@@ -1,0 +1,86 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // 1. Global Safety Net (default-deny catch-all)
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Helpers
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isUserAdmin() {
+      return isSignedIn()
+          && request.auth.token.email == 'gabrielegregorio123@gmail.com'
+          && request.auth.token.email_verified == true;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isValidMonumento(data) {
+      return data.id is int
+          && data.entryId is string
+          && data.regione is string && data.regione.size() <= 200
+          && data.citta is string && data.citta.size() <= 200
+          && data.tipo is string && data.tipo.size() <= 200
+          && data.materiale is string && data.materiale.size() <= 200
+          && data.testo is string && data.testo.size() <= 50000
+          && data.iscrizione is bool
+          && data.anepigr is bool
+          && data.data is string && data.data.size() <= 200
+          && (!data.keys().contains('titolo') || data.titolo is string && data.titolo.size() <= 200)
+          && (!data.keys().contains('corpus') || data.corpus is string && data.corpus.size() <= 200)
+          && (!data.keys().contains('numero') || data.numero is string && data.numero.size() <= 100)
+          && (!data.keys().contains('conserv') || data.conserv is string && data.conserv.size() <= 200)
+          && (!data.keys().contains('luogo_cons') || data.luogo_cons is string && data.luogo_cons.size() <= 200)
+          && (!data.keys().contains('luogo_rit') || data.luogo_rit is string && data.luogo_rit.size() <= 200)
+          && (!data.keys().contains('data_inizio') || data.data_inizio is int)
+          && (!data.keys().contains('data_fine') || data.data_fine is int)
+          && (!data.keys().contains('epiteti') || data.epiteti is list && data.epiteti.size() <= 50)
+          && (!data.keys().contains('divinita') || data.divinita is list && data.divinita.size() <= 50)
+          && (!data.keys().contains('onomastica') || data.onomastica is list && data.onomastica.size() <= 50)
+          && (!data.keys().contains('textTypes') || data.textTypes is list && data.textTypes.size() <= 50)
+          && (!data.keys().contains('imperatori') || data.imperatori is list && data.imperatori.size() <= 50)
+          && (!data.keys().contains('persone') || data.persone is list && data.persone.size() <= 100)
+          && (!data.keys().contains('traduzioni') || data.traduzioni is list && data.traduzioni.size() <= 50)
+          && (!data.keys().contains('bibliografia') || data.bibliografia is list && data.bibliografia.size() <= 50)
+          && (!data.keys().contains('revisions') || data.revisions is list && data.revisions.size() <= 100)
+          && (!data.keys().contains('iconografia') || data.iconografia is map)
+          && (!data.keys().contains('note_interne') || data.note_interne is string && data.note_interne.size() <= 10000)
+          && (!data.keys().contains('note_interne_rawXml') || data.note_interne_rawXml is string && data.note_interne_rawXml.size() <= 10000)
+          && (!data.keys().contains('apparatus') || data.apparatus is list || data.apparatus is string);
+    }
+
+    // 2. Monumenti Collection Rules
+    match /monumenti/{monumentoId} {
+      // Anyone can read records for research/consultation
+      allow read, list: if true;
+
+      // Only administrators can create new records
+      allow create: if isUserAdmin() 
+                    && isValidId(monumentoId) 
+                    && isValidMonumento(incoming())
+                    && incoming().entryId == monumentoId;
+
+      // Only administrators can update or delete records
+      allow update: if isUserAdmin() 
+                    && isValidId(monumentoId)
+                    && isValidMonumento(incoming());
+
+      allow delete: if isUserAdmin();
+    }
+  }
+}

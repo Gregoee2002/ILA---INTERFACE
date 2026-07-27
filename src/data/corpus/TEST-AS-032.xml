@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng"
+    schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Epitaffio</rs> a Men Tiamou e Motyleites e Axiottenos da parte di Ἀμμία (dato fittizio di test)</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>ILA — DATO FITTIZIO DI TEST (non CMRDM/Lane), generato per test cronologia/heatmap/indici</authority>
+                <idno type="filename">TEST-AS-032</idno>
+                    <idno type="id">17</idno>
+</publicationStmt>
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>Museo fittizio di test</repository>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support><p>Descrizione di test generata proceduralmente, nessun valore scientifico.</p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/48.html">marmo</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/24.html">rilievo</objectType>
+                                </support>
+                            </supportDesc>
+                        </objectDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/628920">Konya</placeName>
+                                <placeName type="region">Asia Minor</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" notBefore-custom="-0013"
+                                notAfter-custom="0087" precision="low"
+                                evidence="fictional-test-data">ca. 13 a.C. - 87 d.C. (TEST)</origDate>
+                        </origin>
+                        <provenance type="found">Dato di test — nessun rinvenimento reale.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti"><term>Tiamou</term><term>Motyleites</term><term>Axiottenos</term></keywords>
+                <keywords scheme="divinita"><term>Men</term></keywords>
+                <keywords scheme="onomastica"><term>Ἀμμία</term></keywords>
+            </textClass>
+        </profileDesc>
+    <xenoData>
+        <iconography>
+            <function key="funerary"/>
+            <figure n="1" type="deity" key="Men">
+                    <trait type="lunar" key="full_moon"/>
+                    <trait type="headgear" key="radiate_crown"/>
+                    <trait type="headgear" key="crescent_crown"/>
+                </figure>
+        </iconography>
+    </xenoData>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+                <ab>
+                    <lb n="1"/><persName type="divine" key="Men Tiamou Motyleites Axiottenos"><name nymRef="Μήν">Μηνὶ</name> <rs type="epithet">Tiamoῷ</rs> <rs type="epithet">Motylῷ</rs> <rs type="epithet">Axiotῷ</rs></persName> <persName type="attested" key="Ἀμμία"><name nymRef="Ἀμμία">Ἀμμίας</name></persName> <rs type="office">ἱερεύς</rs> εὐχήν
+                </ab>
+            </div>
+            <div type="bibliography">
+                <listBibl>
+                    <bibl>Dato fittizio — nessuna bibliografia reale (generato per test UI)</bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

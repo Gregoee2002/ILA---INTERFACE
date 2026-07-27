@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<teiCorpus xmlns="http://www.tei-c.org/ns/1.0">
+  <TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+      <teiHeader>
+          <fileDesc>
+              <titleStmt>
+                  <title><rs type="textType">Iscrizione greca</rs> Inscribed stone with sacred law of Men Tyrannos, Laurion area</title>
+              </titleStmt>
+              <publicationStmt>
+                  <authority>CMRDM — Corpus Monumentorum Religionis Dei Menis</authority>
+                  <idno type="filename">CMRDM-GR-012</idno>
+                  <idno type="TM"><!-- inserire TM number --></idno>
+                  <idno type="CMRDM">CMRDM I 12</idno>
+                      <idno type="id">1</idno>
+          <idno type="entryId">gen-1782293556825-m711izkwhks</idno>
+  </publicationStmt>
+              <sourceDesc>
+                  <msDesc>
+                      <msIdentifier>
+                          <repository>Epigraphical Museum, Athens</repository>
+                          <idno>CMRDM I 12</idno>
+                      </msIdentifier>
+                      <physDesc>
+                          <objectDesc>
+                              <supportDesc>
+                                  <support>
+                                      <p>Inscribed stone with sacred law of Men Tyrannos, Laurion area. Height 68 cm., width 27 cm., thickness 7 cm.</p>
+                                      <material ref="https://www.eagle-network.eu/voc/material/lod/138.html">stone</material>
+                                      <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/250.html">stone</objectType>
+                                      <dimensions unit="cm">
+                                          <height>68</height>
+                                          <width>27</width>
+                                          <depth>7</depth>
+                                      </dimensions>
+                                  </support>
+                              </supportDesc>
+                              <layoutDesc>
+                                  <layout>
+                                      <p>Stone with crescent incised at top, bearing a sacred law (lex sacra) establishing a sanctuary of Men Tyrannos, with detailed purity regulations. Last four lines on right flank.</p>
+                                      <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                  </layout>
+                              </layoutDesc>
+                          </objectDesc>
+                          <handDesc>
+                              <handNote>
+                                  <p>Height of letters: lines 1-6: 2-4 cm; rest: 0.8 cm.</p>
+                              </handNote>
+                          </handDesc>
+                      </physDesc>
+                      <history>
+                          <origin>
+                              <origPlace>
+                                  <placeName type="ancient" ref="https://pleiades.stoa.org/places/570740">Sunium</placeName>
+                                  <placeName type="modern" ref="DA_COMPILARE">Laurion area, Greece</placeName>
+                              </origPlace>
+                              <origDate datingMethod="#julian" precision="low"></origDate>
+                          </origin>
+                          <provenance type="found">Laurion area, Greece</provenance>
+                          <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                      </history>
+                  </msDesc>
+              </sourceDesc>
+          </fileDesc>
+          <profileDesc>
+              <particDesc>
+                  <listPerson>
+                      <person xml:id="Xanthos">
+                          <persName type="attested" key="Xanthos">
+                              <name nymRef="Ξάνθος">Ξάνθος</name>
+                          </persName>
+                          <placeName type="ethnic" ref="https://pleiades.stoa.org/places/638965" nymRef="Λύκιος">Λύκιος</placeName>
+                          <note>Fondatore (καθιδρυσάμενος) del santuario; designa un successore (νέος) senza nominarlo. Nessuna carica sacerdotale esplicita.</note>
+                      </person>
+                  </listPerson>
+              </particDesc>
+          </profileDesc>
+      </teiHeader>
+      <text>
+          <body>
+              <div type="edition" xml:space="preserve" xml:lang="grc">
+                  <ab>
+                      <lb n="1"/><persName type="attested" key="Xanthos" ref="#Xanthos"><name nymRef="Ξάνθος">Ξάνθος</name></persName>
+  <lb n="2"/><placeName type="ethnic"
+      ref="https://pleiades.stoa.org/places/638965"
+      nymRef="Λύκιος">Λυκίος</placeName>
+  <lb n="3"/>καθειδρύσατο
+  <lb n="4"/>ἱερὸν τοῦ
+  <lb n="5"/><persName type="divine" key="Men Tyrannos"><name nymRef="Μήν">Μηνὸς</name>
+  <lb n="6"/><rs type="epithet">Τυράννου</rs></persName>
+  <lb n="7"/>αἱρετίσαντος τοῦ θε<lb n="8" break="no"/>οῦ, ἐπ᾽ ἀγαθῇ τύχῃ καὶ μη<lb n="9" break="no"/>δένα ἀκάθαρτον προσάγειν. Κα<lb n="10" break="no"/>θαριζέσθω δὲ ἀπὸ σκόρ<lb n="11" break="no"/>δων καὶ χοιρέων. Καὶ μηδένα
+  <lb n="12"/>θυσιάζειν ὄνευ τοῦ καθι<lb n="13" break="no"/>δρυσαμένου.
+  <lb n="14"/><supplied reason="lost">Ἐ</supplied>ὰν δέ τις διασή<lb n="15" break="no"/>ται, ἀπρόσδεκτος ἡ θυσία παρὰ
+  <lb n="16"/>τοῦ θεοῦ. Παρέχειν δὲ τῷ
+  <lb n="17"/>θεῷ τὸ καθῆκον, δεξιὸν σκε<lb n="18" break="no"/>λὸς καὶ δοράν καὶ ἤλαιον ἐπὶ βω<lb n="19" break="no"/>μὸν καὶ δᾷκνον καὶ σπονδήν. Καὶ
+  <lb n="20"/>ἀπὸ νεκροῦ καθαριζέσθαι δεκα<lb n="20a" break="no"/>ν<expan><abbr>τ</abbr><ex>αί</ex></expan>αν, ἀπὸ γυναικέων <expan>ἑβ<ex>δ</ex>ομαία<ex>ν</ex></expan>,
+  <lb n="21"/>ἀνδροφόνον μηδὲ περὶ τὸν τό<lb n="22" break="no"/>πον, ἀπὸ δὲ φθορᾶς τετταρα<lb n="23" break="no"/>κοσταίαν, ἀπὸ δὲ γυναικὸς λου<lb n="24" break="no"/>σάμενοι κατακεφαλὰ αὐθήμε<lb n="25" break="no"/>ρι εὐίλατος γένοιτο ὁ θεὸς τοῖς
+  <lb n="26"/>θεραπεύουσιν ἁπλῇ τῇ ψυχῇ.
+  <lb n="27"/>Ἐὰν δέ τινα ἀνθρώπινα πάσχῃ ἢ
+  <lb n="28"/>ἀσθενήσῃ ἢ ἀποδημήσῃ, θεράπευε τὸ
+  <lb n="29"/>τὸν νέον ᾧ ἂν αὐτὸς παραδοῖ. Ὃς ἂν δὲ
+  <lb n="30"/>πολυπραγμονήσῃ ἢ περιεργάσηται,
+  <lb n="31"/>ἁμαρτίαν ὀφείλετω <persName type="divine" key="Men Tyrannos"><name nymRef="Μήν">Μηνὶ</name> <rs type="epithet">Τυράννῳ</rs></persName>,
+  <lb n="32"/>ἣν οὐκ ἐξείλεσέται. Ζήτω κε<lb n="33" break="no"/>φαλή<lb n="34" break="no"/>ν καὶ
+  <lb n="35"/>πόδας <supplied reason="omitted">καὶ</supplied>
+  <lb n="36"/>στηθύ<lb n="37" break="no"/>νιον.
+                  </ab>
+              </div>
+              <div type="apparatus"/>
+              <div type="translation" xml:lang="it"><p>Xanthos il Licio fondò il santuario di Men Tiranno, per volontà del dio, in buona fortuna, e [stabilì che] nessun impuro vi si accostasse.
+                      Ci si purifichi dall'aglio e dai maiali. E nessuno offra sacrifici senza [il consenso] del fondatore.
+                      Se qualcuno trasgredisce, il sacrificio non sarà accetto al dio.
+                      Si offra al dio quanto gli è dovuto: la coscia destra, la pelle, l'olio sull'altare, la torcia e le libagioni.
+                      Da un morto ci si purifichi nel decimo giorno; dalle cose delle donne nel settimo; un omicida non si avvicini nemmeno al luogo; da un aborto nel quarantesimo giorno; dopo il contatto con una donna, chi si sia lavato il capo nello stesso giorno trovi il dio propizio ai suoi servitori con animo semplice.
+                      Se [il fondatore] dovesse subire qualcosa di umano — ammalarsi o partire per un viaggio — provveda al [santuario] il giovane a cui egli stesso lo avrà affidato.
+                      Chi si intrometta o agisca con curiosità indiscreta dovrà rispondere della colpa a Men Tiranno, e non ne sarà assolto.
+                      Spetti [al dio] la testa, i piedi e il petto.</p></div>
+              <div type="commentary"><p>DA_COMPILARE</p></div>
+              <div type="bibliography">
+                  <listBibl>
+                      <bibl>W. Gurlitt, Philologus, XXVII, 1868, pp. 729-35</bibl>
+                      <bibl>*A. Cordella, Le Laurion, Marseille, 1871, p. 34-36</bibl>
+                      <bibl>P. Foucart, Des Associations Religieuses chez les Grecs, Paris, 1873, pp. 119-27</bibl>
+                      <bibl>Daremberg-Saglio, III, ii, p. 1397</bibl>
+                      <bibl>Drexler, loc. cit.</bibl>
+                      <bibl>Milchhöfer, AM, XII, 1887, p. 300, no. 279</bibl>
+                      <bibl>Perdrizet, op. cit., p. 84</bibl>
+                      <bibl>IG, II², 1365</bibl>
+                      <bibl>Lane, I, p. 9, no. 13</bibl>
+                  </listBibl>
+              </div>
+          </body>
+      </text>
+  </TEI>
+  <TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+      <teiHeader>
+          <fileDesc>
+              <titleStmt>
+                  <title><rs type="textType">Decreto onorario</rs> Decreto onorario per Apollodoros figlio di Metrophanes e decreto sull’istituzione di un sacerdozio per Eumene II</title>
+              </titleStmt>
+              <publicationStmt>
+                  <authority>CMRDM — Corpus Monumentorum Religionis Dei Menis</authority>
+                  <idno type="filename">1</idno>
+                  <idno type="id">2</idno>
+                  <idno type="entryId">local-1</idno>
+                  <idno type="PHI">PH252123</idno>
+                  <idno type="PHI">PH351831</idno>
+              </publicationStmt>
+              <sourceDesc>
+                  <msDesc>
+                      <msIdentifier>
+                          <repository>Turchia, Milet Museum, Inschriftenhalle</repository>
+                          <idno>462a (I.Milet VI 3 1029)</idno>
+                          <idno>462b (I.Milet VI 3 1040)</idno>
+                      </msIdentifier>
+                      <physDesc>
+                          <objectDesc>
+                              <supportDesc>
+                                  <support>
+                                      <p>Anta di marmo bianco.</p>
+                                      <material ref="https://www.eagle-network.eu/voc/material/lod/48.html">marmo</material>
+                                      <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/1839.html">anta</objectType>
+                                      <dimensions>
+                                          <height unit="metre">0,83</height>
+                                          <width unit="metre">1,15</width>
+                                          <depth unit="metre">0,735</depth>
+                                      </dimensions>
+                                  </support>
+                              </supportDesc>
+                              <layoutDesc>
+                                  <layout>
+                                      <p>L’anta presenta sulla faccia principale I.Milet VI 3 1029, sul lato sinistro adiacente I.Milet VI 3 1040. L’inizio di I.Milet VI 3 1040 è perduto e doveva trovarsi su un blocco superiore adiacente. Il reimpiego è avvenuto a breve distanza di tempo (circa 50 anni): le due tipologie di iscrizioni sono diverse (la prima un’iscrizione onoraria, la seconda un decreto). Il reimpiego è motivato dalla particolare importanza che assume il tempio di Apollo Termintheus per Apollodoro, che vi aveva dedicato quattro coppe e che per questo motivo veniva onorato dal popolo dei Milesî con un decreto pubblicato proprio nel luogo in cui si era esplicata la sua eusebeia nei confronti degli dèi. Pari importanza ha la collocazione del decreto sull’istituzione del sacerdozio di Eumene, un luogo significativo per la politica espansionistica di Mileto nel contesto micro-asiatico e le suas relazioni con Roma e gli altri regni ellenistici: Miunte era stata sottratta al controllo di Mileto da Filippo V alla fine del III secolo a.C. ed assegnata alla sfera di influenza di Magnesia sul Meandro (Plb. 16.24) ma venne recuperata dopo il ristabilimento dell’assetto territoriale dopo la pace di Apamea, quando Mileto venne premiata per avere parteggiato per i Romani (e gli alleati attalidi: cf. Plb. 21.46.5, Liv. 38.39.9); nonostante il riassetto dello status quo, Miunte fu contesa subito dopo la pace di Apamea da Eraclea al Latmo, con la quale Mileto firma un trattato che le vede riconosciuto il possesso del centro trasmesso da I.Milet I 3 150. È dunque probabile che, oltre alla valenza sacrale rivestita dal santuario, naturale luogo di pubblicazione di un decreto per l’istituzione di un sacerdozio, abbia giocato un ruolo importante per la scelta del luogo di pubblicazione anche il probabile influsso esercitato da Eumene II, alleato dei Romani nella guerra romano-siriaca, nelle redistribuzioni di territori all’indomani della pace di Apamea, che aveva riportato Miunte sotto la sfera di influenza milesia.</p>
+                                      <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                  </layout>
+                              </layoutDesc>
+                          </objectDesc>
+                          <handDesc>
+                              <handNote>
+                                  <p>Altezza delle lettere: 0,015 (I.Milet VI 3 1029), 0,01-0,013 (I.Milet VI 3 1040).</p>
+                              </handNote>
+                          </handDesc>
+                      </physDesc>
+                      <history>
+                          <origin>
+                              <origPlace>
+                                  <placeName type="ancient" ref="https://pleiades.stoa.org/places/599799">Milet</placeName>
+                                  <placeName type="modern" ref="https://www.geonames.org/10182607/milet-harabeleri.html">Balat</placeName>
+                                  <placeName type="region">Grecia</placeName>
+                              </origPlace>
+                              <origDate datingMethod="#julian" notBefore-custom="-0220" notAfter-custom="-0200" precision="medium">fine del III secolo a.C.</origDate>
+                              I.Milet VI 3 1040: <origDate datingMethod="#julian" notBefore-custom="-0159" notAfter-custom="-0158" precision="high">159/8 a.C.</origDate>
+                          </origin>
+                          <provenance type="found">Rinvenuta nel 1903 presso il muro di difesa della terrazza del teatro costruita nella parodos orientale. Tempio di Apollo a Myus, reimpiegata nel teatro di Mileto nel II secolo d.C.</provenance>
+                          <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                      </history>
+                  </msDesc>
+              </sourceDesc>
+          </fileDesc>
+          <profileDesc>
+              <textClass>
+                  <keywords scheme="epiteti">
+                      <term>Terminteo</term>
+                  </keywords>
+                  <keywords scheme="divinita">
+                      <term>Apollo</term>
+                  </keywords>
+                  <keywords scheme="onomastica">
+                      <term>Apollodoros figlio di Metrophanes</term>
+                      <term>Apollodoros</term>
+                  </keywords>
+              </textClass>
+          </profileDesc>
+      </teiHeader>
+      <facsimile>
+          <graphic url="I_Milet_VI_3_1029.jpg">
+              <desc>Squeeze of I.Milet VI 3 1029</desc>
+          </graphic>
+      </facsimile>
+      <text>
+          <body>
+              <div type="edition" xml:space="preserve" xml:lang="grc">
+  <div type="textpart" subtype="face" n="I.Milet VI 3 1029">
+                               <ab>
+                                  <lb n="1"/><gap reason="lost" extent="unknown" unit="character"/>· <supplied reason="lost">ἐπειδὴ</supplied>
+                                  <lb n="2"/><persName type="attested" key="Apollodoros figlio di Metrophanes"><name nymRef="Ἀπολλόδωρος">Ἀπολλόδωρος</name> <persName type="attested" key="Metrophanes"><name type="patronymic" nymRef="Μητροφάνης">Μητροφάνου</name></persName></persName> προαιρ<supplied reason="lost">ούμενος</supplied> <gap reason="lost" unit="character" quantity="15" cert="low"/> <supplied reason="lost">τῶι δή</supplied><lb 
+                                      n="3" break="no"/>μωι ἔν τε τοῖς πρότερον χρόνοις εὔνου<supplied reason="lost">ν ἑαυτὸν διε</supplied>τέ<supplied reason="lost">λ</supplied>ει παρεχό<supplied reason="lost">μ</supplied>ε<lb
+                                          n="4" break="no"/>νος κοινῆι τε καὶ ἰδίαι τοῖς ἀπαντῶσιν αὐτῶι <placeName type="ethnic" nymRef="Μυησίων">Μυησίων</placeName> καὶ νῦν τὴν αὐ<lb
+                                              n="5" break="no"/>τὴν αἵρεσιν ἔχων ἀνατίθησι τῶι <persName type="divine" key="Apollo Terminteo">Ἀπόλλωνι τῶι Τερμινθεῖ</persName> φιάλας τέσ<lb 
+                                                  n="6" break="no"/>σερας ὁλκὴν ἄγουσαν ἑκάστην δραχμὰς <placeName type="ethnic" nymRef="Μιλήσιος">Μιλησίας</placeName> <num value="100">ἑκατόν</num>, δε<lb 
+                                                      n="7" break="no"/><supplied reason="lost">δό</supplied>χθαι τῶι δήμωι <persName type="attested" key="Apollodoros"><name nymRef="Ἀπολλόδωρος">Ἀπολλόδωρον</name></persName> μὲν ἐπῃνῆσθαι τῆς τε πρὸς τὸν
+                                  <lb n="8"/><supplied reason="lost">θε</supplied>ὸν εὐσεβήας ἕνε<choice><corr>κ</corr><sic>β</sic></choice>εν κα <space extent="unknown" unit="character"/>
+                               </ab>
+              </div>
+              </div>
+              <div type="apparatus">
+                  <app loc="I.Milet VI 3 1029 l. 2"><note>Günther: [χρείαν παρέχεσθαι]</note></app>
+                  <app loc="I.Milet VI 3 1029 l. 8"><note>ΕΝΕΒΕΝΚΑ lapis (il lapicida si è interrotto: dovrebbe seguire καὶ τῆς πρὸς τὸν δῆμον εὐνοίας)</note></app>
+                  <app loc="I.Milet VI 3 1040 ll. 3-4"><note>Günther: τὸν δὲ [ταμίαν? καὶ] γραμματέα</note></app>
+                  <app loc="Ι.Milet VI 3 1040 l. 4"><note>Allen: [ἡ βασιλεώς]</note></app>
+                  <app loc="Ι.Milet VI 3 1040 l. 6"><note>Herrmann: [ὑπάρχοντας]</note></app>
+                  <app loc="Ι.Milet VI 3 1040 ll. 12-13"><note>Herrmann: [τῶν ἑαυτοῦ]; Habicht: [τῶν τοῦ θεοῦ]; Günther: [τῶν τοῦ ἀδελφοῦ]</note></app>
+                  <app loc="Ι.Milet VI 3 1040 ll. 15-16"><note>Günther: π[ᾶσαν σπουδὴν ἐποιήσατ]ο</note></app>
+                  <app loc="Ι.Milet VI 3 1040 l. 18"><note>Herrmann: [Ἀπολλων]ίδου</note></app>
+              </div>
+              <div type="translation" xml:lang="it">
+                  <p>I.Milet VI 3 1029: Dal momento che Apollodoros figlio di Metrophanes, essendo stato scelto … al popolo in precedenza si era dimostrato continuamente benevolo nelle questioni pubbliche e in quelle private con i cittadini di Myus che incontrava e anche ora avendo la stessa inclinazione ha offerto ad Apollo Termintheus quattro coppe ciascuna del peso di 100 dracme milesie, il popolo ha stabilito che Apollodoros venga lodato per la pietà dimostrata nei confronti del dio.</p>
+                  <p>I.Milet VI 3 1040: … l’amore per la gloria. La somma raccolta la daranno in prestito in modo che i suoi proventi siano disponibili per quanto è stato stabilito tramite il decreto. Il segretario provveda all’elezione affinché sia messo a disposizione il sacerdozio di Eumene Theos e vengano scelti uomini che producano un’ordinanza sul sacerdozio e che incorporino quanto si è deliberato nelle leggi … del popolo di Myus (?) e che si scriva questo decreto sulla base dove si trova la statua del re e sull’anta del tempio di Apollo Termintheus. La spesa dovuta a questa sia messa a disposizione dal tesoriere dall’entrata complessiva e sia trascritta nei rendiconti. Siano scelti due ambasciatori e coloro che vengono scelti giungano [presso i re] e gli consegnino [il decreto] e lo sollecitino affinché, curandosi degli onori [per il dio] e della gloria del popolo [sia responsabile] sempre di ogni bene [nei nostri confronti]. Abbia cura di innalzare … come anche il popolo attraverso precedente decreto … ed Eirenias [ha promesso] di curarsi dei conti dovuti e [di fare] quanto di buono è in suo potere per il popolo. Sono stati scelti Eirenias figlio di Eirenias …</p>
+              </div>
+              <div type="commentary">
+                  <p>Il personaggio onorato nel decreto onorario di I.Milet VI 3 1029 è probabilmente da identificarsi nell’Apollodoros figlio di Metrophanes nominato nella lista di cittadini di I.Milet I 3 46 l. 1 e come stefaneforo dell’anno 212/1 a.C. nella lista di I.Milet I 3 124 l. 27 e forse con il magistrato responsabile dell’emissione di alcune semidracme milesie. Gauthier (in BE 1989.255) lo identifica con un neocittadino milesio proveniente da Magnesia sul Meandro (I.Milet VI 3 1060 II 2). Dal momento che Apollodoros era nominato senza l’etnico è verosimile che godesse anche della cittadinanza di questa città, alla quale forse Mileto era legata da un trattato di sympoliteia. Apollodoros si era reso eusebes nei confronti degli dèi dedicando quattro coppe ad Apollo Termintheus. I.Milet VI 3 1040 è un decreto per l’istituzione del sacerdozio per Eumene (II) Theos. Il decreto deve essere pubblicato sotto la statua del sovrano e nell’anta del tempio e fu ratificato dalla comunità di Myus che, come si evince dal decreto onorario per Apollodoros (I.Milet VI 3 1029) era legata a Mileto da sympoliteia. L’istituzione del sacerdozio per Eumene si ha a partire da una somma di denaro verosimilmente donata dallo stesso sovrano e gestita dal tesoriere. Il popolo dei Milesî dovette inviare un’ambasceria al sovrano affinché lo informasse sulle predisposizioni prese: solo un nome è trasmesso prima della lacuna alla fine del blocco, quello di Eirenias figlio di Eirenias, uomo politico attivo nelle relazioni diplomatiche con gli Attalidi e che compare anche nel decreto che stabilisce distribuzioni di grano nel giorno del compleanno di Eumene II trasmesso da I.Didyma 488 come responsabile dell’edificazione di un ginnasio. Un ricco dossier di documenti testimonia la carriera politica di Eirenias: I.Milet I 3 147, I.Milet I 3 150, I.Didyma 142, I.Milet I 9 306, I.Milet I 9 307, I.Milet VI 3 1039, I.Milet VI 3 1041. Per la figura di Eirenias, vd. herrmann1987 pp. 174-175; nawotka2023 pp. 66-68, per i rapporti tra Eirenias e gli Attalidi, vd. hopp1977 pp. 6-13; allen1983 pp. 116-121. Questo decreto è datato al 159/8 a.C. successivamente alla morte di Eumene dal momento che vi si cita Attalo II alle ll. 39-40 come basileus: a questo tempo però doveva essere già nota l’ordinanza sul sacerdozio di Eumene rappresentata dalla nostra iscrizione, dal momento che viene nominata alle ll. 13-15: anche I.Milet VI 3 1040 è comunque datata dopo la morte di Eumene, dal momento che alla l. 5 lo si nomina come Eumenous theou. Così hopp1977 pp. 6-7, mentre allen1983 pp. 117-118 ritiene che la menzione di Attalo come basileus in I.Didyma 488 e l’epiteto cultuale theos per Eumene in I.Milet VI 3 1040 non siano necessari indizi di una datazione del decreto successiva alla morte del sovrano, dal momento che Eumene avrebbe avuto un culto divino non istituzionale anche in vita.</p>
+              </div>
+              <div type="bibliography">
+                  <listBibl>
+                      <bibl>herrmann1965b pp. 90-96 nr. 2a, 96-117 nr. 2b = SEG 36.1047, 1048 = BE 1966.375</bibl>
+                      <bibl>mccabe1984 nr. 11, 19</bibl>
+                      <bibl>kleine1986 pp. 129-140</bibl>
+                      <bibl>bringmann1995 356-357 nr. 287</bibl>
+                      <bibl>miletVI3 nr. 1029, 1040</bibl>
+                      <bibl>allen1983 p. 222 nr. 17</bibl>
+                      <bibl>habicht1998 p. 39</bibl>
+                      <bibl>marcellesi1998 p. 39</bibl>
+                      <bibl>kotsidu2000 p. 397 nr. 277</bibl>
+                      <bibl>herrmann1987 pp. 174-175</bibl>
+                      <bibl>nawotka2023 pp. 66-68</bibl>
+                      <bibl>hopp1977 pp. 6-13</bibl>
+                  </listBibl>
+              </div>
+          </body>
+      </text>
+  </TEI>
+</teiCorpus>

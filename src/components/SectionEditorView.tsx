@@ -1,0 +1,1288 @@
+import React, { useState, useEffect, useMemo, useRef, ChangeEvent } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
+import {
+  Upload, Database, Save, Loader2, AlertTriangle, Check, X, Plus, Trash2,
+  ChevronRight, FileText, Search, Download, Feather, Sparkles, LogIn, ShieldCheck
+} from 'lucide-react';
+import { cn } from '../lib/utils';
+import { Monumento, OrigDate, Traduzione, Bibliografia, Revision } from '../types';
+import { xmlToMonumenti } from '../lib/xmlUtils';
+import { EditionMarkupEditor } from './EditionMarkupEditor';
+import { ICONOGRAPHY_LABELS } from '../lib/iconographyLabels';
+import { INSCRIPTION_TYPES, OBJECT_TYPES, MATERIALS, EXECUTION_TECHNIQUES, VocabTerm, displayLabel } from '../lib/eagleVocab';
+import { extractIndexSuggestions } from '../lib/leidenMarkup';
+
+/** Le 18 sezioni canoniche, ora mappate su campi Monumento (Firestore li tiene già separati). */
+export type SectionId =
+  | 'title' | 'publication' | 'msIdentifier' | 'support' | 'layout' | 'hand'
+  | 'origPlace' | 'origDate' | 'provenance' | 'profile' | 'revisions'
+  | 'facsimile' | 'edition' | 'apparatus' | 'translations' | 'commentary'
+  | 'bibliography' | 'iconography';
+
+/* ================================================================
+ * SectionEditorView — "Officina" di modifica a sezioni EpiDoc
+ * Sorgente: file XML esterno oppure scheda dal corpus (server).
+ * Le 18 sezioni sono elencate a sinistra; il pannello centrale
+ * mostra il form della sezione attiva; il salvataggio riscrive
+ * SOLO le sezioni modificate (patch-only, xenoData protetto).
+ * ================================================================ */
+
+type Source =
+  | { kind: 'db'; filename: string }
+  | { kind: 'external'; filename: string };
+
+interface SectionMeta {
+  id: SectionId;
+  label: string;
+  group: 'Intestazione' | 'Storia' | 'Testo' | 'Apparato scientifico';
+  desc: string;
+}
+
+const SECTION_META: SectionMeta[] = [
+  { id: 'title',        label: 'Titolo',            group: 'Intestazione', desc: 'Titolo descrittivo e tipologie testuali (rs textType).' },
+  { id: 'publication',  label: 'Pubblicazione',     group: 'Intestazione', desc: 'Authority, TM, riferimenti CMRDM e identificativi applicativi.' },
+  { id: 'msIdentifier', label: 'Conservazione',     group: 'Intestazione', desc: 'Repository / museo di conservazione.' },
+  { id: 'support',      label: 'Supporto',          group: 'Intestazione', desc: 'Descrizione fisica, materiale, tipo oggetto, dimensioni.' },
+  { id: 'layout',       label: 'Impaginazione',     group: 'Intestazione', desc: 'Descrizione del campo epigrafico e tecnica di scrittura.' },
+  { id: 'hand',         label: 'Mano',              group: 'Intestazione', desc: 'Altezza delle lettere e note paleografiche.' },
+  { id: 'origPlace',    label: 'Luogo di origine',  group: 'Storia',       desc: 'Toponimo antico e moderno, URI Pleiades, regione.' },
+  { id: 'origDate',     label: 'Datazione',         group: 'Storia',       desc: 'Datazioni con attributi notBefore/notAfter, precisione, evidenza.' },
+  { id: 'provenance',   label: 'Provenienza',       group: 'Storia',       desc: 'Luogo di ritrovamento e osservazione autoptica.' },
+  { id: 'profile',      label: 'Indici',            group: 'Apparato scientifico', desc: 'Epiteti, divinità, onomastica, imperatori.' },
+  { id: 'facsimile',    label: 'Facsimile',         group: 'Apparato scientifico', desc: 'URL e didascalia dell\u2019immagine.' },
+  { id: 'revisions',    label: 'Revisioni',         group: 'Apparato scientifico', desc: 'Cronologia delle modifiche (revisionDesc).' },
+  { id: 'edition',      label: 'Edizione',          group: 'Testo',        desc: 'Testo greco con markup Leiden/EpiDoc assistito.' },
+  { id: 'apparatus',    label: 'Apparato critico',  group: 'Testo',        desc: 'Note di apparato per riga (app loc / note).' },
+  { id: 'translations', label: 'Traduzioni',        group: 'Testo',        desc: 'Traduzioni per lingua con eventuali note.' },
+  { id: 'commentary',   label: 'Commento',          group: 'Testo',        desc: 'Commento storico-filologico.' },
+  { id: 'bibliography', label: 'Bibliografia',      group: 'Apparato scientifico', desc: 'Riferimenti bibliografici (listBibl).' },
+  { id: 'iconography',  label: 'Iconografia',       group: 'Apparato scientifico', desc: 'Funzione cultuale, figure e tratti dal vocabolario controllato (xenoData).' },
+];
+
+const GROUPS: SectionMeta['group'][] = ['Intestazione', 'Storia', 'Testo', 'Apparato scientifico'];
+
+/** Campi Monumento che compongono ciascuna sezione (per il diff e per lo stato presente/assente). */
+const SECTION_FIELDS: Record<SectionId, (keyof Monumento)[]> = {
+  title: ['titolo', 'textTypes'],
+  publication: ['authority', 'tm', 'phi', 'corpus', 'numero'],
+  msIdentifier: ['luogo_cons', 'msIdnos'],
+  support: ['dim', 'materiale', 'materialRef', 'tipo', 'tipo_ref', 'dim_altezza', 'dim_larghezza', 'dim_profondita', 'dim_unita'],
+  layout: ['layout_desc', 'scrittura', 'scrittura_ref'],
+  hand: ['scrittura_note'],
+  origPlace: ['citta', 'luogo_moderno', 'regione', 'place_ref_ancient', 'place_ref_modern', 'origPlace_nota'],
+  origDate: ['origDates', 'data', 'data_inizio', 'data_fine'],
+  provenance: ['luogo_rit', 'conserv'],
+  profile: ['epiteti', 'divinita', 'onomastica', 'imperatori', 'persone'],
+  revisions: ['revisions'],
+  facsimile: ['facsimile_url', 'facsimile_desc'],
+  edition: ['testo', 'anepigr', 'iscrizione'],
+  apparatus: ['apparatus'],
+  translations: ['traduzioni'],
+  commentary: ['note_interne', 'note_interne_rawXml'],
+  bibliography: ['bibliografia'],
+  iconography: ['iconografia'],
+};
+const SECTION_FIELDS_FLAT: (keyof Monumento)[] = Array.from(new Set(Object.values(SECTION_FIELDS).flat()));
+
+/** Gli indici (epiteti/divinità/onomastica/imperatori) non sono più campi liberi:
+ *  sono sempre lo specchio esatto dei <persName> già codificati nell'edizione.
+ *  Nessuna digitazione manuale possibile: per aggiungere una voce all'indice si
+ *  codifica il persName nel testo, non il contrario. */
+function applyDerivedIndices(m: Monumento): Monumento {
+  const idx = extractIndexSuggestions(m.testo || '');
+  return { ...m, epiteti: idx.epiteti, divinita: idx.divinita, onomastica: idx.onomastica, imperatori: idx.imperatori };
+}
+
+function diffSections(prev: Monumento, next: Monumento): SectionId[] {
+  const changed: SectionId[] = [];
+  (Object.entries(SECTION_FIELDS) as [SectionId, (keyof Monumento)[]][]).forEach(([section, fields]) => {
+    const a = JSON.stringify(fields.map(f => prev[f] ?? null));
+    const b = JSON.stringify(fields.map(f => next[f] ?? null));
+    if (a !== b) changed.push(section);
+  });
+  return changed;
+}
+
+/* ── micro-componenti UI coerenti col design system ─────────────── */
+
+const Eyebrow: React.FC<{ children: React.ReactNode; className?: string }> = ({ children, className }) => (
+  <div className={cn('text-[10px] font-sans font-bold uppercase tracking-[0.22em] text-accent/70', className)}>{children}</div>
+);
+
+const FieldLabel: React.FC<{ children: React.ReactNode; hint?: string }> = ({ children, hint }) => (
+  <label className="block text-[11px] font-sans font-semibold uppercase tracking-[0.14em] text-muted mb-1.5">
+    {children}
+    {hint && <span className="ml-2 normal-case tracking-normal font-normal text-muted/60 italic">{hint}</span>}
+  </label>
+);
+
+const TextInput: React.FC<React.InputHTMLAttributes<HTMLInputElement>> = (props) => (
+  <input
+    {...props}
+    className={cn(
+      'w-full bg-white/60 dark:bg-white/5 border border-border/50 rounded-lg px-3 py-2 text-sm text-ink font-serif',
+      'focus:outline-none focus:ring-1 focus:ring-accent/40 focus:border-accent/40 transition-all placeholder:text-muted/40 placeholder:italic',
+      props.className,
+    )}
+  />
+);
+
+/** Combobox su un vocabolario EAGLE: mostra le etichette in ITALIANO nel menu a tendina,
+ *  ma il valore che finisce nel campo — e quindi salvato — resta il termine inglese/originale
+ *  (quello agganciato all'URI EAGLE). Compila da sé il campo Ref quando scegli un termine noto
+ *  (mai sovrascrivendo un URI inserito a mano). Resta testo libero per voci non catalogate. */
+const TranslatedCombo: React.FC<{
+  value: string; onChange: (v: string) => void;
+  refValue?: string; onRefChange?: (v: string) => void;
+  terms: VocabTerm[]; placeholder?: string;
+}> = ({ value, onChange, refValue, onRefChange, terms, placeholder }) => {
+  const [open, setOpen] = useState(false);
+  const wrapRef = useRef<HTMLDivElement>(null);
+
+  const norm = (s: string) => s.normalize('NFKD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+  const q = norm(value.trim());
+  const filtered = q
+    ? terms.filter(t => norm(t.label).includes(q) || norm(t.labelIt || '').includes(q) || norm(t.greek || '').includes(q)).slice(0, 40)
+    : terms.slice(0, 40);
+
+  const pick = (t: VocabTerm) => {
+    onChange(t.label);
+    if (t.eagle && onRefChange && !refValue) onRefChange(t.eagle);
+    setOpen(false);
+  };
+
+  useEffect(() => {
+    const onDown = (e: MouseEvent) => { if (!wrapRef.current?.contains(e.target as Node)) setOpen(false); };
+    document.addEventListener('mousedown', onDown);
+    return () => document.removeEventListener('mousedown', onDown);
+  }, []);
+
+  const current = terms.find(t => t.label.toLowerCase() === value.trim().toLowerCase());
+
+  return (
+    <div className="relative" ref={wrapRef}>
+      <input
+        value={value}
+        onChange={e => { onChange(e.target.value); setOpen(true); }}
+        onFocus={() => setOpen(true)}
+        placeholder={placeholder}
+        className="w-full bg-white/60 dark:bg-white/5 border border-border/50 rounded-lg px-3 py-2 text-sm text-ink font-serif focus:outline-none focus:ring-1 focus:ring-accent/40 placeholder:text-muted/40 placeholder:italic"
+      />
+      {current?.eagle && (
+        <span className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[9px] text-accent/70 font-sans uppercase tracking-wide pointer-events-none">EAGLE</span>
+      )}
+      {open && filtered.length > 0 && (
+        <div className="absolute z-30 mt-1 w-full max-h-52 overflow-y-auto custom-scrollbar rounded-lg border border-border/40 bg-white dark:bg-zinc-900 shadow-lg">
+          {filtered.map(t => (
+            <button
+              key={t.id}
+              onMouseDown={e => { e.preventDefault(); pick(t); }}
+              className="w-full flex items-baseline justify-between gap-2 px-3 py-1.5 text-left hover:bg-accent/8 transition-colors"
+            >
+              <span className="text-sm font-serif text-ink">{t.labelIt || t.label}</span>
+              <span className="text-[10px] text-muted/50 font-mono shrink-0">{t.labelIt ? t.label : (t.greek || '')}</span>
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
+
+const TextArea: React.FC<React.TextareaHTMLAttributes<HTMLTextAreaElement>> = (props) => (
+  <textarea
+    {...props}
+    className={cn(
+      'w-full bg-white/60 dark:bg-white/5 border border-border/50 rounded-lg px-3 py-2 text-sm text-ink font-serif leading-relaxed',
+      'focus:outline-none focus:ring-1 focus:ring-accent/40 focus:border-accent/40 transition-all placeholder:text-muted/40 placeholder:italic custom-scrollbar',
+      props.className,
+    )}
+  />
+);
+
+/** Editor di liste di stringhe come chips (epiteti, divinità, textTypes...) */
+const ChipListEditor: React.FC<{ values: string[]; onChange: (v: string[]) => void; placeholder?: string; vocabTerms?: VocabTerm[] }> = ({ values, onChange, placeholder, vocabTerms }) => {
+  const [draft, setDraft] = useState('');
+  const [open, setOpen] = useState(false);
+  const wrapRef = useRef<HTMLDivElement>(null);
+  const commit = (raw?: string) => {
+    const v = (raw ?? draft).trim();
+    if (v && !values.includes(v)) onChange([...values, v]);
+    setDraft('');
+    setOpen(false);
+  };
+  const norm = (s: string) => s.normalize('NFKD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+  const q = norm(draft.trim());
+  const filtered = vocabTerms
+    ? (q ? vocabTerms.filter(t => norm(t.label).includes(q) || norm(t.labelIt || '').includes(q)) : vocabTerms).slice(0, 30)
+    : [];
+
+  useEffect(() => {
+    const onDown = (e: MouseEvent) => { if (!wrapRef.current?.contains(e.target as Node)) setOpen(false); };
+    document.addEventListener('mousedown', onDown);
+    return () => document.removeEventListener('mousedown', onDown);
+  }, []);
+
+  return (
+    <div className="relative" ref={wrapRef}>
+      <div className="flex flex-wrap items-center gap-2 bg-white/40 dark:bg-white/5 border border-border/50 rounded-lg px-2.5 py-2 focus-within:ring-1 focus-within:ring-accent/40 transition-all">
+        {values.map((v, i) => (
+          <span key={i} className="inline-flex items-center gap-1.5 bg-accent/10 text-accent border border-accent/20 rounded-full px-2.5 py-0.5 text-xs font-serif">
+            {v}
+            <button onClick={() => onChange(values.filter((_, j) => j !== i))} className="hover:text-red-500 transition-colors" title="Rimuovi">
+              <X className="w-3 h-3" />
+            </button>
+          </span>
+        ))}
+        <input
+          value={draft}
+          onChange={e => { setDraft(e.target.value); setOpen(true); }}
+          onKeyDown={e => { if (e.key === 'Enter' || e.key === ',') { e.preventDefault(); commit(); } }}
+          onFocus={() => setOpen(true)}
+          onBlur={() => commit()}
+          placeholder={placeholder || 'Aggiungi e premi Invio…'}
+          className="flex-1 min-w-[140px] bg-transparent text-sm font-serif text-ink focus:outline-none placeholder:text-muted/40 placeholder:italic py-0.5"
+        />
+      </div>
+      {open && vocabTerms && filtered.length > 0 && (
+        <div className="absolute z-30 mt-1 w-full max-h-52 overflow-y-auto custom-scrollbar rounded-lg border border-border/40 bg-white dark:bg-zinc-900 shadow-lg">
+          {filtered.map(t => (
+            <button
+              key={t.id}
+              onMouseDown={e => { e.preventDefault(); commit(t.label); }}
+              className="w-full flex items-baseline justify-between gap-2 px-3 py-1.5 text-left hover:bg-accent/8 transition-colors"
+            >
+              <span className="text-sm font-serif text-ink">{t.labelIt || t.label}</span>
+              <span className="text-[10px] text-muted/50 font-mono shrink-0">{t.labelIt ? t.label : ''}</span>
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
+
+/* ================================================================ */
+
+interface Props {
+  monumenti: Monumento[];
+  effectiveAdmin: boolean;
+  currentUserEmail?: string | null;
+  onLogin: () => void;
+  onSave: (entryId: string, patch: Partial<Monumento>) => Promise<void>;
+  onCreate: (m: Monumento) => Promise<string>; // ritorna l'entryId assegnato
+  onExport: (m: Monumento) => void;
+  /** entryId di una scheda da aprire subito (es. arrivando dal pulsante "Modifica" della vista Catalogo). */
+  initialEntryId?: string | null;
+  /** Chiamato dopo aver consumato initialEntryId, per evitare che riapra la stessa scheda ad ogni render. */
+  onInitialEntryIdConsumed?: () => void;
+}
+
+export const SectionEditorView: React.FC<Props> = ({ monumenti, effectiveAdmin, currentUserEmail, onLogin, onSave, onCreate, onExport, initialEntryId, onInitialEntryIdConsumed }) => {
+  /* sorgente e caricamento */
+  const [source, setSource] = useState<Source | null>(null);
+  const [baseModel, setBaseModel] = useState<Monumento | null>(null); // stato al caricamento (per il diff)
+  const [model, setModel] = useState<Monumento | null>(null);         // stato editato
+  const [dbSearch, setDbSearch] = useState('');
+  const [loadError, setLoadError] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  /* editing */
+  const [activeSection, setActiveSection] = useState<SectionId>('title');
+  const [sanitize, setSanitize] = useState(true); // riservato a un futuro export pulito
+
+  /* salvataggio */
+  const [saving, setSaving] = useState(false);
+  const [saveOk, setSaveOk] = useState<string | null>(null);
+  const [saveWarnings, setSaveWarnings] = useState<string[]>([]);
+
+  /* elenco file dal corpus: viene direttamente dai monumenti già in memoria nell'app */
+  const dirtySections = useMemo<SectionId[]>(() => {
+    if (!baseModel || !model) return [];
+    return diffSections(baseModel, model);
+  }, [baseModel, model]);
+
+  const loadModel = (m: Monumento, src: Source) => {
+    setLoadError(null);
+    setBaseModel(m);
+    setModel(applyDerivedIndices(JSON.parse(JSON.stringify(m))));
+    setSource(src);
+    setSaveOk(null); setSaveWarnings([]);
+    setActiveSection('title');
+  };
+
+  const loadFromDb = (m: Monumento) => {
+    loadModel(m, { kind: 'db', filename: m._corpusFile || `${m.corpus || 'CMRDM'}-${m.numero || m.id}` });
+  };
+
+  useEffect(() => {
+    if (!initialEntryId) return;
+    const found = monumenti.find(x => x.entryId === initialEntryId || x.id?.toString() === initialEntryId);
+    if (found) loadFromDb(found);
+    onInitialEntryIdConsumed?.();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initialEntryId, monumenti]);
+
+  const loadFromFile = (e: ChangeEvent<HTMLInputElement>) => {
+    const f = e.target.files?.[0];
+    if (!f) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      try {
+        const parsed = xmlToMonumenti(String(reader.result || ''));
+        if (!parsed || parsed.length === 0) { setLoadError('Nessuna scheda TEI valida nel file.'); return; }
+        if (parsed.length > 1) { setLoadError('File multi-TEI: l\u2019editor a sezioni lavora su una scheda alla volta. Esporta la singola entry.'); return; }
+        // scheda nuova: id/entryId provvisori, verranno confermati alla prima creazione su Firestore
+        const usedIds = new Set(monumenti.map(m => m.id).filter(n => typeof n === 'number' && n > 0) as number[]);
+        let nextId = usedIds.size > 0 ? Math.max(...Array.from(usedIds)) + 1 : 1;
+        while (usedIds.has(nextId)) nextId++;
+        const draft: Monumento = { ...parsed[0], id: parsed[0].id || nextId, entryId: parsed[0].entryId || `new-${Date.now()}` };
+        loadModel(draft, { kind: 'external', filename: f.name });
+      } catch {
+        setLoadError('Lettura o parsing del file non riuscita.');
+      }
+    };
+    reader.onerror = () => setLoadError('Lettura del file non riuscita.');
+    reader.readAsText(f);
+    e.target.value = '';
+  };
+
+  const set = <K extends keyof Monumento>(k: K, v: Monumento[K]) =>
+    setModel(m => m ? { ...m, [k]: v } : m);
+
+  /** Come `set`, ma per il testo dell'edizione: ricalcola SEMPRE gli indici
+   *  derivati nello stesso colpo, così restano fedeli al markup ad ogni battuta. */
+  const setEditionText = (xml: string) =>
+    setModel(m => m ? applyDerivedIndices({ ...m, testo: xml }) : m);
+
+  /* ── salvataggio: diff dei campi cambiati, scrittura su Firestore ─── */
+  const handleSave = async () => {
+    if (!model || !baseModel || !source) return;
+    if (!effectiveAdmin) { setSaveWarnings(['Devi accedere come amministratore per salvare.']); return; }
+    setSaving(true); setSaveOk(null); setSaveWarnings([]);
+    try {
+      const changed = dirtySections;
+      if (source.kind === 'external' || !model.entryId || model.entryId.startsWith('new-')) {
+        const assignedId = await onCreate(model);
+        const created = { ...model, entryId: assignedId };
+        setBaseModel(created); setModel(created);
+        setSource({ kind: 'db', filename: model._corpusFile || `${model.corpus || 'CMRDM'}-${model.numero || model.id}` });
+        setSaveOk(`Scheda creata nel corpus (entryId: ${assignedId}).`);
+      } else {
+        // patch: solo i campi effettivamente cambiati, non l'intero oggetto
+        const patch: Partial<Monumento> = {};
+        SECTION_FIELDS_FLAT.forEach(f => { if (JSON.stringify(baseModel[f]) !== JSON.stringify(model[f])) (patch as any)[f] = (model as any)[f]; });
+        await onSave(model.entryId!, patch);
+        setBaseModel(JSON.parse(JSON.stringify(model)));
+        setSaveOk(`Salvato su Firestore${changed.length > 0 ? ` — sezioni: ${changed.map(s => SECTION_META.find(x => x.id === s)?.label || s).join(', ')}` : ''}.`);
+      }
+    } catch (e: any) {
+      setSaveWarnings([`Salvataggio non riuscito: ${e.message || e}`]);
+    } finally { setSaving(false); }
+  };
+
+  const closeFile = () => {
+    setSource(null); setBaseModel(null); setModel(null);
+    setSaveOk(null); setSaveWarnings([]); setLoadError(null);
+  };
+
+  const filteredMonumenti = useMemo(() => {
+    const q = dbSearch.trim().toLowerCase();
+    const list = q
+      ? monumenti.filter(m => [m.titolo, m.corpus, m.numero, m.citta, m._corpusFile].filter(Boolean).some(v => String(v).toLowerCase().includes(q)))
+      : monumenti;
+    return list.slice(0, 80);
+  }, [monumenti, dbSearch]);
+
+  /* ── stato di ogni sezione per il rail ─────────────────────────── */
+  const sectionState = (id: SectionId): 'dirty' | 'present' | 'absent' => {
+    if (dirtySections.includes(id)) return 'dirty';
+    if (!model) return 'absent';
+    const fields = SECTION_FIELDS[id];
+    const has = fields.some(f => {
+      const v = (model as any)[f];
+      return v !== undefined && v !== null && v !== '' && !(Array.isArray(v) && v.length === 0);
+    });
+    return has ? 'present' : 'absent';
+  };
+
+  /* ================================================================
+   * RENDER
+   * ================================================================ */
+
+  /* — Fase 1: scelta della sorgente — */
+  if (!model) {
+    return (
+      <div className="flex-1 flex flex-col overflow-y-auto custom-scrollbar">
+        <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }} className="mb-8 pb-4 border-b border-border/50">
+          <Eyebrow className="mb-2">Officina filologica</Eyebrow>
+          <h2 className="text-2xl md:text-3xl font-serif font-semibold text-ink">Editor a sezioni</h2>
+          <p className="text-sm text-muted mt-1.5 max-w-2xl font-serif italic">
+            Ogni scheda è scomposta nelle sue diciotto sezioni canoniche. Le modifiche si salvano
+            direttamente su Firestore, campo per campo — mai l\u2019intera scheda quando basta una sezione.
+          </p>
+        </motion.div>
+
+        {!effectiveAdmin && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mb-6 flex items-center justify-between gap-3 text-sm text-amber-800 dark:text-amber-400 bg-amber-500/8 border border-amber-500/25 rounded-xl px-4 py-3">
+            <span className="flex items-center gap-2.5"><ShieldCheck className="w-4 h-4 shrink-0" /> Puoi sfogliare le schede, ma per salvare serve l\u2019accesso come amministratore.</span>
+            <button onClick={onLogin} className="inline-flex items-center gap-1.5 shrink-0 rounded-full px-3.5 py-1.5 text-xs font-sans font-bold uppercase tracking-[0.12em] bg-accent text-white hover:shadow-md transition-all">
+              <LogIn className="w-3.5 h-3.5" /> Accedi
+            </button>
+          </motion.div>
+        )}
+
+        {loadError && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mb-6 flex items-start gap-2.5 text-sm text-red-700 dark:text-red-400 bg-red-500/5 border border-red-500/20 rounded-xl px-4 py-3">
+            <AlertTriangle className="w-4 h-4 mt-0.5 shrink-0" /> {loadError}
+          </motion.div>
+        )}
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 max-w-4xl">
+          {/* Import esterno */}
+          <motion.button
+            initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45, delay: 0.05 }}
+            whileHover={{ y: -3 }} whileTap={{ scale: 0.98 }}
+            onClick={() => fileInputRef.current?.click()}
+            className="glass-card p-8 text-left flex flex-col gap-3 group relative overflow-hidden"
+          >
+            <div className="absolute -top-8 -left-8 w-24 h-24 rounded-full bg-accent/0 group-hover:bg-accent/10 blur-2xl transition-all duration-500 pointer-events-none" />
+            <div className="w-10 h-10 rounded-lg bg-accent/10 text-accent flex items-center justify-center group-hover:bg-accent/20 transition-colors">
+              <Upload className="h-5 w-5" />
+            </div>
+            <div>
+              <div className="font-serif font-bold text-ink text-base mb-1">Importa file XML</div>
+              <p className="text-xs text-muted leading-snug">La scheda viene importata subito nel corpus e da lì si modifica con salvataggi patch-only. L\u2019esportazione del file resta disponibile in ogni momento.</p>
+            </div>
+            <input ref={fileInputRef} type="file" accept=".xml,text/xml" className="hidden" onChange={loadFromFile} />
+          </motion.button>
+
+          {/* Dal corpus */}
+          <motion.div
+            initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45, delay: 0.12 }}
+            className="glass-card p-8 flex flex-col gap-3"
+          >
+            <div className="w-10 h-10 rounded-lg bg-accent/10 text-accent flex items-center justify-center">
+              <Database className="h-5 w-5" />
+            </div>
+            <div>
+              <div className="font-serif font-bold text-ink text-base mb-1">Scegli dal corpus</div>
+              <p className="text-xs text-muted leading-snug mb-3">Le modifiche vengono riscritte direttamente nel file della scheda, con strategia patch-only.</p>
+            </div>
+            <div className="glass-panel rounded-full flex items-center gap-2.5 pl-4 pr-3 py-1.5 focus-within:ring-1 focus-within:ring-accent/30 transition-all">
+              <Search className="w-3.5 h-3.5 text-muted/60 shrink-0" />
+              <input
+                value={dbSearch}
+                onChange={e => setDbSearch(e.target.value)}
+                placeholder="Cerca per nome file… (es. AS-069)"
+                className="flex-1 bg-transparent text-sm font-serif text-ink focus:outline-none placeholder:text-muted/40 placeholder:italic"
+              />
+            </div>
+            <div className="max-h-56 overflow-y-auto custom-scrollbar -mx-2 px-2">
+              {filteredMonumenti.length === 0 && (
+                <p className="text-xs text-muted/60 italic py-3 px-1">{monumenti.length === 0 ? 'Nessuna scheda ancora caricata dal corpus.' : 'Nessuna scheda corrisponde alla ricerca.'}</p>
+              )}
+              {filteredMonumenti.map(m => (
+                <button
+                  key={m.entryId || m.id}
+                  onClick={() => loadFromDb(m)}
+                  className="w-full text-left flex items-center gap-2.5 px-2 py-2 rounded-lg hover:bg-accent/8 transition-colors group"
+                >
+                  <FileText className="w-3.5 h-3.5 text-muted/50 group-hover:text-accent transition-colors shrink-0" />
+                  <span className="text-sm font-serif text-ink truncate flex-1">
+                    {m.corpus && m.numero ? `${m.corpus} ${m.numero}` : m._corpusFile || `#${m.id}`}
+                    {m.titolo && <span className="text-muted/60 italic"> — {m.titolo}</span>}
+                  </span>
+                  <ChevronRight className="w-3.5 h-3.5 text-muted/30 group-hover:text-accent transition-colors shrink-0" />
+                </button>
+              ))}
+            </div>
+          </motion.div>
+        </div>
+      </div>
+    );
+  }
+
+  /* — Fase 2: editing — */
+  const m = model;
+  const active = SECTION_META.find(s => s.id === activeSection)!;
+  const dirty = dirtySections;
+
+  return (
+    <div className="flex-1 flex flex-col overflow-hidden min-h-0">
+      {/* intestazione file */}
+      <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="mb-5 pb-4 border-b border-border/50 flex items-end justify-between gap-4 flex-wrap">
+        <div>
+          <Eyebrow className="mb-2">Officina filologica · {source?.kind === 'db' ? 'Corpus' : 'File esterno'}</Eyebrow>
+          <h2 className="text-xl md:text-2xl font-serif font-semibold text-ink flex items-center gap-3 flex-wrap">
+            {m.corpus && m.numero ? `${m.corpus} ${m.numero}` : source?.filename}
+            {m.titolo && <span className="text-sm font-normal italic text-muted hidden md:inline">— {m.titolo}</span>}
+          </h2>
+        </div>
+        <div className="flex items-center gap-2">
+          {!effectiveAdmin && (
+            <button onClick={onLogin} className="inline-flex items-center gap-1.5 text-xs font-sans font-semibold uppercase tracking-[0.14em] text-amber-700 dark:text-amber-400 hover:text-amber-600 transition-colors px-3 py-2">
+              <LogIn className="w-3.5 h-3.5" /> Accedi per salvare
+            </button>
+          )}
+          <button onClick={() => onExport(m)} title="Scarica l\u2019XML della scheda con le modifiche correnti"
+            className="inline-flex items-center gap-1.5 text-xs font-sans font-semibold uppercase tracking-[0.14em] text-muted hover:text-ink transition-colors px-3 py-2">
+            <Download className="w-3.5 h-3.5" /> Esporta
+          </button>
+          <button onClick={closeFile} className="text-xs font-sans font-semibold uppercase tracking-[0.14em] text-muted hover:text-ink transition-colors px-3 py-2">
+            Chiudi scheda
+          </button>
+          <motion.button
+            whileHover={dirty.length > 0 && effectiveAdmin ? { y: -1 } : undefined}
+            whileTap={dirty.length > 0 && effectiveAdmin ? { scale: 0.97 } : undefined}
+            onClick={handleSave}
+            disabled={saving || dirty.length === 0 || !effectiveAdmin}
+            className={cn(
+              'inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-sans font-bold uppercase tracking-[0.12em] transition-all shadow-custom',
+              dirty.length > 0 && effectiveAdmin
+                ? 'bg-accent text-white hover:shadow-lg'
+                : 'bg-border/30 text-muted/50 cursor-not-allowed',
+            )}
+          >
+            {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
+            {saving ? 'Salvataggio…' : dirty.length > 0 ? `Salva ${dirty.length} ${dirty.length === 1 ? 'sezione' : 'sezioni'}` : 'Nessuna modifica'}
+          </motion.button>
+        </div>
+      </motion.div>
+
+      {/* esito salvataggio */}
+      <AnimatePresence>
+        {(saveOk || saveWarnings.length > 0) && (
+          <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="mb-4 space-y-2 overflow-hidden">
+            {saveOk && (
+              <div className="flex items-center gap-2.5 text-sm text-accent bg-accent/8 border border-accent/25 rounded-xl px-4 py-2.5 font-serif">
+                <Check className="w-4 h-4 shrink-0" /> {saveOk}
+              </div>
+            )}
+            {saveWarnings.map((w, i) => (
+              <div key={i} className="flex items-start gap-2.5 text-sm text-amber-800 dark:text-amber-400 bg-amber-500/8 border border-amber-500/25 rounded-xl px-4 py-2.5 font-serif">
+                <AlertTriangle className="w-4 h-4 mt-0.5 shrink-0" /> {w}
+              </div>
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <div className="flex-1 flex gap-4 min-h-0 overflow-hidden">
+        {/* ── rail delle 18 sezioni ── */}
+        <div className="w-60 shrink-0 glass-panel rounded-2xl p-3 overflow-y-auto custom-scrollbar">
+          {GROUPS.map(g => (
+            <div key={g} className="mb-3 last:mb-0">
+              <div className="text-[9px] font-sans font-bold uppercase tracking-[0.2em] text-muted/50 px-2 mb-1.5">{g}</div>
+              {SECTION_META.filter(s => s.group === g).map(s => {
+                const st = sectionState(s.id);
+                const isActive = activeSection === s.id;
+                return (
+                  <button
+                    key={s.id}
+                    onClick={() => setActiveSection(s.id)}
+                    className={cn(
+                      'w-full flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-left transition-colors group',
+                      isActive ? 'bg-accent/12 text-accent' : 'hover:bg-accent/6 text-ink',
+                    )}
+                  >
+                    <span className={cn(
+                      'w-1.5 h-1.5 rounded-full shrink-0 transition-colors',
+                      st === 'dirty' ? 'bg-amber-500' : st === 'present' ? 'bg-accent/60' : 'bg-transparent border border-muted/30',
+                    )} />
+                    <span className={cn('text-[13px] font-serif flex-1 truncate', isActive && 'font-semibold')}>{s.label}</span>
+                    {st === 'dirty' && <span className="text-[9px] font-sans font-bold uppercase tracking-wider text-amber-600">mod.</span>}
+                  </button>
+                );
+              })}
+            </div>
+          ))}
+          <div className="mt-4 pt-3 border-t border-border/30 px-2">
+            <label className="flex items-center gap-2 cursor-pointer text-[11px] text-muted font-sans">
+              <input type="checkbox" checked={sanitize} onChange={e => setSanitize(e.target.checked)} className="accent-[var(--accent,#2da199)] w-3.5 h-3.5" />
+              <span className="flex items-center gap-1"><Sparkles className="w-3 h-3" /> Rimuovi placeholder al salvataggio</span>
+            </label>
+          </div>
+        </div>
+
+        {/* ── pannello della sezione attiva ── */}
+        <div className="flex-1 glass-panel rounded-2xl overflow-y-auto custom-scrollbar min-h-0">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeSection}
+              initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }}
+              transition={{ duration: 0.22 }}
+              className="p-6 md:p-8"
+            >
+              <div className="mb-6 pb-3 border-b border-border/30">
+                <h3 className="font-serif font-bold text-ink text-lg">{active.label}</h3>
+                <p className="text-xs text-muted italic mt-0.5">{active.desc}</p>
+              </div>
+
+              {renderSectionForm(activeSection, m, set, setEditionText)}
+            </motion.div>
+          </AnimatePresence>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+/* ================================================================
+ * Form delle singole sezioni
+ * ================================================================ */
+
+function renderSectionForm(
+  id: SectionId,
+  m: Monumento,
+  set: <K extends keyof Monumento>(k: K, v: Monumento[K]) => void,
+  setEditionText: (xml: string) => void,
+) {
+  switch (id) {
+    case 'title':
+      return (
+        <div className="space-y-5 max-w-2xl">
+          <div>
+            <FieldLabel>Titolo descrittivo</FieldLabel>
+            <TextInput value={m.titolo || ''} onChange={e => set('titolo', e.target.value)} placeholder="Stele di marmo bianco con rilievo di Men…" />
+          </div>
+          <div>
+            <FieldLabel hint="vocabolario EAGLE «Type of Inscription» + estensioni ILA">Tipologie testuali</FieldLabel>
+            <ChipListEditor
+              values={m.textTypes || []}
+              onChange={v => set('textTypes', v)}
+              vocabTerms={INSCRIPTION_TYPES}
+              placeholder="es. dedica, legge sacra, confessione…"
+            />
+          </div>
+        </div>
+      );
+
+    case 'publication':
+      return (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 max-w-3xl">
+          <div className="md:col-span-2">
+            <FieldLabel>Authority</FieldLabel>
+            <TextInput value={m.authority || ''} onChange={e => set('authority', e.target.value)} />
+          </div>
+          <div>
+            <FieldLabel hint="mai inventarlo: solo se attestato">TM number</FieldLabel>
+            <TextInput value={m.tm || ''} onChange={e => set('tm', e.target.value)} placeholder="—" />
+          </div>
+          <div>
+            <FieldLabel>Corpus</FieldLabel>
+            <TextInput value={m.corpus || ''} onChange={e => set('corpus', e.target.value)} placeholder="CMRDM I" />
+          </div>
+          <div>
+            <FieldLabel>Numero</FieldLabel>
+            <TextInput value={m.numero || ''} onChange={e => set('numero', e.target.value)} placeholder="69" />
+          </div>
+          <div className="md:col-span-2 flex gap-6 text-xs text-muted font-serif italic pt-1">
+            <span>ID applicativo: <span className="not-italic font-semibold text-ink">{m.id || '—'}</span></span>
+            <span>entryId: <span className="not-italic font-semibold text-ink">{m.entryId || '—'}</span></span>
+            <span className="text-muted/60">(assegnati automaticamente, non modificabili)</span>
+          </div>
+        </div>
+      );
+
+    case 'msIdentifier':
+      return (
+        <div className="max-w-2xl">
+          <FieldLabel hint="museo, collezione, «in situ or lost»">Repository</FieldLabel>
+          <TextInput value={m.luogo_cons || ''} onChange={e => set('luogo_cons', e.target.value)} placeholder="Manisa Museum" />
+        </div>
+      );
+
+    case 'support':
+      return (
+        <div className="space-y-5 max-w-3xl">
+          <div>
+            <FieldLabel>Descrizione del supporto</FieldLabel>
+            <TextArea rows={3} value={m.dim || ''} onChange={e => set('dim', e.target.value)} />
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div>
+              <FieldLabel>Materiale</FieldLabel>
+              <TranslatedCombo
+                value={m.materiale || ''} onChange={v => set('materiale', v)}
+                refValue={m.materialRef || ''} onRefChange={v => set('materialRef', v)}
+                terms={MATERIALS} placeholder="marmo, calcare…"
+              />
+            </div>
+            <div>
+              <FieldLabel hint="EAGLE URI — auto-compilato scegliendo un materiale dal vocabolario">Ref materiale</FieldLabel>
+              <TextInput value={m.materialRef || ''} onChange={e => set('materialRef', e.target.value)} placeholder="https://www.eagle-network.eu/voc/material/lod/48" />
+            </div>
+            <div>
+              <FieldLabel>Tipo oggetto</FieldLabel>
+              <TranslatedCombo
+                value={m.tipo || ''} onChange={v => set('tipo', v)}
+                refValue={m.tipo_ref || ''} onRefChange={v => set('tipo_ref', v)}
+                terms={OBJECT_TYPES} placeholder="stele, altare…"
+              />
+            </div>
+            <div>
+              <FieldLabel hint="EAGLE URI — auto-compilato scegliendo un tipo dal vocabolario">Ref tipo</FieldLabel>
+              <TextInput value={m.tipo_ref || ''} onChange={e => set('tipo_ref', e.target.value)} placeholder="https://www.eagle-network.eu/voc/objtyp/lod/250" />
+            </div>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div><FieldLabel>Altezza</FieldLabel><TextInput value={m.dim_altezza || ''} onChange={e => set('dim_altezza', e.target.value)} /></div>
+            <div><FieldLabel>Larghezza</FieldLabel><TextInput value={m.dim_larghezza || ''} onChange={e => set('dim_larghezza', e.target.value)} /></div>
+            <div><FieldLabel>Profondità</FieldLabel><TextInput value={m.dim_profondita || ''} onChange={e => set('dim_profondita', e.target.value)} /></div>
+            <div><FieldLabel>Unità</FieldLabel><TextInput value={m.dim_unita || ''} onChange={e => set('dim_unita', e.target.value)} placeholder="cm" /></div>
+          </div>
+        </div>
+      );
+
+    case 'layout':
+      return (
+        <div className="space-y-5 max-w-2xl">
+          <div>
+            <FieldLabel>Descrizione del campo epigrafico</FieldLabel>
+            <TextArea rows={3} value={m.layout_desc || ''} onChange={e => set('layout_desc', e.target.value)} />
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div>
+              <FieldLabel>Tecnica di scrittura</FieldLabel>
+              <TranslatedCombo
+                value={m.scrittura || ''} onChange={v => set('scrittura', v)}
+                refValue={m.scrittura_ref || ''} onRefChange={v => set('scrittura_ref', v)}
+                terms={EXECUTION_TECHNIQUES} placeholder="inciso a scalpello…"
+              />
+            </div>
+            <div>
+              <FieldLabel hint="EAGLE writing URI — auto-compilato scegliendo una tecnica dal vocabolario">Ref tecnica</FieldLabel>
+              <TextInput value={m.scrittura_ref || ''} onChange={e => set('scrittura_ref', e.target.value)} />
+            </div>
+          </div>
+        </div>
+      );
+
+    case 'hand':
+      return (
+        <div className="max-w-2xl">
+          <FieldLabel hint="es. Height of letters: 1.5 cm.">Note paleografiche</FieldLabel>
+          <TextArea rows={3} value={m.scrittura_note || ''} onChange={e => set('scrittura_note', e.target.value)} />
+        </div>
+      );
+
+    case 'origPlace':
+      return (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 max-w-3xl">
+          <div>
+            <FieldLabel>Toponimo antico</FieldLabel>
+            <TextInput value={m.citta || ''} onChange={e => set('citta', e.target.value)} placeholder="Tarsi" />
+          </div>
+          <div>
+            <FieldLabel hint="mai dedotto: solo se certo">URI Pleiades (antico)</FieldLabel>
+            <TextInput value={m.place_ref_ancient || ''} onChange={e => set('place_ref_ancient', e.target.value)} placeholder="https://pleiades.stoa.org/places/…" />
+          </div>
+          <div>
+            <FieldLabel>Toponimo moderno</FieldLabel>
+            <TextInput value={m.luogo_moderno || ''} onChange={e => set('luogo_moderno', e.target.value)} placeholder="Kölekoy, Turkey" />
+          </div>
+          <div>
+            <FieldLabel>Ref (moderno)</FieldLabel>
+            <TextInput value={m.place_ref_modern || ''} onChange={e => set('place_ref_modern', e.target.value)} />
+          </div>
+          <div>
+            <FieldLabel hint="patch solo se già presente nel file">Regione</FieldLabel>
+            <TextInput value={m.regione || ''} onChange={e => set('regione', e.target.value)} placeholder="Asia Minor" />
+          </div>
+        </div>
+      );
+
+    case 'origDate': {
+      const dates: OrigDate[] = m.origDates && m.origDates.length > 0 ? m.origDates : [];
+      const update = (i: number, patch: Partial<OrigDate>) =>
+        set('origDates', dates.map((d, j) => j === i ? { ...d, ...patch } : d));
+      return (
+        <div className="space-y-4 max-w-3xl">
+          {dates.length === 0 && <p className="text-sm text-muted italic font-serif">Nessuna datazione. Se Lane non data, il campo si omette — mai stimare.</p>}
+          {dates.map((d, i) => (
+            <div key={i} className="glass-card p-4 space-y-4">
+              <div className="flex items-start justify-between gap-3">
+                <div className="flex-1">
+                  <FieldLabel hint="formula originale, es. ἔτους σμε΄ = 164-165 A.D.">Testo della datazione</FieldLabel>
+                  <TextInput value={d.testo || ''} onChange={e => update(i, { testo: e.target.value })} />
+                </div>
+                <button onClick={() => set('origDates', dates.filter((_, j) => j !== i))} className="mt-6 p-1.5 text-muted/50 hover:text-red-500 transition-colors" title="Rimuovi datazione">
+                  <Trash2 className="w-4 h-4" />
+                </button>
+              </div>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                <div><FieldLabel hint="-0220 per a.C.">Da (notBefore)</FieldLabel><TextInput value={d.notBeforeCustom || ''} onChange={e => update(i, { notBeforeCustom: e.target.value })} /></div>
+                <div><FieldLabel>A (notAfter)</FieldLabel><TextInput value={d.notAfterCustom || ''} onChange={e => update(i, { notAfterCustom: e.target.value })} /></div>
+                <div><FieldLabel hint="low / medium / high">Precisione</FieldLabel><TextInput value={d.precision || ''} onChange={e => update(i, { precision: e.target.value })} /></div>
+                <div><FieldLabel hint="es. internal-date">Evidenza</FieldLabel><TextInput value={d.evidence || ''} onChange={e => update(i, { evidence: e.target.value })} /></div>
+              </div>
+            </div>
+          ))}
+          <button
+            onClick={() => set('origDates', [...dates, { datingMethod: '#julian', testo: '' }])}
+            className="inline-flex items-center gap-1.5 text-xs font-sans font-semibold uppercase tracking-[0.12em] text-accent hover:text-accent/70 transition-colors"
+          >
+            <Plus className="w-3.5 h-3.5" /> Aggiungi datazione
+          </button>
+        </div>
+      );
+    }
+
+    case 'provenance':
+      return (
+        <div className="space-y-5 max-w-2xl">
+          <div>
+            <FieldLabel hint="provenance type=&quot;found&quot;">Luogo di ritrovamento</FieldLabel>
+            <TextInput value={m.luogo_rit || ''} onChange={e => set('luogo_rit', e.target.value)} />
+          </div>
+          <div>
+            <FieldLabel hint="provenance type=&quot;observed&quot;">Osservazione autoptica</FieldLabel>
+            <TextInput value={m.conserv || ''} onChange={e => set('conserv', e.target.value)} placeholder="Nessuna." />
+          </div>
+        </div>
+      );
+
+    case 'profile': {
+      const IndexGroup: React.FC<{ label: string; values: string[]; empty: string }> = ({ label, values, empty }) => (
+        <div>
+          <FieldLabel>{label}</FieldLabel>
+          {values.length > 0 ? (
+            <div className="flex flex-wrap gap-1.5">
+              {values.map(v => (
+                <span key={v} className="inline-flex items-center bg-accent/10 text-accent border border-accent/20 rounded-full px-2.5 py-0.5 text-xs font-serif">
+                  {v}
+                </span>
+              ))}
+            </div>
+          ) : (
+            <p className="text-xs text-muted/50 italic">{empty}</p>
+          )}
+        </div>
+      );
+      return (
+        <div className="space-y-5 max-w-3xl">
+          <p className="text-[11px] text-muted/60 italic -mt-1">
+            Indice a sola lettura: rispecchia automaticamente i <span className="font-mono not-italic text-[10px]">&lt;persName&gt;</span> già codificati nella sezione Edizione. Per aggiungere o correggere una voce, si interviene lì sul testo — non qui.
+          </p>
+          <IndexGroup label="Epiteti" values={m.epiteti || []} empty="Nessun <rs type=\u201cepithet\u201d> ancora codificato nel testo." />
+          <IndexGroup label="Divinità" values={m.divinita || []} empty="Nessun persName type=\u201cdivine\u201d ancora codificato nel testo." />
+          <IndexGroup label="Onomastica" values={m.onomastica || []} empty="Nessun persName type=\u201cattested\u201d ancora codificato nel testo." />
+          <IndexGroup label="Imperatori" values={m.imperatori || []} empty="Nessun persName type=\u201cruler/emperor\u201d ancora codificato nel testo." />
+          {m.persone && m.persone.length > 0 && (
+            <div className="pt-2 border-t border-border/30">
+              <FieldLabel>Persone attestate (listPerson)</FieldLabel>
+              <div className="space-y-1.5">
+                {m.persone.map((p, i) => (
+                  <div key={i} className="text-sm font-serif text-ink flex items-center gap-2">
+                    <span className="w-1 h-1 rounded-full bg-accent/50" />{p.name}{p.key && <span className="text-muted italic text-xs">({p.key})</span>}
+                  </div>
+                ))}
+              </div>
+              <p className="text-[11px] text-muted/70 italic mt-2">La struttura completa delle persone (patronimici, etnici, nymRef) si cura in Oxygen sull'edizione.</p>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    case 'facsimile':
+      return (
+        <div className="space-y-5 max-w-2xl">
+          <div>
+            <FieldLabel>URL immagine</FieldLabel>
+            <TextInput value={m.facsimile_url || ''} onChange={e => set('facsimile_url', e.target.value)} placeholder="https://…" />
+          </div>
+          <div>
+            <FieldLabel>Didascalia</FieldLabel>
+            <TextInput value={m.facsimile_desc || ''} onChange={e => set('facsimile_desc', e.target.value)} />
+          </div>
+        </div>
+      );
+
+    case 'revisions': {
+      const revs: Revision[] = m.revisions || [];
+      const update = (i: number, patch: Partial<Revision>) => set('revisions', revs.map((r, j) => j === i ? { ...r, ...patch } : r));
+      return (
+        <div className="space-y-3 max-w-3xl">
+          {revs.map((r, i) => (
+            <div key={i} className="flex items-start gap-3">
+              <TextInput className="w-36" type="date" value={r.date || ''} onChange={e => update(i, { date: e.target.value })} />
+              <TextInput className="w-28" value={r.who || ''} onChange={e => update(i, { who: e.target.value })} placeholder="#GG" />
+              <TextInput className="flex-1" value={r.note || ''} onChange={e => update(i, { note: e.target.value })} placeholder="Descrizione della modifica…" />
+              <button onClick={() => set('revisions', revs.filter((_, j) => j !== i))} className="p-2 text-muted/50 hover:text-red-500 transition-colors"><Trash2 className="w-4 h-4" /></button>
+            </div>
+          ))}
+          <button
+            onClick={() => set('revisions', [...revs, { date: new Date().toISOString().slice(0, 10), who: '#GG', note: '' }])}
+            className="inline-flex items-center gap-1.5 text-xs font-sans font-semibold uppercase tracking-[0.12em] text-accent hover:text-accent/70 transition-colors"
+          >
+            <Plus className="w-3.5 h-3.5" /> Aggiungi revisione
+          </button>
+        </div>
+      );
+    }
+
+    case 'edition':
+      return (
+        <EditionMarkupEditor
+          value={m.testo || ''}
+          onChange={setEditionText}
+          anepigrafo={m.anepigr}
+        />
+      );
+
+    case 'apparatus': {
+      const entries = Array.isArray(m.apparatus) ? m.apparatus : [];
+      const isRaw = typeof m.apparatus === 'string' && m.apparatus.trim().length > 0;
+      if (isRaw) {
+        return (
+          <div className="max-w-3xl">
+            <FieldLabel hint="apparato in prosa (stile IGCyr)">Apparato</FieldLabel>
+            <TextArea rows={6} value={m.apparatus as string} onChange={e => set('apparatus', e.target.value)} />
+          </div>
+        );
+      }
+      const update = (i: number, patch: Partial<{ loc: string; note: string }>) =>
+        set('apparatus', entries.map((r, j) => j === i ? { ...r, ...patch } : r));
+      return (
+        <div className="space-y-3 max-w-3xl">
+          {entries.map((a, i) => (
+            <div key={i} className="flex items-start gap-3">
+              <TextInput className="w-20" value={a.loc} onChange={e => update(i, { loc: e.target.value })} placeholder="r. 1" />
+              <TextInput className="flex-1" value={a.note} onChange={e => update(i, { note: e.target.value })} placeholder="Μὲς lapis pro Μὴν…" />
+              <button onClick={() => set('apparatus', entries.filter((_, j) => j !== i))} className="p-2 text-muted/50 hover:text-red-500 transition-colors"><Trash2 className="w-4 h-4" /></button>
+            </div>
+          ))}
+          <button
+            onClick={() => set('apparatus', [...entries, { loc: '', note: '' }])}
+            className="inline-flex items-center gap-1.5 text-xs font-sans font-semibold uppercase tracking-[0.12em] text-accent hover:text-accent/70 transition-colors"
+          >
+            <Plus className="w-3.5 h-3.5" /> Aggiungi nota di apparato
+          </button>
+        </div>
+      );
+    }
+
+    case 'translations': {
+      const trads: Traduzione[] = m.traduzioni || [];
+      const update = (i: number, patch: Partial<Traduzione>) => set('traduzioni', trads.map((t, j) => j === i ? { ...t, ...patch } : t));
+      return (
+        <div className="space-y-4 max-w-3xl">
+          {trads.map((t, i) => (
+            <div key={i} className="glass-card p-4 space-y-3">
+              <div className="flex items-center justify-between gap-3">
+                <div className="w-24">
+                  <FieldLabel>Lingua</FieldLabel>
+                  <TextInput value={t.lang} onChange={e => update(i, { lang: e.target.value })} placeholder="it" />
+                </div>
+                <button onClick={() => set('traduzioni', trads.filter((_, j) => j !== i))} className="p-1.5 text-muted/50 hover:text-red-500 transition-colors mt-4"><Trash2 className="w-4 h-4" /></button>
+              </div>
+              <div>
+                <FieldLabel>Traduzione</FieldLabel>
+                <TextArea rows={5} value={t.testo} onChange={e => update(i, { testo: e.target.value })} />
+              </div>
+              <div>
+                <FieldLabel>Nota</FieldLabel>
+                <TextInput value={t.note} onChange={e => update(i, { note: e.target.value })} />
+              </div>
+            </div>
+          ))}
+          <button
+            onClick={() => set('traduzioni', [...trads, { lang: 'it', testo: '', note: '' }])}
+            className="inline-flex items-center gap-1.5 text-xs font-sans font-semibold uppercase tracking-[0.12em] text-accent hover:text-accent/70 transition-colors"
+          >
+            <Plus className="w-3.5 h-3.5" /> Aggiungi traduzione
+          </button>
+        </div>
+      );
+    }
+
+    case 'commentary':
+      return (
+        <div className="max-w-3xl">
+          <FieldLabel>Commento</FieldLabel>
+          <TextArea rows={8} value={m.note_interne || ''} onChange={e => { set('note_interne', e.target.value); set('note_interne_rawXml', undefined as any); }} />
+          {m.note_interne_rawXml && (
+            <p className="text-[11px] text-amber-700 dark:text-amber-400 italic mt-2 flex items-center gap-1.5">
+              <AlertTriangle className="w-3 h-3" /> Il commento contiene markup TEI (ptr, foreign…): modificandolo qui verrà riscritto come testo semplice.
+            </p>
+          )}
+        </div>
+      );
+
+    case 'bibliography': {
+      const bibl: Bibliografia[] = m.bibliografia || [];
+      const update = (i: number, titolo: string) =>
+        set('bibliografia', bibl.map((b, j) => j === i ? { titolo, punti_rif: b.punti_rif } : b)); // modificando si perde il rawXml, intenzionale
+      return (
+        <div className="space-y-3 max-w-3xl">
+          {bibl.map((b, i) => (
+            <div key={i} className="flex items-start gap-3">
+              <TextInput className="flex-1" value={b.titolo} onChange={e => update(i, e.target.value)} />
+              {b.rawXml && <span title="Contiene markup TEI: la modifica lo converte in testo semplice" className="mt-2.5"><AlertTriangle className="w-3.5 h-3.5 text-amber-500/70" /></span>}
+              <button onClick={() => set('bibliografia', bibl.filter((_, j) => j !== i))} className="p-2 text-muted/50 hover:text-red-500 transition-colors"><Trash2 className="w-4 h-4" /></button>
+            </div>
+          ))}
+          <button
+            onClick={() => set('bibliografia', [...bibl, { titolo: '' }])}
+            className="inline-flex items-center gap-1.5 text-xs font-sans font-semibold uppercase tracking-[0.12em] text-accent hover:text-accent/70 transition-colors"
+          >
+            <Plus className="w-3.5 h-3.5" /> Aggiungi riferimento
+          </button>
+        </div>
+      );
+    }
+
+    case 'iconography':
+      return <IconographyEditor m={m} set={set} />;
+
+    default:
+      return null;
+  }
+}
+
+
+/* ================================================================
+ * Editor iconografico — vocabolario controllato da iconographyLabels
+ * Ogni campo pesca SOLO dalla propria categoria del vocabolario:
+ * funzione cultuale, tipo di figura, identificativo figura, tipo di
+ * tratto, elemento del tratto (a cascata sul tipo scelto).
+ * ================================================================ */
+
+// Le chiavi qui sotto rispecchiano i commenti-categoria di iconographyLabels.ts —
+// se il vocabolario cresce, aggiornare queste liste mantiene i menu separati.
+// Sottoinsieme curato di INSCRIPTION_TYPES: solo le funzioni genuinamente cultuali
+// del monumento (non un decreto o una lettera, che sono generi testuali ma non
+// "funzioni" nel senso iconografico). "confession" è l'estensione ILA dichiarata.
+const FUNCTION_TERM_IDS = ['dedication', 'sacredlaw', 'confession', 'honorary', 'epitaph'];
+const FUNCTION_TERMS = INSCRIPTION_TYPES.filter(t => FUNCTION_TERM_IDS.includes(t.id));
+
+// Sinonimi (italiano/inglese, spogliati di accenti) per riconoscere nei textTypes
+// del titolo un valore compatibile col vocabolario EAGLE della funzione iconografica.
+// Serve solo a SUGGERIRE — mai a scrivere da sola: la scelta finale resta dello studioso.
+// Le chiavi sono gli id reali di INSCRIPTION_TYPES/FUNCTION_TERM_IDS (eagleVocab.ts).
+const FUNCTION_SYNONYMS: Record<string, string[]> = {
+  dedication: ['dedication', 'votiv', 'dedica'],
+  sacredlaw: ['sacred law', 'lex sacra', 'legge sacra'],
+  confession: ['confession'],
+  honorary: ['honorary', 'honorific', 'onorari', 'honour', 'honor'],
+  epitaph: ['epitaph', 'funerary', 'funerari', 'sepolcr', 'epitaffio'],
+};
+
+function stripAccents(s: string): string {
+  return s.normalize('NFKD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+}
+
+/** Deriva un suggerimento di funzione dai textTypes del titolo (mai una scrittura automatica).
+ *  Prima cerca una corrispondenza esatta con un id/label di INSCRIPTION_TYPES, poi ripiega
+ *  sui sinonimi per i textTypes scritti liberamente (non ancora allineati al vocabolario). */
+function suggestFunctionFromTextTypes(textTypes: string[] | undefined): string | null {
+  for (const raw of textTypes || []) {
+    const t = stripAccents(raw);
+    const exact = INSCRIPTION_TYPES.find(term => stripAccents(term.label) === t || stripAccents(term.id) === t);
+    if (exact && FUNCTION_TERM_IDS.includes(exact.id)) return exact.id;
+  }
+  for (const raw of textTypes || []) {
+    const t = stripAccents(raw);
+    for (const [key, synonyms] of Object.entries(FUNCTION_SYNONYMS)) {
+      if (synonyms.some(s => t.includes(s))) return key;
+    }
+  }
+  return null;
+}
+const FIGURE_TYPE_KEYS = ['deity', 'secondary', 'worshipper', 'animal', 'symbol'];
+const FIGURE_KEY_OPTIONS = ['Men', 'crescent', 'Nike', 'eagle', 'Attis', 'Helios'];
+const TRAIT_TYPE_KEYS = ['headgear', 'lunar', 'held_object', 'mount', 'dress', 'technique', 'position'];
+const TRAIT_KEY_OPTIONS: Record<string, string[]> = {
+  headgear: ['phrygian_cap', 'radiate_crown', 'crescent_crown'],
+  lunar: ['crescent_shoulders', 'crescent_cap', 'full_moon'],
+  held_object: ['pine_cone', 'torch', 'patera', 'sceptre', 'wreath'],
+  mount: ['bull', 'horse'],
+  dress: ['military', 'himation', 'chiton'],
+  technique: ['incised', 'relief_carved', 'painted'],
+  position: ['upper_left', 'upper_right', 'lower_left', 'lower_right', 'top_centre'],
+};
+
+const vocabLabel = (k: string) => {
+  const term = FUNCTION_TERMS.find(t => t.id === k);
+  if (term) return displayLabel(term);
+  return ICONOGRAPHY_LABELS[k] || k;
+};
+
+/** Select rigoroso: solo valori della categoria (niente testo libero, niente valori fuori vocabolario). */
+const VocabSelect: React.FC<{ value: string; onChange: (v: string) => void; options: string[]; placeholder?: string }> = ({ value, onChange, options, placeholder }) => (
+  <select
+    value={value}
+    onChange={e => onChange(e.target.value)}
+    style={{ colorScheme: 'light dark' }}
+    className="w-full bg-white/60 dark:bg-white/5 border border-border/50 rounded-lg px-3 py-2 text-sm text-ink font-serif focus:outline-none focus:ring-1 focus:ring-accent/40"
+  >
+    <option value="" disabled>{placeholder || 'Seleziona…'}</option>
+    {options.map(k => <option key={k} value={k}>{vocabLabel(k)}</option>)}
+  </select>
+);
+
+/** Combo libera con suggerimenti dalla categoria: per figure con nome proprio non ancora in vocabolario (es. un orante). */
+const VocabCombo: React.FC<{ value: string; onChange: (v: string) => void; options: string[]; listId: string; placeholder?: string }> = ({ value, onChange, options, listId, placeholder }) => (
+  <div className="relative">
+    <input
+      value={value}
+      onChange={e => onChange(e.target.value)}
+      list={listId}
+      placeholder={placeholder}
+      className="w-full bg-white/60 dark:bg-white/5 border border-border/50 rounded-lg px-3 py-2 text-sm text-ink font-serif focus:outline-none focus:ring-1 focus:ring-accent/40 placeholder:text-muted/40 placeholder:italic"
+    />
+    <datalist id={listId}>{options.map(k => <option key={k} value={k}>{vocabLabel(k)}</option>)}</datalist>
+    {value && ICONOGRAPHY_LABELS[value] && (
+      <span className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[10px] text-accent/70 italic pointer-events-none">{ICONOGRAPHY_LABELS[value]}</span>
+    )}
+  </div>
+);
+
+const IconographyEditor: React.FC<{ m: Monumento; set: <K extends keyof Monumento>(k: K, v: Monumento[K]) => void }> = ({ m, set }) => {
+  const ico = m.iconografia || { figures: [] };
+  const update = (patch: Partial<typeof ico>) => set('iconografia', { ...ico, ...patch });
+  const updateFigure = (fi: number, patch: any) =>
+    update({ figures: ico.figures.map((f, i) => i === fi ? { ...f, ...patch } : f) });
+  const updateTrait = (fi: number, ti: number, patch: any) =>
+    updateFigure(fi, { traits: ico.figures[fi].traits.map((t, i) => i === ti ? { ...t, ...patch } : t) });
+
+  const suggestedFunction = suggestFunctionFromTextTypes(m.textTypes);
+  const functionConflict = ico.function && suggestedFunction && ico.function !== suggestedFunction;
+
+  return (
+    <div className="space-y-8 max-w-3xl">
+      {/* ── 1. Funzione cultuale ── */}
+      <section>
+        <Eyebrow className="mb-2">1 · Funzione</Eyebrow>
+        <FieldLabel hint="cosa rappresenta il monumento, non il tipo fisico">Funzione cultuale</FieldLabel>
+        <VocabSelect
+          value={ico.function || ''}
+          onChange={v => update({ function: v || undefined })}
+          options={FUNCTION_TERM_IDS}
+          placeholder="Nessuna funzione selezionata"
+        />
+        <p className="text-[10px] text-muted/50 italic mt-1">
+          Vocabolario EAGLE «Type of Inscription» — «Confession inscription» è un\u2019estensione ILA, non EAGLE.
+        </p>
+        {!ico.function && suggestedFunction && (
+          <div className="mt-2 flex items-center gap-2.5 text-xs bg-accent/8 border border-accent/20 rounded-lg px-3 py-2">
+            <Sparkles className="w-3.5 h-3.5 text-accent shrink-0" />
+            <span className="text-ink flex-1">
+              Il titolo suggerisce <span className="font-semibold">«{vocabLabel(suggestedFunction)}»</span> — coerente con i tipi testuali indicati.
+            </span>
+            <button onClick={() => update({ function: suggestedFunction })}
+              className="shrink-0 text-[10px] font-sans font-bold uppercase tracking-[0.1em] text-accent hover:text-accent/70 transition-colors">
+              Usa
+            </button>
+          </div>
+        )}
+        {functionConflict && (
+          <div className="mt-2 flex items-start gap-2.5 text-xs bg-amber-500/8 border border-amber-500/25 rounded-lg px-3 py-2 text-amber-800 dark:text-amber-400">
+            <AlertTriangle className="w-3.5 h-3.5 mt-0.5 shrink-0" />
+            <span>
+              Funzione impostata su «{vocabLabel(ico.function!)}», ma il titolo suggerisce «{vocabLabel(suggestedFunction!)}».
+              Se è voluto (es. rilievo votivo con testo onorario) va bene così — altrimenti controlla il titolo o questo campo.
+            </span>
+          </div>
+        )}
+      </section>
+
+      {/* ── 2. Figure ── */}
+      <section>
+        <Eyebrow className="mb-2">2 · Figure</Eyebrow>
+        <div className="space-y-4">
+          {ico.figures.map((fig, fi) => (
+            <div key={fi} className="glass-card p-4 space-y-4">
+              <div className="flex items-start gap-3">
+                <span className="text-[10px] font-mono text-muted/50 pt-2.5 shrink-0">n.{fi + 1}</span>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 flex-1">
+                  <div>
+                    <FieldLabel hint="ruolo della figura nella scena">Tipo di figura</FieldLabel>
+                    <VocabSelect value={fig.type} onChange={v => updateFigure(fi, { type: v })} options={FIGURE_TYPE_KEYS} placeholder="Scegli il tipo…" />
+                  </div>
+                  <div>
+                    <FieldLabel hint="nome noto, o testo libero se non in vocabolario">Identificativo</FieldLabel>
+                    <VocabCombo value={fig.key} onChange={v => updateFigure(fi, { key: v })} options={FIGURE_KEY_OPTIONS} listId={`dl-figkey-${fi}`} placeholder="es. dedicante, Men…" />
+                  </div>
+                </div>
+                <button onClick={() => update({ figures: ico.figures.filter((_, i) => i !== fi) })}
+                  className="p-1.5 mt-5 text-muted/50 hover:text-red-500 transition-colors" title="Rimuovi figura">
+                  <Trash2 className="w-4 h-4" />
+                </button>
+              </div>
+
+              {/* ── 3. Tratti di questa figura ── */}
+              <div className="pl-8 pt-1 border-t border-border/20">
+                <div className="text-[9px] font-sans font-bold uppercase tracking-[0.2em] text-muted/50 mb-2 pt-2">Tratti</div>
+                <div className="space-y-2">
+                  {fig.traits.map((t, ti) => (
+                    <div key={ti} className="flex items-center gap-2">
+                      <div className="w-36 shrink-0">
+                        <VocabSelect
+                          value={t.type}
+                          onChange={v => updateTrait(fi, ti, { type: v, key: '' })} // cambio categoria: azzera l'elemento, non è più valido
+                          options={TRAIT_TYPE_KEYS}
+                          placeholder="Categoria…"
+                        />
+                      </div>
+                      <div className="flex-1">
+                        <VocabSelect
+                          value={t.key}
+                          onChange={v => updateTrait(fi, ti, { key: v })}
+                          options={TRAIT_KEY_OPTIONS[t.type] || []}
+                          placeholder={t.type ? 'Elemento…' : 'Scegli prima la categoria'}
+                        />
+                      </div>
+                      <select
+                        value={t.hand || ''}
+                        onChange={e => updateTrait(fi, ti, { hand: e.target.value || undefined })}
+                        title="Mano (per oggetti tenuti)"
+                        style={{ colorScheme: 'light dark' }}
+                        className="w-20 shrink-0 bg-white/60 dark:bg-white/5 border border-border/50 rounded-lg px-2 py-2 text-xs text-ink font-sans focus:outline-none focus:ring-1 focus:ring-accent/40"
+                      >
+                        <option value="">—</option>
+                        <option value="right">dx</option>
+                        <option value="left">sx</option>
+                      </select>
+                      <button onClick={() => updateFigure(fi, { traits: fig.traits.filter((_, i) => i !== ti) })}
+                        className="p-1.5 text-muted/40 hover:text-red-500 transition-colors shrink-0" title="Rimuovi tratto">
+                        <X className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  ))}
+                  <button
+                    onClick={() => updateFigure(fi, { traits: [...fig.traits, { type: 'held_object', key: '' }] })}
+                    className="inline-flex items-center gap-1.5 text-[11px] font-sans font-semibold uppercase tracking-[0.12em] text-accent hover:text-accent/70 transition-colors"
+                  >
+                    <Plus className="w-3 h-3" /> Aggiungi tratto
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
+          <button
+            onClick={() => update({ figures: [...ico.figures, { n: ico.figures.length + 1, type: 'deity', key: '', traits: [] }] })}
+            className="inline-flex items-center gap-1.5 text-xs font-sans font-semibold uppercase tracking-[0.12em] text-accent hover:text-accent/70 transition-colors"
+          >
+            <Plus className="w-3.5 h-3.5" /> Aggiungi figura
+          </button>
+        </div>
+      </section>
+
+      {/* ── 4. Nota libera ── */}
+      <section>
+        <Eyebrow className="mb-2">4 · Nota</Eyebrow>
+        <FieldLabel>Nota iconografica</FieldLabel>
+        <TextArea rows={3} value={ico.note || ''} onChange={e => update({ note: e.target.value || undefined })} />
+      </section>
+
+      <p className="text-[11px] text-muted/60 italic">
+        Il blocco <span className="font-mono not-italic text-[10px]">&lt;xenoData&gt;</span> viene riscritto al salvataggio solo se questa sezione risulta modificata; Oxygen resta pienamente compatibile.
+      </p>
+    </div>
+  );
+};
+
+export default SectionEditorView;

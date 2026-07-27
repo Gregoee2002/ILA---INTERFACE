@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">stele</rs> White marble stele with relief of Men, Tarsi? (Kölekoy)</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>CMRDM — Corpus Monumentorum Religionis Dei Menis</authority>
+                <idno type="filename">3</idno>
+                <idno type="id">42</idno>
+                <idno type="entryId">local-3</idno>
+                <idno type="TM">&lt;!-- inserire TM number --&gt;</idno>
+            </publicationStmt>
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>in situ or lost</repository>
+                        <idno>CMRDM I 69</idno>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>White marble stele with relief of Men, Tarsi? (Kölekoy). Height 1.00 m., width 48 cm., thickness 7 cm.</p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/48.html">marble</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/250.html">stele</objectType>
+                                    <dimensions>
+                                        <height unit="metre">1,00</height>
+                                        <width unit="metre">48</width>
+                                        <depth unit="metre">7</depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>Stele with relief of Men holding staff, pine-cone, with piece of clothing and boy with uplifted hands. Confession inscription: a garment was stolen from a bathhouse; the god punished the thief who confessed and returned it.</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Height of letters: 1.5 cm.</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="DA_COMPILARE">Tarsi (?)</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">Kölekoy, Turkey</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" notBefore-custom="164" notAfter-custom="165" precision="medium">164-165 A.D.</origDate>
+                        </origin>
+                        <provenance type="found">Kölekoy, Turkey</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+<ab>
+                    <lb n="1"/>Μέγας Μὲς Ἀξιοτ-τηνὸς Ταρεῖ βα-
+                    <lb n="2"/>σιλεύων. Ἐπεὶ ἐπέσταθη σκή-
+                    <lb n="3"/>πτρον εἴ τις ἐκ τοῦ βαλανείου τι
+                    <lb n="4"/>κλέψι, κλέψαντος οὖν εἰμάτιου
+                    <lb n="5"/>ὁ θεὸς ἐνεμέσησε τὸν κλέπτην
+                    <lb n="6"/>καὶ ἐτόθησε μετὰ χρόνον τὸ εἰμά-
+                    <lb n="7"/>τιων ἐνέγκαν ἐπὶ τὸν θεὸν καὶ ε-
+                    <lb n="8"/>ξωμολογήσατο. Ὁ θεὸς οὖν ἐκέλευ-
+                    <lb n="9"/>σε δι᾽ ἀγγέλου πραθῆναι τὸ εἰμά-
+                    <lb n="10"/>τιν καὶ στηλογραφῆσαι τὰς δυ-
+                    <lb n="11"/>νάμεις. Ἔτους σμε΄.
+                </ab>
+            </div>
+            <div type="commentary">
+                <p>DA_COMPILARE</p>
+            </div>
+            <div type="bibliography">
+                <listBibl>
+                    <bibl>Herrmann, op. cit., p. 30, no. 21, Plate VIII, no. 2</bibl>
+                    <bibl>Robert, REG, LXXVI, 1963, p. 170, no. 235</bibl>
+                    <bibl>Lane, I, p. 50, no. A2</bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

@@ -1,0 +1,346 @@
+// ═══════════════════════════════════════════════════════════════════════
+// githubStorage.ts — corpus XML persistito su una repo GitHub privata
+// ═══════════════════════════════════════════════════════════════════════
+//
+// Sostituisce Firestore come fonte di verità persistente. Il filesystem
+// locale (CORPUS_DIR) resta come CACHE veloce per le letture durante la
+// vita del processo; la repo GitHub è la fonte di verità che sopravvive
+// a un filesystem effimero (redeploy/restart).
+//
+// CONFIGURAZIONE — unica cosa da fare per attivarlo:
+//   GITHUB_TOKEN         Personal Access Token (fine-grained), permesso
+//                        Contents: Read and write, sulla singola repo.
+//   GITHUB_REPO          "utente/nome-repo" (la repo privata degli XML)
+//   GITHUB_BRANCH        opzionale, default "main"
+//   GITHUB_CORPUS_PATH   opzionale, default "corpus" (cartella nella repo)
+//
+// Se GITHUB_TOKEN o GITHUB_REPO non sono impostati, il modulo resta
+// silenziosamente inattivo (no-op): il server continua a funzionare solo
+// con il filesystem locale, com'era prima — così puoi attivare la
+// migrazione semplicemente aggiungendo le variabili d'ambiente, senza
+// dover toccare altro codice.
+//
+// NOTA su volumi grandi: qui uso la Contents API (un file per chiamata),
+// adatta a un singolo admin con scritture non concorrenti. Per import
+// massivi di centinaia di file in un colpo solo converrebbe la Git Data
+// API (blob+tree+commit in un'unica richiesta) — non implementata qui
+// per restare semplice; le scritture correnti (patch singole, import di
+// poche decine di file) restano comunque entro i rate limit di GitHub.
+
+const GITHUB_API = "https://api.github.com";
+
+interface GitHubConfig {
+  token: string;
+  repo: string; // "utente/nome-repo"
+  branch: string;
+  corpusPath: string; // cartella nella repo, es. "corpus"
+}
+
+let config: GitHubConfig | null = null;
+let warnedOnce = false;
+
+// Cache in-memory dello sha di ogni file sulla repo — necessario per
+// aggiornare (PUT con sha) invece di creare un file già esistente.
+const shaCache = new Map<string, string>();
+
+function loadConfig(): GitHubConfig | null {
+  const token = process.env.GITHUB_TOKEN;
+  const repo = process.env.GITHUB_REPO;
+  if (!token || !repo) {
+    if (!warnedOnce) {
+      console.log(
+        "[githubStorage] GITHUB_TOKEN e/o GITHUB_REPO non impostati — " +
+        "persistenza su GitHub DISATTIVA, uso solo il filesystem locale."
+      );
+      warnedOnce = true;
+    }
+    return null;
+  }
+  return {
+    token,
+    repo,
+    branch: process.env.GITHUB_BRANCH || "main",
+    corpusPath: (process.env.GITHUB_CORPUS_PATH || "corpus").replace(/^\/+|\/+$/g, ""),
+  };
+}
+
+export function isGitHubConfigured(): boolean {
+  if (config === null) config = loadConfig();
+  return config !== null;
+}
+
+function getConfig(): GitHubConfig {
+  if (config === null) config = loadConfig();
+  if (config === null) throw new Error("GitHub storage non configurato");
+  return config;
+}
+
+function headers(cfg: GitHubConfig): Record<string, string> {
+  return {
+    Authorization: `Bearer ${cfg.token}`,
+    Accept: "application/vnd.github+json",
+    "User-Agent": "ila-corpus-sync",
+    "Content-Type": "application/json",
+  };
+}
+
+function repoPath(cfg: GitHubConfig, filename: string): string {
+  return `${cfg.corpusPath}/${filename}`;
+}
+
+// ── Lettura: elenco file + contenuto ──────────────────────────────────
+
+interface GitHubDirEntry {
+  name: string;
+  path: string;
+  sha: string;
+  type: "file" | "dir";
+  download_url: string | null;
+}
+
+async function listRepoFiles(cfg: GitHubConfig): Promise<{ entries: GitHubDirEntry[]; confirmed: boolean }> {
+  const url = `${GITHUB_API}/repos/${cfg.repo}/contents/${cfg.corpusPath}?ref=${encodeURIComponent(cfg.branch)}`;
+  const res = await fetch(url, { headers: headers(cfg) });
+
+  if (res.status === 404) {
+    console.warn(`[githubStorage] GET ${url} → 404: cartella "${cfg.corpusPath}" non trovata sul branch "${cfg.branch}". Se pensavi che i file ci fossero, controlla nome repo/branch/percorso.`);
+    // "confirmed: false" — un 404 può significare tanto "repo vuota al primo
+    // avvio" quanto "percorso/branch sbagliato per errore di configurazione".
+    // Non fidarsi di questo caso per decidere cosa cancellare in locale.
+    return { entries: [], confirmed: false };
+  }
+  if (!res.ok) {
+    throw new Error(`GitHub list fallita (${res.status}): ${await res.text()}`);
+  }
+  const data = await res.json();
+  if (!Array.isArray(data)) {
+    throw new Error(`Percorso "${cfg.corpusPath}" sulla repo non è una cartella`);
+  }
+  console.log(`[githubStorage] GET ${url} → ${data.length} elementi grezzi (prima del filtro .xml)`);
+  return { entries: data as GitHubDirEntry[], confirmed: true };
+}
+
+/**
+ * Scarica tutti gli XML dalla repo GitHub e li scrive in localDir,
+ * popolando anche la cache degli sha. Va chiamata all'avvio del server,
+ * prima di servire qualunque richiesta, così un filesystem effimero
+ * riparte sempre allineato alla fonte di verità.
+ *
+ * MIRROR VERO: i file locali che non esistono più su GitHub vengono
+ * cancellati anche in locale — così cancellare un file direttamente sulla
+ * repo (via browser o `git rm`) è sufficiente, senza dover passare
+ * dall'app. La cronologia commit di GitHub resta la rete di sicurezza.
+ *
+ * SICUREZZA: la cancellazione locale scatta SOLO se la lista remota è
+ * "confirmed" (una risposta 200 genuina, non un 404 che potrebbe in
+ * realtà nascondere un percorso/branch configurato male). Su un 404 non
+ * tocchiamo nulla in locale — meglio un filesystem locale temporaneamente
+ * disallineato che una cancellazione di massa basata su una lista che
+ * potrebbe essere vuota per errore di configurazione invece che per stato
+ * reale della repo.
+ */
+export async function pullCorpusFromGitHub(
+  localDir: string,
+  fsWriteFileSync: (filepath: string, content: string) => void,
+  pathJoin: (...parts: string[]) => string,
+  fsListLocalXmlFiles?: (dir: string) => string[],
+  fsUnlinkSync?: (filepath: string) => void
+): Promise<{ pulled: number; skipped: string[]; deletedLocally: string[] }> {
+  if (!isGitHubConfigured()) return { pulled: 0, skipped: [], deletedLocally: [] };
+  const cfg = getConfig();
+
+  console.log(`[githubStorage] Sincronizzazione corpus da ${cfg.repo}/${cfg.corpusPath} (branch ${cfg.branch}) ...`);
+
+  const { entries, confirmed } = await listRepoFiles(cfg);
+  const xmlFiles = entries.filter(e => e.type === "file" && e.name.endsWith(".xml") && !e.name.startsWith("_"));
+  const remoteNames = new Set(xmlFiles.map(e => e.name));
+
+  shaCache.clear();
+  const skipped: string[] = [];
+  let pulled = 0;
+
+  for (const entry of xmlFiles) {
+    try {
+      if (!entry.download_url) {
+        skipped.push(entry.name);
+        continue;
+      }
+      // download_url è pubblico solo per repo pubbliche; per repo private
+      // serve comunque il token sull'endpoint contents "raw".
+      const fileRes = await fetch(entry.download_url, {
+        headers: { Authorization: `Bearer ${cfg.token}`, "User-Agent": "ila-corpus-sync" },
+      });
+      if (!fileRes.ok) {
+        console.warn(`[githubStorage] Skip ${entry.name}: download fallito (${fileRes.status})`);
+        skipped.push(entry.name);
+        continue;
+      }
+      const content = await fileRes.text();
+      fsWriteFileSync(pathJoin(localDir, entry.name), content);
+      shaCache.set(entry.name, entry.sha);
+      pulled++;
+    } catch (e: any) {
+      console.warn(`[githubStorage] Skip ${entry.name}: ${e.message || e}`);
+      skipped.push(entry.name);
+    }
+  }
+
+  const deletedLocally: string[] = [];
+  if (confirmed && fsListLocalXmlFiles && fsUnlinkSync) {
+    const localFiles = fsListLocalXmlFiles(localDir);
+    // Un file scaricato con successo in QUESTO giro ma poi rimosso qui
+    // sarebbe un controsenso: escludiamo esplicitamente anche i nomi
+    // "skipped" da questo giro, per non cancellare qualcosa che sappiamo
+    // esistere su GitHub ma che abbiamo semplicemente fallito a scaricare
+    // per un errore transitorio.
+    for (const localName of localFiles) {
+      if (!remoteNames.has(localName) && !skipped.includes(localName)) {
+        try {
+          fsUnlinkSync(pathJoin(localDir, localName));
+          deletedLocally.push(localName);
+        } catch (e: any) {
+          console.warn(`[githubStorage] Impossibile cancellare in locale ${localName}: ${e.message || e}`);
+        }
+      }
+    }
+    if (deletedLocally.length > 0) {
+      console.log(`[githubStorage] Rimossi in locale ${deletedLocally.length} file non più presenti su GitHub: ${deletedLocally.join(', ')}`);
+    }
+  } else if (!confirmed) {
+    console.warn(`[githubStorage] Lista remota non confermata (404) — nessuna cancellazione locale eseguita per sicurezza.`);
+  }
+
+  console.log(`[githubStorage] Sync completata: ${pulled} file scaricati${skipped.length ? `, ${skipped.length} saltati` : ""}${deletedLocally.length ? `, ${deletedLocally.length} rimossi in locale` : ""}.`);
+  return { pulled, skipped, deletedLocally };
+}
+
+// ── Scrittura: crea/aggiorna un file ──────────────────────────────────
+
+/**
+ * Crea o aggiorna un singolo file XML sulla repo GitHub. Va chiamata
+ * DOPO ogni scrittura locale (nuova entry, patch, import) così le due
+ * copie restano allineate. No-op silenziosa se GitHub non è configurato.
+ */
+export async function pushFileToGitHub(filename: string, content: string, message: string): Promise<void> {
+  if (!isGitHubConfigured()) return;
+  const cfg = getConfig();
+
+  const body: Record<string, unknown> = {
+    message,
+    content: Buffer.from(content, "utf-8").toString("base64"),
+    branch: cfg.branch,
+  };
+  const existingSha = shaCache.get(filename);
+  if (existingSha) body.sha = existingSha;
+
+  const url = `${GITHUB_API}/repos/${cfg.repo}/contents/${repoPath(cfg, filename)}`;
+  const res = await fetch(url, {
+    method: "PUT",
+    headers: headers(cfg),
+    body: JSON.stringify(body),
+  });
+
+  if (!res.ok) {
+    const detail = await res.text();
+    // 409 = sha non allineato (qualcuno ha cambiato il file altrove): ricarico
+    // lo sha corrente e ritento una volta sola, per non far fallire l'intero
+    // salvataggio per una race condition transitoria.
+    if (res.status === 409) {
+      console.warn(`[githubStorage] Conflitto sha su ${filename}, ritento con sha aggiornato...`);
+      const refreshed = await fetchCurrentSha(cfg, filename);
+      if (refreshed) {
+        shaCache.set(filename, refreshed);
+        body.sha = refreshed;
+        const retryRes = await fetch(url, { method: "PUT", headers: headers(cfg), body: JSON.stringify(body) });
+        if (retryRes.ok) {
+          const retryData = await retryRes.json();
+          shaCache.set(filename, retryData.content.sha);
+          return;
+        }
+      }
+    }
+    throw new Error(`Scrittura GitHub fallita per ${filename} (${res.status}): ${detail}`);
+  }
+
+  const data = await res.json();
+  shaCache.set(filename, data.content.sha);
+}
+
+async function fetchCurrentSha(cfg: GitHubConfig, filename: string): Promise<string | null> {
+  const url = `${GITHUB_API}/repos/${cfg.repo}/contents/${repoPath(cfg, filename)}?ref=${encodeURIComponent(cfg.branch)}`;
+  const res = await fetch(url, { headers: headers(cfg) });
+  if (!res.ok) return null;
+  const data = await res.json();
+  return data.sha || null;
+}
+
+/**
+ * Elimina un file dalla repo GitHub (usata quando una scheda viene
+ * rimossa/rinominata localmente). No-op silenziosa se non configurato o
+ * se il file non è mai stato pushato (niente sha in cache).
+ *
+ * SICUREZZA: disattiva per default. La route POST /api/monumenti cancella
+ * in locale qualunque file non presente nel payload che il client sta
+ * salvando in quel momento — comportamento innocuo quando l'unica copia è
+ * locale (recuperabile con un nuovo pull), ma distruttivo se specchiato
+ * automaticamente sulla fonte di verità permanente: uno stato del
+ * frontend non aggiornato/parziale può cancellare schede reali dalla repo
+ * senza conferma. Va abilitato esplicitamente con GITHUB_ALLOW_DELETE=true
+ * SOLO dopo aver verificato che il frontend non manda mai payload parziali
+ * per errore (es. dopo un fallimento di sync che silenziosamente riduce
+ * lo stato in memoria).
+ */
+export async function deleteFileFromGitHub(filename: string, message: string): Promise<void> {
+  if (!isGitHubConfigured()) return;
+  if (process.env.GITHUB_ALLOW_DELETE !== "true") {
+    console.warn(
+      `[githubStorage] Cancellazione di "${filename}" NON specchiata su GitHub ` +
+      `(GITHUB_ALLOW_DELETE non è "true"). Il file resta rimosso solo in locale — ` +
+      `su GitHub è ancora presente. Imposta GITHUB_ALLOW_DELETE=true per abilitare ` +
+      `le cancellazioni remote una volta verificato che sia sicuro farlo.`
+    );
+    return;
+  }
+  const cfg = getConfig();
+
+  const sha = shaCache.get(filename) || (await fetchCurrentSha(cfg, filename));
+  if (!sha) return; // mai esistito su GitHub, niente da cancellare
+
+  const url = `${GITHUB_API}/repos/${cfg.repo}/contents/${repoPath(cfg, filename)}`;
+  const res = await fetch(url, {
+    method: "DELETE",
+    headers: headers(cfg),
+    body: JSON.stringify({ message, sha, branch: cfg.branch }),
+  });
+
+  if (!res.ok) {
+    console.error(`[githubStorage] Eliminazione fallita per ${filename}: ${await res.text()}`);
+  } else {
+    shaCache.delete(filename);
+  }
+}
+
+/**
+ * Test di connettività + permessi, usato dalla route diagnostica.
+ * Non modifica nulla sulla repo.
+ */
+export async function testGitHubAccess(): Promise<
+  { configured: false } | { configured: true; ok: boolean; detail: string }
+> {
+  if (!isGitHubConfigured()) return { configured: false };
+  const cfg = getConfig();
+  try {
+    const res = await fetch(`${GITHUB_API}/repos/${cfg.repo}`, { headers: headers(cfg) });
+    if (!res.ok) {
+      return { configured: true, ok: false, detail: `HTTP ${res.status}: ${await res.text()}` };
+    }
+    const data = await res.json();
+    return {
+      configured: true,
+      ok: true,
+      detail: `Repo raggiunta: ${data.full_name} (privata: ${data.private}), branch predefinito: ${data.default_branch}`,
+    };
+  } catch (e: any) {
+    return { configured: true, ok: false, detail: e.message || String(e) };
+  }
+}

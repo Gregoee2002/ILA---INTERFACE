@@ -1,0 +1,6 @@
+[
+  { "field": "epiteti", "label": "Epiteti" },
+  { "field": "divinita", "label": "Divinità" },
+  { "field": "regione", "label": "Regione" },
+  { "field": "tipo", "label": "Tipo di oggetto" }
+]

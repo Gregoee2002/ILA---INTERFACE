@@ -1,0 +1,129 @@
+{
+  "entities": {
+    "monumento": {
+      "title": "Monumento",
+      "description": "An ancient monument or inscription record",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "description": "Sequential numerical identifier"
+        },
+        "entryId": {
+          "type": "string",
+          "description": "Unique string key for database record"
+        },
+        "titolo": {
+          "type": "string"
+        },
+        "corpus": {
+          "type": "string"
+        },
+        "numero": {
+          "type": "string"
+        },
+        "conserv": {
+          "type": "string"
+        },
+        "regione": {
+          "type": "string"
+        },
+        "citta": {
+          "type": "string"
+        },
+        "tipo": {
+          "type": "string"
+        },
+        "materiale": {
+          "type": "string"
+        },
+        "dim": {
+          "type": "string"
+        },
+        "luogo_rit": {
+          "type": "string"
+        },
+        "luogo_cons": {
+          "type": "string"
+        },
+        "testo": {
+          "type": "string"
+        },
+        "iscrizione": {
+          "type": "boolean"
+        },
+        "anepigr": {
+          "type": "boolean"
+        },
+        "data": {
+          "type": "string"
+        },
+        "data_inizio": {
+          "type": "integer"
+        },
+        "data_fine": {
+          "type": "integer"
+        },
+        "epiteti": {
+          "type": "array"
+        },
+        "divinita": {
+          "type": "array"
+        },
+        "onomastica": {
+          "type": "array"
+        },
+        "textTypes": {
+          "type": "array"
+        },
+        "imperatori": {
+          "type": "array"
+        },
+        "persone": {
+          "type": "array"
+        },
+        "iconografia": {
+          "type": "object"
+        },
+        "traduzioni": {
+          "type": "array"
+        },
+        "bibliografia": {
+          "type": "array"
+        },
+        "note_interne": {
+          "type": "string"
+        },
+        "note_interne_rawXml": {
+          "type": "string"
+        },
+        "apparatus": {
+          "type": "string"
+        },
+        "revisions": {
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "entryId",
+        "regione",
+        "citta",
+        "tipo",
+        "materiale",
+        "testo",
+        "iscrizione",
+        "anepigr",
+        "data"
+      ]
+    }
+  },
+  "firestore": {
+    "/monumenti/{monumentoId}": {
+      "schema": {
+        "$ref": "#/entities/monumento"
+      },
+      "description": "Collection of all individual monuments and inscriptions"
+    }
+  }
+}
