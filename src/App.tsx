@@ -40,7 +40,8 @@ import {
   Filter,
   Check,
   AlertTriangle,
-  Feather
+  Feather,
+  FlaskConical
 } from 'lucide-react';
 import { cn } from './lib/utils';
 import { Monumento, FilterState, SortField, Traduzione, Bibliografia, Appunto } from './types';
@@ -53,10 +54,23 @@ import { MapView } from './components/MapView';
 import { IconographyPanel } from './components/IconographyPanel';
 import { CooccurrenceHeatmap } from './components/CooccurrenceHeatmap';
 import { SectionEditorView } from './components/SectionEditorView';
+import { TestDataPanel } from './components/TestDataPanel';
 import { auth, loginWithGoogle, logout } from './lib/firebase';
 import { onAuthStateChanged, User } from 'firebase/auth';
 
-type AppView = 'home' | 'catalog' | 'stats' | 'timeline' | 'health' | 'map' | 'heatmap' | 'editor';
+// Forma della risposta di GET /api/search (vedi src/lib/searchIndex.ts).
+// Dichiarato qui invece che importato dal modulo server per non accoppiare
+// il bundle frontend al codice Node del backend.
+interface SearchResult {
+  id: number;
+  entryId?: string;
+  score: number;
+  match: Record<string, string[]>;
+  terms: string[];
+  matchInSupplied: boolean;
+}
+
+type AppView = 'home' | 'catalog' | 'stats' | 'timeline' | 'health' | 'map' | 'heatmap' | 'editor' | 'testdata';
 
 // Curve condivise: stessa "fisica" per tutte le micro-animazioni del progetto
 const EASE_OUT = [0.16, 1, 0.3, 1] as const;
@@ -79,15 +93,6 @@ const fadeSwap = {
   animate: { opacity: 1 },
   exit: { opacity: 0 },
   transition: { duration: 0.4, ease: EASE_OUT },
-};
-
-// Helper: Normalize Greek text for searching (rough)
-const normalizeGreek = (text: string) => {
-  return text
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "") // Remove accents
-    .replace(/ς/g, "σ") // Sigma normalization
-    .toLowerCase();
 };
 
 const formatDate = (val?: number) => {
@@ -517,7 +522,7 @@ function EpithetStats({ monumenti, onSelectMonumento }: { monumenti: Monumento[]
       <motion.div {...scrollReveal} className="mb-8 flex justify-between items-end">
         <div>
           <div className="text-[10px] font-sans font-bold uppercase tracking-[0.22em] text-accent/70 mb-2">Statistiche del Corpus</div>
-          <h2 className="text-4xl font-bold italic mb-2">Divinità &amp; Onomastica</h2>
+          <h2 className="text-3xl md:text-4xl font-bold italic mb-2">Divinità &amp; Onomastica</h2>
           <div className="ornament-rule !my-0 mb-3 max-w-[6rem] mx-0" />
           <p className="text-sm text-muted font-serif">
             {activeTab === 'divinita'
@@ -729,7 +734,7 @@ function CorpusHealth({ monumenti, onSelectMonumento }: { monumenti: Monumento[]
     <div className="flex-1 flex flex-col overflow-hidden">
       <motion.div {...scrollReveal} className="mb-8">
         <div className="text-[10px] font-sans font-bold uppercase tracking-[0.22em] text-accent/70 mb-2">Controllo qualità</div>
-        <h2 className="text-4xl font-bold italic mb-2">Coerenza del Corpus</h2>
+        <h2 className="text-3xl md:text-4xl font-bold italic mb-2">Coerenza del Corpus</h2>
         <div className="ornament-rule !my-0 mb-3 max-w-[6rem] mx-0" />
         <p className="text-sm text-muted font-serif">
           Controllo automatico delle varianti grafiche e dei campi mancanti. Nessun dato viene modificato: le segnalazioni vanno verificate e corrette a mano.
@@ -930,6 +935,7 @@ const RAIL_ITEMS: { view: AppView; label: string; icon: React.ReactNode }[] = [
   { view: 'stats', label: 'Statistiche Epiteti', icon: <BarChart2 className="h-4 w-4" /> },
   { view: 'heatmap', label: 'Heatmap Co-occorrenze', icon: <Columns className="h-4 w-4" /> },
   { view: 'health', label: 'Coerenza', icon: <Check className="h-4 w-4" /> },
+  { view: 'testdata', label: 'Reali vs. Test', icon: <FlaskConical className="h-4 w-4" /> },
   { view: 'editor', label: 'Editor XML', icon: <Feather className="h-4 w-4" /> },
 ];
 
@@ -1356,7 +1362,7 @@ function Timeline({ monumenti, onSelect }: { monumenti: Monumento[], onSelect: (
     <div className="flex-1 flex flex-col overflow-hidden">
       <motion.div {...scrollReveal} className="mb-8 pb-4 border-b border-border/50">
         <div className="text-[10px] font-sans font-bold uppercase tracking-[0.22em] text-accent/70 mb-2">Sequenza temporale</div>
-        <h2 className="text-4xl font-bold italic mb-2">Cronologia Storica</h2>
+        <h2 className="text-3xl md:text-4xl font-bold italic mb-2">Cronologia Storica</h2>
         <p className="text-sm text-muted font-serif">Visualizzazione sequenziale dei monumenti datati (a.C. - d.C.).</p>
       </motion.div>
 
@@ -2280,19 +2286,54 @@ export default function App() {
     searchMode: 'AND',
   });
   
-  const [miniSearchResults, setMiniSearchResults] = useState<any[]>([]);
-  const [showMiniSearch, setShowMiniSearch] = useState(false);
+  // Ricerca full-text (MiniSearch, lato server) — è la ricerca di default,
+  // non più un pannello di confronto separato dal filtro vero.
+  const [miniSearchResults, setMiniSearchResults] = useState<SearchResult[]>([]);
+  const [isSearching, setIsSearching] = useState(false);
+  // true finché non arriva la prima risposta per la query corrente: evita di
+  // mostrare per un istante "nessun risultato" (lista vuota) prima che la
+  // fetch abbia risposto, mentre l'utente sta ancora scrivendo
+  const [searchPending, setSearchPending] = useState(false);
 
   useEffect(() => {
-    if (filters.searchText.trim().length > 2) {
-      fetch(`/api/search?q=${encodeURIComponent(filters.searchText)}`)
-        .then(res => res.json())
-        .then(data => setMiniSearchResults(data))
-        .catch(console.error);
-    } else {
+    const query = filters.searchText.trim();
+    if (query.length <= 2) {
       setMiniSearchResults([]);
+      setSearchPending(false);
+      return;
     }
-  }, [filters.searchText]);
+    setSearchPending(true);
+    const controller = new AbortController();
+    // Piccolo debounce per non sparare una fetch ad ogni tasto
+    const t = setTimeout(() => {
+      setIsSearching(true);
+      fetch(`/api/search?q=${encodeURIComponent(query)}&mode=${filters.searchMode}`, { signal: controller.signal })
+        .then(res => res.json())
+        .then((data: SearchResult[]) => {
+          setMiniSearchResults(Array.isArray(data) ? data : []);
+          setSearchPending(false);
+        })
+        .catch((e) => {
+          if (e.name !== 'AbortError') console.error('Ricerca fallita:', e);
+        })
+        .finally(() => setIsSearching(false));
+    }, 200);
+    return () => { clearTimeout(t); controller.abort(); };
+  }, [filters.searchText, filters.searchMode]);
+
+  // Set degli id trovati dalla ricerca (undefined = nessuna ricerca testuale
+  // attiva, quindi il filtro per testo non esclude nulla) e mappa id →
+  // "il match cade in una parte ricostruita editorialmente" per il badge.
+  const searchResultIds = useMemo(() => {
+    if (filters.searchText.trim().length <= 2) return null;
+    return new Set(miniSearchResults.map(r => r.id));
+  }, [miniSearchResults, filters.searchText]);
+
+  const matchInSuppliedById = useMemo(() => {
+    const map = new Map<number, boolean>();
+    miniSearchResults.forEach(r => map.set(r.id, r.matchInSupplied));
+    return map;
+  }, [miniSearchResults]);
   
   const [selectedMonumento, setSelectedMonumento] = useState<Monumento | null>(null);
   const [editForm, setEditForm] = useState<any>({});
@@ -2501,64 +2542,17 @@ export default function App() {
   const types = useMemo(() => Array.from(new Set(monumenti.map(m => m.tipo).filter(Boolean).map(s => s.trim()))).sort(), [monumenti]);
   const materials = useMemo(() => Array.from(new Set(monumenti.map(m => m.materiale).filter(Boolean).map(s => s.trim()))).sort(), [monumenti]);
 
-  // Optimized: Map monument IDs to pre-calculated normalized search strings to avoid repeating this during keystrokes
-  const normalizedSearchMap = useMemo(() => {
-    const map = new Map<number | string, string>();
-    monumenti.forEach(m => {
-      const textToNormalize = `
-        ${m.id} 
-        ${m.titolo || ''} 
-        ${m.corpus || ''}
-        ${m.numero || ''}
-        ${m.citta || ''} 
-        ${m.regione || ''} 
-        ${m.testo || ''} 
-        ${m.tipo || ''} 
-        ${m.materiale || ''}
-        ${m.epiteti?.join(' ') || ''}
-        ${m.divinita?.join(' ') || ''}
-        ${(m as any).imperatori?.join(' ') || ''}
-        ${m.onomastica?.join(' ') || ''}
-        ${m.note_interne || ''}
-        ${stripXml(m.apparatus)}
-        ${m.traduzioni?.map(t => `${t.testo || ''} ${t.note || ''}`).join(' ') || ''}
-        ${m.bibliografia?.map(b => b.titolo || '').join(' ') || ''}
-      `;
-      map.set(m.id, normalizeGreek(textToNormalize));
-    });
-    return map;
-  }, [monumenti]);
-
   const filteredMonumenti = useMemo(() => {
-    const query = filters.searchText.toLowerCase().trim();
-    const queryParts = query ? query.split(/\s+/) : [];
-    const queryPartsNormalized = queryParts.map(p => normalizeGreek(p));
-
     return monumenti
       .filter(m => {
-        // Advanced Search Logic (AND/OR/NOT)
-        let matchesSearch = true;
-        if (queryPartsNormalized.length > 0) {
-          const mNorm = normalizedSearchMap.get(m.id) || '';
-          let currentMode: 'AND' | 'OR' | 'NOT' = filters.searchMode;
-          
-          if (filters.searchMode === 'AND') {
-            matchesSearch = queryPartsNormalized.every(partNorm => {
-              if (partNorm === 'and') { currentMode = 'AND'; return true; }
-              if (partNorm === 'or') { currentMode = 'OR'; return true; }
-              if (partNorm === 'not') { currentMode = 'NOT'; return true; }
-              
-              const matchesPart = mNorm.includes(partNorm);
-              if (currentMode === 'NOT') return !matchesPart;
-              return matchesPart;
-            });
-          } else {
-            matchesSearch = queryPartsNormalized.some(partNorm => {
-              if (partNorm === 'and' || partNorm === 'or' || partNorm === 'not') return false;
-              return mNorm.includes(partNorm);
-            });
-          }
-        }
+        // Ricerca testuale: guidata da MiniSearch (server), non più da un
+        // confronto substring in locale. searchResultIds === null significa
+        // "nessuna ricerca testuale attiva" (query vuota o troppo corta):
+        // in quel caso il filtro per testo non esclude nulla. Mentre la
+        // fetch per una query nuova è ancora in corso (searchPending),
+        // teniamo tutto visibile invece di mostrare per un istante "nessun
+        // risultato" prima che la risposta arrivi.
+        const matchesSearch = searchResultIds === null || searchPending || searchResultIds.has(m.id);
         
         const matchesRegione = !filters.regione || m.regione === filters.regione;
         const matchesCorpus = !filters.corpus || m.corpus === filters.corpus;
@@ -2596,12 +2590,12 @@ export default function App() {
         }
         return 0;
       });
-  }, [monumenti, filters, sortField, sortOrder, normalizedSearchMap]);
+  }, [monumenti, filters, sortField, sortOrder, searchResultIds, searchPending]);
 
   useEffect(() => {
     setCurrentPage(1);
     setSelectedIds(new Set());
-  }, [filters, showMiniSearch]);
+  }, [filters]);
 
 
   const totalPages = Math.ceil(filteredMonumenti.length / ITEMS_PER_PAGE);
@@ -3234,7 +3228,7 @@ export default function App() {
 
   return (
     <MotionConfig reducedMotion="user">
-    <div className="flex h-screen w-full flex-col bg-parchment text-ink font-serif overflow-hidden relative pl-14">
+    <div className="flex h-screen w-full flex-col bg-parchment text-ink font-serif overflow-hidden relative pb-14 md:pb-0 md:pl-14">
       <IconRail
         activeView={activeView}
         onNavigate={(v) => { setActiveView(v); setHasNavigated(true); }}
@@ -3335,7 +3329,7 @@ export default function App() {
         {!hasNavigated && (
         <div className="flex flex-col">
           <div className="flex items-center gap-4">
-            <button onClick={goHome} className="text-4xl md:text-5xl font-bold tracking-[0.15em] text-accent leading-none hover:opacity-80 transition-opacity cursor-pointer" style={{ fontFamily: '"Cinzel", serif' }} title="Torna alla home">ILA</button>
+            <button onClick={goHome} className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-[0.15em] text-accent leading-none hover:opacity-80 transition-opacity cursor-pointer" style={{ fontFamily: '"Cinzel", serif' }} title="Torna alla home">ILA</button>
             <div className="hidden lg:block h-14 w-[1px] bg-accent/20 mx-2" />
           </div>
           <div className="mt-2 lg:mt-4 flex flex-col items-start">
@@ -3449,7 +3443,7 @@ export default function App() {
               initial={{ x: '100%' }}
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
-              className="glass-panel absolute right-0 top-0 bottom-0 w-80 border-t-0 border-r-0 border-b-0 z-40 p-10 shadow-2xl flex flex-col"
+              className="glass-panel absolute right-0 top-0 bottom-0 w-[85vw] sm:w-80 p-6 sm:p-10 border-t-0 border-r-0 border-b-0 z-40 shadow-2xl flex flex-col"
             >
               <div className="flex items-center justify-between mb-12">
                 <h3 className="font-sans text-[11px] font-bold uppercase tracking-[0.25em] text-muted">Gestione Dati</h3>
@@ -3550,7 +3544,7 @@ export default function App() {
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: -10, scale: 0.98 }}
                 transition={SPRING_SOFT}
-                className="hidden md:flex absolute z-30 top-2 left-2.5 md:left-5 lg:left-6 flex-col w-80 lg:w-96 max-h-[calc(100%-1rem)] p-8 rounded-2xl bg-[var(--card)]/95 dark:bg-[var(--card)]/90 backdrop-blur-xl border border-[var(--border)]/60 dark:border-[var(--border)]/50 shadow-[0_20px_50px_-12px_rgba(var(--shadow-color),0.28)] dark:shadow-[0_20px_50px_-12px_rgba(0,0,0,0.6)] overflow-y-auto custom-scrollbar"
+                className="flex absolute z-30 top-14 md:top-2 left-2 right-2 md:left-5 lg:left-6 md:right-auto flex-col md:w-80 lg:w-96 max-h-[calc(100%-4rem)] md:max-h-[calc(100%-1rem)] p-6 md:p-8 rounded-2xl bg-[var(--card)]/95 dark:bg-[var(--card)]/90 backdrop-blur-xl border border-[var(--border)]/60 dark:border-[var(--border)]/50 shadow-[0_20px_50px_-12px_rgba(var(--shadow-color),0.28)] dark:shadow-[0_20px_50px_-12px_rgba(0,0,0,0.6)] overflow-y-auto custom-scrollbar"
               >
             {/* Soft bottom glow/blur to match the header relief effect */}
             <div className="absolute -bottom-4 inset-x-12 h-8 bg-accent/5 dark:bg-accent/2 blur-2xl rounded-full opacity-40 pointer-events-none -z-10" />
@@ -3566,22 +3560,17 @@ export default function App() {
                 <div className="flex items-center justify-between mb-2">
                   <label className="block field-label">Ricerca Intelligente</label>
                   <div className="flex bg-sidebar border border-border p-0.5 rounded-sm">
-                    <button
-                      onClick={() => setShowMiniSearch(!showMiniSearch)}
-                      className={cn("px-2 py-0.5 text-[8px] font-bold transition-all border-r border-border/50", showMiniSearch ? "text-accent" : "text-muted hover:text-ink")}
-                      title="Mostra risultati MiniSearch"
-                    >
-                      MINISEARCH {showMiniSearch ? 'ON' : 'OFF'}
-                    </button>
                     <button 
                       onClick={() => setFilters(f => ({ ...f, searchMode: 'AND' }))}
                       className={cn("px-2 py-0.5 text-[8px] font-bold transition-all", filters.searchMode === 'AND' ? "bg-accent text-white" : "text-muted hover:text-ink")}
+                      title="Tutti i termini devono comparire"
                     >
                       AND
                     </button>
                     <button 
                       onClick={() => setFilters(f => ({ ...f, searchMode: 'OR' }))}
                       className={cn("px-2 py-0.5 text-[8px] font-bold transition-all", filters.searchMode === 'OR' ? "bg-accent text-white" : "text-muted hover:text-ink")}
+                      title="Basta che compaia almeno un termine"
                     >
                       OR
                     </button>
@@ -3593,31 +3582,14 @@ export default function App() {
                   <input 
                     type="text" 
                     placeholder="Cerca testo, luoghi, tipi..."
-                    className="w-full bg-transparent py-1 pl-6 font-sans text-xs outline-none transition-colors placeholder:opacity-50"
+                    className="w-full bg-transparent py-1 pl-6 pr-6 font-sans text-xs outline-none transition-colors placeholder:opacity-50"
                     value={filters.searchText}
                     onChange={(e) => setFilters(f => ({ ...f, searchText: e.target.value }))}
                   />
+                  {isSearching && (
+                    <Loader2 className="absolute right-3.5 top-1/2 -translate-y-1/2 h-3 w-3 text-accent/60 animate-spin" />
+                  )}
                 </div>
-                
-                {/* Pannello Debug MiniSearch */}
-                {showMiniSearch && filters.searchText.trim().length > 2 && (
-                  <div className="mt-3 p-3 bg-accent/5 border border-accent/20 rounded-xl max-h-48 overflow-y-auto">
-                    <h4 className="text-[10px] font-bold uppercase tracking-widest text-accent mb-2">Risultati MiniSearch (Debug)</h4>
-                    {miniSearchResults.length > 0 ? (
-                      <ul className="space-y-2">
-                        {miniSearchResults.slice(0, 20).map(res => (
-                          <li key={res.id} className="text-[11px] font-sans border-b border-border/30 pb-1">
-                            <span className="font-bold mr-1">{res.id}</span>
-                            <span className="text-muted/70 mr-2">(score: {res.score?.toFixed(1)})</span>
-                            <span className="italic text-ink/80">{res.match ? Object.keys(res.match).join(', ') : ''}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    ) : (
-                      <div className="text-xs text-muted italic">Nessun risultato da MiniSearch</div>
-                    )}
-                  </div>
-                )}
               </div>
 
               <div className="animate-in fade-in slide-in-from-left-2 duration-300">
@@ -3807,16 +3779,16 @@ export default function App() {
           {activeView === 'catalog' && (
             <>
               {/* Dashboard Stats Row */}
-              <div className="mb-6 md:mb-10 bg-[var(--card)]/80 dark:bg-[var(--card)]/60 backdrop-blur-md border border-[var(--border)]/50 dark:border-[var(--border)]/40 rounded-2xl shadow-lg border-l-[4px] border-l-accent pl-6 md:pl-8 py-4 pr-6 relative overflow-hidden group transition-all duration-300 hover:shadow-xl hover:bg-[var(--card)] dark:hover:bg-[var(--card)]/80">
+              <div className="shrink-0 mb-6 md:mb-10 bg-[var(--card)]/80 dark:bg-[var(--card)]/60 backdrop-blur-md border border-[var(--border)]/50 dark:border-[var(--border)]/40 rounded-2xl shadow-lg border-l-[4px] border-l-accent pl-6 md:pl-8 py-5 pr-6 relative overflow-hidden group transition-all duration-300 hover:shadow-xl hover:bg-[var(--card)] dark:hover:bg-[var(--card)]/80">
                 <div className="absolute inset-0 bg-accent/5 -translate-x-full group-hover:translate-x-0 transition-transform duration-700" />
-                <div className="relative z-10 flex items-baseline gap-3">
-                  <span className="block text-3xl md:text-4xl font-serif font-semibold leading-none text-ink">{monumenti.length}</span>
+                <div className="relative z-10 flex flex-col md:flex-row md:items-baseline gap-1 md:gap-3">
+                  <span className="block text-3xl md:text-4xl font-serif font-semibold leading-tight text-ink">{monumenti.length}</span>
                   <span className="text-sm font-serif italic text-muted">voci totali nel corpus</span>
                 </div>
               </div>
 
                 {/* Record List */}
-                <div className="flex flex-col overflow-hidden min-h-0 max-h-[68vh] glass-panel rounded-2xl shadow-custom">
+                <div className="flex-1 flex flex-col overflow-hidden min-h-0 glass-panel rounded-2xl shadow-custom">
                   <div className="px-6 pt-6 mb-2 flex items-center justify-between border-b border-border/20 pb-3 font-sans text-[10px] font-bold uppercase tracking-[0.2em] text-muted">
                     <span>Visualizzazione di {filteredMonumenti.length} schede</span>
                     <div className="flex items-center gap-4">
@@ -3827,7 +3799,7 @@ export default function App() {
                   </div>
   
                   <div className="flex-1 overflow-y-auto custom-scrollbar px-6">
-                    <div className="grid grid-cols-13 gap-2 border-b border-border py-4 text-[10px] font-bold uppercase tracking-tighter text-muted/60 sticky top-0 bg-parchment/80 backdrop-blur-md z-10 px-2 lg:px-0" style={{gridTemplateColumns: '1.5rem 1fr 1fr 1fr 3fr 2fr 1fr 2fr 1.5rem'}}>
+                    <div className="hidden md:grid md:grid-cols-[1.5rem_1.5fr_4fr_2fr_2fr_1.5rem] lg:grid-cols-[1.5rem_1.5fr_1.5fr_1fr_4fr_2fr_2fr_1.5rem] xl:grid-cols-[1.5rem_1fr_1fr_0.5fr_3fr_1.5fr_1fr_2.5fr_1.5rem] gap-2 border-b border-border py-4 text-[10px] font-bold uppercase tracking-tighter text-muted/60 sticky top-0 bg-[var(--card)]/95 backdrop-blur-md z-10 px-2 lg:px-0" >
                       <div className="flex items-center justify-center">
                         <button
                           onClick={() => selectedIds.size === filteredMonumenti.length ? deselectAll() : selectAll()}
@@ -3860,7 +3832,7 @@ export default function App() {
                       <div>ID</div>
                       <div className="hidden lg:block">Corp.</div>
                       <div className="hidden lg:block text-right">N.</div>
-                      <div>Località</div>
+                      <div>Monumento</div>
                       <div className="text-right">Datazione</div>
                       <div>Tipologia</div>
                       <div className="hidden xl:block">Testo</div>
@@ -3884,10 +3856,10 @@ export default function App() {
                             transition={{ backgroundColor: { duration: 0.25, ease: EASE_OUT }, layout: SPRING_SNAPPY }}
                             whileHover={!isSelected ? { backgroundColor: 'rgba(45,45,45,0.03)' } : undefined}
                             className={cn(
-                              "relative grid gap-2 border-b py-4 group items-center px-2 lg:px-0 h-[76px] overflow-hidden [&>div]:min-w-0",
+                              "relative block md:grid md:grid-cols-[1.5rem_1.5fr_4fr_2fr_2fr_1.5rem] lg:grid-cols-[1.5rem_1.5fr_1.5fr_1fr_4fr_2fr_2fr_1.5rem] xl:grid-cols-[1.5rem_1fr_1fr_0.5fr_3fr_1.5fr_1fr_2.5fr_1.5rem] gap-2 border-b py-3 md:py-4 group items-center px-2 lg:px-0 min-h-[76px] md:h-[76px] overflow-hidden [&>div]:min-w-0",
                               isSelected ? "border-accent/20" : "border-border/30 cursor-pointer"
                             )}
-                            style={{gridTemplateColumns: '1.5rem 1fr 1fr 1fr 3fr 2fr 1fr 2fr 1.5rem'}}
+                            
                             onClick={() => setSelectedMonumento(m)}
                           >
                             {/* Accent bar indicating selection */}
@@ -3897,8 +3869,10 @@ export default function App() {
                               animate={{ width: isSelected ? 3 : 0, opacity: isSelected ? 1 : 0 }}
                               transition={SPRING_SNAPPY}
                             />
-                            {/* Checkbox */}
-                            <div className="flex items-center justify-center" onClick={e => { e.stopPropagation(); toggleSelect(m); }}>
+
+                            {/* --- MOBILE VIEW --- */}
+                            <div className="md:hidden flex w-full gap-3 items-start">
+                              <div className="flex items-center justify-center pt-0.5 md:pt-0" onClick={e => { e.stopPropagation(); toggleSelect(m); }}>
                               <motion.div
                                 whileTap={{ scale: 0.85 }}
                                 animate={{
@@ -3923,63 +3897,187 @@ export default function App() {
                                 </AnimatePresence>
                               </motion.div>
                             </div>
-                            <div>
-                              <span className="font-mono text-[10px] font-bold text-accent bg-accent/5 px-1.5 py-0.5 rounded-sm border border-accent/10 tabular-nums">#{m.id.toString().padStart(3, '0')}</span>
-                            </div>
-                            <div className="hidden lg:block">
-                               <span className="text-[9px] font-sans font-bold text-muted/60 uppercase line-clamp-1">{m.corpus || '-'}</span>
-                            </div>
-                            <div className="hidden lg:block">
-                               <span className="text-[9px] font-sans font-bold text-ink/70 tabular-nums block text-right">{m.numero || '-'}</span>
-                            </div>
-                            <div>
-                              <div className="text-sm font-bold text-ink line-clamp-1 group-hover:text-accent transition-colors">{getDisplayTitle(m)}</div>
-                              <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 mt-1">
-                                {m.regione && (
-                                  <button
-                                    onClick={(e) => { e.stopPropagation(); setFilters(f => ({ ...f, regione: m.regione })); }}
-                                    className="text-[7px] font-sans text-accent font-bold uppercase tracking-wider bg-accent/5 px-1 rounded-xs border border-accent/10 hover:bg-accent hover:text-white transition-all cursor-pointer"
-                                  >
-                                    {m.regione}
-                                  </button>
-                                )}
-                                {m.citta && (
-                                  <button
-                                    onClick={(e) => { e.stopPropagation(); setFilters(f => ({ ...f, citta: m.citta })); }}
-                                    className="flex items-center gap-1 opacity-70 hover:opacity-100 hover:text-accent transition-all cursor-pointer"
-                                  >
-                                    <MapPin className="h-1.5 w-1.5 text-muted/50" />
-                                    <span className="text-[8px] font-sans text-muted uppercase tracking-tighter">{m.citta}</span>
-                                  </button>
-                                )}
+                              
+                              <div className="flex-1 min-w-0 flex flex-col gap-1.5">
+                                <div className="flex justify-between items-center gap-2">
+                                  <div className="flex items-center gap-1 flex-wrap">
+                                    <span className="font-mono text-[10px] font-bold text-accent bg-accent/5 px-1.5 py-0.5 rounded-sm border border-accent/10 tabular-nums">#{m.id.toString().padStart(3, '0')}</span>
+                                    {searchResultIds?.has(m.id) && matchInSuppliedById.get(m.id) && (
+                                      <span className="font-mono text-[8px] font-bold text-amber-700 bg-amber-500/10 px-1 py-0.5 rounded-sm border border-amber-500/20">RICOSTR.</span>
+                                    )}
+                                    {(m.corpus || m.numero) && (
+                                      <span className="text-[9px] font-sans font-bold text-muted/60 uppercase ml-1">
+                                        {m.corpus || ''} {m.numero || ''}
+                                      </span>
+                                    )}
+                                  </div>
+                                  <span className="text-[10px] font-bold text-ink/75 tabular-nums shrink-0">{formatDateRange(m.data_inizio, m.data_fine)}</span>
+                                </div>
+                                
+                                <div className="text-sm font-bold text-ink leading-tight line-clamp-2">{getDisplayTitle(m)}</div>
+                                
+                                <div className="flex flex-wrap items-center gap-x-2 gap-y-1 mt-0.5">
+                                  <span className="text-[9px] font-bold uppercase text-muted tracking-tighter">{m.tipo}</span>
+                                  {m.regione && <span className="text-[7px] font-sans text-accent font-bold uppercase tracking-wider bg-accent/5 px-1 rounded-xs border border-accent/10">{m.regione}</span>}
+                                  {m.citta && (
+                                     <span className="flex items-center gap-0.5 text-[8px] font-sans text-muted uppercase tracking-tighter">
+                                       <MapPin className="h-1.5 w-1.5 opacity-50" />
+                                       {m.citta}
+                                     </span>
+                                  )}
+                                </div>
+                              </div>
+                              
+                              <div className="shrink-0 pl-1 self-center">
+                                <ChevronRight className="h-4 w-4 text-border group-hover:text-accent group-hover:translate-x-1 transition-all" />
                               </div>
                             </div>
-                            <div>
-                               <span className="text-[10px] font-bold text-ink/75 tabular-nums whitespace-nowrap block text-right">{formatDateRange(m.data_inizio, m.data_fine)}</span>
+
+                            {/* --- DESKTOP VIEW --- */}
+                            <div className="hidden md:contents">
+                              <div className="flex items-center justify-center pt-0.5 md:pt-0" onClick={e => { e.stopPropagation(); toggleSelect(m); }}>
+                              <motion.div
+                                whileTap={{ scale: 0.85 }}
+                                animate={{
+                                  scale: isSelected ? [1, 1.15, 1] : 1,
+                                  backgroundColor: isSelected ? 'rgb(45,161,153)' : 'rgba(0,0,0,0)',
+                                  borderColor: isSelected ? 'rgb(45,161,153)' : 'var(--border)',
+                                }}
+                                transition={{ duration: 0.28, ease: EASE_OUT }}
+                                className="w-4 h-4 border rounded-sm flex items-center justify-center cursor-pointer"
+                              >
+                                <AnimatePresence>
+                                  {isSelected && (
+                                    <motion.div
+                                      initial={{ scale: 0, opacity: 0 }}
+                                      animate={{ scale: 1, opacity: 1 }}
+                                      exit={{ scale: 0, opacity: 0 }}
+                                      transition={{ type: 'spring', stiffness: 600, damping: 25 }}
+                                    >
+                                      <Check className="h-2.5 w-2.5 text-white" />
+                                    </motion.div>
+                                  )}
+                                </AnimatePresence>
+                              </motion.div>
                             </div>
-                            <div className="flex flex-col gap-1">
-                               <button
-                                 onClick={(e) => { e.stopPropagation(); setFilters(f => ({ ...f, tipo: m.tipo })); }}
-                                 className="text-[9px] font-bold uppercase text-muted tracking-tighter line-clamp-1 opacity-70 hover:text-accent transition-colors cursor-pointer text-left"
-                               >
-                                 {m.tipo}
-                               </button>
-                            </div>
-                            <div
-                              className="hidden xl:block text-[10px] italic text-muted/50 leading-relaxed font-serif overflow-hidden"
-                              style={{ display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' as const }}
-                            >
-                              {stripXml(m.testo) || '[Anepigrafe]'}
-                            </div>
-                            <div className="text-right flex justify-end items-center">
-                              <ChevronRight className="h-4 w-4 text-border group-hover:text-accent group-hover:translate-x-1 transition-all" />
+                              <div className="flex items-center gap-1">
+                                <span className="font-mono text-[10px] font-bold text-accent bg-accent/5 px-1.5 py-0.5 rounded-sm border border-accent/10 tabular-nums">#{m.id.toString().padStart(3, '0')}</span>
+                                {searchResultIds?.has(m.id) && matchInSuppliedById.get(m.id) && (
+                                  <span
+                                    className="font-mono text-[8px] font-bold text-amber-700 bg-amber-500/10 px-1 py-0.5 rounded-sm border border-amber-500/20 whitespace-nowrap"
+                                    title="Il termine cercato compare in una parte ricostruita editorialmente (supplied), non attestata sulla pietra"
+                                  >
+                                    RICOSTR.
+                                  </span>
+                                )}
+                              </div>
+                              <div className="hidden lg:block">
+                                 <span className="text-[9px] font-sans font-bold text-muted/60 uppercase line-clamp-1">{m.corpus || '-'}</span>
+                              </div>
+                              <div className="hidden lg:block">
+                                 <span className="text-[9px] font-sans font-bold text-ink/70 tabular-nums block text-right">{m.numero || '-'}</span>
+                              </div>
+                              <div>
+                                <div className="text-sm font-bold text-ink line-clamp-1 group-hover:text-accent transition-colors">{getDisplayTitle(m)}</div>
+                                <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 mt-1">
+                                  {m.regione && (
+                                    <button
+                                      onClick={(e) => { e.stopPropagation(); setFilters(f => ({ ...f, regione: m.regione })); }}
+                                      className="text-[7px] font-sans text-accent font-bold uppercase tracking-wider bg-accent/5 px-1 rounded-xs border border-accent/10 hover:bg-accent hover:text-white transition-all cursor-pointer"
+                                    >
+                                      {m.regione}
+                                    </button>
+                                  )}
+                                  {m.citta && (
+                                    <button
+                                      onClick={(e) => { e.stopPropagation(); setFilters(f => ({ ...f, citta: m.citta })); }}
+                                      className="flex items-center gap-1 opacity-70 hover:opacity-100 hover:text-accent transition-all cursor-pointer"
+                                    >
+                                      <MapPin className="h-1.5 w-1.5 text-muted/50" />
+                                      <span className="text-[8px] font-sans text-muted uppercase tracking-tighter">{m.citta}</span>
+                                    </button>
+                                  )}
+                                </div>
+                              </div>
+                              <div>
+                                 <span className="text-[10px] font-bold text-ink/75 tabular-nums whitespace-nowrap block text-right">{formatDateRange(m.data_inizio, m.data_fine)}</span>
+                              </div>
+                              <div className="flex flex-col gap-1">
+                                 <button
+                                   onClick={(e) => { e.stopPropagation(); setFilters(f => ({ ...f, tipo: m.tipo })); }}
+                                   className="text-[9px] font-bold uppercase text-muted tracking-tighter line-clamp-1 opacity-70 hover:text-accent transition-colors cursor-pointer text-left"
+                                 >
+                                   {m.tipo}
+                                 </button>
+                              </div>
+                              <div className="hidden xl:block">
+                                <div
+                                  className="text-[10px] italic text-muted/50 leading-relaxed font-serif overflow-hidden"
+                                  style={{ display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' as const }}
+                                >
+                                  {stripXml(m.testo) || '[Anepigrafe]'}
+                                </div>
+                              </div>
+                              <div className="text-right flex justify-end items-center">
+                                <ChevronRight className="h-4 w-4 text-border group-hover:text-accent group-hover:translate-x-1 transition-all" />
+                              </div>
                             </div>
                           </motion.div>
                           );
                         })}
                       </AnimatePresence>
                     </div>
-             </div>
+
+                    {/* Pagination Controls */}
+                    {totalPages > 1 && (
+                      <div className="mt-8 mb-6 flex items-center justify-between border-t border-border/20 pt-6 px-6">
+                        <div className="text-[10px] font-sans font-bold uppercase tracking-widest text-muted">
+                          Pagina {currentPage} di {totalPages}
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <button
+                            disabled={currentPage === 1}
+                            onClick={() => setCurrentPage(prev => prev - 1)}
+                            className="p-2 border border-border/40 rounded-sm hover:bg-accent/10 disabled:opacity-20 transition-colors"
+                          >
+                            <ChevronLeft className="h-4 w-4" />
+                          </button>
+                          
+                          <div className="flex items-center gap-1 mx-2">
+                            {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                              let pageNum;
+                              if (totalPages <= 5) pageNum = i + 1;
+                              else if (currentPage <= 3) pageNum = i + 1;
+                              else if (currentPage >= totalPages - 2) pageNum = totalPages - 4 + i;
+                              else pageNum = currentPage - 2 + i;
+
+                              return (
+                                <button
+                                  key={pageNum}
+                                  onClick={() => setCurrentPage(pageNum)}
+                                  className={cn(
+                                    "w-7 h-7 flex items-center justify-center text-[10px] font-bold rounded-sm border transition-all",
+                                    currentPage === pageNum
+                                       ? "bg-accent border-accent text-white"
+                                       : "border-border/40 hover:border-accent text-muted"
+                                  )}
+                                >
+                                  {pageNum}
+                                </button>
+                              );
+                            })}
+                          </div>
+                          
+                          <button
+                            disabled={currentPage === totalPages}
+                            onClick={() => setCurrentPage(prev => prev + 1)}
+                            className="p-2 border border-border/40 rounded-sm hover:bg-accent/10 disabled:opacity-20 transition-colors"
+                          >
+                            <ChevronRight className="h-4 w-4" />
+                          </button>
+                        </div>
+                      </div>
+                    )}
 
                     {/* Selection Bar */}
                     <AnimatePresence>
@@ -4053,60 +4151,10 @@ export default function App() {
                         </motion.div>
                       )}
                     </AnimatePresence>
-
-                    {/* Pagination Controls */}
-                    {totalPages > 1 && (
-                      <div className="mt-8 mb-6 flex items-center justify-between border-t border-border/20 pt-6">
-                        <div className="text-[10px] font-sans font-bold uppercase tracking-widest text-muted">
-                          Pagina {currentPage} di {totalPages}
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <button
-                            disabled={currentPage === 1}
-                            onClick={() => setCurrentPage(prev => prev - 1)}
-                            className="p-2 border border-border/40 rounded-sm hover:bg-accent/10 disabled:opacity-20 transition-colors"
-                          >
-                            <ChevronLeft className="h-4 w-4" />
-                          </button>
-                          
-                          <div className="flex items-center gap-1 mx-2">
-                            {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
-                              let pageNum;
-                              if (totalPages <= 5) pageNum = i + 1;
-                              else if (currentPage <= 3) pageNum = i + 1;
-                              else if (currentPage >= totalPages - 2) pageNum = totalPages - 4 + i;
-                              else pageNum = currentPage - 2 + i;
-
-                              return (
-                                <button
-                                  key={pageNum}
-                                  onClick={() => setCurrentPage(pageNum)}
-                                  className={cn(
-                                    "w-7 h-7 flex items-center justify-center text-[10px] font-bold rounded-sm border transition-all",
-                                    currentPage === pageNum 
-                                      ? "bg-accent border-accent text-white" 
-                                      : "border-border/40 hover:border-accent text-muted"
-                                  )}
-                                >
-                                  {pageNum}
-                                </button>
-                              );
-                            })}
-                          </div>
-
-                          <button
-                            disabled={currentPage === totalPages}
-                            onClick={() => setCurrentPage(prev => prev + 1)}
-                            className="p-2 border border-border/40 rounded-sm hover:bg-accent/10 disabled:opacity-20 transition-colors"
-                          >
-                            <ChevronRight className="h-4 w-4" />
-                          </button>
-                        </div>
-                      </div>
-                    )}
                   </div>
-             </>
-           )}
+                </div>
+            </>
+          )}
 
           {activeView === 'stats' && <EpithetStats monumenti={monumenti} onSelectMonumento={(m) => { setSelectedMonumento(m); setActiveView('catalog'); }} />}
           {activeView === 'heatmap' && (
@@ -4121,6 +4169,7 @@ export default function App() {
             </div>
           )}
           {activeView === 'health' && <CorpusHealth monumenti={monumenti} onSelectMonumento={(m) => { setSelectedMonumento(m); setActiveView('catalog'); }} />}
+          {activeView === 'testdata' && <TestDataPanel monumenti={monumenti} onSelectMonumento={(m) => { setSelectedMonumento(m); setActiveView('catalog'); }} />}
           {activeView === 'editor' && (
             <SectionEditorView
               monumenti={monumenti}
@@ -4136,23 +4185,6 @@ export default function App() {
           )}
           {activeView === 'timeline' && <Timeline monumenti={monumenti} onSelect={setSelectedMonumento} />}
           {activeView === 'map' && <MapView monumenti={monumenti} onSelectMonumento={(id) => { const m = monumenti.find(x => x.id.toString() === id || x.entryId === id); if (m) { setSelectedMonumento(m); setActiveView('catalog'); } }} />}
-
-          {/* Footer Controls */}
-          {activeView === 'catalog' && (
-          <footer className="mt-8 flex items-center justify-between border-t border-border pt-6 font-sans text-[10px] font-bold uppercase tracking-[0.3em] text-muted shrink-0">
-            <div className="hidden sm:flex gap-6">
-              <span className="text-accent underline decoration-2 underline-offset-4">01</span>
-              <span className="opacity-30 hover:opacity-100 transition-opacity cursor-pointer">02</span>
-              <span className="opacity-30 hover:opacity-100 transition-opacity cursor-pointer">03</span>
-              <span className="opacity-20">...</span>
-              <span className="opacity-30 hover:opacity-100 transition-opacity cursor-pointer">22</span>
-            </div>
-            <div className="flex gap-10">
-              <span className="cursor-pointer hover:text-accent transition-colors">Prev Record</span>
-              <span className="cursor-pointer hover:text-accent transition-colors">Next Record</span>
-            </div>
-          </footer>
-          )}
         </motion.div>
         </section>
       </div>
@@ -4608,9 +4640,9 @@ export default function App() {
                exit={{ scale: 0.98, opacity: 0, y: 10 }}
                className="relative w-full lg:w-[95vw] max-w-[1400px] bg-parchment shadow-2xl overflow-hidden flex flex-col h-full lg:h-[90vh] border border-border lg:rounded-2xl"
              >
-                <div className="flex h-full flex-col md:flex-row overflow-hidden">
+                <div className="flex h-full flex-col md:flex-row overflow-y-auto md:overflow-hidden">
                   {/* Left Metadata Rail */}
-                  <div className="w-full md:w-72 bg-sidebar border-b md:border-b-0 md:border-r border-border p-8 md:p-10 flex flex-col overflow-y-auto custom-scrollbar">
+                  <div className="w-full md:w-72 bg-sidebar border-b md:border-b-0 md:border-r border-border p-6 md:p-10 flex flex-col shrink-0 md:overflow-y-auto custom-scrollbar">
                     <div className="mb-10 flex items-center justify-between gap-3">
                       <button 
                         onClick={() => setSelectedMonumento(null)}
@@ -4692,7 +4724,7 @@ export default function App() {
                    </div>
 
                   {/* Main Content Area */}
-                  <div className="flex-1 bg-parchment p-8 md:p-16 overflow-y-auto custom-scrollbar">
+                  <div className="flex-1 bg-parchment p-6 md:p-16 md:overflow-y-auto custom-scrollbar">
                     <div className="flex justify-between items-start mb-4">
                       <div className="flex-1 mr-4">
                         {true && (
@@ -5092,7 +5124,7 @@ export default function App() {
                                 + Confronta
                               </button>
                             </div>
-                            <h2 className="text-4xl md:text-5xl font-bold text-ink leading-tight font-serif">
+                            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-ink leading-tight font-serif">
                               {getDisplayTitle(selectedMonumento)}
                             </h2>
                             <div className="ornament-rule !my-0 mt-3 max-w-[6rem] mx-0" />

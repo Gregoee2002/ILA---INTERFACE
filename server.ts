@@ -425,8 +425,9 @@ async function startServer() {
   app.get("/api/search", (req, res) => {
     try {
       const query = (req.query.q as string) || '';
+      const mode = (req.query.mode as string) === 'AND' ? 'AND' : 'OR';
       if (!searchIndex) return res.status(503).json({ error: "Search index not ready" });
-      const results = searchMonumenti(searchIndex, query);
+      const results = searchMonumenti(searchIndex, query, { combineWith: mode });
       res.json(results);
     } catch (error) {
       console.error("Search error:", error);

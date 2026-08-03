@@ -17,67 +17,50 @@ function normalizeGreek(text: string): string {
     .toLowerCase();
 }
 
-// Strip minimale di markup XML residuo (es. dentro apparatus/traduzioni),
-// solo per l'indicizzazione — non tocca i dati originali.
-function stripXmlForIndex(val: any): string {
-  if (val === undefined || val === null) return '';
-  const s = typeof val === 'string' ? val : JSON.stringify(val);
-  return s.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
-}
-
-// Campi indicizzati, con peso relativo. Coprono lo stesso perimetro del
-// vecchio filtro client-side (normalizedSearchMap in App.tsx) più
-// testo_searchable al posto del testo grezzo con markup EpiDoc.
+// Campi indicizzati, con peso relativo. testo_searchable pesa di più perché
+// è il contenuto epigrafico primario; gli altri sono metadati di contesto.
 const SEARCH_FIELDS = [
   'testo_searchable_norm',
   'epiteti_norm',
   'divinita_norm',
-  'onomastica_norm',
-  'imperatori_norm',
   'citta_norm',
   'regione_norm',
-  'tipo_norm',
-  'materiale_norm',
-  'titolo_norm',
-  'corpus_norm',
-  'numero_norm',
-  'note_interne_norm',
-  'apparatus_norm',
-  'traduzioni_norm',
   'bibliografia_norm',
+  'testo_tradotto_norm',
 ];
 
 const FIELD_BOOST: Record<string, number> = {
   testo_searchable_norm: 3,
   epiteti_norm: 2.5,
   divinita_norm: 2.5,
-  onomastica_norm: 1.5,
-  imperatori_norm: 1.5,
   citta_norm: 1,
   regione_norm: 1,
-  tipo_norm: 1,
-  materiale_norm: 0.5,
-  titolo_norm: 1.5,
-  corpus_norm: 0.5,
-  numero_norm: 0.5,
-  note_interne_norm: 0.5,
-  apparatus_norm: 0.5,
-  traduzioni_norm: 1,
   bibliografia_norm: 0.5,
+  testo_tradotto_norm: 1,
 };
 
+/**
+ * Documento indicizzato da MiniSearch. I campi "_norm" contengono la
+ * versione normalizzata (senza diacritici, sigma unificata, minuscolo) —
+ * necessaria perché la ricerca greca politonica altrimenti non trova
+ * "θεος" cercando "θεός". I campi originali (non normalizzati) NON vengono
+ * indicizzati, solo portati con l'id per il display lato client se serve.
+ */
 interface IndexedDoc {
   id: number;
   entryId?: string;
-  [key: string]: any;
+  testo_searchable_norm: string;
+  epiteti_norm: string;
+  divinita_norm: string;
+  citta_norm: string;
+  regione_norm: string;
+  bibliografia_norm: string;
+  testo_tradotto_norm: string;
 }
 
 function toIndexedDoc(m: any): IndexedDoc {
   const bibliografiaText = Array.isArray(m.bibliografia)
     ? m.bibliografia.map((b: any) => b.titolo || '').join(' ')
-    : '';
-  const traduzioniText = Array.isArray(m.traduzioni)
-    ? m.traduzioni.map((t: any) => `${t.testo || ''} ${t.note || ''}`).join(' ')
     : '';
   return {
     id: m.id,
@@ -85,24 +68,16 @@ function toIndexedDoc(m: any): IndexedDoc {
     testo_searchable_norm: normalizeGreek(m.testo_searchable || ''),
     epiteti_norm: normalizeGreek((m.epiteti || []).join(' ')),
     divinita_norm: normalizeGreek((m.divinita || []).join(' ')),
-    onomastica_norm: normalizeGreek((m.onomastica || []).join(' ')),
-    imperatori_norm: normalizeGreek((m.imperatori || []).join(' ')),
     citta_norm: normalizeGreek(m.citta || ''),
     regione_norm: normalizeGreek(m.regione || ''),
-    tipo_norm: normalizeGreek(m.tipo || ''),
-    materiale_norm: normalizeGreek(m.materiale || ''),
-    titolo_norm: normalizeGreek(m.titolo || ''),
-    corpus_norm: normalizeGreek(m.corpus || ''),
-    numero_norm: normalizeGreek(m.numero || ''),
-    note_interne_norm: normalizeGreek(stripXmlForIndex(m.note_interne)),
-    apparatus_norm: normalizeGreek(stripXmlForIndex(m.apparatus)),
-    traduzioni_norm: normalizeGreek(traduzioniText),
     bibliografia_norm: normalizeGreek(bibliografiaText),
+    testo_tradotto_norm: normalizeGreek(m.testo_tradotto || ''),
   };
 }
 
-// Mappa id → monumento originale, per poter controllare supplied_ranges
-// al momento della ricerca (MiniSearch indicizza solo le stringhe).
+// Mappa id → monumento originale, per poter ricostruire testo_searchable e
+// supplied_ranges al momento della ricerca (MiniSearch indicizza solo le
+// stringhe, non li tiene in memoria per noi).
 let monumentiById: Map<number, any> = new Map();
 
 export function buildSearchIndex(monumenti: any[]): MiniSearch<IndexedDoc> {
@@ -130,7 +105,9 @@ export function buildSearchIndex(monumenti: any[]): MiniSearch<IndexedDoc> {
 /**
  * Verifica se un termine cercato compare, in monumento.testo_searchable,
  * dentro uno dei suoi supplied_ranges (= parte ricostruita editorialmente,
- * non attestata sulla pietra). Approssimato ma sufficiente per il badge.
+ * non attestata sulla pietra). Approssimato ma sufficiente per il badge:
+ * cerca tutte le occorrenze case-insensitive del termine e controlla se
+ * almeno una cade dentro un range.
  */
 function termFallsInSuppliedRange(monumento: any, term: string): boolean {
   const testo: string = monumento.testo_searchable || '';
@@ -145,6 +122,12 @@ function termFallsInSuppliedRange(monumento: any, term: string): boolean {
   let idx: number;
   while ((idx = testoNorm.indexOf(termNorm, searchFrom)) !== -1) {
     const matchEnd = idx + termNorm.length;
+    // NB: testoNorm e testo hanno la stessa lunghezza in caratteri per il
+    // greco politonico comune (NFD + strip accenti non cambia il conteggio
+    // di code point per le lettere effettivamente cercate qui), quindi gli
+    // indici sono utilizzabili direttamente contro supplied_ranges calcolati
+    // sul testo originale. Per lingue/script dove questo non valesse, andrebbe
+    // costruita una mappa di offset esplicita.
     const overlaps = ranges.some(([s, e]) => idx < e && matchEnd > s);
     if (overlaps) return true;
     searchFrom = idx + 1;
@@ -161,15 +144,7 @@ export interface SearchResult {
   matchInSupplied: boolean;
 }
 
-export interface SearchOptions {
-  combineWith?: 'AND' | 'OR';
-}
-
-export function searchMonumenti(
-  index: MiniSearch<IndexedDoc>,
-  query: string,
-  opts: SearchOptions = {}
-): SearchResult[] {
+export function searchMonumenti(index: MiniSearch<IndexedDoc>, query: string): SearchResult[] {
   const q = normalizeGreek((query || '').trim());
   if (!q) return [];
 
@@ -177,7 +152,6 @@ export function searchMonumenti(
     boost: FIELD_BOOST,
     fuzzy: 0.2,
     prefix: true,
-    combineWith: opts.combineWith === 'AND' ? 'AND' : 'OR',
   });
 
   return rawResults.map((r: any) => {

@@ -73,6 +73,15 @@ export interface Monumento {
   luogo_rit: string;
   luogo_cons?: string;
   testo: string;
+  // Testo piatto derivato da `testo`, pronto per l'indicizzazione full-text
+  // (MiniSearch): calcolato una volta in fase di parsing/import, non ad ogni
+  // ricerca. Include anche le ricostruzioni editoriali (<supplied>).
+  testo_searchable?: string;
+  // Intervalli [start, end) di carattere in `testo_searchable` che
+  // corrispondono a testo dentro un <supplied> (ricostruzione editoriale,
+  // non attestata sulla pietra) — usati per il badge "match ricostruito"
+  // nei risultati di ricerca.
+  supplied_ranges?: [number, number][];
   iscrizione: boolean;
   anepigr: boolean;
   data: string;

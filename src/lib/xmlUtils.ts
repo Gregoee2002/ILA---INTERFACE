@@ -68,6 +68,102 @@ function resolveXmlTextWithPtrs(xmlBlock: string): { resolvedText: string; cited
   return { resolvedText, citedRanges, rawXml };
 }
 
+/**
+ * extractSearchableText
+ * ----------------------
+ * Trasforma il campo edizione (XML EpiDoc grezzo, come estratto da
+ * <div type="edition"> subito sotto) in UN SOLO testo piatto indicizzabile
+ * per la ricerca full-text — include anche le ricostruzioni editoriali
+ * (<supplied>), non solo il testo materialmente inciso.
+ *
+ * Ritorna anche `suppliedRanges`: gli intervalli [start, end) di carattere
+ * nel testo finale che corrispondono a contenuto dentro un <supplied>.
+ * Il frontend può usarli per segnalare, quando un risultato di ricerca
+ * cade in questi range, che il match è su una parte ricostruita e non
+ * attestata sulla pietra.
+ *
+ * Regole di trasformazione:
+ *  - <lb break="no"/>      → rimosso, nessuno spazio (continuazione di parola
+ *                             a cavallo di fine riga)
+ *  - <lb n="..."/> normale → sostituito con uno spazio (fine riga = confine
+ *                             di parola)
+ *  - <gap/> e <space/>     → placeholder "[…]" per evitare che due parole
+ *                             non contigue sulla pietra vengano indicizzate
+ *                             come adiacenti
+ *  - <choice><corr>X</corr><sic>Y</sic></choice> → si tiene solo <corr>
+ *    (la lettura accettata dall'editore, non l'errore del lapicida)
+ *  - <supplied>...</supplied> → contenuto incluso nel testo, range tracciato
+ *  - altri tag semantici (persName, placeName, rs, name, num...) → tag
+ *    rimosso, contenuto mantenuto senza alterare l'adiacenza
+ *
+ * Testato su 52.xml (incluso il caso con due <div type="textpart"> annidati
+ * nello stesso <div type="edition">, es. I.Milet VI 3 1029 + 1040).
+ */
+function extractSearchableText(xmlTesto: string): { testo: string; suppliedRanges: [number, number][] } {
+  if (!xmlTesto) return { testo: '', suppliedRanges: [] };
+
+  let xml = xmlTesto
+    .replace(/<choice>\s*<corr>([\s\S]*?)<\/corr>\s*<sic>[\s\S]*?<\/sic>\s*<\/choice>/g, '$1')
+    .replace(/<choice>\s*<sic>[\s\S]*?<\/sic>\s*<corr>([\s\S]*?)<\/corr>\s*<\/choice>/g, '$1')
+    .replace(/<lb\b[^>]*\bbreak="no"[^>]*\/>/g, '\u0000NOBREAK\u0000')
+    .replace(/<lb\b[^>]*\/>/g, '\u0000BREAK\u0000')
+    .replace(/<gap\b[^>]*\/>/g, '\u0000GAP\u0000')
+    .replace(/<space\b[^>]*\/>/g, '\u0000GAP\u0000');
+
+  const tokens = xml.match(/<\/?[a-zA-Z][^>]*>|\u0000[A-Z]+\u0000|[^<\u0000]+/g) || [];
+
+  let out = '';
+  let suppliedDepth = 0;
+  let suppliedStart = -1;
+  const suppliedRanges: [number, number][] = [];
+
+  // Aggiunge uno spazio solo se non ne segue già uno — così gli offset restano
+  // validi dall'inizio alla fine, senza bisogno di ricalcolarli dopo un
+  // collasso di spazi multipli a fine funzione
+  const appendSpace = () => {
+    if (out.length > 0 && !out.endsWith(' ')) out += ' ';
+  };
+  const appendText = (rawTok: string) => {
+    const collapsed = rawTok.replace(/\s+/g, ' ');
+    if (collapsed === '') return;
+    if (collapsed.startsWith(' ')) appendSpace();
+    const core = collapsed.trim();
+    if (core === '') return;
+    out += core;
+    if (collapsed.endsWith(' ')) appendSpace();
+  };
+
+  for (const tok of tokens) {
+    if (tok === '\u0000NOBREAK\u0000') continue;
+    if (tok === '\u0000BREAK\u0000') { appendSpace(); continue; }
+    if (tok === '\u0000GAP\u0000') { appendSpace(); out += '[…]'; appendSpace(); continue; }
+    if (tok.startsWith('</supplied')) {
+      suppliedDepth = Math.max(0, suppliedDepth - 1);
+      if (suppliedDepth === 0 && suppliedStart !== -1) {
+        suppliedRanges.push([suppliedStart, out.length]);
+        suppliedStart = -1;
+      }
+      continue;
+    }
+    if (/^<supplied\b/.test(tok)) {
+      if (suppliedDepth === 0) suppliedStart = out.length;
+      suppliedDepth += 1;
+      continue;
+    }
+    if (tok.startsWith('<')) continue; // altri tag: strip, contenuto già gestito dai text token
+    appendText(tok);
+  }
+
+  const leadingSpaces = out.length - out.trimStart().length;
+  const trimmed = out.trim();
+  const adjustedRanges: [number, number][] = suppliedRanges.map(([s, e]) => [
+    Math.max(0, s - leadingSpaces),
+    Math.max(0, e - leadingSpaces),
+  ]);
+
+  return { testo: trimmed, suppliedRanges: adjustedRanges };
+}
+
 function extractIconography(teiString: string): any {
   const xenoMatch = teiString.match(/<xenoData>([\s\S]*?)<\/xenoData>/);
   if (!xenoMatch) return undefined;
@@ -521,6 +617,12 @@ function parseTeiElement(teiString: string): Monumento {
   if (editionMatch) {
     testo = unescapeXml(editionMatch[1].trim());
   }
+
+  // 19b. Testo indicizzabile per la ricerca full-text (MiniSearch) — derivato
+  // da `testo` (già unescaped, con i tag XML EpiDoc ancora dentro). Rispetta
+  // <lb break="no"/>, <supplied>, <gap>/<space> e <choice><corr>/<sic></choice>
+  // invece di uno strip generico dei tag (vedi extractSearchableText sopra).
+  const { testo: testo_searchable, suppliedRanges: supplied_ranges } = extractSearchableText(testo);
 
   // 20. Epiteti
   // Source 1: <keywords scheme="epiteti"><term> — manually curated
@@ -996,6 +1098,8 @@ function parseTeiElement(teiString: string): Monumento {
     facsimile_url,
     facsimile_desc,
     testo,
+    testo_searchable,
+    supplied_ranges,
     epiteti,
     divinita,
     onomastica,
