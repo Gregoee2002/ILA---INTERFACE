@@ -74,6 +74,31 @@ async function startServer() {
     return `${corpus}-${num}.xml`;
   }
 
+  // Limiti di base sui payload in scrittura, in linea con gli invarianti
+  // storicamente descritti in security_spec.md / firestore.rules (mai
+  // enforcati qui: i dati sono passati a file+GitHub, non più a Firestore).
+  // Senza queste guardie un payload malformato o deliberatamente enorme
+  // viene scritto su disco — e specchiato su GitHub — senza alcun limite.
+  function validateMonumentoShape(m: any): string | null {
+    if (typeof m?.id !== 'number' || !Number.isFinite(m.id) || m.id < 0) {
+      return 'id deve essere un numero >= 0';
+    }
+    const strCap = (field: string, max: number): string | null =>
+      (m[field] !== undefined && m[field] !== null && String(m[field]).length > max)
+        ? `${field} supera ${max} caratteri` : null;
+    const arrCap = (field: string, max: number): string | null =>
+      (Array.isArray(m[field]) && m[field].length > max)
+        ? `${field} supera ${max} elementi` : null;
+    const checks = [
+      strCap('regione', 200), strCap('citta', 200), strCap('tipo', 200), strCap('materiale', 200),
+      strCap('testo', 50000), strCap('note_interne', 10000), strCap('note_interne_rawXml', 10000),
+      arrCap('epiteti', 50), arrCap('divinita', 50), arrCap('onomastica', 50), arrCap('textTypes', 50),
+      arrCap('imperatori', 50), arrCap('persone', 100), arrCap('traduzioni', 50), arrCap('bibliografia', 50),
+      arrCap('revisions', 100),
+    ];
+    return checks.find(c => c !== null) ?? null;
+  }
+
   // Read all XML files from corpus dir (excluding backup)
   function readCorpusFiles(): any[] {
     const files = fs.readdirSync(CORPUS_DIR)
@@ -202,12 +227,12 @@ async function startServer() {
     // Write applicative id back into XML as <idno type="id">
     if (m.id) {
       if (/<idno\s+type="id">/.test(xml)) {
-        xml = xml.replace(/<idno\s+type="id">\d*<\/idno>/, `<idno type="id">${m.id}</idno>`);
+        xml = xml.replace(/<idno\s+type="id">\d*<\/idno>/, `<idno type="id">${escXml(String(m.id))}</idno>`);
       } else {
         // Insert after last <idno> in publicationStmt
         xml = xml.replace(
           /(<\/publicationStmt>)/,
-          `        <idno type="id">${m.id}</idno>\n$1`
+          `        <idno type="id">${escXml(String(m.id))}</idno>\n$1`
         );
       }
     }
@@ -291,11 +316,21 @@ async function startServer() {
     try {
       const data: any[] = req.body;
       if (!Array.isArray(data)) return res.status(400).json({ error: "Expected array" });
+      if (data.length > 500) return res.status(400).json({ error: "Troppe schede in un'unica richiesta (max 500)" });
+      for (const m of data) {
+        const err = validateMonumentoShape(m);
+        if (err) return res.status(400).json({ error: `Scheda id=${(m as any)?.id ?? '?'}: ${err}` });
+      }
 
       const writtenFiles = new Set<string>();
 
       for (const m of data) {
-        const filename = (m as any)._corpusFile || buildFilename(m);
+        // _corpusFile arriva dal client: va sanitizzato come ogni altro
+        // filename derivato da input esterno (stesso pattern usato dalle
+        // altre route), per evitare che un valore tipo "../../etc/x" scriva
+        // fuori da CORPUS_DIR.
+        const rawFilename = (m as any)._corpusFile as string | undefined;
+        const filename = rawFilename ? rawFilename.replace(/[^a-zA-Z0-9._-]/g, '_') : buildFilename(m);
         const filepath = path.join(CORPUS_DIR, filename);
         writtenFiles.add(filename);
 
@@ -337,6 +372,7 @@ async function startServer() {
     try {
       const files: { filename: string; content: string }[] = req.body;
       if (!Array.isArray(files)) return res.status(400).json({ error: "Expected array of {filename, content}" });
+      if (files.length > 500) return res.status(400).json({ error: "Troppi file in un'unica richiesta (max 500)" });
 
       let imported = 0;
       const errors: string[] = [];
@@ -350,6 +386,11 @@ async function startServer() {
           const parsed = xmlToMonumenti(content);
           if (parsed.length === 0) {
             errors.push(`${filename}: no valid TEI found`);
+            continue;
+          }
+          const shapeErr = parsed.map(validateMonumentoShape).find(e => e !== null);
+          if (shapeErr) {
+            errors.push(`${filename}: ${shapeErr}`);
             continue;
           }
           const safe = filename.replace(/[^a-zA-Z0-9._-]/g, '_');

@@ -4,8 +4,8 @@ import {
   Upload, Database, Save, Loader2, AlertTriangle, Check, X, Plus, Trash2,
   ChevronRight, FileText, Search, Download, Feather, Sparkles, LogIn, ShieldCheck
 } from 'lucide-react';
-import { cn } from '../lib/utils';
-import { Monumento, OrigDate, Traduzione, Bibliografia, Revision } from '../types';
+import { cn, stripAccents } from '../lib/utils';
+import { Monumento, OrigDate, Traduzione, Bibliografia, Revision, IconographicFigure, IconographicTrait } from '../types';
 import { xmlToMonumenti } from '../lib/xmlUtils';
 import { EditionMarkupEditor } from './EditionMarkupEditor';
 import { ICONOGRAPHY_LABELS } from '../lib/iconographyLabels';
@@ -139,10 +139,9 @@ const TranslatedCombo: React.FC<{
   const [open, setOpen] = useState(false);
   const wrapRef = useRef<HTMLDivElement>(null);
 
-  const norm = (s: string) => s.normalize('NFKD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
-  const q = norm(value.trim());
+  const q = stripAccents(value.trim());
   const filtered = q
-    ? terms.filter(t => norm(t.label).includes(q) || norm(t.labelIt || '').includes(q) || norm(t.greek || '').includes(q)).slice(0, 40)
+    ? terms.filter(t => stripAccents(t.label).includes(q) || stripAccents(t.labelIt || '').includes(q) || stripAccents(t.greek || '').includes(q)).slice(0, 40)
     : terms.slice(0, 40);
 
   const pick = (t: VocabTerm) => {
@@ -211,10 +210,9 @@ const ChipListEditor: React.FC<{ values: string[]; onChange: (v: string[]) => vo
     setDraft('');
     setOpen(false);
   };
-  const norm = (s: string) => s.normalize('NFKD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
-  const q = norm(draft.trim());
+  const q = stripAccents(draft.trim());
   const filtered = vocabTerms
-    ? (q ? vocabTerms.filter(t => norm(t.label).includes(q) || norm(t.labelIt || '').includes(q)) : vocabTerms).slice(0, 30)
+    ? (q ? vocabTerms.filter(t => stripAccents(t.label).includes(q) || stripAccents(t.labelIt || '').includes(q)) : vocabTerms).slice(0, 30)
     : [];
 
   useEffect(() => {
@@ -1002,7 +1000,7 @@ function renderSectionForm(
       return (
         <div className="max-w-3xl">
           <FieldLabel>Commento</FieldLabel>
-          <TextArea rows={8} value={m.note_interne || ''} onChange={e => { set('note_interne', e.target.value); set('note_interne_rawXml', undefined as any); }} />
+          <TextArea rows={8} value={m.note_interne || ''} onChange={e => { set('note_interne', e.target.value); set('note_interne_rawXml', undefined); }} />
           {m.note_interne_rawXml && (
             <p className="text-[11px] text-amber-700 dark:text-amber-400 italic mt-2 flex items-center gap-1.5">
               <AlertTriangle className="w-3 h-3" /> Il commento contiene markup TEI (ptr, foreign…): modificandolo qui verrà riscritto come testo semplice.
@@ -1069,10 +1067,6 @@ const FUNCTION_SYNONYMS: Record<string, string[]> = {
   honorary: ['honorary', 'honorific', 'onorari', 'honour', 'honor'],
   epitaph: ['epitaph', 'funerary', 'funerari', 'sepolcr', 'epitaffio'],
 };
-
-function stripAccents(s: string): string {
-  return s.normalize('NFKD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
-}
 
 /** Deriva un suggerimento di funzione dai textTypes del titolo (mai una scrittura automatica).
  *  Prima cerca una corrispondenza esatta con un id/label di INSCRIPTION_TYPES, poi ripiega
@@ -1143,9 +1137,9 @@ const VocabCombo: React.FC<{ value: string; onChange: (v: string) => void; optio
 const IconographyEditor: React.FC<{ m: Monumento; set: <K extends keyof Monumento>(k: K, v: Monumento[K]) => void }> = ({ m, set }) => {
   const ico = m.iconografia || { figures: [] };
   const update = (patch: Partial<typeof ico>) => set('iconografia', { ...ico, ...patch });
-  const updateFigure = (fi: number, patch: any) =>
+  const updateFigure = (fi: number, patch: Partial<IconographicFigure>) =>
     update({ figures: ico.figures.map((f, i) => i === fi ? { ...f, ...patch } : f) });
-  const updateTrait = (fi: number, ti: number, patch: any) =>
+  const updateTrait = (fi: number, ti: number, patch: Partial<IconographicTrait>) =>
     updateFigure(fi, { traits: ico.figures[fi].traits.map((t, i) => i === ti ? { ...t, ...patch } : t) });
 
   const suggestedFunction = suggestFunctionFromTextTypes(m.textTypes);

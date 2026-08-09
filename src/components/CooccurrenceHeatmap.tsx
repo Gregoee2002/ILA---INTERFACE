@@ -36,7 +36,7 @@ const getAxisValues = (m: Monumento, axis: AxisType): string[] => {
     case 'epiteti': return m.epiteti || [];
     case 'divinita': return m.divinita || [];
     case 'onomastica': return m.onomastica || [];
-    case 'imperatori': return (m as any).imperatori || [];
+    case 'imperatori': return m.imperatori || [];
     case 'materiale': return m.materiale ? [m.materiale] : [];
     case 'tipo': return m.tipo ? [m.tipo] : [];
     case 'regione': return m.regione ? [m.regione] : [];

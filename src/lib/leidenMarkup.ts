@@ -23,12 +23,6 @@
 
 import { OFFICES } from "./eagleVocab";
 
-export interface EditionLine {
-  n: number;
-  breakNo: boolean;
-  xml: string;
-}
-
 const AB_INDENT = "                ";      // 16 spazi (ab dentro div a 12)
 const LB_INDENT = "                    ";  // 20 spazi
 
@@ -122,19 +116,6 @@ export function collectLbs(tokens: MarkupToken[]): LbInfo[] {
   };
   walk(tokens, []);
   return out;
-}
-
-/* ── compat: API a righe usata da codice esistente ─────────────── */
-export function parseEditionXml(testo: string): EditionLine[] {
-  const tokens = parseEdition(testo);
-  const lbs = collectLbs(tokens);
-  const xml = serializeEdition(tokens);
-  const parts = xml.replace(/^[\s\S]*?<ab>/, "").replace(/\n\s*<\/ab>$/, "").split(/\n\s*<lb[^>]*\/>/).slice(1);
-  return parts.map((p, i) => ({ n: i + 1, breakNo: lbs[i]?.breakNo || false, xml: p.trim() }));
-}
-export function serializeEditionXml(lines: EditionLine[]): string {
-  const flat = lines.map((l, i) => `<lb n="${i + 1}"${l.breakNo && i > 0 ? ' break="no"' : ""}/>${l.xml}`).join("");
-  return serializeEdition(tokenize(flat));
 }
 
 /* ================================================================ */
@@ -271,9 +252,32 @@ export function applyOnTextRange(
   return spliceAt(tokens, path, replacement);
 }
 
+/**
+ * Figli "effettivi" di un elemento a semantica correttiva: per <expan> solo
+ * <abbr>, per <choice> solo <corr>, per <subst> solo <add> (la lettura
+ * attuale/corretta) — mai la parte cancellata/superata (<del>), altrimenti
+ * il testo cancellato e quello corretto finiscono concatenati. Per ogni
+ * altro elemento, tutti i figli.
+ */
+function effectiveChildren(tok: MarkupToken & { kind: "el" }): MarkupToken[] {
+  if (tok.name === "expan") {
+    const abbr = tok.children.find(c => c.kind === "el" && c.name === "abbr");
+    return abbr && abbr.kind === "el" ? abbr.children : tok.children;
+  }
+  if (tok.name === "choice") {
+    const corr = tok.children.find(c => c.kind === "el" && c.name === "corr");
+    return corr && corr.kind === "el" ? corr.children : tok.children;
+  }
+  if (tok.name === "subst") {
+    const add = tok.children.find(c => c.kind === "el" && c.name === "add");
+    return add && add.kind === "el" ? add.children : tok.children;
+  }
+  return tok.children;
+}
+
 /** Testo piano concatenato di una lista di token (per prefill e diagnostica). */
 export function sliceText(tokens: MarkupToken[]): string {
-  return tokens.map(t => t.kind === "text" ? t.value : t.name === "lb" ? " " : sliceText(t.children)).join("");
+  return tokens.map(t => t.kind === "text" ? t.value : t.name === "lb" ? " " : sliceText(effectiveChildren(t))).join("");
 }
 
 /**
@@ -329,16 +333,9 @@ export function wrapSlice(
 export function unwrapElement(tokens: MarkupToken[], path: TokenPath): MarkupToken[] {
   const tok = getTokenAt(tokens, path);
   if (!tok || tok.kind !== "el") return tokens;
-  // per expan si conserva solo il contenuto di <abbr>; per choice solo <corr>
-  let children = tok.children;
-  if (tok.name === "expan") {
-    const abbr = tok.children.find(c => c.kind === "el" && c.name === "abbr");
-    children = abbr && abbr.kind === "el" ? abbr.children : children;
-  }
-  if (tok.name === "choice") {
-    const corr = tok.children.find(c => c.kind === "el" && c.name === "corr");
-    children = corr && corr.kind === "el" ? corr.children : children;
-  }
+  // per expan si conserva solo il contenuto di <abbr>; per choice solo <corr>;
+  // per subst solo <add> (mai la lettera cancellata in <del>)
+  const children = effectiveChildren(tok);
   return spliceAt(tokens, path, children);
 }
 
@@ -1045,16 +1042,7 @@ export function validateEditionTokens(tokens: MarkupToken[]): ValidationIssue[] 
 /** Testo piano contenuto in un token (ricorsivo). */
 function collectText(t: MarkupToken): string {
   if (t.kind === "text") return t.value;
-  return t.children.map(collectText).join("");
-}
-
-/** Compat: valida da righe (usa il flusso). */
-export function validateEdition(lines: EditionLine[]): ValidationIssue[] {
-  try {
-    return validateEditionTokens(parseEdition(serializeEditionXml(lines)));
-  } catch (e: any) {
-    return [{ severity: "error", line: 0, message: `Markup malformato: ${e.message}` }];
-  }
+  return effectiveChildren(t).map(collectText).join("");
 }
 
 /* ================================================================ */
@@ -1137,7 +1125,7 @@ export interface IndexSuggestions {
 
 function textOfToken(t: MarkupToken): string {
   if (t.kind === "text") return t.value;
-  return t.children.map(textOfToken).join("");
+  return effectiveChildren(t).map(textOfToken).join("");
 }
 
 /** Scandisce i <persName> già codificati nell'edizione e propone i valori

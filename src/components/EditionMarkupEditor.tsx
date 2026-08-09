@@ -5,7 +5,7 @@ import {
   Plus, Trash2, Check, X, AlertTriangle, Eye, Code2,
   Loader2, Stethoscope, ChevronLeft, Sparkles, Link2, CornerDownLeft, Search
 } from 'lucide-react';
-import { cn } from '../lib/utils';
+import { cn, stripAccents } from '../lib/utils';
 import {
   MarkupToken, TokenPath, MarkupAction, ValidationIssue, EpithetScanIssue, LbInfo,
   parseEdition, serializeEdition, collectLbs, tokenize, serializeTokens, sliceText,
@@ -162,7 +162,13 @@ export const EditionMarkupEditor: React.FC<Props> = ({ value, onChange, anepigra
       } else {
         commit(appendElement(tokens, action.build('', params)));
       }
-    } catch { /* la validazione segnala */ }
+      setSelWarn(null);
+    } catch (e: any) {
+      // wrapSlice/build possono rifiutare l'operazione (es. selezione non
+      // valida per questa azione): senza questo avviso l'utente non ha
+      // nessun segnale che l'azione non è stata applicata.
+      setSelWarn(`Impossibile applicare "${action.label}": ${e?.message || 'selezione non valida per questa azione.'}`);
+    }
     setMenu(null);
     window.getSelection()?.removeAllRanges();
   };
@@ -416,12 +422,12 @@ const InitialPaste: React.FC<{ anepigrafo?: boolean; onCreate: (lines: string[])
 const TokenFlow: React.FC<{
   tokens: MarkupToken[];
   basePath: TokenPath;
-  lbByPath: Map<string, any>;
+  lbByPath: Map<string, LbInfo>;
   lbCount: number;
   preview?: boolean;
   onElClick?: (path: TokenPath, token: MarkupToken, ev: React.MouseEvent) => void;
-  onToggleBreak?: (info: any) => void;
-  onDeleteLb?: (info: any) => void;
+  onToggleBreak?: (info: LbInfo) => void;
+  onDeleteLb?: (info: LbInfo) => void;
 }> = ({ tokens, basePath, lbByPath, lbCount, preview, onElClick, onToggleBreak, onDeleteLb }) => (
   <>
     {tokens.map((t, i) => {
@@ -477,10 +483,10 @@ const ElementChrome: React.FC<{
   path: TokenPath;
   preview?: boolean;
   onElClick?: (path: TokenPath, token: MarkupToken, ev: React.MouseEvent) => void;
-  lbByPath: Map<string, any>;
+  lbByPath: Map<string, LbInfo>;
   lbCount: number;
-  onToggleBreak?: (info: any) => void;
-  onDeleteLb?: (info: any) => void;
+  onToggleBreak?: (info: LbInfo) => void;
+  onDeleteLb?: (info: LbInfo) => void;
 }> = ({ token: t, path, preview, onElClick, lbByPath, lbCount, onToggleBreak, onDeleteLb }) => {
   const click = preview || !onElClick ? undefined : (e: React.MouseEvent) => onElClick(path, t, e);
   const base = preview ? '' : 'cursor-pointer hover:bg-accent/10 rounded transition-colors';
@@ -570,11 +576,10 @@ const MarkupMenu: React.FC<{
   useEffect(() => { if (menu.step === 'list') searchRef.current?.focus(); }, [menu.step]);
 
   const insertOnly = !menu.sel;
-  const norm = (s: string) => s.normalize('NFKD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
-  const q = norm(query.trim());
+  const q = stripAccents(query.trim());
   const actions = MARKUP_ACTIONS
     .filter(a => insertOnly ? a.mode !== 'wrap' : true)
-    .filter(a => !q || norm(a.label).includes(q) || norm(a.group).includes(q));
+    .filter(a => !q || stripAccents(a.label).includes(q) || stripAccents(a.group).includes(q));
   const vw = typeof window !== 'undefined' ? window.innerWidth : 1200;
   const vh = typeof window !== 'undefined' ? window.innerHeight : 800;
   const MENU_W = 320; // w-80

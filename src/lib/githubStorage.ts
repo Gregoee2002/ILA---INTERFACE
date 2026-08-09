@@ -85,7 +85,11 @@ function headers(cfg: GitHubConfig): Record<string, string> {
 }
 
 function repoPath(cfg: GitHubConfig, filename: string): string {
-  return `${cfg.corpusPath}/${filename}`;
+  // Difesa in profondità: filename arriva in ultima analisi da input lato
+  // client (vedi server.ts); anche se il chiamante dovesse già sanitizzare,
+  // qui non deve mai poter contenere segmenti che escono da corpusPath.
+  const safeName = filename.replace(/[^a-zA-Z0-9._-]/g, '_');
+  return `${cfg.corpusPath}/${safeName}`;
 }
 
 // ── Lettura: elenco file + contenuto ──────────────────────────────────

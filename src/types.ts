@@ -141,7 +141,6 @@ export interface FilterState {
   onlyAnep: boolean;
   onlyHasTrad: boolean;
   onlyNoTrad: boolean;
-  selectedEpiteti: string[];
   dateRange: [number, number];
   searchMode: 'AND' | 'OR';
 }

@@ -30,21 +30,26 @@ interface Site {
 }
 
 function getRegionColor(regione?: string) {
-  if (!regione) return '#8a8778'; // stone gray
+  if (!regione) return '#9ca3af'; // stone gray
   const r = regione.toLowerCase();
   if (r.includes('asia minor')) return '#1F8377'; // accent teal — regione di culto principale di Men
   if (r.includes('graecia')) return '#5B7A8C'; // blu-grigio polvere
   if (r.includes('dacia')) return '#B5651D'; // terracotta
   if (r.includes('italia')) return '#7A8F5E'; // salvia
-  return '#8a8778'; // stone gray
+  return '#9ca3af'; // stone gray
 }
 
 const FitToSites: React.FC<{ sites: Site[] }> = ({ sites }) => {
   const map = useMap();
-  const hasFitted = useRef(false);
+  // Le coordinate di alcuni siti arrivano in modo asincrono (fetch a
+  // Pleiades): al primo render "sites" può essere solo un sottoinsieme.
+  // Riadattiamo la vista ogni volta che compaiono NUOVI siti rispetto
+  // all'ultimo fit, ma non quando "sites" si riduce per un filtro attivo
+  // (altrimenti la mappa scatterebbe a ogni cambio di filtro).
+  const fittedCount = useRef(0);
 
   useEffect(() => {
-    if (hasFitted.current || sites.length === 0) return;
+    if (sites.length === 0 || sites.length <= fittedCount.current) return;
     if (sites.length === 1) {
       // Un solo punto: fitBounds su un'area a zero non zooma a sufficienza
       map.setView([sites[0].lat, sites[0].lng], 8);
@@ -52,7 +57,7 @@ const FitToSites: React.FC<{ sites: Site[] }> = ({ sites }) => {
       const bounds = L.latLngBounds(sites.map(s => [s.lat, s.lng] as [number, number]));
       map.fitBounds(bounds, { padding: [60, 60], maxZoom: 7 });
     }
-    hasFitted.current = true;
+    fittedCount.current = sites.length;
   }, [sites, map]);
 
   return null;
@@ -347,7 +352,7 @@ export const MapView: React.FC<MapViewProps> = ({ monumenti, onSelectMonumento }
             <div className="flex items-center gap-3"><span className="w-3 h-3 rounded-full shrink-0" style={{ background: '#5B7A8C' }}></span> Graecia</div>
             <div className="flex items-center gap-3"><span className="w-3 h-3 rounded-full shrink-0" style={{ background: '#B5651D' }}></span> Dacia</div>
             <div className="flex items-center gap-3"><span className="w-3 h-3 rounded-full shrink-0" style={{ background: '#7A8F5E' }}></span> Italia</div>
-            <div className="flex items-center gap-3 pt-2 mt-1 border-t border-border/50"><span className="w-3 h-3 rounded-full shrink-0" style={{ background: '#8a8778' }}></span> Filtrato / Altro</div>
+            <div className="flex items-center gap-3 pt-2 mt-1 border-t border-border/50"><span className="w-3 h-3 rounded-full shrink-0" style={{ background: '#9ca3af' }}></span> Filtrato / Altro</div>
           </div>
         </div>
       </div>

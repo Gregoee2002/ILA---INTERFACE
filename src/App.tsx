@@ -76,6 +76,12 @@ interface SearchResult {
 type AppView = 'home' | 'catalog' | 'stats' | 'timeline' | 'health' | 'map' | 'heatmap' | 'editor' | 'testdata';
 
 // Curve condivise: stessa "fisica" per tutte le micro-animazioni del progetto
+// Unica fonte per l'email amministratore lato client — evita che le ~10
+// occorrenze sparse nel file finiscano per divergere se mai cambiasse.
+// NOTA: questo è solo un controllo di visibilità UI; l'enforcement reale
+// deve avvenire lato server (vedi audit di sicurezza).
+const ADMIN_EMAIL = 'gabrielegregorio123@gmail.com';
+
 const EASE_OUT = [0.16, 1, 0.3, 1] as const;
 const EASE_IN = [0.7, 0, 0.84, 0] as const;
 const SPRING_SNAPPY = { type: 'spring' as const, stiffness: 500, damping: 40 };
@@ -169,54 +175,6 @@ const formatBiblKey = (raw: string): string => {
   return `${fmt} ${year}${suffix}`;
 };
 
-// Helper per le card della griglia statistiche
-// ── MetaField ─────────────────────────────────────────────────────────────
-// Campo di input riutilizzabile con autocompletamento da lista suggestions
-
-const MetaField = ({
-  label, value, onChange, suggestions = [], placeholder = '', mono = false
-}: {
-  label: string;
-  value: string;
-  onChange: (v: string) => void;
-  suggestions?: string[];
-  placeholder?: string;
-  mono?: boolean;
-}) => {
-  const [open, setOpen] = useState(false);
-  const filtered = suggestions.filter(s =>
-    s.toLowerCase().includes(value.toLowerCase()) && s.toLowerCase() !== value.toLowerCase()
-  ).slice(0, 8);
-  const inputClass = `w-full text-xs p-2.5 border border-[var(--border)]/50 rounded-xl outline-none shadow-inner focus:border-accent/50 focus:ring-1 focus:ring-accent/30 hover:bg-[var(--sidebar)] transition-all duration-300 text-ink ${mono ? 'font-mono text-[10px]' : 'font-serif'}`;
-
-  return (
-    <div className="space-y-1 mb-3 relative">
-      <label className="field-label">{label}</label>
-      <input
-        className={inputClass}
-        style={{ backgroundColor: 'var(--card)' }}
-        value={value}
-        placeholder={placeholder}
-        onChange={e => { onChange(e.target.value); setOpen(true); }}
-        onFocus={() => setOpen(true)}
-        onBlur={() => setTimeout(() => setOpen(false), 150)}
-      />
-      {open && filtered.length > 0 && (
-        <div className="absolute left-0 right-0 top-full z-50 mt-1 bg-[var(--card)] border border-[var(--border)]/60 rounded-xl shadow-[0_8px_24px_rgba(var(--shadow-color),0.16)] max-h-40 overflow-y-auto">
-          {filtered.map(s => (
-            <button
-              key={s}
-              className="w-full text-left px-2 py-1.5 text-xs font-serif hover:bg-accent hover:text-white transition-colors"
-              onMouseDown={() => { onChange(s); setOpen(false); }}
-            >
-              {s}
-            </button>
-          ))}
-        </div>
-      )}
-    </div>
-  );
-};
 
 const getTintClass = (str: string) => {
   let hash = 0;
@@ -1069,7 +1027,7 @@ function IconRail({
 
           <button
             onClick={currentUser ? logout : loginWithGoogle}
-            title={currentUser ? (currentUser.email === 'gabrielegregorio123@gmail.com' ? "Admin — Disconnetti" : `${currentUser.email} — Disconnetti`) : "Accedi come amministratore"}
+            title={currentUser ? (currentUser.email === ADMIN_EMAIL ? "Admin — Disconnetti" : `${currentUser.email} — Disconnetti`) : "Accedi come amministratore"}
             className="flex items-center gap-3 h-10 px-3 rounded-lg shrink-0 text-muted hover:bg-accent/5 hover:text-accent transition-colors"
           >
             <span className="w-4 h-4 shrink-0 flex items-center justify-center">
@@ -1081,7 +1039,7 @@ function IconRail({
                   initial={{ opacity: 0, x: -6 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -6 }} transition={{ duration: 0.15 }}
                   className="text-[11px] font-sans font-bold uppercase tracking-widest whitespace-nowrap truncate"
                 >
-                  {currentUser ? (currentUser.email === 'gabrielegregorio123@gmail.com' ? 'Admin' : currentUser.email) : 'Accedi'}
+                  {currentUser ? (currentUser.email === ADMIN_EMAIL ? 'Admin' : currentUser.email) : 'Accedi'}
                 </motion.span>
               )}
             </AnimatePresence>
@@ -2588,7 +2546,6 @@ export default function App() {
     onlyAnep: false,
     onlyHasTrad: false,
     onlyNoTrad: false,
-    selectedEpiteti: [],
     dateRange: [-500, 500],
     searchMode: 'AND',
   });
@@ -2643,7 +2600,6 @@ export default function App() {
   }, [miniSearchResults]);
   
   const [selectedMonumento, setSelectedMonumento] = useState<Monumento | null>(null);
-  const [editForm, setEditForm] = useState<any>({});
   const [currentUser, setCurrentUser] = useState<User | null>(null);
 
   useEffect(() => {
@@ -2653,53 +2609,11 @@ export default function App() {
     return () => unsubscribe();
   }, []);
 
-  const isEditing = false;
-  const isCreating = false;
-  const setIsEditing = (val: any) => {};
-  const setIsCreating = (val: any) => {};
   const [translating, setTranslating] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [importStatus, setImportStatus] = useState<{ type: 'idle' | 'loading' | 'success' | 'error', message: string }>({ type: 'idle', message: '' });
 
-  // Advanced Import System States
-  const [metaForm, setMetaForm] = useState({
-    titolo: '',
-    regione: '', corpus: '', numero: '',
-    citta: '', luogo_moderno: '', luogo_rit: '', conserv: '',
-    materiale: '', materialRef: '', tipo: '', tipo_ref: '',
-    dim_altezza: '', dim_larghezza: '', dim_profondita: '', dim_unita: 'metre',
-    place_ref_ancient: '', place_ref_modern: '',
-    facsimile_url: '', facsimile_desc: '',
-  });
-  const [isSavingMeta, setIsSavingMeta] = useState(false);
-  const [saveFlash, setSaveFlash] = useState(false);
 
-  useEffect(() => {
-    if (selectedMonumento) {
-      setMetaForm({
-        titolo: selectedMonumento.titolo || '',
-        regione: selectedMonumento.regione || '',
-        corpus: selectedMonumento.corpus || '',
-        numero: selectedMonumento.numero || '',
-        citta: selectedMonumento.citta || '',
-        luogo_moderno: selectedMonumento.luogo_moderno || '',
-        luogo_rit: selectedMonumento.luogo_rit || '',
-        conserv: selectedMonumento.conserv || '',
-        materiale: selectedMonumento.materiale || '',
-        materialRef: selectedMonumento.materialRef || '',
-        tipo: selectedMonumento.tipo || '',
-        tipo_ref: selectedMonumento.tipo_ref || '',
-        dim_altezza: selectedMonumento.dim_altezza || '',
-        dim_larghezza: selectedMonumento.dim_larghezza || '',
-        dim_profondita: selectedMonumento.dim_profondita || '',
-        dim_unita: selectedMonumento.dim_unita || 'metre',
-        place_ref_ancient: selectedMonumento.place_ref_ancient || '',
-        place_ref_modern: selectedMonumento.place_ref_modern || '',
-        facsimile_url: selectedMonumento.facsimile_url || '',
-        facsimile_desc: selectedMonumento.facsimile_desc || '',
-      });
-    }
-  }, [selectedMonumento]);
 
   const [isImportModalOpen, setIsImportModalOpen] = useState(false);
   // Conferma "Riordina ID" — NON usa window.confirm(): nelle preview embeddate
@@ -2719,68 +2633,6 @@ export default function App() {
   const [loadingCorpusFiles, setLoadingCorpusFiles] = useState(false);
   const [importActiveTab, setImportActiveTab] = useState<'import' | 'files'>('import');
 
-  // Autocomplete support for note fields
-  const [suggestions, setSuggestions] = useState<{ type: '@' | '#', items: any[] } | null>(null);
-  const [suggestionField, setSuggestionField] = useState<string | null>(null);
-  const [suggestionTarget, setSuggestionTarget] = useState<'monument' | 'appunto' | null>(null);
-
-  const allHashtags = useMemo(() => {
-    const tags = new Set<string>();
-    monumenti.forEach(m => m.note_interne?.match(/#[\w\d]+/g)?.forEach(t => tags.add(t)));
-    return Array.from(tags).sort();
-  }, [monumenti]);
-
-  const handleAutocomplete = (val: string, pos: number, field: string, target: 'monument' | 'appunto') => {
-    const lastChar = val.substring(0, pos).split(/[\s\n]/).pop() || '';
-    if (lastChar.startsWith('@')) {
-      const query = lastChar.slice(1).toLowerCase();
-      const items = monumenti.filter(m => 
-        m.id.toString().includes(query) || 
-        m.titolo?.toLowerCase().includes(query) ||
-        m.citta?.toLowerCase().includes(query)
-      ).slice(0, 10);
-      setSuggestions({ type: '@', items });
-      setSuggestionField(field);
-      setSuggestionTarget(target);
-    } else if (lastChar.startsWith('#')) {
-      const query = lastChar.slice(1).toLowerCase();
-      const items = allHashtags.filter(t => t.toLowerCase().includes('#' + query)).slice(0, 10);
-      setSuggestions({ type: '#', items });
-      setSuggestionField(field);
-      setSuggestionTarget(target);
-    } else {
-      setSuggestions(null);
-      setSuggestionField(null);
-      setSuggestionTarget(null);
-    }
-  };
-
-  const applyAutocompleteSuggestion = (item: any, field: string, currentValue: string, textarea: HTMLTextAreaElement, setter: (val: string) => void) => {
-    const pos = textarea.selectionStart;
-    const before = currentValue.substring(0, pos);
-    const after = currentValue.substring(pos);
-    const words = before.split(/([\s\n])/);
-    const lastWord = words[words.length - 1];
-    
-    let replacement = '';
-    if (suggestions?.type === '@') {
-      replacement = `@${item.id} `;
-    } else {
-      replacement = `${item} `;
-    }
-
-    words[words.length - 1] = replacement;
-    const newVal = words.join('') + after;
-    setter(newVal);
-    setSuggestions(null);
-    setSuggestionField(null);
-    
-    setTimeout(() => {
-      const newPos = before.length - lastWord.length + replacement.length;
-      textarea.focus();
-      textarea.setSelectionRange(newPos, newPos);
-    }, 0);
-  };
   
   const [sortField, setSortField] = useState<SortField>('id');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
@@ -2788,9 +2640,7 @@ export default function App() {
   // Reset sub-states when modal closes
   useEffect(() => {
     if (!selectedMonumento) {
-      setIsEditing(false);
       setShowDeleteConfirm(false);
-      setEditForm({});
     }
   }, [selectedMonumento]);
 
@@ -2840,7 +2690,7 @@ export default function App() {
     loadData();
   }, []);
 
-  const effectiveAdmin = !!currentUser && currentUser.email === 'gabrielegregorio123@gmail.com';
+  const effectiveAdmin = !!currentUser && currentUser.email === ADMIN_EMAIL;
 
   const regions = useMemo(() => Array.from(new Set(monumenti.map(m => m.regione).filter(Boolean).map(s => s.trim()))).sort(), [monumenti]);
   const corpora = useMemo(() => Array.from(new Set(monumenti.map(m => m.corpus).filter(Boolean).map(s => s.trim()))).sort(), [monumenti]);
@@ -2906,6 +2756,15 @@ export default function App() {
 
 
   const totalPages = Math.ceil(filteredMonumenti.length / ITEMS_PER_PAGE);
+
+  // La lista filtrata può ridursi anche senza che cambino i filtri (es.
+  // eliminazione di una scheda): se currentPage resta oltre l'ultima
+  // pagina disponibile, paginatedMonumenti sarebbe vuoto pur con
+  // "Pagina N di M" che mostra ancora N > M.
+  useEffect(() => {
+    if (currentPage > totalPages) setCurrentPage(Math.max(1, totalPages));
+  }, [totalPages, currentPage]);
+
   const paginatedMonumenti = filteredMonumenti.slice(
     (currentPage - 1) * ITEMS_PER_PAGE,
     currentPage * ITEMS_PER_PAGE
@@ -2913,7 +2772,7 @@ export default function App() {
 
   const reindexMonumenti = async (dataToReindex?: Monumento[]) => {
     if (!effectiveAdmin) {
-      alert("Solo l'amministratore (gabrielegregorio123@gmail.com) può riordinare gli ID.");
+      alert(`Solo l'amministratore (${ADMIN_EMAIL}) può riordinare gli ID.`);
       return;
     }
     const data = dataToReindex || monumenti;
@@ -3105,7 +2964,7 @@ export default function App() {
 
   const executeImport = async () => {
     if (!effectiveAdmin) {
-      alert("Solo l'amministratore (gabrielegregorio123@gmail.com) può importare dati.");
+      alert(`Solo l'amministratore (${ADMIN_EMAIL}) può importare dati.`);
       return;
     }
     if (!parsedMonuments || parsedMonuments.length === 0) return;
@@ -3218,7 +3077,7 @@ export default function App() {
 
   const handleSaveMetadata = async (entryId: string, metadata: any) => {
     if (!effectiveAdmin) {
-      alert("Solo l'amministratore (gabrielegregorio123@gmail.com) può modificare i dati.");
+      alert(`Solo l'amministratore (${ADMIN_EMAIL}) può modificare i dati.`);
       return;
     }
     try {
@@ -3286,7 +3145,7 @@ export default function App() {
 
   const handleDelete = async () => {
     if (!effectiveAdmin || !selectedMonumento) {
-      alert("Solo l'amministratore (gabrielegregorio123@gmail.com) può eliminare le schede.");
+      alert(`Solo l'amministratore (${ADMIN_EMAIL}) può eliminare le schede.`);
       return;
     }
     try {
@@ -3317,7 +3176,7 @@ export default function App() {
 
   const handleTranslate = async () => {
     if (!effectiveAdmin) {
-      alert("Solo l'amministratore (gabrielegregorio123@gmail.com) può generare e salvare traduzioni.");
+      alert(`Solo l'amministratore (${ADMIN_EMAIL}) può generare e salvare traduzioni.`);
       return;
     }
     if (!selectedMonumento?.testo || !selectedMonumento.entryId) return;
@@ -3704,7 +3563,7 @@ export default function App() {
             {currentUser ? (
               <div className="flex items-center gap-2 text-muted text-[10px] bg-sidebar/50 border border-border/40 py-1 px-2.5 rounded-lg">
                 <span className="font-semibold normal-case truncate max-w-[120px] md:max-w-[160px]" title={currentUser.email || ""}>
-                  {currentUser.email === 'gabrielegregorio123@gmail.com' ? "Admin" : currentUser.email}
+                  {currentUser.email === ADMIN_EMAIL ? "Admin" : currentUser.email}
                 </span>
                 <button
                   onClick={logout}
@@ -3718,7 +3577,7 @@ export default function App() {
               <button
                 onClick={loginWithGoogle}
                 className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-accent/10 hover:bg-accent/20 border border-accent/20 text-accent transition-all cursor-pointer font-sans text-[10px] font-bold"
-                title="Accedi come gabrielegregorio123@gmail.com per abilitare le modifiche"
+                title={`Accedi come ${ADMIN_EMAIL} per abilitare le modifiche`}
               >
                 <LogIn className="h-3 w-3" /> Accedi (Admin)
               </button>
@@ -4045,7 +3904,7 @@ export default function App() {
                   id="reset-filters-btn"
                   onClick={() => setFilters({
                     searchText: '', corpus: '', numero: '', regione: '', citta: '', tipo: '', materiale: '',
-                    onlyInscr: false, onlyAnep: false, onlyHasTrad: false, onlyNoTrad: false, selectedEpiteti: [],
+                    onlyInscr: false, onlyAnep: false, onlyHasTrad: false, onlyNoTrad: false,
                     dateRange: [-500, 500],
                     searchMode: 'AND'
                   })}
@@ -5049,370 +4908,6 @@ export default function App() {
                             )}
                           </div>
                         )}
-                        {false ? (
-                          <div className="space-y-4">
-                            <div className="space-y-1">
-                              <label className="text-[10px] font-bold uppercase text-muted tracking-widest block">Titolo / Denominazione</label>
-                              <input 
-                                className="text-2xl font-bold text-ink bg-transparent border-b border-accent outline-none w-full font-serif"
-                                value={editForm.titolo || ''}
-                                onChange={e => setEditForm({ ...editForm, titolo: e.target.value })}
-                                placeholder="es. Stele di Men Tyrannos"
-                              />
-                            </div>
-                            <div className="grid grid-cols-2 gap-4">
-                              <div className="space-y-1">
-                                <label className="text-[10px] font-bold uppercase text-muted tracking-widest block">Regione / Provincia</label>
-                                <input 
-                                  className="text-lg font-bold text-accent bg-transparent border-b border-accent outline-none w-full font-sans uppercase tracking-widest"
-                                  value={editForm.regione || ''}
-                                  list="regione-list"
-                                  onChange={e => setEditForm({ ...editForm, regione: e.target.value })}
-                                  placeholder="REGIONE"
-                                />
-                                <datalist id="regione-list">
-                                  {regions.map(r => <option key={r} value={r} />)}
-                                </datalist>
-                              </div>
-                              <div className="space-y-1">
-                                <label className="text-[10px] font-bold uppercase text-muted tracking-widest block">Città Antica / Provenienza</label>
-                                <input 
-                                  className="text-lg font-bold text-ink bg-transparent border-b border-border outline-none w-full font-serif"
-                                  value={editForm.citta || ''}
-                                  list="citta-list"
-                                  onChange={e => setEditForm({ ...editForm, citta: e.target.value })}
-                                  placeholder="Città / Provenienza"
-                                />
-                                <datalist id="citta-list">
-                                  {cities.map(c => <option key={c} value={c} />)}
-                                </datalist>
-                              </div>
-                            </div>
-                            <datalist id="citta-list">
-                               {cities.map(c => <option key={c} value={c} />)}
-                            </datalist>
-                            <div className="flex gap-4">
-                              <div className="w-20">
-                                <label className="text-[10px] font-bold uppercase text-muted tracking-widest block mb-1">ID</label>
-                                <input 
-                                  type="number"
-                                  className="w-full border-b border-border bg-transparent py-2 text-sm outline-none focus:border-accent transition-colors duration-300 font-mono font-bold"
-                                  value={editForm.id || ''}
-                                  onChange={e => setEditForm({ ...editForm, id: parseInt(e.target.value) || 0 })}
-                                />
-                              </div>
-                              <div className="flex-1">
-                                <label className="text-[10px] font-bold uppercase text-muted tracking-widest block mb-1">Corpus</label>
-                                <input 
-                                  className="w-full border-b border-border bg-transparent py-2 text-sm outline-none focus:border-accent transition-colors duration-300 font-serif"
-                                  value={editForm.corpus || ''}
-                                  list="corpus-list"
-                                  onChange={e => setEditForm({ ...editForm, corpus: e.target.value })}
-                                  placeholder="es. CMRDM I"
-                                />
-                                <datalist id="corpus-list">
-                                   {Array.from(new Set(monumenti.filter(m => m.corpus).map(m => m.corpus!).filter(Boolean).map(s => s.trim()))).map(c => <option key={c} value={c} />)}
-                                </datalist>
-                              </div>
-                              <div className="w-32">
-                                <label className="text-[10px] font-bold uppercase text-muted tracking-widest block mb-1">Numero</label>
-                                <input 
-                                  className="w-full border-b border-border bg-transparent py-2 text-sm outline-none focus:border-accent transition-colors duration-300 font-serif"
-                                  value={editForm.numero || ''}
-                                  onChange={e => setEditForm({ ...editForm, numero: e.target.value })}
-                                  placeholder="es. 14"
-                                />
-                              </div>
-                              <div className="flex-1">
-                                <label className="text-[10px] font-bold uppercase text-muted tracking-widest block mb-1">Datazione</label>
-                                <div className="grid grid-cols-2 gap-4">
-                                  <div className="flex items-center gap-1">
-                                    <input 
-                                      type="number"
-                                      className="w-full border-b border-border bg-transparent py-2 text-[11px] outline-none focus:border-accent transition-colors duration-300"
-                                      value={editForm.data_inizio !== undefined ? Math.abs(editForm.data_inizio || 0) : ''}
-                                      onChange={e => {
-                                        const val = parseInt(e.target.value);
-                                        const absVal = isNaN(val) ? 0 : val;
-                                        const currentSign = (editForm.data_inizio || 0) < 0 ? -1 : 1;
-                                        setEditForm({ ...editForm, data_inizio: absVal * currentSign });
-                                      }}
-                                      placeholder="Inizio"
-                                    />
-                                    <select 
-                                      className="bg-transparent text-[9px] border-b border-border outline-none py-1.5"
-                                      value={(editForm.data_inizio || 0) < 0 ? 'aC' : 'dC'}
-                                      onChange={e => {
-                                        const abs = Math.abs(editForm.data_inizio || 0);
-                                        setEditForm({ ...editForm, data_inizio: e.target.value === 'aC' ? -abs : abs });
-                                      }}
-                                    >
-                                      <option value="aC">a.C.</option>
-                                      <option value="dC">d.C.</option>
-                                    </select>
-                                  </div>
-                                  <div className="flex items-center gap-1">
-                                    <input 
-                                      type="number"
-                                      className="w-full border-b border-border bg-transparent py-2 text-[11px] outline-none focus:border-accent transition-colors duration-300"
-                                      value={editForm.data_fine !== undefined ? Math.abs(editForm.data_fine || 0) : ''}
-                                      onChange={e => {
-                                        const val = parseInt(e.target.value);
-                                        const absVal = isNaN(val) ? 0 : val;
-                                        const currentSign = (editForm.data_fine || 0) < 0 ? -1 : 1;
-                                        setEditForm({ ...editForm, data_fine: absVal * currentSign });
-                                      }}
-                                      placeholder="Fine"
-                                    />
-                                    <select 
-                                      className="bg-transparent text-[9px] border-b border-border outline-none py-1.5"
-                                      value={(editForm.data_fine || 0) < 0 ? 'aC' : 'dC'}
-                                      onChange={e => {
-                                        const abs = Math.abs(editForm.data_fine || 0);
-                                        setEditForm({ ...editForm, data_fine: e.target.value === 'aC' ? -abs : abs });
-                                      }}
-                                    >
-                                      <option value="aC">a.C.</option>
-                                      <option value="dC">d.C.</option>
-                                    </select>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                            <div className="flex gap-4 mt-6">
-                              <div className="flex-1">
-                                <label className="text-[10px] font-bold uppercase text-muted tracking-widest block mb-1">Tipologia</label>
-                                <input 
-                                  className="w-full border-b border-border bg-transparent py-2 text-sm outline-none focus:border-accent transition-colors duration-300 font-serif"
-                                  value={editForm.tipo || ''}
-                                  onChange={e => setEditForm({ ...editForm, tipo: e.target.value })}
-                                  placeholder="es. Altare"
-                                />
-                              </div>
-                              <div className="flex-1">
-                                <label className="text-[10px] font-bold uppercase text-muted tracking-widest block mb-1">Materiale</label>
-                                <input 
-                                  className="w-full border-b border-border bg-transparent py-2 text-sm outline-none focus:border-accent transition-colors duration-300 font-serif"
-                                  value={editForm.materiale || ''}
-                                  onChange={e => setEditForm({ ...editForm, materiale: e.target.value })}
-                                  placeholder="es. Marmo"
-                                />
-                              </div>
-                            </div>
-
-                            <div className="border border-border/60 bg-sidebar/20 p-6 rounded-sm mt-6 space-y-4">
-                              <h4 className="text-[10px] font-bold uppercase tracking-widest text-accent border-b border-border/30 pb-2">Parametri EpiDoc (TEI) Avanzati</h4>
-                              <div className="grid grid-cols-3 gap-4">
-                                <div>
-                                  <label className="text-[9px] font-bold uppercase text-muted tracking-wide block mb-1">TM (Trismegistos) ID</label>
-                                  <input 
-                                    className="w-full border-b border-border bg-transparent py-1 text-xs outline-none focus:border-accent transition-colors duration-300 font-serif"
-                                    value={editForm.tm || ''}
-                                    onChange={e => setEditForm({ ...editForm, tm: e.target.value })}
-                                    placeholder="es. 123456"
-                                  />
-                                </div>
-                                <div>
-                                  <label className="text-[9px] font-bold uppercase text-muted tracking-wide block mb-1">Authority (Ente Editore)</label>
-                                  <input 
-                                    className="w-full border-b border-border bg-transparent py-1 text-xs outline-none focus:border-accent transition-colors duration-300 font-serif"
-                                    value={editForm.authority || ''}
-                                    onChange={e => setEditForm({ ...editForm, authority: e.target.value })}
-                                    placeholder="es. CMRDM"
-                                  />
-                                </div>
-                                <div>
-                                  <label className="text-[9px] font-bold uppercase text-muted tracking-wide block mb-1">PHI ID (separati da virgola)</label>
-                                  <input 
-                                    className="w-full border-b border-border bg-transparent py-1 text-xs outline-none focus:border-accent transition-colors duration-300 font-serif"
-                                    value={editForm.phi?.join(', ') || ''}
-                                    onChange={e => setEditForm({ ...editForm, phi: e.target.value.split(',').map(s => s.trim()).filter(Boolean) })}
-                                    placeholder="es. PH252123, PH351831"
-                                  />
-                                </div>
-                              </div>
-                              <div className="grid grid-cols-2 gap-4">
-                                <div>
-                                  <label className="text-[9px] font-bold uppercase text-muted tracking-wide block mb-1">Place Link Antico (Pleiades Ref)</label>
-                                  <input 
-                                    className="w-full border-b border-border bg-transparent py-1 text-xs outline-none focus:border-accent transition-colors duration-300 font-mono text-[10px]"
-                                    value={editForm.place_ref_ancient || ''}
-                                    onChange={e => setEditForm({ ...editForm, place_ref_ancient: e.target.value })}
-                                    placeholder="es. https://pleiades.stoa.org/places/599799"
-                                  />
-                                </div>
-                                <div>
-                                  <label className="text-[9px] font-bold uppercase text-muted tracking-wide block mb-1">Place Link Moderno (GeoNames Ref)</label>
-                                  <input 
-                                    className="w-full border-b border-border bg-transparent py-1 text-xs outline-none focus:border-accent transition-colors duration-300 font-mono text-[10px]"
-                                    value={editForm.place_ref_modern || ''}
-                                    onChange={e => setEditForm({ ...editForm, place_ref_modern: e.target.value })}
-                                    placeholder="es. https://www.geonames.org/10182607/..."
-                                  />
-                                </div>
-                              </div>
-                              <div className="grid grid-cols-4 gap-4">
-                                <div>
-                                  <label className="text-[9px] font-bold uppercase text-muted tracking-wide block mb-1">Altezza (m)</label>
-                                  <input 
-                                    className="w-full border-b border-border bg-transparent py-1 text-xs outline-none focus:border-accent transition-colors duration-300"
-                                    value={editForm.dim_altezza || ''}
-                                    onChange={e => setEditForm({ ...editForm, dim_altezza: e.target.value })}
-                                    placeholder="es. 0.83"
-                                  />
-                                </div>
-                                <div>
-                                  <label className="text-[9px] font-bold uppercase text-muted tracking-wide block mb-1">Larghezza (m)</label>
-                                  <input 
-                                    className="w-full border-b border-border bg-transparent py-1 text-xs outline-none focus:border-accent transition-colors duration-300"
-                                    value={editForm.dim_larghezza || ''}
-                                    onChange={e => setEditForm({ ...editForm, dim_larghezza: e.target.value })}
-                                    placeholder="es. 1.15"
-                                  />
-                                </div>
-                                <div>
-                                  <label className="text-[9px] font-bold uppercase text-muted tracking-wide block mb-1">Profondità (m)</label>
-                                  <input 
-                                    className="w-full border-b border-border bg-transparent py-1 text-xs outline-none focus:border-accent transition-colors duration-300"
-                                    value={editForm.dim_profondita || ''}
-                                    onChange={e => setEditForm({ ...editForm, dim_profondita: e.target.value })}
-                                    placeholder="es. 0.735"
-                                  />
-                                </div>
-                                <div>
-                                  <label className="text-[9px] font-bold uppercase text-muted tracking-wide block mb-1">Unità di Misura</label>
-                                  <select 
-                                    className="w-full border-b border-border bg-transparent py-1 text-xs outline-none focus:border-accent transition-colors duration-300"
-                                    value={editForm.dim_unita || 'metre'}
-                                    onChange={e => setEditForm({ ...editForm, dim_unita: e.target.value })}
-                                  >
-                                    <option value="metre">Metri (metre)</option>
-                                    <option value="cm">Centimetri (cm)</option>
-                                    <option value="mm">Millimetri (mm)</option>
-                                  </select>
-                                </div>
-                              </div>
-                              <div className="grid grid-cols-2 gap-4">
-                                <div>
-                                  <label className="text-[9px] font-bold uppercase text-muted tracking-wide block mb-1">Support / Dimensions Text (Dim)</label>
-                                  <input 
-                                    className="w-full border-b border-border bg-transparent py-1 text-xs outline-none focus:border-accent transition-colors duration-300 font-serif"
-                                    value={editForm.dim || ''}
-                                    onChange={e => setEditForm({ ...editForm, dim: e.target.value })}
-                                    placeholder="es. Anta di marmo bianco..."
-                                  />
-                                </div>
-                                <div>
-                                  <label className="text-[9px] font-bold uppercase text-muted tracking-wide block mb-1">Scrittura Note (Altezza lettere)</label>
-                                  <input 
-                                    className="w-full border-b border-border bg-transparent py-1 text-xs outline-none focus:border-accent transition-colors duration-300"
-                                    value={editForm.scrittura_note || ''}
-                                    onChange={e => setEditForm({ ...editForm, scrittura_note: e.target.value })}
-                                    placeholder="es. Altezza delle lettere: 0,015..."
-                                  />
-                                </div>
-                              </div>
-                              <div className="grid grid-cols-2 gap-4">
-                                <div>
-                                  <label className="text-[9px] font-bold uppercase text-muted tracking-wide block mb-1">MS Identifier / Inventory (separati da | )</label>
-                                  <input 
-                                    className="w-full border-b border-border bg-transparent py-1 text-xs outline-none focus:border-accent transition-colors duration-300"
-                                    value={editForm.msIdnos?.join(' | ') || ''}
-                                    onChange={e => setEditForm({ ...editForm, msIdnos: e.target.value.split('|').map(s => s.trim()).filter(Boolean) })}
-                                    placeholder="es. 462a (I.Milet) | 462b (I.Milet)"
-                                  />
-                                </div>
-                                <div>
-                                  <label className="text-[9px] font-bold uppercase text-muted tracking-wide block mb-1">Scrittura Tecnica (rs ref)</label>
-                                  <input 
-                                    className="w-full border-b border-border bg-transparent py-1 text-xs outline-none focus:border-accent transition-colors duration-300"
-                                    value={editForm.scrittura || ''}
-                                    onChange={e => setEditForm({ ...editForm, scrittura: e.target.value })}
-                                    placeholder="es. incisa a scalpello"
-                                  />
-                                </div>
-                              </div>
-                              <div>
-                                <label className="text-[9px] font-bold uppercase text-muted tracking-wide block mb-1">Descrizione Layout / Contesto di Reimpiego</label>
-                                <textarea 
-                                  className="w-full bg-sidebar/30 border border-border/40 p-2 text-xs outline-none min-h-[60px] font-serif"
-                                  value={editForm.layout_desc || ''}
-                                  onChange={e => setEditForm({ ...editForm, layout_desc: e.target.value })}
-                                  placeholder="Inserisci la descrizione del supporto, delle facce incise e del contesto storico-archeologico..."
-                                />
-                              </div>
-                              <div className="grid grid-cols-2 gap-4">
-                                <div>
-                                  <label className="text-[9px] font-bold uppercase text-muted tracking-wide block mb-1">EAGLE Ref Tipo Oggetto (tipo_ref)</label>
-                                  <input 
-                                    className="w-full border-b border-border bg-transparent py-1 text-xs outline-none focus:border-accent transition-colors duration-300 text-[10px] font-mono"
-                                    value={editForm.tipo_ref || ''}
-                                    onChange={e => setEditForm({ ...editForm, tipo_ref: e.target.value })}
-                                    placeholder="es. https://www.eagle-network.eu/voc/objtyp/lod/189"
-                                  />
-                                </div>
-                                <div>
-                                  <label className="text-[9px] font-bold uppercase text-muted tracking-wide block mb-1">EAGLE Ref Materiale (materialRef)</label>
-                                  <input 
-                                    className="w-full border-b border-border bg-transparent py-1 text-xs outline-none focus:border-accent transition-colors duration-300 text-[10px] font-mono"
-                                    value={editForm.materialRef || ''}
-                                    onChange={e => setEditForm({ ...editForm, materialRef: e.target.value })}
-                                    placeholder="es. https://www.eagle-network.eu/voc/material/lod/48"
-                                  />
-                                </div>
-                              </div>
-                              <div className="grid grid-cols-2 gap-4">
-                                <div>
-                                  <label className="text-[9px] font-bold uppercase text-muted tracking-wide block mb-1">Tipi Testuali (rs textTypes, separati da virgola)</label>
-                                  <input 
-                                    className="w-full border-b border-border bg-transparent py-1 text-xs outline-none focus:border-accent transition-colors duration-300"
-                                    value={editForm.textTypes?.join(', ') || ''}
-                                    onChange={e => setEditForm({ ...editForm, textTypes: e.target.value.split(',').map(s => s.trim()).filter(Boolean) })}
-                                    placeholder="es. decreto, epigrafe onoraria"
-                                  />
-                                </div>
-                                <div>
-                                  <label className="text-[9px] font-bold uppercase text-muted tracking-wide block mb-1">Nota Luogo Antico (origPlace_nota)</label>
-                                  <input 
-                                    className="w-full border-b border-border bg-transparent py-1 text-xs outline-none focus:border-accent transition-colors duration-300"
-                                    value={editForm.origPlace_nota || ''}
-                                    onChange={e => setEditForm({ ...editForm, origPlace_nota: e.target.value })}
-                                    placeholder="es. re-employed in the theater of Miletus"
-                                  />
-                                </div>
-                              </div>
-                              <div>
-                                <label className="text-[9px] font-bold uppercase text-muted tracking-wide block mb-1">Stato di Conservazione (conserv)</label>
-                                <textarea 
-                                  className="w-full bg-sidebar/30 border border-border/40 p-2 text-xs outline-none min-h-[60px]"
-                                  value={editForm.conserv || ''}
-                                  onChange={e => setEditForm({ ...editForm, conserv: e.target.value })}
-                                  placeholder="Inserisci la descrizione dello stato di conservazione dell'iscrizione..."
-                                />
-                              </div>
-                              <div className="grid grid-cols-2 gap-4">
-                                <div>
-                                  <label className="text-[9px] font-bold uppercase text-muted tracking-wide block mb-1">Facsimile URL Grafico / Squeeze Image</label>
-                                  <input 
-                                    className="w-full border-b border-border bg-transparent py-1 text-xs outline-none focus:border-accent transition-colors duration-300"
-                                    value={editForm.facsimile_url || ''}
-                                    onChange={e => setEditForm({ ...editForm, facsimile_url: e.target.value })}
-                                    placeholder="es. IG_II(2)_14.jpg"
-                                  />
-                                </div>
-                                <div>
-                                  <label className="text-[9px] font-bold uppercase text-muted tracking-wide block mb-1">Facsimile Descrizione</label>
-                                  <input 
-                                    className="w-full border-b border-border bg-transparent py-1 text-xs outline-none focus:border-accent transition-colors duration-300"
-                                    value={editForm.facsimile_desc || ''}
-                                    onChange={e => setEditForm({ ...editForm, facsimile_desc: e.target.value })}
-                                    placeholder="es. Squeeze of IG II2 14"
-                                  />
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        ) : (
                           <div>
                             <div className="flex flex-wrap items-center gap-2 mb-2">
                               {(selectedMonumento.corpus || selectedMonumento.numero) && (
@@ -5425,8 +4920,8 @@ export default function App() {
                                   {tt}
                                 </span>
                               ))}
-                              <button 
-                                onClick={() => setCompareList([...compareList, selectedMonumento])}
+                              <button
+                                onClick={() => setCompareList(prev => prev.some(m => m.entryId === selectedMonumento.entryId) ? prev : [...prev, selectedMonumento])}
                                 className="text-[9px] font-bold uppercase hover:text-accent transition-colors underline underline-offset-2 ml-1"
                               >
                                 + Confronta
@@ -5437,7 +4932,6 @@ export default function App() {
                             </h2>
                             <div className="ornament-rule !my-0 mt-3 max-w-[6rem] mx-0" />
                           </div>
-                        )}
                       </div>
                       
                       {effectiveAdmin && (
@@ -5603,9 +5097,9 @@ export default function App() {
                                             ({od.datingMethod || '#julian'}: {od.notBeforeCustom} / {od.notAfterCustom || ''})
                                           </span>
                                         )}
-                                        {(od as any).evidence && (
+                                        {od.evidence && (
                                           <span className="text-[8px] font-sans font-bold uppercase tracking-widest text-muted/50 ml-1 border border-border/40 px-1 rounded-sm">
-                                            {(od as any).evidence.replace(/-/g, ' ')}
+                                            {od.evidence.replace(/-/g, ' ')}
                                           </span>
                                         )}
                                       </li>
@@ -5721,11 +5215,11 @@ export default function App() {
                               </div>
                             )}
                             {/* Imperatori */}
-                            {(selectedMonumento as any).imperatori?.length > 0 && (
+                            {selectedMonumento.imperatori && selectedMonumento.imperatori.length > 0 && (
                               <div>
                                 <h3 className="text-xs font-bold uppercase text-muted tracking-widest mb-2">Imperatori</h3>
                                 <div className="flex flex-wrap gap-2">
-                                  {(selectedMonumento as any).imperatori.map((imp: string) => (
+                                  {selectedMonumento.imperatori.map((imp: string) => (
                                     <button key={imp}
                                       onClick={() => { setFilters(f => ({ ...f, searchText: imp })); setSelectedMonumento(null); }}
                                       className="border border-accent/40 text-accent/70 px-3 py-1 text-xs font-serif hover:border-accent hover:text-accent transition-all cursor-pointer rounded-full"
@@ -5737,40 +5231,6 @@ export default function App() {
                          </div>
                          <div>
                             <h3 className="text-xs font-bold uppercase text-muted tracking-widest mb-4">Note Interne</h3>
-                            {false ? (
-                               <div className="relative">
-                                 <textarea 
-                                   id="monument-note-textarea"
-                                   className="w-full border-b border-border bg-transparent py-1 text-sm outline-none resize-none font-serif"
-                                   rows={2}
-                                   value={editForm.note_interne || ''}
-                                   onChange={e => {
-                                      setEditForm({ ...editForm, note_interne: e.target.value });
-                                      handleAutocomplete(e.target.value, e.target.selectionStart, 'note_interne', 'monument');
-                                   }}
-                                 />
-                                 {suggestions && suggestionField === 'note_interne' && (
-                                   <div className="absolute top-full left-0 bg-parchment border border-border shadow-2xl z-50 w-64 rounded-sm divide-y divide-border/50 max-h-40 overflow-y-auto">
-                                      {suggestions.items.map((item, idx) => (
-                                        <button 
-                                          key={idx}
-                                          className="w-full text-left px-4 py-2 text-xs hover:bg-accent hover:text-white transition-colors flex flex-col"
-                                          onClick={() => applyAutocompleteSuggestion(item, 'note_interne', editForm.note_interne || '', document.getElementById('monument-note-textarea') as HTMLTextAreaElement, (val) => setEditForm({ ...editForm, note_interne: val }))}
-                                        >
-                                           {suggestions.type === '@' ? (
-                                             <>
-                                               <span className="font-bold">@{item.id} {item.titolo}</span>
-                                               <span className="opacity-70 text-[10px]">{item.citta}</span>
-                                             </>
-                                           ) : (
-                                             <span className="font-bold">{item}</span>
-                                           )}
-                                        </button>
-                                      ))}
-                                   </div>
-                                 )}
-                               </div>
-                            ) : (
                                <p className="text-xs leading-relaxed text-muted/80 font-serif whitespace-pre-wrap">
                                   {selectedMonumento.note_interne ? (
                                     <NoteWithTags 
@@ -5785,7 +5245,6 @@ export default function App() {
                                     />
                                   ) : "Nessuna nota di ricerca interna."}
                                 </p>
-                            )}
                          </div>
                       </section>
 
@@ -5810,52 +5269,6 @@ export default function App() {
                              </button>
                            )}
                          </h3>
-                         {false ? (
-                           <div className="space-y-6">
-                             <div>
-                               <label className="text-[10px] font-bold uppercase text-muted tracking-widest block mb-2">Testo Epigrafico</label>
-                               <textarea 
-                                 className="w-full bg-sidebar/50 border border-border p-8 font-mono text-base outline-none min-h-[200px]"
-                                 value={editForm.testo || ''}
-                                 onChange={e => setEditForm({ ...editForm, testo: e.target.value, iscrizione: e.target.value.length > 0 })}
-                               />
-                             </div>
-                             <div>
-                               <div className="flex items-center gap-2 mb-2">
-                                 <label className="text-[10px] font-bold uppercase text-muted tracking-widest block font-sans">Traduzione Italiana</label>
-                                 <Info className="h-3 w-3 text-muted/40" title="Inserisci qui la traduzione ufficiale o definitiva del testo epigrafico." />
-                               </div>
-                               <textarea 
-                                 className="w-full bg-sidebar/50 border border-border p-8 font-serif text-base outline-none min-h-[150px] focus:ring-1 focus:ring-accent/20 transition-all"
-                                 value={editForm.traduzioni?.find(t => t.lang?.toLowerCase() === 'it' || t.lang === 'IT')?.testo || ''}
-                                 onChange={e => {
-                                   const text = e.target.value;
-                                   const trList = [...(editForm.traduzioni || [])];
-                                   const itIdx = trList.findIndex(t => t.lang?.toLowerCase() === 'it' || t.lang === 'IT');
-                                   if (itIdx !== -1) {
-                                     trList[itIdx] = { ...trList[itIdx], testo: text };
-                                   } else {
-                                     trList.push({ lang: 'it', testo: text, note: 'Traduzione italiana' });
-                                   }
-                                   setEditForm({ ...editForm, traduzioni: trList });
-                                 }}
-                                 placeholder="Inserisci la traduzione testuale in italiano..."
-                                />
-                              </div>
-                              <div>
-                                <div className="flex items-center gap-2 mb-2 font-sans">
-                                  <label className="text-[10px] font-bold uppercase text-muted tracking-widest block font-sans">Apparatus Critico</label>
-                                  <Info className="h-3 w-3 text-muted/40" title="Inserisci qui le varianti di lettura e l'apparato critico." />
-                                </div>
-                                <textarea 
-                                  className="w-full bg-sidebar/50 border border-border p-8 font-mono text-xs outline-none min-h-[120px] focus:ring-1 focus:ring-accent/20 transition-all font-sans"
-                                  value={editForm.apparatus || ''}
-                                  onChange={e => setEditForm({ ...editForm, apparatus: e.target.value })}
-                                  placeholder="Inserisci l'apparato critico..."
-                               />
-                             </div>
-                           </div>
-                         ) : (
                            <div className="space-y-8">
                              {/* Legenda markup: menu a tendina discreto */}
                              <LegendaDropdown />
@@ -5883,7 +5296,6 @@ export default function App() {
                                </div>
                              ) : null}
                            </div>
-                         )}
                       </section>
 
                       {/* Bibliography */}
@@ -5891,41 +5303,6 @@ export default function App() {
                          <h3 className="text-xl font-bold mb-6 italic flex items-center gap-3">
                            <div className="h-px w-8 bg-border" /> Bibliografia
                          </h3>
-                         {false ? (
-                            <div className="space-y-4">
-                               {(editForm.bibliografia || []).map((b, i) => (
-                                 <div key={i} className="flex gap-2">
-                                    <input 
-                                      className="flex-1 border-b border-border text-xs outline-none"
-                                      placeholder="Titolo / Riferimento"
-                                      value={b.titolo}
-                                      onChange={e => {
-                                        const newB = [...(editForm.bibliografia || [])];
-                                        newB[i].titolo = e.target.value;
-                                        setEditForm({ ...editForm, bibliografia: newB });
-                                      }}
-                                    />
-                                    <input 
-                                      className="w-24 border-b border-border text-xs outline-none"
-                                      placeholder="Pagine"
-                                      value={b.punti_rif || ''}
-                                      onChange={e => {
-                                        const newB = [...(editForm.bibliografia || [])];
-                                        newB[i].punti_rif = e.target.value;
-                                        setEditForm({ ...editForm, bibliografia: newB });
-                                      }}
-                                    />
-                                    <button onClick={() => setEditForm({ ...editForm, bibliografia: editForm.bibliografia?.filter((_, idx) => idx !== i) })} className="text-accent"><X className="h-3 w-3" /></button>
-                                 </div>
-                               ))}
-                               <button 
-                                 onClick={() => setEditForm({ ...editForm, bibliografia: [...(editForm.bibliografia || []), { titolo: '' }] })}
-                                 className="text-[9px] font-bold uppercase text-accent flex items-center gap-1 font-sans"
-                               >
-                                 <Plus className="h-3 w-3" /> Aggiungi Riferimento
-                               </button>
-                            </div>
-                         ) : (
                             <>
                               {selectedMonumento.bibliografia && selectedMonumento.bibliografia.length === 1 && selectedMonumento.bibliografia[0].titolo.length > 60 ? (
                                 // Voce prosa unica (stile IGCyr) — testo fluente
@@ -5944,7 +5321,6 @@ export default function App() {
                                 </ul>
                               )}
                             </>
-                         )}
                       </section>
 
                       {selectedMonumento.traduzioni && selectedMonumento.traduzioni.filter(t => {

@@ -1,12 +1,9 @@
 import MiniSearch from 'minisearch';
 
 /**
- * Normalizzazione diacritici greci per la ricerca — STESSA logica già usata
- * lato frontend in App.tsx (funzione `normalizeGreek`, riga ~85). Duplicata
- * qui perché server.ts gira in un processo Node separato dal bundle React;
- * se in futuro si estrae in un modulo condiviso (es. src/lib/greekUtils.ts,
- * importabile sia da App.tsx che da qui), va tenuta UNA sola implementazione
- * per evitare che le due normalizzazioni divergano nel tempo.
+ * Normalizzazione diacritici greci per la ricerca. Se in futuro serve la
+ * stessa logica anche lato client, va estratta in un modulo condiviso
+ * (es. src/lib/greekUtils.ts) per evitare che due copie divergano nel tempo.
  */
 function normalizeGreek(text: string): string {
   if (!text) return '';
