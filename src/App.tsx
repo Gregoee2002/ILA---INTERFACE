@@ -901,6 +901,21 @@ const RAIL_ITEMS: { view: AppView; label: string; icon: React.ReactNode }[] = [
   { view: 'editor', label: 'Editor XML', icon: <Feather className="h-4 w-4" /> },
 ];
 
+// Sotto la soglia `md` (768px) di Tailwind, la rail verticale lascia il posto a una barra inferiore.
+function useIsDesktop(breakpointPx = 768) {
+  const [isDesktop, setIsDesktop] = useState(() =>
+    typeof window !== 'undefined' ? window.innerWidth >= breakpointPx : true
+  );
+  useEffect(() => {
+    const mq = window.matchMedia(`(min-width: ${breakpointPx}px)`);
+    const handler = (e: MediaQueryListEvent) => setIsDesktop(e.matches);
+    setIsDesktop(mq.matches);
+    mq.addEventListener('change', handler);
+    return () => mq.removeEventListener('change', handler);
+  }, [breakpointPx]);
+  return isDesktop;
+}
+
 function IconRail({
   activeView, onNavigate, theme, setTheme, isDarkModeActive,
   showSettings, setShowSettings, currentUser, loginWithGoogle, logout,
@@ -911,9 +926,74 @@ function IconRail({
   currentUser: User | null; loginWithGoogle: () => void; logout: () => void;
 }) {
   const [expanded, setExpanded] = useState(false);
+  const isDesktop = useIsDesktop();
 
   // Fase lunare reale: ciclo sinodico medio 29.53059 giorni, ancorato al novilunio del 6 gen 2000 18:14 UTC
   const moon = useMemo(() => getMoonPhase(), []);
+
+  if (!isDesktop) {
+    return (
+      <nav className="fixed inset-x-0 bottom-0 z-50 h-14 flex items-stretch bg-[var(--card)]/95 dark:bg-[var(--card)]/90 backdrop-blur-xl border-t border-border/40 shadow-[0_-4px_24px_-8px_rgba(var(--shadow-color),0.15)] overflow-x-auto overflow-y-hidden custom-scrollbar">
+        {RAIL_ITEMS.map(item => {
+          const active = activeView === item.view;
+          return (
+            <button
+              key={item.view}
+              onClick={() => onNavigate(item.view)}
+              title={item.label}
+              className={cn(
+                "flex flex-col items-center justify-center gap-1 shrink-0 w-16 h-full relative transition-colors",
+                active ? "text-accent" : "text-muted"
+              )}
+            >
+              {active && (
+                <motion.span
+                  layoutId="rail-active-indicator-mobile"
+                  className="absolute top-0 inset-x-3 h-[3px] rounded-full bg-accent"
+                  transition={SPRING_SNAPPY}
+                />
+              )}
+              <span className="w-4 h-4 shrink-0 flex items-center justify-center">{item.icon}</span>
+              <span className="text-[8px] font-sans font-bold uppercase tracking-wide leading-none truncate max-w-[56px]">{item.label}</span>
+            </button>
+          );
+        })}
+
+        <div className="self-stretch my-3 w-px shrink-0 bg-border/40" />
+
+        <button
+          onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+          title={isDarkModeActive ? "Modalità Giorno" : "Modalità Notte"}
+          className="flex flex-col items-center justify-center gap-1 shrink-0 w-16 h-full text-muted"
+        >
+          <span className="w-4 h-4 shrink-0 flex items-center justify-center">
+            {isDarkModeActive ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+          </span>
+          <span className="text-[8px] font-sans font-bold uppercase tracking-wide leading-none">Tema</span>
+        </button>
+
+        <button
+          onClick={() => setShowSettings(s => !s)}
+          title="Impostazioni"
+          className={cn("flex flex-col items-center justify-center gap-1 shrink-0 w-16 h-full", showSettings ? "text-accent" : "text-muted")}
+        >
+          <span className="w-4 h-4 shrink-0 flex items-center justify-center"><Settings className="h-4 w-4" /></span>
+          <span className="text-[8px] font-sans font-bold uppercase tracking-wide leading-none">Impostaz.</span>
+        </button>
+
+        <button
+          onClick={currentUser ? logout : loginWithGoogle}
+          title={currentUser ? (currentUser.email === ADMIN_EMAIL ? "Admin — Disconnetti" : `${currentUser.email} — Disconnetti`) : "Accedi come amministratore"}
+          className="flex flex-col items-center justify-center gap-1 shrink-0 w-16 h-full text-muted"
+        >
+          <span className="w-4 h-4 shrink-0 flex items-center justify-center">
+            {currentUser ? <LogOut className="h-4 w-4" /> : <LogIn className="h-4 w-4" />}
+          </span>
+          <span className="text-[8px] font-sans font-bold uppercase tracking-wide leading-none">{currentUser ? 'Esci' : 'Accedi'}</span>
+        </button>
+      </nav>
+    );
+  }
 
   return (
     <>
@@ -1114,9 +1194,10 @@ function HomeView({ monumenti, onNavigate, onSearch }: { monumenti: Monumento[],
 
   return (
     <div
-      className="absolute inset-0 flex flex-col overflow-y-auto overflow-x-hidden custom-scrollbar pb-6"
+      className="absolute inset-0 flex flex-col overflow-y-auto overflow-x-hidden custom-scrollbar"
       style={{ position: 'absolute', inset: 0, overflowY: 'auto' }}
     >
+    <div className="w-full max-w-[1440px] mx-auto px-6 md:px-10 lg:px-14 pb-6">
       {/* Hero: narrativa+ricerca a sinistra, wordmark a bilanciare lo spazio a destra */}
       <div className="grid grid-cols-1 lg:grid-cols-[1.3fr_1fr] gap-6 items-center mb-8">
         <div>
@@ -1180,7 +1261,7 @@ function HomeView({ monumenti, onNavigate, onSearch }: { monumenti: Monumento[],
         whileTap={{ scale: 0.99 }}
         disabled={!!launching}
         onClick={() => launchCard(heroSection.view)}
-        className="relative w-full max-w-3xl mx-auto mb-8 text-left group overflow-hidden rounded-2xl"
+        className="relative w-full mb-8 text-left group overflow-hidden rounded-2xl"
         style={{
           background: 'linear-gradient(135deg, color-mix(in srgb, var(--accent) 62%, black), color-mix(in srgb, var(--accent) 42%, black))',
           boxShadow: `
@@ -1309,7 +1390,7 @@ function HomeView({ monumenti, onNavigate, onSearch }: { monumenti: Monumento[],
                 </motion.div>
                 <div className="relative">
                   <div className="font-serif font-bold text-ink text-sm mb-0.5">{s.label}</div>
-                  <p className="text-[11px] text-muted leading-snug">{s.desc}</p>
+                  <p className="text-[11px] text-muted leading-snug min-h-[2.5em]">{s.desc}</p>
                 </div>
                 {/* Bordo accent che si dissolve dolcemente insieme alla luce */}
                 <motion.div
@@ -1323,6 +1404,7 @@ function HomeView({ monumenti, onNavigate, onSearch }: { monumenti: Monumento[],
             </div>
           </div>
         </motion.div>
+    </div>
     </div>
   );
 }
