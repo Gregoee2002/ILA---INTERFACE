@@ -12,7 +12,7 @@ import { ICONOGRAPHY_LABELS } from '../lib/iconographyLabels';
 import { INSCRIPTION_TYPES, OBJECT_TYPES, MATERIALS, EXECUTION_TECHNIQUES, VocabTerm, displayLabel } from '../lib/eagleVocab';
 import { extractIndexSuggestions } from '../lib/leidenMarkup';
 
-/** Le 18 sezioni canoniche, ora mappate su campi Monumento (Firestore li tiene già separati). */
+/** Le 18 sezioni canoniche, ora mappate su campi Monumento (già separati nel corpus). */
 export type SectionId =
   | 'title' | 'publication' | 'msIdentifier' | 'support' | 'layout' | 'hand'
   | 'origPlace' | 'origDate' | 'provenance' | 'profile' | 'revisions'
@@ -330,7 +330,7 @@ export const SectionEditorView: React.FC<Props> = ({ monumenti, effectiveAdmin, 
         const parsed = xmlToMonumenti(String(reader.result || ''));
         if (!parsed || parsed.length === 0) { setLoadError('Nessuna scheda TEI valida nel file.'); return; }
         if (parsed.length > 1) { setLoadError('File multi-TEI: l\u2019editor a sezioni lavora su una scheda alla volta. Esporta la singola entry.'); return; }
-        // scheda nuova: id/entryId provvisori, verranno confermati alla prima creazione su Firestore
+        // scheda nuova: id/entryId provvisori, verranno confermati alla prima creazione nel corpus
         const usedIds = new Set(monumenti.map(m => m.id).filter(n => typeof n === 'number' && n > 0) as number[]);
         let nextId = usedIds.size > 0 ? Math.max(...Array.from(usedIds)) + 1 : 1;
         while (usedIds.has(nextId)) nextId++;
@@ -353,7 +353,7 @@ export const SectionEditorView: React.FC<Props> = ({ monumenti, effectiveAdmin, 
   const setEditionText = (xml: string) =>
     setModel(m => m ? applyDerivedIndices({ ...m, testo: xml }) : m);
 
-  /* ── salvataggio: diff dei campi cambiati, scrittura su Firestore ─── */
+  /* ── salvataggio: diff dei campi cambiati, patch sul file del corpus ─── */
   const handleSave = async () => {
     if (!model || !baseModel || !source) return;
     if (!effectiveAdmin) { setSaveWarnings(['Devi accedere come amministratore per salvare.']); return; }
@@ -372,7 +372,7 @@ export const SectionEditorView: React.FC<Props> = ({ monumenti, effectiveAdmin, 
         SECTION_FIELDS_FLAT.forEach(f => { if (JSON.stringify(baseModel[f]) !== JSON.stringify(model[f])) (patch as any)[f] = (model as any)[f]; });
         await onSave(model.entryId!, patch);
         setBaseModel(JSON.parse(JSON.stringify(model)));
-        setSaveOk(`Salvato su Firestore${changed.length > 0 ? ` — sezioni: ${changed.map(s => SECTION_META.find(x => x.id === s)?.label || s).join(', ')}` : ''}.`);
+        setSaveOk(`Salvato${changed.length > 0 ? ` — sezioni: ${changed.map(s => SECTION_META.find(x => x.id === s)?.label || s).join(', ')}` : ''}.`);
       }
     } catch (e: any) {
       setSaveWarnings([`Salvataggio non riuscito: ${e.message || e}`]);
@@ -417,13 +417,13 @@ export const SectionEditorView: React.FC<Props> = ({ monumenti, effectiveAdmin, 
           <h2 className="text-2xl md:text-3xl font-serif font-semibold text-ink">Editor a sezioni</h2>
           <p className="text-sm text-muted mt-1.5 max-w-2xl font-serif italic">
             Ogni scheda è scomposta nelle sue diciotto sezioni canoniche. Le modifiche si salvano
-            direttamente su Firestore, campo per campo — mai l\u2019intera scheda quando basta una sezione.
+            direttamente nel corpus, campo per campo — mai l’intera scheda quando basta una sezione.
           </p>
         </motion.div>
 
         {!effectiveAdmin && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mb-6 flex items-center justify-between gap-3 text-sm text-amber-800 dark:text-amber-400 bg-amber-500/8 border border-amber-500/25 rounded-xl px-4 py-3">
-            <span className="flex items-center gap-2.5"><ShieldCheck className="w-4 h-4 shrink-0" /> Puoi sfogliare le schede, ma per salvare serve l\u2019accesso come amministratore.</span>
+            <span className="flex items-center gap-2.5"><ShieldCheck className="w-4 h-4 shrink-0" /> Puoi sfogliare le schede, ma per salvare serve l’accesso come amministratore.</span>
             <button onClick={onLogin} className="inline-flex items-center gap-1.5 shrink-0 rounded-full px-3.5 py-1.5 text-xs font-sans font-bold uppercase tracking-[0.12em] bg-accent text-white hover:shadow-md transition-all">
               <LogIn className="w-3.5 h-3.5" /> Accedi
             </button>
@@ -450,7 +450,7 @@ export const SectionEditorView: React.FC<Props> = ({ monumenti, effectiveAdmin, 
             </div>
             <div>
               <div className="font-serif font-bold text-ink text-base mb-1">Importa file XML</div>
-              <p className="text-xs text-muted leading-snug">La scheda viene importata subito nel corpus e da lì si modifica con salvataggi patch-only. L\u2019esportazione del file resta disponibile in ogni momento.</p>
+              <p className="text-xs text-muted leading-snug">La scheda viene importata subito nel corpus e da lì si modifica con salvataggi patch-only. L’esportazione del file resta disponibile in ogni momento.</p>
             </div>
             <input ref={fileInputRef} type="file" accept=".xml,text/xml" className="hidden" onChange={loadFromFile} />
           </motion.button>
@@ -523,7 +523,7 @@ export const SectionEditorView: React.FC<Props> = ({ monumenti, effectiveAdmin, 
               <LogIn className="w-3.5 h-3.5" /> Accedi per salvare
             </button>
           )}
-          <button onClick={() => onExport(m)} title="Scarica l\u2019XML della scheda con le modifiche correnti"
+          <button onClick={() => onExport(m)} title="Scarica l’XML della scheda con le modifiche correnti"
             className="inline-flex items-center gap-1.5 text-xs font-sans font-semibold uppercase tracking-[0.14em] text-muted hover:text-ink transition-colors px-3 py-2">
             <Download className="w-3.5 h-3.5" /> Esporta
           </button>
@@ -863,10 +863,10 @@ function renderSectionForm(
           <p className="text-[11px] text-muted/60 italic -mt-1">
             Indice a sola lettura: rispecchia automaticamente i <span className="font-mono not-italic text-[10px]">&lt;persName&gt;</span> già codificati nella sezione Edizione. Per aggiungere o correggere una voce, si interviene lì sul testo — non qui.
           </p>
-          <IndexGroup label="Epiteti" values={m.epiteti || []} empty="Nessun <rs type=\u201cepithet\u201d> ancora codificato nel testo." />
-          <IndexGroup label="Divinità" values={m.divinita || []} empty="Nessun persName type=\u201cdivine\u201d ancora codificato nel testo." />
-          <IndexGroup label="Onomastica" values={m.onomastica || []} empty="Nessun persName type=\u201cattested\u201d ancora codificato nel testo." />
-          <IndexGroup label="Imperatori" values={m.imperatori || []} empty="Nessun persName type=\u201cruler/emperor\u201d ancora codificato nel testo." />
+          <IndexGroup label="Epiteti" values={m.epiteti || []} empty="Nessun <rs type=“epithet”> ancora codificato nel testo." />
+          <IndexGroup label="Divinità" values={m.divinita || []} empty="Nessun persName type=“divine” ancora codificato nel testo." />
+          <IndexGroup label="Onomastica" values={m.onomastica || []} empty="Nessun persName type=“attested” ancora codificato nel testo." />
+          <IndexGroup label="Imperatori" values={m.imperatori || []} empty="Nessun persName type=“ruler/emperor” ancora codificato nel testo." />
           {m.persone && m.persone.length > 0 && (
             <div className="pt-2 border-t border-border/30">
               <FieldLabel>Persone attestate (listPerson)</FieldLabel>
@@ -1158,7 +1158,7 @@ const IconographyEditor: React.FC<{ m: Monumento; set: <K extends keyof Monument
           placeholder="Nessuna funzione selezionata"
         />
         <p className="text-[10px] text-muted/50 italic mt-1">
-          Vocabolario EAGLE «Type of Inscription» — «Confession inscription» è un\u2019estensione ILA, non EAGLE.
+          Vocabolario EAGLE «Type of Inscription» — «Confession inscription» è un’estensione ILA, non EAGLE.
         </p>
         {!ico.function && suggestedFunction && (
           <div className="mt-2 flex items-center gap-2.5 text-xs bg-accent/8 border border-accent/20 rounded-lg px-3 py-2">
