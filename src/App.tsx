@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect, useRef, ChangeEvent } from 'react';
+import React, { useState, useMemo, useEffect, useLayoutEffect, useRef, ChangeEvent } from 'react';
 import { motion, AnimatePresence, MotionConfig } from 'motion/react';
 import { 
   Search, 
@@ -41,7 +41,10 @@ import {
   Check,
   AlertTriangle,
   Feather,
-  FlaskConical
+  FlaskConical,
+  ZoomIn,
+  ZoomOut,
+  RotateCcw
 } from 'lucide-react';
 import { cn } from './lib/utils';
 import { Monumento, FilterState, SortField, Traduzione, Bibliografia, Appunto } from './types';
@@ -1151,7 +1154,10 @@ function HomeView({ monumenti, onNavigate, onSearch }: { monumenti: Monumento[],
   };
 
   return (
-    <div className="flex-1 flex flex-col overflow-y-auto overflow-x-hidden custom-scrollbar relative">
+    <div
+      className="absolute inset-0 flex flex-col overflow-y-auto overflow-x-hidden custom-scrollbar pb-6"
+      style={{ position: 'absolute', inset: 0, overflowY: 'auto' }}
+    >
       {/* Hero: narrativa+ricerca a sinistra, wordmark a bilanciare lo spazio a destra */}
       <div className="grid grid-cols-1 lg:grid-cols-[1.3fr_1fr] gap-6 items-center mb-8">
         <div>
@@ -1246,20 +1252,31 @@ function HomeView({ monumenti, onNavigate, onSearch }: { monumenti: Monumento[],
           }}
           transition={{ duration: 0.6, ease: EASE_OUT }}
         />
-        <div className="relative flex items-center gap-4 md:gap-5 px-7 py-7 md:px-10 md:py-9">
-          <motion.div
-            className="relative w-14 h-14 shrink-0 rounded-full bg-white/10 text-white flex items-center justify-center ring-1 ring-white/25 group-hover:bg-white/20 group-hover:ring-white/40 transition-all"
-            animate={launching === 'catalog' && launchStage === 'lit' ? { scale: [1, 1.15, 1] } : {}}
-            transition={{ duration: 0.6, ease: EASE_OUT }}
-          >
-            {heroSection.icon}
-          </motion.div>
-          <div className="flex-1">
-            <div className="text-[9px] font-sans font-bold uppercase tracking-[0.22em] text-white/70 mb-1">Punto di partenza</div>
-            <div className="font-serif font-bold text-white text-2xl mb-1">{heroSection.label}</div>
-            <p className="text-sm text-white/70 leading-snug">{heroSection.desc}</p>
+        <div className="relative flex flex-col md:flex-row md:items-center justify-between gap-6 md:gap-10 px-7 py-8 md:px-12 md:py-10 text-left">
+          <div className="flex flex-col md:flex-row md:items-center gap-6 md:gap-10 flex-1">
+            <motion.div
+              className="relative w-16 h-16 md:w-20 md:h-20 shrink-0 rounded-full bg-white/10 text-white flex items-center justify-center ring-1 ring-white/25 group-hover:bg-white/20 group-hover:ring-white/40 transition-all self-start md:self-auto shadow-inner"
+              animate={launching === 'catalog' && launchStage === 'lit' ? { scale: [1, 1.15, 1] } : {}}
+              transition={{ duration: 0.6, ease: EASE_OUT }}
+            >
+              {React.cloneElement(heroSection.icon as React.ReactElement, { className: 'h-7 w-7 md:h-8 md:w-8 text-white/90' })}
+            </motion.div>
+
+            <div className="w-px h-16 bg-gradient-to-b from-transparent via-white/25 to-transparent hidden md:block shrink-0" />
+
+            <div className="flex-1 min-w-0 flex flex-col justify-center">
+              <div className="text-[9px] md:text-[10px] font-sans font-bold uppercase tracking-[0.25em] text-white/60 mb-2 md:mb-1">Punto di partenza</div>
+              <div className="font-serif font-bold text-white text-3xl md:text-4xl mb-2 md:mb-2 leading-tight tracking-tight">{heroSection.label}</div>
+              <p className="text-sm md:text-base text-white/70 leading-relaxed max-w-lg">{heroSection.desc}</p>
+            </div>
           </div>
-          <ChevronRight className="h-5 w-5 text-white/50 group-hover:text-white group-hover:translate-x-1 transition-all shrink-0" />
+
+          <div className="hidden md:flex flex-col items-center justify-center shrink-0 pl-4">
+            <div className="w-14 h-14 md:w-16 md:h-16 rounded-full border border-white/20 flex items-center justify-center group-hover:bg-white/15 group-hover:border-white/50 transition-all">
+              <ChevronRight className="h-5 w-5 md:h-6 md:w-6 text-white/70 group-hover:text-white group-hover:translate-x-1 transition-all" />
+            </div>
+          </div>
+          <ChevronRight className="md:hidden absolute right-6 top-10 h-6 w-6 text-white/30 group-hover:text-white group-hover:translate-x-1 transition-all shrink-0" />
         </div>
         <motion.div
           className="absolute inset-0 rounded-[inherit] border border-white/50 pointer-events-none"
@@ -1275,7 +1292,7 @@ function HomeView({ monumenti, onNavigate, onSearch }: { monumenti: Monumento[],
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
-        className="text-[10px] font-sans font-bold uppercase tracking-[0.22em] text-accent/70 mb-3"
+        className="relative z-10 text-[10px] font-sans font-bold uppercase tracking-[0.22em] text-accent/70 mb-4"
       >
         Strumenti database
       </motion.div>
@@ -1351,19 +1368,236 @@ function HomeView({ monumenti, onNavigate, onSearch }: { monumenti: Monumento[],
   );
 }
 
+// Larghezza fissa del riquadro di diramazione (single-item vs gruppo)
+const TIMELINE_BUCKET_YEARS = 6; // ampiezza (in anni) entro cui le schede vengono raggruppate in un'unica diramazione
+
+// Riquadro di diramazione: singola scheda (etichetta compatta) o gruppo (lista impilata)
+function TimelineBranchBox({ items, onSelect }: { items: Monumento[]; onSelect: (m: Monumento) => void }) {
+  if (items.length === 1) {
+    const m = items[0];
+    return (
+      <button
+        onClick={() => onSelect(m)}
+        className="flex items-center gap-1.5 text-[9px] font-sans font-bold bg-parchment pl-1.5 pr-2 py-1 border border-border border-l-2 border-l-accent/60 shadow-sm whitespace-nowrap max-w-[130px] overflow-hidden text-ellipsis hover:border-accent hover:bg-accent/5 hover:text-accent transition-colors"
+      >
+        <span className="text-accent/80">#{m.id}</span>
+        <span className="truncate">{m.citta || m.regione || 'N/A'}</span>
+      </button>
+    );
+  }
+  return (
+    <div className="w-[156px] bg-parchment border border-border border-l-2 border-l-accent/60 shadow-md rounded-sm overflow-hidden">
+      <div className="flex items-center gap-1.5 px-2.5 py-1.5 bg-accent/10 border-b border-accent/25">
+        <Hash className="h-3 w-3 text-accent shrink-0" />
+        <span className="text-[9px] font-sans font-bold uppercase tracking-wider text-accent">{items.length} schede</span>
+      </div>
+      <div className="max-h-[136px] overflow-y-auto custom-scrollbar">
+        {items.map((m, ri) => (
+          <button
+            key={m.entryId || `id-${m.id}`}
+            onClick={() => onSelect(m)}
+            className={`w-full text-left px-2.5 py-1.5 text-[9px] font-sans font-bold truncate border-b border-border/30 last:border-b-0 hover:bg-accent/10 hover:text-accent transition-colors ${ri % 2 === 1 ? 'bg-ink/[0.02]' : ''}`}
+          >
+            <span className="text-accent/80 mr-1">#{m.id}</span>
+            {m.citta || m.regione || 'N/A'}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function Timeline({ monumenti, onSelect }: { monumenti: Monumento[], onSelect: (m: Monumento) => void }) {
+  const [hoverX, setHoverX] = useState<number | null>(null);
+  const [zoom, setZoom] = useState(1);
+  const axisRef = useRef<HTMLDivElement>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const zoomAnchorRef = useRef<{ year: number; clientX: number } | null>(null);
+
+  const ZOOM_MIN = 0.4;
+  const ZOOM_MAX = 6;
+
   const sorted = useMemo(() => {
     return monumenti
       .filter(m => m.data_inizio !== undefined)
       .sort((a, b) => (a.data_inizio || 0) - (b.data_inizio || 0));
   }, [monumenti]);
 
+  // Dominio cronologico dell'asse: derivato dai dati reali (con un secolo di margine per lato),
+  // non più un intervallo fisso — così nessuna scheda, per quanto antica o tarda, resta fuori
+  // dall'asse e "persa".
+  const { yearMin, yearMax } = useMemo(() => {
+    if (sorted.length === 0) return { yearMin: -400, yearMax: 400 };
+    const years = sorted.map(m => m.data_inizio || 0);
+    const dataMin = Math.min(...years);
+    const dataMax = Math.max(...years);
+    return {
+      yearMin: Math.floor(dataMin / 100) * 100 - 100,
+      yearMax: Math.ceil(dataMax / 100) * 100 + 100,
+    };
+  }, [sorted]);
+  const yearSpan = yearMax - yearMin;
+
+  // Raggruppa le schede vicine nel tempo in un'unica diramazione (bucket a passo fisso,
+  // così una diramazione copre al massimo TIMELINE_BUCKET_YEARS anni — niente catene infinite)
+  const clusters = useMemo(() => {
+    const map = new Map<number, Monumento[]>();
+    for (const m of sorted) {
+      const y = m.data_inizio || 0;
+      const key = Math.round(y / TIMELINE_BUCKET_YEARS) * TIMELINE_BUCKET_YEARS;
+      if (!map.has(key)) map.set(key, []);
+      map.get(key)!.push(m);
+    }
+    return Array.from(map.entries())
+      .map(([year, items]) => ({ year, items }))
+      .sort((a, b) => a.year - b.year);
+  }, [sorted]);
+
+  // Scala cronologica di base (px/anno). Lo zoom la moltiplica: si può espandere un tratto denso
+  // (es. il II-III sec. d.C.) senza perdere la proporzione reale col resto dell'asse, oppure
+  // comprimerla per avere una vista d'insieme più ampia del solito.
+  const BASE_PX_PER_YEAR = 3.4;
+  const pxPerYear = BASE_PX_PER_YEAR * zoom;
+  const naturalWidth = yearSpan * pxPerYear;
+  const yearToLeft = (year: number) => (year - yearMin) * pxPerYear;
+
+  // Marcatori dei secoli: generati dal dominio reale, non da un intervallo fisso.
+  const centuryTicks = useMemo(() => {
+    const startC = Math.floor(yearMin / 100);
+    const endC = Math.ceil(yearMax / 100);
+    const ticks: number[] = [];
+    for (let c = startC; c <= endC; c++) ticks.push(c);
+    return ticks;
+  }, [yearMin, yearMax]);
+
+  // Posizione effettiva delle diramazioni: parte dalla posizione cronologica reale, ma non scende
+  // mai sotto una distanza minima dalla diramazione precedente. Nei periodi densi (molte
+  // diramazioni ravvicinate) questo "spinge" leggermente le une lontano dalle altre evitando
+  // sovrapposizioni; con lo zoom la distanza reale cresce e il correttivo si applica sempre meno.
+  // Nessuna scheda viene mai scartata: ogni cluster ottiene comunque una posizione.
+  const MIN_CLUSTER_GAP = 82;
+  const clusterLefts = useMemo(() => {
+    const lefts: number[] = [];
+    let prevLeft = -Infinity;
+    for (const cluster of clusters) {
+      const natural = (cluster.year - yearMin) * pxPerYear;
+      const placed = Math.max(natural, prevLeft + MIN_CLUSTER_GAP);
+      lefts.push(placed);
+      prevLeft = placed;
+    }
+    return lefts;
+  }, [clusters, pxPerYear, yearMin]);
+
+  const axisWidth = Math.max(
+    1200,
+    naturalWidth + 40,
+    (clusterLefts[clusterLefts.length - 1] ?? 0) + 120
+  );
+
+  const formatHoverYear = (y: number) => (y < 0 ? `${Math.abs(y)} a.C.` : y === 0 ? '1 d.C.' : `${y} d.C.`);
+  const hoverYear = hoverX !== null ? Math.round(yearMin + hoverX / pxPerYear) : null;
+
+  const handleAxisMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!axisRef.current) return;
+    const rect = axisRef.current.getBoundingClientRect();
+    setHoverX(Math.max(0, Math.min(axisWidth, e.clientX - rect.left)));
+  };
+  const handleAxisMouseLeave = () => setHoverX(null);
+
+  // Ctrl/Cmd + rotellina (o pizzico sul trackpad, che il browser riporta come wheel+ctrlKey)
+  // zooma l'asse — in entrambe le direzioni — mantenendo fermo sotto il cursore l'anno su cui
+  // si trovava il mouse.
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const onWheel = (e: WheelEvent) => {
+      if (!(e.ctrlKey || e.metaKey)) return;
+      e.preventDefault();
+      if (!axisRef.current) return;
+      const rect = axisRef.current.getBoundingClientRect();
+      const cursorXInAxis = e.clientX - rect.left;
+      const currentYear = yearMin + cursorXInAxis / pxPerYear;
+      zoomAnchorRef.current = { year: currentYear, clientX: e.clientX };
+      const factor = e.deltaY < 0 ? 1.15 : 1 / 1.15;
+      setZoom(z => Math.min(ZOOM_MAX, Math.max(ZOOM_MIN, z * factor)));
+    };
+    el.addEventListener('wheel', onWheel, { passive: false });
+    return () => el.removeEventListener('wheel', onWheel);
+  }, [pxPerYear, yearMin]);
+
+  // Dopo ogni cambio di zoom, riallinea lo scroll così l'anno "ancorato" (sotto il cursore, o al
+  // centro della vista se si è usato un pulsante) resta nella stessa posizione sullo schermo.
+  useLayoutEffect(() => {
+    const anchor = zoomAnchorRef.current;
+    const scrollEl = scrollRef.current;
+    const axisEl = axisRef.current;
+    if (!anchor || !scrollEl || !axisEl) return;
+    scrollEl.scrollLeft = 0;
+    const axisLeftAtZero = axisEl.getBoundingClientRect().left;
+    const pos = (anchor.year - yearMin) * pxPerYear;
+    let target = axisLeftAtZero + pos - anchor.clientX;
+    target = Math.max(0, Math.min(target, scrollEl.scrollWidth - scrollEl.clientWidth));
+    scrollEl.scrollLeft = target;
+    zoomAnchorRef.current = null;
+  }, [zoom]);
+
+  // Zoom da pulsante: ancora sul centro della vista attualmente visibile
+  const zoomByFactor = (factor: number) => {
+    if (!axisRef.current || !scrollRef.current) return;
+    const scrollRect = scrollRef.current.getBoundingClientRect();
+    const axisRect = axisRef.current.getBoundingClientRect();
+    const viewportCenterClientX = scrollRect.left + scrollRect.width / 2;
+    const cursorXInAxis = viewportCenterClientX - axisRect.left;
+    const currentYear = yearMin + cursorXInAxis / pxPerYear;
+    zoomAnchorRef.current = { year: currentYear, clientX: viewportCenterClientX };
+    setZoom(z => Math.min(ZOOM_MAX, Math.max(ZOOM_MIN, z * factor)));
+  };
+  const handleZoomIn = () => zoomByFactor(1.4);
+  const handleZoomOut = () => zoomByFactor(1 / 1.4);
+  const handleZoomReset = () => {
+    zoomAnchorRef.current = null;
+    setZoom(1);
+    if (scrollRef.current) scrollRef.current.scrollLeft = 0;
+  };
+
   return (
     <div className="flex-1 flex flex-col overflow-hidden">
-      <motion.div {...scrollReveal} className="mb-8 pb-4 border-b border-border/50">
-        <div className="text-[10px] font-sans font-bold uppercase tracking-[0.22em] text-accent/70 mb-2">Sequenza temporale</div>
-        <h2 className="text-3xl md:text-4xl font-bold italic mb-2">Cronologia Storica</h2>
-        <p className="text-sm text-muted font-serif">Visualizzazione sequenziale dei monumenti datati (a.C. - d.C.).</p>
+      <motion.div {...scrollReveal} className="mb-8 pb-4 border-b border-border/50 flex items-end justify-between gap-4 flex-wrap">
+        <div>
+          <div className="text-[10px] font-sans font-bold uppercase tracking-[0.22em] text-accent/70 mb-2">Sequenza temporale</div>
+          <h2 className="text-3xl md:text-4xl font-bold italic mb-2">Cronologia Storica</h2>
+          <p className="text-sm text-muted font-serif">Visualizzazione sequenziale dei monumenti datati (a.C. - d.C.).</p>
+          <p className="text-xs text-muted/60 font-sans mt-1">Le schede ravvicinate nel tempo sono riunite in un'unica diramazione. Ctrl/Cmd + rotellina (o pizzico) per zoomare, in entrambe le direzioni.</p>
+        </div>
+
+        {sorted.length > 0 && (
+          <div className="flex items-center gap-0.5 bg-parchment/70 backdrop-blur-sm border border-border/60 rounded-full p-1 shadow-sm shrink-0">
+            <button
+              onClick={handleZoomOut}
+              disabled={zoom <= ZOOM_MIN + 0.001}
+              className="h-7 w-7 rounded-full flex items-center justify-center text-muted/70 hover:bg-accent/10 hover:text-accent disabled:opacity-25 disabled:hover:bg-transparent transition-colors"
+              title="Riduci zoom"
+            >
+              <ZoomOut className="h-3.5 w-3.5" />
+            </button>
+            <button
+              onClick={handleZoomIn}
+              disabled={zoom >= ZOOM_MAX - 0.001}
+              className="h-7 w-7 rounded-full flex items-center justify-center text-muted/70 hover:bg-accent/10 hover:text-accent disabled:opacity-25 disabled:hover:bg-transparent transition-colors"
+              title="Aumenta zoom"
+            >
+              <ZoomIn className="h-3.5 w-3.5" />
+            </button>
+            <button
+              onClick={handleZoomReset}
+              disabled={Math.abs(zoom - 1) < 0.01}
+              className="h-7 w-7 rounded-full flex items-center justify-center text-muted/70 hover:bg-accent/10 hover:text-accent disabled:opacity-25 disabled:hover:bg-transparent transition-colors"
+              title="Reimposta zoom"
+            >
+              <RotateCcw className="h-3 w-3" />
+            </button>
+          </div>
+        )}
       </motion.div>
 
       {sorted.length === 0 ? (
@@ -1374,45 +1608,118 @@ function Timeline({ monumenti, onSelect }: { monumenti: Monumento[], onSelect: (
           </div>
         </div>
       ) : (
-      <div className="flex-1 overflow-x-auto overflow-y-auto relative custom-scrollbar min-h-0">
+      <div ref={scrollRef} className="flex-1 overflow-x-auto overflow-y-auto relative custom-scrollbar min-h-0" style={{ minHeight: 0, overflowX: 'auto' }}>
             <motion.div
-                 initial={{ left: '-10px', opacity: 0 }}
-                 animate={{ left: 0, opacity: 1 }}
-                 className="relative h-full flex items-center pr-20"
+                 initial={{ opacity: 0 }}
+                 animate={{ opacity: 1 }}
+                 className="relative h-full flex items-center px-16 md:px-24"
             >
-              <div className="relative w-full h-[1px] bg-border flex items-center">
-                {/* Century Markers */}
-                {[-4, -3, -2, -1, 0, 1, 2, 3, 4].map(c => (
-                  <div 
-                    key={c} 
-                    className="absolute flex flex-col items-center"
-                    style={{ left: `${((c + 4) / 8) * 100}%` }}
+              <div
+                ref={axisRef}
+                onMouseMove={handleAxisMouseMove}
+                onMouseLeave={handleAxisMouseLeave}
+                className="relative shrink-0 cursor-crosshair"
+                style={{ width: axisWidth, height: 1 }}
+              >
+                {/* Asse: un'unica barra continua, sempre sopra a marcatori e diramazioni
+                    (zIndex esplicito) così non può mai apparire spezzata da altri elementi.
+                    Un filo più in rilievo — spessore maggiore, ombra leggera — e si accende
+                    in teal al passaggio del mouse per segnalare che è interattivo. */}
+                <div
+                  className={`absolute inset-x-0 top-0 rounded-full transition-colors duration-200 ${hoverX !== null ? 'bg-accent/50' : 'bg-border'}`}
+                  style={{ height: 2, zIndex: 1, boxShadow: 'inset 0 1px 1px rgba(0,0,0,0.08), 0 1px 0 rgba(255,255,255,0.5)' }}
+                />
+
+                {/* Puntini di sospensione agli estremi: l'asse è ricavato dai dati reali, ma
+                    questo ricorda che il tempo continua oltre il margine mostrato. */}
+                <span
+                  className="absolute text-muted/35 text-sm font-bold tracking-tighter select-none pointer-events-none"
+                  style={{ left: 0, top: 1, transform: 'translate(-135%, -50%)' }}
+                >
+                  ···
+                </span>
+                <span
+                  className="absolute text-muted/35 text-sm font-bold tracking-tighter select-none pointer-events-none"
+                  style={{ left: axisWidth, top: 1, transform: 'translate(35%, -50%)' }}
+                >
+                  ···
+                </span>
+
+                {/* Linea guida interattiva: segue il mouse e mostra l'anno approssimativo sotto il cursore */}
+                {hoverX !== null && hoverYear !== null && (
+                  <div
+                    className="absolute pointer-events-none"
+                    style={{ left: hoverX, top: -170, height: 340, transform: 'translateX(-50%)' }}
                   >
-                    <div className="h-3 w-[1px] bg-border mb-3" />
+                    <div className="w-px h-full bg-accent/40 mx-auto" style={{ backgroundImage: 'linear-gradient(to bottom, transparent, var(--accent) 45%, var(--accent) 55%, transparent)', opacity: 0.35 }} />
+                    <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-full mb-1 px-2 py-0.5 rounded-full bg-ink text-parchment text-[9px] font-sans font-bold whitespace-nowrap shadow-md">
+                      {formatHoverYear(hoverYear)}
+                    </div>
+                  </div>
+                )}
+
+                {/* Century Markers: sotto la linea (mai sopra), niente ambiguità visiva con l'asse */}
+                {centuryTicks.map(c => (
+                  <div
+                    key={c}
+                    className="absolute flex flex-col items-center"
+                    style={{ left: yearToLeft(c * 100), top: 4, transform: 'translateX(-50%)', zIndex: 0 }}
+                  >
+                    <div className="h-2 w-px bg-border/70 mb-2" />
                     <span className="text-[10px] font-sans font-bold text-muted/40 uppercase tracking-widest">
                       {c < 0 ? `${Math.abs(c)} a.C.` : `${c + 1} d.C.`}
                     </span>
                   </div>
                 ))}
 
-                {/* Monument Points */}
-                {sorted.map((m, i) => (
-                  <motion.div
-                    key={m.entryId || `idx-${m.id}`}
-                    whileHover={{ scale: 1.2, zIndex: 10 }}
-                    className="absolute flex flex-col items-center cursor-pointer group"
-                    style={{ 
-                      left: `${(( (m.data_inizio || 0) / 100 + 4) / 8) * 100}%`,
-                      top: i % 2 === 0 ? '-60px' : '20px'
-                    }}
-                    onClick={() => onSelect(m)}
-                  >
-                    <div className="h-3 w-3 rounded-full bg-accent border-2 border-parchment shadow-sm" />
-                    <div className="mt-2 text-[9px] font-sans font-bold bg-parchment p-1 border border-border whitespace-nowrap shadow-sm max-w-[120px] overflow-hidden text-ellipsis">
-                      #{m.id} {m.citta || m.regione || 'N/A'}
+                {/* Diramazioni: una per cluster, alternate sopra/sotto l'asse in base all'indice
+                    del cluster (non della singola scheda) — così due diramazioni sullo stesso lato
+                    sono sempre separate da almeno una diramazione sul lato opposto. La posizione
+                    orizzontale usa clusterLefts (con distanza minima garantita) invece della
+                    posizione cronologica pura, per evitare sovrapposizioni nei periodi densi.
+                    Ogni scheda del corpus rientra in esattamente un cluster: nessuna va persa. */}
+                {clusters.map((cluster, idx) => {
+                  const dir: 'up' | 'down' = idx % 2 === 0 ? 'up' : 'down';
+                  const isGroup = cluster.items.length > 1;
+                  const connectorHeight = isGroup ? 32 : 20;
+                  const left = clusterLefts[idx];
+                  return (
+                    <div key={`cluster-${cluster.year}-${idx}`} className="absolute" style={{ left, top: 0 }}>
+                      {/* Connettore + riquadro: ancorati al punto esatto sull'asse (0,0 del wrapper),
+                          in tinta accento per legare visivamente box e punto senza ambiguità */}
+                      {dir === 'up' ? (
+                        <div
+                          className="absolute flex flex-col items-center"
+                          style={{ left: 0, bottom: 0, transform: 'translateX(-50%)' }}
+                        >
+                          <TimelineBranchBox items={cluster.items} onSelect={onSelect} />
+                          <div className="w-px bg-accent/35" style={{ height: connectorHeight }} />
+                        </div>
+                      ) : (
+                        <div
+                          className="absolute flex flex-col items-center"
+                          style={{ left: 0, top: 0, transform: 'translateX(-50%)' }}
+                        >
+                          <div className="w-px bg-accent/35" style={{ height: connectorHeight }} />
+                          <TimelineBranchBox items={cluster.items} onSelect={onSelect} />
+                        </div>
+                      )}
+
+                      {/* Punto sull'asse: il conteggio è integrato nel pallino stesso (niente più
+                          badge fluttuante scollegato) — sempre teal, dimensione maggiore per i gruppi */}
+                      <div
+                        className={`absolute rounded-full border-2 border-parchment shadow-sm flex items-center justify-center bg-accent ${isGroup ? 'h-5 w-5' : 'h-2.5 w-2.5'}`}
+                        style={{ left: 0, top: 0, transform: 'translate(-50%, -50%)', zIndex: 2 }}
+                      >
+                        {isGroup && (
+                          <span className="text-[8px] font-sans font-bold text-white leading-none">
+                            {cluster.items.length}
+                          </span>
+                        )}
+                      </div>
                     </div>
-                  </motion.div>
-                ))}
+                  );
+                })}
               </div>
             </motion.div>
           </div>
@@ -3201,7 +3508,7 @@ export default function App() {
 
   if (loading) {
     return (
-      <div className="h-screen w-full flex flex-col items-center justify-center bg-parchment gap-10 px-6">
+      <div className="h-dvh w-full flex flex-col items-center justify-center bg-parchment gap-10 px-6">
         <div className="flex flex-col items-center gap-3">
           <span className="text-3xl font-bold tracking-[0.15em] text-accent/40" style={{ fontFamily: '"Cinzel", serif' }}>ILA</span>
           <div className="flex items-center gap-2 text-[10px] font-sans font-bold uppercase tracking-widest text-muted/60">
@@ -3228,7 +3535,7 @@ export default function App() {
 
   return (
     <MotionConfig reducedMotion="user">
-    <div className="flex h-screen w-full flex-col bg-parchment text-ink font-serif overflow-hidden relative pb-14 md:pb-0 md:pl-14">
+    <div className="flex h-dvh w-full flex-col bg-parchment text-ink font-serif overflow-hidden relative pb-14 md:pb-0 md:pl-14" style={{ height: '100dvh' }}>
       <IconRail
         activeView={activeView}
         onNavigate={(v) => { setActiveView(v); setHasNavigated(true); }}
@@ -3435,7 +3742,7 @@ export default function App() {
       </header>
       )}
 
-      <div className="flex-1 flex overflow-hidden relative">
+      <div className="flex-1 flex overflow-hidden relative min-h-0" style={{ minHeight: 0 }}>
         {/* Settings Overlay */}
         <AnimatePresence>
           {showSettings && (
@@ -3754,7 +4061,7 @@ export default function App() {
           )}
         </AnimatePresence>
 
-        <section className="flex-1 flex flex-col p-6 md:p-12 overflow-hidden transition-all duration-500">
+        <section className="flex-1 relative p-6 md:p-12 overflow-hidden transition-all duration-500">
         <motion.div
           key={activeView}
           initial={activeView === 'map' ? { opacity: 0 } : { opacity: 0, y: 14 }}
@@ -3763,7 +4070,8 @@ export default function App() {
           onAnimationComplete={() => {
             if (activeView === 'map') window.dispatchEvent(new Event('resize'));
           }}
-          className="flex-1 flex flex-col min-h-0"
+          className="absolute inset-0 flex flex-col"
+          style={{ position: 'absolute', inset: 0 }}
         >
           {activeView === 'home' && (
             <HomeView
