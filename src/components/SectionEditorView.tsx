@@ -9,7 +9,7 @@ import { Monumento, OrigDate, Traduzione, Bibliografia, Revision, IconographicFi
 import { xmlToMonumenti } from '../lib/xmlUtils';
 import { EditionMarkupEditor } from './EditionMarkupEditor';
 import { ICONOGRAPHY_LABELS } from '../lib/iconographyLabels';
-import { INSCRIPTION_TYPES, OBJECT_TYPES, MATERIALS, EXECUTION_TECHNIQUES, VocabTerm, displayLabel } from '../lib/eagleVocab';
+import { INSCRIPTION_TYPES, OBJECT_TYPES, MATERIALS, EXECUTION_TECHNIQUES, VocabTerm } from '../lib/eagleVocab';
 import { extractIndexSuggestions } from '../lib/leidenMarkup';
 
 /** Le 18 sezioni canoniche, ora mappate su campi Monumento (già separati nel corpus). */
@@ -1048,34 +1048,38 @@ function renderSectionForm(
  * tratto, elemento del tratto (a cascata sul tipo scelto).
  * ================================================================ */
 
-// Le chiavi qui sotto rispecchiano i commenti-categoria di iconographyLabels.ts —
-// se il vocabolario cresce, aggiornare queste liste mantiene i menu separati.
-// Sottoinsieme curato di INSCRIPTION_TYPES: solo le funzioni genuinamente cultuali
-// del monumento (non un decreto o una lettera, che sono generi testuali ma non
-// "funzioni" nel senso iconografico). "confession" è l'estensione ILA dichiarata.
-const FUNCTION_TERM_IDS = ['dedication', 'sacredlaw', 'confession', 'honorary', 'epitaph'];
-const FUNCTION_TERMS = INSCRIPTION_TYPES.filter(t => FUNCTION_TERM_IDS.includes(t.id));
+// "Funzione cultuale" (iconografia) usa il vocabolario di iconographyLabels.ts —
+// lo stesso namespace già usato dai dati esistenti e dal pannello di
+// visualizzazione pubblica (IconographyPanel), NON gli id EAGLE di
+// INSCRIPTION_TYPES (quelli restano il vocabolario per i textTypes del titolo).
+const FUNCTION_IDS = ['votive', 'lex_sacra', 'confession', 'honorific', 'funerary'];
+
+// Mappa dagli id EAGLE (INSCRIPTION_TYPES, usati in textTypes) all'id corrispondente
+// di iconographyLabels — serve solo al suggerimento automatico qui sotto.
+const EAGLE_TO_FUNCTION: Record<string, string> = {
+  dedication: 'votive', sacredlaw: 'lex_sacra', confession: 'confession',
+  honorary: 'honorific', epitaph: 'funerary',
+};
 
 // Sinonimi (italiano/inglese, spogliati di accenti) per riconoscere nei textTypes
-// del titolo un valore compatibile col vocabolario EAGLE della funzione iconografica.
-// Serve solo a SUGGERIRE — mai a scrivere da sola: la scelta finale resta dello studioso.
-// Le chiavi sono gli id reali di INSCRIPTION_TYPES/FUNCTION_TERM_IDS (eagleVocab.ts).
+// del titolo un valore compatibile con la funzione iconografica. Serve solo a
+// SUGGERIRE — mai a scrivere da sola: la scelta finale resta dello studioso.
 const FUNCTION_SYNONYMS: Record<string, string[]> = {
-  dedication: ['dedication', 'votiv', 'dedica'],
-  sacredlaw: ['sacred law', 'lex sacra', 'legge sacra'],
+  votive: ['dedication', 'votiv', 'dedica'],
+  lex_sacra: ['sacred law', 'lex sacra', 'legge sacra'],
   confession: ['confession'],
-  honorary: ['honorary', 'honorific', 'onorari', 'honour', 'honor'],
-  epitaph: ['epitaph', 'funerary', 'funerari', 'sepolcr', 'epitaffio'],
+  honorific: ['honorary', 'honorific', 'onorari', 'honour', 'honor'],
+  funerary: ['epitaph', 'funerary', 'funerari', 'sepolcr', 'epitaffio'],
 };
 
 /** Deriva un suggerimento di funzione dai textTypes del titolo (mai una scrittura automatica).
- *  Prima cerca una corrispondenza esatta con un id/label di INSCRIPTION_TYPES, poi ripiega
- *  sui sinonimi per i textTypes scritti liberamente (non ancora allineati al vocabolario). */
+ *  Prima cerca una corrispondenza esatta con un id/label EAGLE di INSCRIPTION_TYPES (mappato
+ *  al vocabolario iconografico), poi ripiega sui sinonimi per i textTypes scritti liberamente. */
 function suggestFunctionFromTextTypes(textTypes: string[] | undefined): string | null {
   for (const raw of textTypes || []) {
     const t = stripAccents(raw);
     const exact = INSCRIPTION_TYPES.find(term => stripAccents(term.label) === t || stripAccents(term.id) === t);
-    if (exact && FUNCTION_TERM_IDS.includes(exact.id)) return exact.id;
+    if (exact && EAGLE_TO_FUNCTION[exact.id]) return EAGLE_TO_FUNCTION[exact.id];
   }
   for (const raw of textTypes || []) {
     const t = stripAccents(raw);
@@ -1099,8 +1103,6 @@ const TRAIT_KEY_OPTIONS: Record<string, string[]> = {
 };
 
 const vocabLabel = (k: string) => {
-  const term = FUNCTION_TERMS.find(t => t.id === k);
-  if (term) return displayLabel(term);
   return ICONOGRAPHY_LABELS[k] || k;
 };
 
@@ -1154,7 +1156,7 @@ const IconographyEditor: React.FC<{ m: Monumento; set: <K extends keyof Monument
         <VocabSelect
           value={ico.function || ''}
           onChange={v => update({ function: v || undefined })}
-          options={FUNCTION_TERM_IDS}
+          options={FUNCTION_IDS}
           placeholder="Nessuna funzione selezionata"
         />
         <p className="text-[10px] text-muted/50 italic mt-1">

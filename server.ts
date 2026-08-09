@@ -3,7 +3,7 @@ import path from "path";
 import fs from "fs";
 import { createServer as createViteServer } from "vite";
 import { GoogleGenAI } from "@google/genai";
-import { xmlToMonumenti, monumentiToXml } from "./src/lib/xmlUtils";
+import { xmlToMonumenti, monumentiToXml, renderIconography } from "./src/lib/xmlUtils";
 import { pullCorpusFromGitHub, pushFileToGitHub, deleteFileFromGitHub, isGitHubConfigured, testGitHubAccess } from "./src/lib/githubStorage";
 import { buildSearchIndex, searchMonumenti } from "./src/lib/searchIndex";
 import MiniSearch from 'minisearch';
@@ -89,12 +89,25 @@ async function startServer() {
     const arrCap = (field: string, max: number): string | null =>
       (Array.isArray(m[field]) && m[field].length > max)
         ? `${field} supera ${max} elementi` : null;
+    const iconCap = (): string | null => {
+      const ico = m.iconografia;
+      if (!ico) return null;
+      if (ico.function !== undefined && String(ico.function).length > 200) return 'iconografia.function supera 200 caratteri';
+      if (ico.note !== undefined && String(ico.note).length > 10000) return 'iconografia.note supera 10000 caratteri';
+      if (Array.isArray(ico.figures)) {
+        if (ico.figures.length > 50) return 'iconografia.figures supera 50 elementi';
+        for (const f of ico.figures) {
+          if (Array.isArray(f?.traits) && f.traits.length > 50) return 'iconografia.figures[].traits supera 50 elementi';
+        }
+      }
+      return null;
+    };
     const checks = [
       strCap('regione', 200), strCap('citta', 200), strCap('tipo', 200), strCap('materiale', 200),
       strCap('testo', 50000), strCap('note_interne', 10000), strCap('note_interne_rawXml', 10000),
       arrCap('epiteti', 50), arrCap('divinita', 50), arrCap('onomastica', 50), arrCap('textTypes', 50),
       arrCap('imperatori', 50), arrCap('persone', 100), arrCap('traduzioni', 50), arrCap('bibliografia', 50),
-      arrCap('revisions', 100),
+      arrCap('revisions', 100), iconCap(),
     ];
     return checks.find(c => c !== null) ?? null;
   }
@@ -261,6 +274,29 @@ async function startServer() {
         xml = xml.replace(/<revisionDesc>[\s\S]*?<\/revisionDesc>/, `<revisionDesc>\n${revXml}\n  </revisionDesc>`);
       } else {
         xml = xml.replace('</teiHeader>', `  <revisionDesc>\n${revXml}\n  </revisionDesc>\n</teiHeader>`);
+      }
+    }
+
+    // Add, update or remove <xenoData><iconography> — unico punto di
+    // scrittura, condiviso con monumentiToXml (renderIconography), così le
+    // due strade (scheda nuova / patch scheda esistente) non possono
+    // divergere nel formato scritto su disco.
+    if ('iconografia' in m) {
+      const hasExisting = /[ \t]*<xenoData>[\s\S]*?<\/xenoData>\n?/.test(xml);
+      const rendered = renderIconography(m.iconografia, '    ');
+      if (rendered) {
+        if (hasExisting) {
+          xml = xml.replace(/[ \t]*<xenoData>[\s\S]*?<\/xenoData>\n?/, rendered + '\n');
+        } else if (/<\/profileDesc>\n?/.test(xml)) {
+          xml = xml.replace(/(<\/profileDesc>\n?)/, `$1${rendered}\n`);
+        } else if (/[ \t]*<revisionDesc>/.test(xml)) {
+          xml = xml.replace(/([ \t]*<revisionDesc>)/, `${rendered}\n$1`);
+        } else {
+          xml = xml.replace('</teiHeader>', `${rendered}\n</teiHeader>`);
+        }
+      } else if (hasExisting) {
+        // iconografia svuotata esplicitamente dall'editor: rimuove il blocco
+        xml = xml.replace(/[ \t]*<xenoData>[\s\S]*?<\/xenoData>\n?/, '');
       }
     }
 

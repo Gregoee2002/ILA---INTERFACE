@@ -1,4 +1,4 @@
-import { Monumento, Traduzione, Bibliografia, OrigDate } from "../types";
+import { Monumento, Traduzione, Bibliografia, OrigDate, IconographyData } from "../types";
 
 function escapeXml(unsafe: any): string {
   if (unsafe === undefined || unsafe === null) return "";
@@ -1121,6 +1121,47 @@ function parseTeiElement(teiString: string): Monumento {
   } as Monumento;
 }
 
+/**
+ * Serializza <xenoData><iconography> a partire da IconographyData. Unica fonte
+ * usata sia per le schede nuove (monumentiToXml) sia per il patch di schede
+ * esistenti (server.ts), così le due scritture non possono divergere nel
+ * formato. Ritorna null se non c'è nulla da scrivere (funzione/figure/nota
+ * tutte assenti) — il chiamante decide se questo significa "non toccare" o
+ * "rimuovi il blocco esistente".
+ */
+export function renderIconography(ico: IconographyData | undefined, indent: string): string | null {
+  if (!ico) return null;
+  const hasContent = !!ico.function || (ico.figures && ico.figures.length > 0) || !!ico.note;
+  if (!hasContent) return null;
+
+  const i1 = indent + "    ", i2 = i1 + "    ", i3 = i2 + "    ";
+  const lines = [`${indent}<xenoData>`, `${i1}<iconography>`];
+  if (ico.function) lines.push(`${i2}<function key="${escapeXml(ico.function)}"/>`);
+  (ico.figures || []).forEach((f, idx) => {
+    // n rispecchia sempre la posizione corrente nell'array (mai un valore
+    // storico stantio) — così una figura rimossa non lascia numerazioni
+    // disallineate nelle figure successive.
+    const fAttrs = [`n="${idx + 1}"`];
+    if (f.type) fAttrs.push(`type="${escapeXml(f.type)}"`);
+    if (f.key) fAttrs.push(`key="${escapeXml(f.key)}"`);
+    const traits = (f.traits || []).filter(t => t.type && t.key);
+    if (traits.length === 0) {
+      lines.push(`${i2}<figure ${fAttrs.join(" ")}/>`);
+    } else {
+      lines.push(`${i2}<figure ${fAttrs.join(" ")}>`);
+      traits.forEach(t => {
+        const tAttrs = [`type="${escapeXml(t.type)}"`, `key="${escapeXml(t.key)}"`];
+        if (t.hand) tAttrs.push(`hand="${escapeXml(t.hand)}"`);
+        lines.push(`${i3}<trait ${tAttrs.join(" ")}/>`);
+      });
+      lines.push(`${i2}</figure>`);
+    }
+  });
+  if (ico.note) lines.push(`${i2}<note>${escapeXml(ico.note)}</note>`);
+  lines.push(`${i1}</iconography>`, `${indent}</xenoData>`);
+  return lines.join("\n");
+}
+
 export function monumentiToXml(monumenti: Monumento[]): string {
   let xml = '<?xml version="1.0" encoding="UTF-8"?>\n';
   xml += '<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>\n';
@@ -1294,6 +1335,8 @@ export function monumentiToXml(monumenti: Monumento[]): string {
       
       block += `        </profileDesc>\n`;
     }
+    const iconographyBlock = renderIconography(m.iconografia, '    ');
+    if (iconographyBlock) block += iconographyBlock + '\n';
     if (m.revisions && m.revisions.length > 0) {
       block += `    <revisionDesc>\n`;
       for (const r of m.revisions) {

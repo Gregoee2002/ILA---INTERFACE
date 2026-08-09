@@ -1,4 +1,5 @@
 import MiniSearch from 'minisearch';
+import { ICONOGRAPHY_LABELS } from './iconographyLabels';
 
 /**
  * Normalizzazione diacritici greci per la ricerca. Se in futuro serve la
@@ -22,6 +23,24 @@ function stripXmlForIndex(val: any): string {
   return s.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
 }
 
+// Testo piano cercabile per l'iconografia: chiavi grezze (function/figure
+// key/type, trait key) più le rispettive etichette italiane, così cercare
+// sia "patera" sia "held_object" trova la stessa scheda.
+function iconographyText(ico: any): string {
+  if (!ico) return '';
+  const parts: string[] = [];
+  if (ico.function) parts.push(ico.function, ICONOGRAPHY_LABELS[ico.function] || '');
+  (ico.figures || []).forEach((f: any) => {
+    if (f.key) parts.push(f.key, ICONOGRAPHY_LABELS[f.key] || '');
+    if (f.type) parts.push(ICONOGRAPHY_LABELS[f.type] || '');
+    (f.traits || []).forEach((t: any) => {
+      if (t.key) parts.push(t.key, ICONOGRAPHY_LABELS[t.key] || '');
+    });
+  });
+  if (ico.note) parts.push(ico.note);
+  return parts.filter(Boolean).join(' ');
+}
+
 // Campi indicizzati, con peso relativo. Coprono lo stesso perimetro del
 // vecchio filtro client-side (normalizedSearchMap in App.tsx) più
 // testo_searchable al posto del testo grezzo con markup EpiDoc.
@@ -42,6 +61,7 @@ const SEARCH_FIELDS = [
   'apparatus_norm',
   'traduzioni_norm',
   'bibliografia_norm',
+  'iconografia_norm',
 ];
 
 const FIELD_BOOST: Record<string, number> = {
@@ -61,6 +81,7 @@ const FIELD_BOOST: Record<string, number> = {
   apparatus_norm: 0.5,
   traduzioni_norm: 1,
   bibliografia_norm: 0.5,
+  iconografia_norm: 1,
 };
 
 interface IndexedDoc {
@@ -95,6 +116,7 @@ function toIndexedDoc(m: any): IndexedDoc {
     apparatus_norm: normalizeGreek(stripXmlForIndex(m.apparatus)),
     traduzioni_norm: normalizeGreek(traduzioniText),
     bibliografia_norm: normalizeGreek(bibliografiaText),
+    iconografia_norm: normalizeGreek(iconographyText(m.iconografia)),
   };
 }
 

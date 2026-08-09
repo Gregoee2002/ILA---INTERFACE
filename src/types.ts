@@ -137,6 +137,8 @@ export interface FilterState {
   citta: string;
   tipo: string;
   materiale: string;
+  iconAttributo: string;
+  iconFunzione: string;
   onlyInscr: boolean;
   onlyAnep: boolean;
   onlyHasTrad: boolean;
