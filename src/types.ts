@@ -130,6 +130,7 @@ export interface Monumento {
   revisions?: Revision[];
   imperatori?: string[];
   _corpusFile?: string;
+  _fileHash?: string;
 }
 
 export type SortField = keyof Monumento | 'epiteti';

@@ -1,6 +1,7 @@
 import express from "express";
 import path from "path";
 import fs from "fs";
+import crypto from "crypto";
 import { createServer as createViteServer } from "vite";
 import { GoogleGenAI } from "@google/genai";
 import { xmlToMonumenti, monumentiToXml, renderIconography } from "./src/lib/xmlUtils";
@@ -74,6 +75,16 @@ async function startServer() {
     return `${corpus}-${num}.xml`;
   }
 
+  // Impronta del contenuto di un file del corpus, usata come controllo di
+  // allineamento sul salvataggio scoped di un singolo record (vedi
+  // PATCH /api/monumenti/:entryId): il client deve dichiarare quale hash
+  // conosceva quando ha aperto la scheda, per accorgersi se nel frattempo
+  // il file è stato toccato altrove (altra sessione, o direttamente su
+  // GitHub) prima di sovrascriverlo.
+  function hashContent(content: string): string {
+    return crypto.createHash('sha256').update(content, 'utf-8').digest('hex');
+  }
+
   // Limiti di base sui payload in scrittura, in linea con gli invarianti
   // storicamente descritti in security_spec.md / firestore.rules (mai
   // enforcati qui: i dati sono passati a file+GitHub, non più a Firestore).
@@ -124,8 +135,10 @@ async function startServer() {
         const xml = fs.readFileSync(path.join(CORPUS_DIR, file), 'utf-8');
         const parsed = xmlToMonumenti(xml);
         if (parsed.length > 0) {
-          // Attach filename for round-trip updates
-          parsed.forEach(m => { (m as any)._corpusFile = file; });
+          // Attach filename + content hash for round-trip updates and
+          // per-record staleness checks
+          const fileHash = hashContent(xml);
+          parsed.forEach(m => { (m as any)._corpusFile = file; (m as any)._fileHash = fileHash; });
           monumenti.push(...parsed);
         }
       } catch (e) {
@@ -400,6 +413,53 @@ async function startServer() {
     } catch (error: any) {
       console.error("Error writing corpus:", error);
       res.status(500).json({ error: error.message || "Failed to save corpus" });
+    }
+  });
+
+  // PATCH save a single monument — patches only the one corpus file
+  // (no full-array rewrite, no cleanup/delete pass). Used by the section
+  // editor's per-field save so that editing one record never touches the
+  // other ~30 files of the corpus. Blocks (409) instead of overwriting if
+  // the file was changed since the client last read it.
+  app.patch("/api/monumenti/:entryId", async (req, res) => {
+    try {
+      const { entryId } = req.params;
+      const { monumento, baseHash } = req.body || {};
+      if (!monumento || typeof monumento !== 'object') {
+        return res.status(400).json({ error: "Corpo mancante: atteso { monumento, baseHash }" });
+      }
+      if (monumento.entryId !== entryId) {
+        return res.status(400).json({ error: "entryId nel corpo non corrisponde a quello nell'URL" });
+      }
+      const shapeErr = validateMonumentoShape(monumento);
+      if (shapeErr) return res.status(400).json({ error: shapeErr });
+
+      const rawFilename = (monumento as any)._corpusFile as string | undefined;
+      const filename = rawFilename ? rawFilename.replace(/[^a-zA-Z0-9._-]/g, '_') : buildFilename(monumento);
+      const filepath = path.join(CORPUS_DIR, filename);
+
+      if (!fs.existsSync(filepath)) {
+        return res.status(404).json({ error: `File corpus non trovato per la scheda ${entryId} (${filename}). Ricarica l'elenco e riprova.` });
+      }
+
+      const currentXml = fs.readFileSync(filepath, 'utf-8');
+      if (baseHash && hashContent(currentXml) !== baseHash) {
+        return res.status(409).json({
+          error: "stale",
+          message: `La scheda ${entryId} è stata modificata altrove da quando l'hai aperta qui. Ricarica i dati prima di salvare, per non sovrascrivere quelle modifiche.`,
+        });
+      }
+
+      const patched = patchXmlContent(filepath, monumento);
+      await writeCorpusFile(filename, patched, `Aggiorna ${filename}`);
+
+      rebuildBackup();
+      updateSearchIndex(readCorpusFiles());
+
+      res.json({ status: "ok", _corpusFile: filename, _fileHash: hashContent(patched) });
+    } catch (error: any) {
+      console.error("Error patching single monumento:", error);
+      res.status(500).json({ error: error.message || "Failed to save record" });
     }
   });
 

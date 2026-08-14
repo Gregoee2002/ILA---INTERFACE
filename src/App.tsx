@@ -2708,6 +2708,9 @@ export default function App() {
   // errore visibile — il click sembra "non fare nulla". Un dialogo interno
   // funziona sempre, indipendentemente dal contesto di rendering.
   const [showReindexConfirm, setShowReindexConfirm] = useState(false);
+  // Blocco salvataggio per scheda disallineata (vedi handleSaveMetadata) —
+  // stesso motivo del dialogo sopra: niente window.confirm()/alert().
+  const [staleSaveEntryId, setStaleSaveEntryId] = useState<string | null>(null);
   const [importFileName, setImportFileName] = useState<string>('');
   const [importFileSize, setImportFileSize] = useState<number>(0);
   const [importFileType, setImportFileType] = useState<'xml' | 'json' | null>(null);
@@ -3184,38 +3187,41 @@ export default function App() {
       alert(`Solo l'amministratore (${ADMIN_EMAIL}) può modificare i dati.`);
       return;
     }
-    try {
-      const target = monumenti.find(m => m.entryId === entryId);
-      if (!target) return;
+    const target = monumenti.find(m => m.entryId === entryId);
+    if (!target) return;
 
-      const testXml = monumentiToXml([{ ...target, ...metadata }]);
-      const parser = new DOMParser();
-      const xmldoc = parser.parseFromString(testXml, 'application/xml');
-      if (xmldoc.getElementsByTagName('parsererror').length > 0) {
-        throw new Error("I dati modificati producono XML non valido. Controlla i valori inseriti.");
-      }
+    const updatedMon = { ...target, ...metadata };
 
-      const updatedMon = { ...target, ...metadata };
-      const finalEntryId = entryId;
-      const finalUpdated = monumenti.map(m => m.entryId === entryId ? updatedMon : m);
-
-      setMonumenti(finalUpdated);
-      const updatedSelected = finalUpdated.find(m => m.entryId === finalEntryId);
-      if (updatedSelected) setSelectedMonumento(updatedSelected);
-
-      try {
-        await fetch('/api/monumenti', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(finalUpdated)
-        });
-      } catch (errSync) {
-        console.warn("Background file sync failed", errSync);
-      }
-    } catch (err) {
-      console.error("Save metadata error", err);
-      alert("Errore durante il salvataggio dei dati.");
+    const testXml = monumentiToXml([updatedMon]);
+    const parser = new DOMParser();
+    const xmldoc = parser.parseFromString(testXml, 'application/xml');
+    if (xmldoc.getElementsByTagName('parsererror').length > 0) {
+      throw new Error("I dati modificati producono XML non valido. Controlla i valori inseriti.");
     }
+
+    // Salvataggio scoped al singolo file: manda solo questa scheda (mai
+    // l'intero corpus) e dichiara l'ultimo hash noto del file, così il
+    // server può bloccare invece di sovrascrivere se nel frattempo è
+    // cambiato altrove (altra sessione, o modifica diretta su GitHub).
+    const res = await fetch(`/api/monumenti/${encodeURIComponent(entryId)}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ monumento: updatedMon, baseHash: target._fileHash ?? null })
+    });
+
+    if (res.status === 409) {
+      setStaleSaveEntryId(entryId);
+      throw new Error("Salvataggio bloccato: la scheda è stata modificata altrove nel frattempo.");
+    }
+    if (!res.ok) {
+      const errBody = await res.json().catch(() => ({} as any));
+      throw new Error(errBody.error || "Impossibile salvare la scheda sul server.");
+    }
+
+    const body = await res.json();
+    const persisted: Monumento = { ...updatedMon, _corpusFile: body._corpusFile, _fileHash: body._fileHash };
+    setMonumenti(prev => prev.map(m => m.entryId === entryId ? persisted : m));
+    setSelectedMonumento(prev => (prev && prev.entryId === entryId) ? persisted : prev);
   };
 
   const exportSingleRecord = async (m: Monumento) => {
@@ -4552,6 +4558,65 @@ export default function App() {
                   className="text-[11px] font-sans font-bold uppercase tracking-widest bg-accent text-parchment px-4 py-2 rounded-lg hover:opacity-90 transition-opacity"
                 >
                   Conferma
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* Blocco salvataggio scheda disallineata — vedi handleSaveMetadata */}
+      <AnimatePresence>
+        {staleSaveEntryId && (
+          <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setStaleSaveEntryId(null)}
+              className="absolute inset-0 bg-ink/80 backdrop-blur-sm"
+            />
+            <motion.div
+              initial={{ scale: 0.98, opacity: 0, y: 10 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.98, opacity: 0, y: 10 }}
+              className="relative w-full max-w-sm bg-parchment shadow-2xl border border-border rounded-2xl text-ink p-6 space-y-4"
+            >
+              <div className="flex items-center gap-2 font-sans font-bold uppercase tracking-widest text-xs text-accent">
+                <AlertTriangle className="h-4 w-4" /> Salvataggio bloccato
+              </div>
+              <p className="text-sm font-serif text-ink/80 leading-relaxed">
+                Questa scheda è stata modificata altrove (un'altra sessione di lavoro, o un
+                aggiornamento diretto su GitHub) da quando l'hai aperta qui. Per non
+                sovrascrivere quelle modifiche, il salvataggio è stato bloccato. Ricarica i
+                dati e riapplica le tue modifiche sulla versione più recente.
+              </p>
+              <div className="flex items-center justify-end gap-3 pt-1">
+                <button
+                  onClick={() => setStaleSaveEntryId(null)}
+                  className="text-[11px] font-sans font-bold uppercase tracking-widest text-muted hover:text-ink transition-colors px-3 py-2"
+                >
+                  Chiudi
+                </button>
+                <button
+                  onClick={async () => {
+                    const id = staleSaveEntryId;
+                    setStaleSaveEntryId(null);
+                    try {
+                      const freshRes = await fetch('/api/monumenti');
+                      if (freshRes.ok) {
+                        const fresh: Monumento[] = await freshRes.json();
+                        setMonumenti(fresh);
+                        const freshTarget = id ? fresh.find(m => m.entryId === id) : undefined;
+                        if (freshTarget) setSelectedMonumento(freshTarget);
+                      }
+                    } catch (err) {
+                      console.error("Reload after stale save failed", err);
+                    }
+                  }}
+                  className="text-[11px] font-sans font-bold uppercase tracking-widest bg-accent text-parchment px-4 py-2 rounded-lg hover:opacity-90 transition-opacity"
+                >
+                  Ricarica dati
                 </button>
               </div>
             </motion.div>
