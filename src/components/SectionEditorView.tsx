@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo, useRef, ChangeEvent } from 'react'
 import { motion, AnimatePresence } from 'motion/react';
 import {
   Upload, Database, Save, Loader2, AlertTriangle, Check, X, Plus, Trash2,
-  ChevronRight, FileText, Search, Download, Feather, Sparkles, LogIn, ShieldCheck
+  ChevronRight, FileText, Search, Download, Sparkles, LogIn, ShieldCheck
 } from 'lucide-react';
 import { cn, stripAccents } from '../lib/utils';
 import { Monumento, OrigDate, Traduzione, Bibliografia, Revision, IconographicFigure, IconographicTrait } from '../types';

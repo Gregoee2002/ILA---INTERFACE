@@ -3,9 +3,9 @@ import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import {
   Plus, Trash2, Check, X, AlertTriangle, Eye, Code2,
-  Loader2, Stethoscope, ChevronLeft, Sparkles, Link2, CornerDownLeft, Search
+  Loader2, Stethoscope, ChevronLeft, Sparkles, CornerDownLeft, Search
 } from 'lucide-react';
-import { cn, stripAccents } from '../lib/utils';
+import { cn, stripAccents, EASE_OUT } from '../lib/utils';
 import {
   MarkupToken, TokenPath, MarkupAction, ValidationIssue, EpithetScanIssue, LbInfo,
   parseEdition, serializeEdition, collectLbs, tokenize, serializeTokens, sliceText,
@@ -24,8 +24,6 @@ interface Props {
   onChange: (xml: string) => void;
   anepigrafo?: boolean;
 }
-
-const EASE_OUT = [0.22, 1, 0.36, 1] as const;
 
 /** Legenda hover leggera: sostituisce il title nativo del browser (piccolo, ritardato, poco leggibile). */
 const Tip: React.FC<{ label: string; children: React.ReactNode; side?: 'top' | 'bottom' }> = ({ label, children, side = 'top' }) => {
@@ -76,8 +74,17 @@ interface MenuState {
 
 interface ElPopover { path: TokenPath; token: MarkupToken & { kind: 'el' }; x: number; y: number; }
 
+/** parseEdition lancia su markup che il modello a flusso unico non sa rappresentare
+ *  (es. più <div type="textpart"> nella stessa edizione, caso reale nel corpus:
+ *  I.Milet VI 3 1029+1040). Senza questo guard il crash arriva nudo dall'inizializzatore
+ *  di useState e rompe il render dell'intera sezione Edizione. */
+function safeParseEdition(xml: string): MarkupToken[] | null {
+  try { return parseEdition(xml); } catch { return null; }
+}
+
 export const EditionMarkupEditor: React.FC<Props> = ({ value, onChange, anepigrafo }) => {
-  const [tokens, setTokens] = useState<MarkupToken[]>(() => parseEdition(value));
+  const [tokens, setTokens] = useState<MarkupToken[]>(() => safeParseEdition(value) ?? []);
+  const [parseError, setParseError] = useState(() => safeParseEdition(value) === null);
   const [menu, setMenu] = useState<MenuState | null>(null);
   const [pop, setPop] = useState<ElPopover | null>(null);
   const [tab, setTab] = useState<'anteprima' | 'xml'>('anteprima');
@@ -90,7 +97,9 @@ export const EditionMarkupEditor: React.FC<Props> = ({ value, onChange, anepigra
 
   useEffect(() => {
     if (value !== lastEmitted.current) {
-      setTokens(parseEdition(value));
+      const next = safeParseEdition(value);
+      if (next) { setTokens(next); setParseError(false); }
+      else setParseError(true);
       lastEmitted.current = value;
     }
   }, [value]);
@@ -230,6 +239,20 @@ export const EditionMarkupEditor: React.FC<Props> = ({ value, onChange, anepigra
   };
 
   /* ================================================================ */
+
+  if (parseError) {
+    return (
+      <div className="flex items-start gap-2.5 text-sm text-amber-800 dark:text-amber-400 bg-amber-500/8 border border-amber-500/25 rounded-xl px-4 py-3">
+        <AlertTriangle className="w-4 h-4 mt-0.5 shrink-0" />
+        <span>
+          Questa edizione ha una struttura che l'editor assistito non sa ancora rappresentare
+          (es. più parti di testo — <span className="font-mono not-italic text-[11px]">&lt;div type="textpart"&gt;</span> multipli
+          nella stessa sezione). Per non rischiare di alterare il markup, la modifica qui è disabilitata:
+          intervieni sul file XML direttamente (Oxygen o l'esportazione/reimportazione).
+        </span>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-4" ref={rootRef}>

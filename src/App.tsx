@@ -46,7 +46,7 @@ import {
   ZoomOut,
   RotateCcw
 } from 'lucide-react';
-import { cn } from './lib/utils';
+import { cn, EASE_OUT, EASE_IN, SPRING_SNAPPY, SPRING_SOFT } from './lib/utils';
 import { ICONOGRAPHY_LABELS } from './lib/iconographyLabels';
 import { Monumento, FilterState, SortField, Traduzione, Bibliografia, Appunto } from './types';
 import { RAW_DATA } from './data';
@@ -82,11 +82,6 @@ type AppView = 'home' | 'catalog' | 'stats' | 'timeline' | 'health' | 'map' | 'h
 // NOTA: questo è solo un controllo di visibilità UI; l'enforcement reale
 // deve avvenire lato server (vedi audit di sicurezza).
 const ADMIN_EMAIL = 'gabrielegregorio123@gmail.com';
-
-const EASE_OUT = [0.16, 1, 0.3, 1] as const;
-const EASE_IN = [0.7, 0, 0.84, 0] as const;
-const SPRING_SNAPPY = { type: 'spring' as const, stiffness: 500, damping: 40 };
-const SPRING_SOFT = { type: 'spring' as const, stiffness: 300, damping: 30 };
 
 // Helper: fade+slide standard per l'ingresso di sezioni al momento in cui entrano nel viewport
 const scrollReveal = {
