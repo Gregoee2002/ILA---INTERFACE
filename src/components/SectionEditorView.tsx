@@ -1091,15 +1091,21 @@ function suggestFunctionFromTextTypes(textTypes: string[] | undefined): string |
 }
 const FIGURE_TYPE_KEYS = ['deity', 'secondary', 'worshipper', 'animal', 'symbol'];
 const FIGURE_KEY_OPTIONS = ['Men', 'crescent', 'Nike', 'eagle', 'Attis', 'Helios'];
-const TRAIT_TYPE_KEYS = ['headgear', 'lunar', 'held_object', 'mount', 'dress', 'technique', 'position'];
+// Posizione COMPOSITIVA della figura nel rilievo — proprietà della figura
+// (figure.place), non più un "trait" fisico: vedi nota in types.ts.
+const PLACE_KEYS = ['upper_left', 'upper_right', 'lower_left', 'lower_right', 'top_centre'];
+// `technique` è stata rimossa da questo vocabolario: è già codificata a
+// livello di intero supporto in layoutDesc/layout/rs[@ref=.../voc/writing/]
+// (vedi i file CMRDM reali) — tenerla anche qui per singola figura duplicava
+// il dato con rischio di divergenza, senza reale valore informativo.
+const TRAIT_TYPE_KEYS = ['headgear', 'lunar', 'held_object', 'mount', 'dress', 'gesture'];
 const TRAIT_KEY_OPTIONS: Record<string, string[]> = {
   headgear: ['phrygian_cap', 'radiate_crown', 'crescent_crown'],
-  lunar: ['crescent_shoulders', 'crescent_cap', 'full_moon'],
-  held_object: ['pine_cone', 'torch', 'patera', 'sceptre', 'wreath'],
-  mount: ['bull', 'horse'],
-  dress: ['military', 'himation', 'chiton'],
-  technique: ['incised', 'relief_carved', 'painted'],
-  position: ['upper_left', 'upper_right', 'lower_left', 'lower_right', 'top_centre'],
+  lunar: ['crescent_shoulders', 'crescent_cap', 'full_moon', 'crescent'],
+  held_object: ['pine_cone', 'torch', 'patera', 'sceptre', 'wreath', 'staff', 'bucranium'],
+  mount: ['bull', 'horse', 'cock'],
+  dress: ['military', 'himation', 'chiton', 'belted_tunic'],
+  gesture: ['hands_raised'],
 };
 
 const vocabLabel = (k: string) => {
@@ -1160,7 +1166,8 @@ const IconographyEditor: React.FC<{ m: Monumento; set: <K extends keyof Monument
           placeholder="Nessuna funzione selezionata"
         />
         <p className="text-[10px] text-muted/50 italic mt-1">
-          Vocabolario EAGLE «Type of Inscription» — «Confession inscription» è un’estensione ILA, non EAGLE.
+          Sottoinsieme curato per il corpus di Men, concettualmente allineato al vocabolario EAGLE «Type of Inscription»
+          (non un suo estratto letterale) — «Confession inscription» è un’estensione ILA, non presente in EAGLE.
         </p>
         {!ico.function && suggestedFunction && (
           <div className="mt-2 flex items-center gap-2.5 text-xs bg-accent/8 border border-accent/20 rounded-lg px-3 py-2">
@@ -1193,7 +1200,7 @@ const IconographyEditor: React.FC<{ m: Monumento; set: <K extends keyof Monument
             <div key={fi} className="glass-card p-4 space-y-4">
               <div className="flex items-start gap-3">
                 <span className="text-[10px] font-mono text-muted/50 pt-2.5 shrink-0">n.{fi + 1}</span>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 flex-1">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3 flex-1">
                   <div>
                     <FieldLabel hint="ruolo della figura nella scena">Tipo di figura</FieldLabel>
                     <VocabSelect value={fig.type} onChange={v => updateFigure(fi, { type: v })} options={FIGURE_TYPE_KEYS} placeholder="Scegli il tipo…" />
@@ -1201,6 +1208,10 @@ const IconographyEditor: React.FC<{ m: Monumento; set: <K extends keyof Monument
                   <div>
                     <FieldLabel hint="nome noto, o testo libero se non in vocabolario">Identificativo</FieldLabel>
                     <VocabCombo value={fig.key} onChange={v => updateFigure(fi, { key: v })} options={FIGURE_KEY_OPTIONS} listId={`dl-figkey-${fi}`} placeholder="es. dedicante, Men…" />
+                  </div>
+                  <div>
+                    <FieldLabel hint="dove si trova nel rilievo, non un attributo fisico">Posizione nella composizione</FieldLabel>
+                    <VocabSelect value={fig.place || ''} onChange={v => updateFigure(fi, { place: v || undefined })} options={PLACE_KEYS} placeholder="Non specificata" />
                   </div>
                 </div>
                 <button onClick={() => update({ figures: ico.figures.filter((_, i) => i !== fi) })}

@@ -189,17 +189,23 @@ function extractIconography(teiString: string): any {
   if (noteMatch) note = noteMatch[1].trim();
 
   const figures: any[] = [];
-  const figureRegex = /<figure([^>]*)>([\s\S]*?)<\/figure>/g;
+  // Deve matchare sia <figure .../> (auto-chiudente, scritto da renderIconography
+  // quando la figura non ha traits) sia <figure ...>...</figure> (con traits
+  // annidati) — la sola forma con chiusura esplicita perdeva silenziosamente ogni
+  // figura senza tratti al giro successivo di lettura (bug scoperto codificando
+  // dati reali: un simbolo isolato come una falce incisa senza altri attributi).
+  const figureRegex = /<figure([^>]*?)(?:\/>|>([\s\S]*?)<\/figure>)/g;
   let figMatch;
   while ((figMatch = figureRegex.exec(iconContent)) !== null) {
     const figAttrs = figMatch[1];
     const nMatch = figAttrs.match(/n="([^"]*)"/);
     const typeMatch = figAttrs.match(/type="([^"]*)"/);
     const keyMatch = figAttrs.match(/key="([^"]*)"/);
-    
+    const placeMatch = figAttrs.match(/place="([^"]*)"/);
+
     if (!typeMatch || !keyMatch) continue;
 
-    const figContent = figMatch[2];
+    const figContent = figMatch[2] || '';
     const traits: any[] = [];
     const traitRegex = /<trait([^>]*)>/g;
     let trMatch;
@@ -221,6 +227,7 @@ function extractIconography(teiString: string): any {
       n: nMatch ? parseInt(nMatch[1], 10) : 1,
       type: typeMatch[1],
       key: keyMatch[1],
+      place: placeMatch ? placeMatch[1] : undefined,
       traits
     });
   }
@@ -1144,6 +1151,7 @@ export function renderIconography(ico: IconographyData | undefined, indent: stri
     const fAttrs = [`n="${idx + 1}"`];
     if (f.type) fAttrs.push(`type="${escapeXml(f.type)}"`);
     if (f.key) fAttrs.push(`key="${escapeXml(f.key)}"`);
+    if (f.place) fAttrs.push(`place="${escapeXml(f.place)}"`);
     const traits = (f.traits || []).filter(t => t.type && t.key);
     if (traits.length === 0) {
       lines.push(`${i2}<figure ${fAttrs.join(" ")}/>`);

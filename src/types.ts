@@ -48,6 +48,11 @@ export interface IconographicFigure {
   n: number;
   type: string;
   key: string;
+  // Posizione compositiva nel rilievo (es. "upper_left", "top_centre").
+  // Proprietà DELLA FIGURA (dove si trova nella scena), non un trait fisico
+  // — per questo vive qui e non in `traits`, che raccoglie solo attributi
+  // fisici/iconografici propri della figura (copricapo, oggetto tenuto...).
+  place?: string;
   traits: IconographicTrait[];
 }
 
@@ -139,6 +144,7 @@ export interface FilterState {
   materiale: string;
   iconAttributo: string;
   iconFunzione: string;
+  iconPosizione: string;
   onlyInscr: boolean;
   onlyAnep: boolean;
   onlyHasTrad: boolean;

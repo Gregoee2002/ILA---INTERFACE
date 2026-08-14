@@ -2627,6 +2627,7 @@ export default function App() {
     materiale: '',
     iconAttributo: '',
     iconFunzione: '',
+    iconPosizione: '',
     onlyInscr: false,
     onlyAnep: false,
     onlyHasTrad: false,
@@ -2793,6 +2794,11 @@ export default function App() {
     monumenti.forEach(m => { if (m.iconografia?.function) set.add(m.iconografia.function); });
     return Array.from(set).sort();
   }, [monumenti]);
+  const iconPosizioni = useMemo(() => {
+    const set = new Set<string>();
+    monumenti.forEach(m => m.iconografia?.figures?.forEach(f => f.place && set.add(f.place)));
+    return Array.from(set).sort();
+  }, [monumenti]);
 
   const filteredMonumenti = useMemo(() => {
     return monumenti
@@ -2814,6 +2820,7 @@ export default function App() {
         const matchesMateriale = !filters.materiale || m.materiale === filters.materiale;
         const matchesIconAttributo = !filters.iconAttributo || (m.iconografia?.figures?.some(f => f.traits?.some(t => t.key === filters.iconAttributo)) ?? false);
         const matchesIconFunzione = !filters.iconFunzione || m.iconografia?.function === filters.iconFunzione;
+        const matchesIconPosizione = !filters.iconPosizione || (m.iconografia?.figures?.some(f => f.place === filters.iconPosizione) ?? false);
 
         const matchesInscr = !filters.onlyInscr || m.iscrizione;
         const matchesAnep = !filters.onlyAnep || m.anepigr;
@@ -2824,7 +2831,7 @@ export default function App() {
 
         const matchesDate = (!m.data_inizio || !m.data_fine) || (m.data_inizio >= filters.dateRange[0] && m.data_fine <= filters.dateRange[1]);
 
-        return matchesSearch && matchesRegione && matchesCorpus && matchesNumero && matchesCitta && matchesTipo && matchesMateriale && matchesIconAttributo && matchesIconFunzione && matchesInscr && matchesAnep && matchesHasTrad && matchesNoTrad && matchesDate;
+        return matchesSearch && matchesRegione && matchesCorpus && matchesNumero && matchesCitta && matchesTipo && matchesMateriale && matchesIconAttributo && matchesIconFunzione && matchesIconPosizione && matchesInscr && matchesAnep && matchesHasTrad && matchesNoTrad && matchesDate;
       })
       .sort((a, b) => {
         if (sortField === 'citta') {
@@ -4008,6 +4015,24 @@ export default function App() {
                 </div>
               )}
 
+              {iconPosizioni.length > 0 && (
+                <div className="animate-in fade-in slide-in-from-left-2 duration-300">
+                  <label className="mb-2 block field-label">Posizione Composizione</label>
+                  <div className="relative">
+                    <select
+                      className="w-full bg-[var(--card)] dark:bg-black/25 border border-[var(--border)]/50 dark:border-white/5 rounded-xl pl-3 pr-8 py-2.5 font-sans text-xs outline-none shadow-inner focus:border-accent/50 focus:ring-1 focus:ring-accent/30 hover:bg-[var(--sidebar)] dark:hover:bg-black/40 cursor-pointer appearance-none transition-all duration-300"
+                      style={{ backgroundColor: 'var(--card)', color: 'var(--ink)', WebkitAppearance: 'none' as const, appearance: 'none' as const }}
+                      value={filters.iconPosizione}
+                      onChange={(e) => setFilters(f => ({ ...f, iconPosizione: e.target.value }))}
+                    >
+                      <option value="" className="bg-parchment dark:bg-sidebar text-ink">Tutte le Posizioni</option>
+                      {iconPosizioni.map(v => <option key={v} value={v} className="bg-parchment dark:bg-sidebar text-ink">{ICONOGRAPHY_LABELS[v] || v}</option>)}
+                    </select>
+                    <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted/50 pointer-events-none" />
+                  </div>
+                </div>
+              )}
+
               <div className="animate-in fade-in slide-in-from-left-2 duration-300">
                 <label className="block field-label mb-3">Gestione Traduzioni</label>
                 <div className="flex flex-col gap-3">
@@ -4037,7 +4062,7 @@ export default function App() {
                   id="reset-filters-btn"
                   onClick={() => setFilters({
                     searchText: '', corpus: '', numero: '', regione: '', citta: '', tipo: '', materiale: '',
-                    iconAttributo: '', iconFunzione: '',
+                    iconAttributo: '', iconFunzione: '', iconPosizione: '',
                     onlyInscr: false, onlyAnep: false, onlyHasTrad: false, onlyNoTrad: false,
                     dateRange: [-500, 500],
                     searchMode: 'AND'

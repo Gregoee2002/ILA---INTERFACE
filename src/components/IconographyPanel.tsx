@@ -59,8 +59,13 @@ export const IconographyPanel: React.FC<IconographyPanelProps> = ({ monumento })
                 <span className="font-serif text-[15px] font-medium text-ink">
                   {displayTitle}
                 </span>
-                <span className="text-xs text-muted font-sans shrink-0">
+                <span className="text-xs text-muted font-sans shrink-0 flex items-center gap-2">
                   {translatedType}
+                  {fig.place && (
+                    <span className="text-[10px] uppercase tracking-wide text-muted/60 border border-border/30 rounded px-1.5 py-0.5">
+                      {ICONOGRAPHY_LABELS[fig.place] || fig.place}
+                    </span>
+                  )}
                 </span>
               </div>
               

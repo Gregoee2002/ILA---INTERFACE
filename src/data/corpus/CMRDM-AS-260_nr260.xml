@@ -59,6 +59,16 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+    <xenoData>
+        <iconography>
+            <function key="votive"/>
+            <figure n="1" type="deity" key="Men">
+                <trait type="headgear" key="phrygian_cap"/>
+                <trait type="lunar" key="crescent"/>
+            </figure>
+            <note>Busto (non figura intera) entro nicchia ad arco di tipo naiskos con acroteri — forma di rappresentazione (statua intera / busto) non ancora coperta da un campo dedicato nel vocabolario controllato.</note>
+        </iconography>
+    </xenoData>
     </teiHeader>
     <text>
         <body>

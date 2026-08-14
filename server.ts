@@ -98,6 +98,7 @@ async function startServer() {
         if (ico.figures.length > 50) return 'iconografia.figures supera 50 elementi';
         for (const f of ico.figures) {
           if (Array.isArray(f?.traits) && f.traits.length > 50) return 'iconografia.figures[].traits supera 50 elementi';
+          if (f?.place !== undefined && String(f.place).length > 50) return 'iconografia.figures[].place supera 50 caratteri';
         }
       }
       return null;

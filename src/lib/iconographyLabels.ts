@@ -1,5 +1,26 @@
+/**
+ * Vocabolario controllato per <xenoData><iconography> (v2 — 2026-08).
+ *
+ * Fonti per gli attributi di Men (categoria `trait`):
+ *  - Descrizioni prosastiche già presenti nel corpus reale CMRDM (support/layout
+ *    <p>), confermate nell'audit di questa revisione: CMRDM I 69 ("holding
+ *    staff, pine-cone... boy with uplifted hands"), CMRDM I 80 e Laurion
+ *    12/13 ("incised crescent at top"), CMRDM I 260 ("Phrygian cap and
+ *    crescent").
+ *  - Letteratura secondaria accessibile online (voce Wikipedia/Britannica/
+ *    World History Encyclopedia su "Men (deity)"), usata per confermare
+ *    berretto frigio, falce lunare sulle spalle, pigna, bucranio e gallo come
+ *    attributi ricorrenti di Men.
+ *  - NON verificato direttamente contro LIMC (voce "Men") né contro Lane,
+ *    CMRDM III (Interpretations and Testimonia) — nessuno dei due è stato
+ *    consultabile in questa sessione. Le voci qui sotto marcate "[da
+ *    verificare su LIMC/Lane III]" andrebbero controllate prima di trattarle
+ *    come canoniche.
+ *
+ * `function` = funzione cultuale (NON tipo fisico, quello va in objectType).
+ */
 export const ICONOGRAPHY_LABELS: Record<string, string> = {
-  // function (funzione cultuale — NON tipo fisico, quello va in objectType)
+  // function
   votive: "votiva",
   lex_sacra: "lex sacra",
   confession: "iscrizione di confessione",
@@ -16,24 +37,33 @@ export const ICONOGRAPHY_LABELS: Record<string, string> = {
   phrygian_cap: "berretto frigio",
   radiate_crown: "corona radiata",
   crescent_crown: "corona a falce",
-  // lunar
+  // lunar — attributo diagnostico di Men
   crescent_shoulders: "falce lunare sulle spalle",
   crescent_cap: "falce sul berretto",
   full_moon: "luna piena",
+  crescent: "falce lunare (posizione non specificata in fonte)",
   // held_object
   pine_cone: "pigna",
   torch: "torcia",
   patera: "patera",
   sceptre: "scettro",
   wreath: "corona vegetale",
-  // mount
+  staff: "bastone",
+  bucranium: "bucranio [da verificare su LIMC/Lane III]",
+  // mount / animale associato (cavalcatura o accompagnatore — non solo "ridden")
   bull: "toro",
   horse: "cavallo",
+  cock: "gallo [da verificare su LIMC/Lane III]",
   // dress
   military: "abbigliamento militare",
   himation: "himation",
   chiton: "chitone",
-  // position
+  belted_tunic: "tunica cinta",
+  // gesture — introdotta in questa revisione: CMRDM I 69 descrive un orante
+  // "with uplifted hands", nessuna delle categorie esistenti lo copriva.
+  hands_raised: "mani alzate (gesto di supplica)",
+  // position — posizione COMPOSITIVA della figura nel rilievo (figure.place,
+  // non più un trait: vedi types.ts IconographicFigure.place)
   upper_left: "in alto a sinistra",
   upper_right: "in alto a destra",
   lower_left: "in basso a sinistra",
@@ -45,23 +75,18 @@ export const ICONOGRAPHY_LABELS: Record<string, string> = {
   worshipper: "orante",
   animal: "animale",
   symbol: "simbolo",
-  // figure key (symbols and named figures)
-  crescent: "falce lunare",
+  // figure key (simboli e figure nominate)
   Nike: "Nike",
   eagle: "aquila",
   Attis: "Attis",
   Helios: "Helios",
   Men: "Men",
-  // technique
-  incised: "inciso",
-  relief_carved: "a rilievo",
-  painted: "dipinto",
-  // trait type headers
+  // trait/field type headers
   headgear: "copricapo",
   lunar: "attributo lunare",
   held_object: "oggetto tenuto",
-  mount: "cavalcatura",
+  mount: "animale associato",
   dress: "abbigliamento",
+  gesture: "gesto",
   position: "posizione",
-  technique: "tecnica",
 };
