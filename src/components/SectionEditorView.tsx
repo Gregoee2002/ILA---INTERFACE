@@ -1112,15 +1112,18 @@ const vocabLabel = (k: string) => {
   return ICONOGRAPHY_LABELS[k] || k;
 };
 
-/** Select rigoroso: solo valori della categoria (niente testo libero, niente valori fuori vocabolario). */
-const VocabSelect: React.FC<{ value: string; onChange: (v: string) => void; options: string[]; placeholder?: string }> = ({ value, onChange, options, placeholder }) => (
+/** Select rigoroso: solo valori della categoria (niente testo libero, niente valori fuori vocabolario).
+ *  `allowEmpty` lascia il placeholder selezionabile — per campi davvero opzionali (es. posizione
+ *  compositiva) dove serve poter tornare a "non specificato"; per i campi obbligatori (funzione,
+ *  tipo, categoria) resta disabilitato così una scelta fatta non può ripiegare sul vuoto. */
+const VocabSelect: React.FC<{ value: string; onChange: (v: string) => void; options: string[]; placeholder?: string; allowEmpty?: boolean }> = ({ value, onChange, options, placeholder, allowEmpty }) => (
   <select
     value={value}
     onChange={e => onChange(e.target.value)}
     style={{ colorScheme: 'light dark' }}
     className="w-full bg-white/60 dark:bg-white/5 border border-border/50 rounded-lg px-3 py-2 text-sm text-ink font-serif focus:outline-none focus:ring-1 focus:ring-accent/40"
   >
-    <option value="" disabled>{placeholder || 'Seleziona…'}</option>
+    <option value="" disabled={!allowEmpty}>{placeholder || 'Seleziona…'}</option>
     {options.map(k => <option key={k} value={k}>{vocabLabel(k)}</option>)}
   </select>
 );
@@ -1195,11 +1198,16 @@ const IconographyEditor: React.FC<{ m: Monumento; set: <K extends keyof Monument
       {/* ── 2. Figure ── */}
       <section>
         <Eyebrow className="mb-2">2 · Figure</Eyebrow>
+        {ico.figures.length === 0 && (
+          <p className="text-sm text-muted italic font-serif mb-3">Nessuna figura codificata. Aggiungine una se il monumento reca una scena figurata (divinità, oranti, simboli…).</p>
+        )}
         <div className="space-y-4">
           {ico.figures.map((fig, fi) => (
             <div key={fi} className="glass-card p-4 space-y-4">
               <div className="flex items-start gap-3">
-                <span className="text-[10px] font-mono text-muted/50 pt-2.5 shrink-0">n.{fi + 1}</span>
+                <span className="w-6 h-6 rounded-full bg-accent/10 text-accent border border-accent/20 flex items-center justify-center text-[11px] font-sans font-bold shrink-0 mt-1.5">
+                  {fi + 1}
+                </span>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3 flex-1">
                   <div>
                     <FieldLabel hint="ruolo della figura nella scena">Tipo di figura</FieldLabel>
@@ -1211,7 +1219,7 @@ const IconographyEditor: React.FC<{ m: Monumento; set: <K extends keyof Monument
                   </div>
                   <div>
                     <FieldLabel hint="dove si trova nel rilievo, non un attributo fisico">Posizione nella composizione</FieldLabel>
-                    <VocabSelect value={fig.place || ''} onChange={v => updateFigure(fi, { place: v || undefined })} options={PLACE_KEYS} placeholder="Non specificata" />
+                    <VocabSelect value={fig.place || ''} onChange={v => updateFigure(fi, { place: v || undefined })} options={PLACE_KEYS} placeholder="Non specificata" allowEmpty />
                   </div>
                 </div>
                 <button onClick={() => update({ figures: ico.figures.filter((_, i) => i !== fi) })}
@@ -1221,8 +1229,11 @@ const IconographyEditor: React.FC<{ m: Monumento; set: <K extends keyof Monument
               </div>
 
               {/* ── 3. Tratti di questa figura ── */}
-              <div className="pl-8 pt-1 border-t border-border/20">
+              <div className="pl-9 pt-1 border-t border-border/20">
                 <div className="text-[9px] font-sans font-bold uppercase tracking-[0.2em] text-muted/50 mb-2 pt-2">Tratti</div>
+                {fig.traits.length === 0 && (
+                  <p className="text-xs text-muted/50 italic font-serif mb-2">Nessun tratto — solo tipo, identificativo e posizione, se bastano a descrivere la figura.</p>
+                )}
                 <div className="space-y-2">
                   {fig.traits.map((t, ti) => (
                     <div key={ti} className="flex items-center gap-2">
@@ -1281,7 +1292,7 @@ const IconographyEditor: React.FC<{ m: Monumento; set: <K extends keyof Monument
       {/* ── 4. Nota libera ── */}
       <section>
         <Eyebrow className="mb-2">4 · Nota</Eyebrow>
-        <FieldLabel>Nota iconografica</FieldLabel>
+        <FieldLabel hint="per elementi non copribili dal vocabolario controllato — mai un ripiego per evitare di scegliere un tratto">Nota iconografica</FieldLabel>
         <TextArea rows={3} value={ico.note || ''} onChange={e => update({ note: e.target.value || undefined })} />
       </section>
 
