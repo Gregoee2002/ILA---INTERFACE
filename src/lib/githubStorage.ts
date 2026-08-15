@@ -34,14 +34,20 @@ interface GitHubConfig {
   repo: string; // "utente/nome-repo"
   branch: string;
   corpusPath: string; // cartella nella repo, es. "corpus"
+  draftsPath: string; // cartella nella repo per i draft non revisionati, es. "drafts" — SEMPRE distinta da corpusPath
 }
 
 let config: GitHubConfig | null = null;
 let warnedOnce = false;
 
-// Cache in-memory dello sha di ogni file sulla repo — necessario per
+// Cache in-memory dello sha di ogni file sulla repo — necessaria per
 // aggiornare (PUT con sha) invece di creare un file già esistente.
+// Due cache separate: corpus e drafts vivono nella stessa repo ma sono
+// cartelle diverse, e possono avere file con lo stesso nome (es. una entry
+// già revisionata in corpus/ e la sua bozza originale in drafts/) — una
+// cache unica causerebbe sha sbagliati e scritture corrotte tra le due.
 const shaCache = new Map<string, string>();
+const draftShaCache = new Map<string, string>();
 
 function loadConfig(): GitHubConfig | null {
   const token = process.env.GITHUB_TOKEN;
@@ -56,11 +62,17 @@ function loadConfig(): GitHubConfig | null {
     }
     return null;
   }
+  const corpusPath = (process.env.GITHUB_CORPUS_PATH || "corpus").replace(/^\/+|\/+$/g, "");
+  const draftsPath = (process.env.GITHUB_DRAFTS_PATH || "drafts").replace(/^\/+|\/+$/g, "");
+  if (corpusPath === draftsPath) {
+    throw new Error(`[githubStorage] GITHUB_CORPUS_PATH e GITHUB_DRAFTS_PATH non possono coincidere ("${corpusPath}") — il corpus revisionato e i draft non revisionati devono restare in cartelle separate.`);
+  }
   return {
     token,
     repo,
     branch: process.env.GITHUB_BRANCH || "main",
-    corpusPath: (process.env.GITHUB_CORPUS_PATH || "corpus").replace(/^\/+|\/+$/g, ""),
+    corpusPath,
+    draftsPath,
   };
 }
 
@@ -92,6 +104,11 @@ function repoPath(cfg: GitHubConfig, filename: string): string {
   return `${cfg.corpusPath}/${safeName}`;
 }
 
+function draftRepoPath(cfg: GitHubConfig, filename: string): string {
+  const safeName = filename.replace(/[^a-zA-Z0-9._-]/g, '_');
+  return `${cfg.draftsPath}/${safeName}`;
+}
+
 // ── Lettura: elenco file + contenuto ──────────────────────────────────
 
 interface GitHubDirEntry {
@@ -102,12 +119,12 @@ interface GitHubDirEntry {
   download_url: string | null;
 }
 
-async function listRepoFiles(cfg: GitHubConfig): Promise<{ entries: GitHubDirEntry[]; confirmed: boolean }> {
-  const url = `${GITHUB_API}/repos/${cfg.repo}/contents/${cfg.corpusPath}?ref=${encodeURIComponent(cfg.branch)}`;
+async function listRepoFiles(cfg: GitHubConfig, folderPath: string = cfg.corpusPath): Promise<{ entries: GitHubDirEntry[]; confirmed: boolean }> {
+  const url = `${GITHUB_API}/repos/${cfg.repo}/contents/${folderPath}?ref=${encodeURIComponent(cfg.branch)}`;
   const res = await fetch(url, { headers: headers(cfg) });
 
   if (res.status === 404) {
-    console.warn(`[githubStorage] GET ${url} → 404: cartella "${cfg.corpusPath}" non trovata sul branch "${cfg.branch}". Se pensavi che i file ci fossero, controlla nome repo/branch/percorso.`);
+    console.warn(`[githubStorage] GET ${url} → 404: cartella "${folderPath}" non trovata sul branch "${cfg.branch}". Se pensavi che i file ci fossero, controlla nome repo/branch/percorso.`);
     // "confirmed: false" — un 404 può significare tanto "repo vuota al primo
     // avvio" quanto "percorso/branch sbagliato per errore di configurazione".
     // Non fidarsi di questo caso per decidere cosa cancellare in locale.
@@ -118,7 +135,7 @@ async function listRepoFiles(cfg: GitHubConfig): Promise<{ entries: GitHubDirEnt
   }
   const data = await res.json();
   if (!Array.isArray(data)) {
-    throw new Error(`Percorso "${cfg.corpusPath}" sulla repo non è una cartella`);
+    throw new Error(`Percorso "${folderPath}" sulla repo non è una cartella`);
   }
   console.log(`[githubStorage] GET ${url} → ${data.length} elementi grezzi (prima del filtro .xml)`);
   return { entries: data as GitHubDirEntry[], confirmed: true };
@@ -218,6 +235,81 @@ export async function pullCorpusFromGitHub(
   return { pulled, skipped, deletedLocally };
 }
 
+/**
+ * Variante di pullCorpusFromGitHub per la cartella drafts/ — stessa logica
+ * (mirror completo, cancellazione locale solo se la lista remota è
+ * confermata), ma path e cache sha indipendenti da quelli del corpus.
+ * I draft sono materiale di lavoro pre-revisione: mai scritti nella stessa
+ * cartella del corpus revisionato.
+ */
+export async function pullDraftsFromGitHub(
+  localDir: string,
+  fsWriteFileSync: (filepath: string, content: string) => void,
+  pathJoin: (...parts: string[]) => string,
+  fsListLocalXmlFiles?: (dir: string) => string[],
+  fsUnlinkSync?: (filepath: string) => void
+): Promise<{ pulled: number; skipped: string[]; deletedLocally: string[] }> {
+  if (!isGitHubConfigured()) return { pulled: 0, skipped: [], deletedLocally: [] };
+  const cfg = getConfig();
+
+  console.log(`[githubStorage] Sincronizzazione draft da ${cfg.repo}/${cfg.draftsPath} (branch ${cfg.branch}) ...`);
+
+  const { entries, confirmed } = await listRepoFiles(cfg, cfg.draftsPath);
+  const xmlFiles = entries.filter(e => e.type === "file" && e.name.endsWith(".xml") && !e.name.startsWith("_"));
+  const remoteNames = new Set(xmlFiles.map(e => e.name));
+
+  draftShaCache.clear();
+  const skipped: string[] = [];
+  let pulled = 0;
+
+  for (const entry of xmlFiles) {
+    try {
+      if (!entry.download_url) {
+        skipped.push(entry.name);
+        continue;
+      }
+      const fileRes = await fetch(entry.download_url, {
+        headers: { Authorization: `Bearer ${cfg.token}`, "User-Agent": "ila-corpus-sync" },
+      });
+      if (!fileRes.ok) {
+        console.warn(`[githubStorage] Skip draft ${entry.name}: download fallito (${fileRes.status})`);
+        skipped.push(entry.name);
+        continue;
+      }
+      const content = await fileRes.text();
+      fsWriteFileSync(pathJoin(localDir, entry.name), content);
+      draftShaCache.set(entry.name, entry.sha);
+      pulled++;
+    } catch (e: any) {
+      console.warn(`[githubStorage] Skip draft ${entry.name}: ${e.message || e}`);
+      skipped.push(entry.name);
+    }
+  }
+
+  const deletedLocally: string[] = [];
+  if (confirmed && fsListLocalXmlFiles && fsUnlinkSync) {
+    const localFiles = fsListLocalXmlFiles(localDir);
+    for (const localName of localFiles) {
+      if (!remoteNames.has(localName) && !skipped.includes(localName)) {
+        try {
+          fsUnlinkSync(pathJoin(localDir, localName));
+          deletedLocally.push(localName);
+        } catch (e: any) {
+          console.warn(`[githubStorage] Impossibile cancellare in locale ${localName}: ${e.message || e}`);
+        }
+      }
+    }
+    if (deletedLocally.length > 0) {
+      console.log(`[githubStorage] Rimossi in locale ${deletedLocally.length} draft non più presenti su GitHub: ${deletedLocally.join(', ')}`);
+    }
+  } else if (!confirmed) {
+    console.warn(`[githubStorage] Lista remota draft non confermata (404) — nessuna cancellazione locale eseguita per sicurezza.`);
+  }
+
+  console.log(`[githubStorage] Sync draft completata: ${pulled} file scaricati${skipped.length ? `, ${skipped.length} saltati` : ""}${deletedLocally.length ? `, ${deletedLocally.length} rimossi in locale` : ""}.`);
+  return { pulled, skipped, deletedLocally };
+}
+
 // ── Scrittura: crea/aggiorna un file ──────────────────────────────────
 
 /**
@@ -276,6 +368,54 @@ async function fetchCurrentSha(cfg: GitHubConfig, filename: string): Promise<str
   if (!res.ok) return null;
   const data = await res.json();
   return data.sha || null;
+}
+
+/**
+ * Variante di pushFileToGitHub per un file in drafts/ — stessa logica di
+ * retry su conflitto sha, ma path e cache sha indipendenti da corpus/.
+ */
+export async function pushDraftFileToGitHub(filename: string, content: string, message: string): Promise<void> {
+  if (!isGitHubConfigured()) return;
+  const cfg = getConfig();
+
+  const body: Record<string, unknown> = {
+    message,
+    content: Buffer.from(content, "utf-8").toString("base64"),
+    branch: cfg.branch,
+  };
+  const existingSha = draftShaCache.get(filename);
+  if (existingSha) body.sha = existingSha;
+
+  const url = `${GITHUB_API}/repos/${cfg.repo}/contents/${draftRepoPath(cfg, filename)}`;
+  const res = await fetch(url, {
+    method: "PUT",
+    headers: headers(cfg),
+    body: JSON.stringify(body),
+  });
+
+  if (!res.ok) {
+    const detail = await res.text();
+    if (res.status === 409) {
+      console.warn(`[githubStorage] Conflitto sha su draft ${filename}, ritento con sha aggiornato...`);
+      const refreshedUrl = `${GITHUB_API}/repos/${cfg.repo}/contents/${draftRepoPath(cfg, filename)}?ref=${encodeURIComponent(cfg.branch)}`;
+      const refreshedRes = await fetch(refreshedUrl, { headers: headers(cfg) });
+      const refreshed = refreshedRes.ok ? (await refreshedRes.json()).sha : null;
+      if (refreshed) {
+        draftShaCache.set(filename, refreshed);
+        body.sha = refreshed;
+        const retryRes = await fetch(url, { method: "PUT", headers: headers(cfg), body: JSON.stringify(body) });
+        if (retryRes.ok) {
+          const retryData = await retryRes.json();
+          draftShaCache.set(filename, retryData.content.sha);
+          return;
+        }
+      }
+    }
+    throw new Error(`Scrittura GitHub fallita per draft ${filename} (${res.status}): ${detail}`);
+  }
+
+  const data = await res.json();
+  draftShaCache.set(filename, data.content.sha);
 }
 
 /**

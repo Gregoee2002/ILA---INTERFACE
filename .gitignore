@@ -6,3 +6,9 @@ coverage/
 *.log
 .env*
 !.env.example
+
+# Draft CMRDM (estrazioni Vision non revisionate): ora sincronizzati da
+# Gregoee2002/ILA, cartella drafts/ (vedi githubStorage.ts). Il filesystem
+# locale resta solo una cache, popolata al boot dal server — non va più
+# tracciata qui, per non tenere due fonti di verità divergenti.
+src/data/corpus-drafts/

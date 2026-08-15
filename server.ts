@@ -6,7 +6,7 @@ import crypto from "crypto";
 import { createServer as createViteServer } from "vite";
 import { GoogleGenAI } from "@google/genai";
 import { xmlToMonumenti, monumentiToXml, renderIconography } from "./src/lib/xmlUtils";
-import { pullCorpusFromGitHub, pushFileToGitHub, deleteFileFromGitHub, isGitHubConfigured, testGitHubAccess } from "./src/lib/githubStorage";
+import { pullCorpusFromGitHub, pushFileToGitHub, deleteFileFromGitHub, isGitHubConfigured, testGitHubAccess, pullDraftsFromGitHub } from "./src/lib/githubStorage";
 import { buildSearchIndex, searchMonumenti } from "./src/lib/searchIndex";
 import MiniSearch from 'minisearch';
 
@@ -16,7 +16,10 @@ async function startServer() {
   const DATA_DIR = path.join(process.cwd(), "src", "data");
   const CORPUS_DIR = path.join(DATA_DIR, "corpus");
   // Staging area per le estrazioni draft (agente Vision su Lane 1971), separata
-  // dal corpus vero e proprio: sola lettura, mai scritta/cancellata da qui.
+  // dal corpus vero e proprio. Sincronizzata da Gregoee2002/ILA, cartella
+  // drafts/ (mai la stessa cartella "corpus" del corpus revisionato). Le
+  // route HTTP restano sola lettura: le scritture avvengono offline (script
+  // di revisione + pushDraftFileToGitHub), mai tramite l'app in esecuzione.
   const DRAFTS_DIR = path.join(DATA_DIR, "corpus-drafts");
   const BACKUP_FILE = path.join(CORPUS_DIR, "_teiCorpus.xml");
   // Legacy file — kept for backwards compatibility on first run
@@ -30,6 +33,7 @@ async function startServer() {
   // ── Ensure directories exist ─────────────────────────────────────────────
   if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
   if (!fs.existsSync(CORPUS_DIR)) fs.mkdirSync(CORPUS_DIR, { recursive: true });
+  if (!fs.existsSync(DRAFTS_DIR)) fs.mkdirSync(DRAFTS_DIR, { recursive: true });
 
   // ── Sync iniziale da GitHub ──────────────────────────────────────────────
   // Se GITHUB_TOKEN/GITHUB_REPO sono impostati, il filesystem locale viene
@@ -62,8 +66,19 @@ async function startServer() {
     } catch (e: any) {
       console.error("[githubStorage] Sync iniziale fallita — il server parte comunque con il filesystem locale (probabilmente vuoto o stale):", e.message || e);
     }
+    try {
+      await pullDraftsFromGitHub(
+        DRAFTS_DIR,
+        (filepath, content) => fs.writeFileSync(filepath, content, "utf-8"),
+        (...parts) => path.join(...parts),
+        (dir) => fs.readdirSync(dir).filter(f => f.endsWith('.xml') && !f.startsWith('_')),
+        (filepath) => fs.unlinkSync(filepath)
+      );
+    } catch (e: any) {
+      console.error("[githubStorage] Sync draft iniziale fallita — il server parte comunque con il filesystem locale (probabilmente vuoto o stale):", e.message || e);
+    }
   }
-  
+
   // Costruisci l'indice di ricerca all'avvio
   updateSearchIndex(readCorpusFiles());
 
