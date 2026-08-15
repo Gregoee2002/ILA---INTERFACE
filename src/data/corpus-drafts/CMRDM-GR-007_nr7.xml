@@ -12,6 +12,7 @@
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 7</idno>
             </publicationStmt>
+            <!-- Revisione: corretto il testo greco confrontandolo con lo stampato di Lane (p. 5). Riga 1: "Ἱερεὺ" mancava del sigma finale, corretto in "Ἱερεὺς". Riga 2: "καὶ ἱεροστόλος" (titolo sacerdotale inventato, assente dallo stampato) corretto in "καὶ Σεράπιδος" ("sacerdote vestiario di Iside e Serapide"), coerente anche con la bibliografia (Vidman, Sylloge Inscriptionum Religionis Isiacae et Sarapiacae). Aggiunta la notizia sulla provenienza dalla collezione Saburoff (ambasciatore russo ad Atene, prima segnalazione 1874), assente nel draft. Verificato Pleiades (Athenae 579885, invariato, corretto). TM number non compilato: nessuna corrispondenza certa trovata in Trismegistos per IG II² 4818. -->
             <sourceDesc>
                 <msDesc>
                     <msIdentifier>
@@ -22,7 +23,7 @@
                         <objectDesc>
                             <supportDesc>
                                 <support>
-                                    <p>Stone with relief and inscription, Staatliches Museum Berlin. Height 40 cm., length 33.7 cm., thickness 4 cm.</p>
+                                    <p>Stone with relief and inscription, first reported in 1874 from the collection of Saburoff, the Russian ambassador in Athens; now in the Staatliches Museum, Berlin. Height 40 cm., length 33.7 cm., thickness 4 cm.</p>
                                     <material ref="https://www.eagle-network.eu/voc/material/lod/138.html">stone</material>
                                     <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/24.html">relief</objectType>
                                     <dimensions unit="cm">
@@ -64,8 +65,8 @@
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Ἱερεὺ στολιστὴς Ἴσιδος
-                    <lb n="2"/>καὶ ἱεροστόλος Αὐρ. Ἐπαφρόδει-
+                    <lb n="1"/>Ἱερεὺς στολιστὴς Ἴσιδος
+                    <lb n="2"/>καὶ Σεράπιδος Αὐρ. Ἐπαφρόδει-
                     <lb n="3"/>τος τῷ Οὐρανίῳ Μηνὶ εὐχα-
                     <lb n="4"/>[ρ]ιστήριον ἀνέθηκα.
                 </ab>

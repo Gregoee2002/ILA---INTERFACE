@@ -12,6 +12,7 @@
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 4</idno>
             </publicationStmt>
+            <!-- Revisione: aggiunta la data e le circostanze precise di ritrovamento riportate da Lane (scavi dell'Agora ateniese, 15 aprile 1936; frammento rotto in alto e ai lati, con probabile perno di incasso alla base), assenti nel draft. Verificato Pleiades (Athenae 579885, invariato, corretto). Nessun testo greco (monumento anepigrafe, conforme allo stampato). TM number non compilato: monumento senza iscrizione, non indicizzabile in Trismegistos. -->
             <sourceDesc>
                 <msDesc>
                     <msIdentifier>
@@ -22,7 +23,7 @@
                         <objectDesc>
                             <supportDesc>
                                 <support>
-                                    <p>Fragment of marble relief from Athenian Agora excavations. Height 16 cm., width 16.3 cm., thickness 3.7 cm.</p>
+                                    <p>Fragment of marble relief broken at top and both sides; there was apparently a lug at the bottom for insertion into a base. Height 16 cm., width 16.3 cm., thickness 3.7 cm. Found in the excavations of the Athenian Agora, April 15, 1936, and now in the Agora Museum.</p>
                                     <material ref="https://www.eagle-network.eu/voc/material/lod/48.html">marble</material>
                                     <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/24.html">relief</objectType>
                                     <dimensions unit="cm">
@@ -53,7 +54,7 @@
                             </origPlace>
                             <origDate datingMethod="#julian" precision="low"></origDate>
                         </origin>
-                        <provenance type="found">Athens, Greece</provenance>
+                        <provenance type="found">Found in the excavations of the Athenian Agora, April 15, 1936, Athens, Greece.</provenance>
                         <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
                     </history>
                 </msDesc>

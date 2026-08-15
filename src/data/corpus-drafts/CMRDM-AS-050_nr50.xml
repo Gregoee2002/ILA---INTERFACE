@@ -12,6 +12,7 @@
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 50</idno>
             </publicationStmt>
+            <!-- REVISIONE: testo greco confrontato col PDF (Lane, AS XX, 1970, pp. 51-52 = CMRDM I p. 19, no. 28... rectius p. 32, tav. VIb). Corretti: r. 1 "Ἀξιοττήνῳ"→"Ἀξιοττηνῷ" (accento come da stampa); r. 7 "στήλην"→"στήλλην" (doppia lambda come nelle altre occorrenze del corpus); r. 8 nome del mese "Παναίμου"→"Πανήμου" (Panemos, non "Panaimos"). Aggiunto dettaglio di rinvenimento (stele vista per la prima volta nel 1969, casa di Mehmet Çiçek) e nota sulla frattura/riparazione antica con perni di piombo. Completato il campo depth (spessore ca. 4 cm, già in prosa); larghezza lasciata vuota per ambiguità (Lane dà due valori: alla base 50.5 cm, al punto più stretto 40.5 cm). Pleiades: nessun ID verificabile per "Koresa", ref lasciato non compilato. TM number non reperibile. -->
             <sourceDesc>
                 <msDesc>
                     <msIdentifier>
@@ -22,13 +23,13 @@
                         <objectDesc>
                             <supportDesc>
                                 <support>
-                                    <p>Marble stele with pediment, relief of Men with bull and lions, Ayazviran. Height 88 cm., width at bottom 50.5 cm., width at narrowest point 40.5 cm., thickness ca. 4 cm.</p>
+                                    <p>Marble stele with pediment, relief of Men with bull and lions, first seen in Ayazviran in 1969 in the house of Mehmet Çiçek. Apparently broken in antiquity by a fissure running across the relief field and repaired, likewise in antiquity, by two lead dowels still fixed in the lower part. Height 88 cm., width at bottom 50.5 cm., width at narrowest point under pediment 40.5 cm., thickness ca. 4 cm.</p>
                                     <material ref="https://www.eagle-network.eu/voc/material/lod/48.html">marble</material>
                                     <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/250.html">stele</objectType>
                                     <dimensions unit="cm">
                                         <height>88</height>
                                         <width></width>
-                                        <depth></depth>
+                                        <depth>4</depth>
                                     </dimensions>
                                 </support>
                             </supportDesc>
@@ -64,14 +65,14 @@
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Μηνὶ Ἀξιοττήνῳ. Τατιανὴ Ἑρ-
+                    <lb n="1"/>Μηνὶ Ἀξιοττηνῷ. Τατιανὴ Ἑρ-
                     <lb n="2"/>που εὐξαμένη ταῦρον ὑ-
                     <lb n="3"/>πὲρ ἀδελφῶν καὶ ἀκουσ-
                     <lb n="4"/>θεῖσα, μὴ δυνασθεῖσα δὲ
                     <lb n="5"/>ἀποδοῦναι ταῦρον, ἠρώτη-
                     <lb n="6"/>σε τὸν θεὸν καὶ συνεχώρησε
-                    <lb n="7"/>ἀπολαβεῖν στήλην. Ἔτους τκ΄,
-                    <lb n="8"/>μη(νὸς) Παναίμου ι΄.
+                    <lb n="7"/>ἀπολαβεῖν στήλλην. Ἔτους τκ΄,
+                    <lb n="8"/>μη(νὸς) Πανήμου ι΄.
                 </ab>
             </div>
             <div type="apparatus"/>

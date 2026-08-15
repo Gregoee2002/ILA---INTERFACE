@@ -12,6 +12,7 @@
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 8</idno>
             </publicationStmt>
+            <!-- Revisione: corretto il testo greco confrontandolo con lo stampato di Lane (p. 6): il nome della moglie "Ἑρατιὸν" (inesistente) corretto in "Ἐρώτιον" (Erotion), coerentemente aggiornata anche la resa in inglese nella descrizione del layout. Corretti gli attributi di datazione notBefore/notAfter-custom, che indicavano erroneamente un intervallo attorno all'anno 0 (-28/22) mentre il testo e Lane (citando Robert) datano l'iscrizione alla "late 3rd cent. B.C.": impostati a -233/-201. Corretto l'ID Pleiades del Pireo: quello presente nel draft (580069) risultava un luogo del tutto diverso (l'isola di Phabra/Fleves); sostituito con l'ID corretto di Peiraieus/Piraeus (580062), verificato su due fonti (Pleiades stesso e ToposText). Aggiunta la notizia sul probabile luogo di rinvenimento (scavi del Metroon, 1855), assente nel draft. TM number non compilato: nessuna corrispondenza certa trovata in Trismegistos per IG II² 4687a. -->
             <sourceDesc>
                 <msDesc>
                     <msIdentifier>
@@ -22,7 +23,7 @@
                         <objectDesc>
                             <supportDesc>
                                 <support>
-                                    <p>Marble altar with inscription, Louvre Paris. Height 52 cm., width of base 53.5 cm., width of shaft 34 cm., thickness of shaft 36.5 cm.</p>
+                                    <p>Marble altar, probably found in the excavations of the Metroon in 1855; now in the Louvre, Paris. Height 52 cm., width of base 53.5 cm., width of shaft 34 cm., thickness of shaft 36.5 cm.</p>
                                     <material ref="https://www.eagle-network.eu/voc/material/lod/48.html">marble</material>
                                     <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/29.html">altar</objectType>
                                     <dimensions unit="cm">
@@ -34,7 +35,7 @@
                             </supportDesc>
                             <layoutDesc>
                                 <layout>
-                                    <p>Marble altar with dedicatory inscription by Demetrios and his wife Eration to Men, during the priesthood of Glaukos.</p>
+                                    <p>Marble altar with dedicatory inscription by Demetrios and his wife Erotion to Men, during the priesthood of Glaukos.</p>
                                     <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
                                 </layout>
                             </layoutDesc>
@@ -48,10 +49,10 @@
                     <history>
                         <origin>
                             <origPlace>
-                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/580069">Peiraieus</placeName>
+                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/580062">Peiraieus</placeName>
                                 <placeName type="modern" ref="DA_COMPILARE">Piraeus, Greece</placeName>
                             </origPlace>
-                            <origDate datingMethod="#julian" notBefore-custom="-28" notAfter-custom="22" precision="low">late 3rd cent. B.C.</origDate>
+                            <origDate datingMethod="#julian" notBefore-custom="-233" notAfter-custom="-201" precision="low">late 3rd cent. B.C.</origDate>
                         </origin>
                         <provenance type="found">Piraeus, Greece</provenance>
                         <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
@@ -66,7 +67,7 @@
                 <ab>
                     <lb n="1"/>Δημήτριος
                     <lb n="2"/>καὶ ἡ γυνὴ
-                    <lb n="3"/>Ἑρατιὸν Μηνὶ
+                    <lb n="3"/>Ἐρώτιον Μηνὶ
                     <lb n="4"/>ἐπὶ ἱερέας
                     <lb n="5"/>Γλαύκου.
                 </ab>

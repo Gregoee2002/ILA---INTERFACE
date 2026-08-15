@@ -12,6 +12,7 @@
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 5</idno>
             </publicationStmt>
+            <!-- Revisione: corretto il testo greco confrontandolo con lo stampato di Lane (p. 4). "Πὰν" con accento grave errato prima di virgola (non ammesso in greco) corretto in "Πάν"; "νυωμαι" (parola inesistente, inventata) corretto nella lezione autentica "νύνφαι" (nymphai); "καλαι" corretto con l'accento mancante in "καλαί"; "θεύε ὑπέρκυε" (parole inventate/inesistenti) corretto nella formula misterica autentica "ὕε κύε ὑπέρχυε" (hye kye), attestata anche dai riferimenti bibliografici sulla Via Sacra Eleusinia. Aggiunta la data di scoperta (ca. 1864) e nota su ubicazione attuale ignota, assenti nel draft. Verificato Pleiades (Athenae 579885, invariato, corretto). TM number non compilato: nessuna corrispondenza certa trovata in Trismegistos per IG II² 4876. -->
             <sourceDesc>
                 <msDesc>
                     <msIdentifier>
@@ -22,7 +23,7 @@
                         <objectDesc>
                             <supportDesc>
                                 <support>
-                                    <p>Three contiguous inscribed bricks from well-head, Kerameikos. </p>
+                                    <p>Three contiguous bricks from a well-head discovered in the Kerameikos ca. 1864. Present whereabouts unknown.</p>
                                     <material ref="https://www.eagle-network.eu/voc/material/lod/131.html">terracotta</material>
                                     <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/189.html">brick</objectType>
                                     <dimensions unit="cm">
@@ -64,7 +65,7 @@
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>ὁ Πὰν, ὁ Μήν, χαίρετε νυωμαι καλαι, θεύε ὑπέρκυε.
+                    <lb n="1"/>ὁ Πάν, ὁ Μήν, χαίρετε νύνφαι καλαί, ὕε κύε ὑπέρχυε.
                 </ab>
             </div>
             <div type="apparatus"/>

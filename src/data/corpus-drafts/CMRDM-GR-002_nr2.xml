@@ -12,6 +12,7 @@
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 2</idno>
             </publicationStmt>
+            <!-- Revisione: corretto il testo greco delle tracce di iscrizione confrontandolo con lo stampato di Lane. Riga 1: "EA" (lettera latina A) era una lettura errata di Λ (lambda) — corretto in "ΕΛ"; portato il numero di punti a 3 come da stampato. Riga 2: "e·" era una lettura errata di Θ (theta) — corretto in "Θ"; punti riportati fedelmente come da stampato. Aggiunte le notizie di rinvenimento/storia collezionistica (nota dal 1893, in vendita a New York nel 1968, poi tornata a Münzen und Medaillen Basel), assenti nel draft. Verificato Pleiades (Athenae 579885, invariato, corretto). TM number non compilato: trattandosi solo di tracce illeggibili, nessuna corrispondenza verificabile in Trismegistos. -->
             <sourceDesc>
                 <msDesc>
                     <msIdentifier>
@@ -22,7 +23,7 @@
                         <objectDesc>
                             <supportDesc>
                                 <support>
-                                    <p>Double-faced marble relief with Men on ram and solar divinity. Height 45 cm., width 44.5 cm.</p>
+                                    <p>Double-faced marble relief with Men on ram and solar divinity, broken on the left (from the point of view of the side which showed Men). Height 45 cm., width 44.5 cm. Known since at least 1893. For sale in New York in 1968; now returned to Münzen und Medaillen, Basel.</p>
                                     <material ref="https://www.eagle-network.eu/voc/material/lod/48.html">marble</material>
                                     <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/24.html">relief</objectType>
                                     <dimensions unit="cm">
@@ -64,8 +65,8 @@
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>.. EA
-                    <lb n="2"/>.. e· .. I ...
+                    <lb n="1"/>· · ·ΕΛ
+                    <lb n="2"/>· ·Θ· · ·Ι· · ·
                 </ab>
             </div>
             <div type="apparatus"/>

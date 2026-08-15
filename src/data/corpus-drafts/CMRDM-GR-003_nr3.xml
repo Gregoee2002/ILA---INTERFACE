@@ -12,6 +12,7 @@
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 3</idno>
             </publicationStmt>
+            <!-- Revisione: aggiunta la nota di Lane sulle circostanze di ritrovamento e conservazione ignote, assente nel draft. Verificato Pleiades (Athenae 579885, invariato, corretto: la sede è quella della rubrica di città "Athenae", Lane non indica un luogo di rinvenimento più preciso). Nessun testo greco (monumento anepigrafe, conforme allo stampato). TM number non compilato: monumento senza iscrizione, non indicizzabile in Trismegistos. -->
             <sourceDesc>
                 <msDesc>
                     <msIdentifier>
@@ -22,7 +23,7 @@
                         <objectDesc>
                             <supportDesc>
                                 <support>
-                                    <p>Fragment of marble(?) relief known from engravings of 1687 and 1700. </p>
+                                    <p>Fragment of marble(?) relief known from an engraving done in the year 1700 and from an earlier inaccurate one of 1687. Exact circumstances of finding and present whereabouts unknown.</p>
                                     <material ref="https://www.eagle-network.eu/voc/material/lod/48.html">marble</material>
                                     <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/24.html">relief</objectType>
                                     <dimensions unit="cm">

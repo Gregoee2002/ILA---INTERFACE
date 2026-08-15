@@ -12,6 +12,7 @@
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 48</idno>
             </publicationStmt>
+            <!-- REVISIONE: testo greco confrontato col PDF (Lane I, p. 51, no. A6, tav. p. 31). Corretti: r. 1 numerale dell'anno "σξω΄"→"σξβ΄" (ω non è cifra valida in questa posizione; σξβ΄=262, coerente con la datazione 177-8 d.C. già presente in origDate tramite l'era sillana) e nome del mese "Σ[ανδίκου"→"Ξ[ανδικοῦ" (Xandikos, non "Sandikos"); r. 2 rimossa spezzatura/trattino spurio e corretta grafia "Ἀξιοτ-τήν[ῳ"→"Ἀξιοττη[νῷ"; r. 3 "δοῦλον"→"βούλων" (come stampato in Lane, verificato per immagine). Aggiunto dettaglio di rinvenimento (P. Herrmann, prima del 1962; spezzata in alto, in basso e a destra). Pleiades: nessun ID verificabile per "Koresa", ref lasciato non compilato. TM number non reperibile. -->
             <sourceDesc>
                 <msDesc>
                     <msIdentifier>
@@ -22,7 +23,7 @@
                         <objectDesc>
                             <supportDesc>
                                 <support>
-                                    <p>Fragmentary white marble stele with traces of relief, Ayazviran area. Height 24 cm., width 22 cm., thickness 7.5 cm.</p>
+                                    <p>Fragmentary white marble stele, broken at top, bottom, and right, with traces of relief, Ayazviran area. Found by P. Herrmann before 1962. Height 24 cm., width 22 cm., thickness 7.5 cm.</p>
                                     <material ref="https://www.eagle-network.eu/voc/material/lod/48.html">marble</material>
                                     <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/250.html">stele</objectType>
                                     <dimensions unit="cm">
@@ -64,9 +65,9 @@
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Ἔτους σξω΄, μη(νὸς) Σ[ανδίκου ..]
-                    <lb n="2"/>Θεῷ Ἀξιοτ-τήν[ῳ ................]
-                    <lb n="3"/>δοῦλον Τατίο[........................]
+                    <lb n="1"/>Ἔτους σξβ΄, μη(νὸς) Ξ[ανδικοῦ ..]
+                    <lb n="2"/>Θεῷ Ἀξιοττη[νῷ ................]
+                    <lb n="3"/>βούλων Τατιο[........................]
                     <lb n="4"/>[... Ἑ]ρμογένου[........................]
                 </ab>
             </div>

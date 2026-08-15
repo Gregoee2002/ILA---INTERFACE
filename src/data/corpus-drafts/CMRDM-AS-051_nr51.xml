@@ -12,6 +12,7 @@
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 51</idno>
             </publicationStmt>
+            <!-- REVISIONE: testo greco confrontato col PDF (Lane I, p. 17, no. 16, tav. pp. 33-34; restituzione di Buckler). Correzione maggiore: alla r. 5 il draft omette per intero una riga della stampa ("[Σκόλλῳ παρέθε]το Ἀπολλωνί-"), passando direttamente al rigo successivo — contenuto centrale per il senso del testo (il deposito del denaro presso Skollos), reintegrato e rinumerate di conseguenza tutte le righe seguenti (20→21 lb totali). Altri errori corretti: r. 1 "Ἀ-τίμιτς" (trattino spurio e desinenza errata)→"Ἄτιμις"; r. 6 (già r. 5 nel draft) "φύπάρχοντα"→"ὑπάρχοντα" (φ iniziale inventata); r. 9 "εἰς πρό-"/"θεσμιαν"→"ἰς προ-"/"θεσμίαν" (ricomposizione della lacuna secondo Lane); rr. 15-16 (già 14-15) omessa la parola "τὴν" e mislettura "λεύτην"→corretti in "μετὰ τὴν [τε-]"/"λευτὴν"; "ἐπεζήτηθη"→"ἐπεζητήθη" (metatesi); r. 17 "Τατίας"→"Τατιὰς"; ultime righe: mese "Σαωδίκου" (nome inesistente)→"Ξανδικοῦ" (Xandikos, coerente con l'analogo mese del nr. 48). Aggiunto dettaglio di rinvenimento (Kurtoğlu Haci Seraphion, Aivatlar, ca. 1885, trasportata a Gyölde). Dubbio non risolto: la grafia "εἰλάσαμένη"/"εἴλασαμένη" (accento/spirito) è rimasta come da stampa, non essendo un errore di lettera. Pleiades: nessun toponimo antico è indicato da Lane per Aivatlar (a differenza di Ayazviran/Koresa, Menye/Maeonia, Kula/Coloe); l'ID 609032 presente nel draft è errato (risulta riutilizzato in modo incoerente anche per Maeonia e Coloe in altre schede del batch) ed è stato rimosso. TM number non reperibile. -->
             <sourceDesc>
                 <msDesc>
                     <msIdentifier>
@@ -22,7 +23,7 @@
                         <objectDesc>
                             <supportDesc>
                                 <support>
-                                    <p>Marble stele with moulding, confession-propitiation inscription, Aivatlar. Height 78 cm., width 38-40 cm., thickness 4 cm.</p>
+                                    <p>Marble stele with projecting moulding on top, confession-propitiation inscription. Found by Kurtoğlu Haci Seraphion at Aivatlar ca. 1885, and brought by him to Gyölde. Height 78 cm., width 38-40 cm., thickness 4 cm.</p>
                                     <material ref="https://www.eagle-network.eu/voc/material/lod/48.html">marble</material>
                                     <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/250.html">stele</objectType>
                                     <dimensions unit="cm">
@@ -48,7 +49,7 @@
                     <history>
                         <origin>
                             <origPlace>
-                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/609032">Aivatlar area (Kula)</placeName>
+                                <placeName type="ancient">Aivatlar area (Kula)</placeName>
                                 <placeName type="modern" ref="DA_COMPILARE">Aivatlar, Turkey</placeName>
                             </origPlace>
                             <origDate datingMethod="#julian" notBefore-custom="118" notAfter-custom="119" precision="medium">118-119 A.D.</origDate>
@@ -64,26 +65,27 @@
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>[Μεγάλη Μήτηρ Ἀ-τίμιτς]
-                    <lb n="2"/>[καὶ μέγας Μὴν Τιάμου ἐν ...]
-                    <lb n="3"/>[... κώμην βασιλεύ]ων καὶ ἡ Δύ-
+                    <lb n="1"/>[Μεγάλη Μήτηρ Ἄτιμις]
+                    <lb n="2"/>[καὶ μέγας Μὴν Τιάμου τὴν ···]
+                    <lb n="3"/>[... κώμην βασιλεύ]ων καὶ ἡ δύ-
                     <lb n="4"/>[ναμις αὐτῶν μεγάλη.] Ἀπολλώνιος
-                    <lb n="5"/>[φύπάρχοντα χαλκ]οῦ μύρια. Εἶτα ἀπαι-
-                    <lb n="6"/>τοῦντος τοῦ Ἀπολλωνίου τὸν χαλ-
-                    <lb n="7"/>κὸν παρὰ τοῦ Σκόλλου ὤμοσε τοὺς
-                    <lb n="8"/>προγεγραμ(μέ)νους θεοὺς εἰς πρό-
-                    <lb n="9"/>θεσμιαν ἀποδοῦναι τὸ
-                    <lb n="10"/>συναχθὲν κεφάλαιον. Μὴ τηρήσαν-
-                    <lb n="11"/>τος αὐτοῦ τὴν πίστιν παρεχώρησεν
-                    <lb n="12"/>τῇ θεῷ ὁ Ἀπολλώνιος. Κολασθέν-
-                    <lb n="13"/>τος οὖν τοῦ Σκόλλου ὑπὸ τῶν θε-
-                    <lb n="14"/>ῶν εἰς θανάτου λόγον μετὰ[-τε-]
-                    <lb n="15"/>λεύτην αὐτοῦ ἐπεζήτηθη ὑπ[ὸ τῶν]
-                    <lb n="16"/>θεῶν. Τατίας οὖν ἡ θυγάτηρ αὐτοῦ
-                    <lb n="17"/>ἔλοισε τοὺς ὅρκους καὶ νῦν εἰλα-
-                    <lb n="18"/>σαμένη εὐλογεῖ Μητρὶ Ἀτίμιτι
-                    <lb n="19"/>καὶ Μηνὶ Τιάμου.
-                    <lb n="20"/>Ἔτους σγ΄, μη(νὸς) Σαωδίκου ει΄.
+                    <lb n="5"/>[Σκόλλῳ παρέθε]το Ἀπολλωνί-
+                    <lb n="6"/>ῳ [ὑπάρχοντα χαλκ]οῦ ✳ μ(ύρια). Εἶτα ἀπα(ι)-
+                    <lb n="7"/>τοῦντος τοῦ Ἀπολλωνίου τὸν χαλ-
+                    <lb n="8"/>κὸν παρὰ τοῦ Σκόλλου ὤμοσε τοὺς
+                    <lb n="9"/>προγεγραμ(μ)ένους θεοὺς ἰς προ-
+                    <lb n="10"/>θεσμίαν ἀποδοῦναι τὸ
+                    <lb n="11"/>συναχθὲν κεφάλαιον. Μὴ τηρήσαντος
+                    <lb n="12"/>αὐτοῦ τὴν πίστιν παρεχώρησεν
+                    <lb n="13"/>τῇ θεῷ ὁ Ἀπολλώνιος. Κολασθέν-
+                    <lb n="14"/>τος οὖν τοῦ Σκόλλου ὑπὸ τῶν θε-
+                    <lb n="15"/>ῶν ἰς θανάτου λόγον μετὰ τὴν [τε-]
+                    <lb n="16"/>λευτὴν αὐτοῦ ἐπεζητήθη ὑπὸ τ[ῶν]
+                    <lb n="17"/>θεῶν. Τατιὰς οὖν ἡ θυγάτηρ αὐτοῦ
+                    <lb n="18"/>ἔλοισε τοὺς ὅρκους καὶ νῦν εἴλα-
+                    <lb n="19"/>σαμένη εὐλογεῖ Μητρὶ Ἀτίμιτι
+                    <lb n="20"/>καὶ Μηνὶ Τιάμου. Ἔτους σγ΄, μη(νὸς)
+                    <lb n="21"/>Ξανδικοῦ εἰ΄.
                 </ab>
             </div>
             <div type="apparatus"/>

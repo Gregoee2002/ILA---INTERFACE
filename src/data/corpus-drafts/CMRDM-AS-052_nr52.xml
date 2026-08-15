@@ -12,6 +12,7 @@
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 52</idno>
             </publicationStmt>
+            <!-- REVISIONE: testo greco confrontato col PDF (Lane I, p. 15, Lydia no. 6, tav. p. 35; Lane stesso definisce l'iscrizione "enigmatic"). Corretti: r. 1 "Ὁσήρ"→"Ὁσήῳ" (lettera errata); r. 2 "λλι φιλία"→"λλιωλιας" (il draft aveva sostituito con una parola greca comune un frammento di lettura incerta ma effettivamente stampato da Lane; ripristinato il testo esatto, pur restando di senso oscuro come segnalato dallo stesso Lane); r. 3 "εἰ ον"→"ει ον" (dittongo come da stampa). Pleiades ID corretto: "https://pleiades.stoa.org/places/609040" non risultava verificabile (nessuna fonte esterna conferma questo ID per Maeonia; inoltre 609032, usato per le voci nrr. 53-54, era incoerentemente assegnato anche a Coloe e Aivatlar altrove nel batch). Sostituito con l'ID Pleiades di Maionia/Maeonia in Lidia (550709), verificato incrociando Wikidata Q28221538 e ToposText (place 388283RMai), entrambi concordi. TM number non reperibile. -->
             <sourceDesc>
                 <msDesc>
                     <msIdentifier>
@@ -22,7 +23,7 @@
                         <objectDesc>
                             <supportDesc>
                                 <support>
-                                    <p>Plaque with enigmatic inscription, Maeonia (Menye). </p>
+                                    <p>Plaque built into a fountain in Menye. Discovered before 1870. Enigmatic inscription (as copied by Lane).</p>
                                     <material ref="https://www.eagle-network.eu/voc/material/lod/138.html">stone</material>
                                     <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/53.html">plaque</objectType>
                                     <dimensions unit="cm">
@@ -48,7 +49,7 @@
                     <history>
                         <origin>
                             <origPlace>
-                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/609040">Maeonia</placeName>
+                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/550709">Maeonia</placeName>
                                 <placeName type="modern" ref="DA_COMPILARE">Menye, Turkey</placeName>
                             </origPlace>
                             <origDate datingMethod="#julian" precision="low"></origDate>
@@ -64,9 +65,9 @@
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Μ[ηνὶ] Ὁσήρ Μάνης καὶ Βάνας ὁ
-                    <lb n="2"/>Μ[......]λλι φιλία ἡ μήτηρ αὐτῶν
-                    <lb n="3"/>τὸ πρόπυλον εἰ ον
+                    <lb n="1"/>Μ[ηνὶ] Ὁσήῳ Μάνης καὶ Βάνας ὁ
+                    <lb n="2"/>Μ[......]λλιωλιας ἡ μήτηρ αὐτῶν
+                    <lb n="3"/>τὸ πρόπυλον ει ον
                 </ab>
             </div>
             <div type="apparatus"/>

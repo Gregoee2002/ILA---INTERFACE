@@ -12,6 +12,7 @@
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 47</idno>
             </publicationStmt>
+            <!-- REVISIONE: testo greco confrontato col PDF (Lane I, p. 50, no. A1, tav. pp. 30-31); il draft conteneva numerosi errori di trascrizione. Corretti: r. 1-2 spezzatura dell'abbreviazione "μη(νὸς)" riportata alla riga di Lane e aggiunto il numerale del giorno "ς΄" (6), assorbito per errore nel nome del mese ("Ἀρτεμεισίους" invece di "Ἀρτεμεισίου ς΄"); r. 3 nome proprio "Τραρίμη"→"Τροφίμη" (nome inesistente vs nome attestato); r. 4 "Κικιωνάδος"→"Κικιννάδος"; r. 5 "ὑπηρεσίαν"→"ὑπηρεσίας" (caso richiesto da "χάριν"); r. 6 "τάχεως"→"ταχέως"; r. 8 rimossa particella "τε" non presente in Lane ("μανῆναί τε ἐποίησεν"→"μανῆναι ἐποίησεν"); r. 9 "Τάρρηνην"→"Ταρσηνὴν"; r. 11 "Κορεσσα"→"Κόρεσα" (grafia del toponimo come stampata); rr. 12-14 verbi finali "στηλογραφῆσθαι"/"κατάγραφαι"→"στηλλογραφηθῆναι"/"καταγράψαι" (forme verbali diverse da quelle stampate, con "στηλλο-" a doppia lambda come nelle altre occorrenze del corpus). Aggiunto dettaglio del rinvenimento (P. Herrmann, prima del 1962) e della modanatura in alto. Pleiades: nessun ID verificabile per "Koresa" (non ha voce propria su pleiades.stoa.org), ref lasciato non compilato. TM number non reperibile. -->
             <sourceDesc>
                 <msDesc>
                     <msIdentifier>
@@ -22,7 +23,7 @@
                         <objectDesc>
                             <supportDesc>
                                 <support>
-                                    <p>Marble stele broken in two with relief of female figure and crescent, Ayazviran area. Height 1.04 m., width 42 cm., thickness 8 cm.</p>
+                                    <p>Marble stele broken in two, moulding at top, with relief of female figure and crescent, Ayazviran area. Found by P. Herrmann before 1962. Height 1.04 m., width 42 cm., thickness 8 cm.</p>
                                     <material ref="https://www.eagle-network.eu/voc/material/lod/48.html">marble</material>
                                     <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/250.html">stele</objectType>
                                     <dimensions unit="cm">
@@ -64,21 +65,20 @@
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Ἔτους σγ΄, μ(η-
-                    <lb n="2"/>νὸς) Ἀρτεμεισίους, ἐ-
-                    <lb n="3"/>πὶ Τραρίμη, Ἀρτεμιδώρου Κι-
-                    <lb n="4"/>κιωνάδος κληθεῖσα ὑπὸ τοῦ
-                    <lb n="5"/>θεοῦ εἰς ὑπηρεσίαν χάριν μὴ
-                    <lb n="6"/>βουληθοῦσα τάχεως προσελ-
-                    <lb n="7"/>θεῖν ἐκολάσετο αὐτὴν καὶ μα-
-                    <lb n="8"/>νῆναί τε ἐποίησεν. Ἠρώτησε οὖν Μη-
-                    <lb n="9"/>τέρα Τάρρηνην καὶ Ἀπόλλωνα Ταρσί-
-                    <lb n="10"/>ον καὶ Μῆνα Ἀρτεμιδώρου Ἀξι-
-                    <lb n="11"/>οττηνὸν Κορεσσα κατέχοντα
-                    <lb n="12"/>καὶ ἐκέλευσεν στηλογραφ-
-                    <lb n="13"/>ῆσθαι νέμεσιν καὶ κατάγρα-
-                    <lb n="14"/>φαι ἐμαυτὸν εἰς ὑπηρεσίαν
-                    <lb n="15"/>τοῖς θεοῖς.
+                    <lb n="1"/>Ἔτους σγ΄, μη(νὸς) Ἀρτεμεισίου ς΄, ἐ-
+                    <lb n="2"/>πὶ Τροφίμη, Ἀρτεμιδώρου Κι-
+                    <lb n="3"/>κιννάδος κληθεῖσα ὑπὸ τοῦ
+                    <lb n="4"/>θεοῦ εἰς ὑπηρεσίας χάριν μὴ
+                    <lb n="5"/>βουληθοῦσα ταχέως προσελ-
+                    <lb n="6"/>θεῖν ἐκολάσετο αὐτὴν καὶ μα-
+                    <lb n="7"/>νῆναι ἐποίησεν. Ἠρώτησε οὖν Μη-
+                    <lb n="8"/>τέρα Ταρσηνὴν καὶ Ἀπόλλωνα Ταρσί-
+                    <lb n="9"/>ον καὶ Μῆνα Ἀρτεμιδώρου Ἀξι-
+                    <lb n="10"/>οττηνὸν Κόρεσα κατέχοντα
+                    <lb n="11"/>καὶ ἐκέλευσεν στηλλογραφ-
+                    <lb n="12"/>ηθῆναι νέμεσιν καὶ καταγρά-
+                    <lb n="13"/>ψαι ἐμαυτὸν εἰς ὑπηρεσίαν
+                    <lb n="14"/>τοῖς θεοῖς.
                 </ab>
             </div>
             <div type="apparatus"/>

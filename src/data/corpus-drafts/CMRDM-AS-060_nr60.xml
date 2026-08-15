@@ -12,6 +12,7 @@
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 60</idno>
             </publicationStmt>
+            <!-- REVISIONE: testo greco confrontato col PDF (Lane I, p. 17, no. 15, tav. p. 41). Corretti: r. 1 epiteto "Ἀνδαείτι"→"Ἀνάειτι" (come nrr. 57, 59); r. 3 rimossa lacuna fittizia su "ἱεροπο[ί]ημα" (interamente leggibile in Lane: "ἱεροποίημα"); r. 4 nome del mese "Δαισίκου"→"Ξανδικοῦ" (mese completamente diverso da quanto stampato). Aggiunto anno di acquisizione (nota dal 1881). Pleiades ID corretto: sostituito 609032 (errato) con 550659 (Koloe/Coloe), stessa identificazione e stesse riserve del nr. 58. TM number non reperibile. -->
             <sourceDesc>
                 <msDesc>
                     <msIdentifier>
@@ -22,7 +23,7 @@
                         <objectDesc>
                             <supportDesc>
                                 <support>
-                                    <p>Marble plaque with relief of praying woman, Kula, now in Leiden. Height 48.5 cm., width at top 27.5 cm., width at bottom 36.2 cm., thickness 4.0 cm.</p>
+                                    <p>Marble plaque with relief of praying woman, Kula, known since 1881, now in Leiden. Height 48.5 cm., width at top 27.5 cm., width at bottom 36.2 cm., thickness 4.0 cm.</p>
                                     <material ref="https://www.eagle-network.eu/voc/material/lod/48.html">marble</material>
                                     <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/53.html">plaque</objectType>
                                     <dimensions unit="cm">
@@ -48,7 +49,7 @@
                     <history>
                         <origin>
                             <origPlace>
-                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/609032">Coloe</placeName>
+                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/550659">Coloe</placeName>
                                 <placeName type="modern" ref="DA_COMPILARE">Kula, Turkey</placeName>
                             </origPlace>
                             <origDate datingMethod="#julian" notBefore-custom="215" notAfter-custom="216" precision="medium">215-216 A.D.</origDate>
@@ -64,10 +65,10 @@
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Θεᾷ Ἀνδαείτι καὶ Μηνὶ Τιάμου
+                    <lb n="1"/>Θεᾷ Ἀνάειτι καὶ Μηνὶ Τιάμου
                     <lb n="2"/>Μελτίνη καὶ Γλύκων ἀπέδω-
-                    <lb n="3"/>καν τὸ ἱεροπο[ί]ημα εὐχαρισ-
-                    <lb n="4"/>τοῦντες. Ἔτους τ΄, μη(νὸς) Δαισίκου.
+                    <lb n="3"/>καν τὸ ἱεροποίημα εὐχαρισ-
+                    <lb n="4"/>τοῦντες. Ἔτους τ΄, μη(νὸς) Ξανδικοῦ.
                 </ab>
             </div>
             <div type="apparatus"/>

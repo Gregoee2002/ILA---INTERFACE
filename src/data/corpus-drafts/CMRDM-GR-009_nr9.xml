@@ -12,6 +12,7 @@
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 9</idno>
             </publicationStmt>
+            <!-- Revisione: corretto il testo greco confrontandolo con lo stampato di Lane (p. 6): il nome della moglie "Βασίλεια" (nome reale ma non quello stampato) corretto in "Βαβυλία" (nome attico attestato), aggiornata coerentemente la resa in inglese nella descrizione del layout; corretto l'articolo "τὸ Μηνὶ" (agrammaticale prima di dativo) in "τῷ Μηνὶ". Corretto l'ID Pleiades del Pireo: quello presente nel draft (580069) risultava un luogo del tutto diverso (l'isola di Phabra/Fleves); sostituito con l'ID corretto di Peiraieus/Piraeus (580062), verificato su due fonti (Pleiades stesso e ToposText). Aggiunta la data di rinvenimento (ca. 1879) e la misura del foro (ca. 55×35 cm), assenti nel draft. TM number non compilato: nessuna corrispondenza certa trovata in Trismegistos per IG II² 4685. -->
             <sourceDesc>
                 <msDesc>
                     <msIdentifier>
@@ -22,7 +23,7 @@
                         <objectDesc>
                             <supportDesc>
                                 <support>
-                                    <p>Inscribed marble statue base with hole for statue. Height 15 cm., length 75 cm., thickness 66 cm.</p>
+                                    <p>Inscribed marble statue base with hole for statue. Found ca. 1879, now in the Epigraphical Museum, Athens. Height 15 cm., length 75 cm., thickness 66 cm., hole ca. 55 × 35 cm.</p>
                                     <material ref="https://www.eagle-network.eu/voc/material/lod/48.html">marble</material>
                                     <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/57.html">statue base</objectType>
                                     <dimensions unit="cm">
@@ -34,7 +35,7 @@
                             </supportDesc>
                             <layoutDesc>
                                 <layout>
-                                    <p>Marble statue base with hole for insertion of statue, bearing a short dedicatory inscription by Dionysios and Basileia to Men.</p>
+                                    <p>Marble statue base with hole for insertion of statue, bearing a short dedicatory inscription by Dionysios and Babylia to Men.</p>
                                     <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
                                 </layout>
                             </layoutDesc>
@@ -48,7 +49,7 @@
                     <history>
                         <origin>
                             <origPlace>
-                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/580069">Peiraieus</placeName>
+                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/580062">Peiraieus</placeName>
                                 <placeName type="modern" ref="DA_COMPILARE">Piraeus, Greece</placeName>
                             </origPlace>
                             <origDate datingMethod="#julian" precision="low"></origDate>
@@ -64,7 +65,7 @@
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Διονύσιος καὶ Βασίλεια τὸ Μηνὶ τὸ ἱερὸν ἀνέθεσαν.
+                    <lb n="1"/>Διονύσιος καὶ Βαβυλία τῷ Μηνὶ τὸ ἱερὸν ἀνέθεσαν.
                 </ab>
             </div>
             <div type="apparatus"/>

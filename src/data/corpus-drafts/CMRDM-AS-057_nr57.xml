@@ -12,6 +12,7 @@
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 57</idno>
             </publicationStmt>
+            <!-- REVISIONE: testo greco confrontato col PDF (Lane I, p. 51, no. A3, tav. p. 39-40). Corretti: r. 1 epiteto "Ἀνδαείτι"→"Ἀνάειτι" (lettera δ inventata, non presente nella stampa per questa scheda); rr. 6-8 pesantemente corrotte nel draft ("θε[σ]φόρος εὐλαβρω-[σ]άμεν θε [ἀνέστη-[σαν·" — sequenza priva di senso, con parole inesistenti come "εὐλαβρω") sostituite con il testo effettivamente stampato: "συνβολαφόροι ἐγλυτρω-[σάμεν]οι ἀνέστη-[σαν · · · · · · · · · ·]" (i "sunbolaphoroi", contribuenti di un'associazione cultuale, che "riscattandosi" eressero la stele). Aggiunto dettaglio di rinvenimento (rottura in basso, nota dal 1962). Pleiades: nessun toponimo antico indicato da Lane per Görnevit; ref lasciato non compilato. TM number non reperibile. -->
             <sourceDesc>
                 <msDesc>
                     <msIdentifier>
@@ -22,7 +23,7 @@
                         <objectDesc>
                             <supportDesc>
                                 <support>
-                                    <p>White marble stele with pediment, Görnevit. Height 30 cm., width 28 cm., thickness 4.5 cm.</p>
+                                    <p>White marble stele with pediment, broken at bottom, known since 1962, Görnevit. Height 30 cm., width 28 cm., thickness 4.5 cm.</p>
                                     <material ref="https://www.eagle-network.eu/voc/material/lod/48.html">marble</material>
                                     <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/250.html">stele</objectType>
                                     <dimensions unit="cm">
@@ -64,14 +65,14 @@
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Ἀρτέμιδι Ἀνδαείτι
+                    <lb n="1"/>Ἀρτέμιδι Ἀνάειτι
                     <lb n="2"/>καὶ Μηνὶ Τιάμου Ἀ-
                     <lb n="3"/>λέξανδρος Τειμό-
                     <lb n="4"/>θεος Γλύκων τῶν
                     <lb n="5"/>Βολλάδος καὶ οἱ συν-
-                    <lb n="6"/>θε[σ]φόρος εὐλαβρω-
-                    <lb n="7"/>[σ]άμεν θε [ἀνέστη-
-                    <lb n="8"/>[σαν· .........]
+                    <lb n="6"/>βολαφόροι ἐγλυτρω-
+                    <lb n="7"/>[σάμεν]οι ἀνέστη-
+                    <lb n="8"/>[σαν · · · · · · · · · ·]
                 </ab>
             </div>
             <div type="apparatus"/>

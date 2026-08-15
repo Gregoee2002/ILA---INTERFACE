@@ -12,6 +12,7 @@
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 46</idno>
             </publicationStmt>
+            <!-- REVISIONE: testo greco confrontato col PDF (Lane I, p. 18, no. 21, tav. p. 30). Corretti: rr. 1 e 4 confini della lacuna spostati per rispecchiare "[Θεῷ ἐπηκ]όῳ" e "[ριστ]ῶν" (non "[Θεῷ Ἐπη]κ[ό]ῳ"/"[ρισ]τῶν"); r. 1 "Ἐπη"→"ἐπη" (minuscola, non inizio testo); r. 2 rimossa lacuna fittizia su "Τρόφ[ι]μος" (interamente leggibile in Lane) e corretto "εὐχάμε-"→"εὐξάμε-" (χ→ξ); r. 3 "Ἐπιτυχῶν"→"ἐπιτυχὼν" (minuscola e accento come da stampa); r. 5 numero del giorno "ε΄"→"βι΄" (Lane stampa "Δίου βι΄", non "ε΄": errore di trascrizione del numerale, non una scelta editoriale). Aggiunti dettagli di rinvenimento dal testo di Lane (anno 1911, proprietari delle due case). Pleiades: nessun ID verificabile per "Koresa" (il sito è noto solo da Wikidata Q85774905 e Digital Atlas of the Roman Empire, non ha voce propria su pleiades.stoa.org) — ref lasciato non compilato, segnalato per verifica futura. TM number non reperibile. -->
             <sourceDesc>
                 <msDesc>
                     <msIdentifier>
@@ -22,7 +23,7 @@
                         <objectDesc>
                             <supportDesc>
                                 <support>
-                                    <p>Two fragments of bluish marble stele with relief, Ayazviran. Height 25 cm., width 32 cm. (two pieces together), thickness 6.3 cm.</p>
+                                    <p>Two fragments of bluish marble stele with relief, preserving part of original right margin, Ayazviran. Found in 1911: piece a (larger, right) outside the house of Tartaroğlu Mehmet Çanç, piece b (smaller, left) in the house of Kadiroğlu Suleiman. Height 25 cm., width 32 cm. (two pieces together), thickness 6.3 cm.</p>
                                     <material ref="https://www.eagle-network.eu/voc/material/lod/48.html">marble</material>
                                     <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/250.html">stele</objectType>
                                     <dimensions unit="cm">
@@ -64,11 +65,11 @@
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>[Θεῷ Ἐπη]κ[ό]ῳ Μηνὶ Ἀξιτη-
-                    <lb n="2"/>[νῷ Τ]ρόφ[ι]μος εὐχάμε-
-                    <lb n="3"/>[νος] καὶ Ἐπιτυχῶν εὐχα-
-                    <lb n="4"/>[ρισ]τῶν ἀνέθηκα
-                    <lb n="5"/>[......] μη(νὸς) Δίου ε΄
+                    <lb n="1"/>[Θεῷ ἐπηκ]όῳ Μηνὶ Ἀξιτη-
+                    <lb n="2"/>[νῷ Τ]ρόφιμος εὐξάμε-
+                    <lb n="3"/>[νος] καὶ ἐπιτυχὼν εὐχα-
+                    <lb n="4"/>[ριστ]ῶν ἀνέθηκα
+                    <lb n="5"/>[......] μη(νὸς) Δίου βι΄
                 </ab>
             </div>
             <div type="apparatus"/>

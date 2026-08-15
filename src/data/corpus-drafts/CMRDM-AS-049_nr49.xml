@@ -12,6 +12,7 @@
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 49</idno>
             </publicationStmt>
+            <!-- REVISIONE: testo greco confrontato col PDF (Lane I, p. 17, note 49, tav. p. 31): nessun errore di trascrizione, solo due divergenze di accento corrette (r. 1 "Ἀτιμίτι"→"Ἀτίμιτι", r. 4 "Τρόφωνος"→"Τρύφωνος", nome proprio errato). Aggiunti dettagli di rinvenimento (superficie frontale in parte spezzata; localizzato nel 1886, ancora presente nell'agosto 1969) e completate le dimensioni strutturate (larghezza e spessore del fusto, già presenti in prosa ma non nei campi width/depth). Pleiades: nessun ID verificabile per "Koresa", ref lasciato non compilato. TM number non reperibile. -->
             <sourceDesc>
                 <msDesc>
                     <msIdentifier>
@@ -22,13 +23,13 @@
                         <objectDesc>
                             <supportDesc>
                                 <support>
-                                    <p>Small bomos with hollow on top, Turkish sanctuary of Ayazviran. Height 58.5 cm., width of shaft 24.5 cm., thickness of shaft 17 cm.</p>
+                                    <p>Small bomos with hollow on center of top, top front surface somewhat broken. Located in 1886 in the Turkish sanctuary of Ayazviran, still there in August 1969. Height 58.5 cm., width of shaft 24.5 cm., thickness of shaft 17 cm.</p>
                                     <material ref="https://www.eagle-network.eu/voc/material/lod/138.html">stone</material>
                                     <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/29.html">altar</objectType>
                                     <dimensions unit="cm">
                                         <height>58,5</height>
-                                        <width></width>
-                                        <depth></depth>
+                                        <width>24,5</width>
+                                        <depth>17</depth>
                                     </dimensions>
                                 </support>
                             </supportDesc>
@@ -64,10 +65,10 @@
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Μητρὶ Ἀτιμίτι
+                    <lb n="1"/>Μητρὶ Ἀτίμιτι
                     <lb n="2"/>καὶ Μηνὶ Τιάμ-
                     <lb n="3"/>ου Γλύκων
-                    <lb n="4"/>Τρόφωνος καὶ
+                    <lb n="4"/>Τρύφωνος καὶ
                     <lb n="5"/>Τρόφιμος Θεο-
                     <lb n="6"/>γένου κατ᾽ ἐπι-
                     <lb n="7"/>ταγὴν τὸν βωμ-

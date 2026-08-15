@@ -12,6 +12,7 @@
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 61</idno>
             </publicationStmt>
+            <!-- REVISIONE: testo greco confrontato col PDF (Lane I, p. 17, no. 17, tav. pp. 41-42). Corretti: r. 1 numerale dell'anno "σκε΄"→"σκζ΄" (227, coerente con la datazione 142-143 d.C. già presente in origDate; σκε΄=225 non torna) e aggiunta virgola mancante; r. 1-2 lacuna ricomposta secondo Lane ("Ἀρτεμίδω[ρο-]" non "Ἀρτεμ[ιδώρο-]"); r. 2 "Ἀ[μμιάς" (con lacuna e doppia μ fittizie)→"Ἀμιὰς" (interamente leggibile in Lane, μ singola); rr. 3-4 pesantemente corrotte nel draft ("ἐξ ἑαυ-τῶν καὶ μὴ ἑαυτῶν ΜΗΡ-", con la sequenza "ΜΗΡ-" priva di senso) sostituite col testo stampato: "ἐξ ἰδό-των καὶ μὴ ἰδότων λύτρ-ον" (un'offerta di riscatto "da parte di chi sa e di chi non sa"). Completate le dimensioni strutturate (45×40×5 cm, già in prosa ma non nei campi height/width/depth; ordine desunto dalla convenzione altezza-larghezza-spessore usata sistematicamente da Lane). Aggiunto dettaglio del trasporto (1880 casa di kyria Barbara a Kula; 1901 trasportata a Smirne, casa del dr. Michael Kossagis). Pleiades ID corretto: sostituito 609032 (errato) con 550659 (Koloe/Coloe), stessa identificazione e stesse riserve del nr. 58. TM number non reperibile. -->
             <sourceDesc>
                 <msDesc>
                     <msIdentifier>
@@ -22,13 +23,13 @@
                         <objectDesc>
                             <supportDesc>
                                 <support>
-                                    <p>Plaque with confession inscription, Kula. 45 cm. × 40 cm. × 5 cm.</p>
+                                    <p>Plaque with confession inscription. Located in 1880 in the house of kyria Barbara in Kula; in 1901 transported to Smyrna, in the house of the late Dr. Michael Kossagis. 45 cm. × 40 cm. × 5 cm.</p>
                                     <material ref="https://www.eagle-network.eu/voc/material/lod/138.html">stone</material>
                                     <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/53.html">plaque</objectType>
                                     <dimensions unit="cm">
-                                        <height></height>
-                                        <width></width>
-                                        <depth></depth>
+                                        <height>45</height>
+                                        <width>40</width>
+                                        <depth>5</depth>
                                     </dimensions>
                                 </support>
                             </supportDesc>
@@ -48,7 +49,7 @@
                     <history>
                         <origin>
                             <origPlace>
-                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/609032">Coloe</placeName>
+                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/550659">Coloe</placeName>
                                 <placeName type="modern" ref="DA_COMPILARE">Kula, Turkey</placeName>
                             </origPlace>
                             <origDate datingMethod="#julian" notBefore-custom="142" notAfter-custom="143" precision="medium">142-143 A.D.</origDate>
@@ -64,10 +65,10 @@
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>[Ἔτ]ους σκε΄ Ἀρτεμ[ιδώρο-]
-                    <lb n="2"/>ς Διοδότου καὶ Ἀ[μμιάς
-                    <lb n="3"/>μετὰ τῶν συγγενῶν ἐξ ἑαυ-
-                    <lb n="4"/>τῶν καὶ μὴ ἑαυτῶν ΜΗΡ-
+                    <lb n="1"/>[Ἔτ]ους σκζ΄, Ἀρτεμίδω[ρο-]
+                    <lb n="2"/>ς Διοδότου καὶ Ἀμιὰς
+                    <lb n="3"/>μετὰ τῶν συγγενῶν ἐξ ἰδό-
+                    <lb n="4"/>των καὶ μὴ ἰδότων λύτρ-
                     <lb n="5"/>ον κατ᾽ ἐπιταγὴν Μηνὶ
                     <lb n="6"/>Τυράννῳ καὶ Διὶ Ὀγμην-
                     <lb n="7"/>ῷ καὶ τοῖς σὺν αὐτῷ θεοῖς.

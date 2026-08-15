@@ -12,6 +12,7 @@
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 56</idno>
             </publicationStmt>
+            <!-- REVISIONE: testo greco confrontato col PDF (Lane I, p. 18, no. 23, tav. p. 39; restituzione di Buresch). Corretta una sola imprecisione: r. 6 rimossa una parentesi quadra aperta e non richiusa prima di "ίου" ("Γορπια[ίου"→"Γορπιαίου"), lettura interamente certa in Lane, senza lacuna. Aggiunto anno di rinvenimento (1893) dal testo di Lane. Pleiades: nessun toponimo antico indicato da Lane per Görnevit (a differenza di Ayazviran/Koresa, Menye/Maeonia, Kula/Coloe); ref lasciato non compilato, nessuna corrispondenza verificabile trovata. TM number non reperibile. -->
             <sourceDesc>
                 <msDesc>
                     <msIdentifier>
@@ -22,7 +23,7 @@
                         <objectDesc>
                             <supportDesc>
                                 <support>
-                                    <p>Fragment of marble with inscription, Görnevit. </p>
+                                    <p>Fragment of marble with inscription, built into outer wall of house, known since 1893, Görnevit. </p>
                                     <material ref="https://www.eagle-network.eu/voc/material/lod/48.html">marble</material>
                                     <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/189.html">fragment</objectType>
                                     <dimensions unit="cm">
@@ -69,7 +70,7 @@
                     <lb n="3"/>Ἡρακλείδης Με-
                     <lb n="4"/>νεκράτους,
                     <lb n="5"/>ἔτους ρνα΄, μη-
-                    <lb n="6"/>νὸς Γορπια[ίου
+                    <lb n="6"/>νὸς Γορπιαίου
                     <lb n="7"/>ἀνέθηκεν.
                 </ab>
             </div>

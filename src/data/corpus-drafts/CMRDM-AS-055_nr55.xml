@@ -12,6 +12,7 @@
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 55</idno>
             </publicationStmt>
+            <!-- REVISIONE: testo greco confrontato col PDF (Lane I, p. 51, no. A8, tav. p. 38). Corretti: r. 1 numerale dell'anno "εγσ΄"→"σγζ΄" (207, coerente con la datazione 172-3 d.C. già presente in origDate; "εγσ΄" non è una sequenza di cifre valida) e mese "Παναίμ[ου"→"Πανήμ[ου"; r. 2 "Ἑρμίππος"→"Ἕρμιππος" (accento come da stampa); r. 3 "Κι["→"ΚΓ[" (lettera errata); r. 8 "τὰ τετελευτηκένα[ι αὐτοῖς"→"τὸ τετελευτηκένα[ι αὐτοὺς" (articolo e caso diversi da quanto stampato). Aggiunto dettaglio di rinvenimento (rottura in alto, in basso e a destra; casa di Süleyman Türe). Pleiades ID corretto: sostituito 609040 (non verificabile) con 550709 (Maionia/Maeonia), verificato su Wikidata Q28221538 e ToposText, coerente con il nr. 52. TM number non reperibile. -->
             <sourceDesc>
                 <msDesc>
                     <msIdentifier>
@@ -22,7 +23,7 @@
                         <objectDesc>
                             <supportDesc>
                                 <support>
-                                    <p>Fragmentary white marble stele, Maeonia (Menye). Height 33 cm., width 30 cm., thickness 4.5 cm.</p>
+                                    <p>Fragmentary white marble stele, broken above, below, and right. Menye, in house of Süleyman Türe. Known since before 1962. Height 33 cm., width 30 cm., thickness 4.5 cm.</p>
                                     <material ref="https://www.eagle-network.eu/voc/material/lod/48.html">marble</material>
                                     <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/250.html">stele</objectType>
                                     <dimensions unit="cm">
@@ -48,7 +49,7 @@
                     <history>
                         <origin>
                             <origPlace>
-                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/609040">Maeonia</placeName>
+                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/550709">Maeonia</placeName>
                                 <placeName type="modern" ref="DA_COMPILARE">Menye, Turkey</placeName>
                             </origPlace>
                             <origDate datingMethod="#julian" notBefore-custom="172" notAfter-custom="173" precision="medium">172-173 A.D.</origDate>
@@ -64,14 +65,14 @@
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>[Ἔτου]ς εγσ΄, μη(νὸς) Παναίμ[ου· Ἐπεὶ]
-                    <lb n="2"/>Ἑρμίππος Ἑρμίππο[υ ................]
-                    <lb n="3"/>σετο τὸν θεὸν Μῆνα Κι[................]
+                    <lb n="1"/>[Ἔτου]ς σγζ΄, μη(νὸς) Πανήμ[ου· Ἐπεὶ]
+                    <lb n="2"/>Ἕρμιππος Ἑρμίππο[υ ................]
+                    <lb n="3"/>σετο τὸν θεὸν Μῆνα ΚΓ[................]
                     <lb n="4"/>μετὰ τῶν ἰδίων ἀδελφῶν Διονυσίου, Ἀ-
                     <lb n="5"/>πολλωνίου, Ὀρφέος ἀ[πέκτεινε ........]
                     <lb n="6"/>τὸν ἐπιζητηθέντ[α ...... μετὰ]
                     <lb n="7"/>Διονυσίου τοῦ ἀδελ[φοῦ· ...... μετὰ]
-                    <lb n="8"/>τὰ τετελευτηκένα[ι αὐτοῖς ...........]
+                    <lb n="8"/>τὸ τετελευτηκένα[ι αὐτοὺς ...........]
                 </ab>
             </div>
             <div type="apparatus"/>

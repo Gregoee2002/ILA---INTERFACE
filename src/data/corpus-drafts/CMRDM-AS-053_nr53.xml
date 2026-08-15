@@ -12,6 +12,7 @@
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 53</idno>
             </publicationStmt>
+            <!-- REVISIONE: testo greco confrontato col PDF (Lane I, p. 16, no. 11, tav. p. 35). Corretti: r. 3 "Μα(σ)φαλατηνῷ"→"Μασφαλατηνῷ" (parentesi di espansione fittizia, la parola è interamente stampata per esteso); r. 5 "ὁρίσθαι"→"τηρεῖσθαι" (verbo diverso, l'originale corrisponde al senso "osservare/rispettare" già riportato nel riassunto della scheda, non "delimitare"); r. 8 "τῆς δυνάμεως"→"τὰς δυνάμις" (caso e numero diversi da quanto stampato); r. 11 "Βαλερ(ίου)"→"Βαλερίου" (parentesi fittizia); r. 12 numerale dell'anno "σνε΄"→"σνς΄" (256, coerente con la datazione 171-172 d.C. già presente in origDate; σνε΄=255 non torna) e nome del mese "Αὐστρου"→"Δύστρου" (Dystros, mese macedone standard; "Αὐστρου" non è un mese reale). Aggiunto dettaglio di rinvenimento (nota almeno dal 1829, portata a Kula da Menye). Dubbio non risolto: il nome proprio "Διον[υ/οι]σίου" (rr. non presenti in questa scheda ma comune ad altre del gruppo) non è qui coinvolto. Pleiades ID corretto: sostituito 609032 (errato: riutilizzato in modo incoerente anche per Aivatlar e Coloe nel batch) con 550709 (Maionia/Maeonia), verificato su Wikidata Q28221538 e ToposText. TM number non reperibile. -->
             <sourceDesc>
                 <msDesc>
                     <msIdentifier>
@@ -22,7 +23,7 @@
                         <objectDesc>
                             <supportDesc>
                                 <support>
-                                    <p>Marble stele with relief (sun-god and Men) and inscription, Maeonia. </p>
+                                    <p>Marble stele with relief (sun-god and Men) and inscription, known at least since 1829, brought to Kula from Menye.</p>
                                     <material ref="https://www.eagle-network.eu/voc/material/lod/48.html">marble</material>
                                     <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/250.html">stele</objectType>
                                     <dimensions unit="cm">
@@ -48,7 +49,7 @@
                     <history>
                         <origin>
                             <origPlace>
-                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/609032">Maeonia</placeName>
+                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/550709">Maeonia</placeName>
                                 <placeName type="modern" ref="DA_COMPILARE">Kula, Turkey</placeName>
                             </origPlace>
                             <origDate datingMethod="#julian" notBefore-custom="171" notAfter-custom="172" precision="medium">171-172 A.D.</origDate>
@@ -66,16 +67,16 @@
                 <ab>
                     <lb n="1"/>Κατὰ τὴν τῶν θεῶν ἐπιτα-
                     <lb n="2"/>γὴν ἱερὸς δοῦμος εὐχὴν
-                    <lb n="3"/>Διὶ Μα(σ)φαλατηνῷ καὶ Μηνὶ
+                    <lb n="3"/>Διὶ Μασφαλατηνῷ καὶ Μηνὶ
                     <lb n="4"/>Τιάμου καὶ Μηνὶ Τυράννῳ
-                    <lb n="5"/>ἐκέλευσεν ὁρίσθαι ἀ-
+                    <lb n="5"/>ἐκέλευσεν τηρεῖσθαι ἀ-
                     <lb n="6"/>πὸ ἡμερῶν θ΄. Εἴ τις δὲ τού-
                     <lb n="7"/>των ἀπειθήσι, ἀναγνώσ-
-                    <lb n="8"/>εται τῆς δυνάμεως τοῦ Δι-
+                    <lb n="8"/>εται τὰς δυνάμις τοῦ Δι-
                     <lb n="9"/>ός. Ἐπιμελησαμένου
                     <lb n="10"/>Διονυσίου, Διοδώρου,
-                    <lb n="11"/>καὶ Ἑρμογένους Βαλερ(ίου),
-                    <lb n="12"/>ἔτους σνε΄, μη(νὸς) Αὐστρου.
+                    <lb n="11"/>καὶ Ἑρμογένους Βαλερίου,
+                    <lb n="12"/>ἔτους σνς΄, μη(νὸς) Δύστρου.
                 </ab>
             </div>
             <div type="apparatus"/>

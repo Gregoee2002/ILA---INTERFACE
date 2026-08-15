@@ -12,6 +12,7 @@
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 6</idno>
             </publicationStmt>
+            <!-- Revisione: aggiunta la nota di Lane sulle circostanze di ritrovamento ignote (attestato prima del 1895), assente nel draft. Verificato Pleiades (Athenae 579885, invariato, corretto). Nessun testo greco (monumento anepigrafe, conforme allo stampato). TM number non compilato: monumento senza iscrizione, non indicizzabile in Trismegistos. -->
             <sourceDesc>
                 <msDesc>
                     <msIdentifier>
@@ -22,7 +23,7 @@
                         <objectDesc>
                             <supportDesc>
                                 <support>
-                                    <p>Marble relief preserved entire, National Museum Athens. Height 41 cm., width 43 cm.</p>
+                                    <p>Marble relief preserved entire. Circumstances of finding unknown (before 1895). Height 41 cm., width 43 cm. Now in the National Museum of Athens.</p>
                                     <material ref="https://www.eagle-network.eu/voc/material/lod/48.html">marble</material>
                                     <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/24.html">relief</objectType>
                                     <dimensions unit="cm">

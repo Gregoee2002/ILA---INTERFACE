@@ -12,6 +12,7 @@
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 58</idno>
             </publicationStmt>
+            <!-- REVISIONE: testo greco confrontato col PDF (Lane I, p. 15, Lydia no. 5, tav. p. 40). Corretti: r. 1 "Ἀξιοτ(τ)ήν[ῳ]"→"Ἀξιοττ(η)νῷ" (posizione dell'espansione editoriale come da stampa); r. 3 nome proprio "Νίκωνις"→"Νιτωνὶς" (nome diverso); r. 4 "ἐλοισώρησαν"→"ἐλοιδώρησαν" (verbo inesistente vs "insultarono", coerente col senso della vicenda); r. 6 "πιτάκιον"→"πιττάκιον" (lettera caduta); ultima riga "εὐλογεῖ"→"εὐδοξεῖ" (verbo diverso da quello stampato). Pleiades ID corretto: sostituito 609032 (errato: nel batch era riferito incoerentemente anche a Maeonia e Aivatlar) con l'ID di Koloe/Coloe in Lidia (550659), verificato incrociando Wikidata Q85774838 (che riporta anche Digital Atlas of the Roman Empire id 29072 e ToposText 382282UKol) — l'identificazione della città antica di Coloe con l'odierna Kula, adottata da Lane, riflette una tradizione geografica più ampia e approssimativa (il sito archeologico preciso di Koloe è oggi collocato presso Kiraz, alcune decine di km da Kula); segnalato come identificazione tradizionale, non puntuale. TM number non reperibile. -->
             <sourceDesc>
                 <msDesc>
                     <msIdentifier>
@@ -22,7 +23,7 @@
                         <objectDesc>
                             <supportDesc>
                                 <support>
-                                    <p>Tablet with crescent in relief and confession inscription, Coloe (Kula). </p>
+                                    <p>Tablet with crescent in relief and confession inscription, known since at least 1829, Coloe (Kula). </p>
                                     <material ref="https://www.eagle-network.eu/voc/material/lod/138.html">stone</material>
                                     <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/250.html">stone</objectType>
                                     <dimensions unit="cm">
@@ -48,7 +49,7 @@
                     <history>
                         <origin>
                             <origPlace>
-                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/609032">Coloe</placeName>
+                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/550659">Coloe</placeName>
                                 <placeName type="modern" ref="DA_COMPILARE">Kula, Turkey</placeName>
                             </origPlace>
                             <origDate datingMethod="#julian" precision="low"></origDate>
@@ -64,17 +65,17 @@
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>[Μ]ηνὶ Ἀξιοτ(τ)ήν[ῳ]. Ἐπὶ
+                    <lb n="1"/>[Μ]ηνὶ Ἀξιοττ(η)νῷ. Ἐπὶ
                     <lb n="2"/>Ἑρμογένης Γλύκωνος
-                    <lb n="3"/>καὶ Νίκωνις Φιλόξενου
-                    <lb n="4"/>ἐλοισώρησαν Ἀρτεμι-
-                    <lb n="5"/>δώρον περὶ οἴνου, Ἀρτε-
-                    <lb n="6"/>μιδώρος πιτάκιον ε-
+                    <lb n="3"/>καὶ Νιτωνὶς Φιλοξένου
+                    <lb n="4"/>ἐλοιδώρησαν Ἀρτεμί-
+                    <lb n="5"/>δωρον περὶ οἴνου, Ἀρτε-
+                    <lb n="6"/>μίδωρος πιττάκιον ἔ-
                     <lb n="7"/>δωκεν. Ὁ θεὸς ἐκολά-
                     <lb n="8"/>σετο τὸν Ἑρμογένην
-                    <lb n="9"/>καὶ εἴλασετο τὸν θε-
-                    <lb n="10"/>ὸν καὶ ἀπὸ νῦν εὐλο-
-                    <lb n="11"/>γεῖ.
+                    <lb n="9"/>καὶ εἰλάσετο τὸν θε-
+                    <lb n="10"/>ὸν καὶ ἀπὸ νῦν εὐδο-
+                    <lb n="11"/>ξεῖ.
                 </ab>
             </div>
             <div type="apparatus"/>
