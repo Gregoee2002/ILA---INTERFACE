@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Iscrizione latina</rs> — CMRDM I nr. 24: Inscribed altar from foundations of St. Peter's basilica, Rome</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>CMRDM — Corpus Monumentorum Religionis Dei Menis</authority>
+                <idno type="filename">CMRDM-IT-024</idno>
+                <idno type="TM"><!-- inserire TM number --></idno>
+                <idno type="CMRDM">CMRDM I 24</idno>
+            </publicationStmt>
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>lost/unknown</repository>
+                        <idno>CMRDM I 24</idno>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Inscribed altar from foundations of St. Peter's basilica, Rome. </p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/138.html">stone</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/29.html">altar</objectType>
+                                    <dimensions unit="cm">
+                                        <height></height>
+                                        <width></width>
+                                        <depth></depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>Altar dedicated to Magna Mater, Attis, and Menotyrannus by Caelius Hilarianus, dated 377 A.D.</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Height of letters: DA_COMPILARE.</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/423025">Roma</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">Rome, Italy</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" notBefore-custom="377" notAfter-custom="377" precision="high">377 A.D.</origDate>
+                        </origin>
+                        <provenance type="found">Rome, Italy</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="la">
+                <ab>
+                    <lb n="1"/>M(atri) D(eum) M(agnae) I(daeae)
+                    <lb n="2"/>et Attidi Meno-
+                    <lb n="3"/>tyranno conser-
+                    <lb n="4"/>vatoribus suis Cae-
+                    <lb n="5"/>lius Hilarianus V(ir) C(onsularis)
+                    <lb n="6"/>Duodecimbyr
+                    <lb n="7"/>Urbis Romae
+                    <lb n="8"/>P(ater) S(acrorum) et Hieroceryx
+                    <lb n="9"/>I(nvicti) M(ithrae) S(acerdos) D(ei) L(iberi) S(acerdos) D(eae)
+                    <lb n="10"/>Hecate
+                    <lb n="11"/>D(omino) N(ostro) Gratiano Aug.
+                    <lb n="12"/>et Merobaude Conss. III Idus
+                    <lb n="13"/>Maias.
+                </ab>
+            </div>
+            <div type="apparatus"/>
+            <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="bibliography">
+                <listBibl>
+                    <bibl>CIL, VI, 500</bibl>
+                    <bibl>F. Cumont, Textes et monuments figurés relatifs aux mystères de Mithra, Brussels, 1899, II, no. 19</bibl>
+                    <bibl>Dessau, ILS, 4148</bibl>
+                    <bibl>M.J. Vermaseren, Corpus Inscriptionum et Monumentorum Religionis Mithriacae, Hague, 1956-60, I, p. 204, no. 513</bibl>
+                    <bibl>Lane, I, p. 13, no. 3</bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

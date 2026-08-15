@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Iscrizione greca</rs> — CMRDM I nr. 85: Altar with moon decoration and ram's heads, Manisa Museum</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>CMRDM — Corpus Monumentorum Religionis Dei Menis</authority>
+                <idno type="filename">CMRDM-AS-085</idno>
+                <idno type="TM"><!-- inserire TM number --></idno>
+                <idno type="CMRDM">CMRDM I 85</idno>
+            </publicationStmt>
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>Manisa Museum</repository>
+                        <idno>CMRDM I 85</idno>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Altar with moon decoration and ram's heads, Manisa Museum. ca. 3 feet high</p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/138.html">stone</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/29.html">altar</objectType>
+                                    <dimensions unit="cm">
+                                        <height></height>
+                                        <width></width>
+                                        <depth></depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>Altar with moon decoration on front face and ram's head on each of the four corners connected by garlands. Dedication by Artemon to Men Axiottenos by divine command.</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Height of letters: DA_COMPILARE.</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/550791">Magnesia ad Sipylum</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">Manisa, Turkey</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" notBefore-custom="184" notAfter-custom="185" precision="medium">184-185 A.D.</origDate>
+                        </origin>
+                        <provenance type="found">Manisa, Turkey</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+                <ab>
+                    <lb n="1"/>Μη-
+                    <lb n="2"/>νὶ
+                    <lb n="3"/>Ἀξιοτ-
+                    <lb n="4"/>τη-
+                    <lb n="5"/>νῷ καὶ θείῳ
+                    <lb n="6"/>Ἄρτεμων τὸ
+                    <lb n="7"/>πηγαρές κατ᾽ ἐπ-
+                    <lb n="8"/>[ιτα]γὴν ἀνέθηκεν
+                    <lb n="9"/>ἐπὶ τὰ ἴχνη.
+                    <lb n="10"/>Ἔτους ογη΄, μη(νὸς)
+                    <lb n="11"/>Δαισίου δ΄.
+                </ab>
+            </div>
+            <div type="apparatus"/>
+            <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="bibliography">
+                <listBibl>
+                    <bibl>Lane, I, p. 19, no. 28 (see appendix)</bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

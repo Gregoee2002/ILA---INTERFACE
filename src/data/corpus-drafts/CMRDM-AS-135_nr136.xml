@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Iscrizione greca</rs> — CMRDM I nr. 136: Dice-oracle epigram for Men Phosphoros built into wall, Attaleia Pamphyliae</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>CMRDM — Corpus Monumentorum Religionis Dei Menis</authority>
+                <idno type="filename">CMRDM-AS-135</idno>
+                <idno type="TM"><!-- inserire TM number --></idno>
+                <idno type="CMRDM">CMRDM I 136</idno>
+            </publicationStmt>
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>in situ (wall)</repository>
+                        <idno>CMRDM I 136</idno>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Dice-oracle epigram for Men Phosphoros built into wall, Attaleia Pamphyliae. </p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/138.html">stone</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/250.html">stone</objectType>
+                                    <dimensions unit="cm">
+                                        <height></height>
+                                        <width></width>
+                                        <depth></depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>Stone built into wall in street near harbor. Essentially the same dice-oracle epigram ascribed to Men Phosphoros, fifth member of the group.</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Height of letters: DA_COMPILARE.</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/638674">Attaleia Pamphyliae</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">Antalya, Turkey</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" precision="low"></origDate>
+                        </origin>
+                        <provenance type="found">Antalya, Turkey</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+                <ab>
+                    <lb n="1"/>δδδδγ΄ ξε Μηνὸς Φωσφόρου
+                    <lb n="2"/>[θά]ρσι, καίρον ἔχεις, πράξεις δ᾽ ἃ θέλεις, καίρου δ᾽ ἐπιτε[ύξῃ
+                    <lb n="3"/>[εἰς ὁ]δὸν ὁρ[μηθῆναι, ἔχεις καίρόν τιν᾽ ὁ μόχθος
+                    <lb n="4"/>[ἔργ]ον τ᾽ ἐγχείρειν ἀγαθὸν καὶ ἀγώνανα δίκ[ην τε].
+                </ab>
+            </div>
+            <div type="apparatus"/>
+            <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="bibliography">
+                <listBibl>
+                    <bibl>H. Barth, RM, VII, 1850, p. 251</bibl>
+                    <bibl>Hirschfeld, Akademie der Wissenschaften, Berichte, Berlin, 1875, p. 716</bibl>
+                    <bibl>G. Kaibel, Epigrammata Graeca, Berlin, 1878, no. 1038</bibl>
+                    <bibl>Drexler, op. cit., col. 2720</bibl>
+                    <bibl>A.M. Woodward, JHS, XXX, 1910, pp. 260-62</bibl>
+                    <bibl>Heinevetter, op. cit., no. 1</bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Iscrizione greca</rs> — CMRDM I nr. 58: Tablet with crescent in relief and confession inscription, Coloe (Kula)</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>CMRDM — Corpus Monumentorum Religionis Dei Menis</authority>
+                <idno type="filename">CMRDM-AS-058</idno>
+                <idno type="TM"><!-- inserire TM number --></idno>
+                <idno type="CMRDM">CMRDM I 58</idno>
+            </publicationStmt>
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>in situ or lost</repository>
+                        <idno>CMRDM I 58</idno>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Tablet with crescent in relief and confession inscription, Coloe (Kula). </p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/138.html">stone</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/250.html">stone</objectType>
+                                    <dimensions unit="cm">
+                                        <height></height>
+                                        <width></width>
+                                        <depth></depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>Tablet with crescent in relief. Confession inscription recording a false accusation against Artemidoros concerning wine; the god Men punished Hermogenes who then propitiated the deity.</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Height of letters: DA_COMPILARE.</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/609032">Coloe</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">Kula, Turkey</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" precision="low"></origDate>
+                        </origin>
+                        <provenance type="found">Kula, Turkey</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+                <ab>
+                    <lb n="1"/>[Μ]ηνὶ Ἀξιοτ(τ)ήν[ῳ]. Ἐπὶ
+                    <lb n="2"/>Ἑρμογένης Γλύκωνος
+                    <lb n="3"/>καὶ Νίκωνις Φιλόξενου
+                    <lb n="4"/>ἐλοισώρησαν Ἀρτεμι-
+                    <lb n="5"/>δώρον περὶ οἴνου, Ἀρτε-
+                    <lb n="6"/>μιδώρος πιτάκιον ε-
+                    <lb n="7"/>δωκεν. Ὁ θεὸς ἐκολά-
+                    <lb n="8"/>σετο τὸν Ἑρμογένην
+                    <lb n="9"/>καὶ εἴλασετο τὸν θε-
+                    <lb n="10"/>ὸν καὶ ἀπὸ νῦν εὐλο-
+                    <lb n="11"/>γεῖ.
+                </ab>
+            </div>
+            <div type="apparatus"/>
+            <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="bibliography">
+                <listBibl>
+                    <bibl>CIG, 3442</bibl>
+                    <bibl>Keppel, op. cit., II, p. 346, no. 1</bibl>
+                    <bibl>W.J. Hamilton, Researches in Asia Minor, Pontus, and Armenia, 1842, II, p. 467-8, no. 340</bibl>
+                    <bibl>Drexler, op. cit., col. 2701, no. 5</bibl>
+                    <bibl>Perdrizet, op. cit., p. 58, bottom, no. 1</bibl>
+                    <bibl>Steinleitner, op. cit., p. 34, no. 10</bibl>
+                    <bibl>Lane, I, p. 15, Lydia, no. 5</bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

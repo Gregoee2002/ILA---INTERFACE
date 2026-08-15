@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Iscrizione greca</rs> — CMRDM I nr. 97: Limestone altar (?) with worn inscription, Nacoleia</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>CMRDM — Corpus Monumentorum Religionis Dei Menis</authority>
+                <idno type="filename">CMRDM-AS-097</idno>
+                <idno type="TM"><!-- inserire TM number --></idno>
+                <idno type="CMRDM">CMRDM I 97</idno>
+            </publicationStmt>
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>in situ or lost</repository>
+                        <idno>CMRDM I 97</idno>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Limestone altar (?) with worn inscription, Nacoleia. Height 80 cm., width 41 cm., thickness 38 cm.</p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/138.html">limestone</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/29.html">altar</objectType>
+                                    <dimensions unit="cm">
+                                        <height>80</height>
+                                        <width>41</width>
+                                        <depth>38</depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>Limestone altar without reliefs (mouldings shaved off), with badly worn inscription mentioning Men.</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Height of letters: 3 cm.</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/609310">Nacoleia</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">Seyitgazi, Turkey</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" precision="low"></origDate>
+                        </origin>
+                        <provenance type="found">Seyitgazi, Turkey</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+                <ab>
+                    <lb n="1"/>[---]σωμήτ[---]
+                    <lb n="2"/>Μη[νὶ Εν]-
+                    <lb n="3"/>δην
+                    <lb n="4"/>[χα]ὶ Σύγνο[ι].
+                </ab>
+            </div>
+            <div type="apparatus"/>
+            <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="bibliography">
+                <listBibl>
+                    <bibl>MAMA, V, p. 101, no. 210 and Plate 48</bibl>
+                    <bibl>Lane, I, p. 24, no. 10a</bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

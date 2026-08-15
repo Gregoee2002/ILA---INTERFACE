@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Iscrizione greca</rs> — CMRDM I nr. 126: Altar with reliefs and inscriptions on all four sides, Macropedium (Akörenç)</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>CMRDM — Corpus Monumentorum Religionis Dei Menis</authority>
+                <idno type="filename">CMRDM-AS-126</idno>
+                <idno type="TM"><!-- inserire TM number --></idno>
+                <idno type="CMRDM">CMRDM I 126</idno>
+            </publicationStmt>
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>in situ (outside house)</repository>
+                        <idno>CMRDM I 126</idno>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Altar with reliefs and inscriptions on all four sides, Macropedium (Akörenç). Height 1.19 m., width 44 cm., thickness 44 cm.</p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/138.html">stone</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/29.html">altar</objectType>
+                                    <dimensions unit="cm">
+                                        <height>1,19</height>
+                                        <width>44</width>
+                                        <depth>44</depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>Altar with inscriptions and reliefs on all four sides: front (chariot scene), left (horseman, scorpion, garlands; hymn to Apollo), back (Zeus on throne with female figure; hymn to Zeus), right (horseman; hymn to Men as philanthropic king). Family dedication by Troilas son of Ophelion and family.</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Height of letters: DA_COMPILARE.</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="DA_COMPILARE">Macropedium</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">Akörenç, Turkey</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" precision="low"></origDate>
+                        </origin>
+                        <provenance type="found">Akörenç, Turkey</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+                <ab>
+                    <lb n="1"/>Ἔτους βρρ΄.
+                    <lb n="2"/>καὶ τῷ δήμῳ τῷ Μα-
+                    <lb n="3"/>κροπεδειτῶν
+                    <lb n="4"/>Τρωΐλας Ὠφελίωνας
+                    <lb n="5"/>Ὀσαεὶ καὶ Τατεὶς Ἀγα-
+                    <lb n="6"/>θείνου ἡ γυνὴ αὐτοῦ
+                    <lb n="7"/>καὶ Τρωΐλας δὶς καὶ Ἀ-
+                    <lb n="8"/>γαθεῖνας Ὀσαεὶ τὰ τε-
+                    <lb n="9"/>κνα αὐτῶν ἐκ τῶν ἰδί-
+                    <lb n="10"/>ων κατασκευάσαντες
+                    <lb n="11"/>Χρυσοκό-μην Παιᾶνα
+                    <lb n="12"/>ον ψυκόμε-νος τέκε Λητοῖ,
+                    <lb n="13"/>Ἡλίον φαεθόντα λελου-
+                    <lb n="14"/>[μ]ένον Ὠκεανοῖο, εἴλε-
+                    <lb n="15"/>ον ἀνθρώποισιν οἳ ἐν-
+                    <lb n="16"/>θάδε ναιετάουσιν ἢ
+                    <lb n="17"/>ἐποίει
+                    <lb n="18"/>Μηνὸς φιλάνθρωπον πο-
+                    <lb n="19"/>λυάρητον βασιλῆα,
+                    <lb n="20"/>γράψας ὅδε ἀνέθηκε
+                    <lb n="21"/>σὺν εὐχωλῇσιν ἀγανῇσιν
+                    <lb n="22"/>Τρωΐλας Ὠφελίωνος, ἐπ[ὶ]
+                    <lb n="23"/>σὺν κεδνῇ ἀκοίτει, ἀνδρά-
+                    <lb n="24"/>σιν ἥδε γυναιξὶ σαόφροσιν
+                    <lb n="25"/>εἴλεον ἀεί.
+                </ab>
+            </div>
+            <div type="apparatus"/>
+            <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="bibliography">
+                <listBibl>
+                    <bibl>Ramsay, AJA, IV, 1888, p. 19</bibl>
+                    <bibl>Ramsay, C and B, I, p. 308, no. 120</bibl>
+                    <bibl>Bean, AS, IX, 1959, p. 103, no. 64</bibl>
+                    <bibl>Robert, REG, LXXIV, 1961, p. 242, no. 738</bibl>
+                    <bibl>SEG, XIX, p. 249, no. 796</bibl>
+                    <bibl>Lane, I, p. 44, no. 7</bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

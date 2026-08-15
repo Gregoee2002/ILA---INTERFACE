@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Monumento senza iscrizione</rs> — CMRDM I nr. 140: Terracotta figurine of Men seated, uncertain provenience (Bonn)</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>CMRDM — Corpus Monumentorum Religionis Dei Menis</authority>
+                <idno type="filename">CMRDM-AS-139</idno>
+                <idno type="TM"><!-- inserire TM number --></idno>
+                <idno type="CMRDM">CMRDM I 140</idno>
+            </publicationStmt>
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>Akademisches Kunstmuseum, University of Bonn</repository>
+                        <idno>CMRDM I 140</idno>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Terracotta figurine of Men seated, uncertain provenience (Bonn). Height 17.6 cm.</p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/131.html">terracotta</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/24.html">relief</objectType>
+                                    <dimensions unit="cm">
+                                        <height>17,6</height>
+                                        <width></width>
+                                        <depth></depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>Men seated on a stool (perhaps cloth-covered), right foot slightly raised. Boots, belted chiton, Phrygian cap, crescent behind shoulders. Patera in outstretched right hand, indistinct object in raised left. Rooster in relief on seat near right foot. Womanish appearance.</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Height of letters: DA_COMPILARE.</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="DA_COMPILARE">uncertain</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">uncertain</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" precision="low"></origDate>
+                        </origin>
+                        <provenance type="found">uncertain</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+                <ab>
+                    <lb n="1"/>
+                </ab>
+            </div>
+            <div type="apparatus"/>
+            <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="bibliography">
+                <listBibl>
+                    <bibl>Antiken aus dem akademischen Kunstmuseum Bonn, Düsseldorf, 1969, p. 77, no. 80 and Pl. 51</bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

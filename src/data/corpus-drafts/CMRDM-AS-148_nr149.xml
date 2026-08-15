@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Iscrizione greca</rs> — CMRDM I nr. 149: Limestone stele with funerary curse invoking Men Katachthonios, Iconium (Alaeddin excavations)</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>CMRDM — Corpus Monumentorum Religionis Dei Menis</authority>
+                <idno type="filename">CMRDM-AS-148</idno>
+                <idno type="TM"><!-- inserire TM number --></idno>
+                <idno type="CMRDM">CMRDM I 149</idno>
+            </publicationStmt>
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>Konya Museum (in storage?)</repository>
+                        <idno>CMRDM I 149</idno>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Limestone stele with funerary curse invoking Men Katachthonios, Iconium (Alaeddin excavations). Height 1.35 m., width at top 51 cm., at bottom 56 cm., thickness 24 cm.</p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/138.html">limestone</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/250.html">stele</objectType>
+                                    <dimensions unit="cm">
+                                        <height>1,35</height>
+                                        <width>51</width>
+                                        <depth>24</depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>Limestone stele broken across top, with sunken panel. Relief of man (left) and woman (right). Funerary inscription by Lulus Iulios Philemon and Iulia Mamathia Daphneepis. Curse invoking Men Katachthonios.</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Height of letters: DA_COMPILARE.</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/628920">Iconium</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">Konya, Turkey</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" precision="low"></origDate>
+                        </origin>
+                        <provenance type="found">Konya, Turkey</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+                <ab>
+                    <lb n="1"/>Λῦλος Ἰουλί-
+                    <lb n="2"/>ος Φιλήμων κ-
+                    <lb n="3"/>αὶ Ἰουλία Μα-
+                    <lb n="4"/>μά[θι]α Δαφν-
+                    <lb n="5"/>ῆπις
+                    <lb n="6"/>μνήμης χα-
+                    <lb n="7"/>ρίν. Ὃς δ᾽ ἄν ἀ-
+                    <lb n="8"/>δικήσῃ τὴν σ-
+                    <lb n="9"/>τήλην ἢ ἀ-
+                    <lb n="10"/>ποκθῇει ἕξει
+                    <lb n="11"/>τὸν Μῆνα κε-
+                    <lb n="12"/>κολωμένον
+                    <lb n="13"/>τὸν Κατάχθόνι-
+                    <lb n="14"/>ον.
+                </ab>
+            </div>
+            <div type="apparatus"/>
+            <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="bibliography">
+                <listBibl>
+                    <bibl>W.M. Calder, Revue de Philologie, XXXVI, 1912, p. 66, no. 33</bibl>
+                    <bibl>W.H. Buckler et al., JRS, XIV, 1924, p. 47, no. 37 and Plate VIII</bibl>
+                    <bibl>SEG, VI, 1932, p. 76, no. 427</bibl>
+                    <bibl>Lane, II, p. 46, no. 1a</bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

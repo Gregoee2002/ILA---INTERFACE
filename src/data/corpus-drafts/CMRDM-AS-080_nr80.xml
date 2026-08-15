@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Iscrizione greca</rs> — CMRDM I nr. 80: Two fragments of white marble stele with crescent, Sardis</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>CMRDM — Corpus Monumentorum Religionis Dei Menis</authority>
+                <idno type="filename">CMRDM-AS-080</idno>
+                <idno type="TM"><!-- inserire TM number --></idno>
+                <idno type="CMRDM">CMRDM I 80</idno>
+            </publicationStmt>
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>Sardis Excavation collection</repository>
+                        <idno>CMRDM I 80</idno>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Two fragments of white marble stele with crescent, Sardis. Top piece height 24 cm., bottom piece height 42 cm., width at bottom 37.5 cm.</p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/48.html">marble</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/250.html">stele</objectType>
+                                    <dimensions unit="cm">
+                                        <height>24</height>
+                                        <width>37,5</width>
+                                        <depth></depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>Two fragments of stele with incised crescent at top. Confession inscription: Epaphroditos vowed to Men Axiottenos if he obtained a wife; he failed to pay the vow and was punished before fulfilling it.</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Height of letters: 1.5 to 2.0 cm.</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/550867">Sardis</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">Sart, Turkey</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" notBefore-custom="160" notAfter-custom="161" precision="medium">160-161 A.D.</origDate>
+                        </origin>
+                        <provenance type="found">Sart, Turkey</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+                <ab>
+                    <lb n="1"/>[Μήν]ι Ἀξιοττήνῳ Ἐ[πα-]
+                    <lb n="2"/>[φρόδ]ειτος οἰκο[γε-]
+                    <lb n="3"/>[νὸς Κλαύ]διο[υ Στρα-]
+                    <lb n="4"/>[τ]ονείκου εὐχά[με-
+                    <lb n="5"/>νος ἐὰν σ]ῴζ[η]ται
+                    <lb n="6"/>γυναῖκαν ἣν θέλω
+                    <lb n="7"/>καὶ λα[βὼν] καὶ μὴ ἀ-
+                    <lb n="8"/>ποδῶν τὴν εὐχήν,
+                    <lb n="9"/>κολασθεὶς ἀνέθη-
+                    <lb n="10"/>κεν καὶ ἀπὸ νῦν εὐλο-
+                    <lb n="11"/>γεῖ μετὰ τῶν ἰδίων
+                    <lb n="12"/>πάντων. Ἔτους σμε΄,
+                    <lb n="13"/>μη(νὸς) Δείου δι΄.
+                </ab>
+            </div>
+            <div type="apparatus"/>
+            <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="bibliography">
+                <listBibl>
+                    <bibl>Illustrated London News, July 9, 1960</bibl>
+                    <bibl>L. Robert, Nouvelles Inscriptions de Sardes, Paris, 1964, pp. 23-24, nos. 2 and 3 and Plate II, no. 2</bibl>
+                    <bibl>Lane, I, p. 22, no. 33; Lane II, p. 45, no. 7</bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

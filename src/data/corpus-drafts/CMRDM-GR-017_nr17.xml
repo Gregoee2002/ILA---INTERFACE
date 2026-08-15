@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Iscrizione greca</rs> — CMRDM I nr. 17: Oblong altar with bucrania and garlands, Lindos, Rhodes</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>CMRDM — Corpus Monumentorum Religionis Dei Menis</authority>
+                <idno type="filename">CMRDM-GR-017</idno>
+                <idno type="TM"><!-- inserire TM number --></idno>
+                <idno type="CMRDM">CMRDM I 17</idno>
+            </publicationStmt>
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>in situ or lost</repository>
+                        <idno>CMRDM I 17</idno>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Oblong altar with bucrania and garlands, Lindos, Rhodes. Height 76 cm., width 78 cm., thickness 44 cm.</p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/138.html">stone</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/29.html">altar</objectType>
+                                    <dimensions unit="cm">
+                                        <height>76</height>
+                                        <width>78</width>
+                                        <depth>44</depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>Oblong altar decorated with 6 bucrania, garlands, ribbons, and little chains. Inscription arranged around a crown in a square field, honoring Hephaistion of Antioch by the association of Meniastai.</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Height of letters: 2 cm.</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/589913">Lindus</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">Lindos, Rhodes, Greece</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" precision="low"></origDate>
+                        </origin>
+                        <provenance type="found">Lindos, Rhodes, Greece</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+                <ab>
+                    <lb n="1"/>Τὸ κοινὸν                     Δίδοστος
+                    <lb n="2"/>τὸ Μηνιω[στᾶν]              Ἐγγενής
+                    <lb n="3"/>ἐτίμασε                        υἱός
+                    <lb n="4"/>Ἡφαιστίωνα                    Ἡφαιστίωνος
+                    <lb n="5"/>Ἀντιοχεῖ θαλίνῳ στεφάνῳ
+                    <lb n="6"/>Χρηστοὶ χαίρετε.
+                </ab>
+            </div>
+            <div type="apparatus"/>
+            <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="bibliography">
+                <listBibl>
+                    <bibl>Drexler, op. cit., col. 2699</bibl>
+                    <bibl>E. Loewy, Archäologisch-Epigraphische Mitteilungen aus Österreich-Ungarn, X, 1886, p. 219, no. 23</bibl>
+                    <bibl>IG, XII, i, 917</bibl>
+                    <bibl>Perdrizet, op. cit., p. 76, note 1</bibl>
+                    <bibl>Lane, I, p. 12, no. 4</bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

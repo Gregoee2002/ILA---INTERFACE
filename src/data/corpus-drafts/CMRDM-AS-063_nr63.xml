@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Iscrizione greca</rs> — CMRDM I nr. 63: Marble stele with relief of adorants and confession inscription, Kula (Boston MFA)</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>CMRDM — Corpus Monumentorum Religionis Dei Menis</authority>
+                <idno type="filename">CMRDM-AS-063</idno>
+                <idno type="TM"><!-- inserire TM number --></idno>
+                <idno type="CMRDM">CMRDM I 63</idno>
+            </publicationStmt>
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>Museum of Fine Arts, Boston</repository>
+                        <idno>CMRDM I 63</idno>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Marble stele with relief of adorants and confession inscription, Kula (Boston MFA). Height 72 cm., width 42 cm., thickness 6 cm.</p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/48.html">marble</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/250.html">stele</objectType>
+                                    <dimensions unit="cm">
+                                        <height>72</height>
+                                        <width>42</width>
+                                        <depth>6</depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>Stele with relief showing man, child, woman, and second child raising right hands in adoration. Dedication to Artemis Andaetis and Men Tiamos by Mousas and his wife Kalligeneaia for their son.</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Height of letters: DA_COMPILARE.</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/609032">Coloe</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">Kula, Turkey</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" notBefore-custom="196" notAfter-custom="197" precision="medium">196-197 A.D.</origDate>
+                        </origin>
+                        <provenance type="found">Kula, Turkey</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+                <ab>
+                    <lb n="1"/>Ἀρτέμιδι Ἀνδαεί τ[ι καὶ Μη-]
+                    <lb n="2"/>νὶ Τιά[μου Μουσᾶς W [καὶ]
+                    <lb n="3"/>Καλλιγένεια ἡ σύ[μβιο]ς αὐ-
+                    <lb n="4"/>τοῦ ὑπὲρ Μουσ[οῦ το[ῦ υἱοῦ
+                    <lb n="5"/>[μαρτυροῦντες τὰς δ[υνά-]
+                    <lb n="6"/>[μεις τῶν θεῶν ἀπέδω[καν]
+                    <lb n="7"/>τὴν εὐχήν. Ἔτους σπα΄, [μη(νὸς)]
+                    <lb n="8"/>Δείου ι΄.
+                </ab>
+            </div>
+            <div type="apparatus"/>
+            <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="bibliography">
+                <listBibl>
+                    <bibl>Drexler, op. cit., col. 2704</bibl>
+                    <bibl>*M.F.A.B. 18th Annual Report, 1894, p. 20</bibl>
+                    <bibl>Archäologischer Anzeiger, IX, 1894, p. 95</bibl>
+                    <bibl>Reinach, RA, 1894, II, p. 117</bibl>
+                    <bibl>Wright, HSCP, VI, 1895, p. 56, Pl. II</bibl>
+                    <bibl>Bulletin MFAB, LVI, 1958, p. 72</bibl>
+                    <bibl>Lane, I, pp. 17-18, no. 19</bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

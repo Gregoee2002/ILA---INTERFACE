@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Iscrizione greca</rs> — CMRDM I nr. 67: Fragment of marble stele built into house wall, Kavakli</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>CMRDM — Corpus Monumentorum Religionis Dei Menis</authority>
+                <idno type="filename">CMRDM-AS-067</idno>
+                <idno type="TM"><!-- inserire TM number --></idno>
+                <idno type="CMRDM">CMRDM I 67</idno>
+            </publicationStmt>
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>in situ (house wall)</repository>
+                        <idno>CMRDM I 67</idno>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Fragment of marble stele built into house wall, Kavakli. </p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/48.html">marble</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/250.html">stele</objectType>
+                                    <dimensions unit="cm">
+                                        <height></height>
+                                        <width></width>
+                                        <depth></depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>Fragment of marble stele preserving traces of relief field. Confession-propitiation inscription of Philippikos son of Tapageos who committed perjury before Men Petraeites and Meter Tasene.</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Height of letters: DA_COMPILARE.</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="DA_COMPILARE">Kavakli area (Kula)</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">Kavakli, Turkey</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" precision="low"></origDate>
+                        </origin>
+                        <provenance type="found">Kavakli, Turkey</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+                <ab>
+                    <lb n="1"/>Μεγὰς [Μὴν]
+                    <lb n="2"/>Πετραείτης [τὴν κώμην βα-]
+                    <lb n="3"/>σιλεύων κα(ὶ) [μεγάλη θεῶν]
+                    <lb n="4"/>Μήτηρ Τάση[νη. Φιλίππι-]
+                    <lb n="5"/>κος Ταπαγ[έου, ἐπειδὴ Μ-]
+                    <lb n="6"/>[ηνὶ ἐπόιησ[ε ἐπιορκήσας,]
+                    <lb n="7"/>ἀπελεγχθε[ὶς ὑπὸ τῶν ἀν-]
+                    <lb n="8"/>τιδίκων νυ[ν ἱλασάμενος]
+                    <lb n="9"/>μετὰ υἱοῦ [ἐστηλλογρά-]
+                    <lb n="10"/>φησε τάς [δ]υ[νάμεις ὑμῶν]
+                    <lb n="11"/>Ἔτους σ[...  μη(νὸς) ...]
+                    <lb n="12"/>οῦ ηλ΄.
+                </ab>
+            </div>
+            <div type="apparatus"/>
+            <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="bibliography">
+                <listBibl>
+                    <bibl>Drexler, op. cit., col. 2702, no. 10</bibl>
+                    <bibl>Buresch, Reisebericht II, p. 98f.</bibl>
+                    <bibl>Perdrizet, op. cit., p. 57, no. 4</bibl>
+                    <bibl>Buresch, Aus Lydien, p. 111, no. 53</bibl>
+                    <bibl>Ramsay, Classical Review, XIII, 1899, p. 142</bibl>
+                    <bibl>K-P, II Reise, p. 105</bibl>
+                    <bibl>Steinleitner, op. cit., p. 29, no. 8</bibl>
+                    <bibl>Lane, I, p. 16, no. 8</bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

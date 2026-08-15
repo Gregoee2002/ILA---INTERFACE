@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Iscrizione greca</rs> — CMRDM I nr. 39: Pyramidal white marble stele with relief of praying woman, Gyölde</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>CMRDM — Corpus Monumentorum Religionis Dei Menis</authority>
+                <idno type="filename">CMRDM-AS-039</idno>
+                <idno type="TM"><!-- inserire TM number --></idno>
+                <idno type="CMRDM">CMRDM I 39</idno>
+            </publicationStmt>
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>Sardis Excavation collection</repository>
+                        <idno>CMRDM I 39</idno>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Pyramidal white marble stele with relief of praying woman, Gyölde. Height 32 cm., width 31 cm. at bottom, 23.5 cm. at top, thickness 4.2 cm.</p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/48.html">marble</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/250.html">stele</objectType>
+                                    <dimensions unit="cm">
+                                        <height>32</height>
+                                        <width>31</width>
+                                        <depth>4,2</depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>Pyramidal stele with representation of a woman standing with right hand uplifted in prayer. Dedication to Men Motellites by Trophime for her foster-son Iulianus.</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Height of letters: DA_COMPILARE.</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/609032">Gyölde area (Kula)</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">Gyölde, Turkey</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" notBefore-custom="228" notAfter-custom="229" precision="medium">228-229 A.D.</origDate>
+                        </origin>
+                        <provenance type="found">Gyölde, Turkey</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+                <ab>
+                    <lb n="1"/>Ἔτους τιγ΄, μη(νὸς) Ὁρπαίου
+                    <lb n="2"/>ηλ΄. Μηνὶ Μοτελλείτῃ
+                    <lb n="3"/>Τροφίμη ὑπὲρ Ἰουλιανοῦ
+                    <lb n="4"/>τοῦ θρεπτοῦ εὐχὴν
+                    <lb n="5"/>ἀνέστησεν.
+                </ab>
+            </div>
+            <div type="apparatus"/>
+            <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="bibliography">
+                <listBibl>
+                    <bibl>L. Robert, Nouvelles Inscriptions de Sardes, Paris, 1964, pp. 35-6 and Plate III, no. 1</bibl>
+                    <bibl>Lane, II, p. 46, no. 8</bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

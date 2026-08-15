@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Iscrizione greca</rs> — CMRDM I nr. 43: Marble stele with incised crescent, confession inscription, Ayazviran</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>CMRDM — Corpus Monumentorum Religionis Dei Menis</authority>
+                <idno type="filename">CMRDM-AS-043</idno>
+                <idno type="TM"><!-- inserire TM number --></idno>
+                <idno type="CMRDM">CMRDM I 43</idno>
+            </publicationStmt>
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>lost/unknown</repository>
+                        <idno>CMRDM I 43</idno>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Marble stele with incised crescent, confession inscription, Ayazviran. Height 1.10 m., width at top 42 cm., at bottom 50 cm.</p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/48.html">marble</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/250.html">stele</objectType>
+                                    <dimensions unit="cm">
+                                        <height>1,10</height>
+                                        <width></width>
+                                        <depth></depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>Long confession-propitiation stele with incised crescent at top, recording divine punishment of Hermogenes and Apollonios who wrongfully took pigs belonging to Zemaenetos and Papias.</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Height of letters: DA_COMPILARE.</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="DA_COMPILARE">Koresa (?)</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">Ayazviran, Turkey</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" notBefore-custom="114" notAfter-custom="115" precision="medium">114-115 A.D.</origDate>
+                        </origin>
+                        <provenance type="found">Ayazviran, Turkey</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+                <ab>
+                    <lb n="1"/>Μεγάλη Μήτηρ Ἀνδαεῖτις Ἄξι-
+                    <lb n="2"/>τα. κατέχουσα καὶ Μὲς Τιάμου
+                    <lb n="3"/>καὶ αι δυνάμεις αὐτῶν. Ἑρμογε-
+                    <lb n="4"/>νης καὶ Ἀπολλώνιος οἱ Ἀπολλω-
+                    <lb n="5"/>νίου Μίδου ἀπὸ Σύρου μαναρῶν
+                    <lb n="6"/>πλαξάμενοι χοίρων τριῶν ζη-
+                    <lb n="7"/>μαίνετου καὶ Παπίου ἐξ Ἀξι-
+                    <lb n="8"/>τῶν καὶ προσμισγόντων αὐτῶν
+                    <lb n="9"/>πρόβατοις τοῦ Ἑρμογένου καὶ Ἀ-
+                    <lb n="10"/>πολλωνίου, παιδίου αὐτῶν βόσ-
+                    <lb n="11"/>κοντος πεντάετους, καὶ ἀπαγα-
+                    <lb n="12"/>γόντων ἔσω, ὃ ἐτούντος δὲ τοῦ
+                    <lb n="13"/>ζημαίνετου καὶ τοῦ Παπίου οὐ-
+                    <lb n="14"/>κ ὡμολόγησαν διά τινα ἀκαριατί-\ναν. Ἐπέσταθη οὖν τῆς θεοῦ τὸ σκή-
+                    <lb n="15"/>πτρον καὶ τοῦ Κυρίου τοῦ Τιάμου.
+                    <lb n="16"/>Καὶ μὴ ὁμολογησάντων αὐτῶν ἡ
+                    <lb n="17"/>θεὸς οὖν ἔδειξεν τὰς ἰδίας αὐ-
+                    <lb n="18"/>νάμεις καὶ ἐλάσαντο αὐτὴν τελευ-
+                    <lb n="19"/>τήσαντος τοῦ Ἑρμογένου ἡ γυνὴ
+                    <lb n="20"/>αὐτοῦ καὶ τὸ τέκνον καὶ Ἀπολλώνι-
+                    <lb n="21"/>ος ὁ ἀδελφὸς τοῦ Ἑρμογένου. Καὶ
+                    <lb n="22"/>νῦν αὐτῇ μαρτυροῦμεν καὶ εὐλο-
+                    <lb n="23"/>γοῦμεν μετὰ τῶν τέκνων.
+                    <lb n="24"/>Ἔτους ρκθ΄.
+                </ab>
+            </div>
+            <div type="apparatus"/>
+            <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="bibliography">
+                <listBibl>
+                    <bibl>*A. Fontrier, Harmonia, 20 and 31 May 1900, no. 2</bibl>
+                    <bibl>J. Zingerle, JÖAI, XXIII, 1926, Beiblatt, cols. 1-15 and fig. 1</bibl>
+                    <bibl>SEG, IV, 1930, p. 123, no. 647</bibl>
+                    <bibl>Rostovzeff, SEHRE², p. 656, note 6</bibl>
+                    <bibl>Herrmann, op. cit., p. 30, note 102</bibl>
+                    <bibl>Lane, I, p. 18, no. 24</bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

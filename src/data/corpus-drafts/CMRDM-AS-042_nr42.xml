@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Iscrizione greca</rs> — CMRDM I nr. 42: Marble stele with confession inscription, Ayazviran</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>CMRDM — Corpus Monumentorum Religionis Dei Menis</authority>
+                <idno type="filename">CMRDM-AS-042</idno>
+                <idno type="TM"><!-- inserire TM number --></idno>
+                <idno type="CMRDM">CMRDM I 42</idno>
+            </publicationStmt>
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>in situ or lost</repository>
+                        <idno>CMRDM I 42</idno>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Marble stele with confession inscription, Ayazviran. Height 42 cm., width at top 34.5 cm., at bottom 37 cm., thickness 5 cm.</p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/48.html">marble</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/250.html">stele</objectType>
+                                    <dimensions unit="cm">
+                                        <height>42</height>
+                                        <width></width>
+                                        <depth>5</depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>Confession stele (stele of propitiation) recording divine punishment and the erection of a confession inscription by Iulia Metra, dedicated to Megale Meter Tasene, Men Lasanas, and Men Artemidarou.</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Height of letters: 1.5 to 1.6 cm.</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="DA_COMPILARE">Koresa (?)</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">Ayazviran, Turkey</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" notBefore-custom="143" notAfter-custom="144" precision="medium">143-144 A.D.</origDate>
+                        </origin>
+                        <provenance type="found">Ayazviran, Turkey</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+                <ab>
+                    <lb n="1"/>[Με]γάλη Μήτ[ηρ Τασηι-]
+                    <lb n="2"/>νὴ καὶ Μὲς Λασάνας [καὶ]
+                    <lb n="3"/>Μὲς Ἀρτεμιδώρου Δό-
+                    <lb n="4"/>ρου κώμην βασιλεύον-
+                    <lb n="5"/>τες. Ἔτους οκη΄, μη(νὸς) Δαισί-
+                    <lb n="6"/>ου ρε΄(βαστή), Ἰουλία Μητρὰ ἀνέ-
+                    <lb n="7"/>στησε σήλλην ἐπιζητη-
+                    <lb n="8"/>σάντων τῶν θεῶν τὴν γε-
+                    <lb n="9"/>γόνουσαν ἁμαρτίαν ὑπο
+                    <lb n="10"/>[...]
+                </ab>
+            </div>
+            <div type="apparatus"/>
+            <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="bibliography">
+                <listBibl>
+                    <bibl>K-P, II Reise, p. 103, no. 204</bibl>
+                    <bibl>Steinleitner, op. cit., p. 10, no. 1</bibl>
+                    <bibl>M. Rostovzeff, SEHRE², Oxford, 1957, p. 656, note 6</bibl>
+                    <bibl>Herrmann, op. cit., p. 45, note 174</bibl>
+                    <bibl>Lane, I, p. 18, no. 20</bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

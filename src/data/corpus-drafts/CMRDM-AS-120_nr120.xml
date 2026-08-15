@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Iscrizione greca</rs> — CMRDM I nr. 120: Two joining marble fragments with honorific inscription, Aphrodisias</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>CMRDM — Corpus Monumentorum Religionis Dei Menis</authority>
+                <idno type="filename">CMRDM-AS-120</idno>
+                <idno type="TM"><!-- inserire TM number --></idno>
+                <idno type="CMRDM">CMRDM I 120</idno>
+            </publicationStmt>
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>in situ (wall near stadium)</repository>
+                        <idno>CMRDM I 120</idno>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Two joining marble fragments with honorific inscription, Aphrodisias. a) height 47 cm., width 27 cm.; b) height 25 cm., width 13 cm.</p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/48.html">marble</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/189.html">block</objectType>
+                                    <dimensions unit="cm">
+                                        <height>47</height>
+                                        <width>27</width>
+                                        <depth></depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>Two joining marble fragments. Honorific inscription recording dedication of Nike and Leon statues to the Imperial gods and the demos by Kallikrates son of Molossos, priest of Men Askaienos and Hermes Agoraios.</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Height of letters: 2 to 2.5 cm.</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/638753">Aphrodisias</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">Geyre, Turkey</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" precision="low"></origDate>
+                        </origin>
+                        <provenance type="found">Geyre, Turkey</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+                <ab>
+                    <lb n="1"/>Νίκη πάρ[ε]ι[μ]
+                    <lb n="2"/>Καισαρ[ι] ἀεί.
+                    <lb n="3"/>Θεοῖς Σεβάστο[ις καὶ τῷ]
+                    <lb n="4"/>δ[ήμῳ] Νίκη[ν καὶ]-
+                    <lb n="5"/>την τὸν
+                    <lb n="6"/>[Α]εοντα [Καλλικράτης]
+                    <lb n="7"/>[Μ]ολοσσοῦ ἱε[ρεὺς Μηνὸς Ἀσ-]
+                    <lb n="8"/>καηνοῦ κα(ὶ) Ἑρ[μοῦ Ἀγοραίου, τὰ]
+                    <lb n="9"/>[πρ]οτονικὰ ἀν[αθήματα πάντα]
+                    <lb n="10"/>[ἐπ]ισκευάσας [ἀποκατέστησεν].
+                </ab>
+            </div>
+            <div type="apparatus"/>
+            <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="bibliography">
+                <listBibl>
+                    <bibl>MAMA, VIII, p. 94, no. 446 and Pl. 36</bibl>
+                    <bibl>Lane, I, p. 27, no. 3</bibl>
+                    <bibl>Robert, Hellenica, XIII, p. 128-9</bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

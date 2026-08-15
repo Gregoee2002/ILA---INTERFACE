@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Iscrizione greca</rs> — CMRDM I nr. 121: Altar with relief of Men on horseback and long inscription, Burdur (Antalya Museum)</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>CMRDM — Corpus Monumentorum Religionis Dei Menis</authority>
+                <idno type="filename">CMRDM-AS-121</idno>
+                <idno type="TM"><!-- inserire TM number --></idno>
+                <idno type="CMRDM">CMRDM I 121</idno>
+            </publicationStmt>
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>Antalya Museum</repository>
+                        <idno>CMRDM I 121</idno>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Altar with relief of Men on horseback and long inscription, Burdur (Antalya Museum). Height 86.5 cm., width 42 cm., thickness 38 cm.</p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/138.html">stone</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/29.html">altar</objectType>
+                                    <dimensions unit="cm">
+                                        <height>86,5</height>
+                                        <width>42</width>
+                                        <depth>38</depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>Altar with relief on three faces: seated goddess with scepter (right), Hermes with caduceus (left), Men on horseback going right at gallop (back). Main inscribed face records Artemon son of Ailios and then Rhopson son of Neoges Sophos, assistant of Men Kleinas, who dedicated cult furnishings from his own funds.</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Height of letters: DA_COMPILARE.</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/609347">Burdur area</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">Burdur, Turkey</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" precision="low"></origDate>
+                        </origin>
+                        <provenance type="found">Burdur, Turkey</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+                <ab>
+                    <lb n="1"/>[Ἀρτ]έμων Αἰλίο[υ] Μυ[........]
+                    <lb n="2"/>ἠργάσετο
+                    <lb n="3"/>[Ῥό]ψων Νεωγ[ης] Σώφου, παρ[ε-]
+                    <lb n="4"/>δρος τοῦ Μηνὸς Κλεί-
+                    <lb n="5"/>νᾶς Μν [σὺν κατ]αρτισμῷ
+                    <lb n="6"/>καὶ τραπέζης Μο
+                    <lb n="7"/>[ἀ]νακλητήρια τέσσερα
+                    <lb n="8"/>[σὺν καὶ τῷ] πε[ρι]βόλῳ κα[ὶ]
+                    <lb n="9"/>[........]τήν μέσην καὶ
+                    <lb n="10"/>[θυ]ρίδα κανκελωτὴν
+                    <lb n="11"/>τὴν ἐπούσα τέ τῷ ταμί[ῳ]
+                    <lb n="12"/>καὶ κῆπον σὺν τῷ πεπ[η-]
+                    <lb n="13"/>[ρανέ]νω καὶ *
+                    <lb n="14"/>γμένῳ ξυλικῷ καὶ θησαυ-
+                    <lb n="15"/>λοθ[ή]κην καὶ τοὺς βωμοὺς
+                    <lb n="16"/>* ε * δ΄, ἐκ τῶν ἰδίων ἀνέθηκεν.
+                </ab>
+            </div>
+            <div type="apparatus"/>
+            <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="bibliography">
+                <listBibl>
+                    <bibl>L. Robert, Hellenica, IX, 1950, p. 39ff. and Plates VI-VIII</bibl>
+                    <bibl>REG, LXIV, 1951, p. 191, no. 217</bibl>
+                    <bibl>Robert, REG, LXV, 1952, p. 176, no. 155</bibl>
+                    <bibl>Bean, JHS, LXXII, 1952, p. 118</bibl>
+                    <bibl>SEG, XVII, 1960, p. 148, no. 545</bibl>
+                    <bibl>Lane, I, p. 43, no. 3</bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

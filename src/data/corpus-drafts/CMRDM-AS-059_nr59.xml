@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Iscrizione greca</rs> — CMRDM I nr. 59: Marble plaque with relief of two feet, Kula</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>CMRDM — Corpus Monumentorum Religionis Dei Menis</authority>
+                <idno type="filename">CMRDM-AS-059</idno>
+                <idno type="TM"><!-- inserire TM number --></idno>
+                <idno type="CMRDM">CMRDM I 59</idno>
+            </publicationStmt>
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>in situ or lost</repository>
+                        <idno>CMRDM I 59</idno>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Marble plaque with relief of two feet, Kula. Height 18 cm., width 30 cm., thickness 4 cm.</p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/48.html">marble</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/53.html">plaque</objectType>
+                                    <dimensions unit="cm">
+                                        <height>18</height>
+                                        <width>30</width>
+                                        <depth>4</depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>Plaque with relief of two feet (body-part ex-voto). Dedication to Artemis Andaetis and Men Tiamos by Meltine for the health of her feet.</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Height of letters: DA_COMPILARE.</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/609032">Coloe</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">Kula, Turkey</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" precision="low"></origDate>
+                        </origin>
+                        <provenance type="found">Kula, Turkey</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+                <ab>
+                    <lb n="1"/>Ἀρτέμιδι Ἀνδαείτι καὶ
+                    <lb n="2"/>Μηνὶ Τιάμου Μελτίνη
+                    <lb n="3"/>[ὑ]πὲρ τῆς ὁλοκληρίας
+                    <lb n="4"/>[τῶν] ποδῶν εὐχὴν
+                    <lb n="5"/>[ἀνέσ]τησεν.
+                </ab>
+            </div>
+            <div type="apparatus"/>
+            <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="bibliography">
+                <listBibl>
+                    <bibl>Mouseion kai Bibliotheke, III, 1-2, 1880, p. 127, no. 165</bibl>
+                    <bibl>Foucart, BCH, IV, 1880, p. 128</bibl>
+                    <bibl>Drexler, op. cit., col. 2703, no. 15</bibl>
+                    <bibl>Reinach, RA, 1885, II, p. 107 and 1886, I, p. 156</bibl>
+                    <bibl>Leemans, op. cit., p. 39</bibl>
+                    <bibl>Perdrizet, op. cit., p. 58, middle, no. 1</bibl>
+                    <bibl>Dittenberger, SIG³, no. 1142</bibl>
+                    <bibl>Lane, I, p. 17, no. 13</bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

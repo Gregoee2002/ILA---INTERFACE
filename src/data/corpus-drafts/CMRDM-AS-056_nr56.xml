@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Iscrizione greca</rs> — CMRDM I nr. 56: Fragment of marble with inscription, Görnevit</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>CMRDM — Corpus Monumentorum Religionis Dei Menis</authority>
+                <idno type="filename">CMRDM-AS-056</idno>
+                <idno type="TM"><!-- inserire TM number --></idno>
+                <idno type="CMRDM">CMRDM I 56</idno>
+            </publicationStmt>
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>in situ (house wall)</repository>
+                        <idno>CMRDM I 56</idno>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Fragment of marble with inscription, Görnevit. </p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/48.html">marble</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/189.html">fragment</objectType>
+                                    <dimensions unit="cm">
+                                        <height></height>
+                                        <width></width>
+                                        <depth></depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>Fragment of marble built into outer wall of house. Inscription with date in Sullan era (66-67 A.D.) dedicated to Men Kamarites, known as a by-name of Men from coins of Nysa.</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Height of letters: DA_COMPILARE.</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="DA_COMPILARE">Görnevit area (Kula)</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">Görnevit, Turkey</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" notBefore-custom="66" notAfter-custom="67" precision="medium">66-67 A.D.</origDate>
+                        </origin>
+                        <provenance type="found">Görnevit, Turkey</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+                <ab>
+                    <lb n="1"/>[Μηνὶ Καμα-]
+                    <lb n="2"/>ρείτῃ ε[ὐχὴν]
+                    <lb n="3"/>Ἡρακλείδης Με-
+                    <lb n="4"/>νεκράτους,
+                    <lb n="5"/>ἔτους ρνα΄, μη-
+                    <lb n="6"/>νὸς Γορπια[ίου
+                    <lb n="7"/>ἀνέθηκεν.
+                </ab>
+            </div>
+            <div type="apparatus"/>
+            <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="bibliography">
+                <listBibl>
+                    <bibl>Buresch, Reisebericht II, p. 96f.</bibl>
+                    <bibl>Buresch, Aus Lydien, p. 85, no. 41</bibl>
+                    <bibl>Lane, I, p. 18, no. 23</bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

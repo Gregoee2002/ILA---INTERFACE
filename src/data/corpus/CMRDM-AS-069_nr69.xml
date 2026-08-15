@@ -60,19 +60,6 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
-    <xenoData>
-        <iconography>
-            <function key="confession"/>
-            <figure n="1" type="deity" key="Men">
-                <trait type="held_object" key="staff"/>
-                <trait type="held_object" key="pine_cone"/>
-            </figure>
-            <figure n="2" type="worshipper" key="fanciullo">
-                <trait type="gesture" key="hands_raised"/>
-            </figure>
-            <note>Raffigurato anche un indumento (veste) accanto alle figure — probabile richiamo alla veste rubata citata nel testo («a garment was stolen from a bathhouse»). Elemento isolato non coperto dal vocabolario controllato, lasciato in nota libera.</note>
-        </iconography>
-    </xenoData>
     </teiHeader>
     <text>
         <body>

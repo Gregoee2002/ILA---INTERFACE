@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Iscrizione greca</rs> — CMRDM I nr. 33: Marble(?) plaque with relief of crescent, Gyölde</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>CMRDM — Corpus Monumentorum Religionis Dei Menis</authority>
+                <idno type="filename">CMRDM-AS-033</idno>
+                <idno type="TM"><!-- inserire TM number --></idno>
+                <idno type="CMRDM">CMRDM I 33</idno>
+            </publicationStmt>
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>in situ or lost</repository>
+                        <idno>CMRDM I 33</idno>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Marble(?) plaque with relief of crescent, Gyölde. </p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/48.html">marble</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/53.html">plaque</objectType>
+                                    <dimensions unit="cm">
+                                        <height></height>
+                                        <width></width>
+                                        <depth></depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>Plaque with crescent moon in relief and inscription dated by Sullan era (122-123 A.D.), dedication by a slave of Tiberius Philocalos to Men Axiottenos.</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Height of letters: DA_COMPILARE.</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/609032">Gyölde area (Kula)</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">Gyölde, Turkey</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" notBefore-custom="122" notAfter-custom="123" precision="medium">122-123 A.D. (Sullan era)</origDate>
+                        </origin>
+                        <provenance type="found">Gyölde, Turkey</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+                <ab>
+                    <lb n="1"/>Ἔτους σιδ΄, μη(νὸς) Δαισίκου τδ΄, κατ᾽ ἐπιτάγην
+                    <lb n="2"/>Μηνὸς Ἀρτεμιδώρου
+                    <lb n="3"/>Ἀξιοτ-τηνοῦ, Ἥπιος Τ[ι]βερίου Φιλοκάλου δοῦλος ὑπὲρ ἑαυτοῦ καὶ
+                    <lb n="4"/>τῶν τέκνων ἀνέθηκεν.
+                </ab>
+            </div>
+            <div type="apparatus"/>
+            <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="bibliography">
+                <listBibl>
+                    <bibl>CIG, (1828-77), 3448</bibl>
+                    <bibl>G. Keppel, Narrative of a journey across the Balcan, London, 1831, II, p. 357, no. 1</bibl>
+                    <bibl>P. LeBas and W.H. Waddington, Voyage Archéologique en Grèce et en Asie Mineure, Paris ca. 1870, III, i, p. 217, no. 680</bibl>
+                    <bibl>Drexler, col. 2700, no. 4</bibl>
+                    <bibl>Lane, I, p. 15, Lydia, no. 4</bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

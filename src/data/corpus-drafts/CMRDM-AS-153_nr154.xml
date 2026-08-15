@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Iscrizione greca</rs> — CMRDM I nr. 154: Stone with funerary curse invoking Men, Lystra</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>CMRDM — Corpus Monumentorum Religionis Dei Menis</authority>
+                <idno type="filename">CMRDM-AS-153</idno>
+                <idno type="TM"><!-- inserire TM number --></idno>
+                <idno type="CMRDM">CMRDM I 154</idno>
+            </publicationStmt>
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>in situ or lost</repository>
+                        <idno>CMRDM I 154</idno>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Stone with funerary curse invoking Men, Lystra. </p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/138.html">stone</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/250.html">stone</objectType>
+                                    <dimensions unit="cm">
+                                        <height></height>
+                                        <width></width>
+                                        <depth></depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>Stone found in Eastern Cemetery. Funerary curse invoking Men above and below (heavenly and chthonian) against tomb violators.</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Height of letters: DA_COMPILARE.</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/629018">Lystra</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">Hatunsaray, Turkey</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" precision="low"></origDate>
+                        </origin>
+                        <provenance type="found">Hatunsaray, Turkey</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+                <ab>
+                    <lb n="1"/>[Ὁ καλούμ]ενιος φρονῶν ἐπόησεν ἑαυτῷ
+                    <lb n="2"/>[καὶ Βαδ]ε τῇ ἰδ[ίᾳ] γυναικί· [μ]νήμης ἕνεκεν·
+                    <lb n="3"/>[ὃς δ᾽ ἄν ἀδ]ικήσῃ τὸ [μ]νῆμα, Μῆνα ἄνωθεν καὶ κατο-
+                    <lb n="4"/>[θεν κεκολωμένους ἔχοιτο.]
+                </ab>
+            </div>
+            <div type="apparatus"/>
+            <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="bibliography">
+                <listBibl>
+                    <bibl>Sterrett, Wolfe Expedition, p. 146, no. 251</bibl>
+                    <bibl>Drexler, op. cit., col. 2726</bibl>
+                    <bibl>Perdrizet, op. cit., p. 69, no. 4</bibl>
+                    <bibl>Ramsay, Social Basis, p. 196, no. 204</bibl>
+                    <bibl>Lane, I, p. 46, no. 3</bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

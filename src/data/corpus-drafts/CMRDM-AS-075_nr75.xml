@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Iscrizione greca</rs> — CMRDM I nr. 75: Stone with inscription honoring a cult official at Darmara/Tire</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>CMRDM — Corpus Monumentorum Religionis Dei Menis</authority>
+                <idno type="filename">CMRDM-AS-075</idno>
+                <idno type="TM"><!-- inserire TM number --></idno>
+                <idno type="CMRDM">CMRDM I 75</idno>
+            </publicationStmt>
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>in situ or lost</repository>
+                        <idno>CMRDM I 75</idno>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Stone with inscription honoring a cult official at Darmara/Tire. </p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/138.html">stone</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/250.html">stone</objectType>
+                                    <dimensions unit="cm">
+                                        <height></height>
+                                        <width></width>
+                                        <depth></depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>Honorific inscription for Publius Aelius Menekrates who donated a silver-covered basket for the Demeter mysteries and a silver sema for the presiding deity Men of the village, also consecrating his workshops for the annual procession.</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Height of letters: DA_COMPILARE.</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="DA_COMPILARE">Darmara (area of Tire)</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">Tire, Turkey</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" precision="low"></origDate>
+                        </origin>
+                        <provenance type="found">Tire, Turkey</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+                <ab>
+                    <lb n="1"/>ΟΜ
+                    <lb n="2"/>Π(όπλιον) Αἴλιον Μενεκράτην
+                    <lb n="3"/>τ[ῇ] ἱερεῖᾳ τῆς Δήμητρος
+                    <lb n="4"/>ἀνενέγκαντος καὶ καθιέρω-
+                    <lb n="5"/>σαντος καλάθον περιάργυρον
+                    <lb n="6"/>τὸν λείποντα τοῖς τῆς Δήμη-
+                    <lb n="7"/>τρος μυστηρίοις, καὶ τῷ προκα-
+                    <lb n="8"/>θημένῳ τῆς κώμης Μηνὶ σή-
+                    <lb n="9"/>μαν περιάργυρον, τὴν προ-
+                    <lb n="10"/>πομπεύουσαν τῶν μυστηρί-
+                    <lb n="11"/>ων αὐτοῦ. Διὰ τε τοῦτο καθι-
+                    <lb n="12"/>έρωσεν ὑπὲρ τῆς ἱεροσύνης
+                    <lb n="13"/>εἰς τὰς ἐπιθυσίας τῆς Δήμη-
+                    <lb n="14"/>τρος τὰ πρὸ τῆς οἰκίας ἐργα-
+                    <lb n="15"/>στήρια εἰς τὸ κατ᾽ ἐνιαυτὸν
+                    <lb n="16"/>ἕκαστον τῇ τοῦ καλάθου
+                    <lb n="17"/>ἀναφορᾷ τοὺς κληρωθέν-
+                    <lb n="18"/>τας εἰς τὴν πομπὴν ἄνδρας
+                    <lb n="19"/>μετ[ὰ] τῶν ἀρχόντων προθυ-
+                    <lb n="20"/>σιάσαι εὐωχηθῆναι ἐν τῇ
+                    <lb n="21"/>οἰκίᾳ αὐτοῦ διὰ παντὸς τοῦ
+                    <lb n="22"/>βίου.
+                    <lb n="23"/>Ἐπὶ ἄρχοντος τῆς κατοικίας
+                    <lb n="24"/>Βερίου Βάσσου φιλοσεβάστου καὶ
+                    <lb n="25"/>τῶν συναρχόντων αὐτοῦ.
+                </ab>
+            </div>
+            <div type="apparatus"/>
+            <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="bibliography">
+                <listBibl>
+                    <bibl>Drexler, op. cit., col. 2708</bibl>
+                    <bibl>Kontoleon, REG, V, 1892, p. 341</bibl>
+                    <bibl>T. Homolle, BCH, XVIII, 1894, p. 539</bibl>
+                    <bibl>AM, XX, 1895, p. 242</bibl>
+                    <bibl>*Buresch, Harmonia, 1 and 12 April, 1895</bibl>
+                    <bibl>K-P, II Reise, p. 175</bibl>
+                    <bibl>Lane, I, p. 21, no. 30</bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

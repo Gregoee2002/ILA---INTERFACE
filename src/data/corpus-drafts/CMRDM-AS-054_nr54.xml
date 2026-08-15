@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Iscrizione greca</rs> — CMRDM I nr. 54: Stele with relief (Men and Zeus Masphalatenos) and inscription, Maeonia</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>CMRDM — Corpus Monumentorum Religionis Dei Menis</authority>
+                <idno type="filename">CMRDM-AS-054</idno>
+                <idno type="TM"><!-- inserire TM number --></idno>
+                <idno type="CMRDM">CMRDM I 54</idno>
+            </publicationStmt>
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>in situ or lost</repository>
+                        <idno>CMRDM I 54</idno>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Stele with relief (Men and Zeus Masphalatenos) and inscription, Maeonia. </p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/138.html">stone</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/250.html">stele</objectType>
+                                    <dimensions unit="cm">
+                                        <height></height>
+                                        <width></width>
+                                        <depth></depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>Stele with relief showing Men standing with crescent, Phrygian cap, spear and pine-cone, left foot on prostrate bull; Zeus Masphalatenos with eagle and staff to right. Long list of dedicants.</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Height of letters: DA_COMPILARE.</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/609032">Maeonia</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">Kula, Turkey</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" notBefore-custom="171" notAfter-custom="172" precision="medium">171-172 A.D.</origDate>
+                        </origin>
+                        <provenance type="found">Kula, Turkey</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+                <ab>
+                    <lb n="1"/>Ἱερὸς συμβιωσίς καὶ νεώτερα κατ᾽ ἐπι-
+                    <lb n="2"/>ταγὴν τοῦ κοιρίου τυράννου Διὸς Μας-
+                    <lb n="3"/>φαλατηνοῦ καὶ Μηνὶ Τιάμου εὐχήν. Ἰουλ(ί)-
+                    <lb n="4"/>ανος Μενεκράτου, Μενεκράτης Διοδω-
+                    <lb n="5"/>ρου, Διονύσιος Παπίου, Ἑρμογένης Ἑρ-
+                    <lb n="6"/>μίππου, Λουκᾶς Ὀνησίμου, Διογένης
+                    <lb n="7"/>Γλύκωνος, Διογένης Μαξίμου, Τρόφιμ[ος]
+                    <lb n="8"/>Ἑρμίππου, Ἀπολλώνιος W, Θεόδωρος W,
+                    <lb n="9"/>Μαρκιανᾶς W, Μένανδρος Ἑρμογένου, Ἑρ-
+                    <lb n="10"/>μογένης Στατιανοῦ, Μητρόδωρος Εὐελπίσ-
+                    <lb n="11"/>του, Ἀσκληπιάδης Μαρκιανοῦ, Ἀσκληπιά-
+                    <lb n="12"/>δης Διονύσιου, Ἑρμογένης Τροφίμου,
+                    <lb n="13"/>Βάζηλος Ἑρμογένου, ἐπιμελησαμένων
+                    <lb n="14"/>Ἰουλιάνου καὶ Ἑρμογένου. Ἔτους σνε΄, μη(νὸς) Π(υστρου).
+                </ab>
+            </div>
+            <div type="apparatus"/>
+            <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="bibliography">
+                <listBibl>
+                    <bibl>CIG, 3438</bibl>
+                    <bibl>Keppel, op. cit., II, p. 349-50, no. 5</bibl>
+                    <bibl>Texier, op. cit., p. 136, Pl. 52</bibl>
+                    <bibl>Le Bas-Waddington, op. cit., III, i, p. 212, no. 667</bibl>
+                    <bibl>Daremberg-Saglio, III, ii, p. 1384, fig. 4665</bibl>
+                    <bibl>P. Foucart, BCH, IV, 1880, p. 129</bibl>
+                    <bibl>Drexler, op. cit., col. 2703, no. 14</bibl>
+                    <bibl>Leemans, op. cit., p. 38</bibl>
+                    <bibl>Roscher, op. cit., p. 125d and Pl. II top</bibl>
+                    <bibl>Perdrizet, op. cit., p. 60, no. 1</bibl>
+                    <bibl>F. Cumont, Textes et monuments, Brussels 1899, II, p. 220, fig. 50</bibl>
+                    <bibl>A.B. Cook, Zeus, I, p. 731, fig. 540</bibl>
+                    <bibl>Vermaseren, Vigiliae Christianae, IV, 1950, pp. 142-156</bibl>
+                    <bibl>Herrmann, op. cit., p. 43</bibl>
+                    <bibl>Lane, I, p. 16, no. 12</bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Iscrizione greca</rs> — CMRDM I nr. 61: Plaque with confession inscription, Kula</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>CMRDM — Corpus Monumentorum Religionis Dei Menis</authority>
+                <idno type="filename">CMRDM-AS-061</idno>
+                <idno type="TM"><!-- inserire TM number --></idno>
+                <idno type="CMRDM">CMRDM I 61</idno>
+            </publicationStmt>
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>lost/unknown</repository>
+                        <idno>CMRDM I 61</idno>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Plaque with confession inscription, Kula. 45 cm. × 40 cm. × 5 cm.</p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/138.html">stone</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/53.html">plaque</objectType>
+                                    <dimensions unit="cm">
+                                        <height></height>
+                                        <width></width>
+                                        <depth></depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>Plaque with confession inscription recording a dedication by divine command to Men Tyrannos, Zeus Ogmenos and their associated deities.</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Height of letters: DA_COMPILARE.</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/609032">Coloe</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">Kula, Turkey</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" notBefore-custom="142" notAfter-custom="143" precision="medium">142-143 A.D.</origDate>
+                        </origin>
+                        <provenance type="found">Kula, Turkey</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+                <ab>
+                    <lb n="1"/>[Ἔτ]ους σκε΄ Ἀρτεμ[ιδώρο-]
+                    <lb n="2"/>ς Διοδότου καὶ Ἀ[μμιάς
+                    <lb n="3"/>μετὰ τῶν συγγενῶν ἐξ ἑαυ-
+                    <lb n="4"/>τῶν καὶ μὴ ἑαυτῶν ΜΗΡ-
+                    <lb n="5"/>ον κατ᾽ ἐπιταγὴν Μηνὶ
+                    <lb n="6"/>Τυράννῳ καὶ Διὶ Ὀγμην-
+                    <lb n="7"/>ῷ καὶ τοῖς σὺν αὐτῷ θεοῖς.
+                </ab>
+            </div>
+            <div type="apparatus"/>
+            <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="bibliography">
+                <listBibl>
+                    <bibl>Mouseion kai Bibliotheke, III, i-ii, 1880, p. 162, no. τκς'</bibl>
+                    <bibl>Drexler, op. cit., col. 2704, no. 20</bibl>
+                    <bibl>W. Fröhner, Philologus, Supplement V, 1889, p. 26, no. 25</bibl>
+                    <bibl>Ramsay, JHS, X, 1889, p. 227, no. 24</bibl>
+                    <bibl>Perdrizet, op. cit., p. 57, no. 1</bibl>
+                    <bibl>Buresch, Aus Lydien, p. 87</bibl>
+                    <bibl>Kontoleon, REG, XIV, 1901, p. 302, no. 2</bibl>
+                    <bibl>Steinleitner, op. cit., p. 36, no. 11</bibl>
+                    <bibl>Lane, I, p. 17, no. 17</bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

@@ -41,10 +41,10 @@ import {
   Check,
   AlertTriangle,
   Feather,
-  FlaskConical,
   ZoomIn,
   ZoomOut,
-  RotateCcw
+  RotateCcw,
+  GitCompare
 } from 'lucide-react';
 import { cn, EASE_OUT, EASE_IN, SPRING_SNAPPY, SPRING_SOFT } from './lib/utils';
 import { ICONOGRAPHY_LABELS } from './lib/iconographyLabels';
@@ -58,7 +58,7 @@ import { MapView } from './components/MapView';
 import { IconographyPanel } from './components/IconographyPanel';
 import { CooccurrenceHeatmap } from './components/CooccurrenceHeatmap';
 import { SectionEditorView } from './components/SectionEditorView';
-import { TestDataPanel } from './components/TestDataPanel';
+import { DraftReviewPanel } from './components/DraftReviewPanel';
 import { auth, loginWithGoogle, logout } from './lib/firebase';
 import { onAuthStateChanged, User } from 'firebase/auth';
 
@@ -74,7 +74,7 @@ interface SearchResult {
   matchInSupplied: boolean;
 }
 
-type AppView = 'home' | 'catalog' | 'stats' | 'timeline' | 'health' | 'map' | 'heatmap' | 'editor' | 'testdata';
+type AppView = 'home' | 'catalog' | 'stats' | 'timeline' | 'health' | 'map' | 'heatmap' | 'editor' | 'review';
 
 // Curve condivise: stessa "fisica" per tutte le micro-animazioni del progetto
 // Unica fonte per l'email amministratore lato client — evita che le ~10
@@ -892,8 +892,8 @@ const RAIL_ITEMS: { view: AppView; label: string; icon: React.ReactNode }[] = [
   { view: 'stats', label: 'Statistiche Epiteti', icon: <BarChart2 className="h-4 w-4" /> },
   { view: 'heatmap', label: 'Heatmap Co-occorrenze', icon: <Columns className="h-4 w-4" /> },
   { view: 'health', label: 'Coerenza', icon: <Check className="h-4 w-4" /> },
-  { view: 'testdata', label: 'Reali vs. Test', icon: <FlaskConical className="h-4 w-4" /> },
   { view: 'editor', label: 'Editor XML', icon: <Feather className="h-4 w-4" /> },
+  { view: 'review', label: 'Revisione Draft', icon: <GitCompare className="h-4 w-4" /> },
 ];
 
 // Sotto la soglia `md` (768px) di Tailwind, la rail verticale lascia il posto a una barra inferiore.
@@ -4496,7 +4496,7 @@ export default function App() {
             </div>
           )}
           {activeView === 'health' && <CorpusHealth monumenti={monumenti} onSelectMonumento={(m) => { setSelectedMonumento(m); setActiveView('catalog'); }} />}
-          {activeView === 'testdata' && <TestDataPanel monumenti={monumenti} onSelectMonumento={(m) => { setSelectedMonumento(m); setActiveView('catalog'); }} />}
+          {activeView === 'review' && <DraftReviewPanel />}
           {activeView === 'editor' && (
             <SectionEditorView
               monumenti={monumenti}

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Iscrizione greca</rs> — CMRDM I nr. 155: Stone with funerary inscription invoking Men, area of Savatra (Ennek)</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>CMRDM — Corpus Monumentorum Religionis Dei Menis</authority>
+                <idno type="filename">CMRDM-AS-154</idno>
+                <idno type="TM"><!-- inserire TM number --></idno>
+                <idno type="CMRDM">CMRDM I 155</idno>
+            </publicationStmt>
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>in situ or lost</repository>
+                        <idno>CMRDM I 155</idno>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Stone with funerary inscription invoking Men, area of Savatra (Ennek). </p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/138.html">stone</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/250.html">stone</objectType>
+                                    <dimensions unit="cm">
+                                        <height></height>
+                                        <width></width>
+                                        <depth></depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>Stone built into doorway of a hut. Diadoumenos dedicates tomb for himself and his companion Helias, invoking three Men gods (divine triad) to exclude all other burials except Artemesia his own person.</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Height of letters: DA_COMPILARE.</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="DA_COMPILARE">Savatra area</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">Ennek, Turkey</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" precision="low"></origDate>
+                        </origin>
+                        <provenance type="found">Ennek, Turkey</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+                <ab>
+                    <lb n="1"/>Διαδούμε-
+                    <lb n="2"/>νος ἑαυτῷ καὶ
+                    <lb n="3"/>Ἡλιάδι τῇ συνεί-
+                    <lb n="4"/>δι τὸν βωμὸν
+                    <lb n="5"/>καὶ τὴν στήλην
+                    <lb n="6"/>καὶ τὰ πέλτα, καὶ
+                    <lb n="7"/>ἐνορκῶ τρεῖς θ[εοὺς]
+                    <lb n="8"/>Μῆνας ἀνεπιτά[κτως]
+                    <lb n="9"/>μηδένα ἕτερον ε-
+                    <lb n="10"/>πεισενεχθῆναι ἢ
+                    <lb n="11"/>μόνην Ἀρτεμεισίαν ἣν
+                    <lb n="12"/>ἐμήν,
+                </ab>
+            </div>
+            <div type="apparatus"/>
+            <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="bibliography">
+                <listBibl>
+                    <bibl>T.A. Callander, Studies in the History and Art of the Eastern Provinces, Aberdeen 1906, p. 160, no. 9</bibl>
+                    <bibl>H. Swoboda et al., Denkmäler, p. 18</bibl>
+                    <bibl>Lane, I, p. 46, no. 7</bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

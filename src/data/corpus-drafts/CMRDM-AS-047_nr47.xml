@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Iscrizione greca</rs> — CMRDM I nr. 47: Marble stele broken in two with relief of female figure and crescent, Ayazviran area</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>CMRDM — Corpus Monumentorum Religionis Dei Menis</authority>
+                <idno type="filename">CMRDM-AS-047</idno>
+                <idno type="TM"><!-- inserire TM number --></idno>
+                <idno type="CMRDM">CMRDM I 47</idno>
+            </publicationStmt>
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>in situ or lost</repository>
+                        <idno>CMRDM I 47</idno>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Marble stele broken in two with relief of female figure and crescent, Ayazviran area. Height 1.04 m., width 42 cm., thickness 8 cm.</p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/48.html">marble</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/250.html">stele</objectType>
+                                    <dimensions unit="cm">
+                                        <height>1,04</height>
+                                        <width>42</width>
+                                        <depth>8</depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>Stele with relief showing female figure, crescent, and double axe. Records divine punishment of Trarimes daughter of Artemidoros for refusing to enter the service of Men Axiottenos of Koresa.</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Height of letters: 1.5 cm.</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="DA_COMPILARE">Koresa (?)</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">Ayazviran, Turkey</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" notBefore-custom="118" notAfter-custom="119" precision="medium">118-119 A.D.</origDate>
+                        </origin>
+                        <provenance type="found">Ayazviran, Turkey</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+                <ab>
+                    <lb n="1"/>Ἔτους σγ΄, μ(η-
+                    <lb n="2"/>νὸς) Ἀρτεμεισίους, ἐ-
+                    <lb n="3"/>πὶ Τραρίμη, Ἀρτεμιδώρου Κι-
+                    <lb n="4"/>κιωνάδος κληθεῖσα ὑπὸ τοῦ
+                    <lb n="5"/>θεοῦ εἰς ὑπηρεσίαν χάριν μὴ
+                    <lb n="6"/>βουληθοῦσα τάχεως προσελ-
+                    <lb n="7"/>θεῖν ἐκολάσετο αὐτὴν καὶ μα-
+                    <lb n="8"/>νῆναί τε ἐποίησεν. Ἠρώτησε οὖν Μη-
+                    <lb n="9"/>τέρα Τάρρηνην καὶ Ἀπόλλωνα Ταρσί-
+                    <lb n="10"/>ον καὶ Μῆνα Ἀρτεμιδώρου Ἀξι-
+                    <lb n="11"/>οττηνὸν Κορεσσα κατέχοντα
+                    <lb n="12"/>καὶ ἐκέλευσεν στηλογραφ-
+                    <lb n="13"/>ῆσθαι νέμεσιν καὶ κατάγρα-
+                    <lb n="14"/>φαι ἐμαυτὸν εἰς ὑπηρεσίαν
+                    <lb n="15"/>τοῖς θεοῖς.
+                </ab>
+            </div>
+            <div type="apparatus"/>
+            <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="bibliography">
+                <listBibl>
+                    <bibl>Herrmann, op. cit., p. 24, no. 18, Plate VI, no. 1</bibl>
+                    <bibl>Robert, REG, LXXVI, 1963, p. 166-7, no. 224</bibl>
+                    <bibl>Lane, I, p. 50, no. A1</bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

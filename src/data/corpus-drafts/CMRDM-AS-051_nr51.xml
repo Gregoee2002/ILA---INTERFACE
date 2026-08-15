@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Iscrizione greca</rs> — CMRDM I nr. 51: Marble stele with moulding, confession-propitiation inscription, Aivatlar</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>CMRDM — Corpus Monumentorum Religionis Dei Menis</authority>
+                <idno type="filename">CMRDM-AS-051</idno>
+                <idno type="TM"><!-- inserire TM number --></idno>
+                <idno type="CMRDM">CMRDM I 51</idno>
+            </publicationStmt>
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>lost/unknown</repository>
+                        <idno>CMRDM I 51</idno>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Marble stele with moulding, confession-propitiation inscription, Aivatlar. Height 78 cm., width 38-40 cm., thickness 4 cm.</p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/48.html">marble</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/250.html">stele</objectType>
+                                    <dimensions unit="cm">
+                                        <height>78</height>
+                                        <width></width>
+                                        <depth>4</depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>Confession-propitiation stele (two lines erased at top) recording divine punishment of Skollos who swore falsely before Megale Meter and Men Tiamos. After his death his daughter Tatia propitiates the gods.</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Height of letters: DA_COMPILARE.</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/609032">Aivatlar area (Kula)</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">Aivatlar, Turkey</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" notBefore-custom="118" notAfter-custom="119" precision="medium">118-119 A.D.</origDate>
+                        </origin>
+                        <provenance type="found">Aivatlar, Turkey</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+                <ab>
+                    <lb n="1"/>[Μεγάλη Μήτηρ Ἀ-τίμιτς]
+                    <lb n="2"/>[καὶ μέγας Μὴν Τιάμου ἐν ...]
+                    <lb n="3"/>[... κώμην βασιλεύ]ων καὶ ἡ Δύ-
+                    <lb n="4"/>[ναμις αὐτῶν μεγάλη.] Ἀπολλώνιος
+                    <lb n="5"/>[φύπάρχοντα χαλκ]οῦ μύρια. Εἶτα ἀπαι-
+                    <lb n="6"/>τοῦντος τοῦ Ἀπολλωνίου τὸν χαλ-
+                    <lb n="7"/>κὸν παρὰ τοῦ Σκόλλου ὤμοσε τοὺς
+                    <lb n="8"/>προγεγραμ(μέ)νους θεοὺς εἰς πρό-
+                    <lb n="9"/>θεσμιαν ἀποδοῦναι τὸ
+                    <lb n="10"/>συναχθὲν κεφάλαιον. Μὴ τηρήσαν-
+                    <lb n="11"/>τος αὐτοῦ τὴν πίστιν παρεχώρησεν
+                    <lb n="12"/>τῇ θεῷ ὁ Ἀπολλώνιος. Κολασθέν-
+                    <lb n="13"/>τος οὖν τοῦ Σκόλλου ὑπὸ τῶν θε-
+                    <lb n="14"/>ῶν εἰς θανάτου λόγον μετὰ[-τε-]
+                    <lb n="15"/>λεύτην αὐτοῦ ἐπεζήτηθη ὑπ[ὸ τῶν]
+                    <lb n="16"/>θεῶν. Τατίας οὖν ἡ θυγάτηρ αὐτοῦ
+                    <lb n="17"/>ἔλοισε τοὺς ὅρκους καὶ νῦν εἰλα-
+                    <lb n="18"/>σαμένη εὐλογεῖ Μητρὶ Ἀτίμιτι
+                    <lb n="19"/>καὶ Μηνὶ Τιάμου.
+                    <lb n="20"/>Ἔτους σγ΄, μη(νὸς) Σαωδίκου ει΄.
+                </ab>
+            </div>
+            <div type="apparatus"/>
+            <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="bibliography">
+                <listBibl>
+                    <bibl>Drexler, op. cit., col. 2703-4, no. 18</bibl>
+                    <bibl>Mouseion kai Bibliotheke, V, ii, 1885-6, p. 84-5, no. ρος'</bibl>
+                    <bibl>Ramsay, JRS, X, 1889, p. 227, note 2</bibl>
+                    <bibl>Smirnoff, op. cit., pp. 97-8, no. 32</bibl>
+                    <bibl>Perdrizet, op. cit., p. 59, no. 3</bibl>
+                    <bibl>K-P, II Reise, p. 107</bibl>
+                    <bibl>Steinleitner, op. cit., no. 6</bibl>
+                    <bibl>Buckler, ABSA, XXI, 1914-16, pp. 175-80, no. 4</bibl>
+                    <bibl>Lane, I, p. 17, no. 16</bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

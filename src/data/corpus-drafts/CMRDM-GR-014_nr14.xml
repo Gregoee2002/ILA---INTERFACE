@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Monumento senza iscrizione</rs> — CMRDM I nr. 14: Terracotta relief-figurine from tomb, Eretria</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>CMRDM — Corpus Monumentorum Religionis Dei Menis</authority>
+                <idno type="filename">CMRDM-GR-014</idno>
+                <idno type="TM"><!-- inserire TM number --></idno>
+                <idno type="CMRDM">CMRDM I 14</idno>
+            </publicationStmt>
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>local museum, Eretria</repository>
+                        <idno>CMRDM I 14</idno>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Terracotta relief-figurine from tomb, Eretria. </p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/131.html">terracotta</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/24.html">relief</objectType>
+                                    <dimensions unit="cm">
+                                        <height></height>
+                                        <width></width>
+                                        <depth></depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>Men (head and left arm broken) seated frontally on large crescent raised from a disk; holds patera in outstretched right hand. Large spotted animal (panther?) at his feet supports crescent and disk.</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Height of letters: DA_COMPILARE.</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/540730">Eretria</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">Eretria, Greece</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" notBefore-custom="-28" notAfter-custom="22" precision="low">3rd century B.C.</origDate>
+                        </origin>
+                        <provenance type="found">Eretria, Greece</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+                <ab>
+                    <lb n="1"/>
+                </ab>
+            </div>
+            <div type="apparatus"/>
+            <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="bibliography">
+                <listBibl>
+                    <bibl>A. Andreiomenou, Archaiologikon Deltion, XVI, 1960, ii, p. 150</bibl>
+                    <bibl>Lane, I, p. 10, no. 1</bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

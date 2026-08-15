@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Iscrizione greca</rs> — CMRDM I nr. 90: Marble stele with relief of Men standing, Synaus (Simav)</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>CMRDM — Corpus Monumentorum Religionis Dei Menis</authority>
+                <idno type="filename">CMRDM-AS-090</idno>
+                <idno type="TM"><!-- inserire TM number --></idno>
+                <idno type="CMRDM">CMRDM I 90</idno>
+            </publicationStmt>
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>lost/unknown (formerly Warsaw?)</repository>
+                        <idno>CMRDM I 90</idno>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Marble stele with relief of Men standing, Synaus (Simav). Height 37 cm.</p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/48.html">marble</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/250.html">stele</objectType>
+                                    <dimensions unit="cm">
+                                        <height>37</height>
+                                        <width></width>
+                                        <depth></depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>Stele with relief showing Men standing frontally with crescent, cap, staff in right hand and indistinct object in left, on projecting ledge. Dedicated to Men of Gallikos by a slave girl of Diogenes from the village of Kerybeis.</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Height of letters: DA_COMPILARE.</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/609439">Synaus</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">Simav, Turkey</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" precision="low"></origDate>
+                        </origin>
+                        <provenance type="found">Simav, Turkey</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+                <ab>
+                    <lb n="1"/>Γαλλικῷ Ἀσκληπιάς
+                    <lb n="2"/>κώμης Κερυβέων πα[ι]-
+                    <lb n="3"/>δίσκη Διογένου
+                    <lb n="4"/>δῶρον.
+                </ab>
+            </div>
+            <div type="apparatus"/>
+            <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="bibliography">
+                <listBibl>
+                    <bibl>Drexler, op. cit., col. 2701, no. 7</bibl>
+                    <bibl>Ramsay, JHS, X, 1889, p. 227, no. 25</bibl>
+                    <bibl>E.L. Hicks, Classical Review, III, 1889, p. 138, no. 19</bibl>
+                    <bibl>Buresch, Reisebericht II, p. 97</bibl>
+                    <bibl>Perdrizet, op. cit., p. 57, no. 3</bibl>
+                    <bibl>Buresch, Aus Lydien, p. 87 and 197</bibl>
+                    <bibl>T. Wiegand, AM, XXIX, 1904, p. 318, fig. 38</bibl>
+                    <bibl>A. Deissmann, Light from the Ancient East, 1910, p. 332</bibl>
+                    <bibl>Buckler, ABSA, XXI, 1914-16, pp. 181-3, no. 6</bibl>
+                    <bibl>Lane, I, p. 23, no. 3</bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

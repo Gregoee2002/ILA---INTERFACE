@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Iscrizione greca</rs> — CMRDM I nr. 88: Stele with moulding and inscription, Alianon katoikia (near Emet)</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>CMRDM — Corpus Monumentorum Religionis Dei Menis</authority>
+                <idno type="filename">CMRDM-AS-088</idno>
+                <idno type="TM"><!-- inserire TM number --></idno>
+                <idno type="CMRDM">CMRDM I 88</idno>
+            </publicationStmt>
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>in situ or lost</repository>
+                        <idno>CMRDM I 88</idno>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Stele with moulding and inscription, Alianon katoikia (near Emet). </p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/138.html">stone</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/250.html">stele</objectType>
+                                    <dimensions unit="cm">
+                                        <height></height>
+                                        <width></width>
+                                        <depth></depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>Stele with moulding (corniche). First line on moulding. Dedication to Men (the holy and just god) by Naikatas son of Paralas; the Alianon katoikia invoked.</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Height of letters: DA_COMPILARE.</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="DA_COMPILARE">Alianon katoikia</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">Kirgil, near Emet, Turkey</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" notBefore-custom="190" notAfter-custom="191" precision="medium">190-191 A.D.</origDate>
+                        </origin>
+                        <provenance type="found">Kirgil, near Emet, Turkey</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+                <ab>
+                    <lb n="1"/>[Ἔτ]ους σοο΄ ἀ[....]
+                    <lb n="2"/>Ναικάτας Παρά-
+                    <lb n="3"/>αλα Μηνὶ θε[ῷ]
+                    <lb n="4"/>εὐχὴν
+                    <lb n="5"/>ὁσίῳ κ(αὶ) δίκεῳ.
+                    <lb n="6"/>Ἡ Ἀλιανῶν κα-
+                    <lb n="7"/>τοικία. Σῳζε
+                    <lb n="8"/>τὴν κατοικι-
+                    <lb n="9"/>αν.
+                </ab>
+            </div>
+            <div type="apparatus"/>
+            <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="bibliography">
+                <listBibl>
+                    <bibl>Drexler, op. cit., col. 2709</bibl>
+                    <bibl>S. Reinach, REG, III, 1890, p. 51, no. 1</bibl>
+                    <bibl>Perdrizet, op. cit., pp. 62-3</bibl>
+                    <bibl>Lane, I, pp. 22-23, no. 2</bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Iscrizione greca</rs> — CMRDM I nr. 53: Marble stele with relief (sun-god and Men) and inscription, Maeonia</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>CMRDM — Corpus Monumentorum Religionis Dei Menis</authority>
+                <idno type="filename">CMRDM-AS-053</idno>
+                <idno type="TM"><!-- inserire TM number --></idno>
+                <idno type="CMRDM">CMRDM I 53</idno>
+            </publicationStmt>
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>in situ or lost</repository>
+                        <idno>CMRDM I 53</idno>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Marble stele with relief (sun-god and Men) and inscription, Maeonia. </p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/48.html">marble</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/250.html">stele</objectType>
+                                    <dimensions unit="cm">
+                                        <height></height>
+                                        <width></width>
+                                        <depth></depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>Stele with bust of youthful sun-god (left) and bust of Men with crescent and Phrygian cap (right) on projecting ledge. Sacred slave records command to observe a 9-day purification.</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Height of letters: DA_COMPILARE.</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/609032">Maeonia</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">Kula, Turkey</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" notBefore-custom="171" notAfter-custom="172" precision="medium">171-172 A.D.</origDate>
+                        </origin>
+                        <provenance type="found">Kula, Turkey</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+                <ab>
+                    <lb n="1"/>Κατὰ τὴν τῶν θεῶν ἐπιτα-
+                    <lb n="2"/>γὴν ἱερὸς δοῦμος εὐχὴν
+                    <lb n="3"/>Διὶ Μα(σ)φαλατηνῷ καὶ Μηνὶ
+                    <lb n="4"/>Τιάμου καὶ Μηνὶ Τυράννῳ
+                    <lb n="5"/>ἐκέλευσεν ὁρίσθαι ἀ-
+                    <lb n="6"/>πὸ ἡμερῶν θ΄. Εἴ τις δὲ τού-
+                    <lb n="7"/>των ἀπειθήσι, ἀναγνώσ-
+                    <lb n="8"/>εται τῆς δυνάμεως τοῦ Δι-
+                    <lb n="9"/>ός. Ἐπιμελησαμένου
+                    <lb n="10"/>Διονυσίου, Διοδώρου,
+                    <lb n="11"/>καὶ Ἑρμογένους Βαλερ(ίου),
+                    <lb n="12"/>ἔτους σνε΄, μη(νὸς) Αὐστρου.
+                </ab>
+            </div>
+            <div type="apparatus"/>
+            <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="bibliography">
+                <listBibl>
+                    <bibl>CIG, 3439</bibl>
+                    <bibl>Keppel, op. cit., II, p. 351, no. 6</bibl>
+                    <bibl>C. Texier, Description de l'Asie Mineure, Paris, 1850, I, p. 135, Pl. 51 top</bibl>
+                    <bibl>Le Bas-Waddington, op. cit., III, i, p. 213, no. 668</bibl>
+                    <bibl>Daremberg-Saglio, III, ii, p. 1393, fig. 4662</bibl>
+                    <bibl>Drexler, op. cit., col. 2702, no. 13</bibl>
+                    <bibl>Roscher, Leipzig, Phil.-Hist. Klasse, Berichte, XLIII, 1891, p. 125c, Pl. II bottom</bibl>
+                    <bibl>Perdrizet, op. cit., p. 60, no. 2</bibl>
+                    <bibl>A.B. Cook, Zeus, Cambridge, 1913-40, I, p. 193, fig. 142</bibl>
+                    <bibl>M.J. Vermaseren, Vigiliae Christianae, IV, 1950, pp. 142-156</bibl>
+                    <bibl>Lane, I, p. 16, no. 11</bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>
