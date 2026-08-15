@@ -12,6 +12,7 @@
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 33</idno>
             </publicationStmt>
+            <!-- REVISIONE (cross-check PDF Lane p. 22): "σιδ΄" -> "σζ΄" (l. 1, numerale anno errato: 207 dell'era sillana = 122/3 d.C., coerente con la datazione già presente nel file; σιδ'=214 non torna); "Δαισίκου τδ΄" -> "Ξανδικοῦ βι΄" (l. 1, mese e giorno errati); "κατ᾽ ἐπιτάγην" -> "κατὰ ἐπιταγὴν" (l. 1, Lane stampa la forma non elisa); "Ἀξιοτ-τηνοῦ" -> "Ἀξιοττηνοῦ" (l. 3, trattino interno spurio); Pleiades ref corretto 609032 (ID inesistente/404) -> 609441 (Kollyda/Goloida = Gölde, verificato via Pleiades API e Trismegistos TM Geo 33613); TM non trovato. -->
             <sourceDesc>
                 <msDesc>
                     <msIdentifier>
@@ -22,7 +23,7 @@
                         <objectDesc>
                             <supportDesc>
                                 <support>
-                                    <p>Marble(?) plaque with relief of crescent, Gyölde. </p>
+                                    <p>Marble(?) plaque with relief of crescent, found before 1829 in Gyölde in church of Hagios Theodoros.</p>
                                     <material ref="https://www.eagle-network.eu/voc/material/lod/48.html">marble</material>
                                     <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/53.html">plaque</objectType>
                                     <dimensions unit="cm">
@@ -48,7 +49,7 @@
                     <history>
                         <origin>
                             <origPlace>
-                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/609032">Gyölde area (Kula)</placeName>
+                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/609441">Gyölde area (Kula)</placeName>
                                 <placeName type="modern" ref="DA_COMPILARE">Gyölde, Turkey</placeName>
                             </origPlace>
                             <origDate datingMethod="#julian" notBefore-custom="122" notAfter-custom="123" precision="medium">122-123 A.D. (Sullan era)</origDate>
@@ -64,9 +65,9 @@
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Ἔτους σιδ΄, μη(νὸς) Δαισίκου τδ΄, κατ᾽ ἐπιτάγην
+                    <lb n="1"/>Ἔτους σζ΄, μη(νὸς) Ξανδικοῦ βι΄, κατὰ ἐπιταγὴν
                     <lb n="2"/>Μηνὸς Ἀρτεμιδώρου
-                    <lb n="3"/>Ἀξιοτ-τηνοῦ, Ἥπιος Τ[ι]βερίου Φιλοκάλου δοῦλος ὑπὲρ ἑαυτοῦ καὶ
+                    <lb n="3"/>Ἀξιοττηνοῦ, Ἥπιος Τ[ι]βερίου Φιλοκάλου δοῦλος ὑπὲρ ἑαυτοῦ καὶ
                     <lb n="4"/>τῶν τέκνων ἀνέθηκεν.
                 </ab>
             </div>

@@ -12,6 +12,7 @@
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 35</idno>
             </publicationStmt>
+            <!-- REVISIONE (cross-check PDF Lane p. 23): "σύγγραφον" -> "ἔνγραφον" (l. 8, parola diversa); "Δαισίκου" -> "Ξανδικοῦ" (l. 9, mese errato); "εἰλασάμενοι" -> "εἰλασάμενυ" (l. 6, forma anomala ma è esattamente quanto stampato da Lane — probabile refuso nell'edizione originale, non corretto poiché il compito è la fedeltà al testo stampato, non l'emendazione grammaticale; segnalato per revisione umana); aggiunta data di rinvenimento "ca. 1886" (assente nel draft); Pleiades ref corretto 609032 (ID inesistente/404) -> 609441 (Kollyda/Goloida = Gölde, verificato via Pleiades API e Trismegistos TM Geo 33613); TM non trovato. -->
             <sourceDesc>
                 <msDesc>
                     <msIdentifier>
@@ -22,7 +23,7 @@
                         <objectDesc>
                             <supportDesc>
                                 <support>
-                                    <p>Stone with relief (breasts, leg, eyes) and inscription, now in Leiden. Height 98 cm., width at bottom 44.3 cm., thickness 4.7 cm.</p>
+                                    <p>Stone with relief (breasts, leg, eyes) and inscription, found ca. 1886, perhaps brought to Gyölde from Aivatlar. Now in Leiden. Height 98 cm., width at bottom 44.3 cm., width under entablature 36.9 cm., width at entablature 41.8 cm., thickness 4.7 cm.</p>
                                     <material ref="https://www.eagle-network.eu/voc/material/lod/138.html">stone</material>
                                     <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/250.html">stone</objectType>
                                     <dimensions unit="cm">
@@ -48,7 +49,7 @@
                     <history>
                         <origin>
                             <origPlace>
-                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/609032">Gyölde area (Kula)</placeName>
+                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/609441">Gyölde area (Kula)</placeName>
                                 <placeName type="modern" ref="DA_COMPILARE">Aivatlar area, Turkey</placeName>
                             </origPlace>
                             <origDate datingMethod="#julian" notBefore-custom="236" notAfter-custom="237" precision="medium">236-237 A.D.</origDate>
@@ -69,10 +70,10 @@
                     <lb n="3"/>μιανὸς καὶ Τρόφιμος οἱ Ἀμ-
                     <lb n="4"/>μίου καὶ Φιλήτη καὶ Σωκρατία
                     <lb n="5"/>aι Ἀμμιάδος ποιήσαντες τὸ ἱε-
-                    <lb n="6"/>ροποίημα εἰλασάμενοι Μητέ-
+                    <lb n="6"/>ροποίημα εἰλασάμενυ Μητέ-
                     <lb n="7"/>ραν Ἀνάειτιν ὑπὲρ τέκνων καὶ
-                    <lb n="8"/>θρεμμάτων σύγγραφον ἔστησαν.
-                    <lb n="9"/>Ἔτους τκα΄, μη(νὸς) Δαισίκου.
+                    <lb n="8"/>θρεμμάτων ἔνγραφον ἔστησαν.
+                    <lb n="9"/>Ἔτους τκα΄, μη(νὸς) Ξανδικοῦ.
                 </ab>
             </div>
             <div type="apparatus"/>

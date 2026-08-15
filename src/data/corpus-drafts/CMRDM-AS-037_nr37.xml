@@ -12,6 +12,7 @@
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 37</idno>
             </publicationStmt>
+            <!-- REVISIONE (cross-check PDF Lane p. 24): errore di contenuto grave in l. 3-4: "εὐχα[μένη ὑπὲρ τοῦ σ]υ[μ-]βίου εὐχήν" ("avendo pregato per il marito") -> "εὐξαμένη ὑπὲρ τοῦ ἡμι-όνου εὐχήν" ("avendo pregato per il mulo"), coerente con la descrizione dello stesso Lane del rilievo soprastante ("seems to represent the mule mentioned in the inscription"); di conseguenza corretta anche la descrizione fisica ("for her husband" -> "for her mule"); bracket editoriali l. 1 normalizzati secondo Lane: "[Ἀξιο]τ[τ]ήν[ῳ]" -> "[Ἀξι]ο[τη]ν[ῷ]" (Lane suppone un solo τ nella lacuna, non due: scelta editoriale di Lane, non modificata nel merito, solo riportata fedelmente); TM non trovato; Pleiades ref corretto 609032 (ID inesistente/404) -> 609441 (Kollyda/Goloida = Gölde, verificato via Pleiades API e Trismegistos TM Geo 33613). -->
             <sourceDesc>
                 <msDesc>
                     <msIdentifier>
@@ -22,7 +23,7 @@
                         <objectDesc>
                             <supportDesc>
                                 <support>
-                                    <p>Fragment of white marble stele, parekklesi of John the Baptist, Gyölde. Height 20 cm., width 38 cm., thickness 7.5 cm.</p>
+                                    <p>Fragment of stele of white marble, wider at bottom, broken above and below. Found before 1870 in the parekklesi of John the Baptist, Gyölde. Height 20 cm., width 38 cm., thickness 7.5 cm.</p>
                                     <material ref="https://www.eagle-network.eu/voc/material/lod/48.html">marble</material>
                                     <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/250.html">stele</objectType>
                                     <dimensions unit="cm">
@@ -34,7 +35,7 @@
                             </supportDesc>
                             <layoutDesc>
                                 <layout>
-                                    <p>Fragment of stele with traces of relief (possibly a mule) and inscription: dedication to Men Axiottenos by Elpis daughter of Andronikos for her husband.</p>
+                                    <p>Fragment of stele with relief which seems to represent the mule mentioned in the inscription: dedication to Men Axiottenos by Elpis daughter of Andronikos for her mule.</p>
                                     <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
                                 </layout>
                             </layoutDesc>
@@ -48,7 +49,7 @@
                     <history>
                         <origin>
                             <origPlace>
-                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/609032">Gyölde area (Kula)</placeName>
+                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/609441">Gyölde area (Kula)</placeName>
                                 <placeName type="modern" ref="DA_COMPILARE">Gyölde, Turkey</placeName>
                             </origPlace>
                             <origDate datingMethod="#julian" precision="low"></origDate>
@@ -64,10 +65,10 @@
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>[Ἀξιο]τ[τ]ήν[ῳ] ἐ[ξ] Ἐπικρ[ά-]
-                    <lb n="2"/>[τ]ου Ἐλπὶς Ἀνδρονίκο[υ]
-                    <lb n="3"/>εὐχα[μένη ὑπὲρ τοῦ σ]υ[μ-]
-                    <lb n="4"/>βίου εὐχήν.
+                    <lb n="1"/>[Ἀξι]ο[τη]ν[ῷ] ἐ[ξ] Ἐπικρ[ά-]
+                    <lb n="2"/>[το]υ Ἐλπὶς Ἀνδρονίκο[υ]
+                    <lb n="3"/>εὐξαμένη ὑπὲρ τοῦ ἡμι-
+                    <lb n="4"/>όνου εὐχήν.
                 </ab>
             </div>
             <div type="apparatus"/>

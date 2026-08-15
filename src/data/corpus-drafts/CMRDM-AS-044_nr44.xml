@@ -12,6 +12,7 @@
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 44</idno>
             </publicationStmt>
+            <!-- REVISIONE (cross-check PDF Lane p. 27-29): numerose correzioni del testo greco confrontato riga per riga con lo stampato: "σμβ΄" -> "σμα΄" (l. 1, numerale anno errato: 241 dell'era sillana = 156/7 d.C., coerente con la data già presente nel file; σμβ'=242 non torna); "Παναίμου W" -> "Πανήμου β΄" (l. 1, mese/giorno alterati); "Ἰουκούνδος" -> "Ἰουκοῦνδος" (l. 4, accento); "διαθέσει" -> "διαθέσι" (l. 5); "διδόσθαι" -> "δίδοσθαι" (l. 8, accento); "ἄρας" -> "ἀρὰς" (l. 10, compare 2 volte, accento); "ἀδυνοποιού-σα" -> "ἱκανοποιοῦ-σα" (l. 11, parola diversa, errore di significato); "αὐτὴ" -> "αὐτῇ" (l. 13); "συνειδήσει" -> "συνειδήσι" (l. 13); "ἰσόδον" -> "ἴσοδον" (l. 17, accento); "εἰς" -> "ἐς" (l. 18); "δρεπάνων" -> "δρέπανον" (l. 19, caso grammaticale); "ἀμπελοτό-" -> "ἀμπελοτ[ό-]" (l. 19-20, ripristinata parentesi editoriale di Lane); "μονήμερῳ" -> "μονημέρῳ" (l. 22, accento); "Ἀξιττοῖς" -> "Ἀζίττοις" (l. 24); "Λυθῆναι" -> "λυθῆναι" (l. 25, minuscola: non inizio di frase); "λύσαν" -> "λῦσαν" (l. 27, accento); "Σωκρατεία" -> "Σωκράτεια" (l. 29, accento); "ἐξειλάσαμενοι" -> "ἐξειλασάμενοι" (l. 31, accento); "ἀπὸ νοῦν" -> "ἀπὸ νοῖν" (l. 32, forma anomala ma esattamente quanto stampato da Lane, non emendata); "στηλογραφήσαντες" -> "στηλλογραφήσαντες" (l. 33, lettera mancante); "δυνάμεις" -> "δυνάμις" (l. 34, come da stampa); aggiunta provenienza "found before 1900, presumably in Ayazviran, transported to Evangelike Schole in Smyrna, now apparently lost; moulding at top" (assente nel draft); Pleiades ref per "Koresa (?)" compilato con 609443 (Koresa, BAtlas 62 A4); identificazione Ayazviran=Koresa resta ipotesi incerta di Lane — segnalato per revisione umana; TM non trovato. -->
             <sourceDesc>
                 <msDesc>
                     <msIdentifier>
@@ -22,7 +23,7 @@
                         <objectDesc>
                             <supportDesc>
                                 <support>
-                                    <p>Marble stele with confession inscription, Ayazviran. Height 1 m., width at top 31 cm., at bottom 45 cm.</p>
+                                    <p>Stele of marble, decreasing in size towards top, found before 1900, presumably in Ayazviran, transported to Evangelike Schole in Smyrna. Now apparently lost. Height 1 m., width at top 31 cm., at bottom 45 cm. Moulding at top.</p>
                                     <material ref="https://www.eagle-network.eu/voc/material/lod/48.html">marble</material>
                                     <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/250.html">stele</objectType>
                                     <dimensions unit="cm">
@@ -48,7 +49,7 @@
                     <history>
                         <origin>
                             <origPlace>
-                                <placeName type="ancient" ref="DA_COMPILARE">Koresa (?)</placeName>
+                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/609443">Koresa (?)</placeName>
                                 <placeName type="modern" ref="DA_COMPILARE">Ayazviran, Turkey</placeName>
                             </origPlace>
                             <origDate datingMethod="#julian" notBefore-custom="156" notAfter-custom="157" precision="medium">156-157 A.D.</origDate>
@@ -64,40 +65,40 @@
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Ἔτους σμβ΄, μη(νὸς) Παναίμου W.
+                    <lb n="1"/>Ἔτους σμα΄, μη(νὸς) Πανήμου β΄.
                     <lb n="2"/>Μεγάλη Ἄρτεμις Ἀνάει-
                     <lb n="3"/>τις καὶ Μὴν Τιάμου. Ἐπὶ
-                    <lb n="4"/>Ἰουκούνδος ἐγένετο ἐν
-                    <lb n="5"/>διαθέσει μανικῇ καὶ ὑπὸ πάν-
+                    <lb n="4"/>Ἰουκοῦνδος ἐγένετο ἐν
+                    <lb n="5"/>διαθέσι μανικῇ καὶ ὑπὸ πάν-
                     <lb n="6"/>των διεφημίσθη ὡς ὑπὸ
                     <lb n="7"/>Τατίας τῆς πενθερᾶς αὐ-
-                    <lb n="8"/>τοῦ φάρμακον αὐτῷ διδόσ-
+                    <lb n="8"/>τοῦ φάρμακον αὐτῷ δίδοσ-
                     <lb n="9"/>θαι, ἡ δὲ Τατίας ἐπέστησεν
-                    <lb n="10"/>σκῆπτρον καὶ ἄρας ἔθηκεν
-                    <lb n="11"/>ἐν τῷ ναῷ ὡς ἀδυνοποιού-
+                    <lb n="10"/>σκῆπτρον καὶ ἀρὰς ἔθηκεν
+                    <lb n="11"/>ἐν τῷ ναῷ ὡς ἱκανοποιοῦ-
                     <lb n="12"/>σα περὶ τοῦ πεφημίσθαι αὐ-
-                    <lb n="13"/>τὴ ἐν συνειδήσει τοιαύτῃ.
+                    <lb n="13"/>τῇ ἐν συνειδήσι τοιαύτῃ.
                     <lb n="14"/>Οἱ θεοὶ αὐτὴν ἐποίησαν ἐ[ν]
                     <lb n="15"/>κολάσει, ἣν οὐ διέφυγεν. Ὁ-
                     <lb n="16"/>μοίως καὶ Σωκράτης, ὁ υἱὸς
-                    <lb n="17"/>αὐτῆς, παράγων τὴν ἰσόδον
-                    <lb n="18"/>τὴν εἰς τὸ ἄλσος ἀπάγουσαν,
-                    <lb n="19"/>δρεπάνων κρατῶν ἀμπελοτό-
+                    <lb n="17"/>αὐτῆς, παράγων τὴν ἴσοδον
+                    <lb n="18"/>τὴν ἐς τὸ ἄλσος ἀπάγουσαν,
+                    <lb n="19"/>δρέπανον κρατῶν ἀμπελοτ[ό-]
                     <lb n="20"/>μον ἐκ τῆς χειρὸς ἔπεσεν
                     <lb n="21"/>αὐτῷ ἐπὶ τὸν πόδαν καὶ οὕ-
-                    <lb n="22"/>τως μονήμερῳ κολάσει ἀ-
+                    <lb n="22"/>τως μονημέρῳ κολάσει ἀ-
                     <lb n="23"/>πηλλάγη. Μεγάλοι οὖν οἱ θε-
-                    <lb n="24"/>οὶ οἱ ἐν Ἀξιττοῖς. Ἐπέστησαν
-                    <lb n="25"/>Λυθῆναι τὸ σκῆπτρον καὶ τὰς
-                    <lb n="26"/>ἄρας τὰς γενομένας ἐν τῷ
-                    <lb n="27"/>ναῷ, ἃς λύσαν τὰ Ἰουκούνδου
+                    <lb n="24"/>οὶ οἱ ἐν Ἀζίττοις. Ἐπέστησαν
+                    <lb n="25"/>λυθῆναι τὸ σκῆπτρον καὶ τὰς
+                    <lb n="26"/>ἀρὰς τὰς γενομένας ἐν τῷ
+                    <lb n="27"/>ναῷ, ἃς λῦσαν τὰ Ἰουκούνδου
                     <lb n="28"/>καὶ Μοσχίου, ἔγγονοι δὲ τῆς
-                    <lb n="29"/>Τατίας, Σωκρατεία καὶ Μοσχᾶς
+                    <lb n="29"/>Τατίας, Σωκράτεια καὶ Μοσχᾶς
                     <lb n="30"/>καὶ Ἰουκοῦνδος καὶ Μενεκρά-
-                    <lb n="31"/>της, κατὰ πάντα ἐξειλάσαμενοι
-                    <lb n="32"/>τοὺς θεοὺς καὶ ἀπὸ νοῦν εὐλογοῦ-
-                    <lb n="33"/>μεν στηλογραφήσαντες τὰς δυ-
-                    <lb n="34"/>νάμεις τῶν θεῶν.
+                    <lb n="31"/>της, κατὰ πάντα ἐξειλασάμενοι
+                    <lb n="32"/>τοὺς θεοὺς καὶ ἀπὸ νοῖν εὐλογοῦ-
+                    <lb n="33"/>μεν στηλλογραφήσαντες τὰς δυ-
+                    <lb n="34"/>νάμις τῶν θεῶν.
                 </ab>
             </div>
             <div type="apparatus"/>

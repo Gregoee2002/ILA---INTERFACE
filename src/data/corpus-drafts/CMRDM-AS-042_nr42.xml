@@ -12,6 +12,7 @@
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 42</idno>
             </publicationStmt>
+            <!-- REVISIONE (cross-check PDF Lane p. 26-27): "Τασηι-νή" -> "Ταζη-νή" (l. 1-2, nome epiteto errato); "Μὲς" -> "Μὶς" (compare 2 volte, ll. 2-3); "Λασάνας" -> "Λαβάνας" (l. 2, nome epiteto errato); "οκη΄" -> "σκη΄" (l. 5, numerale anno errato: 228 dell'era sillana = 143/4 d.C., coerente con la data già presente nel file; οκη'=98 non torna); "ρε΄(βαστή)" -> "Σε(βαστῇ)" (l. 6, testo garbled, dovrebbe essere l'abbreviazione del mese "Sebaste"); "σήλλην" -> "στήλλην" (l. 7, lettera mancante); "τὴν γε-" -> "τὴν γ[ε-]" e "ὑπο" -> "ὑ[πὸ]" (ll. 8-9, ripristinate le parentesi editoriali di Lane per le lettere supplite); aggiunta provenienza dettagliata "found in 1911 in a field just east of Ayazviran, transported to house of Secbekoğlu Mustafa" (assente nel draft); Pleiades ref per "Koresa (?)" compilato con 609443 (Koresa, BAtlas 62 A4, verificato via Pleiades API); identificazione Ayazviran=Koresa resta ipotesi incerta di Lane, fonti moderne propendono per Ayazviran=Iaza — segnalato per revisione umana; TM non trovato. -->
             <sourceDesc>
                 <msDesc>
                     <msIdentifier>
@@ -22,7 +23,7 @@
                         <objectDesc>
                             <supportDesc>
                                 <support>
-                                    <p>Marble stele with confession inscription, Ayazviran. Height 42 cm., width at top 34.5 cm., at bottom 37 cm., thickness 5 cm.</p>
+                                    <p>Stele of white marble, wider at bottom, broken at bottom, injured top right and left. Found in 1911 in a field just east of Ayazviran, transported to house of Secbekoğlu Mustafa. Height 42 cm., width at top 34.5 cm., at bottom 37 cm., thickness 5 cm.</p>
                                     <material ref="https://www.eagle-network.eu/voc/material/lod/48.html">marble</material>
                                     <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/250.html">stele</objectType>
                                     <dimensions unit="cm">
@@ -48,7 +49,7 @@
                     <history>
                         <origin>
                             <origPlace>
-                                <placeName type="ancient" ref="DA_COMPILARE">Koresa (?)</placeName>
+                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/609443">Koresa (?)</placeName>
                                 <placeName type="modern" ref="DA_COMPILARE">Ayazviran, Turkey</placeName>
                             </origPlace>
                             <origDate datingMethod="#julian" notBefore-custom="143" notAfter-custom="144" precision="medium">143-144 A.D.</origDate>
@@ -64,15 +65,15 @@
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>[Με]γάλη Μήτ[ηρ Τασηι-]
-                    <lb n="2"/>νὴ καὶ Μὲς Λασάνας [καὶ]
-                    <lb n="3"/>Μὲς Ἀρτεμιδώρου Δό-
+                    <lb n="1"/>[Με]γάλη Μήτ[ηρ Ταζη-]
+                    <lb n="2"/>νὴ καὶ Μὶς Λαβάνας [καὶ]
+                    <lb n="3"/>Μὶς Ἀρτεμιδώρου Δό-
                     <lb n="4"/>ρου κώμην βασιλεύον-
-                    <lb n="5"/>τες. Ἔτους οκη΄, μη(νὸς) Δαισί-
-                    <lb n="6"/>ου ρε΄(βαστή), Ἰουλία Μητρὰ ἀνέ-
-                    <lb n="7"/>στησε σήλλην ἐπιζητη-
-                    <lb n="8"/>σάντων τῶν θεῶν τὴν γε-
-                    <lb n="9"/>γόνουσαν ἁμαρτίαν ὑπο
+                    <lb n="5"/>τες. Ἔτους σκη΄, μη(νὸς) Δαισί-
+                    <lb n="6"/>ου Σε(βαστῇ), Ἰουλία Μητρὰ ἀνέ-
+                    <lb n="7"/>στησε στήλλην ἐπιζητη-
+                    <lb n="8"/>σάντων τῶν θεῶν τὴν γ[ε-]
+                    <lb n="9"/>γόνουσαν ἁμαρτίαν ὑ[πὸ]
                     <lb n="10"/>[...]
                 </ab>
             </div>

@@ -12,6 +12,7 @@
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 41</idno>
             </publicationStmt>
+            <!-- REVISIONE (cross-check PDF Lane p. 26): testo greco delle ll. 3-5 largamente divergente dallo stampato (probabile errore di estrazione, non semplice refuso di lettera): "[Τ]οσιανὸς Γ[λ]αῦκος" -> "[Τα]τιανὸς Γλαῦκος" (l. 1, nome proprio errato); "[ι]ού[σα] ἀνθόντε εὐχό[μενοι ὑπὲρ]" -> "[ία]αν ἔθοντο εὐχόμενοι ἀεὶ ὑπὲρ" (l. 3, testo inventato); "βαπτι-" -> "Σαβειν-" (l. 4, parola diversa, inizio del nome "Σαβείνης"); "ζε[ς ......] ὑπὲρ σωσείης σύ[...]" -> "ῆς [······] ἥνπερ σώσειες σὺ [···]" (l. 5, testo inventato); aggiunta provenienza "found before 1898 in Ayazviran" (assente nel draft); Pleiades ref per "Koresa (?)" compilato con 609443 (Koresa, BAtlas 62 A4, verificato via Pleiades API, cross-check con coordinate Wikipedia/Digital Atlas of the Roman Empire); identificazione Ayazviran=Koresa resta ipotesi incerta di Lane, fonti moderne (Trismegistos place 34414, ToposText) propendono per Ayazviran=Iaza — segnalato per revisione umana; TM non trovato. -->
             <sourceDesc>
                 <msDesc>
                     <msIdentifier>
@@ -22,7 +23,7 @@
                         <objectDesc>
                             <supportDesc>
                                 <support>
-                                    <p>Marble plaque with relief of worshippers, Ayazviran. </p>
+                                    <p>Marble plaque with relief of worshippers, found before 1898 in Ayazviran.</p>
                                     <material ref="https://www.eagle-network.eu/voc/material/lod/48.html">marble</material>
                                     <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/53.html">plaque</objectType>
                                     <dimensions unit="cm">
@@ -48,7 +49,7 @@
                     <history>
                         <origin>
                             <origPlace>
-                                <placeName type="ancient" ref="DA_COMPILARE">Koresa (?)</placeName>
+                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/609443">Koresa (?)</placeName>
                                 <placeName type="modern" ref="DA_COMPILARE">Ayazviran, Turkey</placeName>
                             </origPlace>
                             <origDate datingMethod="#julian" precision="low"></origDate>
@@ -64,11 +65,11 @@
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>[Τ]οσιανὸς Γ[λ]αῦκος καὶ Ἀμμιανὴ φι-
+                    <lb n="1"/>[Τα]τιανὸς Γλαῦκος καὶ Ἀμμιανὴ φι-
                     <lb n="2"/>[λ]όθεοι Μηνὶ Μοτυλεῖτῃ εὐχαριστ-
-                    <lb n="3"/>[ι]ού[σα] ἀνθόντε εὐχό[μενοι ὑπὲρ]
-                    <lb n="4"/>[θ]ρεπτῆς γένει πρώτης βαπτι-
-                    <lb n="5"/>ζε[ς ......] ὑπὲρ σωσείης σύ[...]
+                    <lb n="3"/>[ία]αν ἔθοντο εὐχόμενοι ἀεὶ ὑπὲρ
+                    <lb n="4"/>[θ]ρεπτῆς γένει πρώτης Σαβειν-
+                    <lb n="5"/>ῆς [......] ἥνπερ σώσειες σὺ [...]
                 </ab>
             </div>
             <div type="apparatus"/>
