@@ -392,6 +392,23 @@ export async function installApiShim(): Promise<void> {
     if (!url.pathname.startsWith("/api/")) {
       return originalFetch(input, init);
     }
-    return handleRequest(url, init);
+
+    // Rispetta AbortController/signal (usato dalla ricerca con debounce in
+    // App.tsx): senza questo, query digitate in rapida successione
+    // potrebbero far sì che una risposta "vecchia" risolva dopo una più
+    // recente e sovrascriva risultati aggiornati con risultati stale.
+    const signal = init?.signal;
+    if (signal?.aborted) {
+      throw new DOMException("The operation was aborted.", "AbortError");
+    }
+    if (!signal) return handleRequest(url, init);
+
+    return new Promise<Response>((resolve, reject) => {
+      const onAbort = () => reject(new DOMException("The operation was aborted.", "AbortError"));
+      signal.addEventListener("abort", onAbort, { once: true });
+      handleRequest(url, init)
+        .then(resolve, reject)
+        .finally(() => signal.removeEventListener("abort", onAbort));
+    });
   };
 }

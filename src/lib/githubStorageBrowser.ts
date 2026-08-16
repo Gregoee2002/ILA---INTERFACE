@@ -188,17 +188,26 @@ export async function pushCorpusFile(filename: string, content: string, message:
   shaCache.set(filename, data.content.sha);
 }
 
-export async function deleteCorpusFile(filename: string, message: string): Promise<void> {
-  const sha = shaCache.get(filename) || (await fetchCurrentSha(filename));
-  if (!sha) return; // mai esistito su GitHub, niente da cancellare
-
-  const url = `${GITHUB_API}/repos/${REPO}/contents/${repoPath(filename)}`;
-  const res = await fetch(url, {
-    method: "DELETE",
-    headers: headers(),
-    body: JSON.stringify({ message, sha, branch: BRANCH }),
-  });
-  if (res.ok) shaCache.delete(filename);
+/**
+ * NON cancella mai il file su GitHub (no-op + solo warning in console).
+ *
+ * Stesso default di sicurezza di deleteFileFromGitHub in githubStorage.ts
+ * (GITHUB_ALLOW_DELETE="false"): POST /api/monumenti cancella in locale
+ * qualunque file non presente nel payload che il client sta salvando in
+ * quel momento — innocuo quando l'unica copia è locale (recuperabile con
+ * un reload), distruttivo se specchiato automaticamente sulla repo reale.
+ * Uno stato React non aggiornato o parziale (es. dopo un errore di rete a
+ * metà caricamento) potrebbe altrimenti cancellare schede vere dalla repo
+ * senza conferma — qui non c'è nemmeno una env var da controllare per
+ * riattivarlo di proposito, quindi resta sempre disattivo. Le cancellazioni
+ * reali vanno fatte a mano su GitHub o dal flusso locale (server.ts).
+ */
+export async function deleteCorpusFile(filename: string, _message: string): Promise<void> {
+  console.warn(
+    `[githubStorageBrowser] Cancellazione di "${filename}" NON specchiata su GitHub ` +
+    `(disattiva per sicurezza sulla build statica). Il file resta rimosso solo dalla vista ` +
+    `locale di questa sessione — su GitHub è ancora presente.`
+  );
 }
 
 export async function testGitHubAccess(): Promise<{ ok: boolean; detail: string }> {

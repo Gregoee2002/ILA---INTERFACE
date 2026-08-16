@@ -985,16 +985,20 @@ function IconRail({
           <span className="text-[8px] font-sans font-bold uppercase tracking-wide leading-none">Impostaz.</span>
         </button>
 
-        <button
-          onClick={currentUser ? logout : loginWithGoogle}
-          title={currentUser ? (currentUser.email === ADMIN_EMAIL ? "Admin — Disconnetti" : `${currentUser.email} — Disconnetti`) : "Accedi come amministratore"}
-          className="flex flex-col items-center justify-center gap-1 shrink-0 w-16 h-full text-muted"
-        >
-          <span className="w-4 h-4 shrink-0 flex items-center justify-center">
-            {currentUser ? <LogOut className="h-4 w-4" /> : <LogIn className="h-4 w-4" />}
-          </span>
-          <span className="text-[8px] font-sans font-bold uppercase tracking-wide leading-none">{currentUser ? 'Esci' : 'Accedi'}</span>
-        </button>
+        {/* Sulla build statica non c'e' login Google: l'accesso in scrittura
+            e' gia' autorizzato da password+PAT GitHub (vedi effectiveAdmin). */}
+        {!isStaticBuild && (
+          <button
+            onClick={currentUser ? logout : loginWithGoogle}
+            title={currentUser ? (currentUser.email === ADMIN_EMAIL ? "Admin — Disconnetti" : `${currentUser.email} — Disconnetti`) : "Accedi come amministratore"}
+            className="flex flex-col items-center justify-center gap-1 shrink-0 w-16 h-full text-muted"
+          >
+            <span className="w-4 h-4 shrink-0 flex items-center justify-center">
+              {currentUser ? <LogOut className="h-4 w-4" /> : <LogIn className="h-4 w-4" />}
+            </span>
+            <span className="text-[8px] font-sans font-bold uppercase tracking-wide leading-none">{currentUser ? 'Esci' : 'Accedi'}</span>
+          </button>
+        )}
       </nav>
     );
   }
@@ -1110,25 +1114,29 @@ function IconRail({
             </AnimatePresence>
           </button>
 
-          <button
-            onClick={currentUser ? logout : loginWithGoogle}
-            title={currentUser ? (currentUser.email === ADMIN_EMAIL ? "Admin — Disconnetti" : `${currentUser.email} — Disconnetti`) : "Accedi come amministratore"}
-            className="flex items-center gap-3 h-10 px-3 rounded-lg shrink-0 text-muted hover:bg-accent/5 hover:text-accent transition-colors"
-          >
-            <span className="w-4 h-4 shrink-0 flex items-center justify-center">
-              {currentUser ? <LogOut className="h-4 w-4" /> : <LogIn className="h-4 w-4" />}
-            </span>
-            <AnimatePresence>
-              {expanded && (
-                <motion.span
-                  initial={{ opacity: 0, x: -6 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -6 }} transition={{ duration: 0.15 }}
-                  className="text-[11px] font-sans font-bold uppercase tracking-widest whitespace-nowrap truncate"
-                >
-                  {currentUser ? (currentUser.email === ADMIN_EMAIL ? 'Admin' : currentUser.email) : 'Accedi'}
-                </motion.span>
-              )}
-            </AnimatePresence>
-          </button>
+          {/* Sulla build statica non c'e' login Google: l'accesso in scrittura
+              e' gia' autorizzato da password+PAT GitHub (vedi effectiveAdmin). */}
+          {!isStaticBuild && (
+            <button
+              onClick={currentUser ? logout : loginWithGoogle}
+              title={currentUser ? (currentUser.email === ADMIN_EMAIL ? "Admin — Disconnetti" : `${currentUser.email} — Disconnetti`) : "Accedi come amministratore"}
+              className="flex items-center gap-3 h-10 px-3 rounded-lg shrink-0 text-muted hover:bg-accent/5 hover:text-accent transition-colors"
+            >
+              <span className="w-4 h-4 shrink-0 flex items-center justify-center">
+                {currentUser ? <LogOut className="h-4 w-4" /> : <LogIn className="h-4 w-4" />}
+              </span>
+              <AnimatePresence>
+                {expanded && (
+                  <motion.span
+                    initial={{ opacity: 0, x: -6 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -6 }} transition={{ duration: 0.15 }}
+                    className="text-[11px] font-sans font-bold uppercase tracking-widest whitespace-nowrap truncate"
+                  >
+                    {currentUser ? (currentUser.email === ADMIN_EMAIL ? 'Admin' : currentUser.email) : 'Accedi'}
+                  </motion.span>
+                )}
+              </AnimatePresence>
+            </button>
+          )}
         </div>
 
         {/* Fase lunare corrente — omaggio a Men */}
@@ -2783,7 +2791,15 @@ export default function App() {
     loadData();
   }, []);
 
-  const effectiveAdmin = !!currentUser && currentUser.email === ADMIN_EMAIL;
+  // Sulla build statica non c'è login Google/Firebase (vedi PasswordGate/
+  // GitHubTokenGate in main.tsx): l'accesso in scrittura è già autorizzato
+  // a monte dal PAT GitHub dell'utente (permessi Contents: Read/write sulla
+  // repo, enforcement reale lato GitHub) più il gate password. Il check su
+  // ADMIN_EMAIL era comunque solo un controllo di visibilità UI, mai
+  // enforcement reale (vedi commento sopra) — qui diventerebbe un login
+  // extra ridondante che richiede anche gregoee2002.github.io autorizzato
+  // in Firebase Console, che complica senza aggiungere sicurezza reale.
+  const effectiveAdmin = isStaticBuild || (!!currentUser && currentUser.email === ADMIN_EMAIL);
 
   const regions = useMemo(() => Array.from(new Set(monumenti.map(m => m.regione).filter(Boolean).map(s => s.trim()))).sort(), [monumenti]);
   const corpora = useMemo(() => Array.from(new Set(monumenti.map(m => m.corpus).filter(Boolean).map(s => s.trim()))).sort(), [monumenti]);
@@ -3673,8 +3689,10 @@ export default function App() {
         )}
           
           <div className="flex items-center gap-2.5 shrink-0">
-            {/* Authentication Buttons */}
-            {currentUser ? (
+            {/* Authentication Buttons — sulla build statica l'accesso in
+                scrittura è già autorizzato da password+PAT GitHub (vedi
+                effectiveAdmin sopra), niente login Google da mostrare. */}
+            {!isStaticBuild && (currentUser ? (
               <div className="flex items-center gap-2 text-muted text-[10px] bg-sidebar/50 border border-border/40 py-1 px-2.5 rounded-lg">
                 <span className="font-semibold normal-case truncate max-w-[120px] md:max-w-[160px]" title={currentUser.email || ""}>
                   {currentUser.email === ADMIN_EMAIL ? "Admin" : currentUser.email}
@@ -3695,7 +3713,7 @@ export default function App() {
               >
                 <LogIn className="h-3 w-3" /> Accedi (Admin)
               </button>
-            )}
+            ))}
 
             <button 
               onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
