@@ -76,6 +76,12 @@ interface SearchResult {
 
 type AppView = 'home' | 'catalog' | 'stats' | 'timeline' | 'health' | 'map' | 'heatmap' | 'editor' | 'review';
 
+// true sulla build GitHub Pages (vedi vite.config.ts / apiShim.ts): niente
+// server.ts, quindi le funzionalità che dipendevano da Gemini AI o dalla
+// cartella drafts/ (solo lettura, popolata dalla pipeline locale) restano
+// nascoste — non hanno un backend a cui appoggiarsi lì.
+const isStaticBuild = import.meta.env.VITE_STATIC_BUILD === 'true';
+
 // Curve condivise: stessa "fisica" per tutte le micro-animazioni del progetto
 // Unica fonte per l'email amministratore lato client — evita che le ~10
 // occorrenze sparse nel file finiscano per divergere se mai cambiasse.
@@ -893,7 +899,10 @@ const RAIL_ITEMS: { view: AppView; label: string; icon: React.ReactNode }[] = [
   { view: 'heatmap', label: 'Heatmap Co-occorrenze', icon: <Columns className="h-4 w-4" /> },
   { view: 'health', label: 'Coerenza', icon: <Check className="h-4 w-4" /> },
   { view: 'editor', label: 'Editor XML', icon: <Feather className="h-4 w-4" /> },
-  { view: 'review', label: 'Revisione Draft', icon: <GitCompare className="h-4 w-4" /> },
+  // Pannello di revisione draft: dipende dalla cartella drafts/ (solo
+  // lettura, popolata dalla pipeline locale) — non disponibile sulla build
+  // GitHub Pages, che non ha accesso a quel filesystem.
+  ...(isStaticBuild ? [] : [{ view: 'review' as const, label: 'Revisione Draft', icon: <GitCompare className="h-4 w-4" /> }]),
 ];
 
 // Sotto la soglia `md` (768px) di Tailwind, la rail verticale lascia il posto a una barra inferiore.
@@ -5477,7 +5486,7 @@ export default function App() {
                            </div>
                            Trascrizione Testuale
                            <div className="flex-1 h-[1px] bg-border/20" />
-                           {effectiveAdmin && selectedMonumento.testo && (
+                           {!isStaticBuild && effectiveAdmin && selectedMonumento.testo && (
                              <button 
                                onClick={handleTranslate}
                                disabled={translating}
