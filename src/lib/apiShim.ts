@@ -17,14 +17,31 @@
 //
 // Non gestisce: /api/translate, /api/drafts/* (funzionalità AI, fuori
 // scope per la build Pages — vedi PLAN). Rispondono 501.
+//
+// DUE MODALITÀ (vedi PLAN "condivisione sola lettura"):
+//  - viewer (default, dopo il solo gate password): il corpus viene letto
+//    dallo snapshot statico incluso nel sito (public/corpus-snapshot.json,
+//    generato a build time — vedi scripts/build-corpus-snapshot.ts). Dati
+//    fermi all'ultimo deploy, ma nessun token richiesto a chi deve solo
+//    consultare. Le route di scrittura restano bloccate (canWrite=false).
+//  - editor (dopo unlockEditing(token) con un PAT personale valido): il
+//    corpus viene ri-idratato live da GitHub (pullAllCorpusFiles) e le
+//    route di scrittura vengono abilitate, con enforcement qui nello shim
+//    stesso — non solo lato UI — così un bug nell'interfaccia non può mai
+//    tradursi in una scrittura non autorizzata.
 
 import { xmlToMonumenti, monumentiToXml, renderIconography } from "./xmlUtils";
 import { buildSearchIndex, searchMonumenti } from "./searchIndex";
 import MiniSearch from "minisearch";
-import { pullAllCorpusFiles, pushCorpusFile, deleteCorpusFile, testGitHubAccess } from "./githubStorageBrowser";
+import { pullAllCorpusFiles, pushCorpusFile, deleteCorpusFile, testGitHubAccess, setStoredToken, clearStoredToken } from "./githubStorageBrowser";
 
 let corpusStore = new Map<string, string>(); // filename -> xml content
 let searchIndex: MiniSearch<any> | null = null;
+let canWrite = false;
+
+export function isEditingUnlocked(): boolean {
+  return canWrite;
+}
 
 function json(data: unknown, status = 200): Response {
   return new Response(JSON.stringify(data), {
@@ -246,6 +263,7 @@ async function handleRequest(url: URL, init: RequestInit | undefined): Promise<R
     }
 
     if (path === "/api/monumenti" && method === "POST") {
+      if (!canWrite) return json({ error: "Modifica non abilitata. Sblocca l'editing con un token GitHub per salvare." }, 403);
       const data: any[] = body;
       if (!Array.isArray(data)) return json({ error: "Expected array" }, 400);
       if (data.length > 500) return json({ error: "Troppe schede in un'unica richiesta (max 500)" }, 400);
@@ -275,6 +293,7 @@ async function handleRequest(url: URL, init: RequestInit | undefined): Promise<R
     }
 
     if (path.startsWith("/api/monumenti/") && method === "PATCH") {
+      if (!canWrite) return json({ error: "Modifica non abilitata. Sblocca l'editing con un token GitHub per salvare." }, 403);
       const entryId = decodeURIComponent(path.slice("/api/monumenti/".length));
       const { monumento, baseHash } = body || {};
       if (!monumento || typeof monumento !== "object") return json({ error: "Corpo mancante: atteso { monumento, baseHash }" }, 400);
@@ -298,6 +317,7 @@ async function handleRequest(url: URL, init: RequestInit | undefined): Promise<R
     }
 
     if (path === "/api/corpus/import" && method === "POST") {
+      if (!canWrite) return json({ error: "Modifica non abilitata. Sblocca l'editing con un token GitHub per importare." }, 403);
       const files: { filename: string; content: string }[] = body;
       if (!Array.isArray(files)) return json({ error: "Expected array of {filename, content}" }, 400);
       if (files.length > 500) return json({ error: "Troppi file in un'unica richiesta (max 500)" }, 400);
@@ -372,6 +392,56 @@ async function handleRequest(url: URL, init: RequestInit | undefined): Promise<R
   }
 }
 
+// ── Caricamento snapshot statico (modalità viewer) ───────────────────────
+
+async function loadSnapshot(): Promise<Map<string, string>> {
+  // import.meta.env.BASE_URL rispetta il "base" di vite.config.ts
+  // (/ILA---INTERFACE/ sulla build Pages) — stesso asset servito da GitHub
+  // Pages insieme al resto del sito, nessuna richiesta cross-origin.
+  const url = `${import.meta.env.BASE_URL}corpus-snapshot.json`;
+  const res = await fetch(url);
+  if (!res.ok) {
+    throw new Error(`Snapshot corpus non trovato (${res.status}) — il deploy potrebbe non aver generato public/corpus-snapshot.json`);
+  }
+  const data = await res.json();
+  const files = data?.files;
+  if (!files || typeof files !== "object") throw new Error("Formato snapshot inatteso");
+  return new Map(Object.entries(files) as [string, string][]);
+}
+
+/**
+ * Sblocca la modalità editor: valida il PAT fornito, ri-idrata il corpus
+ * live da GitHub (sostituendo lo snapshot statico) e abilita le route di
+ * scrittura. In caso di token non valido non tocca lo stato corrente
+ * (resta in modalità viewer sullo snapshot).
+ */
+export async function unlockEditing(token: string): Promise<{ ok: boolean; detail: string }> {
+  setStoredToken(token);
+  const result = await testGitHubAccess();
+  if (!result.ok) {
+    clearStoredToken();
+    return result;
+  }
+  try {
+    corpusStore = await pullAllCorpusFiles();
+    updateSearchIndex();
+    canWrite = true;
+    return result;
+  } catch (e: any) {
+    clearStoredToken();
+    canWrite = false;
+    return { ok: false, detail: e.message || String(e) };
+  }
+}
+
+/** Ri-blocca la modalità editor e torna allo snapshot statico di sola lettura. */
+export async function lockEditing(): Promise<void> {
+  clearStoredToken();
+  canWrite = false;
+  corpusStore = await loadSnapshot();
+  updateSearchIndex();
+}
+
 // ── Installazione ─────────────────────────────────────────────────────
 
 let installed = false;
@@ -380,7 +450,7 @@ export async function installApiShim(): Promise<void> {
   if (installed) return;
   installed = true;
 
-  corpusStore = await pullAllCorpusFiles();
+  corpusStore = await loadSnapshot();
   updateSearchIndex();
 
   const originalFetch = window.fetch.bind(window);

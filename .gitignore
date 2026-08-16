@@ -12,3 +12,8 @@ coverage/
 # locale resta solo una cache, popolata al boot dal server — non va più
 # tracciata qui, per non tenere due fonti di verità divergenti.
 src/data/corpus-drafts/
+
+# Scatto statico del corpus generato a build time per la build GitHub Pages
+# (vedi scripts/build-corpus-snapshot.ts) — contiene il corpus vero, mai da
+# committare: viene rigenerato ad ogni deploy dal workflow Actions.
+public/corpus-snapshot.json

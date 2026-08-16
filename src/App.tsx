@@ -44,7 +44,9 @@ import {
   ZoomIn,
   ZoomOut,
   RotateCcw,
-  GitCompare
+  GitCompare,
+  KeyRound,
+  Unlock
 } from 'lucide-react';
 import { cn, EASE_OUT, EASE_IN, SPRING_SNAPPY, SPRING_SOFT } from './lib/utils';
 import { ICONOGRAPHY_LABELS } from './lib/iconographyLabels';
@@ -59,6 +61,7 @@ import { IconographyPanel } from './components/IconographyPanel';
 import { CooccurrenceHeatmap } from './components/CooccurrenceHeatmap';
 import { SectionEditorView } from './components/SectionEditorView';
 import { DraftReviewPanel } from './components/DraftReviewPanel';
+import { UnlockEditingModal } from './components/UnlockEditingModal';
 import { auth, loginWithGoogle, logout } from './lib/firebase';
 import { onAuthStateChanged, User } from 'firebase/auth';
 
@@ -923,11 +926,13 @@ function useIsDesktop(breakpointPx = 768) {
 function IconRail({
   activeView, onNavigate, theme, setTheme, isDarkModeActive,
   showSettings, setShowSettings, currentUser, loginWithGoogle, logout,
+  editingUnlocked, onUnlockClick, onLockClick,
 }: {
   activeView: AppView; onNavigate: (v: AppView) => void;
   theme: 'light' | 'dark' | 'system'; setTheme: (t: 'light' | 'dark' | 'system') => void; isDarkModeActive: boolean;
   showSettings: boolean; setShowSettings: (v: boolean | ((s: boolean) => boolean)) => void;
   currentUser: User | null; loginWithGoogle: () => void; logout: () => void;
+  editingUnlocked: boolean; onUnlockClick: () => void; onLockClick: () => void;
 }) {
   const [expanded, setExpanded] = useState(false);
   const isDesktop = useIsDesktop();
@@ -997,6 +1002,21 @@ function IconRail({
               {currentUser ? <LogOut className="h-4 w-4" /> : <LogIn className="h-4 w-4" />}
             </span>
             <span className="text-[8px] font-sans font-bold uppercase tracking-wide leading-none">{currentUser ? 'Esci' : 'Accedi'}</span>
+          </button>
+        )}
+
+        {/* Sblocco modifica per token GitHub — solo sulla build statica: il
+            gate password da sola apre il sito in sola lettura (snapshot). */}
+        {isStaticBuild && (
+          <button
+            onClick={editingUnlocked ? onLockClick : onUnlockClick}
+            title={editingUnlocked ? "Modifica sbloccata — blocca di nuovo" : "Sblocca modifica con token GitHub"}
+            className={cn("flex flex-col items-center justify-center gap-1 shrink-0 w-16 h-full", editingUnlocked ? "text-accent" : "text-muted")}
+          >
+            <span className="w-4 h-4 shrink-0 flex items-center justify-center">
+              {editingUnlocked ? <Unlock className="h-4 w-4" /> : <KeyRound className="h-4 w-4" />}
+            </span>
+            <span className="text-[8px] font-sans font-bold uppercase tracking-wide leading-none">{editingUnlocked ? 'Sbloccato' : 'Sblocca'}</span>
           </button>
         )}
       </nav>
@@ -1132,6 +1152,28 @@ function IconRail({
                     className="text-[11px] font-sans font-bold uppercase tracking-widest whitespace-nowrap truncate"
                   >
                     {currentUser ? (currentUser.email === ADMIN_EMAIL ? 'Admin' : currentUser.email) : 'Accedi'}
+                  </motion.span>
+                )}
+              </AnimatePresence>
+            </button>
+          )}
+
+          {isStaticBuild && (
+            <button
+              onClick={editingUnlocked ? onLockClick : onUnlockClick}
+              title={editingUnlocked ? "Modifica sbloccata — blocca di nuovo" : "Sblocca modifica con token GitHub"}
+              className={cn("flex items-center gap-3 h-10 px-3 rounded-lg shrink-0 hover:bg-accent/5 transition-colors", editingUnlocked ? "text-accent" : "text-muted hover:text-accent")}
+            >
+              <span className="w-4 h-4 shrink-0 flex items-center justify-center">
+                {editingUnlocked ? <Unlock className="h-4 w-4" /> : <KeyRound className="h-4 w-4" />}
+              </span>
+              <AnimatePresence>
+                {expanded && (
+                  <motion.span
+                    initial={{ opacity: 0, x: -6 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -6 }} transition={{ duration: 0.15 }}
+                    className="text-[11px] font-sans font-bold uppercase tracking-widest whitespace-nowrap truncate"
+                  >
+                    {editingUnlocked ? 'Modifica sbloccata' : 'Sblocca modifica'}
                   </motion.span>
                 )}
               </AnimatePresence>
@@ -2707,6 +2749,44 @@ export default function App() {
     return () => unsubscribe();
   }, []);
 
+  // Sulla build statica: di default si consulta lo snapshot statico del
+  // corpus (nessun token richiesto, solo il gate password in main.tsx).
+  // editingUnlocked diventa true solo dopo un PAT GitHub valido inserito
+  // da UnlockEditingModal — è quello il vero "sei autorizzato a scrivere"
+  // per questa build (vedi effectiveAdmin sotto e apiShim.ts).
+  const [editingUnlocked, setEditingUnlocked] = useState(false);
+  const [showUnlockModal, setShowUnlockModal] = useState(false);
+
+  const handleUnlockSubmit = async (token: string) => {
+    const { unlockEditing } = await import('./lib/apiShim');
+    return unlockEditing(token);
+  };
+
+  const handleUnlocked = async () => {
+    setEditingUnlocked(true);
+    // Il corpus in memoria (snapshot) va rimpiazzato con quello live appena
+    // idratato da unlockEditing, altrimenti la UI continua a mostrare i
+    // dati fermi all'ultimo deploy anche se lo shim ora ne ha di freschi.
+    try {
+      const res = await fetch('/api/monumenti');
+      if (res.ok) setMonumenti(await res.json());
+    } catch (e) {
+      console.warn('Ricaricamento corpus live dopo sblocco fallito', e);
+    }
+  };
+
+  const handleLockEditing = async () => {
+    const { lockEditing } = await import('./lib/apiShim');
+    await lockEditing();
+    setEditingUnlocked(false);
+    try {
+      const res = await fetch('/api/monumenti');
+      if (res.ok) setMonumenti(await res.json());
+    } catch (e) {
+      console.warn('Ricaricamento snapshot dopo blocco fallito', e);
+    }
+  };
+
   const [translating, setTranslating] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [importStatus, setImportStatus] = useState<{ type: 'idle' | 'loading' | 'success' | 'error', message: string }>({ type: 'idle', message: '' });
@@ -2791,15 +2871,14 @@ export default function App() {
     loadData();
   }, []);
 
-  // Sulla build statica non c'è login Google/Firebase (vedi PasswordGate/
-  // GitHubTokenGate in main.tsx): l'accesso in scrittura è già autorizzato
-  // a monte dal PAT GitHub dell'utente (permessi Contents: Read/write sulla
-  // repo, enforcement reale lato GitHub) più il gate password. Il check su
-  // ADMIN_EMAIL era comunque solo un controllo di visibilità UI, mai
-  // enforcement reale (vedi commento sopra) — qui diventerebbe un login
-  // extra ridondante che richiede anche gregoee2002.github.io autorizzato
-  // in Firebase Console, che complica senza aggiungere sicurezza reale.
-  const effectiveAdmin = isStaticBuild || (!!currentUser && currentUser.email === ADMIN_EMAIL);
+  // Sulla build statica non c'è login Google/Firebase (il check su
+  // ADMIN_EMAIL era comunque solo visibilità UI, mai enforcement reale —
+  // vedi commento sopra): l'accesso in scrittura dipende da editingUnlocked,
+  // vero solo dopo un PAT GitHub valido sbloccato da UnlockEditingModal
+  // (enforcement reale è comunque lato apiShim.ts + permessi del token su
+  // GitHub, non questo booleano). Prima di sbloccare, chi ha solo la
+  // password vede il catalogo in sola lettura dallo snapshot statico.
+  const effectiveAdmin = isStaticBuild ? editingUnlocked : (!!currentUser && currentUser.email === ADMIN_EMAIL);
 
   const regions = useMemo(() => Array.from(new Set(monumenti.map(m => m.regione).filter(Boolean).map(s => s.trim()))).sort(), [monumenti]);
   const corpora = useMemo(() => Array.from(new Set(monumenti.map(m => m.corpus).filter(Boolean).map(s => s.trim()))).sort(), [monumenti]);
@@ -3536,6 +3615,9 @@ export default function App() {
         currentUser={currentUser}
         loginWithGoogle={loginWithGoogle}
         logout={logout}
+        editingUnlocked={editingUnlocked}
+        onUnlockClick={() => setShowUnlockModal(true)}
+        onLockClick={handleLockEditing}
       />
       <div className="digital-seal">CDA</div>
 
@@ -3689,9 +3771,9 @@ export default function App() {
         )}
           
           <div className="flex items-center gap-2.5 shrink-0">
-            {/* Authentication Buttons — sulla build statica l'accesso in
-                scrittura è già autorizzato da password+PAT GitHub (vedi
-                effectiveAdmin sopra), niente login Google da mostrare. */}
+            {/* Authentication Buttons — sulla build statica non c'è login
+                Google, il "chi può modificare" è lo sblocco con token
+                GitHub qui sotto (guardia isStaticBuild). */}
             {!isStaticBuild && (currentUser ? (
               <div className="flex items-center gap-2 text-muted text-[10px] bg-sidebar/50 border border-border/40 py-1 px-2.5 rounded-lg">
                 <span className="font-semibold normal-case truncate max-w-[120px] md:max-w-[160px]" title={currentUser.email || ""}>
@@ -3714,6 +3796,29 @@ export default function App() {
                 <LogIn className="h-3 w-3" /> Accedi (Admin)
               </button>
             ))}
+
+            {isStaticBuild && (
+              editingUnlocked ? (
+                <div className="flex items-center gap-2 text-accent text-[10px] bg-accent/10 border border-accent/20 py-1 px-2.5 rounded-lg">
+                  <span className="font-semibold normal-case">Modifica sbloccata</span>
+                  <button
+                    onClick={handleLockEditing}
+                    className="hover:text-ink font-bold transition-all ml-1 cursor-pointer flex items-center gap-1"
+                    title="Blocca di nuovo (torna alla sola consultazione)"
+                  >
+                    <Unlock className="h-3 w-3" />
+                  </button>
+                </div>
+              ) : (
+                <button
+                  onClick={() => setShowUnlockModal(true)}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-accent/10 hover:bg-accent/20 border border-accent/20 text-accent transition-all cursor-pointer font-sans text-[10px] font-bold"
+                  title="Sblocca modifica con un token GitHub personale"
+                >
+                  <KeyRound className="h-3 w-3" /> Sblocca modifica
+                </button>
+              )
+            )}
 
             <button 
               onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
@@ -4529,7 +4634,7 @@ export default function App() {
               monumenti={monumenti}
               effectiveAdmin={effectiveAdmin}
               currentUserEmail={currentUser?.email}
-              onLogin={loginWithGoogle}
+              onLogin={isStaticBuild ? () => setShowUnlockModal(true) : loginWithGoogle}
               onSave={handleSaveMetadata}
               onCreate={createMonumentoFromEditor}
               onExport={exportSingleRecord}
@@ -5701,6 +5806,14 @@ export default function App() {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {isStaticBuild && showUnlockModal && (
+        <UnlockEditingModal
+          onClose={() => setShowUnlockModal(false)}
+          onSubmit={handleUnlockSubmit}
+          onUnlocked={handleUnlocked}
+        />
+      )}
     </div>
     </MotionConfig>
   );
