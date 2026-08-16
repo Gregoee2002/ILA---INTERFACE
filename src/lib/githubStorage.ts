@@ -326,7 +326,10 @@ export async function pushFileToGitHub(filename: string, content: string, messag
     content: Buffer.from(content, "utf-8").toString("base64"),
     branch: cfg.branch,
   };
-  const existingSha = shaCache.get(filename);
+  // Vedi commento analogo in pushDraftFileToGitHub: la cache è in-memory per
+  // processo, quindi va recuperata da GitHub se manca (script one-off lanciati
+  // a parte dal server, che è dove normalmente viene popolata dal pull).
+  const existingSha = shaCache.get(filename) || (await fetchCurrentSha(cfg, filename));
   if (existingSha) body.sha = existingSha;
 
   const url = `${GITHUB_API}/repos/${cfg.repo}/contents/${repoPath(cfg, filename)}`;
