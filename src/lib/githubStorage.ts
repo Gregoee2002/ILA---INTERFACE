@@ -370,6 +370,14 @@ async function fetchCurrentSha(cfg: GitHubConfig, filename: string): Promise<str
   return data.sha || null;
 }
 
+async function fetchCurrentDraftSha(cfg: GitHubConfig, filename: string): Promise<string | null> {
+  const url = `${GITHUB_API}/repos/${cfg.repo}/contents/${draftRepoPath(cfg, filename)}?ref=${encodeURIComponent(cfg.branch)}`;
+  const res = await fetch(url, { headers: headers(cfg) });
+  if (!res.ok) return null;
+  const data = await res.json();
+  return data.sha || null;
+}
+
 /**
  * Variante di pushFileToGitHub per un file in drafts/ — stessa logica di
  * retry su conflitto sha, ma path e cache sha indipendenti da corpus/.
@@ -383,7 +391,11 @@ export async function pushDraftFileToGitHub(filename: string, content: string, m
     content: Buffer.from(content, "utf-8").toString("base64"),
     branch: cfg.branch,
   };
-  const existingSha = draftShaCache.get(filename);
+  // La cache sha è in-memory per processo: in uno script one-off lanciato
+  // a parte dal server (che è dove la cache viene normalmente popolata dal
+  // pull), sarebbe sempre vuota — recupero lo sha corrente da GitHub se manca,
+  // così pushDraftFileToGitHub funziona anche da processo "freddo".
+  const existingSha = draftShaCache.get(filename) || (await fetchCurrentDraftSha(cfg, filename));
   if (existingSha) body.sha = existingSha;
 
   const url = `${GITHUB_API}/repos/${cfg.repo}/contents/${draftRepoPath(cfg, filename)}`;
