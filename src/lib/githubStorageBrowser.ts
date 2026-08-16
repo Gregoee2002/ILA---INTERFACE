@@ -48,6 +48,16 @@ export function utf8ToBase64(content: string): string {
   return btoa(binary);
 }
 
+// Decode inverso, UTF-8-safe — serve a leggere il campo "content" (base64)
+// della Contents API. new TextDecoder gestisce correttamente i caratteri
+// multi-byte (es. greco epigrafico), a differenza di un atob() ingenuo.
+function base64ToUtf8(b64: string): string {
+  const binary = atob(b64.replace(/\s/g, ""));
+  const bytes = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+  return new TextDecoder("utf-8").decode(bytes);
+}
+
 function repoPath(filename: string): string {
   const safeName = filename.replace(/[^a-zA-Z0-9._-]/g, "_");
   return `${CORPUS_PATH}/${safeName}`;
@@ -79,6 +89,14 @@ export async function listCorpusFiles(): Promise<GitHubDirEntry[]> {
  * Scarica tutti gli XML del corpus dalla repo GitHub, popolando anche la
  * cache degli sha. Va chiamata all'avvio dello shim, prima di rispondere a
  * qualunque richiesta /api/*.
+ *
+ * NOTA: il contenuto va letto dalla Contents API (api.github.com), MAI da
+ * entry.download_url (raw.githubusercontent.com) — quell'host rifiuta la
+ * richiesta preflight CORS quando il browser aggiunge l'header
+ * Authorization (verificato: risponde 403 all'OPTIONS, senza
+ * Access-Control-Allow-Headers), quindi ogni fetch verrebbe bloccato dal
+ * browser prima di partire. api.github.com invece gestisce Authorization
+ * in CORS correttamente (stesso host già usato per liste/scritture).
  */
 export async function pullAllCorpusFiles(): Promise<Map<string, string>> {
   const entries = await listCorpusFiles();
@@ -86,13 +104,8 @@ export async function pullAllCorpusFiles(): Promise<Map<string, string>> {
   shaCache.clear();
 
   for (const entry of entries) {
-    if (!entry.download_url) continue;
     try {
-      const fileRes = await fetch(entry.download_url, {
-        headers: { Authorization: `Bearer ${getStoredToken()}` },
-      });
-      if (!fileRes.ok) continue;
-      const content = await fileRes.text();
+      const content = await fetchFileContent(entry.name);
       result.set(entry.name, content);
       shaCache.set(entry.name, entry.sha);
     } catch {
@@ -101,6 +114,17 @@ export async function pullAllCorpusFiles(): Promise<Map<string, string>> {
     }
   }
   return result;
+}
+
+async function fetchFileContent(filename: string): Promise<string> {
+  const url = `${GITHUB_API}/repos/${REPO}/contents/${repoPath(filename)}?ref=${encodeURIComponent(BRANCH)}`;
+  const res = await fetch(url, { headers: headers() });
+  if (!res.ok) throw new Error(`GitHub get file fallita per ${filename} (${res.status})`);
+  const data = await res.json();
+  if (data.encoding !== "base64" || typeof data.content !== "string") {
+    throw new Error(`Formato risposta inatteso per ${filename}`);
+  }
+  return base64ToUtf8(data.content);
 }
 
 async function fetchCurrentSha(filename: string): Promise<string | null> {
