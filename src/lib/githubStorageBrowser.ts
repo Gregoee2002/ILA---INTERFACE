@@ -97,22 +97,37 @@ export async function listCorpusFiles(): Promise<GitHubDirEntry[]> {
  * Access-Control-Allow-Headers), quindi ogni fetch verrebbe bloccato dal
  * browser prima di partire. api.github.com invece gestisce Authorization
  * in CORS correttamente (stesso host già usato per liste/scritture).
+ *
+ * Le richieste partono in parallelo (pool a concorrenza limitata) invece
+ * che una alla volta: con ~100 file in sequenza il caricamento iniziale
+ * richiedeva decine di secondi. 8 in parallelo è un compromesso prudente —
+ * abbastanza per abbattere il tempo totale senza rischiare la secondary
+ * rate limit di GitHub sulle richieste concorrenti.
  */
+const PULL_CONCURRENCY = 8;
+
 export async function pullAllCorpusFiles(): Promise<Map<string, string>> {
   const entries = await listCorpusFiles();
   const result = new Map<string, string>();
   shaCache.clear();
 
-  for (const entry of entries) {
-    try {
-      const content = await fetchFileContent(entry.name);
-      result.set(entry.name, content);
-      shaCache.set(entry.name, entry.sha);
-    } catch {
-      // File saltato: resta assente dalla Map, l'editor lo tratterà come
-      // non esistente finché un reload dello shim non riesce a scaricarlo.
+  let next = 0;
+  async function worker(): Promise<void> {
+    while (next < entries.length) {
+      const entry = entries[next++];
+      try {
+        const content = await fetchFileContent(entry.name);
+        result.set(entry.name, content);
+        shaCache.set(entry.name, entry.sha);
+      } catch {
+        // File saltato: resta assente dalla Map, l'editor lo tratterà come
+        // non esistente finché un reload dello shim non riesce a scaricarlo.
+      }
     }
   }
+
+  const workers = Array.from({ length: Math.min(PULL_CONCURRENCY, entries.length) }, () => worker());
+  await Promise.all(workers);
   return result;
 }
 
