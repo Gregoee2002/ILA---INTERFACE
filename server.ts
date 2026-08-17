@@ -13,7 +13,7 @@ import MiniSearch from 'minisearch';
 
 async function startServer() {
   const app = express();
-  const PORT = 3000;
+  const PORT = Number(process.env.PORT) || 3000;
   const DATA_DIR = path.join(process.cwd(), "src", "data");
   const CORPUS_DIR = path.join(DATA_DIR, "corpus");
   // Staging area per le estrazioni draft (agente Vision su Lane 1971), separata
