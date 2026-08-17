@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Iscrizione greca</rs> Grande altare con rilievo di Men su piedistallo, Selmea (Gözören)</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>CMRDM — Corpus Monumentorum Religionis Dei Menis</authority>
+                <idno type="filename">CMRDM-AS-108</idno>
+                <idno type="TM"><!-- inserire TM number --></idno>
+                <idno type="CMRDM">CMRDM I 108</idno>
+                    <idno type="id">76</idno>
+</publicationStmt>
+            <!-- Revisione assistita (cross-check PDF Lane): corretto il rigo 1, dove lo stampato ha "[ὁ δῆ]μος" (minuscolo, con spirito e circonflesso) e non "[Ὁ δη]μος" come nel draft; rigo 2 già corretto. Corretto Pleiades: come per il nr. 107, l'ID nel draft (609395, Hadrianeia) è errato/riutilizzato da un sito diverso; nessuna voce Pleiades affidabile per Selmea, campo riportato a DA_COMPILARE e segnalato. Tradotta in italiano la prosa descrittiva di Lane, integrate le dimensioni mancanti (larghezza della base 59 cm, spessore 55 cm). -->
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>in situ o disperso</repository>
+                        <idno>CMRDM I 108</idno>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Altare (marmo?) scoperto da Crowfoot e Anderson nel 1898 in un cimitero a Gözören. Altezza 1.48 m, larghezza in alto 61 cm, larghezza del fusto 56 cm, larghezza della base 59 cm, spessore 55 cm.</p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/138.html">stone</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/29.html">altar</objectType>
+                                    <dimensions unit="cm">
+                                        <height>1,48</height>
+                                        <width>61</width>
+                                        <depth>55</depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>Il campo principale mostra Men su piedistallo, con una testa di bue presso il piede sinistro, un oggetto deturpato nella mano destra, la mano sinistra alzata con il gomito appoggiato a un pilastro (?). Sul lato sinistro, una testa di bue; sul lato destro, grappoli d'uva e foglie come in precedenza. Dedica del demos dei Selmenoi a Men.</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Altezza delle lettere: 2.5–3 cm.</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="DA_COMPILARE">Selmea</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">Gözören, Turchia</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" precision="low"></origDate>
+                        </origin>
+                        <provenance type="found">Gözören, Turchia</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+                <ab>
+                    <lb n="1"/>[ὁ δῆ]μος Σελμηνῶν
+                    <lb n="2"/>[Μ]ηνὶ εὐχήν.
+                </ab>
+            </div>
+            <div type="apparatus"/>
+            <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="bibliography">
+                <listBibl>
+                    <bibl>Anderson, op. cit., p. 299, no. 221</bibl>
+                    <bibl>MAMA, VII, p. 52, no. 244 and Pl. 15</bibl>
+                    <bibl>Lane, I, p. 25, no. 18</bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

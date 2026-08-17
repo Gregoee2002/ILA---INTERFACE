@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Iscrizione greca</rs> — CMRDM I nr. 130: Pietra con iscrizione horos (cippo di confine) per Men Askaenos, Apollonia Pisidiae</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>CMRDM — Corpus Monumentorum Religionis Dei Menis</authority>
+                <idno type="filename">CMRDM-AS-130</idno>
+                <idno type="TM"><!-- inserire TM number --></idno>
+                <idno type="CMRDM">CMRDM I 130</idno>
+            </publicationStmt>
+            <!-- REVISIONE MAGGIORE (cross-check col PDF Lane, p. 84): il draft conteneva per errore il testo dell'entry 131 (Anaboura, iscrizione onoraria MAMA VIII per un sacerdote di Men Askaenos) invece del testo reale dell'entry 130, che è tutt'altra iscrizione: una pietra di confine (horos) nel muro della chiesa greca della cittadella presso Apollonia Pisidiae ("Ὅρος ἱερὸς καὶ ἄσυλος θεοῦ ἐπιφανοῦς Μηνὸς Ἀσκαηνοῦ" — "confine sacro e inviolabile del dio manifesto Men Askaenos"). Sostituiti integralmente: titolo, testo greco, bibliografia (era erroneamente "MAMA VIII p.5 nota 2; Lane I p.28 no.5", che non corrisponde a nessuna delle due entry), <support> e <layout>. L'entry 131 (Anaboura) non fa parte di questo batch di revisione e il suo testo corretto non è stato ricreato altrove. Pleiades: corretto l'ID di Apollonia Pisidiae (Mordiaion/Sozopolis, Uluborlu) da 652388 (id inesistente, 404 sull'API) a 638758, verificato su Pleiades stesso. -->
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>in situ (Greek church wall, citadel)</repository>
+                        <idno>CMRDM I 130</idno>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Pietra nel muro della chiesa greca nella cittadella, scoperta da C. Wilson, nota dal 1883. Dimensioni non disponibili.</p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/138.html">stone</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/250.html">stone</objectType>
+                                    <dimensions unit="cm">
+                                        <height></height>
+                                        <width></width>
+                                        <depth></depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>La pietra reca apparentemente un rilievo di Men a cavallo e la seguente iscrizione: un cippo di confine (horos) sacro e inviolabile del dio manifesto Men Askaenos.</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Height of letters: DA_COMPILARE.</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/638758">Apollonia Pisidiae</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">near Uluborlu, Turkey</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" precision="low"></origDate>
+                        </origin>
+                        <provenance type="found">presso Uluborlu, Turchia</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+                <ab>
+                    <lb n="1"/>Ὅρος ἱερὸς καὶ ἄσυ-
+                    <lb n="2" break="no"/>λος θεοῦ ἐπιφανοῦ[ς]
+                    <lb n="3"/>Μηνὸς Ἀσκ[α]ηνοῦ.
+                </ab>
+            </div>
+            <div type="apparatus"/>
+            <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="bibliography">
+                <listBibl>
+                    <bibl>Ramsay, JHS, IV, 1883, p. 417, no. 32</bibl>
+                    <bibl>Drexler, op. cit., col. 2723</bibl>
+                    <bibl>Perdrizet, op. cit., p. 69</bibl>
+                    <bibl>H. Rott, Kleinasiatische Denkmäler aus Pisidien, Pamphylien, Kilikien, und Lykien (Studien über christliche Denkmäler, V-VI, Leipzig, 1908), p. 348, no. 1</bibl>
+                    <bibl>Robert, Hellenica, VI, 1948, p. 34</bibl>
+                    <bibl>Lane, I, p. 45, no. 12</bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

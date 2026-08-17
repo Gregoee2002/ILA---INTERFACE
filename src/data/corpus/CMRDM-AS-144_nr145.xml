@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Iscrizione greca</rs> — CMRDM I nr. 145: Tetragonal cippus with funerary curse invoking Men Katachthonios, Iconium</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>CMRDM — Corpus Monumentorum Religionis Dei Menis</authority>
+                <idno type="filename">CMRDM-AS-144</idno>
+                <idno type="TM"><!-- inserire TM number --></idno>
+                <idno type="CMRDM">CMRDM I 145</idno>
+            </publicationStmt>
+            <!-- Revisione assistita (cross-check PDF Lane): corretto Pleiades ID di Iconium (628920, non risolvibile/non pertinente) con l'ID corretto 648647, verificato su Pleiades e su Trismegistos. Corretto il testo greco: l.1 "Οὐλπίος"→"Οὔλπιος" (nome "Ulpius"); l.8 aggiunto accento caduto "ε-"→"ἐ-"; l.9 "ισδιαστῇ"→"ισβιάσηται" (forma inesistente, sostituita con la lezione di Lane da ἐπιβιάζομαι); l.11 rimosso accento spurio "Κατάχθόνι-"→"Καταχθόνι-"; l.12 "κεκολωμέ-"→"κεχολωμέ-" (da χολόομαι, formula ricorrente in questo gruppo di iscrizioni). Aggiunto dato di scoperta (Sterrett, 1884, casa del dott. Diamantides) e tradotta la prosa inglese in italiano. -->
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>in situ or lost</repository>
+                        <idno>CMRDM I 145</idno>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Cippo tetragono con maledizione funeraria che invoca Men Katachthonios, Iconium. Scoperto da Sterrett nel 1884 nella casa del dott. Diamantides.</p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/138.html">stone</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/57.html">base</objectType>
+                                    <dimensions unit="cm">
+                                        <height></height>
+                                        <width></width>
+                                        <depth></depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>Cippo tetragono. Marco Ulpio Eracleito dedica questa tomba per sé stesso, la moglie Claudia e i loro figli, vietandone l'uso ad altri. Maledizione funeraria che invoca Men Katachthonios contro i violatori.</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Height of letters: DA_COMPILARE.</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/648647">Iconium</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">Konya, Turkey</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" precision="low"></origDate>
+                        </origin>
+                        <provenance type="found">Konya, Turkey</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+                <ab>
+                    <lb n="1"/>Μ. Οὔλπιος Ἡρά-
+                    <lb n="2"/>κλειτος ἑαυτ[ῷ]
+                    <lb n="3"/>καὶ Κλαυδ[ίᾳ γυν-
+                    <lb n="4"/>[α]ικὶ αὐτοῦ καὶ τε-
+                    <lb n="5"/>κνοῖς αὐτῶν τήν
+                    <lb n="6"/>[λ]άρνακα καὶ τὸν βω-
+                    <lb n="7"/>μόν, ἄλλῳ δὲ μὴ θε-
+                    <lb n="8"/>ῖναι. Ὃ δ᾽ ἄν ἐ-
+                    <lb n="9"/>[π]ισβιάσηται ἢ
+                    <lb n="10"/>ἀ[δ]ικήσει ἔχοιτο
+                    <lb n="11"/>[Μ]ῆνα Καταχθόνι-
+                    <lb n="12"/>ον κεχολωμέ-
+                    <lb n="13"/>νον.
+                </ab>
+            </div>
+            <div type="apparatus"/>
+            <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="bibliography">
+                <listBibl>
+                    <bibl>Sterrett, Epigraphical Journey (ASCSA II, 1883-4), p. 200, no. 211</bibl>
+                    <bibl>Drexler, op. cit., col. 2725</bibl>
+                    <bibl>Perdrizet, op. cit., p. 69, no. 5</bibl>
+                    <bibl>Lane I, p. 46, no. 2</bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

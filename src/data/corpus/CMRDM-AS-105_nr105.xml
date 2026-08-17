@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Iscrizione greca</rs> Pilastro cilindrico di calcare bluastro con iscrizione, Appola? (Çoğu)</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>CMRDM — Corpus Monumentorum Religionis Dei Menis</authority>
+                <idno type="filename">CMRDM-AS-105</idno>
+                <idno type="TM"><!-- inserire TM number --></idno>
+                <idno type="CMRDM">CMRDM I 105</idno>
+                    <idno type="id">73</idno>
+</publicationStmt>
+            <!-- Revisione assistita (cross-check PDF Lane): corretto il rigo 4, dove il draft univa in un'unica lacuna non chiusa "[μοσθένης Διο[τίμου]." un testo che nello stampato è invece "[μοσθέν]ης Διο[τείμου]." (bracket chiuso dopo "μοσθέν", e cognome "Διοτείμου" con l'epsilon caduta nel draft). Corretto Pleiades: aggiunto l'ID per Appolena (toponimo minore della Frigia, corrispondente ad "Appola?" di Lane e situato nella stessa zona tra Bolvadin ed Emirdağ, Barrington 62 F4), verificato su Wikipedia/Pleiades, 609315 (contrassegnato con asterisco in Pleiades come localizzazione incerta, coerente con il punto interrogativo di Lane). Tradotta in italiano la prosa descrittiva di Lane. -->
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>in situ (lato moschea)</repository>
+                        <idno>CMRDM I 105</idno>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Pilastro cilindrico di calcare bluastro, spezzato in basso. Trovato nel 1908 da W. M. Calder, accanto a una moschea. Altezza 79 cm, circonferenza 1.23 m.</p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/138.html">limestone</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/103.html">column</objectType>
+                                    <dimensions unit="cm">
+                                        <height>79</height>
+                                        <width></width>
+                                        <depth></depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>La pietra reca l'iscrizione seguente, che inizia a 63 cm dalla sommità. Dedica per la salvezza del popolo di Appola a Men Askaienos, da parte di Demosthenes figlio di Diotimos.</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Altezza delle lettere: 2–2.5 cm.</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/609315">Appola (?)</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">Çoğu (Kaçubi), Turchia</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" precision="low"></origDate>
+                        </origin>
+                        <provenance type="found">Çoğu (Kaçubi), Turchia</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+                <ab>
+                    <lb n="1"/>Ὑπὲρ δήμου Ἀππολη-
+                    <lb n="2"/>νῶν σωτηρίας Μηνὶ
+                    <lb n="3"/>Ἀσκαηνῷ εὐχὴν Δη-
+                    <lb n="4"/>[μοσθέν]ης Διο[τείμου].
+                </ab>
+            </div>
+            <div type="apparatus"/>
+            <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="bibliography">
+                <listBibl>
+                    <bibl>W.M. Calder, Klio, X, 1910, p. 241, no. 14</bibl>
+                    <bibl>MAMA, I, (1928) p. 231, no. 436</bibl>
+                    <bibl>Lane, I, p. 24, no. 15</bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

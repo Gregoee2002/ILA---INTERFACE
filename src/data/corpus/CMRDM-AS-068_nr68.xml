@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Iscrizione greca</rs> Stele di marmo bianco spezzata in alto, Kavakli</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>CMRDM — Corpus Monumentorum Religionis Dei Menis</authority>
+                <idno type="filename">CMRDM-AS-068</idno>
+                <idno type="TM"><!-- inserire TM number --></idno>
+                <idno type="CMRDM">CMRDM I 68</idno>
+                    <idno type="id">39</idno>
+</publicationStmt>
+            <!-- REVISIONE: testo greco confrontato col PDF (Lane I, p. 52, no. A9, tav. p. 45). Corretti: r. 2 "[.]ψης"→"[·]ονις" (frammento di nome femminile, non "ψης"); r. 3 "[υ]ἱοῦ εὐχά[μενη"→"[ὑ]οῦ εὐξαμένη" (spostata la parentesi; εὐξαμένη con ξ, non εὐχάμενη con χ). Aggiunto dettaglio dal testo di Lane (rinvenuta prima del 1962 davanti alla porta di casa di Veli Çalık; superficie sinistra danneggiata) e tradotta la prosa descrittiva in italiano. TM number non reperibile. -->
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>in situ or lost</repository>
+                        <idno>CMRDM I 68</idno>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Stele di marmo bianco spezzata in alto, Kavakli. Rinvenuta prima del 1962 davanti alla porta di casa di Veli Çalık; superficie sinistra danneggiata. Altezza 40 cm, larghezza 45 cm, spessore 7 cm.</p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/48.html">marble</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/250.html">stele</objectType>
+                                    <dimensions unit="cm">
+                                        <height>40</height>
+                                        <width>45</width>
+                                        <depth>7</depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>Stele spezzata in alto con superficie sinistra danneggiata. Dedica a Men Petraeites da parte di una donna per il figlio Marcus.</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Height of letters: 2.5 cm.</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="DA_COMPILARE">Kavakli area (Kula)</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">Kavakli, Turkey</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" precision="low"></origDate>
+                        </origin>
+                        <provenance type="found">Kavakli, Turchia</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+                <ab>
+                    <lb n="1"/>[Ἔτ]ους τηλ΄, μ[η(νὸς)...]
+                    <lb n="2"/>[·]ονις ὑπὲρ Μάρκου τοῦ
+                    <lb n="3"/>[ὑ]οῦ εὐξαμένη Μηνὶ
+                    <lb n="4"/>[Π]ετραείτῃ εὐλογῶ.
+                </ab>
+            </div>
+            <div type="apparatus"/>
+            <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="bibliography">
+                <listBibl>
+                    <bibl>Herrmann, op. cit., p. 49, no. 43, Plate XIII, no. 2</bibl>
+                    <bibl>Robert, REG, LXXVI, 1963, p. 168, no. 227</bibl>
+                    <bibl>Lane, I, p. 52, no. A9</bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

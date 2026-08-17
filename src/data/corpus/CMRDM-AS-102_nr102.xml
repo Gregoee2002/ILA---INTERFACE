@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Iscrizione greca</rs> Stele di marmo con rilievo di Men in nicchia, Kaualenon katoikia? (British Museum)</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>CMRDM — Corpus Monumentorum Religionis Dei Menis</authority>
+                <idno type="filename">CMRDM-AS-102</idno>
+                <idno type="TM"><!-- inserire TM number --></idno>
+                <idno type="CMRDM">CMRDM I 102</idno>
+                    <idno type="id">70</idno>
+</publicationStmt>
+            <!-- Revisione assistita (cross-check PDF Lane): corretto testo greco. Il rigo 2 dello stampato è "υς Καουλη-" (non "ος Καουλη-" come nel draft) e "Μηνὶ" è affiancato sulla stessa riga a destra, non su una riga propria: la pietra dispone il testo su due colonne separate dalla nicchia scolpita con la figura di Men, layout tipografico frainteso nel draft come righe consecutive. Ricostruito su 3 righe secondo lo stampato. Corretto Pleiades: aggiunto l'ID per Kaualena, verificato su Pleiades/Wikipedia (sito presso Elmacık, corrispondente alla località dell'entry), 609428. Tradotta in italiano la prosa descrittiva di Lane, aggiunto l'aneddoto di Sotheby's del 1964 sulla provenienza dell'oggetto. -->
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>British Museum, Londra</repository>
+                        <idno>CMRDM I 102</idno>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Stele di marmo con lug, nota dal 1884. Ora al British Museum. Altezza 40.5 cm, larghezza 24.5 cm, spessore 7 cm.</p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/48.html">marble</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/250.html">stele</objectType>
+                                    <dimensions unit="cm">
+                                        <height>40,5</height>
+                                        <width>24,5</width>
+                                        <depth>7</depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>Il rilievo mostra Men entro una nicchia scolpita, decorata con acroteri, con in mano sinistra una pigna e nella destra, forse, un tirso, il piede sinistro poggiato sulla testa di un toro prostrato. Sotto il rilievo, dedica di Agathopous a Men di Kaoule. Secondo il catalogo d'asta Sotheby's del 6 luglio 1964, "si dice che il rilievo sia stato trovato al Royal Mt. Ephraim Hotel di Tunbridge Wells, verso il 1800, durante la ricostruzione dell'edificio": dunque o portato lì da un viaggiatore in epoca moderna, oppure effettivamente dedicato lì in antico.</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Altezza delle lettere: DA_COMPILARE.</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/609428">Kaualenon katoikia (?)</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">Elmaçık, Turchia</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" precision="low"></origDate>
+                        </origin>
+                        <provenance type="found">Elmaçık, Turchia</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+                <ab>
+                    <lb n="1"/>Ἀγαθόπο-
+                    <lb n="2"/>υς Καουλη-          Μηνὶ
+                    <lb n="3"/>νῷ εὐχήν.
+                </ab>
+            </div>
+            <div type="apparatus"/>
+            <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="bibliography">
+                <listBibl>
+                    <bibl>*W.H. Cope, Journal of the British Archaeological Association, XL, 1884, pp. 114-5</bibl>
+                    <bibl>Drexler, op. cit., col. 2714</bibl>
+                    <bibl>Perdrizet, op. cit., p. 63</bibl>
+                    <bibl>Robert, Revue de Philologie, LXV, 1939, p. 179, note 3 and Plate II, no. 1</bibl>
+                    <bibl>Vermaseren, Vigiliae Christianae, IV, 1950, p. 151, fig. 2</bibl>
+                    <bibl>Lane, I, p. 24, no. 13 and Plate III, no. 1</bibl>
+                    <bibl>R.A. Higgins, Archaeological Reports, XIII, 1966-7, pp. 47-48 and fig. 5</bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

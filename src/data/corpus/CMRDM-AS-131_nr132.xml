@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Iscrizione greca</rs> — CMRDM I nr. 132: Iscrizione dell'oracolo a dadi che menziona Men Phosphoros, area di Apollonia Pisidiae</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>CMRDM — Corpus Monumentorum Religionis Dei Menis</authority>
+                <idno type="filename">CMRDM-AS-131</idno>
+                <idno type="TM"><!-- inserire TM number --></idno>
+                <idno type="CMRDM">CMRDM I 132</idno>
+            </publicationStmt>
+            <!-- Revisione assistita (cross-check col PDF Lane, p. 85): testo greco riga 1, numerale dell'oracolo a dadi corretto da "ξε΄ δδδδγ΄" a "κε΄ δςςςγ΄" (lettura errata delle lettere numerali κ/ξ e ς/δ); riga 5 "ἐγχείρειν" corretta in "ἐνχειρεῖν" (forma non assimilata, come stampata da Lane su questa pietra). Tradotta in italiano la prosa di <support> e <layout>, integrando il dato di scoperta (Sterrett, 1885) presente nel PDF ma assente dal draft. Pleiades: corretto l'ID di Apollonia Pisidiae da 652388 (inesistente, 404) a 638758. -->
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>in situ or lost</repository>
+                        <idno>CMRDM I 132</idno>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Iscrizione incisa sul lato concavo di un grande blocco, scoperta da Sterrett nel 1885, con menzione di Men Phosphoros, area di Apollonia Pisidiae. Lunghezza 1,36 m, altezza 1,24 m.</p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/138.html">stone</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/189.html">block</objectType>
+                                    <dimensions unit="cm">
+                                        <height>1,24</height>
+                                        <width></width>
+                                        <depth></depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>Iscrizione dell'oracolo a dadi incisa sul lato concavo di un grande blocco. L'epigramma attribuito a Men Phosphoros è uno dei cinque oracoli pressoché identici che formano un gruppo chiuso; Lane riporta solo la parte dell'epigramma relativa a Men.</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Height of letters: DA_COMPILARE.</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/638758">Apollonia Pisidiae (area)</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">near Uluborlu, Turkey</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" precision="low"></origDate>
+                        </origin>
+                        <provenance type="found">presso Uluborlu, Turchia</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+                <ab>
+                    <lb n="1"/>κε΄ δςςςγ΄ Μηνὸς Φωσφόρου
+                    <lb n="2"/>Τέσσαρα δ᾽ εἰς πείπτων, τρεῖς δ᾽ ἐξεῖται, τρί᾽ ὁ πέμπτος
+                    <lb n="3"/>θάρσε, καίρον ἔχεις, πράξεις δ᾽ ἃ θέλεις, ἐπιτεύξῃ
+                    <lb n="4"/>εἰς ὁδὸν ὁρμηθῆναι. Ἔχει καρπόν τιν᾽ ὁ μόχθος,
+                    <lb n="5"/>ἔργον δ᾽ ἐνχειρεῖν ἀγαθὸν καὶ ἀγῶνα δίκην τε.
+                </ab>
+            </div>
+            <div type="apparatus"/>
+            <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="bibliography">
+                <listBibl>
+                    <bibl>Sterrett, Wolfe Expedition (ASCSA III, 1884-5), p. 206-214, nos. 339-342</bibl>
+                    <bibl>Drexler, op. cit., col. 2720</bibl>
+                    <bibl>G. Kaibel, Hermes, XXIII, 1888, p. 532ff.</bibl>
+                    <bibl>Perdrizet, op. cit., p. 68, no. 2</bibl>
+                    <bibl>F. Heinevetter, Würfel- und Buchstabenorakel, Breslau, 1912, no. 3</bibl>
+                    <bibl>Lane, I, p. 42, no. 1</bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

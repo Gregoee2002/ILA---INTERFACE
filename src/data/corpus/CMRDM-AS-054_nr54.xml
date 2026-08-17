@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Iscrizione greca</rs> Stele con rilievo (Men e Zeus Masphalatenos) e iscrizione, Maeonia</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>CMRDM — Corpus Monumentorum Religionis Dei Menis</authority>
+                <idno type="filename">CMRDM-AS-054</idno>
+                <idno type="TM"><!-- inserire TM number --></idno>
+                <idno type="CMRDM">CMRDM I 54</idno>
+                    <idno type="id">25</idno>
+</publicationStmt>
+            <!-- REVISIONE: testo greco confrontato col PDF (Lane I, p. 16, no. 12, tav. pp. 37-38). Corretti: r. 1 "Ἱερὸς συμβιωσίς καὶ νεώτερα"→"Ἱερὰ συμβιώσεως καὶ νεωτέρα" (forme diverse da quelle stampate); r. 6 nome proprio "Λουκᾶς"→"Λούκιος" (nome diverso; Lukas vs Lucius); r. 8 "Ἀπολλώνιος W, Θεόδωρος W,"→"Ἀπολλώνιος β΄, Θεόδωρος β΄," (la lettera latina "W" nel draft è un artefatto di estrazione al posto del numerale greco β΄=2, cioè "II"); r. 9 "Μαρκιανᾶς W,"→"Μαρκιανὸς β΄," (stesso errore "W", più genere/caso del nome); r. 10 "Εὐελπίσ-"→"Εὐελπίστ-" (lettera caduta); r. 13 "Βάζηλος"→"Βάβηλος" (lettera errata); r. 14 numerale dell'anno "σνε΄"→"σνς΄" (256, coerente con 171-172 d.C. come nella scheda gemella nr. 53) e abbreviazione del mese "Π(υστρου)"→"Δ(ύστρου)" (Dystros, come nel nr. 53). Aggiunto dettaglio di rinvenimento (nota almeno dal 1829, portata a Kula da Menye). Dubbio non risolto e segnalato: il nome "Διον[υ]σίου/Διον[οι]σίου" (rr. 5 e 12) non è leggibile con piena certezza dalla scansione — potrebbe essere la grafia standard "Διονύσιος" (mantenuta) oppure una variante "Διονοίσιος"; da verificare su copia ad alta risoluzione o in Oxygen. Pleiades ID corretto: sostituito 609032 (errato, riutilizzato in modo incoerente anche per Aivatlar e Coloe nel batch) con 550709 (Maionia/Maeonia), verificato su Wikidata Q28221538 e ToposText. TM number non reperibile. -->
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>in situ or lost</repository>
+                        <idno>CMRDM I 54</idno>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Stele con rilievo (Men e Zeus Masphalatenos) e iscrizione, a Kula, portata da Menye, nota almeno dal 1829.</p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/138.html">stone</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/250.html">stele</objectType>
+                                    <dimensions unit="cm">
+                                        <height></height>
+                                        <width></width>
+                                        <depth></depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>Stele con rilievo raffigurante Men in piedi con mezzaluna, berretto frigio, lancia e pigna, piede sinistro su un toro prostrato; Zeus Masphalatenos con aquila e scettro a destra. Lunga lista di dedicanti.</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Height of letters: DA_COMPILARE.</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/550709">Maeonia</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">Kula, Turkey</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" notBefore-custom="171" notAfter-custom="172" precision="medium">171-172 A.D.</origDate>
+                        </origin>
+                        <provenance type="found">Kula, Turchia</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+                <ab>
+                    <lb n="1"/>Ἱερὰ συμβιώσεως καὶ νεωτέρα κατ᾽ ἐπι-
+                    <lb n="2"/>ταγὴν τοῦ κοιρίου τυράννου Διὸς Μας-
+                    <lb n="3"/>φαλατηνοῦ καὶ Μηνὶ Τιάμου εὐχήν. Ἰουλ(ι)-
+                    <lb n="4"/>ανὸς Μενεκράτου, Μενεκράτης Διοδώ-
+                    <lb n="5"/>ρου, Διονύσιος Παπίου, Ἑρμογένης Ἑρ-
+                    <lb n="6"/>μίππου, Λούκιος Ὀνησίμου, Διογένης
+                    <lb n="7"/>Γλύκωνος, Διογένης Μαξίμου, Τρόφιμο[ς]
+                    <lb n="8"/>Ἑρμίππου, Ἀπολλώνιος β΄, Θεόδωρος β΄,
+                    <lb n="9"/>Μαρκιανὸς β΄, Μένανδρος Ἑρμογένου, Ἑρ-
+                    <lb n="10"/>μογένης Στατιανοῦ, Μητρόδωρος Εὐελπίστ-
+                    <lb n="11"/>ου, Ἀσκληπιάδης Μαρκιανοῦ, Ἀσκληπιά-
+                    <lb n="12"/>δης Διονύσιου, Ἑρμογένης Τροφίμου,
+                    <lb n="13"/>Βάβηλος Ἑρμογένου, ἐπιμελησαμένων
+                    <lb n="14"/>Ἰουλιανοῦ καὶ Ἑρμογένου. Ἔτους σνς΄, μη(νὸς) Δ(ύστρου).
+                </ab>
+            </div>
+            <div type="apparatus"/>
+            <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="bibliography">
+                <listBibl>
+                    <bibl>CIG, 3438</bibl>
+                    <bibl>Keppel, op. cit., II, p. 349-50, no. 5</bibl>
+                    <bibl>Texier, op. cit., p. 136, Pl. 52</bibl>
+                    <bibl>Le Bas-Waddington, op. cit., III, i, p. 212, no. 667</bibl>
+                    <bibl>Daremberg-Saglio, III, ii, p. 1384, fig. 4665</bibl>
+                    <bibl>P. Foucart, BCH, IV, 1880, p. 129</bibl>
+                    <bibl>Drexler, op. cit., col. 2703, no. 14</bibl>
+                    <bibl>Leemans, op. cit., p. 38</bibl>
+                    <bibl>Roscher, op. cit., p. 125d and Pl. II top</bibl>
+                    <bibl>Perdrizet, op. cit., p. 60, no. 1</bibl>
+                    <bibl>F. Cumont, Textes et monuments, Brussels 1899, II, p. 220, fig. 50</bibl>
+                    <bibl>A.B. Cook, Zeus, I, p. 731, fig. 540</bibl>
+                    <bibl>Vermaseren, Vigiliae Christianae, IV, 1950, pp. 142-156</bibl>
+                    <bibl>Herrmann, op. cit., p. 43</bibl>
+                    <bibl>Lane, I, p. 16, no. 12</bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

@@ -4,12 +4,12 @@
     <teiHeader>
         <fileDesc>
             <titleStmt>
-                <title><rs type="textType">Iscrizione latina</rs> Inscribed altar from Potaissa (Turda)</title>
+                <title><rs type="textType">Iscrizione latina</rs> Altare iscritto da Potaissa (Turda)</title>
             </titleStmt>
             <publicationStmt>
                 <authority>CMRDM — Corpus Monumentorum Religionis Dei Menis</authority>
                 <idno type="filename">7</idno>
-                <idno type="id">46</idno>
+                <idno type="id">106</idno>
                 <idno type="entryId">local-7</idno>
                 <idno type="TM">&lt;!-- inserire TM number --&gt;</idno>
             </publicationStmt>
@@ -23,7 +23,7 @@
                         <objectDesc>
                             <supportDesc>
                                 <support>
-                                    <p>Inscribed altar from Potaissa (Turda). Height 70 cm., width 23 cm.</p>
+                                    <p>Altare iscritto da Potaissa (Turda). Altezza 70 cm., larghezza 23 cm.</p>
                                     <material ref="https://www.eagle-network.eu/voc/material/lod/138.html">stone</material>
                                     <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/29.html">altar</objectType>
                                     <dimensions>
@@ -35,7 +35,7 @@
                             </supportDesc>
                             <layoutDesc>
                                 <layout>
-                                    <p>Inscribed altar with mixed Greek-Latin inscription dedicated to Men Augelastos by Aurelius Marcianus, a signifer of a legion.</p>
+                                    <p>Altare iscritto con testo misto greco-latino dedicato a Men Augelastos da Aurelius Marcianus, signifer di una legione.</p>
                                     <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
                                 </layout>
                             </layoutDesc>

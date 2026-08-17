@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Iscrizione greca</rs> — CMRDM I nr. 215: Due naiskoi con tabula ansata e dedica di Gallos Aufustios e Markellos Gaios Oueibios, muro del peribolo</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>CMRDM — Corpus Monumentorum Religionis Dei Menis</authority>
+                <idno type="filename">CMRDM-AS-215</idno>
+                <idno type="TM"><!-- inserire TM number --></idno>
+                <idno type="CMRDM">CMRDM I 215</idno>
+            </publicationStmt>
+            <!-- Revisione 2026-08-16 (cross-check con PDF Lane, p.127): corretti i nomi travisati nel draft — "Δυρουστ-τῷ" (privo di senso grammaticale) → "Αὐφούστ-ιος" (Aufustios, gentilizio latino ellenizzato, continua correttamente da riga 1 a riga 2); "Οὐέξιος" → "Οὐείβιος" come stampato. Lane segnala accanto alla riga 1 una lettura alternativa: "Γάλλος" potrebbe invece essere "Γάμος" ("perhaps Γάμος") — non incorporata nel testo (resta la lezione principale a stampa), segnalata qui. Tradotta la prosa inglese in italiano; corretto Pleiades ID di Antiocheia Pisidiae da 652388 a 609307; rimossa voce bibliografica autoreferenziale fittizia "Lane, I, p. 40, no. 37". -->
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>in situ (peribolos wall)</repository>
+                        <idno>CMRDM I 215</idno>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Due naiskoi con dedica su tabula ansata di Gallos Aufustios e Markellos Gaios Oueibios, muro del peribolo. </p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/138.html">stone</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/250.html">stone</objectType>
+                                    <dimensions unit="cm">
+                                        <height></height>
+                                        <width></width>
+                                        <depth></depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>Due naiskoi, ciascuno con cerchio nel frontone, quattro crescenti muniti di alette nel campo. Sotto, una tabula ansata con l'iscrizione: Gallos Aufustios e Markellos Gaios Oueibios.</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Height of letters: DA_COMPILARE.</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/609307">Antiocheia Pisidiae</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">Yalvaç, Turkey</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" precision="low"></origDate>
+                        </origin>
+                        <provenance type="found">Yalvaç, Turchia</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+                <ab>
+                    <lb n="1"/>Γάλλος Αὐφούσ-
+                    <lb n="2"/>τιος καὶ Μάρκελλος
+                    <lb n="3"/>Γάιος Οὐείβιος.
+                </ab>
+            </div>
+            <div type="apparatus"/>
+            <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="bibliography">
+                <listBibl>
+                    <bibl>Hardie, JHS, XXXII, 1912, p. 135, no. 37 and fig. 12</bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

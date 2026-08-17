@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Iscrizione greca</rs> — CMRDM I nr. 193: Naiskos con cinque crescenti, dedica letta come "Meinodora" (Hardie) o "la synodia" (Ramsay), muro del peribolo</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>CMRDM — Corpus Monumentorum Religionis Dei Menis</authority>
+                <idno type="filename">CMRDM-AS-193</idno>
+                <idno type="TM"><!-- inserire TM number --></idno>
+                <idno type="CMRDM">CMRDM I 193</idno>
+            </publicationStmt>
+            <!-- Revisione assistita (cross-check PDF Lane, CMRDM I p.118, Hardie no.15): l'edizione a stampa presenta DUE LETTURE ALTERNATIVE dello stesso testo di 3 righe (Hardie: "Μεινοδώρα..."; Ramsay: "Ἡ συνοδία..."), non due iscrizioni consecutive. Il draft le fondeva erroneamente in 6 righe sequenziali come se fossero entrambe scolpite sulla pietra: corretto riportando in edizione la lettura di Hardie (indicata da Lane come principale) e spostando la variante di Ramsay in apparato. Rimossa voce bibliografica "Lane, I, p. 38, no. 15" non presente a stampa (artefatto sistematico, vedi nota nr.191); corretto Pleiades ref da 652388 a 609307; tradotti i campi in prosa inglese. -->
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>in situ (peribolos wall)</repository>
+                        <idno>CMRDM I 193</idno>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Naiskos con cinque crescenti, dedica letta come "Meinodora" (Hardie) o come "la synodia" (Ramsay), muro del peribolo. </p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/138.html">stone</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/250.html">stone</objectType>
+                                    <dimensions unit="cm">
+                                        <height></height>
+                                        <width></width>
+                                        <depth></depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>Naiskos con cinque crescenti nel campo, cerchio nel timpano. Hardie legge Μεινοδώρα (nome proprio femminile); Ramsay legge Ἡ συνοδία (l'associazione). Entrambe le letture sono riportate (edizione: Hardie; apparato: variante di Ramsay).</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Altezza delle lettere: DA_COMPILARE.</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/609307">Antiocheia Pisidiae</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">Yalvaç, Turchia</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" precision="low"></origDate>
+                        </origin>
+                        <provenance type="found">Yalvaç, Turchia</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+                <ab>
+                    <lb n="1"/>Μεινοδώ[ρ-
+                    <lb n="2"/>α] Μηνὶ εὐ-
+                    <lb n="3"/>χήν.
+                </ab>
+            </div>
+            <div type="apparatus"><p>Lettura alternativa delle stesse 3 righe secondo Ramsay (JRS VIII, 1918, p. 109): <foreign xml:lang="grc">Ἡ συνοδία Μηνὶ εὐχήν</foreign> ("la synodia [associazione], per voto"), invece di Μεινοδώρα (nome proprio femminile) secondo Hardie.</p></div>
+            <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="bibliography">
+                <listBibl>
+                    <bibl>Hardie, JHS, XXXII, 1912, p. 129, no. 15 and fig. 10</bibl>
+                    <bibl>Ramsay, JRS, VIII, 1918, p. 109</bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

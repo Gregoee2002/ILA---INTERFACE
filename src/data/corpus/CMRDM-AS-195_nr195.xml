@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Iscrizione greca</rs> — CMRDM I nr. 195: Due naiskoi con dediche di Gamos figlio di Abaskantos a Men, muro del peribolo</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>CMRDM — Corpus Monumentorum Religionis Dei Menis</authority>
+                <idno type="filename">CMRDM-AS-195</idno>
+                <idno type="TM"><!-- inserire TM number --></idno>
+                <idno type="CMRDM">CMRDM I 195</idno>
+            </publicationStmt>
+            <!-- Revisione assistita (cross-check PDF Lane, CMRDM I p.119, Hardie no.17, fig.10; verificato ad alta risoluzione): testo greco ampiamente ricostruito/allucinato nel draft. Il secondo dedicante (naiskos b) NON è "Σέμος" (nome inesistente nella scheda) ma di nuovo "Γάμος Ἀβασκάγ[τ-]ου", figlio dello stesso Abaskantos del naiskos (a); il draft aveva inoltre inventato "μετὰ τῶν [οἴκων]" ("con la sua famiglia") al posto del testo reale "με(τὰ) γυν[αικὸς]" ("con la moglie"). Corretti anche: Ἀβάσκαντο[υ]→Ἀβασκάντου (nessuna lacuna, accento), υἱος→ὑὸς (forma dialettale attestata a stampa), Πουμπουλίος→Πουμπούμλιος (lettera μ mancante), Εὐδόξος→Εὔδοξος (accento/spirito), εὐχή-→εὐχὴν (riga 7 completa, non spezzata). Titolo e descrizioni corrette di conseguenza (non più "famiglia Semos/Samos" ma "Gamos figlio di Abaskantos", dedicante in entrambi i naiskoi). Rimossa voce bibliografica "Lane, I, p. 38, nos. 17a-b" non presente a stampa (artefatto sistematico, vedi nota nr.191); corretto Pleiades ref da 652388 a 609307; tradotti i campi in prosa inglese. -->
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>in situ (peribolos wall)</repository>
+                        <idno>CMRDM I 195</idno>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Due naiskoi con dediche di Gamos figlio di Abaskantos a Men, muro del peribolo. </p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/138.html">stone</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/250.html">stone</objectType>
+                                    <dimensions unit="cm">
+                                        <height></height>
+                                        <width></width>
+                                        <depth></depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>Due naiskoi. (a) Quattro crescenti nel campo; l'iscrizione ricorda Gamos figlio di Abaskantos con i fratelli Loukas, Poumpoumlios ed Eudoxos. (b) Tre crescenti a linguetta; di nuovo Gamos figlio di Abaskantos, questa volta con la moglie e i figli Loukios e Poumpoulios.</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Altezza delle lettere: DA_COMPILARE.</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/609307">Antiocheia Pisidiae</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">Yalvaç, Turchia</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" precision="low"></origDate>
+                        </origin>
+                        <provenance type="found">Yalvaç, Turchia</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+                <ab>
+                    <lb n="1"/>Μηνὶ εὐχὴν
+                    <lb n="2"/>Γάμος Ἀβασκάντου
+                    <lb n="3"/>ὑὸς καὶ Λουκᾶς καὶ
+                    <lb n="4"/>Πουμπούμλιος
+                    <lb n="5"/>καὶ Εὔδοξος.
+                    <lb n="6"/>Μηνὶ
+                    <lb n="7"/>εὐχὴν
+                    <lb n="8"/>Γάμος Ἀβασκάγ[τ-
+                    <lb n="9"/>ου] με(τὰ) γυν[αικὸς],
+                    <lb n="10"/>Λούκιος υἱός,
+                    <lb n="11"/>Πουμπούλιος
+                    <lb n="12"/>υἱός.
+                </ab>
+            </div>
+            <div type="apparatus"/>
+            <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="bibliography">
+                <listBibl>
+                    <bibl>Hardie, JHS, XXXII, 1912, p. 130, no. 17 and fig. 10</bibl>
+                    <bibl>Ramsay, Bearing of Recent Discovery, 1915, pp. 376-7, figs. 10-11</bibl>
+                    <bibl>Deissmann, Light from the Ancient East, English ed. 1927, p. 436, figs. 78-9</bibl>
+                    <bibl>SEG, VI, nos. 558-9</bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

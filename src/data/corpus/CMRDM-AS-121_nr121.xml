@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Iscrizione greca</rs> Altare con rilievo di Men a cavallo e lunga iscrizione, Burdur (Museo di Antalya)</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>CMRDM — Corpus Monumentorum Religionis Dei Menis</authority>
+                <idno type="filename">CMRDM-AS-121</idno>
+                <idno type="TM"><!-- inserire TM number --></idno>
+                <idno type="CMRDM">CMRDM I 121</idno>
+                    <idno type="id">89</idno>
+</publicationStmt>
+            <!-- Revisione assistita (cross-check con PDF Lane, pp. 77-78), correzioni estese dopo confronto con zoom ad alta risoluzione: l'iscrizione principale (restituzione di Bean) era gravemente corrotta nel draft. Corretti nome e patronimico del dedicante (r.3): "Ῥόψων Νεωγ[ης] Σώφου" (nome inventato) → "Ῥόδων Νεωγ[ος] Σώσου". Corretta la parola "κλεί-/νας" (klinai, "letti/divani"), che nel draft era stata fraintesa come un presunto epiteto divino "Men Kleinas" (capitalizzata "Κλεί-νᾶς" e riportata come tale nel layout): si tratta invece del sostantivo comune "κλείνας" (klinai), parte di un elenco di arredi dedicati (klinai, tavole, sedili reclinabili, recinto, finestra, giardino, legnaia, tesoro, altari). Rimossa la sillaba "Μν"/"Μο" inserita arbitrariamente alle rr. 5-6. Corretto "ἀνακλητήρια" → "ἀνακλιτήρια" (r.7, forma stampata). Individuata e ripristinata un'intera riga di stampa mancante nel draft ("[ρὸν·······]ον καὶ * ἐξ ἰς ξυ-", continuazione di "θησαυ-ρόν"), che il draft aveva sostituito con una riga inventata e non presente nello stampato ("[ρανέ]νω καὶ *"). Ricostruita la parte finale (rr. 14-15 stampate) con "τοῦ ε[ἰργ]μοῦ" (recinto/precinto) del tutto assente nel draft. Rimossa la parola "τέ" inserita arbitrariamente nella r. 11 stampata (ἐποῦσα). Numerazione delle righe rifatta da 17 (2 dell'iscrizione sulla cornice + 15 dell'iscrizione principale) contro le 16 del draft. Layout completamente riscritto in italiano rimuovendo l'epiteto "Men Kleinas" fittizio e i nomi errati. Pleiades: l'ID 609347 usato per "Burdur area" risulta INESISTENTE (404 su Pleiades API e su mirror statico), verificato più volte — sostituito con DA_COMPILARE; nessun toponimo antico certo per Burdur stesso risulta verificabile (l'antico nome del lago, Ascanius/Ascania, pleiades 638774, non è necessariamente il nome dell'insediamento). Restano incertezze minori sul conteggio esatto dei puntini nelle lacune (r.1 dell'iscrizione sulla cornice, "Μυ[...]"), segnalate qui per controllo umano. -->
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>Antalya Museum</repository>
+                        <idno>CMRDM I 121</idno>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Altare con rilievo di Men a cavallo e lunga iscrizione, Burdur (Museo di Antalya). Altezza 86,5 cm, larghezza 42 cm, spessore 38 cm.</p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/138.html">stone</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/29.html">altar</objectType>
+                                    <dimensions unit="cm">
+                                        <height>86,5</height>
+                                        <width>42</width>
+                                        <depth>38</depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>Altare con iscrizione su una faccia e rilievi sulle altre tre. Sul fianco destro, rilievo di una dea assisa in trono con alto schienale, che indossa un polos dal quale scendono lunghi ornamenti sulle spalle; nella mano sinistra regge uno scettro che termina in un oggetto simile a una pigna. Sul fianco sinistro, Hermes con mantello dietro le spalle, petaso sul capo (danneggiato), mano sinistra che regge il caduceo, mano destra con una borsa (?). Sulla faccia opposta a quella iscritta, Men a cavallo verso destra al galoppo, capo rivolto verso lo spettatore, volutamente privo di tratti del volto; la mano destra regge le briglie, il mantello svolazza nel vento fissato alla spalla destra; indossa un copricapo a punta e porta una falce lunare appena visibile al collo. Sulla cornice sporgente sotto la figura di Men vi è l'iscrizione: Artemon figlio di Ailios ... eseguì (l'opera). La faccia principale reca la seguente iscrizione (restituzione di Bean): Rhodon figlio di Neogos, figlio di Sosos, paredros (assistente) del dio Men, dedicò a proprie spese due klinai (letti conviviali) con relativo corredo, due tavole, quattro sedili reclinabili, insieme al recinto e alla parte centrale, e una finestra a cancello che dà sul tesoro, e un giardino con il recinto ligneo e il deposito, e la legnaia, e gli altari del recinto.</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Height of letters: DA_COMPILARE.</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="DA_COMPILARE">Burdur area</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">Burdur, Turkey</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" precision="low"></origDate>
+                        </origin>
+                        <provenance type="found">Burdur, Turchia</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+                <ab>
+                    <lb n="1"/>[Ἀρτέ]μων Αἰλίο[υ] Μυ[.............]
+                    <lb n="2"/>ἠργάσετο
+                    <lb n="3"/>[Ῥό]δων Νεωγ[ος] Σώσου, παρ[ε]-
+                    <lb n="4"/>δρος τοῦ Μηνὸς κλεί-
+                    <lb n="5"/>νας δύο σὺν καταρτισμῷ
+                    <lb n="6"/>καὶ τραπέζας δύο
+                    <lb n="7"/>[ἀ]νακλιτήρια τέσσερα
+                    <lb n="8"/>[σὺν καὶ τῷ] πε[ρ]ιβόλῳ κα[ὶ]
+                    <lb n="9"/>[.......]τὴν μέσην κα[ὶ]
+                    <lb n="10"/>[θυ]ρίδα κανκελλωτὴν
+                    <lb n="11"/>τὴν ἐποῦσα τῷ ταμί[ῳ]
+                    <lb n="12"/>καὶ κῆπον σὺν τῷ πεπ[η-]
+                    <lb n="13"/>γμένῳ ξυλικῷ καὶ θησαυ-
+                    <lb n="14"/>[ρὸν·······]ον καὶ * ἐξ ἰς ξυ-
+                    <lb n="15"/>λοθ[ήκ]ην καὶ τοὺς βωμοὺς
+                    <lb n="16"/>[τ]οῦ ε[ἰργ]μοῦ, ὑφ' ἓν * τ', ἐκ
+                    <lb n="17"/>[τῶν ἰδίων ἀ]νέθηκεν.
+                </ab>
+            </div>
+            <div type="apparatus"/>
+            <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="bibliography">
+                <listBibl>
+                    <bibl>L. Robert, Hellenica, IX, 1950, p. 39ff. and Plates VI-VIII</bibl>
+                    <bibl>REG, LXIV, 1951, p. 191, no. 217</bibl>
+                    <bibl>Robert, REG, LXV, 1952, p. 176, no. 155</bibl>
+                    <bibl>Bean, JHS, LXXII, 1952, p. 118</bibl>
+                    <bibl>SEG, XVII, 1960, p. 148, no. 545</bibl>
+                    <bibl>Lane, I, p. 43, no. 3</bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

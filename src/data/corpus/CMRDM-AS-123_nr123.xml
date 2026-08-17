@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Monumento senza iscrizione</rs> — CMRDM I nr. 123: Rilievo marmoreo anepigrafe di Men a cavallo, area di Burdur (Boston MFA)</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>CMRDM — Corpus Monumentorum Religionis Dei Menis</authority>
+                <idno type="filename">CMRDM-AS-123</idno>
+                <idno type="TM"><!-- inserire TM number --></idno>
+                <idno type="CMRDM">CMRDM I 123</idno>
+            </publicationStmt>
+            <!-- Revisione assistita (cross-check con PDF Lane, p. 79): monumento anepigrafe, descrizione fisica confermata conforme allo stampato. Pleiades: l'ID 609347 usato per "Burdur area" risulta INESISTENTE (404 su Pleiades API e su mirror statico), verificato — sostituito con DA_COMPILARE. -->
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>Museum of Fine Arts, Boston</repository>
+                        <idno>CMRDM I 123</idno>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Rilievo marmoreo anepigrafe di Men a cavallo, area di Burdur (Boston MFA). Altezza 31,7 cm, larghezza 37,8 cm, spessore 9,9 cm in basso, 4,8 cm in alto.</p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/48.html">marble</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/24.html">relief</objectType>
+                                    <dimensions unit="cm">
+                                        <height>31,7</height>
+                                        <width>37,8</width>
+                                        <depth>9,9</depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>Rilievo entro cornice modanata che mostra Men a cavallo verso destra. Il cavallo ha lo zoccolo anteriore sinistro su un bucranio. Men è giovanile, con mantello svolazzante, berretto frigio, chitone, calzoni, falce lunare alle spalle. La mano sinistra regge le briglie, la destra una pigna.</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Height of letters: DA_COMPILARE.</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="DA_COMPILARE">Burdur area</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">Burdur, Turkey</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" precision="low"></origDate>
+                        </origin>
+                        <provenance type="found">Burdur, Turchia</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+                <ab>
+                    <lb n="1"/>
+                </ab>
+            </div>
+            <div type="apparatus"/>
+            <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="bibliography">
+                <listBibl>
+                    <bibl>Lane, I, p. 45, no. 13 and frontispiece</bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

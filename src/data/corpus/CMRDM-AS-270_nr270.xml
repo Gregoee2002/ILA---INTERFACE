@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Iscrizione greca</rs> — CMRDM I nr. 270: Altare votivo con tre crescenti e dedica tekmor a Men Patrios, Museo di Konya</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>CMRDM — Corpus Monumentorum Religionis Dei Menis</authority>
+                <idno type="filename">CMRDM-AS-270</idno>
+                <idno type="TM"><!-- inserire TM number --></idno>
+                <idno type="CMRDM">CMRDM I 270</idno>
+            </publicationStmt>
+            <!-- Revisione: corretto Pleiades id 652388 (404) in 609307 (Antiocheia Pisidiae/Yalvaç); riga 2, rimossa la parola "δε" assente dallo stampato (Lane I, p. 146: dopo "Πρείμου" lo stampato mostra solo un simbolo decorativo di crescente lunare, non lettere greche — testo probabilmente frainteso dal simbolo tipografico) — "δε" non è grammaticalmente coerente col resto della frase ed è stato rimosso in quanto testo non presente a stampa. Rimossa la bibliografia fittizia "Lane, II, p. 47 (unpublished)" non presente a stampa per questa entry. Tradotta in italiano la prosa descrittiva inglese. -->
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>Konya Archaeological Museum</repository>
+                        <idno>CMRDM I 270</idno>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Altare votivo, trovato nello stesso momento e nello stesso luogo delle precedenti, ora nello stesso museo. Altezza 40,5 cm, larghezza 19 cm, spessore 17 cm.</p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/138.html">stone</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/29.html">altar</objectType>
+                                    <dimensions unit="cm">
+                                        <height>40,5</height>
+                                        <width>19</width>
+                                        <depth>17</depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>Nella parte superiore del campo principale vi sono tre crescenti. Sotto di essi la seguente iscrizione, di cui l'ultima riga è sulla base: Asklepiades figlio di Preimos, insieme anche ai figli Asklepiades e Kointos, avendo adempiuto il voto tekmor, a Men Patrios, voto.</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Height of letters: DA_COMPILARE.</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/609307">Antiocheia Pisidiae</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">Yalvaç, Turkey</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" precision="low"></origDate>
+                        </origin>
+                        <provenance type="found">Yalvaç, Turkey</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+                <ab>
+                    <lb n="1"/>Ἀσκληπιάδης
+                    <lb n="2"/>Πρείμου
+                    <lb n="3"/>μετὰ καὶ τῶν
+                    <lb n="4"/>υἱῶν Ἀσκλη-
+                    <lb n="5"/>πιάδου καὶ Κο-
+                    <lb n="6"/>ίντου τεκμο-
+                    <lb n="7"/>ρεύσας Μηνὶ
+                    <lb n="8"/>Πατρίῳ εὐχήν.
+                </ab>
+            </div>
+            <div type="apparatus"/>
+            <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>DA_COMPILARE</p></div>
+        </body>
+    </text>
+</TEI>

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Iscrizione greca</rs> Grande lastra con iscrizione di confessione e rilievo, zona di Kavakh (Kula)</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>CMRDM — Corpus Monumentorum Religionis Dei Menis</authority>
+                <idno type="filename">CMRDM-AS-062</idno>
+                <idno type="TM"><!-- inserire TM number --></idno>
+                <idno type="CMRDM">CMRDM I 62</idno>
+                    <idno type="id">33</idno>
+</publicationStmt>
+            <!-- REVISIONE: testo greco confrontato col PDF (Lane I, p. 16, no. 9, tav. p. 42). Corretti numerosi errori di trascrizione: r. 2-3 "Λασάνῃ"→"Λαβάνῃ" (Men Labanes, non Men Lasenes: β non σ nello stampato); r. 4 "Φιλίππου"→"Φιλιππικοῦ" (patronimico diverso) e "καταλεφθ-"→"καταλειφθ-"; r. 6 "ὀρφανίᾳ"→"ὀρφανείᾳ"; r. 8 "ἀρθόντων συγγράφα"→"ἀρόντων ἔνγραφα"; r. 11 "Τάσηνων"→"Ταζηνῶν" (ζ non σ); r. 12 "ἄδος ἦσα" (sequenza priva di senso) → "ἀδοξήσασα" (participio reale, "disonorata"); rr. 15-16 lacuna spostata: il draft bracketava erroneamente l'intera r. 16 come lacuna mentre solo "ἐπι-" a fine r. 15 è tra parentesi in Lane, la r. 16 "βουλεύσαντας αὐτοῖς ὁ θεὸς" è stampata per intero; r. 17 "ιν ἐστηλογράφησα"→"ις ἐστηλλογράφησα" (doppia λ); r. 18 "τὴν δύναμιν"→"τὰς δυνάμις" (plurale, non singolare); r. 19 "δης"→"τῆς" (lettura errata). Aggiunti dettagli di rinvenimento dal testo di Lane (trovata prima del 1880 a due ore da Kula, probabilmente Kavakh secondo Steinleitner; trasferita alla Evangelike Schole di Smirne) e tradotta la prosa descrittiva in italiano. Pleiades: sostituito 609032 (ID errato, riscontrato riutilizzato per toponimi diversi nei batch precedenti) con 550659 (Koloe/Coloe presso Kula), verificato su topostext.org e Wikidata, coerente con la correzione già adottata per i nr. 58/61. TM number non reperibile. -->
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>lost/unknown</repository>
+                        <idno>CMRDM I 62</idno>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Grande lastra con iscrizione di confessione e rilievo, zona di Kavakh (Kula). Trovata prima del 1880 a due ore di distanza (a piedi?) da Kula (probabilmente Kavakh, secondo Steinleitner); trasferita alla Evangelike Schole di Smirne. Altezza 96 cm, larghezza 58 cm.</p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/138.html">stone</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/53.html">plaque</objectType>
+                                    <dimensions unit="cm">
+                                        <height>96</height>
+                                        <width>58</width>
+                                        <depth></depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>Grande lastra con rilievo di un uomo che pone uno scettro su un altare, ragazzo dietro. Iscrizione di confessione-propiziazione che registra la punizione divina di coloro che fecero torto a due fratelli orfani.</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Altezza delle lettere: 2 cm.</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/550659">Coloe (Kavakh area)</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">Kavakh, Turkey</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" notBefore-custom="210" notAfter-custom="211" precision="medium">210-211 A.D.</origDate>
+                        </origin>
+                        <provenance type="found">Kavakh, Turchia</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+                <ab>
+                    <lb n="1"/>Ἔτους σϙε΄, μη(νὸς) Περειτίου η΄,
+                    <lb n="2"/>Μηνὶ Πετραείτῃ καὶ Μηνὶ Λα-
+                    <lb n="3"/>βάνῃ Μητροφάνης καὶ Φλαβια-
+                    <lb n="4"/>νὸς οἱ Φιλιππικοῦ καταλειφθ-
+                    <lb n="5"/>έντες ὑπὸ τῶν γονέων ἐν ὀρ-
+                    <lb n="6"/>φανείᾳ καὶ ἐνίων ἀνθρώπων ἐ-
+                    <lb n="7"/>πιβουλευσάντων αὐτοῖς ἐκ τῆ[ς]
+                    <lb n="8"/>κώμης καὶ ἀρόντων ἔνγραφα καὶ ἐτέ-
+                    <lb n="9"/>ρα εἴδη ἐκ τῆς οἰκίας αὐτῶν λα-
+                    <lb n="10"/>θραίως, καὶ περισυρομένων αὐτῶν
+                    <lb n="11"/>ὑπὸ δανειστῶν, ἡ Ταζηνῶν κατοι-
+                    <lb n="12"/>κία ἀδοξήσασα ἐπέστησε τὸ
+                    <lb n="13"/>σκῆπτρον τοῖς κακῶς εἰς α(ὐ)τοὺς τι-
+                    <lb n="14"/>μήσασιν, καὶ ὁ θεὸς ἐξεζήτησεν [καὶ]
+                    <lb n="15"/>ἐκόλασετο καὶ διέφθειρε τοὺς [ἐπι-]
+                    <lb n="16"/>βουλεύσαντας αὐτοῖς ὁ θεὸς
+                    <lb n="17"/>[···]ις ἐστηλλογράφησα[ν]
+                    <lb n="18"/>[······τὰ]ς δυνάμις ὅτι
+                    <lb n="19"/>[·············]τῆς
+                </ab>
+            </div>
+            <div type="apparatus"/>
+            <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="bibliography">
+                <listBibl>
+                    <bibl>Mouseion kai Bibliotheke, III, 1-2, 1880, p. 158, no. τιε'</bibl>
+                    <bibl>A. Papadopoulos-Kerameus, AM, VI, 1881, p. 273-4, no. 23</bibl>
+                    <bibl>Drexler, op. cit., col. 2702, no. 11</bibl>
+                    <bibl>Perdrizet, op. cit., p. 59, no. 2</bibl>
+                    <bibl>Steinleitner, op. cit., p. 33, no. 9</bibl>
+                    <bibl>Lane, I, p. 16, no. 9</bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

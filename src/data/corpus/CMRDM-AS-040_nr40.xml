@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Iscrizione greca</rs> Lastra di marmo(?) con iscrizione, zona di Koresa? (Ayazviran)</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>CMRDM — Corpus Monumentorum Religionis Dei Menis</authority>
+                <idno type="filename">CMRDM-AS-040</idno>
+                <idno type="TM"><!-- inserire TM number --></idno>
+                <idno type="CMRDM">CMRDM I 40</idno>
+                    <idno type="id">12</idno>
+</publicationStmt>
+            <!-- REVISIONE (cross-check PDF Lane p. 25): testo greco già corretto, nessuna modifica (solo differenza di accentazione su "Ἀξιοττηνῷ", non toccata); aggiunta provenienza "found before 1885 in house of Halil Kechagianni Moustafa" (assente nel draft); Pleiades ref per il toponimo antico "Koresa (?)" (etichetta di Lane, incerta) compilato con 609443 (Koresa, BAtlas 62 A4, verificato via Pleiades API e cross-check indipendente con le coordinate Wikipedia/Digital Atlas of the Roman Empire — coincidenti); l'identificazione stessa Ayazviran=Koresa resta l'ipotesi incerta di Lane (nota "?"): fonti moderne (Trismegistos place 34414, ToposText) tendono piuttosto a identificare Ayazviran con l'antica Iaza, sita a nord di Koresa secondo il Barrington Atlas — segnalato per revisione umana, ref non rimosso poiché corrisponde comunque al toponimo "Koresa" scritto nel campo; TM non trovato. -->
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>in situ or lost</repository>
+                        <idno>CMRDM I 40</idno>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Lastra di marmo(?) con iscrizione, rinvenuta prima del 1885 nella casa di Halil Kechagianni Moustafa. Altezza 33 cm., larghezza 24 cm., spessore 4 cm.</p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/48.html">marble</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/53.html">plaque</objectType>
+                                    <dimensions unit="cm">
+                                        <height>33</height>
+                                        <width>24</width>
+                                        <depth>4</depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>Lastra con iscrizione dedicatoria a Men Axiottenos da parte di Athenion per la figlia adottiva Onesime.</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Height of letters: DA_COMPILARE.</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/609443">Koresa (?)</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">Ayazviran, Turkey</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" precision="low"></origDate>
+                        </origin>
+                        <provenance type="found">Ayazviran, Turchia</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+                <ab>
+                    <lb n="1"/>Μηνὶ Ἀξιοττήνῳ Ἀθη-
+                    <lb n="2"/>νίων ὑπὲρ Ὀνησίμη-
+                    <lb n="3"/>ς τῆς τεθραμμένης
+                    <lb n="4"/>εὐχήν.
+                </ab>
+            </div>
+            <div type="apparatus"/>
+            <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="bibliography">
+                <listBibl>
+                    <bibl>Mouseion kai Bibliotheke, 1885/6, 2, p. 804, no. φοε'</bibl>
+                    <bibl>Drexler, op. cit., col. 2700, no. 3</bibl>
+                    <bibl>Smirnoff, op. cit., p. 93, no. 15</bibl>
+                    <bibl>Perdrizet, op. cit., p. 58, top, no. 6</bibl>
+                    <bibl>K-P, II Reise, p. 105</bibl>
+                    <bibl>P. Herrmann, Ergebnisse einer Reise in Nordostlydien, 1962, p. 45, note 176</bibl>
+                    <bibl>Lane, I, p. 15, Lydia no. 3</bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

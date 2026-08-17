@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Monumento senza iscrizione</rs> — CMRDM I nr. 158: White marble plaque with relief bust of Men, Ancyra area (Ankara Museum)</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>CMRDM — Corpus Monumentorum Religionis Dei Menis</authority>
+                <idno type="filename">CMRDM-AS-157</idno>
+                <idno type="TM"><!-- inserire TM number --></idno>
+                <idno type="CMRDM">CMRDM I 158</idno>
+            </publicationStmt>
+            <!-- Revisione assistita (cross-check PDF Lane): corretto Pleiades ID di Ancyra (609382, che corrisponde in realtà a un'altra Ancyra, quella di Frigia) con l'ID corretto 619103 per Ancyra/Ankara in Galazia, verificato su Pleiades e Wikidata. Il monumento è privo di iscrizione (anepigrafe), correttamente reso senza testo greco nel draft — nessuna correzione necessaria al campo edition. Aggiunto il dato "provenienza esatta sconosciuta, vista per la prima volta da L. Robert prima del 1955 nel museo di Ankara" e tradotta la prosa inglese in italiano. -->
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>Ankara Museum</repository>
+                        <idno>CMRDM I 158</idno>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Lastra di marmo bianco con busto di Men in rilievo, area di Ancyra (Museo di Ankara). Vista per la prima volta da L. Robert prima del 1955 nel museo di Ankara; provenienza esatta sconosciuta. Altezza 50 cm, larghezza 52 cm, spessore 17 cm.</p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/48.html">marble</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/53.html">plaque</objectType>
+                                    <dimensions unit="cm">
+                                        <height>50</height>
+                                        <width>52</width>
+                                        <depth>17</depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>Lastra curva sul retro. Tra due pilastri che apparentemente sostenevano un arco: busto di Men con drappeggio fermato da una spilla sulla spalla destra, volto danneggiato, berretto frigio, mezzaluna alle spalle.</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Height of letters: DA_COMPILARE.</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/619103">Ancyra area</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">Ankara, Turkey</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" precision="low"></origDate>
+                        </origin>
+                        <provenance type="found">Ankara, Turkey</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+                <ab>
+                    <lb n="1"/>
+                </ab>
+            </div>
+            <div type="apparatus"/>
+            <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="bibliography">
+                <listBibl>
+                    <bibl>L. Robert, Hellenica, X, 1955, p. 15 and Plate IV</bibl>
+                    <bibl>Lane, I, p. 48, no. 3</bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

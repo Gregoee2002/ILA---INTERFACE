@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Iscrizione greca</rs> Stele di marmo con timpano, Ayazviran</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>CMRDM — Corpus Monumentorum Religionis Dei Menis</authority>
+                <idno type="filename">CMRDM-AS-045</idno>
+                <idno type="TM"><!-- inserire TM number --></idno>
+                <idno type="CMRDM">CMRDM I 45</idno>
+                    <idno type="id">16</idno>
+</publicationStmt>
+            <!-- REVISIONE (cross-check PDF Lane p. 29): "Βασσίλεια" -> "Βασσίλλα" (l. 3, nome proprio errato); "εὐχαριστ-οῦντες" -> "εὐχαρισ-τοῦντες" (l. 7-8, posizione del trattino di fine riga non corrispondente allo stampato); "μη(νὸς) Λώου W" -> "μη(νὸς) Λώου β΄" (l. 9, numerale giorno reso illeggibile "W" nel draft, in realtà "β΄" = 2); aggiunta provenienza "found before 1900, presumably in Ayazviran, then transported to Evangelike Schole, now apparently lost" (assente nel draft); Pleiades ref per "Koresa (?)" compilato con 609443 (Koresa, BAtlas 62 A4); identificazione Ayazviran=Koresa resta ipotesi incerta di Lane — segnalato per revisione umana; TM non trovato. -->
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>lost/unknown</repository>
+                        <idno>CMRDM I 45</idno>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Stele di marmo con timpano, rinvenuta prima del 1900, presumibilmente ad Ayazviran, poi trasportata alla Evangelike Schole. Ora apparentemente perduta. Altezza 70 cm.</p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/48.html">marble</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/250.html">stele</objectType>
+                                    <dimensions unit="cm">
+                                        <height>70</height>
+                                        <width></width>
+                                        <depth></depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>Stele con timpano e iscrizione: dedica/restituzione di un oggetto sacro alla Dea Anaitis e a Men Tiamos da parte di un gruppo di cinque persone.</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Height of letters: DA_COMPILARE.</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/609443">Koresa (?)</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">Ayazviran, Turkey</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" notBefore-custom="211" notAfter-custom="212" precision="medium">211-212 A.D.</origDate>
+                        </origin>
+                        <provenance type="found">Ayazviran, Turchia</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+                <ab>
+                    <lb n="1"/>Θεᾷ Ἀνάειτι καὶ
+                    <lb n="2"/>Μηνὶ Τιάμου. Σωκρά-
+                    <lb n="3"/>τεια κ(αὶ) Βασσίλλα
+                    <lb n="4"/>κ(αὶ) Ἀπολλωνὶς κ(αὶ) Πρό-
+                    <lb n="5"/>κλος κ(αὶ) Τρόφιμος
+                    <lb n="6"/>ἀπέδωκαν τὸ ἱ[ε-]
+                    <lb n="7"/>ροποίημα εὐχαρισ-
+                    <lb n="8"/>τοῦντες. Ἔτους σϙε΄,
+                    <lb n="9"/>μη(νὸς) Λώου β΄.
+                </ab>
+            </div>
+            <div type="apparatus"/>
+            <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="bibliography">
+                <listBibl>
+                    <bibl>*Fontrier, loc. cit., no. 4</bibl>
+                    <bibl>Zingerle, op. cit., col. 27, no. 4</bibl>
+                    <bibl>SEG, IV, p. 125, no. 650</bibl>
+                    <bibl>Lane, I, p. 19, no. 26</bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

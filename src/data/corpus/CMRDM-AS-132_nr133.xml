@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Iscrizione greca</rs> — CMRDM I nr. 133: Base quadrata dell'oracolo a dadi, Termessus</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>CMRDM — Corpus Monumentorum Religionis Dei Menis</authority>
+                <idno type="filename">CMRDM-AS-132</idno>
+                <idno type="TM"><!-- inserire TM number --></idno>
+                <idno type="CMRDM">CMRDM I 133</idno>
+            </publicationStmt>
+            <!-- Revisione assistita (cross-check col PDF Lane, pp. 85-87): testo greco riga 1, numerale corretto da "ξξξξα΄ ξε΄" a "ςςςςα΄ κε΄" (lettura errata delle lettere numerali); riga 2 "χεῖρας"→"χεῖος" (lettura certa di Lane su questa pietra); riga 4 "οὓς εἴλικας" (frase senza senso) corretta in "βοῦς ἕλικας" ("buoi dalle corna ricurve", allucinazione di due parole su tre); riga 5 "ἐπερώτης" corretta in "ἐπερωτᾷς" (verbo di seconda persona coerente col resto del testo). Tradotta in italiano la prosa di <support> e <layout>, integrando i dati di rinvenimento (prima del 1890, presso il muro a ovest del tempio n. 3, spezzata in frammenti, area per il lancio dei dadi) presenti nel PDF ma assenti dal draft. Pleiades: l'ID 638853 usato per Termessus corrisponde in realtà a "Hamaxia" (verificato via API Pleiades) — sostituito con l'ID corretto di Termessos, 639139. -->
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>in situ (near temple no. 3)</repository>
+                        <idno>CMRDM I 133</idno>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Base quadrata dell'oracolo a dadi, iscritta su tre lati, con il retro grezzo; sulla sommità restano tracce di un'area per il lancio dei dadi. Trovata a terra, prima del 1890, presso il muro a ovest del tempio n. 3, spezzata in diversi frammenti, Termessus. Altezza 1,87 m, larghezza 60 cm, spessore 52 cm.</p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/138.html">stone</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/57.html">base</objectType>
+                                    <dimensions unit="cm">
+                                        <height>1,87</height>
+                                        <width></width>
+                                        <depth>52</depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>Base quadrata iscritta su tre lati, con il retro grezzo, con un'area per il lancio dei dadi sulla sommità. Trovata presso il muro a ovest del tempio n. 3. Epigramma attribuito a Men Phosphoros, sostanzialmente uguale al nr. 132 ma con responso differente.</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Height of letters: 1 to 3 cm.</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/639139">Termessus</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">Güllük, Turkey</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" precision="low"></origDate>
+                        </origin>
+                        <provenance type="found">Güllük, Turchia</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+                <ab>
+                    <lb n="1"/>ςςςςα΄ κε΄ Μηνὸς Φωσφόρου
+                    <lb n="2"/>τέσσαρες ἐξεῖται, πέμπτος χεῖος, τάδε φράζει,
+                    <lb n="3"/>ὡς ἄρνας κατέχουσι λύκοι κρατεροί τε λέοντες
+                    <lb n="4"/>βοῦς ἕλικας, πάντων τούτων καὶ σύ κρατήσεις
+                    <lb n="5"/>καὶ πάντ᾽ ἔσται σοι, ὅσ᾽ ἐπερωτᾷς, σὺν Διὸς Ἑρμῇ.
+                </ab>
+            </div>
+            <div type="apparatus"/>
+            <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="bibliography">
+                <listBibl>
+                    <bibl>Karl Lanckoronski, Städte Pamphyliens und Pisidiens, Vienna, 1890-92, II, pp. 220-223, no. 180</bibl>
+                    <bibl>R. Heberdey, Termessos (Denkschriften, LXIX, 3), 1929, p. 131</bibl>
+                    <bibl>TAM, III, i, (1941) no. 34, pp. 22-33</bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

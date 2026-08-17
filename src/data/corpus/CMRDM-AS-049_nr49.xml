@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Iscrizione greca</rs> Piccolo bomos con cavità in cima, santuario turco di Ayazviran</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>CMRDM — Corpus Monumentorum Religionis Dei Menis</authority>
+                <idno type="filename">CMRDM-AS-049</idno>
+                <idno type="TM"><!-- inserire TM number --></idno>
+                <idno type="CMRDM">CMRDM I 49</idno>
+                    <idno type="id">20</idno>
+</publicationStmt>
+            <!-- REVISIONE: testo greco confrontato col PDF (Lane I, p. 17, note 49, tav. p. 31): nessun errore di trascrizione, solo due divergenze di accento corrette (r. 1 "Ἀτιμίτι"→"Ἀτίμιτι", r. 4 "Τρόφωνος"→"Τρύφωνος", nome proprio errato). Aggiunti dettagli di rinvenimento (superficie frontale in parte spezzata; localizzato nel 1886, ancora presente nell'agosto 1969) e completate le dimensioni strutturate (larghezza e spessore del fusto, già presenti in prosa ma non nei campi width/depth). Pleiades: nessun ID verificabile per "Koresa", ref lasciato non compilato. TM number non reperibile. -->
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>in situ</repository>
+                        <idno>CMRDM I 49</idno>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Piccolo bomos con cavità al centro della sommità, superficie frontale superiore in parte spezzata. Localizzato nel 1886 nel santuario turco di Ayazviran, ancora presente nell'agosto 1969. Altezza 58,5 cm., larghezza del fusto 24,5 cm., spessore del fusto 17 cm.</p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/138.html">stone</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/29.html">altar</objectType>
+                                    <dimensions unit="cm">
+                                        <height>58,5</height>
+                                        <width>24,5</width>
+                                        <depth>17</depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>Piccolo altare con cavità in cima, recante una dedica a Meter Atimitis e Men Tiamos da parte di Glykon figlio di Trophon e Trophimos figlio di Theogenes, eretto per comando divino.</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Height of letters: DA_COMPILARE.</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="DA_COMPILARE">Koresa (?)</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">Ayazviran, Turkey</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" precision="low"></origDate>
+                        </origin>
+                        <provenance type="found">Ayazviran, Turchia</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+                <ab>
+                    <lb n="1"/>Μητρὶ Ἀτίμιτι
+                    <lb n="2"/>καὶ Μηνὶ Τιάμ-
+                    <lb n="3"/>ου Γλύκων
+                    <lb n="4"/>Τρύφωνος καὶ
+                    <lb n="5"/>Τρόφιμος Θεο-
+                    <lb n="6"/>γένου κατ᾽ ἐπι-
+                    <lb n="7"/>ταγὴν τὸν βωμ-
+                    <lb n="8"/>ὸν ἐκ τῶν ἰδίων
+                    <lb n="9"/>ἀνέθηκαν.
+                </ab>
+            </div>
+            <div type="apparatus"/>
+            <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="bibliography">
+                <listBibl>
+                    <bibl>Fontrier, Mouseion kai Bibliotheke, V, ii, 1886, p. 82, no. φοη'</bibl>
+                    <bibl>Drexler, op. cit., col. 2704, no. 19</bibl>
+                    <bibl>Smirnoff, op. cit., p. 98, no. 34</bibl>
+                    <bibl>Perdrizet, op. cit., p. 58, top, no. 5</bibl>
+                    <bibl>Lane, I, p. 17, note 49</bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

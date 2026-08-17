@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Iscrizione greca</rs> Sedile di teatro con iscrizioni, Ormeleis (Tefenni)</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>CMRDM — Corpus Monumentorum Religionis Dei Menis</authority>
+                <idno type="filename">CMRDM-AS-103</idno>
+                <idno type="TM"><!-- inserire TM number --></idno>
+                <idno type="CMRDM">CMRDM I 103</idno>
+                    <idno type="id">71</idno>
+</publicationStmt>
+            <!-- Revisione assistita (cross-check PDF Lane): testo greco riscritto in più punti sul lato destro (nomi "Μήνιδος" non "Μηνιάδος", "Μεσάνβριο[ς]" non "Μεσανάριου", "ἱερατεύων" non "ἱεροτε(λ)εῦν", finale "ων εὐχήν." non "(ι)ῦν εὐχήν."); sul retro corretti i numerali dell'era cibiratica, travisati identicamente nel draft come "ρλσ΄" per entrambe le date quando lo stampato ha invece due anni consecutivi diversi, "ςλσ΄" e "ζλσ΄" (errore rilevante poiché sono numeri-dato, non semplici varianti); corretto "ἱερεὰσατο" in "ἱεράσατο" (due occorrenze). Sul lato sinistro, "parzialmente leggibile" secondo Lane, il draft aveva silenziosamente normalizzato in greco corrente sequenze che Lane riporta come lettere maiuscole non interpretate (es. "θε-/ός" fu una lettura inventata per "ΘΕΔ/ΟΣ", che restano non sciolte): ripristinata la trascrizione in maiuscolo così come stampata, senza risolvere il testo. Corretto Pleiades: aggiunto l'ID per Ormeleis (demo/popolo della Cibiratide, zona di Tefenni), verificato su Pleiades, 639023. Tradotta in italiano la prosa descrittiva di Lane. -->
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>in situ</repository>
+                        <idno>CMRDM I 103</idno>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Sedile di teatro con iscrizioni, trovato prima del 1878 in un cimitero musulmano. Larghezza della faccia destra esterna 54 cm, spessore 44 cm, altezza 37 cm.</p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/138.html">stone</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/250.html">stone</objectType>
+                                    <dimensions unit="cm">
+                                        <height>37</height>
+                                        <width>54</width>
+                                        <depth>44</depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>Sedile di teatro con iscrizioni su tre lati: il lato destro riporta una dedica votiva a Men Tolyseus da parte di Apollonios figlio di Menias, sacerdote; il retro riporta due cariche sacerdotali ricoperte da Aurelio Filiros e Aurelio Papes in due anni consecutivi dell'era cibiratica (261-2 d.C.); il lato sinistro, parzialmente leggibile, riporta una sequenza di lettere non completamente interpretata.</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Altezza delle lettere: DA_COMPILARE.</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/639023">Ormeleis</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">Tefenni, Turchia</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" notBefore-custom="261" notAfter-custom="262" precision="medium">261-262 d.C. (era cibiratica)</origDate>
+                        </origin>
+                        <provenance type="found">Tefenni, Turchia</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+                <ab>
+                    <lb n="1"/>Ἀπολλώνι-
+                    <lb n="2"/>ος Μήνιδος γ΄
+                    <lb n="3"/>Μεσάνβριο[ς]
+                    <lb n="4"/>ἱερατεύων
+                    <lb n="5"/>Μηνὶ Τολησέ-
+                    <lb n="6"/>ων εὐχήν.
+                    <lb n="7"/>Ἔτους ςλσ΄, Αὐρ. Φιλί-
+                    <lb n="8"/>ρος Δημητρίου [Μ]ικ-
+                    <lb n="9"/>κίου ἱεράσατο.
+                    <lb n="10"/>Ἔτους ζλσ΄, Αὐρ. Πάπης
+                    <lb n="11"/>Μίδα ἱεράσατο ἐκ τῶν
+                    <lb n="12"/>ἰδίων θελίως.
+                    <lb n="13"/>ΙΙ Α
+                    <lb n="14"/>Ρ ΙΙ ΙΙ ΤΟ Μοδίωνο[ς]
+                    <lb n="15"/>ΔΟ. Ν ὑπάρχοντος
+                    <lb n="16"/>ΠΥΤΟΕΣ κατὰ τό
+                    <lb n="17"/>τε ἱερίον καὶ ΘΕΔ
+                    <lb n="18"/>ΟΣ
+                </ab>
+            </div>
+            <div type="apparatus"/>
+            <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="bibliography">
+                <listBibl>
+                    <bibl>Collignon, BCH, II, 1878, p. 171-2</bibl>
+                    <bibl>J.R.S. Sterrett, Epigraphical Journey, p. 94, no. 61</bibl>
+                    <bibl>Drexler, op. cit., col. 2716</bibl>
+                    <bibl>Ramsay, C and B, I, p. 304</bibl>
+                    <bibl>Perdrizet, op. cit., p. 63</bibl>
+                    <bibl>Lane, I, p. 24, no. 14</bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Iscrizione greca</rs> Statuetta di bronzo di Men come cavaliere, Magnesia ad Sipylum</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>CMRDM — Corpus Monumentorum Religionis Dei Menis</authority>
+                <idno type="filename">CMRDM-AS-084</idno>
+                <idno type="TM"><!-- inserire TM number --></idno>
+                <idno type="CMRDM">CMRDM I 84</idno>
+                    <idno type="id">52</idno>
+</publicationStmt>
+            <!-- REVISIONE: testo greco confrontato col PDF (Lane I, p. 22, no. 37) e risultato identico allo stampato, nessuna correzione necessaria. Aggiunto dettaglio di rinvenimento assente dal draft (trovata nel santuario di Meter Plastene a est di Manisa, presso la cosiddetta "statua di Niobe", nel 1887; trasportata al Museo di Costantinopoli secondo l'articolo della RA), tradotto in italiano insieme al resto della prosa descrittiva. Pleiades corretto: l'ID "https://pleiades.stoa.org/places/550791" per Magnesia ad Sipylum non risultava verificabile; sostituito con l'ID corretto 550706, confermato incrociando Wikidata, ToposText e Nomisma (concordi). Lo stesso ID errato 550791 era usato anche nel draft del nr. 85 (stesso sito), corretto allo stesso modo. TM number non reperibile. -->
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>Istanbul Archaeological Museum</repository>
+                        <idno>CMRDM I 84</idno>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Statuetta di bronzo raffigurante Men come cavaliere, trovata nel santuario di Meter Plastene a est di Manisa, presso la cosiddetta "statua di Niobe", nel 1887; trasportata al Museo di Costantinopoli secondo l'articolo della RA. Altezza 50 cm.</p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/109.html">bronze</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/24.html">relief</objectType>
+                                    <dimensions unit="cm">
+                                        <height>50</height>
+                                        <width></width>
+                                        <depth></depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>Statuetta di bronzo che rappresenta Men come cavaliere, dedicata a Meter Plastene da Kalleiso Orpheus.</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Height of letters: DA_COMPILARE.</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/550706">Magnesia ad Sipylum</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">Manisa, Turkey</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" precision="low"></origDate>
+                        </origin>
+                        <provenance type="found">Manisa, Turchia</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+                <ab>
+                    <lb n="1"/>Μητρὶ θεῶν Πλαστήνῃ
+                    <lb n="2"/>Καλλεισὼς Ὀρφεὺς
+                    <lb n="3"/>ἀνέθηκεν.
+                </ab>
+            </div>
+            <div type="apparatus"/>
+            <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="bibliography">
+                <listBibl>
+                    <bibl>S. Reinach, RA, 1887, II, p. 96</bibl>
+                    <bibl>A.E. Kontoleon, AM, XII, 1887, p. 253, no. 17</bibl>
+                    <bibl>Lane, I, p. 22, no. 37</bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

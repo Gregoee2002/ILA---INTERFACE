@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Iscrizione greca</rs> — CMRDM I nr. 253: Tabula ansata marmorea con tre falci di luna e dedica tekmor a Men Askaienos, Museo di Yalvaç</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>CMRDM — Corpus Monumentorum Religionis Dei Menis</authority>
+                <idno type="filename">CMRDM-AS-253</idno>
+                <idno type="TM"><!-- inserire TM number --></idno>
+                <idno type="CMRDM">CMRDM I 253</idno>
+            </publicationStmt>
+            <!-- Revisione confronto col PDF (Lane, CMRDM I, p. 139-140, n. 253): corretto il nome del dedicante da "Σεμπρώνιος" (normalizzato) a "Σενπρώνιος" come effettivamente stampato da Lane; corretto il numerale finale del voto da "εὐχὴν α΄" (primo voto, errato) a "εὐχὴν δ΄" (quarto voto) come stampato — errore che cambia il significato; corretto l'ID Pleiades di Antiocheia Pisidiae da 652388 a 609307; tradotta in italiano la prosa descrittiva di Lane in titolo, support e layout; italianizzato "Turkey" in "Turchia". -->
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>Yalvaç Museum</repository>
+                        <idno>CMRDM I 253</idno>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Tabula ansata marmorea con tre falci di luna e dedica tekmor a Men Askaienos, Museo di Yalvaç. Larghezza 31 cm., altezza 25 cm., spessore 2,5 cm.</p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/48.html">marble</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/53.html">plaque</objectType>
+                                    <dimensions unit="cm">
+                                        <height>25</height>
+                                        <width>31</width>
+                                        <depth>2,5</depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>Tabula ansata con bordo. Tre falci di luna in alto (quella centrale entro una corona). Marcus Senpronius Karpos, avendo compiuto il suo voto-tekmor con i figli, fa una quarta dedica a Men Askaienos.</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Altezza delle lettere: DA_COMPILARE.</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/609307">Antiocheia Pisidiae</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">Yalvaç, Turchia</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" precision="low"></origDate>
+                        </origin>
+                        <provenance type="found">Yalvaç, Turchia</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+                <ab>
+                    <lb n="1"/>Μ. Σενπρώνιος Κάρπος
+                    <lb n="2"/>τεκμορεύσας μετὰ τέκνων
+                    <lb n="3"/>Μηνὶ Ἀσκαηνῷ εὐχὴν δ΄.
+                </ab>
+            </div>
+            <div type="apparatus"/>
+            <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="bibliography">
+                <listBibl>
+                    <bibl>B. Levick, AS, XVII, 1967, p. 117, no. 46</bibl>
+                    <bibl>L. Robert, REG, LXXXI, 1968, p. 529, no. 540</bibl>
+                    <bibl>Lane, II, p. 47</bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

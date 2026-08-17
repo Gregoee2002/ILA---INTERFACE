@@ -4,12 +4,12 @@
     <teiHeader>
         <fileDesc>
             <titleStmt>
-                <title><rs type="textType">stele</rs> Marble stele with confession inscription, Ayazviran</title>
+                <title><rs type="textType">stele</rs> Stele di marmo con iscrizione di confessione, Ayazviran</title>
             </titleStmt>
             <publicationStmt>
                 <authority>CMRDM — Corpus Monumentorum Religionis Dei Menis</authority>
                 <idno type="filename">2</idno>
-                <idno type="id">41</idno>
+                <idno type="id">101</idno>
                 <idno type="entryId">local-2</idno>
                 <idno type="TM">&lt;!-- inserire TM number --&gt;</idno>
             </publicationStmt>
@@ -23,7 +23,7 @@
                         <objectDesc>
                             <supportDesc>
                                 <support>
-                                    <p>Marble stele with confession inscription, Ayazviran. Height 1 m., width at top 31 cm., at bottom 45 cm.</p>
+                                    <p>Stele di marmo con iscrizione di confessione, Ayazviran. Altezza 1 m., larghezza in alto 31 cm., in basso 45 cm.</p>
                                     <material ref="https://www.eagle-network.eu/voc/material/lod/48.html">marble</material>
                                     <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/250.html">stele</objectType>
                                     <dimensions>
@@ -35,7 +35,7 @@
                             </supportDesc>
                             <layoutDesc>
                                 <layout>
-                                    <p>Long confession stele recording divine punishment of Tatia (accused of poisoning her son-in-law Iokoundos) and her son Sokrates, and subsequent propitiation by her grandchildren.</p>
+                                    <p>Lunga stele di confessione che registra la punizione divina di Tatia (accusata di aver avvelenato il genero Iokoundos) e del figlio Sokrates, e la successiva propiziazione da parte dei nipoti.</p>
                                     <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
                                 </layout>
                             </layoutDesc>
@@ -54,7 +54,7 @@
                             </origPlace>
                             <origDate datingMethod="#julian" notBefore-custom="156" notAfter-custom="157" precision="medium">156-157 A.D.</origDate>
                         </origin>
-                        <provenance type="found">Ayazviran, Turkey</provenance>
+                        <provenance type="found">Ayazviran, Turchia</provenance>
                         <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
                     </history>
                 </msDesc>

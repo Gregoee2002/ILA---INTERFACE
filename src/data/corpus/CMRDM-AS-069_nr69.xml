@@ -4,12 +4,12 @@
     <teiHeader>
         <fileDesc>
             <titleStmt>
-                <title><rs type="textType">stele</rs> White marble stele with relief of Men, Tarsi? (Kölekoy)</title>
+                <title><rs type="textType">stele</rs> Stele di marmo bianco con rilievo di Men, Tarsi? (Kölekoy)</title>
             </titleStmt>
             <publicationStmt>
                 <authority>CMRDM — Corpus Monumentorum Religionis Dei Menis</authority>
                 <idno type="filename">3</idno>
-                <idno type="id">42</idno>
+                <idno type="id">102</idno>
                 <idno type="entryId">local-3</idno>
                 <idno type="TM">&lt;!-- inserire TM number --&gt;</idno>
             </publicationStmt>
@@ -23,7 +23,7 @@
                         <objectDesc>
                             <supportDesc>
                                 <support>
-                                    <p>White marble stele with relief of Men, Tarsi? (Kölekoy). Height 1.00 m., width 48 cm., thickness 7 cm.</p>
+                                    <p>Stele di marmo bianco con rilievo di Men, Tarsi? (Kölekoy). Altezza 1,00 m, larghezza 48 cm, spessore 7 cm.</p>
                                     <material ref="https://www.eagle-network.eu/voc/material/lod/48.html">marble</material>
                                     <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/250.html">stele</objectType>
                                     <dimensions>
@@ -35,7 +35,7 @@
                             </supportDesc>
                             <layoutDesc>
                                 <layout>
-                                    <p>Stele with relief of Men holding staff, pine-cone, with piece of clothing and boy with uplifted hands. Confession inscription: a garment was stolen from a bathhouse; the god punished the thief who confessed and returned it.</p>
+                                    <p>Stele con rilievo di Men che regge bastone e pigna, con un indumento e un ragazzo con le mani alzate. Iscrizione di confessione: un indumento fu rubato da uno stabilimento balneare; il dio punì il ladro, che confessò e lo restituì.</p>
                                     <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
                                 </layout>
                             </layoutDesc>
@@ -54,7 +54,7 @@
                             </origPlace>
                             <origDate datingMethod="#julian" notBefore-custom="164" notAfter-custom="165" precision="medium">164-165 A.D.</origDate>
                         </origin>
-                        <provenance type="found">Kölekoy, Turkey</provenance>
+                        <provenance type="found">Kölekoy, Turchia</provenance>
                         <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
                     </history>
                 </msDesc>

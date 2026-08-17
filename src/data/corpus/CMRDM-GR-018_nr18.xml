@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Iscrizione greca</rs> — CMRDM I nr. 18: Pietra bianca iscritta, Serapeo C, Delos</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>CMRDM — Corpus Monumentorum Religionis Dei Menis</authority>
+                <idno type="filename">CMRDM-GR-018</idno>
+                <idno type="TM"><!-- inserire TM number --></idno>
+                <idno type="CMRDM">CMRDM I 18</idno>
+            </publicationStmt>
+            <!-- Revisione: corretto il testo greco (era "Τοόσα Μηνί", lettura errata; lo stampato ha "Τάοσα Μηνί", nome proprio Taosa); titolo/support/layout tradotti in italiano, support arricchito coi dati di scavo (1881 nel Serapeo C, nel ginnasio dal 1911) da Lane; placeName modern tradotto (Greece -> Grecia); Pleiades ancient (599588, Delos) verificato corretto, nessuna modifica. -->
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>in situ</repository>
+                        <idno>CMRDM I 18</idno>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Pietra bianca, che sembra essere stata parte di un monumento più grande, trovata nel 1881 nel Serapeo C dell'isola; nel ginnasio dal 1911. Altezza 25 cm, larghezza 49 cm.</p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/138.html">stone</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/250.html">stone</objectType>
+                                    <dimensions unit="cm">
+                                        <height>25</height>
+                                        <width>49</width>
+                                        <depth></depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>Frammento di un monumento più grande, con breve iscrizione dedicatoria nell'angolo superiore sinistro.</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Height of letters: 2.2 cm.</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/599588">Delus</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">Delos, Grecia</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" precision="low"></origDate>
+                        </origin>
+                        <provenance type="found">Delos, Grecia</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+                <ab>
+                    <lb n="1"/>Τάοσα Μηνί
+                </ab>
+            </div>
+            <div type="apparatus"/>
+            <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="bibliography">
+                <listBibl>
+                    <bibl>A. Hauvette-Bernault, BCH, VI, 1882, p. 345, no. 65</bibl>
+                    <bibl>Drexler, op. cit., col. 2730</bibl>
+                    <bibl>Perdrizet, BCH, XX, 1896, p. 75, note 2</bibl>
+                    <bibl>*P. Roussel, Les Cultes Égyptiens à Délos, Nancy, 1916, no. 63</bibl>
+                    <bibl>IG, XI, (1927), 1291</bibl>
+                    <bibl>Lane, I, p. 12, no. 5</bibl>
+                    <bibl>J. Marcadé, Au Musée de Délos, Paris, 1969, pp. 399 and 411</bibl>
+                    <bibl>L. Vidman, op. cit., p. 67, no. CE 63</bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

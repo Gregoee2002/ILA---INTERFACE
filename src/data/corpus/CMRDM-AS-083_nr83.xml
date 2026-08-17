@@ -4,12 +4,12 @@
     <teiHeader>
         <fileDesc>
             <titleStmt>
-                <title><rs type="textType">altar</rs> Whitish marble altar with inscription to Men Ouranios, Saittae area</title>
+                <title><rs type="textType">altar</rs> Altare di marmo biancastro con iscrizione a Men Ouranios, zona di Saittae</title>
             </titleStmt>
             <publicationStmt>
                 <authority>CMRDM — Corpus Monumentorum Religionis Dei Menis</authority>
                 <idno type="filename">5</idno>
-                <idno type="id">44</idno>
+                <idno type="id">104</idno>
                 <idno type="entryId">local-5</idno>
                 <idno type="TM">&lt;!-- inserire TM number --&gt;</idno>
             </publicationStmt>
@@ -23,7 +23,7 @@
                         <objectDesc>
                             <supportDesc>
                                 <support>
-                                    <p>Whitish marble altar with inscription to Men Ouranios, Saittae area. Height 80.5 cm., width 36 cm.</p>
+                                    <p>Altare di marmo biancastro con iscrizione a Men Ouranios, zona di Saittae. Altezza 80,5 cm, larghezza 36 cm.</p>
                                     <material ref="https://www.eagle-network.eu/voc/material/lod/48.html">marble</material>
                                     <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/29.html">altar</objectType>
                                     <dimensions>
@@ -35,7 +35,7 @@
                             </supportDesc>
                             <layoutDesc>
                                 <layout>
-                                    <p>Altar with mouldings at bottom and top. Inscription invokes Men Ouranieos as a great heavenly god with the great power of the immortal deity.</p>
+                                    <p>Altare con modanature in basso e in alto. L'iscrizione invoca Men Ouranieos come grande dio celeste dotato del grande potere della divinità immortale.</p>
                                     <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
                                 </layout>
                             </layoutDesc>
@@ -53,7 +53,7 @@
                                 <placeName type="modern" ref="DA_COMPILARE">Incikler, Turkey</placeName>
                             </origPlace>
                         </origin>
-                        <provenance type="found">Incikler, Turkey</provenance>
+                        <provenance type="found">Incikler, Turchia</provenance>
                         <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
                     </history>
                 </msDesc>

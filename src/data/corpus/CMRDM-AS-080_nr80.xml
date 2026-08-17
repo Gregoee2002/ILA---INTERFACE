@@ -4,12 +4,12 @@
     <teiHeader>
         <fileDesc>
             <titleStmt>
-                <title><rs type="textType">stele</rs> Two fragments of white marble stele with crescent, Sardis</title>
+                <title><rs type="textType">stele</rs> Due frammenti di stele di marmo bianco con falce di luna, Sardis</title>
             </titleStmt>
             <publicationStmt>
                 <authority>CMRDM — Corpus Monumentorum Religionis Dei Menis</authority>
                 <idno type="filename">4</idno>
-                <idno type="id">43</idno>
+                <idno type="id">103</idno>
                 <idno type="entryId">local-4</idno>
                 <idno type="TM">&lt;!-- inserire TM number --&gt;</idno>
             </publicationStmt>
@@ -23,7 +23,7 @@
                         <objectDesc>
                             <supportDesc>
                                 <support>
-                                    <p>Two fragments of white marble stele with crescent, Sardis. Top piece height 24 cm., bottom piece height 42 cm., width at bottom 37.5 cm.</p>
+                                    <p>Due frammenti di stele di marmo bianco con falce di luna, Sardis. Altezza del pezzo superiore 24 cm, altezza del pezzo inferiore 42 cm, larghezza alla base 37,5 cm.</p>
                                     <material ref="https://www.eagle-network.eu/voc/material/lod/48.html">marble</material>
                                     <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/250.html">stele</objectType>
                                     <dimensions>
@@ -35,7 +35,7 @@
                             </supportDesc>
                             <layoutDesc>
                                 <layout>
-                                    <p>Two fragments of stele with incised crescent at top. Confession inscription: Epaphroditos vowed to Men Axiottenos if he obtained a wife; he failed to pay the vow and was punished before fulfilling it.</p>
+                                    <p>Due frammenti di stele con falce di luna incisa in alto. Iscrizione di confessione: Epaphroditos fece voto a Men Axiottenos se avesse ottenuto una moglie; non adempì al voto e fu punito prima di soddisfarlo.</p>
                                     <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
                                 </layout>
                             </layoutDesc>
@@ -54,7 +54,7 @@
                             </origPlace>
                             <origDate datingMethod="#julian" notBefore-custom="160" notAfter-custom="161" precision="medium">160-161 A.D.</origDate>
                         </origin>
-                        <provenance type="found">Sart, Turkey</provenance>
+                        <provenance type="found">Sart, Turchia</provenance>
                         <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
                     </history>
                 </msDesc>

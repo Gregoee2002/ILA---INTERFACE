@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Iscrizione greca</rs> — CMRDM I nr. 268: Stele con timpano e protome, con busto di Men e dedica di Euboulos figlio di Sosios, Museo di Konya</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>CMRDM — Corpus Monumentorum Religionis Dei Menis</authority>
+                <idno type="filename">CMRDM-AS-268</idno>
+                <idno type="TM"><!-- inserire TM number --></idno>
+                <idno type="CMRDM">CMRDM I 268</idno>
+            </publicationStmt>
+            <!-- Revisione: corretto Pleiades id 652388 (404) in 609307 (Antiocheia Pisidiae/Yalvaç); riga 1, corretto il patronimico "Ζωσίου" (Zosios) in "Σωσίου" (Sosios) secondo lo stampato (Lane I, p. 146) — lettera Ζ/Σ scambiata; riga 3, uniformata la cassa "Ε(ὐχήν)" in "ε(ὐχήν)" minuscola come nello stampato e come le altre abbreviazioni della stessa riga. Aggiornati titolo e layout. Rimossa la bibliografia fittizia "Lane, II, p. 47 (unpublished)" non presente a stampa per questa entry. Tradotta in italiano la prosa descrittiva inglese. -->
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>Konya Archaeological Museum</repository>
+                        <idno>CMRDM I 268</idno>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Stele con timpano e protome (lug), trovata nello stesso momento e nello stesso luogo delle precedenti, ora nello stesso museo. Altezza 72 cm, larghezza 30 cm, spessore 12,5 cm.</p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/138.html">stone</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/250.html">stele</objectType>
+                                    <dimensions unit="cm">
+                                        <height>72</height>
+                                        <width>30</width>
+                                        <depth>12,5</depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>La stele ha acroteri vegetali e un fiore (o stella?) entro una nicchia profonda al centro. Nel campo principale, tra le ante, vi è un busto di Men con crescente e berretto frigio. In basso l'iscrizione: Euboulos figlio di Sosios, per sé e per i figli, a Men Askaienos, voto (abbreviato).</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Height of letters: DA_COMPILARE.</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/609307">Antiocheia Pisidiae</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">Yalvaç, Turkey</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" precision="low"></origDate>
+                        </origin>
+                        <provenance type="found">Yalvaç, Turkey</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+                <ab>
+                    <lb n="1"/>Εὔβουλος Σωσίου
+                    <lb n="2"/>ὑπὲρ ἑαυτοῦ καὶ τέκνων
+                    <lb n="3"/>Μ(ηνὶ) Ἀ(σκαηνῷ) ε(ὐχήν).
+                </ab>
+            </div>
+            <div type="apparatus"/>
+            <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>DA_COMPILARE</p></div>
+        </body>
+    </text>
+</TEI>

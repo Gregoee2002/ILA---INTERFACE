@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Iscrizione latina</rs> — CMRDM I nr. 160: Piccolo cippo rotondo con iscrizione latina, santuario di Men Askaenos, Antiocheia Pisidiae</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>CMRDM — Corpus Monumentorum Religionis Dei Menis</authority>
+                <idno type="filename">CMRDM-AS-159</idno>
+                <idno type="TM"><!-- inserire TM number --></idno>
+                <idno type="CMRDM">CMRDM I 160</idno>
+            </publicationStmt>
+            <!-- Revisione assistita (cross-check con PDF Lane, CMRDM I 160, p. 100-101): tradotta in italiano la prosa descrittiva (support, layout, provenance, title). Corretto un refuso nel testo latino r.7 "VIir" -> "VIIr" (VII vir Augustalis, numerale romano 7, non "VI"+"ir"). Corretto Pleiades ref del placeName "ancient" (Antiocheia Pisidiae) da 652388 (ID errato) a 609307, verificato su Wikidata e topostext.org. -->
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>in situ or lost</repository>
+                        <idno>CMRDM I 160</idno>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Piccolo cippo rotondo con iscrizione latina, santuario di Men Askaenos, Antiocheia Pisidiae. </p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/138.html">stone</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/57.html">base</objectType>
+                                    <dimensions unit="cm">
+                                        <height></height>
+                                        <width></width>
+                                        <depth></depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>Piccolo cippo rotondo trovato nel 1912 presso il santuario di Men Askaenos, a est di Antiochia. LVS interpretato come Luna(e) votum solvit, elemento che collega l'iscrizione a Men. Eretto per decreto dei decurioni, su mandato dei Caristiani, per Drosera e Miletos, genitori di Tiberio Claudio Epinico.</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Altezza delle lettere: DA_COMPILARE.</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/609307">Antiocheia Pisidiae</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">Yalvaç, Turchia</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" precision="low"></origDate>
+                        </origin>
+                        <provenance type="found">Yalvaç, Turchia</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="la">
+                <ab>
+                    <lb n="1"/>LVS
+                    <lb n="2"/>Ti. Claudiu[s]
+                    <lb n="3"/>Epinicus
+                    <lb n="4"/>Proc(urator) et Prae-
+                    <lb n="5"/>gustator et
+                    <lb n="6"/>a secretis Aug(usti)
+                    <lb n="7"/>VIIr aug(ustalis) c(oloniae) c(aesariae)
+                    <lb n="8"/>d(ecreto) d(ecurionum) ex mandatu
+                    <lb n="9"/>Caristianor(um)
+                    <lb n="10"/>Droserae et
+                    <lb n="11"/>Mileti parenti-
+                    <lb n="12"/>um suorum
+                    <lb n="13"/>posuit.
+                </ab>
+            </div>
+            <div type="apparatus"/>
+            <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="bibliography">
+                <listBibl>
+                    <bibl>G.L. Cheesman, JRS, III, 1913, p. 258, no. 3</bibl>
+                    <bibl>Année Épigraphique, 1914, p. 373, no. 261</bibl>
+                    <bibl>Lane, I, p. 30, no. 3</bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Iscrizione greca</rs> — CMRDM I nr. 151: Sepulchral stone invoking Men Chthonios, Iconium</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>CMRDM — Corpus Monumentorum Religionis Dei Menis</authority>
+                <idno type="filename">CMRDM-AS-150</idno>
+                <idno type="TM"><!-- inserire TM number --></idno>
+                <idno type="CMRDM">CMRDM I 151</idno>
+            </publicationStmt>
+            <!-- Revisione assistita (cross-check PDF Lane): corretto Pleiades ID di Iconium (628920, non pertinente) con 648647. Corretto il testo greco (restituzione di Ramsay, come indicato da Lane): l.1 "ἀδικήσῃ"→"ἀδικήσει"; l.2 "στήλην"→"ἱστήλην" (ι caduta) e "κεκολω-"→"χεχολω-"; l.3 "ἐχ]άτω"→"ἐχ]έτω" (forma inesistente sostituita con l'imperativo corretto); l.4 rimossa una lacuna fittizia — il draft troncava il testo con "Μαν[ ]" (lacuna aperta non necessaria) mentre Lane stampa per intero, su due righe, "Ἀνέστησεν δὲ Μάν-ίῳ." (nessun testo perduto in quel punto). Tradotta la prosa inglese in italiano e aggiunta la notizia del rinvenimento (visto da Seetzen nel 1803(?), murato nelle mura di Iconium). -->
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>in situ (city walls)</repository>
+                        <idno>CMRDM I 151</idno>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Pietra sepolcrale che invoca Men Chthonios, Iconium. Vista da Seetzen nel 1803(?), murata nelle mura della città. Dimensioni sconosciute.</p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/138.html">stone</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/250.html">stone</objectType>
+                                    <dimensions unit="cm">
+                                        <height></height>
+                                        <width></width>
+                                        <depth></depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>Pietra sepolcrale con maledizione funeraria (restituzione di Ramsay) che invoca Men Chthonios contro chiunque danneggi la stele di Hermios. Eretta da Manios.</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Height of letters: DA_COMPILARE.</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/648647">Iconium</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">Konya, Turkey</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" precision="low"></origDate>
+                        </origin>
+                        <provenance type="found">Konya, Turkey</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+                <ab>
+                    <lb n="1"/>Ἐάν τις ἀδικήσει τή-
+                    <lb n="2"/>[ν] ἱστήλην Ἑρμίου [χεχολω-]
+                    <lb n="3"/>[μένον ἐχ]έτω [Μ]ῆνα χθόν[ι]ο[ν].
+                    <lb n="4"/>Ἀνέστησεν δὲ Μάν-
+                    <lb n="5"/>ίῳ.
+                </ab>
+            </div>
+            <div type="apparatus"/>
+            <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="bibliography">
+                <listBibl>
+                    <bibl>CIG, 4008</bibl>
+                    <bibl>Ramsay, JHS, XXXVIII, 1918, p. 168, no. X</bibl>
+                    <bibl>Lane, I, p. 47, no. 9</bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

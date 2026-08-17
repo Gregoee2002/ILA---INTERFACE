@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Iscrizione greca</rs> Altare di marmo grigiastro con rilievo a falce di luna, Oueza? (Söpüren)</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>CMRDM — Corpus Monumentorum Religionis Dei Menis</authority>
+                <idno type="filename">CMRDM-AS-093</idno>
+                <idno type="TM"><!-- inserire TM number --></idno>
+                <idno type="CMRDM">CMRDM I 93</idno>
+                    <idno type="id">61</idno>
+</publicationStmt>
+            <!-- REVISIONE: testo greco confrontato col PDF (Lane I, p. 23, no. 5 [sic, stesso numero del nr. 92 nello stampato]; testo stampato p. 62), verificato con ritaglio ingrandito. Correzione maggiore: r. 2 "Μηνὶ Ἡρακλ[εῖ]" (epiteto "Herakles") sostituito da "Μηνὶ Ἰταλ[ι]κῷ" (epiteto "Italikos") — epiteto divino completamente diverso, non un errore di lettera isolata. Corretti anche: r. 1 "Οὐεξαεῖτας"->"Οὐεζαεῖται" (etnico del dedicante); r. 3 "ἐξ ἐπιφ[αν]ῆς"->"ἐξ ἐπιτα[γ]ῆς" ("per comando", non "per manifestazione/epifania": parola diversa). Corretto di conseguenza il riferimento all'epiteto in layout/p. Aggiunti i dettagli dimensionali completi presenti in Lane e assenti dal draft (spessore in cima 40 cm, spessore dello scafo 36 cm) e le circostanze di scoperta (trovato nel 1931 da C.W.M. Cox, a sostegno di una tettoia nel cortile di casa di Suleyman), tradotti in italiano insieme al resto della prosa descrittiva. Pleiades: toponimo antico "Oueza?" segnalato come incerto dallo stesso Lane (punto interrogativo nell'originale); nessuna voce Pleiades verificabile; lasciato "DA_COMPILARE" come nel draft. TM number non reperibile. -->
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>in situ or lost</repository>
+                        <idno>CMRDM I 93</idno>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Altare di marmo grigiastro con rilievo a falce di luna, Oueza? (Söpüren). Trovato nel 1931 da C. W. M. Cox, a sostegno di una tettoia nel cortile di casa di Suleyman. Altezza 83,5 cm, larghezza in cima 41 cm, larghezza dello scafo 40 cm, spessore in cima 40 cm, spessore dello scafo 36 cm.</p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/48.html">marble</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/29.html">altar</objectType>
+                                    <dimensions unit="cm">
+                                        <height>83,5</height>
+                                        <width>41</width>
+                                        <depth></depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>Altare con rilievo di una falce di luna divisa a metà da una linea, con una foglia pendente da ciascuna estremità. Dedica a Men Italikos da parte del popolo di Oueza, per (divino) comando.</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Height of letters: 3 to 3.5 cm.</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="DA_COMPILARE">Oueza (?)</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">Söpüren, near Eskişehir, Turkey</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" precision="low"></origDate>
+                        </origin>
+                        <provenance type="found">Söpüren, near Eskişehir, Turchia</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+                <ab>
+                    <lb n="1"/>Οὐεζαεῖται
+                    <lb n="2"/>Μηνὶ Ἰταλ[ι]κῷ
+                    <lb n="3"/>ἐξ ἐπιτα[γ]ῆς.
+                </ab>
+            </div>
+            <div type="apparatus"/>
+            <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="bibliography">
+                <listBibl>
+                    <bibl>MAMA, V, p. 71, no. 150 and Plate 40</bibl>
+                    <bibl>Lane, I, p. 23, no. 5</bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

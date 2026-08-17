@@ -4,12 +4,12 @@
     <teiHeader>
         <fileDesc>
             <titleStmt>
-                <title><rs type="textType">stone</rs> Inscribed stone with sacred regulations for Men Tyrannos, Laurion area</title>
+                <title><rs type="textType">stone</rs> Pietra iscritta con norme sacre per Men Tyrannos, zona del Laurion</title>
             </titleStmt>
             <publicationStmt>
                 <authority>CMRDM — Corpus Monumentorum Religionis Dei Menis</authority>
                 <idno type="filename">9</idno>
-                <idno type="id">48</idno>
+                <idno type="id">108</idno>
                 <idno type="entryId">local-9</idno>
                 <idno type="TM">&lt;!-- inserire TM number --&gt;</idno>
             </publicationStmt>
@@ -23,7 +23,7 @@
                         <objectDesc>
                             <supportDesc>
                                 <support>
-                                    <p>Inscribed stone with sacred regulations for Men Tyrannos, Laurion area. Height 89 cm., width 73 cm., thickness 9.5 cm.</p>
+                                    <p>Pietra iscritta con norme sacre per Men Tyrannos, zona del Laurion. Altezza 89 cm., larghezza 73 cm., spessore 9,5 cm.</p>
                                     <material ref="https://www.eagle-network.eu/voc/material/lod/138.html">stone</material>
                                     <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/250.html">stone</objectType>
                                     <dimensions>
@@ -35,7 +35,7 @@
                             </supportDesc>
                             <layoutDesc>
                                 <layout>
-                                    <p>Large stone with well-incised crescent at top, fixed by lug at bottom, bearing a detailed sacred law for the sanctuary of Men Tyrannos including purity rules, sacrificial obligations, and regulations for the eranistai.</p>
+                                    <p>Grande pietra con crescente ben inciso in alto, fissata alla base da un incastro, recante una dettagliata legge sacra per il santuario di Men Tyrannos, comprendente norme di purità, obblighi sacrificali e regolamenti per gli eranistai.</p>
                                     <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
                                 </layout>
                             </layoutDesc>
@@ -53,7 +53,7 @@
                                 <placeName type="modern" ref="DA_COMPILARE">Laurion area, Greece</placeName>
                             </origPlace>
                         </origin>
-                        <provenance type="found">Laurion area, Greece</provenance>
+                        <provenance type="found">Zona del Laurion, Grecia</provenance>
                         <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
                     </history>
                 </msDesc>

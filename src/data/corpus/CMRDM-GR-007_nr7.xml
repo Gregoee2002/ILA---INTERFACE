@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Iscrizione greca</rs> Stone with relief and inscription, Staatliches Museum Berlin</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>CMRDM — Corpus Monumentorum Religionis Dei Menis</authority>
+                <idno type="filename">CMRDM-GR-007</idno>
+                <idno type="TM"><!-- inserire TM number --></idno>
+                <idno type="CMRDM">CMRDM I 7</idno>
+                    <idno type="id">96</idno>
+</publicationStmt>
+            <!-- Revisione: corretto il testo greco confrontandolo con lo stampato di Lane (p. 5). Riga 1: "Ἱερεὺ" mancava del sigma finale, corretto in "Ἱερεὺς". Riga 2: "καὶ ἱεροστόλος" (titolo sacerdotale inventato, assente dallo stampato) corretto in "καὶ Σεράπιδος" ("sacerdote vestiario di Iside e Serapide"), coerente anche con la bibliografia (Vidman, Sylloge Inscriptionum Religionis Isiacae et Sarapiacae). Aggiunta la notizia sulla provenienza dalla collezione Saburoff (ambasciatore russo ad Atene, prima segnalazione 1874), assente nel draft. Verificato Pleiades (Athenae 579885, invariato, corretto). TM number non compilato: nessuna corrispondenza certa trovata in Trismegistos per IG II² 4818. -->
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>Staatliches Museum, Berlin</repository>
+                        <idno>CMRDM I 7</idno>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Stone with relief and inscription, first reported in 1874 from the collection of Saburoff, the Russian ambassador in Athens; now in the Staatliches Museum, Berlin. Height 40 cm., length 33.7 cm., thickness 4 cm.</p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/138.html">stone</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/24.html">relief</objectType>
+                                    <dimensions unit="cm">
+                                        <height>40</height>
+                                        <width></width>
+                                        <depth>4</depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>Relief with seven-pointed star in large crescent within a square field, with dedicatory inscription below.</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Height of letters: 0.9 cm.</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/579885">Athenae</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">Athens, Greece</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" precision="low"></origDate>
+                        </origin>
+                        <provenance type="found">Athens, Greece</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+                <ab>
+                    <lb n="1"/>Ἱερεὺς στολιστὴς Ἴσιδος
+                    <lb n="2"/>καὶ Σεράπιδος Αὐρ. Ἐπαφρόδει-
+                    <lb n="3"/>τος τῷ Οὐρανίῳ Μηνὶ εὐχα-
+                    <lb n="4"/>[ρ]ιστήριον ἀνέθηκα.
+                </ab>
+            </div>
+            <div type="apparatus"/>
+            <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="bibliography">
+                <listBibl>
+                    <bibl>Wieseler, Nachrichten der Gesellschaft der Wissenschaften, Göttingen, 1874, p. 14</bibl>
+                    <bibl>idem, Abhandlungen Ges. Wiss. Gatt., XIX, 1874, p. 34</bibl>
+                    <bibl>Drexler, op. cit., col. 2733</bibl>
+                    <bibl>Daremberg-Saglio, III, ii, p. 1397</bibl>
+                    <bibl>Beschreibung der Antiken Skulpturen, Königliche Museen, Berlin, 1891, pp. 262-3</bibl>
+                    <bibl>Perdrizet, op. cit., p. 80, no. 3</bibl>
+                    <bibl>C. Michel, Recueil d'inscriptions grecques, Paris 1897-1927, no. 1690</bibl>
+                    <bibl>IG, II², 4818</bibl>
+                    <bibl>Lane, I, p. 9, no. 10</bibl>
+                    <bibl>L. Vidman, Sylloge Inscriptionum Religionis Isiacae et Sarapiacae, Berlin, 1969, p. 15, no. 27</bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

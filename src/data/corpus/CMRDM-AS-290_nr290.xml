@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Iscrizione greca</rs> — CMRDM I nr. 290: Three tabula ansata fragments with tekmor dedication by T. Claudius Pasinianos to Men Patrios, Konya Museum</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>CMRDM — Corpus Monumentorum Religionis Dei Menis</authority>
+                <idno type="filename">CMRDM-AS-290</idno>
+                <idno type="TM"><!-- inserire TM number --></idno>
+                <idno type="CMRDM">CMRDM I 290</idno>
+            </publicationStmt>
+            <!-- Revisione su collazione col PDF Lane (p. 153, no. 290): riga 2, corretta la lettera iniziale "Δουμ-" in "Σουμ-" come stampato (sigma, non delta). Righe 4-5, corretta l'accentazione errata di "γυναί-κος" (accento sulla sillaba sbagliata) in "γυναι-κὸς" come stampato e come richiesto dalla flessione di γυνή. Rimossa la bibliografia fittizia "Lane, II, p. 47 (unpublished)": nessuna bibliografia è riportata da Lane. Support/layout tradotti in italiano; corretto il nome "Doummaroudēs" in "Soummaroudēs" per coerenza col greco corretto. Corretto anche l'ID Pleiades del luogo di ritrovamento, errato in tutte le entry di questo lotto: "https://pleiades.stoa.org/places/652388" non corrisponde ad Antiochia di Pisidia; sostituito con l'ID corretto 609307 (verificato incrociando Pleiades DARE-location, Wikidata e la posizione "1 km da Yalvaç"). -->
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>Konya Archaeological Museum</repository>
+                        <idno>CMRDM I 290</idno>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Tre frammenti di tabula ansata con dedica tekmor di T. Claudius Pasinianos a Men Patrios, Museo di Konya. Altezza 34,5 cm, larghezza conservata 31 cm.</p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/48.html">marble</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/189.html">fragment</objectType>
+                                    <dimensions unit="cm">
+                                        <height>34,5</height>
+                                        <width>31</width>
+                                        <depth></depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>Tabula ansata con margine rilevato. Fila di quattro mezzelune in alto. Titus Claudius Pasinianos Neos Soummaroudes, con la moglie e i fratelli, avendo adempiuto il proprio voto tekmor, dedica a Men Patrios.</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Height of letters: DA_COMPILARE.</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/609307">Antiocheia Pisidiae</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">Yalvaç, Turchia</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" precision="low"></origDate>
+                        </origin>
+                        <provenance type="found">Yalvaç, Turchia</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+                <ab>
+                    <lb n="1"/>Τ. Κλαύδιος Πασι-
+                    <lb n="2"/>νιανὸς Νέος Σουμ-
+                    <lb n="3"/>μαρούδης τεκμο-
+                    <lb n="4"/>ρεύσας μετὰ γυναι-
+                    <lb n="5"/>κὸς καὶ ἀδελφῶν
+                    <lb n="6"/>Μηνὶ Πατρί[ῳ]
+                    <lb n="7"/>εὐχήν.
+                </ab>
+            </div>
+            <div type="apparatus"/>
+            <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="bibliography"/>
+        </body>
+    </text>
+</TEI>

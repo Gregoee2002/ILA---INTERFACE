@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Iscrizione greca</rs> — CMRDM I nr. 294: Fragment of stele with tekmor dedication to Men Askaenos, Konya Museum</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>CMRDM — Corpus Monumentorum Religionis Dei Menis</authority>
+                <idno type="filename">CMRDM-AS-294</idno>
+                <idno type="TM"><!-- inserire TM number --></idno>
+                <idno type="CMRDM">CMRDM I 294</idno>
+            </publicationStmt>
+            <!-- Revisione su collazione col PDF Lane (p. 155, no. 294): riga 1, corretta "θωιος" (contiene una θ non stampata) in "ώνιος" come stampato. Riga 2, corretta "δίου" in "είου" come stampato (lettera e accento errati). Riga 4, corretta l'accentazione errata "[Μή]νὶ" (due accenti nella stessa parola) in "[Μη]νὶ" come stampato. Rimossa la bibliografia fittizia "Lane, II, p. 47 (seen by B. Levick in Konya, 1955)": si tratta di un formato di citazione fittizio riscontrato sistematicamente in questo lotto; il dato reale su Barbara Levick è però una nota di osservazione autoptica di Lane, non una citazione bibliografica, ed è stato spostato nel campo <provenance type="observed">. Support/layout tradotti in italiano. Corretto anche l'ID Pleiades del luogo di ritrovamento, errato in tutte le entry di questo lotto: "https://pleiades.stoa.org/places/652388" non corrisponde ad Antiochia di Pisidia; sostituito con l'ID corretto 609307 (verificato incrociando Pleiades DARE-location, Wikidata e la posizione "1 km da Yalvaç"). -->
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>Konya Archaeological Museum</repository>
+                        <idno>CMRDM I 294</idno>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Frammento di stele con dedica tekmor a Men Askaenos, Museo di Konya. Altezza conservata 22,5 cm, larghezza conservata 27 cm. Visto da Barbara Levick a Konya nel 1955, ma non più esposto nel museo.</p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/138.html">stone</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/189.html">fragment</objectType>
+                                    <dimensions unit="cm">
+                                        <height>22,5</height>
+                                        <width>27</width>
+                                        <depth></depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>Frammento di stele con porzione di anta sulla destra. Figlio di [...]eios, avendo adempiuto il proprio voto tekmor, dedica a Men Askaenos. L'ultima riga è sul margine inferiore.</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Height of letters: DA_COMPILARE.</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/609307">Antiocheia Pisidiae</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">Yalvaç, Turchia</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" precision="low"></origDate>
+                        </origin>
+                        <provenance type="found">Yalvaç, Turchia</provenance>
+                        <provenance type="observed" subtype="autopsied">Visto da Barbara Levick a Konya nel 1955; non più esposto nel museo al momento della pubblicazione di Lane.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+                <ab>
+                    <lb n="1"/>[.....]ώνιος
+                    <lb n="2"/>[.....]είου υἱὸς
+                    <lb n="3"/>[τεκ]μορεύσας
+                    <lb n="4"/>[Μη]νὶ Ἀσκαηνῷ
+                    <lb n="5"/>εὐχήν.
+                </ab>
+            </div>
+            <div type="apparatus"/>
+            <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="bibliography"/>
+        </body>
+    </text>
+</TEI>

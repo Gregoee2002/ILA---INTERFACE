@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Iscrizione greca</rs> Marble altar with inscription, Louvre Paris</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>CMRDM — Corpus Monumentorum Religionis Dei Menis</authority>
+                <idno type="filename">CMRDM-GR-008</idno>
+                <idno type="TM"><!-- inserire TM number --></idno>
+                <idno type="CMRDM">CMRDM I 8</idno>
+                    <idno type="id">97</idno>
+</publicationStmt>
+            <!-- Revisione: corretto il testo greco confrontandolo con lo stampato di Lane (p. 6): il nome della moglie "Ἑρατιὸν" (inesistente) corretto in "Ἐρώτιον" (Erotion), coerentemente aggiornata anche la resa in inglese nella descrizione del layout. Corretti gli attributi di datazione notBefore/notAfter-custom, che indicavano erroneamente un intervallo attorno all'anno 0 (-28/22) mentre il testo e Lane (citando Robert) datano l'iscrizione alla "late 3rd cent. B.C.": impostati a -233/-201. Corretto l'ID Pleiades del Pireo: quello presente nel draft (580069) risultava un luogo del tutto diverso (l'isola di Phabra/Fleves); sostituito con l'ID corretto di Peiraieus/Piraeus (580062), verificato su due fonti (Pleiades stesso e ToposText). Aggiunta la notizia sul probabile luogo di rinvenimento (scavi del Metroon, 1855), assente nel draft. TM number non compilato: nessuna corrispondenza certa trovata in Trismegistos per IG II² 4687a. -->
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>Louvre, Paris</repository>
+                        <idno>CMRDM I 8</idno>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Marble altar, probably found in the excavations of the Metroon in 1855; now in the Louvre, Paris. Height 52 cm., width of base 53.5 cm., width of shaft 34 cm., thickness of shaft 36.5 cm.</p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/48.html">marble</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/29.html">altar</objectType>
+                                    <dimensions unit="cm">
+                                        <height>52</height>
+                                        <width></width>
+                                        <depth></depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>Marble altar with dedicatory inscription by Demetrios and his wife Erotion to Men, during the priesthood of Glaukos.</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Height of letters: 2 cm.</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/580062">Peiraieus</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">Piraeus, Greece</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" notBefore-custom="-233" notAfter-custom="-201" precision="low">late 3rd cent. B.C.</origDate>
+                        </origin>
+                        <provenance type="found">Piraeus, Greece</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+                <ab>
+                    <lb n="1"/>Δημήτριος
+                    <lb n="2"/>καὶ ἡ γυνὴ
+                    <lb n="3"/>Ἐρώτιον Μηνὶ
+                    <lb n="4"/>ἐπὶ ἱερέας
+                    <lb n="5"/>Γλαύκου.
+                </ab>
+            </div>
+            <div type="apparatus"/>
+            <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="bibliography">
+                <listBibl>
+                    <bibl>IG, II², 4687a</bibl>
+                    <bibl>A. Dain, Inscriptions Grecques du Musée du Louvre, Paris 1933, p. 162, no. 183</bibl>
+                    <bibl>L. Robert, Revue Archéologique, 1933, II, p. 145</bibl>
+                    <bibl>Robert, BCH, LX, 1936, pp. 206ff.</bibl>
+                    <bibl>Lane, I, p. 8, no. 7</bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

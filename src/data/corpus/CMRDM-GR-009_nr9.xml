@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Iscrizione greca</rs> Inscribed marble statue base with hole for statue</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>CMRDM — Corpus Monumentorum Religionis Dei Menis</authority>
+                <idno type="filename">CMRDM-GR-009</idno>
+                <idno type="TM"><!-- inserire TM number --></idno>
+                <idno type="CMRDM">CMRDM I 9</idno>
+                    <idno type="id">98</idno>
+</publicationStmt>
+            <!-- Revisione: corretto il testo greco confrontandolo con lo stampato di Lane (p. 6): il nome della moglie "Βασίλεια" (nome reale ma non quello stampato) corretto in "Βαβυλία" (nome attico attestato), aggiornata coerentemente la resa in inglese nella descrizione del layout; corretto l'articolo "τὸ Μηνὶ" (agrammaticale prima di dativo) in "τῷ Μηνὶ". Corretto l'ID Pleiades del Pireo: quello presente nel draft (580069) risultava un luogo del tutto diverso (l'isola di Phabra/Fleves); sostituito con l'ID corretto di Peiraieus/Piraeus (580062), verificato su due fonti (Pleiades stesso e ToposText). Aggiunta la data di rinvenimento (ca. 1879) e la misura del foro (ca. 55×35 cm), assenti nel draft. TM number non compilato: nessuna corrispondenza certa trovata in Trismegistos per IG II² 4685. -->
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>Epigraphical Museum, Athens</repository>
+                        <idno>CMRDM I 9</idno>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Inscribed marble statue base with hole for statue. Found ca. 1879, now in the Epigraphical Museum, Athens. Height 15 cm., length 75 cm., thickness 66 cm., hole ca. 55 × 35 cm.</p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/48.html">marble</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/57.html">statue base</objectType>
+                                    <dimensions unit="cm">
+                                        <height>15</height>
+                                        <width></width>
+                                        <depth>66</depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>Marble statue base with hole for insertion of statue, bearing a short dedicatory inscription by Dionysios and Babylia to Men.</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Height of letters: 1.5 cm.</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/580062">Peiraieus</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">Piraeus, Greece</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" precision="low"></origDate>
+                        </origin>
+                        <provenance type="found">Piraeus, Greece</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+                <ab>
+                    <lb n="1"/>Διονύσιος καὶ Βαβυλία τῷ Μηνὶ τὸ ἱερὸν ἀνέθεσαν.
+                </ab>
+            </div>
+            <div type="apparatus"/>
+            <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="bibliography">
+                <listBibl>
+                    <bibl>C. Wachsmuth, Die Stadt Athen im Alterthum, Leipzig 1874-90, II, i, p. 163, note 1</bibl>
+                    <bibl>Daremberg-Saglio, III, ii, p. 1397</bibl>
+                    <bibl>*Kumanudes, Athenaion, 8, 1879, p. 294, no. 4</bibl>
+                    <bibl>P. Foucart, BCH, IV, 1880, p. 129</bibl>
+                    <bibl>Drexler, op. cit. col. 2730</bibl>
+                    <bibl>P. Perdrizet, BCH, XX, 1896, p. 75, note 1</bibl>
+                    <bibl>Michel, Recueil, no. 1689</bibl>
+                    <bibl>IG, II², 4685</bibl>
+                    <bibl>Lane, I, p. 8, no. 6</bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

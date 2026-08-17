@@ -9,7 +9,7 @@
             <publicationStmt>
                 <authority>CMRDM — Corpus Monumentorum Religionis Dei Menis</authority>
                 <idno type="filename">11</idno>
-                <idno type="id">50</idno>
+                <idno type="id">110</idno>
                 <idno type="entryId">gen-1784219221438-h8t5u8nl1pn</idno>
             </publicationStmt>
             <sourceDesc>
@@ -22,7 +22,7 @@
                         <objectDesc>
                             <supportDesc>
                                 <support>
-                                    <p>Inscribed marble stele found ca. 1875 at Sibile Tepe, on the East slope of the Pagos (Smyrna), broken in nine pieces. Height 1.30 m [così stampato da Lane come &quot;cm.&quot;: vedi report], maximum width 49 cm., maximum thickness 9 cm.</p>
+                                    <p>Stele di marmo iscritta, rinvenuta ca. 1875 a Sibile Tepe, sul versante orientale del Pagos (Smirne), spezzata in nove pezzi. Altezza 1,30 m [così stampato da Lane come &quot;cm.&quot;: vedi report], larghezza massima 49 cm., spessore massimo 9 cm.</p>
                                     <material ref="https://www.eagle-network.eu/voc/material/lod/48.html">marble</material>
                                     <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/250.html">stele</objectType>
                                     <dimensions>
@@ -34,7 +34,7 @@
                             </supportDesc>
                             <layoutDesc>
                                 <layout>
-                                    <p>Long dedicatory inscription by Apollonios son of Metrodoros Sparos, listing cult statues, furnishings, and buildings which he constructed and dedicated to the god and to the city within the sanctuary.</p>
+                                    <p>Lunga iscrizione dedicatoria di Apollonios figlio di Metrodoros Sparos, che elenca statue di culto, arredi ed edifici da lui costruiti e dedicati al dio e alla città all'interno del santuario.</p>
                                     <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
                                 </layout>
                             </layoutDesc>
@@ -53,7 +53,7 @@
                                 <placeName type="region">Asia Minor</placeName>
                             </origPlace>
                         </origin>
-                        <provenance type="found">Found ca. 1875 at Sibile Tepe, on the East slope of the Pagos.</provenance>
+                        <provenance type="found">Rinvenuta ca. 1875 a Sibile Tepe, sul versante orientale del Pagos.</provenance>
                         <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
                     </history>
                 </msDesc>
