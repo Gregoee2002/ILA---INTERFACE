@@ -3080,6 +3080,18 @@ export default function App() {
         id: index + 1
       }));
     
+    // Sulla build statica (GitHub Pages) il salvataggio scrive le schede una
+    // ad una su GitHub in un pool a concorrenza limitata (apiShim.ts): con
+    // ~300 schede può richiedere decine di secondi. Ascoltiamo l'evento che
+    // apiShim dispatcha ad ogni scrittura riuscita per mostrare un
+    // conteggio live invece di un messaggio statico che sembra bloccato.
+    const onWriteProgress = (e: Event) => {
+      const detail = (e as CustomEvent<{ done: number; total: number }>).detail;
+      if (!detail) return;
+      setImportStatus({ type: 'loading', message: `Riordino ID in corso... (${detail.done}/${detail.total})` });
+    };
+    window.addEventListener('corpus-write-progress', onWriteProgress);
+
     try {
       setImportStatus({ type: 'loading', message: 'Riordino ID in corso...' });
       const res = await fetch('/api/monumenti', {
@@ -3101,6 +3113,8 @@ export default function App() {
     } catch (err: any) {
       console.error("Reindex error", err);
       setImportStatus({ type: 'error', message: `Errore: ${err.message}` });
+    } finally {
+      window.removeEventListener('corpus-write-progress', onWriteProgress);
     }
   };
 

@@ -393,26 +393,37 @@ async function startServer() {
 
       const writtenFiles = new Set<string>();
 
-      for (const m of data) {
-        // _corpusFile arriva dal client: va sanitizzato come ogni altro
-        // filename derivato da input esterno (stesso pattern usato dalle
-        // altre route), per evitare che un valore tipo "../../etc/x" scriva
-        // fuori da CORPUS_DIR.
-        const rawFilename = (m as any)._corpusFile as string | undefined;
-        const filename = rawFilename ? rawFilename.replace(/[^a-zA-Z0-9._-]/g, '_') : buildFilename(m);
-        const filepath = path.join(CORPUS_DIR, filename);
-        writtenFiles.add(filename);
+      // Scritture in pool a concorrenza limitata invece che una alla volta:
+      // con centinaia di schede (es. "Riordina ID", che riscrive l'intero
+      // corpus) il loop sequenziale con un push GitHub per file poteva
+      // richiedere minuti. Stessa strategia della variante browser
+      // (apiShim.ts).
+      const WRITE_CONCURRENCY = 6;
+      let next = 0;
+      async function worker(): Promise<void> {
+        while (next < data.length) {
+          const m = data[next++];
+          // _corpusFile arriva dal client: va sanitizzato come ogni altro
+          // filename derivato da input esterno (stesso pattern usato dalle
+          // altre route), per evitare che un valore tipo "../../etc/x" scriva
+          // fuori da CORPUS_DIR.
+          const rawFilename = (m as any)._corpusFile as string | undefined;
+          const filename = rawFilename ? rawFilename.replace(/[^a-zA-Z0-9._-]/g, '_') : buildFilename(m);
+          const filepath = path.join(CORPUS_DIR, filename);
+          writtenFiles.add(filename);
 
-        if (fs.existsSync(filepath)) {
-          // File exists — patch only editable fields
-          const patched = patchXmlContent(filepath, m);
-          await writeCorpusFile(filename, patched, `Aggiorna ${filename}`);
-        } else {
-          // New entry — write full XML
-          const xml = monumentiToXml([m]);
-          await writeCorpusFile(filename, xml, `Nuova scheda ${filename}`);
+          if (fs.existsSync(filepath)) {
+            // File exists — patch only editable fields
+            const patched = patchXmlContent(filepath, m);
+            await writeCorpusFile(filename, patched, `Aggiorna ${filename}`);
+          } else {
+            // New entry — write full XML
+            const xml = monumentiToXml([m]);
+            await writeCorpusFile(filename, xml, `Nuova scheda ${filename}`);
+          }
         }
       }
+      await Promise.all(Array.from({ length: Math.min(WRITE_CONCURRENCY, data.length) }, () => worker()));
 
       // Cleanup files in CORPUS_DIR that are no longer in writtenFiles (meaning they were deleted or renamed)
       const existingFiles = fs.readdirSync(CORPUS_DIR)

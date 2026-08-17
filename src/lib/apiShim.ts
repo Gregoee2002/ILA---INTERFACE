@@ -250,6 +250,24 @@ async function removeCorpusFile(filename: string, commitMessage: string): Promis
   await deleteCorpusFile(filename, commitMessage);
 }
 
+// Evento DOM per dare un segno di vita ai salvataggi massivi (es. "Riordina
+// ID" su ~300 schede): ogni scrittura riuscita del pool in POST
+// /api/monumenti lo dispatcha, App.tsx lo ascolta per aggiornare il
+// messaggio di stato con un conteggio live invece di un semplice spinner.
+export const CORPUS_WRITE_PROGRESS_EVENT = "corpus-write-progress";
+
+export interface CorpusWriteProgressDetail {
+  done: number;
+  total: number;
+}
+
+function dispatchWriteProgress(done: number, total: number): void {
+  if (typeof window === "undefined") return;
+  window.dispatchEvent(new CustomEvent<CorpusWriteProgressDetail>(CORPUS_WRITE_PROGRESS_EVENT, {
+    detail: { done, total },
+  }));
+}
+
 // ── Router ────────────────────────────────────────────────────────────
 
 async function handleRequest(url: URL, init: RequestInit | undefined): Promise<Response> {
@@ -273,18 +291,36 @@ async function handleRequest(url: URL, init: RequestInit | undefined): Promise<R
       }
 
       const writtenFiles = new Set<string>();
-      for (const m of data) {
-        const rawFilename = m._corpusFile as string | undefined;
-        const filename = rawFilename ? rawFilename.replace(/[^a-zA-Z0-9._-]/g, "_") : buildFilename(m);
-        writtenFiles.add(filename);
-        if (corpusStore.has(filename)) {
-          const patched = patchXmlContent(corpusStore.get(filename)!, m);
-          await writeCorpusFile(filename, patched, `Aggiorna ${filename}`);
-        } else {
-          const xml = monumentiToXml([m]);
-          await writeCorpusFile(filename, xml, `Nuova scheda ${filename}`);
+      let done = 0;
+      dispatchWriteProgress(0, data.length);
+
+      // Scritture in pool a concorrenza limitata invece che una alla volta:
+      // con ~300 schede (es. "Riordina ID", che riscrive l'intero corpus)
+      // il loop sequenziale richiedeva diversi minuti senza alcun feedback
+      // intermedio in UI. Stessa strategia già usata per le letture in
+      // pullAllCorpusFiles (githubStorageBrowser.ts), concorrenza un po' più
+      // bassa perché le scritture pesano di più sul rate limit di GitHub.
+      let next = 0;
+      async function worker(): Promise<void> {
+        while (next < data.length) {
+          const m = data[next++];
+          const rawFilename = m._corpusFile as string | undefined;
+          const filename = rawFilename ? rawFilename.replace(/[^a-zA-Z0-9._-]/g, "_") : buildFilename(m);
+          writtenFiles.add(filename);
+          if (corpusStore.has(filename)) {
+            const patched = patchXmlContent(corpusStore.get(filename)!, m);
+            await writeCorpusFile(filename, patched, `Aggiorna ${filename}`);
+          } else {
+            const xml = monumentiToXml([m]);
+            await writeCorpusFile(filename, xml, `Nuova scheda ${filename}`);
+          }
+          done++;
+          dispatchWriteProgress(done, data.length);
         }
       }
+      const WRITE_CONCURRENCY = 6;
+      await Promise.all(Array.from({ length: Math.min(WRITE_CONCURRENCY, data.length) }, () => worker()));
+
       for (const file of Array.from(corpusStore.keys())) {
         if (!writtenFiles.has(file)) await removeCorpusFile(file, `Rimuovi ${file}`);
       }
