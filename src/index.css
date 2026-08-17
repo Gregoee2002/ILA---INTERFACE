@@ -313,4 +313,9 @@
   .leaflet-popup-close-button:hover {
     color: var(--accent) !important;
   }
+
+  /* Mappa: bagliore per i siti ad alta densità di iscrizioni */
+  .site-marker-hot {
+    filter: drop-shadow(0 0 5px rgba(31, 131, 119, 0.7));
+  }
 }

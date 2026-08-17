@@ -39,17 +39,66 @@ function getRegionColor(regione?: string) {
   return '#9ca3af'; // stone gray
 }
 
-const FitToSites: React.FC<{ sites: Site[] }> = ({ sites }) => {
+// Scala di densità: dal grigio di base (poche iscrizioni) all'accento teal
+// (molte iscrizioni), così le zone "calde" del corpus saltano subito
+// all'occhio mantenendo la palette grigia dell'interfaccia.
+const DENSITY_LOW = '#c7c2b4';
+const DENSITY_HIGH = '#1F8377';
+
+function lerpColor(a: string, b: string, t: number) {
+  const ah = parseInt(a.slice(1), 16);
+  const bh = parseInt(b.slice(1), 16);
+  const ar = (ah >> 16) & 0xff, ag = (ah >> 8) & 0xff, ab = ah & 0xff;
+  const br = (bh >> 16) & 0xff, bg = (bh >> 8) & 0xff, bb = bh & 0xff;
+  const rr = Math.round(ar + (br - ar) * t);
+  const rg = Math.round(ag + (bg - ag) * t);
+  const rb = Math.round(ab + (bb - ab) * t);
+  return `#${((1 << 24) + (rr << 16) + (rg << 8) + rb).toString(16).slice(1)}`;
+}
+
+function getDensityColor(count: number, maxCount: number) {
+  if (maxCount <= 1) return DENSITY_LOW;
+  // Scala su radice quadrata: i pochi siti molto densi non "schiacciano"
+  // la scala, così anche le densità intermedie restano leggibili.
+  const t = Math.sqrt(Math.min(1, (count - 1) / (maxCount - 1)));
+  return lerpColor(DENSITY_LOW, DENSITY_HIGH, t);
+}
+
+const WORLD_BOUNDS = L.latLngBounds([-85, -180], [85, 180]);
+
+const FitToSites: React.FC<{ sites: Site[]; ready: boolean }> = ({ sites, ready }) => {
   const map = useMap();
   // Le coordinate di alcuni siti arrivano in modo asincrono (fetch a
-  // Pleiades): al primo render "sites" può essere solo un sottoinsieme.
-  // Riadattiamo la vista ogni volta che compaiono NUOVI siti rispetto
-  // all'ultimo fit, ma non quando "sites" si riduce per un filtro attivo
-  // (altrimenti la mappa scatterebbe a ogni cambio di filtro).
+  // Pleiades): rifittiamo la vista una sola volta, quando tutte le fetch
+  // in corso si sono risolte, invece che a ogni singolo sito che arriva
+  // (altrimenti la mappa "va per la tangente" saltando di vista più volte).
   const fittedCount = useRef(0);
+  // Se l'utente ha già pannato/zoomato manualmente, non gli rubiamo più la
+  // vista quando un cambio di filtro rivela nuovi siti.
+  const userInteracted = useRef(false);
+  const suppressNext = useRef(false);
 
   useEffect(() => {
+    const onInteraction = () => {
+      if (suppressNext.current) return; // movimento programmatico (fitBounds/setView), non dell'utente
+      userInteracted.current = true;
+    };
+    map.on('dragstart', onInteraction);
+    map.on('zoomstart', onInteraction);
+    return () => {
+      map.off('dragstart', onInteraction);
+      map.off('zoomstart', onInteraction);
+    };
+  }, [map]);
+
+  useEffect(() => {
+    if (!ready) return;
     if (sites.length === 0 || sites.length <= fittedCount.current) return;
+    if (userInteracted.current) {
+      fittedCount.current = sites.length;
+      return;
+    }
+    suppressNext.current = true;
     if (sites.length === 1) {
       // Un solo punto: fitBounds su un'area a zero non zooma a sufficienza
       map.setView([sites[0].lat, sites[0].lng], 8);
@@ -58,7 +107,8 @@ const FitToSites: React.FC<{ sites: Site[] }> = ({ sites }) => {
       map.fitBounds(bounds, { padding: [60, 60], maxZoom: 7 });
     }
     fittedCount.current = sites.length;
-  }, [sites, map]);
+    setTimeout(() => { suppressNext.current = false; }, 0);
+  }, [ready, sites, map]);
 
   return null;
 };
@@ -66,6 +116,10 @@ const FitToSites: React.FC<{ sites: Site[] }> = ({ sites }) => {
 export const MapView: React.FC<MapViewProps> = ({ monumenti, onSelectMonumento }) => {
   const [coordsCache, setCoordsCache] = useState<Record<string, [number, number]>>({});
   const fetchedUris = useRef(new Set<string>());
+  // Conta le fetch a Pleiades in corso: la mappa si "adatta" alla vista solo
+  // quando arriva a 0, per evitare rifit multipli man mano che le
+  // coordinate arrivano una alla volta.
+  const [pendingFetches, setPendingFetches] = useState(0);
 
   const [selectedEpiteti, setSelectedEpiteti] = useState<string[]>([]);
   const [selectedRegioni, setSelectedRegioni] = useState<string[]>([]);
@@ -78,11 +132,12 @@ export const MapView: React.FC<MapViewProps> = ({ monumenti, onSelectMonumento }
   useEffect(() => {
     const uris = Array.from(new Set(monumenti.map(m => m.place_ref_ancient).filter(Boolean))) as string[];
     const toFetch = uris.filter(uri => !fetchedUris.current.has(uri));
-    
+
     if (toFetch.length === 0) return;
-    
+
     toFetch.forEach(uri => fetchedUris.current.add(uri));
-    
+    setPendingFetches(prev => prev + 1);
+
     const fetchAll = async () => {
       const newCache: Record<string, [number, number]> = {};
       await Promise.all(toFetch.map(async (uri) => {
@@ -99,12 +154,13 @@ export const MapView: React.FC<MapViewProps> = ({ monumenti, onSelectMonumento }
           console.warn('Failed to fetch coords for', uri);
         }
       }));
-      
+
       if (Object.keys(newCache).length > 0) {
         setCoordsCache(prev => ({ ...prev, ...newCache }));
       }
+      setPendingFetches(prev => prev - 1);
     };
-    
+
     fetchAll();
   }, [monumenti]);
 
@@ -158,6 +214,10 @@ export const MapView: React.FC<MapViewProps> = ({ monumenti, onSelectMonumento }
     });
     return Array.from(siteMap.values());
   }, [monumenti, coordsCache, selectedRegioni, selectedEpiteti, dateRange]);
+
+  const maxSiteCount = useMemo(() => sites.reduce((max, s) => Math.max(max, s.totalCount), 1), [sites]);
+  // Soglia oltre la quale un sito è considerato "denso" e riceve il bagliore in legenda/mappa
+  const hotThreshold = Math.max(3, Math.ceil(maxSiteCount * 0.6));
 
   return (
     <div className="flex h-full w-full bg-parchment overflow-hidden">
@@ -262,34 +322,44 @@ export const MapView: React.FC<MapViewProps> = ({ monumenti, onSelectMonumento }
 
       {/* Map Area */}
       <div className="flex-1 relative z-0 m-4 ml-0 rounded-2xl overflow-hidden border border-[var(--border)] shadow-[0_12px_32px_-12px_rgba(var(--shadow-color),0.16)]">
-        <MapContainer 
+        <MapContainer
           center={[38.5, 27.0]} // fallback: Egeo/Asia Minor, area centrale del corpus
-          zoom={5} 
-          scrollWheelZoom={true} 
+          zoom={5}
+          scrollWheelZoom={true}
+          minZoom={2}
+          maxBounds={WORLD_BOUNDS}
+          maxBoundsViscosity={0.8}
           style={{ width: '100%', height: '100%' }}
         >
-          <FitToSites sites={sites} />
+          <FitToSites sites={sites} ready={pendingFetches === 0} />
           <TileLayer
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
             url="https://{s}.basemaps.cartocdn.com/rastertiles/light_all/{z}/{x}/{y}{r}.png"
             subdomains="abcd"
+            noWrap
           />
           <MarkerClusterGroup chunkedLoading maxClusterRadius={50}>
             {sites.map(site => {
               const isGrayedOut = site.activeCount === 0;
-              const markerColor = isGrayedOut ? '#9ca3af' : site.color;
-              const radius = Math.min(20, Math.max(6, 6 + (site.totalCount - 1) * 1.5));
-              
+              // Riempimento = densità (grigio → accento teal), bordo = regione:
+              // così le zone più dense saltano all'occhio anche a colpo d'occhio
+              // mentre l'appartenenza regionale resta leggibile dal contorno.
+              const fillColor = isGrayedOut ? '#c7c2b4' : getDensityColor(site.totalCount, maxSiteCount);
+              const strokeColor = isGrayedOut ? '#9ca3af' : site.color;
+              const isHot = !isGrayedOut && site.totalCount >= hotThreshold;
+              const radius = Math.min(22, Math.max(7, 7 + (site.totalCount - 1) * 1.5));
+
               return (
                 <CircleMarker
                   key={site.id}
                   center={[site.lat, site.lng]}
                   radius={radius}
-                  pathOptions={{ 
-                    color: markerColor, 
-                    fillColor: markerColor, 
-                    fillOpacity: isGrayedOut ? 0.3 : 0.7,
-                    weight: 2
+                  pathOptions={{
+                    color: strokeColor,
+                    fillColor: fillColor,
+                    fillOpacity: isGrayedOut ? 0.35 : 0.85,
+                    weight: isHot ? 3 : 2,
+                    className: isHot ? 'site-marker-hot' : undefined
                   }}
                 >
                   <Popup className="custom-popup">
@@ -345,14 +415,24 @@ export const MapView: React.FC<MapViewProps> = ({ monumenti, onSelectMonumento }
         </MapContainer>
         
         {/* Legend */}
-        <div className="absolute bottom-6 right-6 glass-panel p-4 z-[1000] rounded-2xl text-xs pointer-events-none">
-          <h4 className="field-label mb-3">Legenda Regioni</h4>
+        <div className="absolute bottom-6 right-6 glass-panel p-4 z-[1000] rounded-2xl text-xs pointer-events-none w-48">
+          <h4 className="field-label mb-3">Densità iscrizioni</h4>
+          <div
+            className="h-2.5 w-full rounded-full mb-1.5"
+            style={{ background: `linear-gradient(to right, ${DENSITY_LOW}, ${DENSITY_HIGH})` }}
+          ></div>
+          <div className="flex justify-between text-[9px] text-muted uppercase tracking-wide mb-4">
+            <span>Poche</span>
+            <span>Molte</span>
+          </div>
+
+          <h4 className="field-label mb-3">Regione (bordo)</h4>
           <div className="flex flex-col gap-2 font-serif text-ink/90">
-            <div className="flex items-center gap-3"><span className="w-3 h-3 rounded-full shrink-0" style={{ background: '#1F8377' }}></span> Asia Minor</div>
-            <div className="flex items-center gap-3"><span className="w-3 h-3 rounded-full shrink-0" style={{ background: '#5B7A8C' }}></span> Graecia</div>
-            <div className="flex items-center gap-3"><span className="w-3 h-3 rounded-full shrink-0" style={{ background: '#B5651D' }}></span> Dacia</div>
-            <div className="flex items-center gap-3"><span className="w-3 h-3 rounded-full shrink-0" style={{ background: '#7A8F5E' }}></span> Italia</div>
-            <div className="flex items-center gap-3 pt-2 mt-1 border-t border-border/50"><span className="w-3 h-3 rounded-full shrink-0" style={{ background: '#9ca3af' }}></span> Filtrato / Altro</div>
+            <div className="flex items-center gap-3"><span className="w-3 h-3 rounded-full shrink-0 border-2" style={{ borderColor: '#1F8377' }}></span> Asia Minor</div>
+            <div className="flex items-center gap-3"><span className="w-3 h-3 rounded-full shrink-0 border-2" style={{ borderColor: '#5B7A8C' }}></span> Graecia</div>
+            <div className="flex items-center gap-3"><span className="w-3 h-3 rounded-full shrink-0 border-2" style={{ borderColor: '#B5651D' }}></span> Dacia</div>
+            <div className="flex items-center gap-3"><span className="w-3 h-3 rounded-full shrink-0 border-2" style={{ borderColor: '#7A8F5E' }}></span> Italia</div>
+            <div className="flex items-center gap-3 pt-2 mt-1 border-t border-border/50"><span className="w-3 h-3 rounded-full shrink-0 border-2" style={{ borderColor: '#9ca3af' }}></span> Filtrato / Altro</div>
           </div>
         </div>
       </div>
