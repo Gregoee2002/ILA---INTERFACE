@@ -1466,35 +1466,54 @@ function HomeView({ monumenti, onNavigate, onSearch }: { monumenti: Monumento[],
 // Larghezza fissa del riquadro di diramazione (single-item vs gruppo)
 const TIMELINE_BUCKET_YEARS = 6; // ampiezza (in anni) entro cui le schede vengono raggruppate in un'unica diramazione
 
-// Riquadro di diramazione: singola scheda (etichetta compatta) o gruppo (lista impilata)
+// Conversione in numerale romano per le etichette dei secoli (dominio ridotto: corpus antico)
+function toRoman(num: number): string {
+  const vals: [number, string][] = [
+    [1000, 'M'], [900, 'CM'], [500, 'D'], [400, 'CD'], [100, 'C'], [90, 'XC'],
+    [50, 'L'], [40, 'XL'], [10, 'X'], [9, 'IX'], [5, 'V'], [4, 'IV'], [1, 'I'],
+  ];
+  let n = num, out = '';
+  for (const [v, s] of vals) { while (n >= v) { out += s; n -= v; } }
+  return out;
+}
+
+// Riquadro di diramazione: singola scheda (etichetta compatta) o gruppo (lista impilata).
+// Mostra sempre la datazione accanto alla scheda, così la posizione sull'asse è verificabile
+// a colpo d'occhio invece di doversi fidare della sola posizione grafica.
 function TimelineBranchBox({ items, onSelect }: { items: Monumento[]; onSelect: (m: Monumento) => void }) {
   if (items.length === 1) {
     const m = items[0];
     return (
       <button
-        onClick={() => onSelect(m)}
-        className="flex items-center gap-1.5 text-[9px] font-sans font-bold bg-parchment pl-1.5 pr-2 py-1 border border-border border-l-2 border-l-accent/60 shadow-sm whitespace-nowrap max-w-[130px] overflow-hidden text-ellipsis hover:border-accent hover:bg-accent/5 hover:text-accent transition-colors"
+        onClick={(e) => { e.stopPropagation(); onSelect(m); }}
+        className="flex flex-col items-start gap-0.5 text-[9px] font-sans font-bold bg-parchment pl-1.5 pr-2 py-1 border border-border border-l-2 border-l-accent/60 shadow-sm whitespace-nowrap max-w-[150px] overflow-hidden hover:border-accent hover:bg-accent/5 hover:text-accent transition-colors"
       >
-        <span className="text-accent/80">#{m.id}</span>
-        <span className="truncate">{m.citta || m.regione || 'N/A'}</span>
+        <span className="flex items-center gap-1.5 max-w-full">
+          <span className="text-accent/80 shrink-0">#{m.id}</span>
+          <span className="truncate">{m.citta || m.regione || 'N/A'}</span>
+        </span>
+        <span className="text-[8px] font-normal text-muted/70 tabular-nums">{formatDateRange(m.data_inizio, m.data_fine)}</span>
       </button>
     );
   }
   return (
-    <div className="w-[156px] bg-parchment border border-border border-l-2 border-l-accent/60 shadow-md rounded-sm overflow-hidden">
+    <div className="w-[168px] bg-parchment border border-border border-l-2 border-l-accent/60 shadow-md rounded-sm overflow-hidden" onClick={(e) => e.stopPropagation()}>
       <div className="flex items-center gap-1.5 px-2.5 py-1.5 bg-accent/10 border-b border-accent/25">
         <Hash className="h-3 w-3 text-accent shrink-0" />
         <span className="text-[9px] font-sans font-bold uppercase tracking-wider text-accent">{items.length} schede</span>
       </div>
-      <div className="max-h-[136px] overflow-y-auto custom-scrollbar">
+      <div className="max-h-[104px] overflow-y-auto custom-scrollbar">
         {items.map((m, ri) => (
           <button
             key={m.entryId || `id-${m.id}`}
             onClick={() => onSelect(m)}
-            className={`w-full text-left px-2.5 py-1.5 text-[9px] font-sans font-bold truncate border-b border-border/30 last:border-b-0 hover:bg-accent/10 hover:text-accent transition-colors ${ri % 2 === 1 ? 'bg-ink/[0.02]' : ''}`}
+            className={`w-full text-left px-2.5 py-1 text-[9px] font-sans font-bold border-b border-border/30 last:border-b-0 hover:bg-accent/10 hover:text-accent transition-colors ${ri % 2 === 1 ? 'bg-ink/[0.02]' : ''}`}
           >
-            <span className="text-accent/80 mr-1">#{m.id}</span>
-            {m.citta || m.regione || 'N/A'}
+            <span className="flex items-center gap-1 max-w-full">
+              <span className="text-accent/80 shrink-0">#{m.id}</span>
+              <span className="truncate">{m.citta || m.regione || 'N/A'}</span>
+            </span>
+            <span className="block text-[8px] font-normal text-muted/70 tabular-nums">{formatDateRange(m.data_inizio, m.data_fine)}</span>
           </button>
         ))}
       </div>
@@ -1508,9 +1527,10 @@ function Timeline({ monumenti, onSelect }: { monumenti: Monumento[], onSelect: (
   const axisRef = useRef<HTMLDivElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const zoomAnchorRef = useRef<{ year: number; clientX: number } | null>(null);
+  const didFitRef = useRef(false);
 
-  const ZOOM_MIN = 0.4;
-  const ZOOM_MAX = 6;
+  const ZOOM_MIN = 0.2;
+  const ZOOM_MAX = 8;
 
   const sorted = useMemo(() => {
     return monumenti
@@ -1565,29 +1585,42 @@ function Timeline({ monumenti, onSelect }: { monumenti: Monumento[], onSelect: (
     return ticks;
   }, [yearMin, yearMax]);
 
-  // Posizione effettiva delle diramazioni: parte dalla posizione cronologica reale, ma non scende
-  // mai sotto una distanza minima dalla diramazione precedente. Nei periodi densi (molte
-  // diramazioni ravvicinate) questo "spinge" leggermente le une lontano dalle altre evitando
-  // sovrapposizioni; con lo zoom la distanza reale cresce e il correttivo si applica sempre meno.
-  // Nessuna scheda viene mai scartata: ogni cluster ottiene comunque una posizione.
-  const MIN_CLUSTER_GAP = 82;
-  const clusterLefts = useMemo(() => {
-    const lefts: number[] = [];
-    let prevLeft = -Infinity;
-    for (const cluster of clusters) {
-      const natural = (cluster.year - yearMin) * pxPerYear;
-      const placed = Math.max(natural, prevLeft + MIN_CLUSTER_GAP);
-      lefts.push(placed);
-      prevLeft = placed;
-    }
-    return lefts;
+  // Posizione orizzontale delle diramazioni: SEMPRE quella cronologica reale (yearToLeft), mai
+  // corretta o "spinta". In precedenza un algoritmo di spaziatura minima cumulativa spostava ogni
+  // diramazione in base alla posizione della precedente: in un tratto denso (es. il II sec. d.C.,
+  // dove il corpus concentra decine di schede) questo scivolamento si sommava scheda dopo scheda,
+  // finendo per piazzare una stele datata 148-149 d.C. graficamente vicino al IV secolo — la causa
+  // esatta della "linea statica, scollegata dai dati reali" segnalata in revisione. La densità va
+  // invece risolta in verticale: le diramazioni che si sovrappongono orizzontalmente vengono
+  // impilate su "corsie" (lane) via via più lontane dall'asse, ma la loro base resta sempre
+  // ancorata all'anno vero.
+  const CLUSTER_HALF_WIDTH = 86;
+  const LANE_GAP = 12;
+  const LANE_STEP = 152;
+  const BASE_CONNECTOR = 20;
+
+  const clusterLayout = useMemo(() => {
+    const upLaneEdges: number[] = [];
+    const downLaneEdges: number[] = [];
+    return clusters.map((cluster, idx) => {
+      const left = yearToLeft(cluster.year);
+      const side: 'up' | 'down' = idx % 2 === 0 ? 'up' : 'down';
+      const laneEdges = side === 'up' ? upLaneEdges : downLaneEdges;
+      const boxLeftEdge = left - CLUSTER_HALF_WIDTH;
+      let lane = laneEdges.findIndex(rightEdge => boxLeftEdge >= rightEdge + LANE_GAP);
+      if (lane === -1) { lane = laneEdges.length; laneEdges.push(-Infinity); }
+      laneEdges[lane] = left + CLUSTER_HALF_WIDTH;
+      return { cluster, left, side, lane };
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [clusters, pxPerYear, yearMin]);
 
-  const axisWidth = Math.max(
-    1200,
-    naturalWidth + 40,
-    (clusterLefts[clusterLefts.length - 1] ?? 0) + 120
+  const maxLaneDepth = useMemo(
+    () => clusterLayout.reduce((max, c) => Math.max(max, c.lane), 0),
+    [clusterLayout]
   );
+
+  const axisWidth = Math.max(600, naturalWidth + 40);
 
   const formatHoverYear = (y: number) => (y < 0 ? `${Math.abs(y)} a.C.` : y === 0 ? '1 d.C.' : `${y} d.C.`);
   const hoverYear = hoverX !== null ? Math.round(yearMin + hoverX / pxPerYear) : null;
@@ -1636,6 +1669,30 @@ function Timeline({ monumenti, onSelect }: { monumenti: Monumento[], onSelect: (
     zoomAnchorRef.current = null;
   }, [zoom]);
 
+  // Calcola lo zoom "a schermo intero": l'intera sequenza cronologica visibile in una volta,
+  // dal punto più antico al più recente, senza dover scorrere — niente più "si vede solo la
+  // coda finale". Usata sia all'apertura della sezione sia dal pulsante di reset.
+  const computeFitZoom = () => {
+    if (!scrollRef.current) return null;
+    const containerWidth = scrollRef.current.clientWidth;
+    if (containerWidth <= 0) return null;
+    const available = Math.max(containerWidth - 200, 120);
+    const naturalAtZoom1 = yearSpan * BASE_PX_PER_YEAR;
+    if (naturalAtZoom1 <= 0) return null;
+    return Math.min(1, Math.max(ZOOM_MIN, available / naturalAtZoom1));
+  };
+
+  // All'apertura della sezione, applica subito lo zoom a schermo intero. Da lì l'utente zooma
+  // dove gli interessa (rotellina, pulsanti o click diretto sull'asse).
+  useLayoutEffect(() => {
+    if (didFitRef.current) return;
+    if (sorted.length === 0 || !scrollRef.current) return;
+    didFitRef.current = true;
+    const fit = computeFitZoom();
+    if (fit !== null) setZoom(fit);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sorted.length, yearSpan]);
+
   // Zoom da pulsante: ancora sul centro della vista attualmente visibile
   const zoomByFactor = (factor: number) => {
     if (!axisRef.current || !scrollRef.current) return;
@@ -1651,9 +1708,23 @@ function Timeline({ monumenti, onSelect }: { monumenti: Monumento[], onSelect: (
   const handleZoomOut = () => zoomByFactor(1 / 1.4);
   const handleZoomReset = () => {
     zoomAnchorRef.current = null;
-    setZoom(1);
+    setZoom(computeFitZoom() ?? 1);
     if (scrollRef.current) scrollRef.current.scrollLeft = 0;
   };
+
+  // Click diretto sull'asse (fuori da una diramazione): zoom interattivo centrato sul punto
+  // cronologico cliccato. Le diramazioni fermano la propagazione del click (vedi TimelineBranchBox)
+  // così selezionare una scheda non fa anche scattare lo zoom.
+  const handleAxisClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!axisRef.current) return;
+    const rect = axisRef.current.getBoundingClientRect();
+    const cursorXInAxis = e.clientX - rect.left;
+    const currentYear = yearMin + cursorXInAxis / pxPerYear;
+    zoomAnchorRef.current = { year: currentYear, clientX: e.clientX };
+    setZoom(z => Math.min(ZOOM_MAX, Math.max(ZOOM_MIN, z * 1.7)));
+  };
+
+  const bandVerticalReach = BASE_CONNECTOR + (maxLaneDepth + 1) * LANE_STEP + 40;
 
   return (
     <div className="flex-1 flex flex-col overflow-hidden">
@@ -1662,7 +1733,7 @@ function Timeline({ monumenti, onSelect }: { monumenti: Monumento[], onSelect: (
           <div className="text-[10px] font-sans font-bold uppercase tracking-[0.22em] text-accent/70 mb-2">Sequenza temporale</div>
           <h2 className="text-3xl md:text-4xl font-bold italic mb-2">Cronologia Storica</h2>
           <p className="text-sm text-muted font-serif">Visualizzazione sequenziale dei monumenti datati (a.C. - d.C.).</p>
-          <p className="text-xs text-muted/60 font-sans mt-1">Le schede ravvicinate nel tempo sono riunite in un'unica diramazione. Ctrl/Cmd + rotellina (o pizzico) per zoomare, in entrambe le direzioni.</p>
+          <p className="text-xs text-muted/60 font-sans mt-1">Ogni diramazione resta ancorata alla propria data reale: la posizione orizzontale non viene mai alterata per far spazio ad altre schede. Clicca sull'asse per zoomare su un punto, oppure Ctrl/Cmd + rotellina (o pizzico).</p>
         </div>
 
         {sorted.length > 0 && (
@@ -1685,9 +1756,8 @@ function Timeline({ monumenti, onSelect }: { monumenti: Monumento[], onSelect: (
             </button>
             <button
               onClick={handleZoomReset}
-              disabled={Math.abs(zoom - 1) < 0.01}
-              className="h-7 w-7 rounded-full flex items-center justify-center text-muted/70 hover:bg-accent/10 hover:text-accent disabled:opacity-25 disabled:hover:bg-transparent transition-colors"
-              title="Reimposta zoom"
+              className="h-7 w-7 rounded-full flex items-center justify-center text-muted/70 hover:bg-accent/10 hover:text-accent transition-colors"
+              title="Vista d'insieme (adatta alla finestra)"
             >
               <RotateCcw className="h-3 w-3" />
             </button>
@@ -1713,15 +1783,46 @@ function Timeline({ monumenti, onSelect }: { monumenti: Monumento[], onSelect: (
                 ref={axisRef}
                 onMouseMove={handleAxisMouseMove}
                 onMouseLeave={handleAxisMouseLeave}
-                className="relative shrink-0 cursor-crosshair"
+                onClick={handleAxisClick}
+                className="relative shrink-0 cursor-zoom-in"
                 style={{ width: axisWidth, height: 1 }}
               >
+                {/* Bande dei secoli: sfondo alternato a tutta altezza + etichetta in numerali romani
+                    centrata nella banda (non più un'etichetta puntuale ambigua tipo "2 d.C." che si
+                    confondeva con un anno) — così ogni secolo è riconoscibile come intervallo, non
+                    come singolo punto, ed è immediato vedere quali periodi sono vuoti nel corpus. */}
+                {centuryTicks.slice(0, -1).map(c => {
+                  const bandLeft = yearToLeft(c * 100);
+                  const bandRight = yearToLeft((c + 1) * 100);
+                  const bandWidth = bandRight - bandLeft;
+                  const centuryNum = c < 0 ? -c : c + 1;
+                  const label = `${toRoman(centuryNum)} sec. ${c < 0 ? 'a.C.' : 'd.C.'}`;
+                  return (
+                    <div
+                      key={`band-${c}`}
+                      className="absolute"
+                      style={{ left: bandLeft, width: bandWidth, top: -bandVerticalReach, height: bandVerticalReach * 2, zIndex: 0 }}
+                    >
+                      <div className={`absolute inset-0 ${Math.abs(c) % 2 === 0 ? 'bg-ink/[0.02]' : ''}`} />
+                      <div className="absolute left-0 top-0 h-2 w-px bg-border/60" style={{ top: bandVerticalReach - 8 }} />
+                      {bandWidth > 42 && (
+                        <span
+                          className="absolute text-[9px] font-sans font-bold text-muted/40 uppercase tracking-widest whitespace-nowrap"
+                          style={{ left: '50%', top: bandVerticalReach + 6, transform: 'translateX(-50%)' }}
+                        >
+                          {label}
+                        </span>
+                      )}
+                    </div>
+                  );
+                })}
+
                 {/* Asse: un'unica barra continua, sempre sopra a marcatori e diramazioni
                     (zIndex esplicito) così non può mai apparire spezzata da altri elementi.
                     Un filo più in rilievo — spessore maggiore, ombra leggera — e si accende
                     in teal al passaggio del mouse per segnalare che è interattivo. */}
                 <div
-                  className={`absolute inset-x-0 top-0 rounded-full transition-colors duration-200 ${hoverX !== null ? 'bg-accent/50' : 'bg-border'}`}
+                  className={`absolute inset-x-0 top-0 rounded-full transition-colors duration-200 pointer-events-none ${hoverX !== null ? 'bg-accent/50' : 'bg-border'}`}
                   style={{ height: 2, zIndex: 1, boxShadow: 'inset 0 1px 1px rgba(0,0,0,0.08), 0 1px 0 rgba(255,255,255,0.5)' }}
                 />
 
@@ -1744,45 +1845,29 @@ function Timeline({ monumenti, onSelect }: { monumenti: Monumento[], onSelect: (
                 {hoverX !== null && hoverYear !== null && (
                   <div
                     className="absolute pointer-events-none"
-                    style={{ left: hoverX, top: -170, height: 340, transform: 'translateX(-50%)' }}
+                    style={{ left: hoverX, top: -bandVerticalReach, height: bandVerticalReach * 2, transform: 'translateX(-50%)' }}
                   >
                     <div className="w-px h-full bg-accent/40 mx-auto" style={{ backgroundImage: 'linear-gradient(to bottom, transparent, var(--accent) 45%, var(--accent) 55%, transparent)', opacity: 0.35 }} />
-                    <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-full mb-1 px-2 py-0.5 rounded-full bg-ink text-parchment text-[9px] font-sans font-bold whitespace-nowrap shadow-md">
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 px-2 py-0.5 rounded-full bg-ink text-parchment text-[9px] font-sans font-bold whitespace-nowrap shadow-md">
                       {formatHoverYear(hoverYear)}
                     </div>
                   </div>
                 )}
 
-                {/* Century Markers: sotto la linea (mai sopra), niente ambiguità visiva con l'asse */}
-                {centuryTicks.map(c => (
-                  <div
-                    key={c}
-                    className="absolute flex flex-col items-center"
-                    style={{ left: yearToLeft(c * 100), top: 4, transform: 'translateX(-50%)', zIndex: 0 }}
-                  >
-                    <div className="h-2 w-px bg-border/70 mb-2" />
-                    <span className="text-[10px] font-sans font-bold text-muted/40 uppercase tracking-widest">
-                      {c < 0 ? `${Math.abs(c)} a.C.` : `${c + 1} d.C.`}
-                    </span>
-                  </div>
-                ))}
-
-                {/* Diramazioni: una per cluster, alternate sopra/sotto l'asse in base all'indice
-                    del cluster (non della singola scheda) — così due diramazioni sullo stesso lato
-                    sono sempre separate da almeno una diramazione sul lato opposto. La posizione
-                    orizzontale usa clusterLefts (con distanza minima garantita) invece della
-                    posizione cronologica pura, per evitare sovrapposizioni nei periodi densi.
-                    Ogni scheda del corpus rientra in esattamente un cluster: nessuna va persa. */}
-                {clusters.map((cluster, idx) => {
-                  const dir: 'up' | 'down' = idx % 2 === 0 ? 'up' : 'down';
+                {/* Diramazioni: la posizione orizzontale (left) è sempre yearToLeft(cluster.year),
+                    cioè l'anno vero — mai corretta. Le sovrapposizioni tra diramazioni vicine si
+                    risolvono impilandole su corsie (lane) via via più lontane dall'asse, calcolate
+                    in clusterLayout con un algoritmo a intervalli (nessun overlap orizzontale
+                    all'interno della stessa corsia). Ogni scheda del corpus rientra in esattamente
+                    un cluster: nessuna va persa o spostata dal suo punto cronologico. */}
+                {clusterLayout.map(({ cluster, left, side, lane }, idx) => {
                   const isGroup = cluster.items.length > 1;
-                  const connectorHeight = isGroup ? 32 : 20;
-                  const left = clusterLefts[idx];
+                  const connectorHeight = BASE_CONNECTOR + lane * LANE_STEP;
                   return (
-                    <div key={`cluster-${cluster.year}-${idx}`} className="absolute" style={{ left, top: 0 }}>
+                    <div key={`cluster-${cluster.year}-${idx}`} className="absolute" style={{ left, top: 0, zIndex: 2 }}>
                       {/* Connettore + riquadro: ancorati al punto esatto sull'asse (0,0 del wrapper),
                           in tinta accento per legare visivamente box e punto senza ambiguità */}
-                      {dir === 'up' ? (
+                      {side === 'up' ? (
                         <div
                           className="absolute flex flex-col items-center"
                           style={{ left: 0, bottom: 0, transform: 'translateX(-50%)' }}
