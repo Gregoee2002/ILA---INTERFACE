@@ -1,0 +1,29 @@
+cff-version: 1.2.0
+message: "Se utilizzi questo software o l'interfaccia ILA nel tuo lavoro, ti chiediamo di citarlo come segue. Per la citazione del corpus epigrafico sottostante, cita l'edizione originale di Lane 1971–1978 indicata sotto."
+title: "ILA — Index Lunae Antiquae: interfaccia di consultazione del CMRDM"
+type: software
+authors:
+  - family-names: Gregorio
+    given-names: Gabriele
+    email: gabrielegregorio123@gmail.com
+repository-code: "https://github.com/Gregoee2002/ILA---INTERFACE"
+license: Apache-2.0
+license-url: "https://github.com/Gregoee2002/ILA---INTERFACE/blob/main/LICENSE"
+keywords:
+  - epigraphy
+  - EpiDoc
+  - TEI
+  - CMRDM
+  - Men
+  - epigrafia
+  - Anatolia
+references:
+  - type: book
+    authors:
+      - family-names: Lane
+        given-names: Eugene N.
+    title: "Corpus Monumentorum Religionis Dei Menis (CMRDM)"
+    publisher:
+      name: E. J. Brill
+    location: Leiden
+    year: 1971
