@@ -441,6 +441,7 @@ export const SectionEditorView: React.FC<Props> = ({ monumenti, effectiveAdmin, 
     citta: collectDistinct(monumenti, 'citta'),
     luogo_moderno: collectDistinct(monumenti, 'luogo_moderno'),
     luogo_rit: collectDistinct(monumenti, 'luogo_rit'),
+    corpus: collectDistinct(monumenti, 'corpus'),
   }), [monumenti]);
 
   /* ── stato di ogni sezione per il rail ─────────────────────────── */
@@ -679,7 +680,7 @@ function renderSectionForm(
   m: Monumento,
   set: <K extends keyof Monumento>(k: K, v: Monumento[K]) => void,
   setEditionText: (xml: string) => void,
-  suggestions: { luogo_cons: string[]; citta: string[]; luogo_moderno: string[]; luogo_rit: string[] },
+  suggestions: { luogo_cons: string[]; citta: string[]; luogo_moderno: string[]; luogo_rit: string[]; corpus: string[] },
 ) {
   switch (id) {
     case 'title':
@@ -714,7 +715,7 @@ function renderSectionForm(
           </div>
           <div>
             <FieldLabel>Corpus</FieldLabel>
-            <TextInput value={m.corpus || ''} onChange={e => set('corpus', e.target.value)} placeholder="CMRDM I" />
+            <SuggestInput value={m.corpus || ''} onChange={v => set('corpus', v)} options={suggestions.corpus} placeholder="CMRDM I" />
           </div>
           <div>
             <FieldLabel>Numero</FieldLabel>
