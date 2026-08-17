@@ -2,6 +2,11 @@ import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { MapContainer, TileLayer, CircleMarker, Popup, useMap } from 'react-leaflet';
 import MarkerClusterGroup from 'react-leaflet-cluster';
 import 'leaflet/dist/leaflet.css';
+// Senza questi due, i "bollini" cluster mostrano solo il numero senza
+// alcuno sfondo: il CSS di leaflet.markercluster non viene incluso
+// automaticamente da react-leaflet-cluster.
+import 'leaflet.markercluster/dist/MarkerCluster.css';
+import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
 import { Monumento } from '../types';
 import { cn } from '../lib/utils';
 import L from 'leaflet';
@@ -42,7 +47,11 @@ function getRegionColor(regione?: string) {
 // Scala di densità: dal grigio di base (poche iscrizioni) all'accento teal
 // (molte iscrizioni), così le zone "calde" del corpus saltano subito
 // all'occhio mantenendo la palette grigia dell'interfaccia.
-const DENSITY_LOW = '#c7c2b4';
+// Il precedente '#c7c2b4' era troppo vicino al colore delle tile di base
+// (quasi bianche): a bassa densità il pallino diventava invisibile
+// ("grigio su grigio"). Questo grigio è deliberatamente più scuro, per
+// restare leggibile anche per i siti con una sola iscrizione.
+const DENSITY_LOW = '#8b9089';
 const DENSITY_HIGH = '#1F8377';
 
 function lerpColor(a: string, b: string, t: number) {
@@ -359,7 +368,9 @@ export const MapView: React.FC<MapViewProps> = ({ monumenti, onSelectMonumento }
                     fillColor: fillColor,
                     fillOpacity: isGrayedOut ? 0.35 : 0.85,
                     weight: isHot ? 3 : 2,
-                    className: isHot ? 'site-marker-hot' : undefined
+                    // Alone chiaro sempre presente: rende ogni pallino leggibile
+                    // qualunque sia il colore sottostante della tile di base.
+                    className: cn('site-marker', isHot && 'site-marker-hot')
                   }}
                 >
                   <Popup className="custom-popup">
