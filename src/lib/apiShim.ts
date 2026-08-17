@@ -213,7 +213,14 @@ function readCorpusFiles(): any[] {
     try {
       const parsed = xmlToMonumenti(xml);
       if (parsed.length > 0) {
-        parsed.forEach((m: any) => { m._corpusFile = file; });
+        const fileCorpusMatch = file.match(/^CMRDM-([A-Z]+)-/i);
+        parsed.forEach((m: any) => {
+          m._corpusFile = file;
+          // Alcuni file legacy hanno <idno type="filename"> con un numero
+          // invece del pattern CMRDM-XX-NNN (vedi xmlUtils.ts): il nome
+          // file su disco resta comunque affidabile per il codice regione.
+          if (!m.corpus && fileCorpusMatch) m.corpus = fileCorpusMatch[1].toUpperCase();
+        });
         monumenti.push(...parsed);
       }
     } catch (e) {

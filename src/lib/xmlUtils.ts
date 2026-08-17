@@ -1030,6 +1030,19 @@ function parseTeiElement(teiString: string): Monumento {
     }
   }
 
+  // 4. <idno type="filename"> — nessun file del corpus usa i formati sopra:
+  // tutti codificano invece il codice regione nel filename, es. "CMRDM-AS-122".
+  // Estrai il segmento tra i due trattini.
+  if (!corpus) {
+    const filenameMatchForCorpus = teiString.match(/<idno\s+type="filename">([\s\S]*?)<\/idno>/);
+    if (filenameMatchForCorpus) {
+      const fnCorpusMatch = filenameMatchForCorpus[1].trim().match(/^CMRDM-([A-Z]+)-/i);
+      if (fnCorpusMatch) {
+        corpus = fnCorpusMatch[1].toUpperCase();
+      }
+    }
+  }
+
   let numero = "";
   // 1. <idno type="numero"> — se presente, usa il suo contenuto testuale
   const idnoNumeroMatch = teiString.match(/<idno\s+type="numero">([\s\S]*?)<\/idno>/);

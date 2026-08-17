@@ -167,7 +167,15 @@ async function startServer() {
           // Attach filename + content hash for round-trip updates and
           // per-record staleness checks
           const fileHash = hashContent(xml);
-          parsed.forEach(m => { (m as any)._corpusFile = file; (m as any)._fileHash = fileHash; });
+          const fileCorpusMatch = file.match(/^CMRDM-([A-Z]+)-/i);
+          parsed.forEach(m => {
+            (m as any)._corpusFile = file;
+            (m as any)._fileHash = fileHash;
+            // Alcuni file legacy hanno <idno type="filename"> con un numero
+            // invece del pattern CMRDM-XX-NNN (vedi xmlUtils.ts): il nome
+            // file su disco resta comunque affidabile per il codice regione.
+            if (!m.corpus && fileCorpusMatch) m.corpus = fileCorpusMatch[1].toUpperCase();
+          });
           monumenti.push(...parsed);
         }
       } catch (e) {
