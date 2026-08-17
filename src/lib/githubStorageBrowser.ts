@@ -151,41 +151,48 @@ async function fetchCurrentSha(filename: string): Promise<string | null> {
 }
 
 /**
- * Crea o aggiorna un file XML del corpus sulla repo GitHub. Stessa logica
- * di retry-su-409 di githubStorage.ts.
+ * Crea o aggiorna un file XML del corpus sulla repo GitHub.
+ *
+ * La Contents API crea un commit per ogni PUT, che deve avanzare l'HEAD del
+ * branch: con più scritture in corso in parallelo (vedi WRITE_CONCURRENCY in
+ * apiShim.ts) più richieste possono leggere lo stesso HEAD di partenza e
+ * "perdere" la corsa ad avanzarlo, anche scrivendo file diversi — GitHub
+ * risponde 409/422 a chi arriva secondo. Non è un errore di sha del singolo
+ * file (quello resterebbe valido), quindi un solo retry non basta quando la
+ * concorrenza è > 1: si ritenta più volte, ogni volta con lo sha del branch
+ * riletto fresco e un piccolo backoff per diradare le collisioni.
  */
+const MAX_PUSH_ATTEMPTS = 6;
+
 export async function pushCorpusFile(filename: string, content: string, message: string): Promise<void> {
-  const body: Record<string, unknown> = {
-    message,
-    content: utf8ToBase64(content),
-    branch: BRANCH,
-  };
-  const existingSha = shaCache.get(filename) || (await fetchCurrentSha(filename));
-  if (existingSha) body.sha = existingSha;
-
   const url = `${GITHUB_API}/repos/${REPO}/contents/${repoPath(filename)}`;
-  const res = await fetch(url, { method: "PUT", headers: headers(), body: JSON.stringify(body) });
+  let sha = shaCache.get(filename) ?? null;
 
-  if (!res.ok) {
-    const detail = await res.text();
-    if (res.status === 409) {
-      const refreshed = await fetchCurrentSha(filename);
-      if (refreshed) {
-        shaCache.set(filename, refreshed);
-        body.sha = refreshed;
-        const retryRes = await fetch(url, { method: "PUT", headers: headers(), body: JSON.stringify(body) });
-        if (retryRes.ok) {
-          const retryData = await retryRes.json();
-          shaCache.set(filename, retryData.content.sha);
-          return;
-        }
-      }
+  for (let attempt = 1; attempt <= MAX_PUSH_ATTEMPTS; attempt++) {
+    if (sha === null) sha = await fetchCurrentSha(filename);
+    const body: Record<string, unknown> = {
+      message,
+      content: utf8ToBase64(content),
+      branch: BRANCH,
+    };
+    if (sha) body.sha = sha;
+
+    const res = await fetch(url, { method: "PUT", headers: headers(), body: JSON.stringify(body) });
+    if (res.ok) {
+      const data = await res.json();
+      shaCache.set(filename, data.content.sha);
+      return;
     }
-    throw new Error(`Scrittura GitHub fallita per ${filename} (${res.status}): ${detail}`);
-  }
 
-  const data = await res.json();
-  shaCache.set(filename, data.content.sha);
+    const detail = await res.text();
+    const isRaceConflict = res.status === 409 || res.status === 422;
+    if (isRaceConflict && attempt < MAX_PUSH_ATTEMPTS) {
+      await new Promise(r => setTimeout(r, 150 * attempt + Math.random() * 200));
+      sha = null; // forza a rileggere lo sha aggiornato al prossimo giro
+      continue;
+    }
+    throw new Error(`Scrittura GitHub fallita per ${filename} (${res.status}) dopo ${attempt} tentativi: ${detail}`);
+  }
 }
 
 /**

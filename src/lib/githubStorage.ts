@@ -317,52 +317,47 @@ export async function pullDraftsFromGitHub(
  * DOPO ogni scrittura locale (nuova entry, patch, import) così le due
  * copie restano allineate. No-op silenziosa se GitHub non è configurato.
  */
+// La Contents API crea un commit per ogni PUT, che deve avanzare l'HEAD del
+// branch: con più scritture in corso in parallelo (vedi WRITE_CONCURRENCY in
+// server.ts) più richieste possono partire dallo stesso HEAD e "perdere" la
+// corsa ad avanzarlo, anche scrivendo file diversi — GitHub risponde 409/422
+// a chi arriva secondo. Non è un errore di sha del singolo file, quindi un
+// solo retry non basta quando la concorrenza è > 1: si ritenta più volte,
+// ogni volta con lo sha riletto fresco e un piccolo backoff.
+const MAX_PUSH_ATTEMPTS = 6;
+
 export async function pushFileToGitHub(filename: string, content: string, message: string): Promise<void> {
   if (!isGitHubConfigured()) return;
   const cfg = getConfig();
-
-  const body: Record<string, unknown> = {
-    message,
-    content: Buffer.from(content, "utf-8").toString("base64"),
-    branch: cfg.branch,
-  };
-  // Vedi commento analogo in pushDraftFileToGitHub: la cache è in-memory per
-  // processo, quindi va recuperata da GitHub se manca (script one-off lanciati
-  // a parte dal server, che è dove normalmente viene popolata dal pull).
-  const existingSha = shaCache.get(filename) || (await fetchCurrentSha(cfg, filename));
-  if (existingSha) body.sha = existingSha;
-
   const url = `${GITHUB_API}/repos/${cfg.repo}/contents/${repoPath(cfg, filename)}`;
-  const res = await fetch(url, {
-    method: "PUT",
-    headers: headers(cfg),
-    body: JSON.stringify(body),
-  });
+  let sha = shaCache.get(filename) ?? null;
 
-  if (!res.ok) {
-    const detail = await res.text();
-    // 409 = sha non allineato (qualcuno ha cambiato il file altrove): ricarico
-    // lo sha corrente e ritento una volta sola, per non far fallire l'intero
-    // salvataggio per una race condition transitoria.
-    if (res.status === 409) {
-      console.warn(`[githubStorage] Conflitto sha su ${filename}, ritento con sha aggiornato...`);
-      const refreshed = await fetchCurrentSha(cfg, filename);
-      if (refreshed) {
-        shaCache.set(filename, refreshed);
-        body.sha = refreshed;
-        const retryRes = await fetch(url, { method: "PUT", headers: headers(cfg), body: JSON.stringify(body) });
-        if (retryRes.ok) {
-          const retryData = await retryRes.json();
-          shaCache.set(filename, retryData.content.sha);
-          return;
-        }
-      }
+  for (let attempt = 1; attempt <= MAX_PUSH_ATTEMPTS; attempt++) {
+    if (sha === null) sha = await fetchCurrentSha(cfg, filename);
+    const body: Record<string, unknown> = {
+      message,
+      content: Buffer.from(content, "utf-8").toString("base64"),
+      branch: cfg.branch,
+    };
+    if (sha) body.sha = sha;
+
+    const res = await fetch(url, { method: "PUT", headers: headers(cfg), body: JSON.stringify(body) });
+    if (res.ok) {
+      const data = await res.json();
+      shaCache.set(filename, data.content.sha);
+      return;
     }
-    throw new Error(`Scrittura GitHub fallita per ${filename} (${res.status}): ${detail}`);
-  }
 
-  const data = await res.json();
-  shaCache.set(filename, data.content.sha);
+    const detail = await res.text();
+    const isRaceConflict = res.status === 409 || res.status === 422;
+    if (isRaceConflict && attempt < MAX_PUSH_ATTEMPTS) {
+      console.warn(`[githubStorage] Conflitto (${res.status}) su ${filename}, tentativo ${attempt}/${MAX_PUSH_ATTEMPTS}, ritento...`);
+      await new Promise(r => setTimeout(r, 150 * attempt + Math.random() * 200));
+      sha = null;
+      continue;
+    }
+    throw new Error(`Scrittura GitHub fallita per ${filename} (${res.status}) dopo ${attempt} tentativi: ${detail}`);
+  }
 }
 
 async function fetchCurrentSha(cfg: GitHubConfig, filename: string): Promise<string | null> {

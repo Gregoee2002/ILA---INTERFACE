@@ -318,7 +318,7 @@ async function handleRequest(url: URL, init: RequestInit | undefined): Promise<R
           dispatchWriteProgress(done, data.length);
         }
       }
-      const WRITE_CONCURRENCY = 6;
+      const WRITE_CONCURRENCY = 4;
       await Promise.all(Array.from({ length: Math.min(WRITE_CONCURRENCY, data.length) }, () => worker()));
 
       for (const file of Array.from(corpusStore.keys())) {

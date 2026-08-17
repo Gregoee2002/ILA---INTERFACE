@@ -398,7 +398,7 @@ async function startServer() {
       // corpus) il loop sequenziale con un push GitHub per file poteva
       // richiedere minuti. Stessa strategia della variante browser
       // (apiShim.ts).
-      const WRITE_CONCURRENCY = 6;
+      const WRITE_CONCURRENCY = 4;
       let next = 0;
       async function worker(): Promise<void> {
         while (next < data.length) {

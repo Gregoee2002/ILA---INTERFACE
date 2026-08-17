@@ -3108,11 +3108,19 @@ export default function App() {
         setImportStatus({ type: 'success', message: 'ID riordinati con successo!' });
         setTimeout(() => setImportStatus({ type: 'idle', message: '' }), 3000);
       } else {
-        throw new Error("Errore nel salvataggio dei dati riordinati.");
+        // Il server/shim manda sempre un { error: "..." } specifico (validazione,
+        // permessi, fallimento GitHub): mostrarlo invece di un messaggio fisso
+        // era l'unico modo per diagnosticare un fallimento reale come questo.
+        let detail = `HTTP ${res.status}`;
+        try {
+          const body = await res.json();
+          if (body?.error) detail = body.error;
+        } catch { /* risposta non-JSON, resta l'HTTP status */ }
+        throw new Error(detail);
       }
     } catch (err: any) {
       console.error("Reindex error", err);
-      setImportStatus({ type: 'error', message: `Errore: ${err.message}` });
+      setImportStatus({ type: 'error', message: `Errore nel salvataggio: ${err.message}` });
     } finally {
       window.removeEventListener('corpus-write-progress', onWriteProgress);
     }
