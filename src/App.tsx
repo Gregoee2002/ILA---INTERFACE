@@ -1468,9 +1468,6 @@ function HomeView({ monumenti, onNavigate, onSearch }: { monumenti: Monumento[],
   );
 }
 
-// Larghezza fissa del riquadro di diramazione (single-item vs gruppo)
-const TIMELINE_BUCKET_YEARS = 6; // ampiezza (in anni) entro cui le schede vengono raggruppate in un'unica diramazione
-
 // Conversione in numerale romano per le etichette dei secoli (dominio ridotto: corpus antico)
 function toRoman(num: number): string {
   const vals: [number, string][] = [
@@ -1558,21 +1555,6 @@ function Timeline({ monumenti, onSelect }: { monumenti: Monumento[], onSelect: (
   }, [sorted]);
   const yearSpan = yearMax - yearMin;
 
-  // Raggruppa le schede vicine nel tempo in un'unica diramazione (bucket a passo fisso,
-  // così una diramazione copre al massimo TIMELINE_BUCKET_YEARS anni — niente catene infinite)
-  const clusters = useMemo(() => {
-    const map = new Map<number, Monumento[]>();
-    for (const m of sorted) {
-      const y = m.data_inizio || 0;
-      const key = Math.round(y / TIMELINE_BUCKET_YEARS) * TIMELINE_BUCKET_YEARS;
-      if (!map.has(key)) map.set(key, []);
-      map.get(key)!.push(m);
-    }
-    return Array.from(map.entries())
-      .map(([year, items]) => ({ year, items }))
-      .sort((a, b) => a.year - b.year);
-  }, [sorted]);
-
   // Scala cronologica di base (px/anno). Lo zoom la moltiplica: si può espandere un tratto denso
   // (es. il II-III sec. d.C.) senza perdere la proporzione reale col resto dell'asse, oppure
   // comprimerla per avere una vista d'insieme più ampia del solito.
@@ -1580,6 +1562,36 @@ function Timeline({ monumenti, onSelect }: { monumenti: Monumento[], onSelect: (
   const pxPerYear = BASE_PX_PER_YEAR * zoom;
   const naturalWidth = yearSpan * pxPerYear;
   const yearToLeft = (year: number) => (year - yearMin) * pxPerYear;
+
+  // Ampiezza del bucket temporale: non è più fissa, ma reattiva allo zoom corrente.
+  // A schermata intera (zoom basso) un tratto denso comprimerebbe decine di
+  // diramazioni distinte nello stesso pugno di pixel, costringendole a impilarsi
+  // su corsie profonde ("troppo in alto o in basso"); qui invece i bucket si
+  // allargano finché sono zoomati fuori — assorbendo la densità in gruppi più
+  // grandi invece che in più diramazioni via via più lontane dall'asse — e si
+  // restringono automaticamente man mano che l'utente zooma, rivelando il
+  // dettaglio reale. BUCKET_TARGET_PX è la larghezza-bersaglio in pixel di un
+  // bucket sull'asse, indipendente dal livello di zoom.
+  const BUCKET_TARGET_PX = 90;
+  const bucketYears = useMemo(
+    () => Math.max(2, Math.min(60, Math.round(BUCKET_TARGET_PX / pxPerYear))),
+    [pxPerYear]
+  );
+
+  // Raggruppa le schede vicine nel tempo in un'unica diramazione (bucket a passo
+  // dinamico, vedi bucketYears sopra — niente catene infinite)
+  const clusters = useMemo(() => {
+    const map = new Map<number, Monumento[]>();
+    for (const m of sorted) {
+      const y = m.data_inizio || 0;
+      const key = Math.round(y / bucketYears) * bucketYears;
+      if (!map.has(key)) map.set(key, []);
+      map.get(key)!.push(m);
+    }
+    return Array.from(map.entries())
+      .map(([year, items]) => ({ year, items }))
+      .sort((a, b) => a.year - b.year);
+  }, [sorted, bucketYears]);
 
   // Marcatori dei secoli: generati dal dominio reale, non da un intervallo fisso.
   const centuryTicks = useMemo(() => {
@@ -1601,7 +1613,7 @@ function Timeline({ monumenti, onSelect }: { monumenti: Monumento[], onSelect: (
   // ancorata all'anno vero.
   const CLUSTER_HALF_WIDTH = 86;
   const LANE_GAP = 12;
-  const LANE_STEP = 152;
+  const GAP_BETWEEN_LANES = 14;
   const BASE_CONNECTOR = 20;
   // Il connettore non è più un segmento dritto ma una curva a "ramo": si scosta di
   // "bow" pixel a metà percorso per poi rientrare esattamente sul punto dell'asse e
@@ -1612,26 +1624,77 @@ function Timeline({ monumenti, onSelect }: { monumenti: Monumento[], onSelect: (
   const FAN_PER_LANE = 7;
   const FAN_MAX = 34;
 
+  // Altezza stimata del box di una diramazione (vedi TimelineBranchBox): un singolo
+  // elemento è una pillola di due righe, un gruppo ha un'intestazione + righe fino al
+  // tetto di scroll (max-h-[104px]). Serve a impacchettare le corsie "su misura" invece
+  // che con un passo identico per tutte — una corsia di box singoli resta compatta,
+  // una di gruppi affollati si allarga solo quanto serve.
+  const estimateBoxHeight = (items: Monumento[]) => {
+    if (items.length <= 1) return 42;
+    const header = 30;
+    const rowHeight = 40;
+    const contentCap = 108;
+    return header + Math.min(items.length * rowHeight, contentCap) + 6;
+  };
+
   const clusterLayout = useMemo(() => {
     const upLaneEdges: number[] = [];
     const downLaneEdges: number[] = [];
-    return clusters.map((cluster, idx) => {
+    const laneFor = (edges: number[], boxLeftEdge: number) => {
+      const idx = edges.findIndex(rightEdge => boxLeftEdge >= rightEdge + LANE_GAP);
+      return idx === -1 ? edges.length : idx;
+    };
+    // Prima passata: assegna lato/corsia a ogni diramazione — non più un'alternanza
+    // rigida pari/dispari, che poteva ammassare tutto da un lato mentre l'altro
+    // restava vuoto ("troppo in alto o in basso"), ma la parte che in quel momento
+    // richiede meno corsie. Registra anche, per ciascuna corsia, l'altezza del box
+    // più alto che ci finisce dentro.
+    const upLaneMaxHeight: number[] = [];
+    const downLaneMaxHeight: number[] = [];
+    const placed = clusters.map((cluster, idx) => {
       const left = yearToLeft(cluster.year);
-      const side: 'up' | 'down' = idx % 2 === 0 ? 'up' : 'down';
-      const laneEdges = side === 'up' ? upLaneEdges : downLaneEdges;
       const boxLeftEdge = left - CLUSTER_HALF_WIDTH;
-      let lane = laneEdges.findIndex(rightEdge => boxLeftEdge >= rightEdge + LANE_GAP);
-      if (lane === -1) { lane = laneEdges.length; laneEdges.push(-Infinity); }
+      const upLane = laneFor(upLaneEdges, boxLeftEdge);
+      const downLane = laneFor(downLaneEdges, boxLeftEdge);
+      let side: 'up' | 'down';
+      if (upLane < downLane) side = 'up';
+      else if (downLane < upLane) side = 'down';
+      else side = idx % 2 === 0 ? 'up' : 'down';
+      const laneEdges = side === 'up' ? upLaneEdges : downLaneEdges;
+      const lane = side === 'up' ? upLane : downLane;
       laneEdges[lane] = left + CLUSTER_HALF_WIDTH;
+      const laneMaxHeight = side === 'up' ? upLaneMaxHeight : downLaneMaxHeight;
+      laneMaxHeight[lane] = Math.max(laneMaxHeight[lane] || 0, estimateBoxHeight(cluster.items));
       const bowSign = idx % 2 === 0 ? 1 : -1;
+      return { cluster, left, side, lane, bowSign };
+    });
+
+    // Seconda passata: lo scostamento dall'asse per ogni corsia è la somma delle
+    // altezze reali (+ un piccolo margine) delle corsie più vicine, non un
+    // moltiplicatore fisso identico per tutte — così il ramo va esattamente quanto
+    // serve, mai di più, e due box sulla stessa parte non si sovrappongono mai.
+    const cumulativeOffsets = (maxHeights: number[]) => {
+      const offsets: number[] = [];
+      let acc = 0;
+      for (let i = 0; i < maxHeights.length; i++) {
+        offsets[i] = acc;
+        acc += maxHeights[i] + GAP_BETWEEN_LANES;
+      }
+      return offsets;
+    };
+    const upOffsets = cumulativeOffsets(upLaneMaxHeight);
+    const downOffsets = cumulativeOffsets(downLaneMaxHeight);
+
+    return placed.map(({ cluster, left, side, lane, bowSign }) => {
+      const connectorHeight = BASE_CONNECTOR + (side === 'up' ? upOffsets[lane] : downOffsets[lane]);
       const bow = Math.min(FAN_MAX, FAN_BASE + lane * FAN_PER_LANE) * bowSign;
-      return { cluster, left, side, lane, bow };
+      return { cluster, left, side, lane, bow, connectorHeight };
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [clusters, pxPerYear, yearMin]);
 
-  const maxLaneDepth = useMemo(
-    () => clusterLayout.reduce((max, c) => Math.max(max, c.lane), 0),
+  const bandVerticalReach = useMemo(
+    () => clusterLayout.reduce((max, c) => Math.max(max, c.connectorHeight + estimateBoxHeight(c.cluster.items)), 0) + 40,
     [clusterLayout]
   );
 
@@ -1739,8 +1802,6 @@ function Timeline({ monumenti, onSelect }: { monumenti: Monumento[], onSelect: (
     setZoom(z => Math.min(ZOOM_MAX, Math.max(ZOOM_MIN, z * 1.7)));
   };
 
-  const bandVerticalReach = BASE_CONNECTOR + (maxLaneDepth + 1) * LANE_STEP + 40;
-
   return (
     <div className="flex-1 flex flex-col overflow-hidden">
       <motion.div {...scrollReveal} className="mb-8 pb-4 border-b border-border/50 flex items-end justify-between gap-4 flex-wrap">
@@ -1816,7 +1877,10 @@ function Timeline({ monumenti, onSelect }: { monumenti: Monumento[], onSelect: (
                     <div
                       key={`band-${c}`}
                       className="absolute"
-                      style={{ left: bandLeft, width: bandWidth, top: -bandVerticalReach, height: bandVerticalReach * 2, zIndex: 0 }}
+                      style={{
+                        left: bandLeft, width: bandWidth, top: -bandVerticalReach, height: bandVerticalReach * 2, zIndex: 0,
+                        transition: 'left 280ms cubic-bezier(0.22, 1, 0.36, 1), width 280ms cubic-bezier(0.22, 1, 0.36, 1), top 280ms cubic-bezier(0.22, 1, 0.36, 1), height 280ms cubic-bezier(0.22, 1, 0.36, 1)',
+                      }}
                     >
                       <div className={`absolute inset-0 ${Math.abs(c) % 2 === 0 ? 'bg-ink/[0.02]' : ''}`} />
                       <div className="absolute left-0 top-0 h-2 w-px bg-border/60" style={{ top: bandVerticalReach - 8 }} />
@@ -1876,9 +1940,8 @@ function Timeline({ monumenti, onSelect }: { monumenti: Monumento[], onSelect: (
                     in clusterLayout con un algoritmo a intervalli (nessun overlap orizzontale
                     all'interno della stessa corsia). Ogni scheda del corpus rientra in esattamente
                     un cluster: nessuna va persa o spostata dal suo punto cronologico. */}
-                {clusterLayout.map(({ cluster, left, side, lane, bow }, idx) => {
+                {clusterLayout.map(({ cluster, left, side, lane, bow, connectorHeight }, idx) => {
                   const isGroup = cluster.items.length > 1;
-                  const connectorHeight = BASE_CONNECTOR + lane * LANE_STEP;
                   // Connettore a ramo: curva bezier che si scosta di "bow" px a metà
                   // percorso e rientra esattamente sui due estremi (svgCx). Gli estremi
                   // combaciano sempre col centro del wrapper flex sottostante, quindi con
@@ -1903,7 +1966,11 @@ function Timeline({ monumenti, onSelect }: { monumenti: Monumento[], onSelect: (
                     </svg>
                   );
                   return (
-                    <div key={`cluster-${cluster.year}-${idx}`} className="absolute" style={{ left, top: 0, zIndex: 2 }}>
+                    <div
+                      key={`cluster-${cluster.year}-${idx}`}
+                      className="absolute"
+                      style={{ left, top: 0, zIndex: 2, transition: 'left 280ms cubic-bezier(0.22, 1, 0.36, 1)' }}
+                    >
                       {/* Connettore + riquadro: ancorati al punto esatto sull'asse (0,0 del wrapper),
                           in tinta accento per legare visivamente box e punto senza ambiguità */}
                       {side === 'up' ? (
