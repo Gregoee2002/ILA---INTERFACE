@@ -1530,6 +1530,10 @@ function Timeline({ monumenti, onSelect }: { monumenti: Monumento[], onSelect: (
   const scrollRef = useRef<HTMLDivElement>(null);
   const zoomAnchorRef = useRef<{ year: number; clientX: number } | null>(null);
   const didFitRef = useRef(false);
+  // Secolo appena selezionato: illumina la banda corrispondente di un bagliore
+  // turchese. "key" cambia a ogni click (anche sullo stesso secolo) per far
+  // ripartire l'animazione invece di lasciarla già esaurita.
+  const [flashCentury, setFlashCentury] = useState<{ century: number; key: number } | null>(null);
 
   const ZOOM_MIN = 0.2;
   const ZOOM_MAX = 8;
@@ -1790,6 +1794,17 @@ function Timeline({ monumenti, onSelect }: { monumenti: Monumento[], onSelect: (
     if (scrollRef.current) scrollRef.current.scrollLeft = 0;
   };
 
+  // Esc come scorciatoia rapida per tornare alla vista di default, sempre
+  // disponibile senza dover puntare il pulsante dedicato.
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') handleZoomReset();
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   // Click diretto sull'asse (fuori da una diramazione): zoom interattivo centrato sul punto
   // cronologico cliccato. Le diramazioni fermano la propagazione del click (vedi TimelineBranchBox)
   // così selezionare una scheda non fa anche scattare lo zoom.
@@ -1800,6 +1815,28 @@ function Timeline({ monumenti, onSelect }: { monumenti: Monumento[], onSelect: (
     const currentYear = yearMin + cursorXInAxis / pxPerYear;
     zoomAnchorRef.current = { year: currentYear, clientX: e.clientX };
     setZoom(z => Math.min(ZOOM_MAX, Math.max(ZOOM_MIN, z * 1.7)));
+  };
+
+  // Selezionare una diramazione illumina di turchese il secolo a cui appartiene e
+  // zooma leggermente su di esso (ancorato al centro del secolo, non al singolo
+  // anno) — un riferimento di contesto immediato prima che si apra la scheda. La
+  // scheda si apre con un piccolo ritardo apposta: si aprisse subito, il suo
+  // sfondo sfocato coprirebbe la cronologia nello stesso istante e il bagliore
+  // non si vedrebbe mai.
+  const handleItemSelect = (m: Monumento) => {
+    if (scrollRef.current) {
+      const year = m.data_inizio ?? 0;
+      const century = Math.floor(year / 100);
+      const centuryMidYear = century * 100 + 50;
+      const scrollRect = scrollRef.current.getBoundingClientRect();
+      const viewportCenterClientX = scrollRect.left + scrollRect.width / 2;
+      zoomAnchorRef.current = { year: centuryMidYear, clientX: viewportCenterClientX };
+      setZoom(z => Math.min(ZOOM_MAX, z * 1.4));
+      setFlashCentury({ century, key: Date.now() });
+      window.setTimeout(() => onSelect(m), 420);
+    } else {
+      onSelect(m);
+    }
   };
 
   return (
@@ -1813,30 +1850,37 @@ function Timeline({ monumenti, onSelect }: { monumenti: Monumento[], onSelect: (
         </div>
 
         {sorted.length > 0 && (
-          <div className="flex items-center gap-0.5 bg-parchment/70 backdrop-blur-sm border border-border/60 rounded-full p-1 shadow-sm shrink-0">
-            <button
-              onClick={handleZoomOut}
-              disabled={zoom <= ZOOM_MIN + 0.001}
-              className="h-7 w-7 rounded-full flex items-center justify-center text-muted/70 hover:bg-accent/10 hover:text-accent disabled:opacity-25 disabled:hover:bg-transparent transition-colors"
-              title="Riduci zoom"
-            >
-              <ZoomOut className="h-3.5 w-3.5" />
-            </button>
-            <button
-              onClick={handleZoomIn}
-              disabled={zoom >= ZOOM_MAX - 0.001}
-              className="h-7 w-7 rounded-full flex items-center justify-center text-muted/70 hover:bg-accent/10 hover:text-accent disabled:opacity-25 disabled:hover:bg-transparent transition-colors"
-              title="Aumenta zoom"
-            >
-              <ZoomIn className="h-3.5 w-3.5" />
-            </button>
+          <div className="flex items-center gap-2 shrink-0">
+            {/* Pulsante di reset a sé, etichettato e in tinta accento: prima era
+                un'icona anonima in mezzo allo zoom in/out, facile da non notare —
+                ora è il modo più immediato per tornare alla vista di default
+                (utile soprattutto ora che selezionare una scheda zooma sul secolo). */}
             <button
               onClick={handleZoomReset}
-              className="h-7 w-7 rounded-full flex items-center justify-center text-muted/70 hover:bg-accent/10 hover:text-accent transition-colors"
-              title="Vista d'insieme (adatta alla finestra)"
+              className="h-7 pl-2.5 pr-3 rounded-full flex items-center gap-1.5 text-[10px] font-sans font-bold uppercase tracking-wide text-accent bg-accent/10 hover:bg-accent/20 border border-accent/25 transition-colors"
+              title="Vista d'insieme (adatta alla finestra) — anche tasto Esc"
             >
               <RotateCcw className="h-3 w-3" />
+              Vista d'insieme
             </button>
+            <div className="flex items-center gap-0.5 bg-parchment/70 backdrop-blur-sm border border-border/60 rounded-full p-1 shadow-sm">
+              <button
+                onClick={handleZoomOut}
+                disabled={zoom <= ZOOM_MIN + 0.001}
+                className="h-7 w-7 rounded-full flex items-center justify-center text-muted/70 hover:bg-accent/10 hover:text-accent disabled:opacity-25 disabled:hover:bg-transparent transition-colors"
+                title="Riduci zoom"
+              >
+                <ZoomOut className="h-3.5 w-3.5" />
+              </button>
+              <button
+                onClick={handleZoomIn}
+                disabled={zoom >= ZOOM_MAX - 0.001}
+                className="h-7 w-7 rounded-full flex items-center justify-center text-muted/70 hover:bg-accent/10 hover:text-accent disabled:opacity-25 disabled:hover:bg-transparent transition-colors"
+                title="Aumenta zoom"
+              >
+                <ZoomIn className="h-3.5 w-3.5" />
+              </button>
+            </div>
           </div>
         )}
       </motion.div>
@@ -1883,6 +1927,16 @@ function Timeline({ monumenti, onSelect }: { monumenti: Monumento[], onSelect: (
                       }}
                     >
                       <div className={`absolute inset-0 ${Math.abs(c) % 2 === 0 ? 'bg-ink/[0.02]' : ''}`} />
+                      {flashCentury && flashCentury.century === c && (
+                        <motion.div
+                          key={flashCentury.key}
+                          className="absolute inset-0 pointer-events-none"
+                          style={{ background: 'radial-gradient(ellipse at center, var(--accent) 0%, transparent 72%)' }}
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: [0, 0.32, 0] }}
+                          transition={{ duration: 1.3, ease: 'easeOut', times: [0, 0.25, 1] }}
+                        />
+                      )}
                       <div className="absolute left-0 top-0 h-2 w-px bg-border/60" style={{ top: bandVerticalReach - 8 }} />
                       {bandWidth > 42 && (
                         <span
@@ -1978,7 +2032,7 @@ function Timeline({ monumenti, onSelect }: { monumenti: Monumento[], onSelect: (
                           className="absolute flex flex-col items-center"
                           style={{ left: 0, bottom: 0, transform: 'translateX(-50%)' }}
                         >
-                          <TimelineBranchBox items={cluster.items} onSelect={onSelect} />
+                          <TimelineBranchBox items={cluster.items} onSelect={handleItemSelect} />
                           {connector}
                         </div>
                       ) : (
@@ -1987,7 +2041,7 @@ function Timeline({ monumenti, onSelect }: { monumenti: Monumento[], onSelect: (
                           style={{ left: 0, top: 0, transform: 'translateX(-50%)' }}
                         >
                           {connector}
-                          <TimelineBranchBox items={cluster.items} onSelect={onSelect} />
+                          <TimelineBranchBox items={cluster.items} onSelect={handleItemSelect} />
                         </div>
                       )}
 
