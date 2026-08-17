@@ -144,7 +144,12 @@ async function fetchFileContent(filename: string): Promise<string> {
 
 async function fetchCurrentSha(filename: string): Promise<string | null> {
   const url = `${GITHUB_API}/repos/${REPO}/contents/${repoPath(filename)}?ref=${encodeURIComponent(BRANCH)}`;
-  const res = await fetch(url, { headers: headers() });
+  // La Contents API risponde con "Cache-Control: private, max-age=60": senza
+  // no-store, il browser serve la stessa risposta cache per ~60s a ogni
+  // richiesta identica — che è esattamente la finestra in cui pushCorpusFile
+  // la richiama per rileggere lo sha dopo un 409. Risultato: tutti i retry
+  // ricevevano lo stesso sha "vecchio" e fallivano di nuovo, sempre uguale.
+  const res = await fetch(url, { headers: headers(), cache: "no-store" });
   if (!res.ok) return null;
   const data = await res.json();
   return data.sha || null;

@@ -362,7 +362,10 @@ export async function pushFileToGitHub(filename: string, content: string, messag
 
 async function fetchCurrentSha(cfg: GitHubConfig, filename: string): Promise<string | null> {
   const url = `${GITHUB_API}/repos/${cfg.repo}/contents/${repoPath(cfg, filename)}?ref=${encodeURIComponent(cfg.branch)}`;
-  const res = await fetch(url, { headers: headers(cfg) });
+  // Vedi commento gemello in githubStorageBrowser.ts: la Contents API risponde
+  // "Cache-Control: private, max-age=60", quindi anche qui no-store esplicito
+  // per garantire che il retry su 409 rilegga davvero lo sha aggiornato.
+  const res = await fetch(url, { headers: headers(cfg), cache: "no-store" });
   if (!res.ok) return null;
   const data = await res.json();
   return data.sha || null;
