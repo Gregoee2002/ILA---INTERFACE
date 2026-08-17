@@ -6,7 +6,8 @@ import crypto from "crypto";
 import { createServer as createViteServer } from "vite";
 import { GoogleGenAI } from "@google/genai";
 import { xmlToMonumenti, monumentiToXml, renderIconography } from "./src/lib/xmlUtils";
-import { pullCorpusFromGitHub, pushFileToGitHub, deleteFileFromGitHub, isGitHubConfigured, testGitHubAccess, pullDraftsFromGitHub } from "./src/lib/githubStorage";
+import { pullCorpusFromGitHub, pushFileToGitHub, deleteFileFromGitHub, isGitHubConfigured, testGitHubAccess, pullDraftsFromGitHub, pullFlagsFileFromGitHub, pushFlagsFileToGitHub } from "./src/lib/githubStorage";
+import { EntryFlag } from "./src/types";
 import { buildSearchIndex, searchMonumenti } from "./src/lib/searchIndex";
 import MiniSearch from 'minisearch';
 
@@ -24,6 +25,8 @@ async function startServer() {
   const BACKUP_FILE = path.join(CORPUS_DIR, "_teiCorpus.xml");
   // Legacy file — kept for backwards compatibility on first run
   const LEGACY_FILE = path.join(DATA_DIR, "monumenti.xml");
+  // Segnalazioni dei collaboratori (vedi flags.json su GitHub, radice repo).
+  const FLAGS_FILE = path.join(DATA_DIR, "flags.json");
 
   const ai = new GoogleGenAI({
     apiKey: process.env.GEMINI_API_KEY,
@@ -77,7 +80,14 @@ async function startServer() {
     } catch (e: any) {
       console.error("[githubStorage] Sync draft iniziale fallita — il server parte comunque con il filesystem locale (probabilmente vuoto o stale):", e.message || e);
     }
+    try {
+      const remote = await pullFlagsFileFromGitHub();
+      if (remote !== null) fs.writeFileSync(FLAGS_FILE, remote, "utf-8");
+    } catch (e: any) {
+      console.error("[githubStorage] Sync segnalazioni iniziale fallita — il server parte comunque con il filesystem locale (probabilmente vuoto o stale):", e.message || e);
+    }
   }
+  if (!fs.existsSync(FLAGS_FILE)) fs.writeFileSync(FLAGS_FILE, "[]", "utf-8");
 
   // Costruisci l'indice di ricerca all'avvio
   updateSearchIndex(readCorpusFiles());
@@ -353,6 +363,24 @@ async function startServer() {
       console.error(`Failed to delete local file ${filename}:`, err);
     }
     await deleteFileFromGitHub(filename, commitMessage);
+  }
+
+  // Legge/scrive flags.json in un unico punto: locale + specchio su GitHub
+  // (se configurato), stesso pattern di writeCorpusFile.
+  function readFlags(): EntryFlag[] {
+    try {
+      const raw = fs.readFileSync(FLAGS_FILE, "utf-8");
+      const parsed = JSON.parse(raw);
+      return Array.isArray(parsed) ? parsed : [];
+    } catch {
+      return [];
+    }
+  }
+
+  async function writeFlags(flags: EntryFlag[], commitMessage: string): Promise<void> {
+    const content = JSON.stringify(flags, null, 2);
+    fs.writeFileSync(FLAGS_FILE, content, "utf-8");
+    await pushFlagsFileToGitHub(content, commitMessage);
   }
 
   // ── Routes ───────────────────────────────────────────────────────────────
@@ -645,6 +673,60 @@ async function startServer() {
   app.get("/api/corpus/github-status", async (req, res) => {
     const result = await testGitHubAccess();
     res.json(result);
+  });
+
+  // ── Segnalazioni collaboratori ───────────────────────────────────────────
+
+  app.get("/api/flags", (req, res) => {
+    res.json(readFlags());
+  });
+
+  app.post("/api/flags", async (req, res) => {
+    try {
+      const { entryId, entryLabel, note, author } = req.body || {};
+      if (typeof entryId !== "string" || !entryId.trim()) return res.status(400).json({ error: "entryId mancante" });
+      if (typeof note !== "string" || !note.trim()) return res.status(400).json({ error: "Descrizione del problema mancante" });
+      if (note.length > 4000) return res.status(400).json({ error: "note supera 4000 caratteri" });
+      if (typeof entryLabel !== "string" || entryLabel.length > 200) return res.status(400).json({ error: "entryLabel non valida" });
+      if (author !== undefined && (typeof author !== "string" || author.length > 100)) return res.status(400).json({ error: "author supera 100 caratteri" });
+
+      const flag: EntryFlag = {
+        id: crypto.randomUUID(),
+        entryId,
+        entryLabel,
+        note: note.trim(),
+        author: author?.trim() || undefined,
+        status: "open",
+        createdAt: new Date().toISOString(),
+      };
+      const flags = readFlags();
+      flags.push(flag);
+      await writeFlags(flags, `Segnalazione: ${entryLabel}`);
+      res.json(flag);
+    } catch (error: any) {
+      console.error("Error creating flag:", error);
+      res.status(500).json({ error: error.message || "Failed to save flag" });
+    }
+  });
+
+  app.patch("/api/flags/:id", async (req, res) => {
+    try {
+      const { id } = req.params;
+      const { status } = req.body || {};
+      if (status !== "open" && status !== "resolved") return res.status(400).json({ error: "status deve essere 'open' o 'resolved'" });
+
+      const flags = readFlags();
+      const flag = flags.find(f => f.id === id);
+      if (!flag) return res.status(404).json({ error: "Segnalazione non trovata" });
+
+      flag.status = status;
+      flag.resolvedAt = status === "resolved" ? new Date().toISOString() : undefined;
+      await writeFlags(flags, status === "resolved" ? `Segnalazione risolta: ${flag.entryLabel}` : `Segnalazione riaperta: ${flag.entryLabel}`);
+      res.json(flag);
+    } catch (error: any) {
+      console.error("Error updating flag:", error);
+      res.status(500).json({ error: error.message || "Failed to update flag" });
+    }
   });
 
   // ── Ricerca con MiniSearch ───────────────────────────────────────────────

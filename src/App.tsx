@@ -46,11 +46,12 @@ import {
   RotateCcw,
   GitCompare,
   KeyRound,
-  Unlock
+  Unlock,
+  Flag
 } from 'lucide-react';
 import { cn, EASE_OUT, EASE_IN, SPRING_SNAPPY, SPRING_SOFT } from './lib/utils';
 import { ICONOGRAPHY_LABELS } from './lib/iconographyLabels';
-import { Monumento, FilterState, SortField, Traduzione, Bibliografia, Appunto } from './types';
+import { Monumento, FilterState, SortField, Traduzione, Bibliografia, Appunto, EntryFlag } from './types';
 import { RAW_DATA } from './data';
 import { monumentiToXml, xmlToMonumenti } from './lib/xmlUtils';
 import jsPDF from 'jspdf';
@@ -62,6 +63,8 @@ import { CooccurrenceHeatmap } from './components/CooccurrenceHeatmap';
 import { SectionEditorView } from './components/SectionEditorView';
 import { DraftReviewPanel } from './components/DraftReviewPanel';
 import { UnlockEditingModal } from './components/UnlockEditingModal';
+import { FlagsPanel } from './components/FlagsPanel';
+import { EntryFlagForm } from './components/EntryFlagForm';
 import { auth, loginWithGoogle, logout } from './lib/firebase';
 import { onAuthStateChanged, User } from 'firebase/auth';
 
@@ -77,7 +80,7 @@ interface SearchResult {
   matchInSupplied: boolean;
 }
 
-type AppView = 'home' | 'catalog' | 'stats' | 'timeline' | 'health' | 'map' | 'heatmap' | 'editor' | 'review';
+type AppView = 'home' | 'catalog' | 'stats' | 'timeline' | 'health' | 'map' | 'heatmap' | 'editor' | 'review' | 'flags';
 
 // true sulla build GitHub Pages (vedi vite.config.ts / apiShim.ts): niente
 // server.ts, quindi le funzionalità che dipendevano da Gemini AI o dalla
@@ -901,6 +904,7 @@ const RAIL_ITEMS: { view: AppView; label: string; icon: React.ReactNode }[] = [
   { view: 'stats', label: 'Statistiche Epiteti', icon: <BarChart2 className="h-4 w-4" /> },
   { view: 'heatmap', label: 'Heatmap Co-occorrenze', icon: <Columns className="h-4 w-4" /> },
   { view: 'health', label: 'Coerenza', icon: <Check className="h-4 w-4" /> },
+  { view: 'flags', label: 'Segnalazioni', icon: <Flag className="h-4 w-4" /> },
   { view: 'editor', label: 'Editor XML', icon: <Feather className="h-4 w-4" /> },
   // Pannello di revisione draft: dipende dalla cartella drafts/ (solo
   // lettura, popolata dalla pipeline locale) — non disponibile sulla build
@@ -1236,6 +1240,7 @@ function HomeView({ monumenti, onNavigate, onSearch }: { monumenti: Monumento[],
     { view: 'stats', label: 'Statistiche Epiteti', desc: 'Frequenza e distribuzione degli epiteti di Men.', icon: <BarChart2 className="h-5 w-5" /> },
     { view: 'heatmap', label: 'Heatmap Co-occorrenze', desc: 'Quali epiteti e attributi ricorrono insieme.', icon: <Columns className="h-5 w-5" /> },
     { view: 'health', label: 'Coerenza', desc: "Controlli di qualità e coerenza sui dati del corpus.", icon: <Check className="h-5 w-5" /> },
+    { view: 'flags', label: 'Segnalazioni', desc: 'Problemi segnalati dai collaboratori sulle schede del catalogo.', icon: <Flag className="h-5 w-5" /> },
     { view: 'editor', label: 'Editor XML', desc: 'Modifica le schede EpiDoc sezione per sezione, con riscrittura chirurgica.', icon: <Feather className="h-5 w-5" /> },
   ];
 
@@ -2858,6 +2863,7 @@ export default function App() {
     } catch (e) {
       console.warn('Ricaricamento corpus live dopo sblocco fallito', e);
     }
+    fetchFlags();
   };
 
   const handleLockEditing = async () => {
@@ -2870,6 +2876,7 @@ export default function App() {
     } catch (e) {
       console.warn('Ricaricamento snapshot dopo blocco fallito', e);
     }
+    fetchFlags();
   };
 
   const [translating, setTranslating] = useState(false);
@@ -2964,6 +2971,59 @@ export default function App() {
   // GitHub, non questo booleano). Prima di sbloccare, chi ha solo la
   // password vede il catalogo in sola lettura dallo snapshot statico.
   const effectiveAdmin = isStaticBuild ? editingUnlocked : (!!currentUser && currentUser.email === ADMIN_EMAIL);
+
+  // Segnalazioni dei collaboratori sulle schede del catalogo (vedi flags.json
+  // su GitHub). Sulla build statica restano vuote finché l'editing non è
+  // sbloccato (stesso PAT usato per salvare, vedi apiShim.ts) — non c'è uno
+  // snapshot statico per queste, a differenza del corpus.
+  const [flags, setFlags] = useState<EntryFlag[]>([]);
+  const [flagsLoading, setFlagsLoading] = useState(false);
+
+  const fetchFlags = async () => {
+    setFlagsLoading(true);
+    try {
+      const res = await fetch('/api/flags');
+      if (res.ok) setFlags(await res.json());
+    } catch (e) {
+      console.warn('Caricamento segnalazioni fallito', e);
+    } finally {
+      setFlagsLoading(false);
+    }
+  };
+
+  useEffect(() => { fetchFlags(); }, []);
+
+  const createFlag = async (entryId: string, entryLabel: string, note: string): Promise<{ ok: boolean; error?: string }> => {
+    try {
+      const res = await fetch('/api/flags', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ entryId, entryLabel, note }),
+      });
+      const data = await res.json();
+      if (!res.ok) return { ok: false, error: data.error || 'Errore nel salvataggio della segnalazione' };
+      setFlags(prev => [...prev, data]);
+      return { ok: true };
+    } catch (e: any) {
+      return { ok: false, error: e.message || String(e) };
+    }
+  };
+
+  const updateFlagStatus = async (id: string, status: 'open' | 'resolved'): Promise<{ ok: boolean; error?: string }> => {
+    try {
+      const res = await fetch(`/api/flags/${encodeURIComponent(id)}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status }),
+      });
+      const data = await res.json();
+      if (!res.ok) return { ok: false, error: data.error || 'Errore nell\'aggiornamento della segnalazione' };
+      setFlags(prev => prev.map(f => f.id === id ? data : f));
+      return { ok: true };
+    } catch (e: any) {
+      return { ok: false, error: e.message || String(e) };
+    }
+  };
 
   const regions = useMemo(() => Array.from(new Set(monumenti.map(m => m.regione).filter(Boolean).map(s => s.trim()))).sort(), [monumenti]);
   const corpora = useMemo(() => Array.from(new Set(monumenti.map(m => m.corpus).filter(Boolean).map(s => s.trim()))).sort(), [monumenti]);
@@ -4752,6 +4812,20 @@ export default function App() {
             </div>
           )}
           {activeView === 'health' && <CorpusHealth monumenti={monumenti} onSelectMonumento={(m) => { setSelectedMonumento(m); setActiveView('catalog'); }} />}
+          {activeView === 'flags' && (
+            <FlagsPanel
+              flags={flags}
+              loading={flagsLoading}
+              effectiveAdmin={effectiveAdmin}
+              onLogin={isStaticBuild ? () => setShowUnlockModal(true) : loginWithGoogle}
+              onResolve={id => updateFlagStatus(id, 'resolved')}
+              onReopen={id => updateFlagStatus(id, 'open')}
+              onSelectEntry={entryId => {
+                const m = monumenti.find(x => x.entryId === entryId || x.id.toString() === entryId);
+                if (m) { setSelectedMonumento(m); setActiveView('catalog'); }
+              }}
+            />
+          )}
           {activeView === 'review' && <DraftReviewPanel />}
           {activeView === 'editor' && (
             <SectionEditorView
@@ -5358,6 +5432,17 @@ export default function App() {
                           </button>
                         </section>
                       )}
+
+                      <EntryFlagForm
+                        entryId={selectedMonumento.entryId ?? selectedMonumento.id?.toString() ?? ''}
+                        entryLabel={`${selectedMonumento.corpus || ''} ${selectedMonumento.numero || selectedMonumento.id || ''}`.trim()}
+                        flags={flags}
+                        effectiveAdmin={effectiveAdmin}
+                        onLogin={isStaticBuild ? () => setShowUnlockModal(true) : loginWithGoogle}
+                        onCreate={createFlag}
+                        onResolve={id => updateFlagStatus(id, 'resolved')}
+                        onReopen={id => updateFlagStatus(id, 'open')}
+                      />
 
                        <div className="pt-6">
                          <p className="text-[10px] font-sans text-muted/40 italic">Rif. Monografia: Lane (1971), Vol I.</p>

@@ -161,6 +161,20 @@ export interface Tag {
   value: string;
 }
 
+/** Segnalazione di un collaboratore su una scheda del catalogo (vedi flags.json). */
+export interface EntryFlag {
+  id: string;
+  entryId: string;
+  // Etichetta denormalizzata (es. "CMRDM AS 29") — resta leggibile nell'elenco
+  // segnalazioni anche se la scheda viene nel frattempo rinumerata o rimossa.
+  entryLabel: string;
+  note: string;
+  author?: string;
+  status: 'open' | 'resolved';
+  createdAt: string;
+  resolvedAt?: string;
+}
+
 export interface Appunto {
   entryId?: string;
   id: string;

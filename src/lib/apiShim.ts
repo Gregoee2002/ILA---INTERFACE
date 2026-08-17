@@ -33,11 +33,16 @@
 import { xmlToMonumenti, monumentiToXml, renderIconography } from "./xmlUtils";
 import { buildSearchIndex, searchMonumenti } from "./searchIndex";
 import MiniSearch from "minisearch";
-import { pullAllCorpusFiles, pushCorpusFile, deleteCorpusFile, testGitHubAccess, setStoredToken, clearStoredToken } from "./githubStorageBrowser";
+import { pullAllCorpusFiles, pushCorpusFile, deleteCorpusFile, testGitHubAccess, setStoredToken, clearStoredToken, pullFlagsFile, pushFlagsFile } from "./githubStorageBrowser";
+import { EntryFlag } from "../types";
 
 let corpusStore = new Map<string, string>(); // filename -> xml content
 let searchIndex: MiniSearch<any> | null = null;
 let canWrite = false;
+// Segnalazioni: vuote in modalità viewer (niente snapshot statico per
+// queste, a differenza del corpus) — popolate da GitHub solo dopo
+// unlockEditing, stesso gate del corpus in scrittura. Vedi flags.json.
+let flagsStore: EntryFlag[] = [];
 
 export function isEditingUnlocked(): boolean {
   return canWrite;
@@ -440,6 +445,47 @@ async function handleRequest(url: URL, init: RequestInit | undefined): Promise<R
       return json({ status: "ok", message: "Indice ricostruito con successo" });
     }
 
+    if (path === "/api/flags" && method === "GET") {
+      return json(flagsStore);
+    }
+
+    if (path === "/api/flags" && method === "POST") {
+      if (!canWrite) return json({ error: "Modifica non abilitata. Sblocca l'editing con un token GitHub per segnalare." }, 403);
+      const { entryId, entryLabel, note, author } = body || {};
+      if (typeof entryId !== "string" || !entryId.trim()) return json({ error: "entryId mancante" }, 400);
+      if (typeof note !== "string" || !note.trim()) return json({ error: "Descrizione del problema mancante" }, 400);
+      if (note.length > 4000) return json({ error: "note supera 4000 caratteri" }, 400);
+      if (typeof entryLabel !== "string" || entryLabel.length > 200) return json({ error: "entryLabel non valida" }, 400);
+      if (author !== undefined && (typeof author !== "string" || author.length > 100)) return json({ error: "author supera 100 caratteri" }, 400);
+
+      const flag: EntryFlag = {
+        id: crypto.randomUUID(),
+        entryId,
+        entryLabel,
+        note: note.trim(),
+        author: author?.trim() || undefined,
+        status: "open",
+        createdAt: new Date().toISOString(),
+      };
+      flagsStore = [...flagsStore, flag];
+      await pushFlagsFile(JSON.stringify(flagsStore, null, 2), `Segnalazione: ${entryLabel}`);
+      return json(flag);
+    }
+
+    if (path.startsWith("/api/flags/") && method === "PATCH") {
+      if (!canWrite) return json({ error: "Modifica non abilitata. Sblocca l'editing con un token GitHub per aggiornare la segnalazione." }, 403);
+      const id = decodeURIComponent(path.slice("/api/flags/".length));
+      const { status } = body || {};
+      if (status !== "open" && status !== "resolved") return json({ error: "status deve essere 'open' o 'resolved'" }, 400);
+      const flag = flagsStore.find(f => f.id === id);
+      if (!flag) return json({ error: "Segnalazione non trovata" }, 404);
+      flag.status = status;
+      flag.resolvedAt = status === "resolved" ? new Date().toISOString() : undefined;
+      flagsStore = [...flagsStore];
+      await pushFlagsFile(JSON.stringify(flagsStore, null, 2), status === "resolved" ? `Segnalazione risolta: ${flag.entryLabel}` : `Segnalazione riaperta: ${flag.entryLabel}`);
+      return json(flag);
+    }
+
     if (path === "/api/translate" || path.startsWith("/api/drafts/")) {
       return json({ error: "Non disponibile nella build GitHub Pages (funzionalità AI/draft, solo in locale)" }, 501);
     }
@@ -484,6 +530,8 @@ export async function unlockEditing(token: string): Promise<{ ok: boolean; detai
   try {
     corpusStore = await pullAllCorpusFiles();
     updateSearchIndex();
+    const remoteFlags = await pullFlagsFile();
+    flagsStore = remoteFlags ? JSON.parse(remoteFlags) : [];
     canWrite = true;
     return result;
   } catch (e: any) {
@@ -498,6 +546,7 @@ export async function lockEditing(): Promise<void> {
   clearStoredToken();
   canWrite = false;
   corpusStore = await loadSnapshot();
+  flagsStore = [];
   updateSearchIndex();
 }
 

@@ -222,6 +222,57 @@ export async function deleteCorpusFile(filename: string, _message: string): Prom
   );
 }
 
+// ── Segnalazioni (flags.json) ────────────────────────────────────────
+// Stesso file di githubStorage.ts (repoPath fisso "flags.json" alla radice
+// della repo, fuori da CORPUS_PATH), variante browser: vedi commento
+// gemello lì per il perché di un file unico invece che uno per scheda.
+const FLAGS_PATH = "flags.json";
+let flagsSha: string | null = null;
+
+export async function pullFlagsFile(): Promise<string | null> {
+  const url = `${GITHUB_API}/repos/${REPO}/contents/${FLAGS_PATH}?ref=${encodeURIComponent(BRANCH)}`;
+  const res = await fetch(url, { headers: headers() });
+  if (res.status === 404) { flagsSha = null; return null; }
+  if (!res.ok) throw new Error(`GitHub get flags.json fallita (${res.status}): ${await res.text()}`);
+  const data = await res.json();
+  flagsSha = data.sha || null;
+  if (data.encoding !== "base64" || typeof data.content !== "string") {
+    throw new Error("Formato risposta inatteso per flags.json");
+  }
+  return base64ToUtf8(data.content);
+}
+
+export async function pushFlagsFile(content: string, message: string): Promise<void> {
+  const url = `${GITHUB_API}/repos/${REPO}/contents/${FLAGS_PATH}`;
+  let sha = flagsSha;
+
+  for (let attempt = 1; attempt <= 3; attempt++) {
+    const body: Record<string, unknown> = {
+      message,
+      content: utf8ToBase64(content),
+      branch: BRANCH,
+    };
+    if (sha) body.sha = sha;
+
+    const res = await fetch(url, { method: "PUT", headers: headers(), body: JSON.stringify(body) });
+    if (res.ok) {
+      const data = await res.json();
+      flagsSha = data.content.sha;
+      return;
+    }
+
+    const detail = await res.text();
+    const isRaceConflict = res.status === 409 || res.status === 422;
+    if (isRaceConflict && attempt < 3) {
+      await new Promise(r => setTimeout(r, 150 * attempt));
+      const refreshedRes = await fetch(`${url}?ref=${encodeURIComponent(BRANCH)}`, { headers: headers(), cache: "no-store" });
+      sha = refreshedRes.ok ? (await refreshedRes.json()).sha : null;
+      continue;
+    }
+    throw new Error(`Scrittura GitHub fallita per flags.json (${res.status}) dopo ${attempt} tentativi: ${detail}`);
+  }
+}
+
 export async function testGitHubAccess(): Promise<{ ok: boolean; detail: string }> {
   try {
     const res = await fetch(`${GITHUB_API}/repos/${REPO}`, { headers: headers() });
