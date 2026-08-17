@@ -2,8 +2,8 @@ ILA — Index Lunae Antiquae / Interfaccia di consultazione CMRDM
 Copyright 2026 Gabriele Gregorio
 
 This product includes software developed as part of the ILA (Index Lunae
-Antiquae) project, a research tool for the epigraphic corpus of Men
-(CMRDM — Corpus Monumentorum Religionis Dei Menis).
+Antiquae) project, an independent research tool for the epigraphic corpus
+of Men (CMRDM — Corpus Monumentorum Religionis Dei Menis).
 
 ================================================================================
 SCOPE OF THE APACHE 2.0 LICENSE
@@ -30,7 +30,7 @@ This underlying work may still be under copyright. The derived XML dataset
 is therefore explicitly EXCLUDED from the Apache 2.0 grant above and is
 NOT licensed for open redistribution or reuse by this NOTICE. It is
 included in this repository for research and consultation purposes
-connected to the ILA / STAR-Polaris project.
+connected to the ILA project.
 
 Any reuse, redistribution, or publication of the corpus data beyond the
 scope of this project requires separate, explicit permission from the

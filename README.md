@@ -7,8 +7,6 @@ Men. Il progetto codifica le schede in **EpiDoc TEI XML** e le rende
 navigabili tramite ricerca full-text, filtri, mappa geografica e strumenti
 di revisione filologica.
 
-Fa parte del progetto di ricerca **STAR-Polaris / MENISKOS**.
-
 ## Funzionalità principali
 
 - Consultazione e ricerca full-text del corpus (`minisearch`) con filtri per
@@ -76,9 +74,9 @@ la sezione Licenza qui sotto.
 - **Codice sorgente** (tutto tranne `src/data/corpus/`): distribuito con
   licenza [Apache 2.0](LICENSE).
 - **Corpus dei dati** (`src/data/corpus/`): **escluso** dalla licenza
-  Apache. Uso riservato a scopi di ricerca connessi al progetto ILA /
-  STAR-Polaris; per qualsiasi altro riutilizzo o redistribuzione, vedi le
-  condizioni in [NOTICE](NOTICE).
+  Apache. Uso riservato a scopi di ricerca connessi al progetto ILA; per
+  qualsiasi altro riutilizzo o redistribuzione, vedi le condizioni in
+  [NOTICE](NOTICE).
 
 Se citi il progetto o il corpus in un lavoro accademico, vedi
 [CITATION.cff](CITATION.cff).
