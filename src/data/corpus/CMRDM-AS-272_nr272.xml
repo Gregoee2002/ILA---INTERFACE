@@ -4,7 +4,7 @@
     <teiHeader>
         <fileDesc>
             <titleStmt>
-                <title><rs type="textType">Iscrizione greca</rs> — CMRDM I nr. 272: Two fragments of marble plaque bottom with partially preserved tekmor dedication, Konya Museum</title>
+                <title><rs type="textType">Iscrizione greca</rs> — CMRDM I nr. 272: Due frammenti dal fondo di una lastra marmorea con dedica tekmor parzialmente conservata, Museo di Konya</title>
             </titleStmt>
             <publicationStmt>
                 <authority>CMRDM — Corpus Monumentorum Religionis Dei Menis</authority>
@@ -42,7 +42,7 @@
                         </objectDesc>
                         <handDesc>
                             <handNote>
-                                <p>Height of letters: DA_COMPILARE.</p>
+                                <p>Altezza delle lettere: DA_COMPILARE.</p>
                             </handNote>
                         </handDesc>
                     </physDesc>

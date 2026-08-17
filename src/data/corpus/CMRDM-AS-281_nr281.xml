@@ -4,7 +4,7 @@
     <teiHeader>
         <fileDesc>
             <titleStmt>
-                <title><rs type="textType">Iscrizione greca</rs> — CMRDM I nr. 281: Four marble plaque fragments with four crescents and tekmor dedication, Konya Museum</title>
+                <title><rs type="textType">Iscrizione greca</rs> — CMRDM I nr. 281: Quattro frammenti di lastra marmorea con quattro mezzelune e dedica tekmor, Museo di Konya</title>
             </titleStmt>
             <publicationStmt>
                 <authority>CMRDM — Corpus Monumentorum Religionis Dei Menis</authority>
@@ -42,7 +42,7 @@
                         </objectDesc>
                         <handDesc>
                             <handNote>
-                                <p>Height of letters: DA_COMPILARE.</p>
+                                <p>Altezza delle lettere: DA_COMPILARE.</p>
                             </handNote>
                         </handDesc>
                     </physDesc>

@@ -54,7 +54,7 @@
                             </origPlace>
                             <origDate datingMethod="#julian" notBefore-custom="377" notAfter-custom="377" precision="high">377 A.D.</origDate>
                         </origin>
-                        <provenance type="found">Rome, Italia</provenance>
+                        <provenance type="found">Roma, Italia</provenance>
                         <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
                     </history>
                 </msDesc>

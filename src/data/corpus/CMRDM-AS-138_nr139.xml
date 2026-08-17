@@ -4,7 +4,7 @@
     <teiHeader>
         <fileDesc>
             <titleStmt>
-                <title><rs type="textType">Monumento senza iscrizione</rs> — CMRDM I nr. 139: Terracotta figurine of Men on horseback, uncertain provenience (McDaniel Collection)</title>
+                <title><rs type="textType">Monumento senza iscrizione</rs> — CMRDM I nr. 139: Figurina fittile di Men a cavallo, provenienza incerta (McDaniel Collection)</title>
             </titleStmt>
             <publicationStmt>
                 <authority>CMRDM — Corpus Monumentorum Religionis Dei Menis</authority>
@@ -42,7 +42,7 @@
                         </objectDesc>
                         <handDesc>
                             <handNote>
-                                <p>Height of letters: DA_COMPILARE.</p>
+                                <p>Altezza delle lettere: DA_COMPILARE.</p>
                             </handNote>
                         </handDesc>
                     </physDesc>
@@ -54,7 +54,7 @@
                             </origPlace>
                             <origDate datingMethod="#julian" precision="low"></origDate>
                         </origin>
-                        <provenance type="found">uncertain</provenance>
+                        <provenance type="found">Incerta</provenance>
                         <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
                     </history>
                 </msDesc>

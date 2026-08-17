@@ -4,7 +4,7 @@
     <teiHeader>
         <fileDesc>
             <titleStmt>
-                <title><rs type="textType">Iscrizione greca</rs> Double-faced marble relief with Men on ram and solar divinity</title>
+                <title><rs type="textType">Iscrizione greca</rs> Rilievo marmoreo bifronte con Men su ariete e divinità solare</title>
             </titleStmt>
             <publicationStmt>
                 <authority>CMRDM — Corpus Monumentorum Religionis Dei Menis</authority>
@@ -24,7 +24,7 @@
                         <objectDesc>
                             <supportDesc>
                                 <support>
-                                    <p>Double-faced marble relief with Men on ram and solar divinity, broken on the left (from the point of view of the side which showed Men). Height 45 cm., width 44.5 cm. Known since at least 1893. For sale in New York in 1968; now returned to Münzen und Medaillen, Basel.</p>
+                                    <p>Rilievo marmoreo bifronte con Men su ariete e divinità solare, spezzato a sinistra (dal punto di vista del lato che raffigurava Men). Altezza 45 cm, larghezza 44,5 cm. Noto almeno dal 1893. In vendita a New York nel 1968; ora tornato a Münzen und Medaillen, Basel.</p>
                                     <material ref="https://www.eagle-network.eu/voc/material/lod/48.html">marble</material>
                                     <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/24.html">relief</objectType>
                                     <dimensions unit="cm">
@@ -36,14 +36,14 @@
                             </supportDesc>
                             <layoutDesc>
                                 <layout>
-                                    <p>Relief on both faces within aedicula: one side shows foreparts of ram with crescent and four worshippers; other side shows solar divinity in quadriga. Traces of inscription on architrave.</p>
+                                    <p>Rilievo su entrambe le facce entro edicola: un lato mostra il protome dell'ariete con mezzaluna e quattro devoti; l'altro lato mostra la divinità solare su quadriga. Tracce di iscrizione sull'architrave.</p>
                                     <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
                                 </layout>
                             </layoutDesc>
                         </objectDesc>
                         <handDesc>
                             <handNote>
-                                <p>Height of letters: DA_COMPILARE.</p>
+                                <p>Altezza delle lettere: DA_COMPILARE.</p>
                             </handNote>
                         </handDesc>
                     </physDesc>
@@ -55,7 +55,7 @@
                             </origPlace>
                             <origDate datingMethod="#julian" notBefore-custom="-365" notAfter-custom="-315" precision="low">ca. 340 B.C.</origDate>
                         </origin>
-                        <provenance type="found">Athens, Greece</provenance>
+                        <provenance type="found">Athens, Grecia</provenance>
                         <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
                     </history>
                 </msDesc>

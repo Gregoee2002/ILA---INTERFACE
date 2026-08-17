@@ -4,7 +4,7 @@
     <teiHeader>
         <fileDesc>
             <titleStmt>
-                <title><rs type="textType">Monumento senza iscrizione</rs> Fragment of marble relief from Athenian Agora excavations</title>
+                <title><rs type="textType">Monumento senza iscrizione</rs> Frammento di rilievo marmoreo dagli scavi dell'Agora ateniese</title>
             </titleStmt>
             <publicationStmt>
                 <authority>CMRDM — Corpus Monumentorum Religionis Dei Menis</authority>
@@ -24,7 +24,7 @@
                         <objectDesc>
                             <supportDesc>
                                 <support>
-                                    <p>Fragment of marble relief broken at top and both sides; there was apparently a lug at the bottom for insertion into a base. Height 16 cm., width 16.3 cm., thickness 3.7 cm. Found in the excavations of the Athenian Agora, April 15, 1936, and now in the Agora Museum.</p>
+                                    <p>Frammento di rilievo marmoreo spezzato in alto e su entrambi i lati; alla base era presente, a quanto pare, una protome per l'inserimento in una base. Altezza 16 cm, larghezza 16,3 cm, spessore 3,7 cm. Rinvenuto negli scavi dell'Agora ateniese, 15 aprile 1936, ora nell'Agora Museum.</p>
                                     <material ref="https://www.eagle-network.eu/voc/material/lod/48.html">marble</material>
                                     <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/24.html">relief</objectType>
                                     <dimensions unit="cm">
@@ -36,14 +36,14 @@
                             </supportDesc>
                             <layoutDesc>
                                 <layout>
-                                    <p>Lower portion of Men seated on large crescent moon, holding staff. Below: draped male figure, table with two roosters and votive offerings, draped woman and three children.</p>
+                                    <p>Parte inferiore di Men seduto su una grande mezzaluna, con in mano un bastone. Sotto: figura maschile panneggiata, tavola con due galli e offerte votive, donna panneggiata e tre bambini.</p>
                                     <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
                                 </layout>
                             </layoutDesc>
                         </objectDesc>
                         <handDesc>
                             <handNote>
-                                <p>Height of letters: DA_COMPILARE.</p>
+                                <p>Altezza delle lettere: DA_COMPILARE.</p>
                             </handNote>
                         </handDesc>
                     </physDesc>
@@ -55,7 +55,7 @@
                             </origPlace>
                             <origDate datingMethod="#julian" precision="low"></origDate>
                         </origin>
-                        <provenance type="found">Found in the excavations of the Athenian Agora, April 15, 1936, Athens, Greece.</provenance>
+                        <provenance type="found">Rinvenuto negli scavi dell'Agora ateniese, 15 aprile 1936, Athens, Grecia.</provenance>
                         <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
                     </history>
                 </msDesc>

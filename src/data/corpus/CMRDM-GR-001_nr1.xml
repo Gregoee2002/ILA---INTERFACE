@@ -4,7 +4,7 @@
     <teiHeader>
         <fileDesc>
             <titleStmt>
-                <title><rs type="textType">Monumento senza iscrizione</rs> Fragment of marble relief with Men seated on ram</title>
+                <title><rs type="textType">Monumento senza iscrizione</rs> Frammento di rilievo marmoreo con Men seduto su un ariete</title>
             </titleStmt>
             <publicationStmt>
                 <authority>CMRDM — Corpus Monumentorum Religionis Dei Menis</authority>
@@ -24,7 +24,7 @@
                         <objectDesc>
                             <supportDesc>
                                 <support>
-                                    <p>Fragment of marble relief with Men seated on ram, broken all around. Height 17 cm., width 15 cm., thickness 2 cm. Found in 1894 in the German excavations between the Areopagus and the Pnyx, south of the Athenian Agora.</p>
+                                    <p>Frammento di rilievo marmoreo con Men seduto su un ariete, spezzato tutt'intorno. Altezza 17 cm, larghezza 15 cm, spessore 2 cm. Rinvenuto nel 1894 negli scavi tedeschi tra l'Areopago e la Pnice, a sud dell'Agora ateniese.</p>
                                     <material ref="https://www.eagle-network.eu/voc/material/lod/48.html">marble</material>
                                     <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/24.html">relief</objectType>
                                     <dimensions unit="cm">
@@ -36,14 +36,14 @@
                             </supportDesc>
                             <layoutDesc>
                                 <layout>
-                                    <p>Men seated on a ram walking right, crescent moon behind. God holds patera toward two worshippers (man and woman); table with offerings and rooster under ram.</p>
+                                    <p>Men seduto su un ariete che cammina verso destra, con una mezzaluna dietro. Il dio porge una patera verso due devoti (un uomo e una donna); sotto l'ariete una tavola con offerte e un gallo.</p>
                                     <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
                                 </layout>
                             </layoutDesc>
                         </objectDesc>
                         <handDesc>
                             <handNote>
-                                <p>Height of letters: DA_COMPILARE.</p>
+                                <p>Altezza delle lettere: DA_COMPILARE.</p>
                             </handNote>
                         </handDesc>
                     </physDesc>
@@ -55,7 +55,7 @@
                             </origPlace>
                             <origDate datingMethod="#julian" precision="low"></origDate>
                         </origin>
-                        <provenance type="found">Found in 1894 in the German excavations between the Areopagus and the Pnyx, south of the Athenian Agora, Athens, Greece.</provenance>
+                        <provenance type="found">Rinvenuto nel 1894 negli scavi tedeschi tra l'Areopago e la Pnice, a sud dell'Agora ateniese, Athens, Grecia.</provenance>
                         <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
                     </history>
                 </msDesc>

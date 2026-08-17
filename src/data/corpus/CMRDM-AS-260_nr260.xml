@@ -4,7 +4,7 @@
     <teiHeader>
         <fileDesc>
             <titleStmt>
-                <title><rs type="textType">plaque</rs> Marble plaque naiskos with bust of Men and tekmor dedication, forum excavations, Antiocheia Pisidiae</title>
+                <title><rs type="textType">plaque</rs> Placca marmorea a naiskos con busto di Men e dedica tekmor, scavi del foro, Antiocheia Pisidiae</title>
             </titleStmt>
             <publicationStmt>
                 <authority>CMRDM — Corpus Monumentorum Religionis Dei Menis</authority>
@@ -23,7 +23,7 @@
                         <objectDesc>
                             <supportDesc>
                                 <support>
-                                    <p>Marble plaque naiskos with bust of Men and tekmor dedication, forum excavations, Antiocheia Pisidiae. Height 49 cm., width 35 cm., thickness 9 cm.</p>
+                                    <p>Placca marmorea a naiskos con busto di Men e dedica tekmor, scavi del foro, Antiocheia Pisidiae. Altezza 49 cm., larghezza 35 cm., spessore 9 cm.</p>
                                     <material ref="https://www.eagle-network.eu/voc/material/lod/48.html">marble</material>
                                     <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/53.html">plaque</objectType>
                                     <dimensions>
@@ -35,14 +35,14 @@
                             </supportDesc>
                             <layoutDesc>
                                 <layout>
-                                    <p>Naiskos form plaque with acroteria; bust of Men in arched recess with Phrygian cap and crescent. Gaios son of Gaios son of Loukios, having fulfilled his tekmor-vow with his foster child Pancharpē, dedicates to Men Askaienos.</p>
+                                    <p>Placca a forma di naiskos con acroteri; busto di Men in nicchia ad arco con berretto frigio e crescente. Gaios figlio di Gaios figlio di Loukios, avendo adempiuto il proprio voto tekmor con la sua figlia adottiva Pancharpē, dedica a Men Askaienos.</p>
                                     <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
                                 </layout>
                             </layoutDesc>
                         </objectDesc>
                         <handDesc>
                             <handNote>
-                                <p>Height of letters: DA_COMPILARE.</p>
+                                <p>Altezza delle lettere: DA_COMPILARE.</p>
                             </handNote>
                         </handDesc>
                     </physDesc>
@@ -53,7 +53,7 @@
                                 <placeName type="modern" ref="DA_COMPILARE">Yalvaç, Turkey</placeName>
                             </origPlace>
                         </origin>
-                        <provenance type="found">Yalvaç, Turkey</provenance>
+                        <provenance type="found">Yalvaç, Turchia</provenance>
                         <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
                     </history>
                 </msDesc>

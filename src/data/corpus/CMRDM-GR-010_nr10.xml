@@ -4,7 +4,7 @@
     <teiHeader>
         <fileDesc>
             <titleStmt>
-                <title><rs type="textType">Iscrizione greca</rs> Marble relief with inscription from Thorikos, National Museum Athens</title>
+                <title><rs type="textType">Iscrizione greca</rs> Rilievo marmoreo con iscrizione da Thorikos, Museo Nazionale di Atene</title>
             </titleStmt>
             <publicationStmt>
                 <authority>CMRDM — Corpus Monumentorum Religionis Dei Menis</authority>
@@ -24,7 +24,7 @@
                         <objectDesc>
                             <supportDesc>
                                 <support>
-                                    <p>Marble relief with inscription, broken in two pieces, missing the upper right corner and part of the bottom. Exact circumstances of finding unknown, but known since 1881; now in the National Museum, Athens. Height 24 cm., length 32 cm.</p>
+                                    <p>Rilievo marmoreo con iscrizione, spezzato in due pezzi, mancante dell'angolo superiore destro e di parte della base. Circostanze precise del ritrovamento sconosciute, ma noto dal 1881; ora al Museo Nazionale di Atene. Altezza 24 cm, lunghezza 32 cm.</p>
                                     <material ref="https://www.eagle-network.eu/voc/material/lod/48.html">marble</material>
                                     <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/24.html">relief</objectType>
                                     <dimensions unit="cm">
@@ -36,14 +36,14 @@
                             </supportDesc>
                             <layoutDesc>
                                 <layout>
-                                    <p>Relief in aedicula frame with architrave and roof-tiles. Veiled woman and bearded man in adoration; table with votive cakes; Men seated on large rooster facing left. Inscription on architrave.</p>
+                                    <p>Rilievo entro cornice ad edicola con architrave e tegole. Donna velata e uomo barbuto in atto di adorazione; tavola con focacce votive; Men seduto su un grande gallo, rivolto a sinistra. Iscrizione sull'architrave.</p>
                                     <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
                                 </layout>
                             </layoutDesc>
                         </objectDesc>
                         <handDesc>
                             <handNote>
-                                <p>Height of letters: 1 cm.</p>
+                                <p>Altezza delle lettere: 1 cm.</p>
                             </handNote>
                         </handDesc>
                     </physDesc>
@@ -55,7 +55,7 @@
                             </origPlace>
                             <origDate datingMethod="#julian" precision="low"></origDate>
                         </origin>
-                        <provenance type="found">Thorikos, Greece</provenance>
+                        <provenance type="found">Thorikos, Grecia</provenance>
                         <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
                     </history>
                 </msDesc>

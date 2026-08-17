@@ -4,7 +4,7 @@
     <teiHeader>
         <fileDesc>
             <titleStmt>
-                <title><rs type="textType">Iscrizione greca</rs> — CMRDM I nr. 157: Small altar stone with crescent decoration and inscription, Androna? (near Ankara)</title>
+                <title><rs type="textType">Iscrizione greca</rs> — CMRDM I nr. 157: Piccolo altare in pietra con decorazione a mezzaluna e iscrizione, Androna? (presso Ankara)</title>
             </titleStmt>
             <publicationStmt>
                 <authority>CMRDM — Corpus Monumentorum Religionis Dei Menis</authority>
@@ -42,7 +42,7 @@
                         </objectDesc>
                         <handDesc>
                             <handNote>
-                                <p>Height of letters: DA_COMPILARE.</p>
+                                <p>Altezza delle lettere: DA_COMPILARE.</p>
                             </handNote>
                         </handDesc>
                     </physDesc>
@@ -54,7 +54,7 @@
                             </origPlace>
                             <origDate datingMethod="#julian" precision="low"></origDate>
                         </origin>
-                        <provenance type="found">Topakh, S.W. of Ankara, Turkey</provenance>
+                        <provenance type="found">Topakh, S.O. di Ankara, Turchia</provenance>
                         <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
                     </history>
                 </msDesc>

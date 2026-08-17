@@ -4,7 +4,7 @@
     <teiHeader>
         <fileDesc>
             <titleStmt>
-                <title><rs type="textType">Iscrizione greca</rs> Three contiguous inscribed bricks from well-head, Kerameikos</title>
+                <title><rs type="textType">Iscrizione greca</rs> Tre mattoni contigui iscritti da un puteale, Kerameikos</title>
             </titleStmt>
             <publicationStmt>
                 <authority>CMRDM — Corpus Monumentorum Religionis Dei Menis</authority>
@@ -24,7 +24,7 @@
                         <objectDesc>
                             <supportDesc>
                                 <support>
-                                    <p>Three contiguous bricks from a well-head discovered in the Kerameikos ca. 1864. Present whereabouts unknown.</p>
+                                    <p>Tre mattoni contigui da un puteale scoperto nel Kerameikos verso il 1864. Ubicazione attuale sconosciuta.</p>
                                     <material ref="https://www.eagle-network.eu/voc/material/lod/131.html">terracotta</material>
                                     <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/189.html">brick</objectType>
                                     <dimensions unit="cm">
@@ -36,14 +36,14 @@
                             </supportDesc>
                             <layoutDesc>
                                 <layout>
-                                    <p>Well-head without ornamentation bearing an inscription, followed by other graffiti perhaps including mention of Hekate Enodia.</p>
+                                    <p>Puteale privo di decorazione recante un'iscrizione, seguita da altri graffiti che forse includono una menzione di Hekate Enodia.</p>
                                     <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
                                 </layout>
                             </layoutDesc>
                         </objectDesc>
                         <handDesc>
                             <handNote>
-                                <p>Height of letters: DA_COMPILARE.</p>
+                                <p>Altezza delle lettere: DA_COMPILARE.</p>
                             </handNote>
                         </handDesc>
                     </physDesc>
@@ -55,7 +55,7 @@
                             </origPlace>
                             <origDate datingMethod="#julian" precision="low"></origDate>
                         </origin>
-                        <provenance type="found">Athens, Greece</provenance>
+                        <provenance type="found">Athens, Grecia</provenance>
                         <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
                     </history>
                 </msDesc>
