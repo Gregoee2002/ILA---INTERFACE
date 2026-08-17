@@ -2879,6 +2879,25 @@ export default function App() {
     fetchFlags();
   };
 
+  // Il PAT resta in localStorage da uno sblocco precedente (vedi
+  // githubStorageBrowser.ts), ma editingUnlocked riparte sempre da false a
+  // ogni caricamento: senza questo effetto, chi ha già sbloccato una volta
+  // dovrebbe riaprire la finestra e reincollare lo stesso token a ogni
+  // visita. Se il token nel frattempo è stato revocato, unlockEditing lo
+  // scarta da solo (clearStoredToken) e si resta silenziosamente in
+  // modalità viewer, senza popup d'errore a freddo all'avvio.
+  useEffect(() => {
+    if (!isStaticBuild) return;
+    (async () => {
+      const { getStoredToken } = await import('./lib/githubStorageBrowser');
+      const token = getStoredToken();
+      if (!token) return;
+      const result = await handleUnlockSubmit(token);
+      if (result.ok) await handleUnlocked();
+    })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const [translating, setTranslating] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [importStatus, setImportStatus] = useState<{ type: 'idle' | 'loading' | 'success' | 'error', message: string }>({ type: 'idle', message: '' });
