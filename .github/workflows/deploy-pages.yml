@@ -33,17 +33,13 @@ jobs:
             echo "::error::Secret SITE_PASSWORD_HASH mancante — impostalo in Settings > Secrets and variables > Actions prima di rilanciare il deploy."
             exit 1
           fi
-          if [ -z "${{ secrets.CORPUS_READ_TOKEN }}" ]; then
-            echo "::error::Secret CORPUS_READ_TOKEN mancante — PAT fine-grained di sola lettura (Contents: Read) sulla repo Gregoee2002/ILA, serve a generare lo snapshot pubblico del corpus."
-            exit 1
-          fi
 
       # Scatto statico del corpus per chi visita con la sola password (senza
-      # token personale) — vedi scripts/build-corpus-snapshot.ts. Genera
-      # public/corpus-snapshot.json, che `vite build` copia poi in dist/.
+      # token personale) — vedi scripts/build-corpus-snapshot.ts. Legge
+      # src/data/corpus/ dal checkout locale (fonte di verità, vedi
+      # README.md) e genera public/corpus-snapshot.json, che `vite build`
+      # copia poi in dist/.
       - run: npx tsx scripts/build-corpus-snapshot.ts
-        env:
-          CORPUS_READ_TOKEN: ${{ secrets.CORPUS_READ_TOKEN }}
 
       # Solo `vite build`: la build statica non include server.ts (Express
       # non gira su GitHub Pages, vedi src/lib/apiShim.ts per l'equivalente
