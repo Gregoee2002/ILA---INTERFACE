@@ -291,6 +291,7 @@ async function handleRequest(url: URL, init: RequestInit | undefined): Promise<R
       }
 
       const writtenFiles = new Set<string>();
+      const failures: { filename: string; error: string }[] = [];
       let done = 0;
       dispatchWriteProgress(0, data.length);
 
@@ -300,6 +301,12 @@ async function handleRequest(url: URL, init: RequestInit | undefined): Promise<R
       // intermedio in UI. Stessa strategia già usata per le letture in
       // pullAllCorpusFiles (githubStorageBrowser.ts), concorrenza un po' più
       // bassa perché le scritture pesano di più sul rate limit di GitHub.
+      //
+      // Un fallimento su UN file (dopo tutti i retry di pushCorpusFile, es.
+      // per una race persistente lato GitHub) NON deve far perdere il
+      // risultato delle altre ~292 scritture già andate a buon fine: si
+      // registra il fallimento e si continua, invece di far rigettare
+      // l'intero Promise.all e buttare via il progresso reale.
       let next = 0;
       async function worker(): Promise<void> {
         while (next < data.length) {
@@ -307,12 +314,16 @@ async function handleRequest(url: URL, init: RequestInit | undefined): Promise<R
           const rawFilename = m._corpusFile as string | undefined;
           const filename = rawFilename ? rawFilename.replace(/[^a-zA-Z0-9._-]/g, "_") : buildFilename(m);
           writtenFiles.add(filename);
-          if (corpusStore.has(filename)) {
-            const patched = patchXmlContent(corpusStore.get(filename)!, m);
-            await writeCorpusFile(filename, patched, `Aggiorna ${filename}`);
-          } else {
-            const xml = monumentiToXml([m]);
-            await writeCorpusFile(filename, xml, `Nuova scheda ${filename}`);
+          try {
+            if (corpusStore.has(filename)) {
+              const patched = patchXmlContent(corpusStore.get(filename)!, m);
+              await writeCorpusFile(filename, patched, `Aggiorna ${filename}`);
+            } else {
+              const xml = monumentiToXml([m]);
+              await writeCorpusFile(filename, xml, `Nuova scheda ${filename}`);
+            }
+          } catch (e: any) {
+            failures.push({ filename, error: e.message || String(e) });
           }
           done++;
           dispatchWriteProgress(done, data.length);
@@ -321,11 +332,23 @@ async function handleRequest(url: URL, init: RequestInit | undefined): Promise<R
       const WRITE_CONCURRENCY = 4;
       await Promise.all(Array.from({ length: Math.min(WRITE_CONCURRENCY, data.length) }, () => worker()));
 
-      for (const file of Array.from(corpusStore.keys())) {
-        if (!writtenFiles.has(file)) await removeCorpusFile(file, `Rimuovi ${file}`);
+      // Cleanup solo se tutto è andato a buon fine: con dei fallimenti, i
+      // file falliti sono comunque in writtenFiles (aggiunti prima del
+      // tentativo), quindi non verrebbero cancellati per errore — ma è più
+      // prudente non toccare il cleanup finché il salvataggio non è pulito.
+      if (failures.length === 0) {
+        for (const file of Array.from(corpusStore.keys())) {
+          if (!writtenFiles.has(file)) await removeCorpusFile(file, `Rimuovi ${file}`);
+        }
       }
       updateSearchIndex();
-      return json({ status: "ok", count: data.length, github: true });
+      return json({
+        status: failures.length ? "partial" : "ok",
+        count: data.length,
+        succeeded: data.length - failures.length,
+        failures,
+        github: true,
+      });
     }
 
     if (path.startsWith("/api/monumenti/") && method === "PATCH") {

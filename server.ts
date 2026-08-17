@@ -392,12 +392,19 @@ async function startServer() {
       }
 
       const writtenFiles = new Set<string>();
+      const failures: { filename: string; error: string }[] = [];
 
       // Scritture in pool a concorrenza limitata invece che una alla volta:
       // con centinaia di schede (es. "Riordina ID", che riscrive l'intero
       // corpus) il loop sequenziale con un push GitHub per file poteva
       // richiedere minuti. Stessa strategia della variante browser
       // (apiShim.ts).
+      //
+      // Un fallimento su UN file (dopo tutti i retry di pushFileToGitHub, es.
+      // per una race persistente lato GitHub) NON deve far perdere il
+      // risultato delle altre scritture già andate a buon fine: si registra
+      // il fallimento e si continua, invece di far rigettare l'intero
+      // Promise.all e buttare via il progresso reale.
       const WRITE_CONCURRENCY = 4;
       let next = 0;
       async function worker(): Promise<void> {
@@ -412,26 +419,32 @@ async function startServer() {
           const filepath = path.join(CORPUS_DIR, filename);
           writtenFiles.add(filename);
 
-          if (fs.existsSync(filepath)) {
-            // File exists — patch only editable fields
-            const patched = patchXmlContent(filepath, m);
-            await writeCorpusFile(filename, patched, `Aggiorna ${filename}`);
-          } else {
-            // New entry — write full XML
-            const xml = monumentiToXml([m]);
-            await writeCorpusFile(filename, xml, `Nuova scheda ${filename}`);
+          try {
+            if (fs.existsSync(filepath)) {
+              // File exists — patch only editable fields
+              const patched = patchXmlContent(filepath, m);
+              await writeCorpusFile(filename, patched, `Aggiorna ${filename}`);
+            } else {
+              // New entry — write full XML
+              const xml = monumentiToXml([m]);
+              await writeCorpusFile(filename, xml, `Nuova scheda ${filename}`);
+            }
+          } catch (e: any) {
+            failures.push({ filename, error: e.message || String(e) });
           }
         }
       }
       await Promise.all(Array.from({ length: Math.min(WRITE_CONCURRENCY, data.length) }, () => worker()));
 
-      // Cleanup files in CORPUS_DIR that are no longer in writtenFiles (meaning they were deleted or renamed)
-      const existingFiles = fs.readdirSync(CORPUS_DIR)
-        .filter(f => f.endsWith('.xml') && !f.startsWith('_'));
-      for (const file of existingFiles) {
-        if (!writtenFiles.has(file)) {
-          await deleteCorpusFile(file, `Rimuovi ${file}`);
-          console.log(`Deleted obsolete corpus file: ${file}`);
+      // Cleanup solo se tutto è andato a buon fine (vedi apiShim.ts).
+      if (failures.length === 0) {
+        const existingFiles = fs.readdirSync(CORPUS_DIR)
+          .filter(f => f.endsWith('.xml') && !f.startsWith('_'));
+        for (const file of existingFiles) {
+          if (!writtenFiles.has(file)) {
+            await deleteCorpusFile(file, `Rimuovi ${file}`);
+            console.log(`Deleted obsolete corpus file: ${file}`);
+          }
         }
       }
 
@@ -439,7 +452,13 @@ async function startServer() {
       rebuildBackup();
       updateSearchIndex(readCorpusFiles());
 
-      res.json({ status: "ok", count: data.length, github: isGitHubConfigured() });
+      res.json({
+        status: failures.length ? "partial" : "ok",
+        count: data.length,
+        succeeded: data.length - failures.length,
+        failures,
+        github: isGitHubConfigured(),
+      });
     } catch (error: any) {
       console.error("Error writing corpus:", error);
       res.status(500).json({ error: error.message || "Failed to save corpus" });

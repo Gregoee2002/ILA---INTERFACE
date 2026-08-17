@@ -3100,6 +3100,23 @@ export default function App() {
         body: JSON.stringify(reindexed)
       });
       if (res.ok) {
+        const result = await res.json();
+        const failures: { filename: string; error: string }[] = result?.failures || [];
+        if (failures.length > 0) {
+          // Salvataggio parziale: la maggior parte (o quasi) delle schede è
+          // già stata scritta su GitHub con successo — buttare via quel
+          // progresso mostrando solo "errore" sarebbe fuorviante. Si
+          // ricarica lo stato vero dal server invece di assumere che
+          // "reindexed" rispecchi cosa è realmente su GitHub (le poche
+          // schede fallite sono rimaste con l'id/contenuto precedente).
+          const freshRes = await fetch('/api/monumenti');
+          if (freshRes.ok) setMonumenti(await freshRes.json());
+          setImportStatus({
+            type: 'error',
+            message: `Riordino parziale: ${result.succeeded}/${result.count} salvate, ${failures.length} fallite (${failures.map((f: any) => f.filename).join(', ')}). Riprova per completare le rimanenti.`,
+          });
+          return;
+        }
         setMonumenti(reindexed);
         if (selectedMonumento) {
           const updatedSelected = reindexed.find(m => m.entryId === selectedMonumento.entryId);
