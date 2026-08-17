@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-AS-258</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 258</idno>
+                <idno type="id">246</idno>
+                <idno type="entryId">gen-1786984905702-68-vff4x0</idno>
             </publicationStmt>
             <!-- Revisione: corretto Pleiades id 652388 (404) in 609307 (Antiocheia Pisidiae/Yalvaç); corretta riga 1 del testo greco, "Ἰό[νι]ος" (lacuna inventata su lettere in realtà abbreviate, non perse) in "Ἰόν(ιος)" secondo lo stampato (Lane usa parentesi tonde per l'espansione dell'abbreviazione ΙΟΝ, non quadre per lettere perse); tradotta in italiano la prosa descrittiva inglese (support, layout, title). Bibliografia (Ramsay, p. 133; Lane, loc. cit.) verificata genuina. -->
             <sourceDesc>

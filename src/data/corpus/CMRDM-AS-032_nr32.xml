@@ -12,6 +12,7 @@
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 32</idno>
                     <idno type="id">4</idno>
+                <idno type="entryId">gen-1786984905702-3-5iwp5e</idno>
 </publicationStmt>
             <!-- REVISIONE (cross-check PDF Lane p. 21-22): "Ἀξιοτ-τήνῳ" -> "Ἀξιοττηνῷ" (l. 2, trattino interno spurio: nel testo di Lane la parola è stampata per intero su un'unica riga, senza divisione); "... Αλι- Ποπλίου" -> "[...]λία Ποπλίου" (l. 3, il draft riportava lettere non corrispondenti a quanto stampato: Lane mostra tre puntini di lacuna seguiti da "λία", non "Αλι-"); aggiunta nota di rinvenimento (stesso luogo/tempo dell'entry 31, portato al museo della Evangelike Schole, apparentemente perduto); Pleiades ref corretto 609032 (ID inesistente/404) -> 609441 (Kollyda/Goloida = Gölde, verificato via Pleiades API e Trismegistos TM Geo 33613); TM non trovato. -->
             <sourceDesc>

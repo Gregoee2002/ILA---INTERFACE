@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-AS-165</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 166</idno>
+                <idno type="id">154</idno>
+                <idno type="entryId">gen-1786984905702-3o-qy8ac5</idno>
             </publicationStmt>
             <!-- Revisione assistita (cross-check con PDF Lane, CMRDM I 166, pp. 103-104): il draft omette per intero la prima riga di stampa dell'iscrizione ("Ἐπὶ ἀγωνο-"), che è stata reinserita come nuova r.1 con rinumerazione di tutte le righe successive (2-19, prima 1-18). Corretto il nome del vincitore, alterato nel draft: "Γνάδον Ρόττιον" (non attestato) -> "Γναῖον Δότ-τιον" (Gnaeus Dottius). Normalizzato in minuscolo il testo delle rr. 13-14 (già "νεικήσαν-τα σαλπι-"), che nel draft erano in maiuscolo da facsimile fotografico anziché seguire la trascrizione normalizzata a stampa di Lane. Corretto il numerale finale, reso nel draft con il carattere "W" (probabile errore di lettura ottica) -> "β΄" (theta iota beta-apice, "per la seconda volta"), confermato dal confronto con l'entry 171 che presenta lo stesso pattern tipografico. Tradotta in italiano la prosa descrittiva (support, layout, title); aggiunta la seconda misura di altezza "1,47 m secondo la fotografia" presente in Lane oltre a quella di Anderson. Corretto Pleiades ref del placeName "ancient" da 652388 (errato) a 609307 (Antiocheia Pisidiae), verificato su Wikidata e topostext.org. -->
             <sourceDesc>

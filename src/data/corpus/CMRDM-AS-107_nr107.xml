@@ -12,6 +12,7 @@
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 107</idno>
                     <idno type="id">75</idno>
+                <idno type="entryId">gen-1786984905702-22-uw5sbb</idno>
 </publicationStmt>
             <!-- Revisione assistita (cross-check PDF Lane): reintegrati vari segni diacritici omessi nel draft rispetto allo stampato (spirito su "Αὐρ.", "ὁ", accenti su "κὲ", "ὑπὲ[ρ]"); corretta la posizione della lacuna al rigo 4 "σω[τη-]" (non "σωτ[η-]" come nel draft) e al rigo 5 aggiunta la lacuna reale su "Σελμεην[ῷ]" (nel draft presentata come per intero leggibile). Corretto Pleiades: l'ID nel draft (609395) corrisponde in realtà ad Hadrianeia, un sito completamente diverso in Misia, non a Selmea; nessuna voce Pleiades affidabile è stata trovata per Selmea/Selmenoi, per cui il campo è stato riportato a DA_COMPILARE e segnalato. Tradotta in italiano la prosa descrittiva di Lane. -->
             <sourceDesc>

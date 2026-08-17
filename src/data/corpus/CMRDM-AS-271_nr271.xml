@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-AS-271</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 271</idno>
+                <idno type="id">258</idno>
+                <idno type="entryId">gen-1786984905702-6k-rcyjk9</idno>
             </publicationStmt>
             <!-- Revisione su collazione col PDF Lane (p. 147, no. 271): il testo greco riportava erroneamente "Α. Λόλ[λιος] Πρεισκ-ᾶς" invece di "Λ. Λόλ[λιο]ς Πρείσ-κος" stampato da Lane (prenome e cognome del dedicante errati, e punto di a-capo della parola spostato); corretti anche i confini delle lacune supplite per allinearli esattamente allo stampato. Titolo, support e layout aggiornati di conseguenza e tradotti in italiano. Bibliografia "Lane, I, p. 38, no. 45" verificata: genuina, stampata per intero nel PDF. Corretto anche l'ID Pleiades del luogo di ritrovamento, errato in tutte le entry di questo lotto: "https://pleiades.stoa.org/places/652388" non corrisponde ad Antiochia di Pisidia; sostituito con l'ID corretto 609307 (verificato incrociando Pleiades DARE-location, Wikidata e la posizione "1 km da Yalvaç"). -->
             <sourceDesc>

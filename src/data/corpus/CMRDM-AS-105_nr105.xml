@@ -12,6 +12,7 @@
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 105</idno>
                     <idno type="id">73</idno>
+                <idno type="entryId">gen-1786984905702-20-52dauc</idno>
 </publicationStmt>
             <!-- Revisione assistita (cross-check PDF Lane): corretto il rigo 4, dove il draft univa in un'unica lacuna non chiusa "[μοσθένης Διο[τίμου]." un testo che nello stampato è invece "[μοσθέν]ης Διο[τείμου]." (bracket chiuso dopo "μοσθέν", e cognome "Διοτείμου" con l'epsilon caduta nel draft). Corretto Pleiades: aggiunto l'ID per Appolena (toponimo minore della Frigia, corrispondente ad "Appola?" di Lane e situato nella stessa zona tra Bolvadin ed Emirdağ, Barrington 62 F4), verificato su Wikipedia/Pleiades, 609315 (contrassegnato con asterisco in Pleiades come localizzazione incerta, coerente con il punto interrogativo di Lane). Tradotta in italiano la prosa descrittiva di Lane. -->
             <sourceDesc>

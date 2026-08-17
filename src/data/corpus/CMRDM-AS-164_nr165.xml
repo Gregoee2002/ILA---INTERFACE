@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-AS-164</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 165</idno>
+                <idno type="id">153</idno>
+                <idno type="entryId">gen-1786984905702-3n-n5rq0m</idno>
             </publicationStmt>
             <!-- Revisione assistita (cross-check con PDF Lane, CMRDM I 165, p. 103): corretto r.9 "θεὸς" (nominativo, errore grammaticale) -> "θεοῦ" (genitivo, coerente con la catena "τοῦ πατρίου θεοῦ Μηνὸς"); corretto r.11 il prenome del dedicante da "Α." (Alpha) a "Λ." (Lambda, abbreviazione di Λούκιος/Lucius), refuso che alterava l'identità del personaggio; spostato il punto di sillabazione di "Μαρκιαν-/[όν]" (rr.13-14) per farlo coincidere con l'a-capo stampato da Lane. Corretti alcuni accenti (r.6, r.7, r.10) per farli coincidere con lo stampato. Tradotta in italiano la prosa descrittiva (support, layout, title). Corretto Pleiades ref del placeName "ancient" da 652388 (errato) a 609307 (Antiocheia Pisidiae), verificato su Wikidata e topostext.org. -->
             <sourceDesc>

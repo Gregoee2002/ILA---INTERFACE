@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-AS-141</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 142</idno>
+                <idno type="id">130</idno>
+                <idno type="entryId">gen-1786984905702-30-kr8q4x</idno>
             </publicationStmt>
             <!-- Revisione assistita (cross-check col PDF Lane, pp. 90-91): il testo greco era incompleto — Lane riporta l'iscrizione su DUE angoli del rilievo (in alto a sinistra "Μηνὶ / Σωτῆρι καὶ", in alto a destra "Πλουτο- / δώτηι"), un caso di impaginazione su due colonne separate frainteso nel draft come singola colonna: mancava l'intera colonna destra ("Πλουτοδώτῃ", l'epiteto "datore di ricchezza"). Aggiunta come righe 3-4, nell'ordine di lettura (sinistra poi destra); corretta anche l'accentazione "σωτῆρι"→"Σωτῆρι" e "καί"→"καὶ" per coerenza con lo stampato. Tradotta in italiano la prosa di <support> e <layout>, aggiungendo la storia di rinvenimento/perdita dell'oggetto (segnalato nel 1898 al British Museum, non più reperibile nel 1962) presente nel PDF ma assente dal draft. Pleiades: nessun ID applicabile — Lane stesso ammette di non avere elementi sufficienti per un'attribuzione geografica sicura ("not much to go on"), lasciato DA_COMPILARE come da draft. -->
             <sourceDesc>

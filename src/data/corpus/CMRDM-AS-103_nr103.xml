@@ -12,6 +12,7 @@
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 103</idno>
                     <idno type="id">71</idno>
+                <idno type="entryId">gen-1786984905702-1y-75rc0t</idno>
 </publicationStmt>
             <!-- Revisione assistita (cross-check PDF Lane): testo greco riscritto in più punti sul lato destro (nomi "Μήνιδος" non "Μηνιάδος", "Μεσάνβριο[ς]" non "Μεσανάριου", "ἱερατεύων" non "ἱεροτε(λ)εῦν", finale "ων εὐχήν." non "(ι)ῦν εὐχήν."); sul retro corretti i numerali dell'era cibiratica, travisati identicamente nel draft come "ρλσ΄" per entrambe le date quando lo stampato ha invece due anni consecutivi diversi, "ςλσ΄" e "ζλσ΄" (errore rilevante poiché sono numeri-dato, non semplici varianti); corretto "ἱερεὰσατο" in "ἱεράσατο" (due occorrenze). Sul lato sinistro, "parzialmente leggibile" secondo Lane, il draft aveva silenziosamente normalizzato in greco corrente sequenze che Lane riporta come lettere maiuscole non interpretate (es. "θε-/ός" fu una lettura inventata per "ΘΕΔ/ΟΣ", che restano non sciolte): ripristinata la trascrizione in maiuscolo così come stampata, senza risolvere il testo. Corretto Pleiades: aggiunto l'ID per Ormeleis (demo/popolo della Cibiratide, zona di Tefenni), verificato su Pleiades, 639023. Tradotta in italiano la prosa descrittiva di Lane. -->
             <sourceDesc>

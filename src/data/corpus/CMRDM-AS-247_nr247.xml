@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-AS-247</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 247</idno>
+                <idno type="id">235</idno>
+                <idno type="entryId">gen-1786984905702-5x-0pjz1z</idno>
             </publicationStmt>
             <!-- Revisione confronto col PDF (Lane, CMRDM I, p. 137, n. 247): corretto il nome del dedicante da "Κέβπος" (inventato) a "Κείπιος" come stampato; rimossa una parentesi quadra spuria attorno a [μ] in τεκμορεύσας (Lane stampa "[τε]κμορεύσας" senza bracket su μ); unite le righe 3-4 del draft in un'unica riga 3 "[γυ]ναικὸς Μηνὶ εὐχήν." come nell'originale (Lane ha 3 righe, non 4); corretto l'ID Pleiades di Antiocheia Pisidiae da 652388 (errato, ripetuto su molte entry) a 609307; rimossa la voce bibliografica autoreferenziale fittizia "Lane, I, p. 42, no. 70", assente dal testo stampato per questa entry; tradotta in italiano la prosa descrittiva di Lane in titolo, support e layout; italianizzato "Turkey" in "Turchia" nei campi di provenienza. -->
             <sourceDesc>

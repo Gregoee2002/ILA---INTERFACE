@@ -12,6 +12,7 @@
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 91</idno>
                     <idno type="id">59</idno>
+                <idno type="entryId">gen-1786984905702-1m-jn5vny</idno>
 </publicationStmt>
             <!-- REVISIONE: testo greco confrontato col PDF (Lane I, p. 23, no. 4; testo stampato p. 60, lettura data "con ogni riserva" dallo stesso Lane, basata più su Ramsay che su Radet). Corretto r. 1: "Ποπίας Ποπίας"->"Παπᾶ Παπᾶς" (nome proprio: Papas figlio di Papas, non "Popias"). Il testo è disposto su due colonne affiancate nello stampato (interrotte dalla figura del cavaliere); il draft aveva già unito le colonne in righe uniche, struttura mantenuta. Aggiunto dettaglio di rinvenimento assente dal draft (scoperta nell'agosto-settembre 1893 in una casa privata da Radet), tradotto in italiano insieme al resto della prosa descrittiva. Pleiades corretto: l'ID "https://pleiades.stoa.org/places/609310" per Dorylaeum non risultava verificabile; sostituito con l'ID corretto 609367, confermato tramite ToposText (Trismegistos Geo 16146, DARE 21256 concordanti). TM number non reperibile. -->
             <sourceDesc>

@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-AS-241</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 241</idno>
+                <idno type="id">229</idno>
+                <idno type="entryId">gen-1786984905702-5r-hnjoxr</idno>
             </publicationStmt>
             <!-- Revisione: corretto il testo greco r.1 "Κ(ί)λιας"→"Κί(γκιος)" (nome frainteso: Lane legge l'abbreviazione ΚΙ come "Κίγκιος"/Cingius, non "Κίλιας"); corretto Pleiades ref di Antiocheia Pisidiae da 652388 a 609307; rimossa voce bibliografica autoreferenziale fittizia "Lane, I, p. 42, no. 64" assente dal testo a stampa; tradotti in italiano support/layout/provenance e titolo. -->
             <sourceDesc>

@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-GR-014</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 14</idno>
+                <idno type="id">283</idno>
+                <idno type="entryId">gen-1786984905702-7k-z5owwm</idno>
             </publicationStmt>
             <!-- Revisione: titolo/support/layout tradotti in italiano; aggiunta data di ritrovamento (ca. 1959) dal testo di Lane; corretto origDate (era -28/22, incoerente col testo "3rd century B.C."; ora -300/-201); corretto Pleiades ancient (era 540730 = Demetrias, luogo errato; ora 540767 = Eretria); placeName modern e provenance tradotti (Greece -> Grecia). Nessun testo greco da verificare (monumento anepigrafe). -->
             <sourceDesc>

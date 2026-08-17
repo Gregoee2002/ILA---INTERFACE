@@ -12,6 +12,8 @@
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 190</idno>
                 <!-- Revisione: (1) Pleiades ref corretto da 652388 a 609307 (verificato su topostext.org e Wikidata Q579468). (2) Corretti due segni diacritici nel testo greco per farli aderire allo stampato Lane I, p. 117-118: "υἱος" → "υἱὸς" (accento del tutto mancante nel draft); "Πουβνουαίος" → "Πουβνουαῖος" (circonflesso anziché acuto). (3) Tradotti in italiano layout/p e titolo. Numero di entry (190) confermato corrispondente al testo a stampa — ultima entry del batch 175-190. -->
+                <idno type="id">178</idno>
+                <idno type="entryId">gen-1786984905702-4c-944wl9</idno>
             </publicationStmt>
             <sourceDesc>
                 <msDesc>

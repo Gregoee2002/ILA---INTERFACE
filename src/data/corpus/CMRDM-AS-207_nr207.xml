@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-AS-207</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 207</idno>
+                <idno type="id">195</idno>
+                <idno type="entryId">gen-1786984905702-4t-xsnhak</idno>
             </publicationStmt>
             <!-- Revisione 2026-08-16 (cross-check con PDF Lane, pp.124): corretto il testo greco (nome "Γάιλλα" invece di "Γαιάλα" inventato, e punto di andare a capo secondo lo stampato: Μόδεσ-/τος καὶ Γά-/ιλλα.); rimossa la falsa caratterizzazione "partially legible" nel titolo e nella descrizione (il testo stampato da Lane è integro, senza lacune); rimossa voce bibliografica autoreferenziale fittizia "Lane, I, p. 39, no. 29" (pattern ricorrente, Lane non cita se stesso); corretto Pleiades ID di Antiocheia Pisidiae da 652388 (errato, riferito sistematicamente in tutto il batch) a 609307 (verificato su Wikidata Q579468 e ToposText); tradotta la prosa inglese in italiano. -->
             <sourceDesc>

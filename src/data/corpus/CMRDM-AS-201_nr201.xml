@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-AS-201</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 201</idno>
+                <idno type="id">189</idno>
+                <idno type="entryId">gen-1786984905702-4n-lg18by</idno>
             </publicationStmt>
             <!-- Revisione assistita (cross-check PDF Lane, CMRDM I p.123, Hardie no.23): il draft presentava una LACUNA FITTIZIA ("[... Μηνὶ ἈσκαηνῷΚ εὐχήν ...]", con layout dichiarato "largely missing"), mentre il testo a stampa è completo e interamente leggibile su un'unica riga: "Φλάουιος Πατρούεινος Μηνὶ Ἀσκαηνῷ εὐχήν." (Flavius Patroeinus, a Men Askaenos, per voto). Corretti testo, titolo e descrizione fisica di conseguenza. Rimossa voce bibliografica "Lane, I, p. 38, no. 23" non presente a stampa (artefatto sistematico, vedi nota nr.191); corretto Pleiades ref da 652388 a 609307; tradotti i campi in prosa inglese. -->
             <sourceDesc>

@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-AS-293</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 293</idno>
+                <idno type="id">280</idno>
+                <idno type="entryId">gen-1786984905702-76-5echlq</idno>
             </publicationStmt>
             <!-- Revisione su collazione col PDF Lane (p. 154-155, no. 293): riga 1, rimossa una "ς" inventata dentro la lacuna dopo "Μηνο-": Lane stampa solo puntini, senza supplire alcuna lettera specifica. Righe 4-5, il draft univa due righe fisiche distinte ("Γαία[ς γυναι-]" e "κὸς", quest'ultima interamente leggibile e non tra parentesi quadre) in un'unica riga marcando erroneamente l'intera desinenza come lacuna; ripristinata la divisione in due righe corrette, con "κὸς" come testo certo. Segnalato che l'ultima riga è sul margine inferiore. Rimossa la bibliografia fittizia "Lane, II, p. 47 (unpublished)": nessuna bibliografia è riportata da Lane. Support/layout tradotti in italiano. Corretto anche l'ID Pleiades del luogo di ritrovamento, errato in tutte le entry di questo lotto: "https://pleiades.stoa.org/places/652388" non corrisponde ad Antiochia di Pisidia; sostituito con l'ID corretto 609307 (verificato incrociando Pleiades DARE-location, Wikidata e la posizione "1 km da Yalvaç"). -->
             <sourceDesc>

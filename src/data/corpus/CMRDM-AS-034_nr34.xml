@@ -12,6 +12,7 @@
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 34</idno>
                     <idno type="id">6</idno>
+                <idno type="entryId">gen-1786984905702-5-7lgkpo</idno>
 </publicationStmt>
             <!-- REVISIONE (cross-check PDF Lane p. 22-23): "σμε΄" -> "σμς΄" (l. 1, numerale anno errato: 246 dell'era sillana = 161/2 d.C., coerente con la data già presente nel file); "Πετραεύτου" -> "Πετραείτου" (l. 2); "Ἄψιον" -> "Ἄπφιον", "Ἀψιάς" -> "Ἀπφίας" (compare 2 volte: digrafo πφ scambiato per ψ); "Δεκοῦνδος" -> "Σεκοῦνδος" (nome Secundus, Δ/Σ scambiati); "Ἥραις" -> "Ἡραΐς"; "Ἄπελλάς" (dopo Ἀψιάς) -> "Ἀσκλᾶς" (nome sostituito con un duplicato di Ἀπελλᾶς, già presente più avanti nella lista); "Πεῖσα" -> "Πεία"; aggiunta provenienza dettagliata (chiesa di Hagios Taxiarches, Gyölde, parete ovest, a sinistra dell'ingresso, trovata prima del 1870), assente nel draft; Pleiades ref corretto 609032 (ID inesistente/404) -> 609441 (Kollyda/Goloida = Gölde, verificato via Pleiades API e Trismegistos TM Geo 33613); TM non trovato. -->
             <sourceDesc>

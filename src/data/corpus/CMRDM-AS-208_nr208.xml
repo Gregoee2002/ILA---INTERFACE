@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-AS-208</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 208</idno>
+                <idno type="id">196</idno>
+                <idno type="entryId">gen-1786984905702-4u-9bajk1</idno>
             </publicationStmt>
             <!-- Revisione 2026-08-16 (cross-check con PDF Lane, p.124): corretto il nome del dedicante da "Ἄδμιος" (inventato) a "Λόλλιος" come stampato; rimossa l'abbreviazione errata "με(τὰ)" — nel testo di Lane "μετὰ" è scritto per esteso; tradotta la prosa inglese in italiano; corretto Pleiades ID di Antiocheia Pisidiae da 652388 a 609307 (verificato su Wikidata Q579468 e ToposText); rimossa voce bibliografica autoreferenziale fittizia "Lane, I, p. 39, no. 30". -->
             <sourceDesc>

@@ -12,6 +12,7 @@
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 82</idno>
                     <idno type="id">51</idno>
+                <idno type="entryId">gen-1786984905702-1e-xpigd4</idno>
 </publicationStmt>
             <!-- REVISIONE: testo greco confrontato col PDF (Lane I, p. 22, no. 35; testo stampato pp. 54-55). Il draft omette per intero la prima riga di stampa ("Σέλευκος Σε-", il nome del dedicante) fondendola erroneamente nella riga successiva letta come "Λευκοῦ" invece di "λεύκου" (fine di "Σελεύκου"): reintegrata la riga mancante e rinumerate le successive (2 lb -> 3 lb). Il testo corretto è "Σέλευκος Σελεύκου Μηνὶ Τιάμου εὐχήν" (Seleukos figlio di Seleukos, non "Leukos"). Corretta di conseguenza la descrizione in layout/p. Aggiunto dettaglio di rinvenimento assente dal draft (trovata prima del 1908 nel pavimento della chiesa di San Giorgio, quartiere di Hagia Marina, Alaşehir), tradotto in italiano insieme al resto della prosa descrittiva. Pleiades corretto: l'ID "https://pleiades.stoa.org/places/599694" per Philadelphia Lydiae non risultava verificabile; sostituito con l'ID corretto 550822, confermato incrociando Wikidata e ToposText (entrambi concordi su Alaşehir/Philadelphia di Lidia). TM number non reperibile. -->
             <sourceDesc>

@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-GR-019</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 19</idno>
+                <idno type="id">288</idno>
+                <idno type="entryId">gen-1786984905702-7p-qj0odu</idno>
             </publicationStmt>
             <!-- Revisione: testo greco verificato, corrisponde esattamente allo stampato di Lane, nessuna correzione necessaria; titolo/support/layout tradotti in italiano, support arricchito col dato di scavo (1910 nel Serapeo B, ancora in situ) da Lane; standardizzata la notazione decimale dell'altezza (15,5) e aggiunta la lunghezza (40,5 cm) mancante nel campo width; placeName modern tradotto (Greece -> Grecia); Pleiades ancient (599588, Delos) verificato corretto, nessuna modifica. -->
             <sourceDesc>

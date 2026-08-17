@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-AS-238</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 238</idno>
+                <idno type="id">226</idno>
+                <idno type="entryId">gen-1786984905702-5o-79iur2</idno>
             </publicationStmt>
             <!-- Revisione 2026-08-16 (cross-check con PDF Lane, p.134, no. 238 = Hardie no. 61): corretto il nome del secondo dedicante da "Τιπίανος" (allucinato) a "Τιττιανὸς", come stampato; sostituita la lacuna iniziale "[.........]" (nove punti fittizi tra parentesi quadre) con <gap reason="lost" extent="unknown"/>, coerente con i quattro punti stampati. Tradotta la prosa inglese in italiano (titolo, support, layout, provenance). Corretto Pleiades ID di Antiocheia Pisidiae da 652388 a 609307. Rimossa voce bibliografica autoreferenziale fittizia "Lane, I, p. 42, no. 61". -->
             <sourceDesc>

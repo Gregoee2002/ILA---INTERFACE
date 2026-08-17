@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-AS-231</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 231</idno>
+                <idno type="id">219</idno>
+                <idno type="entryId">gen-1786984905702-5h-2h2dx2</idno>
             </publicationStmt>
             <!-- Revisione 2026-08-16 (cross-check con PDF Lane, p.131, no. 231 = Hardie no. 54): l'edizione presentava le due dediche (una per ciascuno dei due naiskoi affiancati, "a)" e "b)" nello stampato) come un'unica sequenza di 6 righe consecutive; ristrutturata in due <div type="textpart"> paralleli con numerazione di riga indipendente, per riflettere il layout fisico reale (due iscrizioni parallele, non una singola colonna). Corretta la spaziatura "LVS" in "L V S" come stampato. Tradotta la prosa inglese in italiano (titolo, support, layout, provenance). Corretto Pleiades ID di Antiocheia Pisidiae da 652388 a 609307. Rimossa voce bibliografica autoreferenziale fittizia "Lane, I, p. 41, no. 54". -->
             <sourceDesc>

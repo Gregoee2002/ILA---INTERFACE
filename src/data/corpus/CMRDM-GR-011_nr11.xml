@@ -12,6 +12,7 @@
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 11</idno>
                     <idno type="id">100</idno>
+                <idno type="entryId">gen-1786984905702-7j-i5j2gm</idno>
 </publicationStmt>
             <!-- Revisione: corretto il testo greco confrontandolo con lo stampato di Lane (p. 7): la lettera integrata tra parentesi era erroneamente il theta ("Ξάν[θ]ος") mentre nello stampato è il nu ("Ξά[ν]θος") — corretta la posizione della lacuna. Corretto l'ID Pleiades di Sounion: quello presente nel draft (570740) risultava un luogo del tutto diverso (Tirinto, in Argolide); sostituito con l'ID corretto del sito/demo di Sounion (580107), verificato tramite la ricerca diretta su Pleiades (esistono più voci Sounion: cape 580108, settlement/deme 580107, Temple of Poseidon 580086 — scelta la voce "settlement and deme", la più pertinente per un rinvenimento epigrafico). Aggiunta la data di ritrovamento (ca. 1868), assente nel draft. TM number non compilato: nessuna corrispondenza certa trovata in Trismegistos per IG II² 4856. -->
             <sourceDesc>

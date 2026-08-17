@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-AS-252</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 252</idno>
+                <idno type="id">240</idno>
+                <idno type="entryId">gen-1786984905702-62-h7jion</idno>
             </publicationStmt>
             <!-- Revisione confronto col PDF (Lane, CMRDM I, p. 139, n. 252): corretto il nome del dedicante da "[Οὐ]ἴβιος" a "[Οὐ]εἴβιος" come stampato (manca la ε del dittongo εἰ); aggiunta la lunghezza 75 cm (mancante nel draft, presente come "Length 75 cm." nel testo a stampa) nel campo width; corretto l'ID Pleiades di Antiocheia Pisidiae da 652388 a 609307; tradotta in italiano la prosa descrittiva di Lane in titolo, support e layout; italianizzato "Turkey" in "Turchia". -->
             <sourceDesc>

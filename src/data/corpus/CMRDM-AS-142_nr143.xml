@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-AS-142</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 143</idno>
+                <idno type="id">131</idno>
+                <idno type="entryId">gen-1786984905702-31-dn6jx4</idno>
             </publicationStmt>
             <!-- Revisione assistita (cross-check PDF Lane): corretto il testo greco l. 1 "Ἀραμδοῦ"→"Ἀραμόου" (nome proprio, lettera errata) e l. 2 aggiunta la particella "δὲ" caduta nella trascrizione ("[ρκιζόμεθ]α"→"[ρκιζόμεθα δ]ὲ"); rimosso un accento spurio su "κατάχθόνιον"→"καταχθόνιον". Aggiunto dato di scoperta (Sterrett, 1885) da Lane e tradotta la prosa inglese in italiano. Nessun toponimo antico attestato da Lane per Dereköy: Pleiades resta DA_COMPILARE. -->
             <sourceDesc>

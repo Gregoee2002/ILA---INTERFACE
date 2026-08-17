@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-AS-194</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 194</idno>
+                <idno type="id">182</idno>
+                <idno type="entryId">gen-1786984905702-4g-rs49o2</idno>
             </publicationStmt>
             <!-- Revisione assistita (cross-check PDF Lane, CMRDM I p.119, Hardie no.16): corretta la divisione di riga 4/5 (a stampa "Ἀσ-"/"καηνῷ", il draft aveva erroneamente "Ἀσκ-"/"αηνῷ"); rimossa voce bibliografica "Lane, I, p. 38, no. 16" non presente a stampa (artefatto sistematico, vedi nota nr.191); corretto Pleiades ref da 652388 a 609307; tradotti i campi in prosa inglese. -->
             <sourceDesc>

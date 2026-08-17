@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-AS-135</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 136</idno>
+                <idno type="id">124</idno>
+                <idno type="entryId">gen-1786984905702-2u-jq4fhj</idno>
             </publicationStmt>
             <!-- Revisione assistita (cross-check col PDF Lane, p. 88): testo greco riga 1, numerale corretto da "δδδδγ΄ ξε" a "δςςςγ΄ κε΄"; riga 2 "καίρον"→"καιρὸν", "ἔχεις"→"ἔχις", "πράξεις δ᾽ ἃ θέλεις"→"πράξις ὃ θέλις" (particella "δ᾽" fittizia rimossa, pronome relativo diverso), "καίρου"→"καιροῦ", aggiunta parentesi quadra mancante "ἐπιτε[ύξη]"; riga 3 "εἰς"→"ἰς" (lettera in eccesso), riposizionata la lacuna "[ἰς ὁ]δὸν" (era erroneamente su "ὁρ[μηθῆναι"), "ὁρμηθῆναι"→"ὁρμηθῆνε", "ἔχεις"→"ἔχις", "καίρόν" (doppio accento)→"καιρόν"; riga 4 lacuna riposizionata "[ἔρ]γον" (non "[ἔργ]ον"), "ἐγχείρειν"→"ἐνχειρῖν" (forma non assimilata), "ἀγώνανα" (variante errata)→"ἀγῶανα" (variante realmente stampata da Lane su questa pietra). Tradotta in italiano la prosa di <support> e <layout>. Pleiades: l'ID 638674 usato per Attaleia Pamphyliae è inesistente (404 sull'API) — sostituito con l'ID corretto, 638778. -->
             <sourceDesc>

@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-AS-123</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 123</idno>
+                <idno type="id">112</idno>
+                <idno type="entryId">gen-1786984905702-2i-j7owmm</idno>
             </publicationStmt>
             <!-- Revisione assistita (cross-check con PDF Lane, p. 79): monumento anepigrafe, descrizione fisica confermata conforme allo stampato. Pleiades: l'ID 609347 usato per "Burdur area" risulta INESISTENTE (404 su Pleiades API e su mirror statico), verificato — sostituito con DA_COMPILARE. -->
             <sourceDesc>

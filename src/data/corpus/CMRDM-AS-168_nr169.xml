@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-AS-168</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 169</idno>
+                <idno type="id">157</idno>
+                <idno type="entryId">gen-1786984905702-3r-fwacff</idno>
             </publicationStmt>
             <!-- Revisione assistita (cross-check con PDF Lane, CMRDM I 169, pp. 106-107): ridotta l'estensione delle lacune segnate a parentesi quadra alle rr. 4-5 e 7-9, dove il draft marcava come integrato/incerto testo che Lane stampa come lettura certa; corretto il prenome del vincitore r.11, alterato nel draft: "[Α.]" (Alpha, "Aulus") -> "[Λ.]" (Lambda, abbreviazione di Λούκιος/Lucius), corretto di conseguenza anche nella descrizione layout ("Aulus Iulios Lomnos" -> "Lucius Iulius Lomnos"). Aggiunta una r.13 di sola lacuna ("[..............]") per riflettere l'ulteriore testo perduto segnalato da Lane con puntini dopo "νει[κήσαντα]", coerente con lo stile già usato dal draft per le lacune totali (r.2). Tradotta in italiano la prosa descrittiva (support, layout, title). Corretto Pleiades ref del placeName "ancient" da 652388 (errato) a 609307 (Antiocheia Pisidiae), verificato su Wikidata e topostext.org. -->
             <sourceDesc>

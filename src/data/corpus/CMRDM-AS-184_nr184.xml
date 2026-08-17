@@ -12,6 +12,8 @@
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 184</idno>
                 <!-- Revisione: (1) Pleiades ref corretto da 652388 a 609307 (verificato su topostext.org e Wikidata Q579468). (2) CORREZIONE TESTO GRECO, verificata sullo stampato Lane I, p. 116: nome del primo dedicante "Σεροϋθιλία" (nome inesistente) → "Σερουειλία" (gentilizio latino "Servilia", ben attestato, coerente con gli altri nomi romani del gruppo); riga 4 "Ἀσκαηνό-" (lettere spurie) → "Ἀσκαη-". Le altre tre dediche (Loukios, Proklos, Hermas) verificate conformi allo stampato, incluse le lievi variazioni di spezzatura di riga rispetto al draft, non modificate perché irrilevanti per il contenuto. (3) Tradotti in italiano layout/p (con nome aggiornato) e titolo. Numero di entry (184) confermato corrispondente al testo a stampa. -->
+                <idno type="id">172</idno>
+                <idno type="entryId">gen-1786984905702-46-k09hg0</idno>
             </publicationStmt>
             <sourceDesc>
                 <msDesc>

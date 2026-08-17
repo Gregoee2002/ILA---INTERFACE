@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-AS-169</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 170</idno>
+                <idno type="id">158</idno>
+                <idno type="entryId">gen-1786984905702-3s-nxk3r6</idno>
             </publicationStmt>
             <!-- Revisione assistita (cross-check con PDF Lane, CMRDM I 170, pp. 107-108): numerose correzioni al testo greco. R.3 "Καίσεωι-" (non attestato) -> "Καισεννί-" (Kaisennios). Rr.14-15 "δι(ὰ) διδάσαν-τα κλήρους δ΄" -> "δι(α)βιβάσαν-τα κλήρους β΄" (verbo alterato e numerale errato: 4 invece di 2, corretto). R.18, nome dell'epistates alterato: "Λόμνον" -> "Δόμνον" (Domnos, non Lomnos), confermato anche dal confronto con l'entry 171 che riporta lo stesso funzionario. Corretti vari accenti (rr. 1,4,5,6,7,8,11,12,16,17) per farli coincidere con lo stampato. Tradotta in italiano la prosa descrittiva (support, layout, title); aggiunta la misura mancante "larghezza della modanatura superiore 44 cm". Corretto Pleiades ref del placeName "ancient" da 652388 (errato) a 609307 (Antiocheia Pisidiae), verificato su Wikidata e topostext.org. Nota non risolta: Lane stampa alla r.8 "Ῥωρωμαί-ων" con "ρω" duplicato (verificato a stampa pulita, non facsimile): trascritto fedelmente come da originale, ma è verosimilmente un refuso dello stampato del 1971 per "Ῥωμαίων" ("dei Romani"), da segnalare come possibile errata corrige di Lane, non del draft. -->
             <sourceDesc>

@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-AS-266</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 266</idno>
+                <idno type="id">253</idno>
+                <idno type="entryId">gen-1786984905702-6f-afqxkj</idno>
             </publicationStmt>
             <!-- Revisione: corretto Pleiades id 652388 (404) in 609307 (Antiocheia Pisidiae/Yalvaç). CORREZIONE SOSTANZIALE: il draft sostituiva l'intera iscrizione, effettivamente riportata per esteso a stampa (Lane I, p. 145), con un segnaposto generico "[ ... Μηνὶ Ἀσκαηνῷ εὐχήν ... ]" che non corrisponde al testo reale — ripristinato il testo integrale "Μάξιμος Λουκίου τεκμορεύσας μετὰ τῶν ἰδίων Μηνὶ πατ(ρίῳ) εὐχήν." (dedica a Men Patrios, non Askaienos). Lane presenta il testo come prosa continua senza indicare le divisioni di riga della pietra (a differenza di molte altre entry di questa sezione): codificato con un unico <lb n="1"/>, scelta editoriale segnalata qui poiché non verificabile diversamente dallo stampato. Aggiornati titolo e layout. Tradotta in italiano la prosa descrittiva inglese; bibliografia (Lane, I, p. 37, no. 40) verificata genuina. -->
             <sourceDesc>

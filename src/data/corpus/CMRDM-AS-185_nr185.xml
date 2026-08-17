@@ -12,6 +12,8 @@
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 185</idno>
                 <!-- Revisione: (1) Pleiades ref corretto da 652388 a 609307 (verificato su topostext.org e Wikidata Q579468). (2) Testo greco verificato conforme allo stampato Lane I, p. 117: nessuna correzione necessaria. (3) Tradotti in italiano layout/p (con dettaglio aggiunto sulla posizione dell'iscrizione), provenance e titolo. Numero di entry (185) confermato corrispondente al testo a stampa. -->
+                <idno type="id">173</idno>
+                <idno type="entryId">gen-1786984905702-47-wnhmdn</idno>
             </publicationStmt>
             <sourceDesc>
                 <msDesc>

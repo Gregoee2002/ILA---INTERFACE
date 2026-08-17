@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-AS-268</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 268</idno>
+                <idno type="id">255</idno>
+                <idno type="entryId">gen-1786984905702-6h-kqmc3b</idno>
             </publicationStmt>
             <!-- Revisione: corretto Pleiades id 652388 (404) in 609307 (Antiocheia Pisidiae/Yalvaç); riga 1, corretto il patronimico "Ζωσίου" (Zosios) in "Σωσίου" (Sosios) secondo lo stampato (Lane I, p. 146) — lettera Ζ/Σ scambiata; riga 3, uniformata la cassa "Ε(ὐχήν)" in "ε(ὐχήν)" minuscola come nello stampato e come le altre abbreviazioni della stessa riga. Aggiornati titolo e layout. Rimossa la bibliografia fittizia "Lane, II, p. 47 (unpublished)" non presente a stampa per questa entry. Tradotta in italiano la prosa descrittiva inglese. -->
             <sourceDesc>

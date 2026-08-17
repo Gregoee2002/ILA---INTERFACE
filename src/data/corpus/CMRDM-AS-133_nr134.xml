@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-AS-133</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 134</idno>
+                <idno type="id">122</idno>
+                <idno type="entryId">gen-1786984905702-2s-mdvmu1</idno>
             </publicationStmt>
             <!-- Revisione assistita (cross-check col PDF Lane, pp. 87-88): testo greco riga 1, numerale corretto da "δδδδγ΄ ξε΄" a "δςςςγ΄ κε΄"; riga 2 "εἰς κείπτων"→"εἷς πείπτων", bracket riposizionato "κ[αὶ τρ]εῖος"→"κ[αὶ τ]ρεῖος", "πεῦπτος"→"πένπτος" (forma non assimilata, come stampata da Lane); riga 3 "ἐπιτε[ύξ]υ" (finale senza senso)→"ἐπιτε[ύ]ξη"; riga 4 "καίρ(π)όν"→"καρ(π)όν" e "τ[ιν᾽ ο]μόχθος" (parola fusa erroneamente)→"τ[ιν᾽ ὁ] μόχθος"; riga 5 "ἐγχείρει[ν]"→"ἐνχειρεῖ[ν]" (forma non assimilata). Tradotta in italiano la prosa di <support> e <layout>, integrando i dati di scoperta (E. S. G. Robinson e H. A. Ormerod, giugno 1911, rovine di chiesa bizantina, danni subiti nella stessa estate) presenti nel PDF ma assenti dal draft. Pleiades: l'ID 638674 usato per Attaleia Pamphyliae è inesistente (404 sull'API) — sostituito con l'ID corretto, 638778. -->
             <sourceDesc>

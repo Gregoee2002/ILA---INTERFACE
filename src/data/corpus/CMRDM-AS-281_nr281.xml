@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-AS-281</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 281</idno>
+                <idno type="id">268</idno>
+                <idno type="entryId">gen-1786984905702-6u-lv15dk</idno>
             </publicationStmt>
             <!-- Revisione su collazione col PDF Lane (p. 150, no. 281): riga 1, allineato il confine della lacuna a quanto stampato ("Τειμόθε[ος]" -> "Τειμόθ[εος]"): Lane supplisce solo "εος", non "εος" più la ε precedente. Rimossa la bibliografia fittizia "Lane, II, p. 47 (unpublished)": nessuna bibliografia è riportata da Lane. Support/layout tradotti in italiano. Corretto anche l'ID Pleiades del luogo di ritrovamento, errato in tutte le entry di questo lotto: "https://pleiades.stoa.org/places/652388" non corrisponde ad Antiochia di Pisidia; sostituito con l'ID corretto 609307 (verificato incrociando Pleiades DARE-location, Wikidata e la posizione "1 km da Yalvaç"). -->
             <sourceDesc>

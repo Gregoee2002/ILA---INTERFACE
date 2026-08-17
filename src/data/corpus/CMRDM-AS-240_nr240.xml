@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-AS-240</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 240</idno>
+                <idno type="id">228</idno>
+                <idno type="entryId">gen-1786984905702-5q-jm2uho</idno>
             </publicationStmt>
             <!-- Revisione: corretto il testo greco r.1 "Ὀένουαος"→"Ὀενούαος" (accento errato) e r.2 "κ[μ]ορεύσας"→"κμορεύσας" (lacuna fittizia: la parola è integra a stampa); corretto Pleiades ref di Antiocheia Pisidiae da 652388 a 609307; rimossa voce bibliografica autoreferenziale fittizia "Lane, I, p. 42, no. 63" assente dal testo a stampa; tradotti in italiano support/layout/provenance. -->
             <sourceDesc>

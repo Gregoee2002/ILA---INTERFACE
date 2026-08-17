@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-AS-131</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 132</idno>
+                <idno type="id">120</idno>
+                <idno type="entryId">gen-1786984905702-2q-5dpezv</idno>
             </publicationStmt>
             <!-- Revisione assistita (cross-check col PDF Lane, p. 85): testo greco riga 1, numerale dell'oracolo a dadi corretto da "ξε΄ δδδδγ΄" a "κε΄ δςςςγ΄" (lettura errata delle lettere numerali κ/ξ e ς/δ); riga 5 "ἐγχείρειν" corretta in "ἐνχειρεῖν" (forma non assimilata, come stampata da Lane su questa pietra). Tradotta in italiano la prosa di <support> e <layout>, integrando il dato di scoperta (Sterrett, 1885) presente nel PDF ma assente dal draft. Pleiades: corretto l'ID di Apollonia Pisidiae da 652388 (inesistente, 404) a 638758. -->
             <sourceDesc>

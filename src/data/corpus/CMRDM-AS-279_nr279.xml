@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-AS-279</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 279</idno>
+                <idno type="id">266</idno>
+                <idno type="entryId">gen-1786984905702-6s-tyzcva</idno>
             </publicationStmt>
             <!-- Revisione su collazione col PDF Lane (p. 149, no. 279): il draft univa in un'unica riga due righe fisiche distinte della pietra ("Τίτος Οὐίσενν-" e "ος Μάξιμος τε-"), portando il totale a 6 righe invece delle 7 stampate; ripristinata la divisione corretta e rinumerate le righe successive. Riga 4: ripristinata la lacuna su una lettera "γυνα[ι]κὸς" (nel draft appariva come testo pienamente certo "γυναικὸς", mentre Lane la marca come supplita). Riga 5: rimossa una lacuna fittizia su "κ" ("[κ]νου" -> "κνου"): nello stampato questa lettera non è tra parentesi quadre. Rimossa la bibliografia fittizia "Lane, II, p. 47 (unpublished)": nessuna bibliografia è riportata da Lane. Support/layout tradotti in italiano. Corretto anche l'ID Pleiades del luogo di ritrovamento, errato in tutte le entry di questo lotto: "https://pleiades.stoa.org/places/652388" non corrisponde ad Antiochia di Pisidia; sostituito con l'ID corretto 609307 (verificato incrociando Pleiades DARE-location, Wikidata e la posizione "1 km da Yalvaç"). -->
             <sourceDesc>

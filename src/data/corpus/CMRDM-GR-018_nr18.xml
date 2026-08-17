@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-GR-018</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 18</idno>
+                <idno type="id">287</idno>
+                <idno type="entryId">gen-1786984905702-7o-6y2i2n</idno>
             </publicationStmt>
             <!-- Revisione: corretto il testo greco (era "Τοόσα Μηνί", lettura errata; lo stampato ha "Τάοσα Μηνί", nome proprio Taosa); titolo/support/layout tradotti in italiano, support arricchito coi dati di scavo (1881 nel Serapeo C, nel ginnasio dal 1911) da Lane; placeName modern tradotto (Greece -> Grecia); Pleiades ancient (599588, Delos) verificato corretto, nessuna modifica. -->
             <sourceDesc>

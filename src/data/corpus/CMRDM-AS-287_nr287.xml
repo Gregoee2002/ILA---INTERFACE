@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-AS-287</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 287</idno>
+                <idno type="id">274</idno>
+                <idno type="entryId">gen-1786984905702-70-3ep1wq</idno>
             </publicationStmt>
             <!-- Revisione su collazione col PDF Lane (p. 152, no. 287): riga 1, corretta la lettura "Οὐλίος" (con spirito aspro e accento su ι, non attestati nello stampato) in "ούλιος" come stampato — probabile coda del nome "[Ἰ]ούλιος" (Iulius), con la lettera iniziale perduta nella lacuna. Righe 2 e 5, ripristinate due lacune reali che il draft presentava come testo pienamente certo ("τεκμορεύσας" -> "τεκμορεύσα[ς]"; "Μηνὶ" -> "Μην[ὶ]"). Riga 6, punto fermo riportato dentro la parentesi quadra come nello stampato. Rimossa la bibliografia fittizia "Lane, II, p. 47 (unpublished)": nessuna bibliografia è riportata da Lane. Support/layout tradotti in italiano, con nota sulla disposizione fisica (prima riga sull'architrave, ultima sul margine inferiore). Corretto anche l'ID Pleiades del luogo di ritrovamento, errato in tutte le entry di questo lotto: "https://pleiades.stoa.org/places/652388" non corrisponde ad Antiochia di Pisidia; sostituito con l'ID corretto 609307 (verificato incrociando Pleiades DARE-location, Wikidata e la posizione "1 km da Yalvaç"). -->
             <sourceDesc>

@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-AS-136</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 137</idno>
+                <idno type="id">125</idno>
+                <idno type="entryId">gen-1786984905702-2v-itj89n</idno>
             </publicationStmt>
             <!-- Revisione assistita (cross-check col PDF Lane, p. 88): nessuna iscrizione (monumento anepigrafe, correttamente reso col campo edition vuoto). Tradotta in italiano la prosa di <support> e <layout>, aggiungendo il dato che la statuetta è nel museo dal 1897. Pleiades: l'ID 638674 usato per Attaleia Pamphyliae è inesistente (404 sull'API) — sostituito con l'ID corretto, 638778. -->
             <sourceDesc>

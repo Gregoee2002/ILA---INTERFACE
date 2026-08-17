@@ -12,6 +12,8 @@
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 175</idno>
                 <!-- Revisione: (1) Pleiades ref per Antiocheia Pisidiae corretto da 652388 (ID inesistente/non pertinente) a 609307, verificato su topostext.org e Wikidata (Q579468); ID identico in tutte le entry 175-190 dello stesso batch. (2) Tradotti in italiano i campi support/p, layout/p, provenance, handNote/p e la parte descrittiva del titolo. (3) Aggiunti dettagli fisici presenti nello stampato di Lane (p. 111) ma assenti nel draft: ritrovamento nel 1912 nel santuario di Men a Yalvaç; gamba destra spezzata tra panneggio e piede; tracce del bastone anche sull'anca destra. Numero di entry (175) confermato corrispondente al testo a stampa (Lane I, p. 111, "175. Statuette..."). Nessuna correzione al testo greco: l'entry è anepigrafe (statuetta senza iscrizione), coerente con l'assenza di testo nel draft. -->
+                <idno type="id">163</idno>
+                <idno type="entryId">gen-1786984905702-3x-c2oqj1</idno>
             </publicationStmt>
             <sourceDesc>
                 <msDesc>

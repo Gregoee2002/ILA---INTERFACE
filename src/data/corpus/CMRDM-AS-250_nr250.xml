@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-AS-250</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 250</idno>
+                <idno type="id">238</idno>
+                <idno type="entryId">gen-1786984905702-60-bvbq5z</idno>
             </publicationStmt>
             <!-- Revisione confronto col PDF (Lane, CMRDM I, p. 139, n. 250): nessun errore testuale riscontrato nel testo latino né nelle dimensioni; corretto l'ID Pleiades di Antiocheia Pisidiae da 652388 a 609307; tradotta in italiano la prosa descrittiva di Lane in titolo, support e layout; italianizzato "Turkey" in "Turchia". Non aggiunta la nota di commento di Lane su LVS/LM e il rimando a Lane I p.30 e Levick AS XX 1970 pp.49-50, perché appartiene al campo commentary che non va compilato. -->
             <sourceDesc>

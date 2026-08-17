@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-AS-239</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 239</idno>
+                <idno type="id">227</idno>
+                <idno type="entryId">gen-1786984905702-5p-9dco2i</idno>
             </publicationStmt>
             <!-- Revisione: corretto Pleiades ref di Antiocheia Pisidiae da 652388 (ID inesistente) a 609307 (verificato); rimossa voce bibliografica autoreferenziale fittizia "Lane, I, p. 42, no. 62" assente dal testo a stampa (Lane cita solo Hardie); tradotti in italiano support/layout/provenance. Testo greco confrontato col PDF (p. 134 stampata) e confermato conforme al draft. -->
             <sourceDesc>

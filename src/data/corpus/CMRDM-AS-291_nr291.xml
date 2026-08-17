@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-AS-291</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 291</idno>
+                <idno type="id">278</idno>
+                <idno type="entryId">gen-1786984905702-74-13d71l</idno>
             </publicationStmt>
             <!-- Revisione su collazione col PDF Lane (p. 154, no. 291): riga 1, corretto il nome "Ἡόδλειος" (con δ non presente nello stampato) in "Ἡούλειος", e l'accento di "Μάρκος" in "Μᾶρκος" (circonflesso) come stampato. Il draft univa in un'unica riga due righe fisiche distinte ("καὶ Μάρ ... κελλος" e "ἀδελφοὶ", quest'ultima su riga propria secondo Lane: le prime due righe sono sopra la corona, le successive due nel campo sotto la corona, l'ultima sul margine inferiore); ripristinata la divisione in 5 righe. Rimossa bibliografia fittizia "Lane, II, p. 47 (unpublished)": nessuna bibliografia è riportata da Lane. Support/layout tradotti in italiano. Corretto anche l'ID Pleiades del luogo di ritrovamento, errato in tutte le entry di questo lotto: "https://pleiades.stoa.org/places/652388" non corrisponde ad Antiochia di Pisidia; sostituito con l'ID corretto 609307 (verificato incrociando Pleiades DARE-location, Wikidata e la posizione "1 km da Yalvaç"). -->
             <sourceDesc>

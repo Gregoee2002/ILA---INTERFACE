@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-AS-237</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 237</idno>
+                <idno type="id">225</idno>
+                <idno type="entryId">gen-1786984905702-5n-pgfj9g</idno>
             </publicationStmt>
             <!-- Revisione 2026-08-16 (cross-check con PDF Lane, p.134, no. 237 = Hardie no. 60): corretto il nome del secondo dedicante da "Οὐαλερία" (forma femminile errata) a "Οὐαλέριος" (maschile), come stampato. Tradotta la prosa inglese in italiano (titolo, support, layout, provenance). Corretto Pleiades ID di Antiocheia Pisidiae da 652388 a 609307. Rimossa voce bibliografica autoreferenziale fittizia "Lane, I, p. 41, no. 60". -->
             <sourceDesc>

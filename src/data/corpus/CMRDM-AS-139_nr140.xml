@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-AS-139</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 140</idno>
+                <idno type="id">128</idno>
+                <idno type="entryId">gen-1786984905702-2y-i50j2y</idno>
             </publicationStmt>
             <!-- Revisione assistita (cross-check col PDF Lane, pp. 89-90): nessuna iscrizione (monumento anepigrafe, correttamente reso col campo edition vuoto). Tradotta in italiano la prosa di <support> e <layout>. Nessun toponimo verificabile: provenienza incerta come da Lane (nota solo la collezione attuale), ref Pleiades lasciato DA_COMPILARE. -->
             <sourceDesc>

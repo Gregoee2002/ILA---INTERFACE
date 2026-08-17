@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-AS-173</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 173</idno>
+                <idno type="id">161</idno>
+                <idno type="entryId">gen-1786984905702-3v-3zyz32</idno>
             </publicationStmt>
             <!-- Revisione assistita (cross-check con PDF Lane, CMRDM I 173, pp. 109-110): corretta r.3 "ποντιφίκος" (accento errato) -> "ποντίφικος"; corretta r.4 "Ρωμαίων πατρωνος" -> "Ῥωμαίων πάτρωνος" (spirito aspro mancante e accento mancante). Corretta r.8 "Οὐλπίον" -> "Οὔλπιον" (spirito e accento). Corretta r.9, che nel draft riportava un errore grave: "Ζωσίμον νεικήσαντ[α .........]" (accento errato sul nome e la sillaba "τα" già inclusa erroneamente tra parentesi quadre sulla stessa riga) seguita da una r.10 "[τα ..........]" che duplicava la sillaba e da una r.11 "['......]" completamente inventata e assente dallo stampato (l'iscrizione stampata da Lane si ferma a "[τα · · · · · · · · · · ·]", 10 righe totali, non 11): ripristinato "Ζώσιμον νεικήσαν-" (r.9, accento corretto, a capo come da stampato) e "[τα ..........]" (r.10, lacuna finale), rimossa la r.11 inventata. Tradotta in italiano la prosa descrittiva (support, layout, title, handNote), completata con l'anno e il luogo di ritrovamento ("estremità nord della cisterna", 1912) e la seconda misura del diametro secondo Anderson (1′ 3″), assenti dal draft. Corretto Pleiades ref del placeName "ancient" da 652388 (errato) a 609307 (Antiocheia Pisidiae), verificato su Wikidata e topostext.org. Italianizzato "Turkey" -> "Turchia". -->
             <sourceDesc>

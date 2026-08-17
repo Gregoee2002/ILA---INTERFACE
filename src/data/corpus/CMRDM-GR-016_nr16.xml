@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-GR-016</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 16</idno>
+                <idno type="id">285</idno>
+                <idno type="entryId">gen-1786984905702-7m-1c4xf4</idno>
             </publicationStmt>
             <!-- Revisione: corretta riga 1 del testo greco (era "τ[ὸν] μαθ[ε]ντος", lettura errata/senza senso; lo stampato ha "τ[ι]μαθ[έ]ντος" = τιμαθέντος); corretta riga 7 (era integrazione fittizia "[καὶ]" per l'intera parola, mentre Lane segna come perduto solo "κα" e legge "ὶ": "[κα]ὶ"); corretta grafia "θαλίνῳ" -> "θαλλίνῳ" (doppia λ, righe 3 e 8, radice θαλλός) in entrambe le occorrenze; titolo/support/layout tradotti in italiano, support arricchito col dato di ritrovamento (ca. 1892) da Lane; corretto Pleiades ancient (era 589721 = Aulon/Alonion a Creta, luogo errato; ora 590030 = Rodi); placeName modern tradotto (Greece -> Grecia); aggiunta lunghezza (1,03 m = 103 cm) nel campo width delle dimensioni, presente nel testo di Lane ma assente nei dati strutturati. -->
             <sourceDesc>

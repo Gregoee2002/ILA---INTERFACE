@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-AS-127</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 127</idno>
+                <idno type="id">116</idno>
+                <idno type="entryId">gen-1786984905702-2m-a2uqts</idno>
             </publicationStmt>
             <!-- Revisione assistita (cross-check col PDF Lane, p. 82): (1) testo greco corretto "Ἑρμοκλέ-" in "Ἑρμοκλ[έ]-" per riflettere la lacuna reale segnalata da Lane; (2) "ΠΛΟΥΡΙΣΤΡΕΩΝ" (tutto maiuscolo, incoerente col resto del testo normalizzato) corretto in "Πλουριστρέων"; aggiunto break="no" alla riga 3 che riceve la continuazione della parola spezzata. Tradotta in italiano la prosa di <support> e <layout>, integrando il dato di rinvenimento (scoperta del gruppo di W. H. Buckler, primavera 1930) presente nel PDF ma assente dal draft. Pleiades: nessuna voce verificabile per "Plouristra" (toponimo minore, area di Tymandos) — lasciato DA_COMPILARE, segnalato. -->
             <sourceDesc>

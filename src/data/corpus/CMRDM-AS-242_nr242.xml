@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-AS-242</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 242</idno>
+                <idno type="id">230</idno>
+                <idno type="entryId">gen-1786984905702-5s-syoxz9</idno>
             </publicationStmt>
             <!-- Revisione: corretto il testo greco r.1 "Κύτης"→"Κύγτις" (nome frainteso), r.2 "ἁμαρτάγων"→"ἀμαρτάγων" (spirito dolce a stampa, non aspro: Lane nota che la forma è scritta in modo sciatto sulla pietra), r.3-4 accento spostato da "γυναί-/κος" a "γυναι-/κὸς" come a stampa; corretto Pleiades ref di Antiocheia Pisidiae da 652388 a 609307; rimossa voce bibliografica autoreferenziale fittizia "Lane, I, p. 42, no. 65" assente dal testo a stampa; tradotti in italiano titolo/support/layout/provenance. -->
             <sourceDesc>

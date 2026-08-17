@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-AS-163</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 164</idno>
+                <idno type="id">152</idno>
+                <idno type="entryId">gen-1786984905702-3m-ilocv7</idno>
             </publicationStmt>
             <!-- Revisione assistita (cross-check con PDF Lane, CMRDM I 164, p. 102-103): corretto un errore grave alle rr. 9-14, dove il draft presentava testo in maiuscolo da facsimile fotografico ("ΚΑΑΜΙΟΝ ΜΑΡΚΙΑΝΟΝ ΝΕΙΚΗΣΑΝ-ΤΑ ΠΑΛΗΝ") al posto della trascrizione normalizzata a stampa di Lane, e il nome del vincitore era alterato ("Τιμ." invece di "Τιβ.", cioè Tiberio): ripristinato "Τιβ. Κλαύδιον Μαρκιανὸν" (Tiberius Claudius Marcianus). Corretto anche "ἐγαδυσάμε-" (parola inesistente) -> "ἀποδυσάμε-" (da ἀποδύομαι, essersi ritirato dalla gara) e la parentesi quadra di r. 18 spostata da "[τάγ]" a "[ταγ]" per far coincidere l'accento con quanto stampato. Tradotta in italiano la prosa descrittiva (support, layout, title). Corretto Pleiades ref del placeName "ancient" da 652388 (errato) a 609307 (Antiocheia Pisidiae), verificato su Wikidata e topostext.org. Nota: Lane stampa "height 1.04 cm." per la colonna (unità plausibilmente errata nell'originale, dato il confronto con colonne simili alte oltre 1 m nelle entry vicine 165-170); mantenuto fedele allo stampato come da istruzioni, segnalato qui per verifica. Lane segnala inoltre "Traces of another line" dopo il testo trascritto (ulteriore riga non leggibile, non riportata nell'edizione). -->
             <sourceDesc>

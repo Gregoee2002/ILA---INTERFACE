@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-AS-160</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 161</idno>
+                <idno type="id">149</idno>
+                <idno type="entryId">gen-1786984905702-3j-v80sxp</idno>
             </publicationStmt>
             <!-- Revisione assistita (cross-check con PDF Lane, CMRDM I 161, p. 101): tradotta in italiano la prosa descrittiva (support, layout, provenance, title). Corretta r.1, interamente inventata nel draft ("ἐπ᾽ [ἐφανοῦ]", parola assente dallo stampato) -> "στ[έφανος]" come da testo di Lane. Corretti i limiti delle parentesi quadre (lacune) alle rr. 3-4 per farli coincidere con quanto stampato; corretto nome proprio r.5 "λυσίμας" (non attestato) -> "Λυσιμαχ[" (Lysimachos); aggiunto il numerale "δ'" mancante a fine r.7. Nota non risolta: sotto la r.1, Lane stampa un piccolo simbolo circolare "ο" centrato (probabile ghirlanda/corona incisa, non testo) che non è stato trascritto né qui né nel draft originale: da verificare con l'originale, non essendo chiaro come renderlo in EpiDoc. Corretto Pleiades ref del placeName "ancient" da 652388 (errato) a 609307 (Antiocheia Pisidiae), verificato su Wikidata e topostext.org. -->
             <sourceDesc>

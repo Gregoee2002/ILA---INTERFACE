@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-AS-200</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 200</idno>
+                <idno type="id">188</idno>
+                <idno type="entryId">gen-1786984905702-4m-h3slxv</idno>
             </publicationStmt>
             <!-- Revisione assistita (cross-check PDF Lane, CMRDM I p.121, Hardie no.22): il draft fraintendeva il layout a tre colonne parallele (tre naiskoi affiancati, ciascuno con il proprio nome nel campo) come righe sequenziali di un'unica iscrizione, inserendo "εὐχήν" tra il primo e il secondo nome come se appartenesse solo ad Argeia. Ristrutturato con <cb/> per segnalare i tre naiskoi paralleli; "εὐχήν" ricompare come riga unica sotto i tre nomi e "LVS" come riga finale, come da testo a stampa ("In the field of the naiskoi, under crescents, respectively... Under them all, LVS in tabula ansata"). Corretto anche l'accento di Ποταμό[ς] (era Ποτάμο[ς]). "Demetrius" è correttamente in caratteri latini nell'originale (non un errore, cf. altre iscrizioni bilingui del lotto). Rimossa voce bibliografica "Lane, I, p. 38, no. 22" non presente a stampa (artefatto sistematico, vedi nota nr.191); corretto Pleiades ref da 652388 a 609307; tradotti i campi in prosa inglese. -->
             <sourceDesc>

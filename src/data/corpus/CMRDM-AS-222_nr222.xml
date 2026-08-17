@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-AS-222</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 222</idno>
+                <idno type="id">210</idno>
+                <idno type="entryId">gen-1786984905702-58-my488g</idno>
             </publicationStmt>
             <!-- Revisione 2026-08-16 (cross-check con PDF Lane, p.129): testo latino confermato conforme allo stampato, nessuna modifica. Rimossa dalla descrizione la precisazione "(second entry in that group)" per il rimando "Cf. no. 179", non presente nel testo di Lane (che riporta solo "Cf. no. 179.") — evitata un'aggiunta interpretativa non verificabile. Tradotta la prosa inglese in italiano; corretto Pleiades ID di Antiocheia Pisidiae da 652388 a 609307; rimossa voce bibliografica autoreferenziale fittizia "Lane, I, p. 40, no. 44". -->
             <sourceDesc>

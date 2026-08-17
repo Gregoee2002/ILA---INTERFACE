@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-AS-130</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 130</idno>
+                <idno type="id">119</idno>
+                <idno type="entryId">gen-1786984905702-2p-8dhl18</idno>
             </publicationStmt>
             <!-- REVISIONE MAGGIORE (cross-check col PDF Lane, p. 84): il draft conteneva per errore il testo dell'entry 131 (Anaboura, iscrizione onoraria MAMA VIII per un sacerdote di Men Askaenos) invece del testo reale dell'entry 130, che è tutt'altra iscrizione: una pietra di confine (horos) nel muro della chiesa greca della cittadella presso Apollonia Pisidiae ("Ὅρος ἱερὸς καὶ ἄσυλος θεοῦ ἐπιφανοῦς Μηνὸς Ἀσκαηνοῦ" — "confine sacro e inviolabile del dio manifesto Men Askaenos"). Sostituiti integralmente: titolo, testo greco, bibliografia (era erroneamente "MAMA VIII p.5 nota 2; Lane I p.28 no.5", che non corrisponde a nessuna delle due entry), <support> e <layout>. L'entry 131 (Anaboura) non fa parte di questo batch di revisione e il suo testo corretto non è stato ricreato altrove. Pleiades: corretto l'ID di Apollonia Pisidiae (Mordiaion/Sozopolis, Uluborlu) da 652388 (id inesistente, 404 sull'API) a 638758, verificato su Pleiades stesso. -->
             <sourceDesc>

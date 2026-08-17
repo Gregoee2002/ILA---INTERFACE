@@ -12,6 +12,7 @@
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 38</idno>
                     <idno type="id">10</idno>
+                <idno type="entryId">gen-1786984905702-9-75bn0e</idno>
 </publicationStmt>
             <!-- REVISIONE (cross-check PDF Lane p. 24): testo greco del draft era un placeholder generico di lacuna (nessuna trascrizione) mentre Lane stampa un testo leggibile: sostituito con "Μηνὶ Ἀξιο[ττηνῷ]"; aggiunta provenienza "found before 1911 in the parekklesi of Hagios Theodoros in Gyölde" (assente nel draft); Pleiades ref corretto 609032 (ID inesistente/404) -> 609441 (Kollyda/Goloida = Gölde, verificato via Pleiades API e Trismegistos TM Geo 33613); TM non trovato. -->
             <sourceDesc>

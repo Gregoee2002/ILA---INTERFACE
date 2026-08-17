@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-AS-214</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 214</idno>
+                <idno type="id">202</idno>
+                <idno type="entryId">gen-1786984905702-50-h73q9t</idno>
             </publicationStmt>
             <!-- Revisione 2026-08-16 (cross-check con PDF Lane, p.127): corretto il nome "Κούμητος" (manca una lettera) in "Κρούμητος" come stampato; corretta la lettura "W" (priva di senso) in "β΄" — il numerale greco stampato per "Ἀσκάνιος β΄" ("Askanios II/il secondo"), verosimilmente una filiazione o distinzione da un omonimo. Tradotta la prosa inglese in italiano; corretto Pleiades ID di Antiocheia Pisidiae da 652388 a 609307; rimossa voce bibliografica autoreferenziale fittizia "Lane, I, p. 39, no. 36". -->
             <sourceDesc>

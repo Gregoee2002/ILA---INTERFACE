@@ -12,6 +12,7 @@
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 37</idno>
                     <idno type="id">9</idno>
+                <idno type="entryId">gen-1786984905702-8-u6lxq8</idno>
 </publicationStmt>
             <!-- REVISIONE (cross-check PDF Lane p. 24): errore di contenuto grave in l. 3-4: "εὐχα[μένη ὑπὲρ τοῦ σ]υ[μ-]βίου εὐχήν" ("avendo pregato per il marito") -> "εὐξαμένη ὑπὲρ τοῦ ἡμι-όνου εὐχήν" ("avendo pregato per il mulo"), coerente con la descrizione dello stesso Lane del rilievo soprastante ("seems to represent the mule mentioned in the inscription"); di conseguenza corretta anche la descrizione fisica ("for her husband" -> "for her mule"); bracket editoriali l. 1 normalizzati secondo Lane: "[Ἀξιο]τ[τ]ήν[ῳ]" -> "[Ἀξι]ο[τη]ν[ῷ]" (Lane suppone un solo τ nella lacuna, non due: scelta editoriale di Lane, non modificata nel merito, solo riportata fedelmente); TM non trovato; Pleiades ref corretto 609032 (ID inesistente/404) -> 609441 (Kollyda/Goloida = Gölde, verificato via Pleiades API e Trismegistos TM Geo 33613). -->
             <sourceDesc>

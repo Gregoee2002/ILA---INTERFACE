@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-IT-022</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 22</idno>
+                <idno type="id">289</idno>
+                <idno type="entryId">gen-1786984905702-7q-c2fplh</idno>
             </publicationStmt>
             <!-- Revisione: correzione importante in riga 3, la restituzione fra parentesi era completamente diversa dallo stampato (draft: "[Ῥώμῃ τε καὶ Ἀπει]" = "a Roma e..."; Lane invece stampa "[Ῥείη τε καὶ Ἄττει]" = "a Rea e Attis", coerente col gruppo Magna Mater/Attis/Men ricorrente in questa sezione) — corretta di conseguenza anche la descrizione in layout, che citava erroneamente "Rome"; corretta riga 2 (era "τόν υμιν" con spazio e accento non presenti nello stampato, che ha la sequenza continua "τονυμιν"); corretta riga 4, finale della parola restituita (era "ραννο", lo stampato ha "ραννω", desinenza dativa in -ω come nel resto del testo); titolo/support tradotti in italiano e arricchiti col dato "circostanze del ritrovamento sconosciute" da Lane; Pleiades ancient (422995, Ostia) verificato corretto, nessuna modifica. -->
             <sourceDesc>

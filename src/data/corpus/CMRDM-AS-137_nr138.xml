@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-AS-137</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 138</idno>
+                <idno type="id">126</idno>
+                <idno type="entryId">gen-1786984905702-2w-o3rf5q</idno>
             </publicationStmt>
             <!-- Revisione assistita (cross-check col PDF Lane, p. 89): nessuna iscrizione (monumento anepigrafe, correttamente reso col campo edition vuoto). Tradotta in italiano la prosa di <support> e <layout>, aggiungendo l'anno di acquisizione (1964) presente nel PDF ma assente dal draft, e correggendo la descrizione della gamba sinistra (non "riparata in antichità", come indicava il draft senza fondamento, ma una sezione rimossa col piede riattaccato più in alto, "con un effetto goffo", per usare le parole di Lane). Nessun toponimo verificabile: provenienza incerta come da Lane, ref Pleiades lasciato DA_COMPILARE. -->
             <sourceDesc>

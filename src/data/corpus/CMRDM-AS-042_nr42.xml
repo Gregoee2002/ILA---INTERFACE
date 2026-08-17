@@ -12,6 +12,7 @@
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 42</idno>
                     <idno type="id">14</idno>
+                <idno type="entryId">gen-1786984905702-d-5e1jk2</idno>
 </publicationStmt>
             <!-- REVISIONE (cross-check PDF Lane p. 26-27): "Τασηι-νή" -> "Ταζη-νή" (l. 1-2, nome epiteto errato); "Μὲς" -> "Μὶς" (compare 2 volte, ll. 2-3); "Λασάνας" -> "Λαβάνας" (l. 2, nome epiteto errato); "οκη΄" -> "σκη΄" (l. 5, numerale anno errato: 228 dell'era sillana = 143/4 d.C., coerente con la data già presente nel file; οκη'=98 non torna); "ρε΄(βαστή)" -> "Σε(βαστῇ)" (l. 6, testo garbled, dovrebbe essere l'abbreviazione del mese "Sebaste"); "σήλλην" -> "στήλλην" (l. 7, lettera mancante); "τὴν γε-" -> "τὴν γ[ε-]" e "ὑπο" -> "ὑ[πὸ]" (ll. 8-9, ripristinate le parentesi editoriali di Lane per le lettere supplite); aggiunta provenienza dettagliata "found in 1911 in a field just east of Ayazviran, transported to house of Secbekoğlu Mustafa" (assente nel draft); Pleiades ref per "Koresa (?)" compilato con 609443 (Koresa, BAtlas 62 A4, verificato via Pleiades API); identificazione Ayazviran=Koresa resta ipotesi incerta di Lane, fonti moderne propendono per Ayazviran=Iaza — segnalato per revisione umana; TM non trovato. -->
             <sourceDesc>

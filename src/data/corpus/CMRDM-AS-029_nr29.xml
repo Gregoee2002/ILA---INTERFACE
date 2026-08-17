@@ -4,7 +4,7 @@
     <teiHeader>
         <fileDesc>
             <titleStmt>
-                <title><rs type="textType">Iscrizione greca</rs> Pietra di marmo blu con foro nella parte superiore, Magnesia ad Maeandrum</title>
+                <title><rs type="textType">Iscrizione greca</rs> Pietra di marmo blu con foro nella parte superiore</title>
             </titleStmt>
             <publicationStmt>
                 <authority>CMRDM — Corpus Monumentorum Religionis Dei Menis</authority>
@@ -12,6 +12,7 @@
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 29</idno>
                     <idno type="id">1</idno>
+                <idno type="entryId">gen-1786984905702-0-hyawwa</idno>
 </publicationStmt>
             <!-- REVISIONE (cross-check PDF Lane p. 20/32): "Χαρισήμου" -> "Χαριδήμου"
                  (l. 2, δ non σ, errore di trascrizione); ref Pleiades corretto

@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-AS-217</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 217</idno>
+                <idno type="id">205</idno>
+                <idno type="entryId">gen-1786984905702-53-9zm9sn</idno>
             </publicationStmt>
             <!-- Revisione 2026-08-16 (cross-check con PDF Lane, p.128): correzione sostanziale — lo stampato riporta "Ἀλέξαν-/δρος ζω-/γράφ[ος]." cioè "Alexandros, pittore" (ζωγράφος = mestiere, non cognome), mentre il draft aveva travisato "ζωγράφος" come un presunto cognome "Δίγραφος" ("Alexandros Digraphos"), alterando anche il punto di andare a capo. Corretto il testo greco e la traduzione della prosa in italiano; corretto Pleiades ID di Antiocheia Pisidiae da 652388 a 609307; rimossa voce bibliografica autoreferenziale fittizia "Lane, I, p. 40, no. 39". -->
             <sourceDesc>

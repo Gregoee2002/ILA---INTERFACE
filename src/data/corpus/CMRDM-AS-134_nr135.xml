@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-AS-134</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 135</idno>
+                <idno type="id">123</idno>
+                <idno type="entryId">gen-1786984905702-2t-gi04w3</idno>
             </publicationStmt>
             <!-- Revisione assistita (cross-check col PDF Lane, p. 88): pietra "molto consunta", con numerose lettere segnate come incerte da Lane (puntini sottoscritti, non riprodotti singolarmente nel testo). Corretto testo greco: riga 1 numerale "δδδγ΄ ξε΄"→"δςςςγ΄ κε΄"; riga 2 "Τέσσαρε"→"Τέσσαρα", "πέπτων"→"πείπτων", "ἐξίται"→"ἐξῖται", e soprattutto "πά[μπτο" (parola tronca e senza senso, con lacuna fittizia)→"πέμπτος," (lettura piena di Lane, nessuna lacuna); riga 3 "καίρ[ου τ᾽ ἐπατεύξ]η" (parola "ἐπατεύξ" inesistente)→"καιρ[οῦ τ]ε ἐπιτεύ[ξη]"; riga 4 "καίρόν" (doppio accento, errore tecnico)→"καιρόν"; riga 5 profondamente corretta: "ἐ[γχ]ειρεῖν"→"ἐ[γχ]ιρεῖν", "ἀγα[θ]ὸν"→"ἀγ[α]θὸν" (lacuna riposizionata), "κ(αὶ)"→"καὶ", e soprattutto "ἀγωγ(ία)" (parola inventata, "condotta/direzione")→"ἀγῶν(α)" (parola corretta, "contesta/gara", coerente con le altre copie dello stesso oracolo), "δ(ίκην)"→"δίκην", "τε΄" (con segno numerale erroneo)→"τε." Tradotta in italiano la prosa di <support> e <layout>. Pleiades: nessun ID applicabile — Lane stesso dichiara "ancient name unknown" per questo sito, lasciato DA_COMPILARE come da draft. -->
             <sourceDesc>

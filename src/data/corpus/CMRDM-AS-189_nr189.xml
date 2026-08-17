@@ -12,6 +12,8 @@
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 189</idno>
                 <!-- Revisione: (1) Pleiades ref corretto da 652388 a 609307 (verificato su topostext.org e Wikidata Q579468). (2) Corretti due segni diacritici nel testo greco per farli aderire allo stampato Lane I, p. 117: "Ὀστιλία" → "Ὁστιλία" (spirito aspro, coerente con la resa greca del gentilizio latino "Hostilia"); "Ὀρεστείνα" → "Ὀρεστεῖνα" (circonflesso anziché acuto). (3) Tradotti in italiano layout/p e titolo. Numero di entry (189) confermato corrispondente al testo a stampa. -->
+                <idno type="id">177</idno>
+                <idno type="entryId">gen-1786984905702-4b-99zou6</idno>
             </publicationStmt>
             <sourceDesc>
                 <msDesc>

@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-AS-166</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 167</idno>
+                <idno type="id">155</idno>
+                <idno type="entryId">gen-1786984905702-3p-5e6naj</idno>
             </publicationStmt>
             <!-- Revisione assistita (cross-check con PDF Lane, CMRDM I 167, pp. 104-105): corretto il nome del vincitore r.11, alterato nel draft: "Ἰουλιεν" (non attestato) -> "Ἰούλιον" (Iulios/Julius, accusativo). Rimosse parentesi quadre indebite a r.14 ("πάλη[ν]" -> "πάλην": lettura certa a stampa, non integrazione). Corretta r.18, che nel draft riportava un testo interamente inventato tra parentesi quadre ("[ίμοί δ]΄.") al posto della lettura certa a stampa "μιδι ζ΄." (che completa "θέ-μιδι", "per la settima volta"). Tradotta in italiano la prosa descrittiva (support, layout, title). Corretto Pleiades ref del placeName "ancient" da 652388 (errato) a 609307 (Antiocheia Pisidiae), verificato su Wikidata e topostext.org. -->
             <sourceDesc>

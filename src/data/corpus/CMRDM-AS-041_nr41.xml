@@ -12,6 +12,7 @@
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 41</idno>
                     <idno type="id">13</idno>
+                <idno type="entryId">gen-1786984905702-c-kv7408</idno>
 </publicationStmt>
             <!-- REVISIONE (cross-check PDF Lane p. 26): testo greco delle ll. 3-5 largamente divergente dallo stampato (probabile errore di estrazione, non semplice refuso di lettera): "[Τ]οσιανὸς Γ[λ]αῦκος" -> "[Τα]τιανὸς Γλαῦκος" (l. 1, nome proprio errato); "[ι]ού[σα] ἀνθόντε εὐχό[μενοι ὑπὲρ]" -> "[ία]αν ἔθοντο εὐχόμενοι ἀεὶ ὑπὲρ" (l. 3, testo inventato); "βαπτι-" -> "Σαβειν-" (l. 4, parola diversa, inizio del nome "Σαβείνης"); "ζε[ς ......] ὑπὲρ σωσείης σύ[...]" -> "ῆς [······] ἥνπερ σώσειες σὺ [···]" (l. 5, testo inventato); aggiunta provenienza "found before 1898 in Ayazviran" (assente nel draft); Pleiades ref per "Koresa (?)" compilato con 609443 (Koresa, BAtlas 62 A4, verificato via Pleiades API, cross-check con coordinate Wikipedia/Digital Atlas of the Roman Empire); identificazione Ayazviran=Koresa resta ipotesi incerta di Lane, fonti moderne (Trismegistos place 34414, ToposText) propendono per Ayazviran=Iaza — segnalato per revisione umana; TM non trovato. -->
             <sourceDesc>

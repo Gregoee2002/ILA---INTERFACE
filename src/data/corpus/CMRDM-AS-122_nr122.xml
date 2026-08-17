@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-AS-122</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 122</idno>
+                <idno type="id">111</idno>
+                <idno type="entryId">gen-1786984905702-2h-3tzna4</idno>
             </publicationStmt>
             <!-- Revisione assistita (cross-check con PDF Lane, pp. 78-79): testo greco confermato conforme allo stampato. Aggiunto in provenance il dato del ritrovamento (murato nella parete della chiesa di San Giorgio a Burdur, attestato dal 1879) assente nel draft, tradotto in italiano. Pleiades: l'ID 609347 usato per "Burdur area" risulta INESISTENTE (404 su Pleiades API e su mirror statico), verificato — sostituito con DA_COMPILARE; nessun toponimo antico certo per Burdur risulta verificabile. -->
             <sourceDesc>

@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-IT-024</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 24</idno>
+                <idno type="id">290</idno>
+                <idno type="entryId">gen-1786984905702-7r-n05xt6</idno>
             </publicationStmt>
             <!-- Revisione: testo latino verificato, corrisponde esattamente allo stampato di Lane (a capo e a-capo compresi), nessuna correzione necessaria; titolo/support/layout tradotti in italiano, support arricchito col dato di ritrovamento (inizio XVII secolo) da Lane; Pleiades ancient (423025, Roma) verificato corretto, nessuna modifica. Il toponimo "Rome" nei campi di provenienza è lasciato non tradotto per uniformità con la convenzione richiesta (solo il nome del paese moderno si italianizza). -->
             <sourceDesc>

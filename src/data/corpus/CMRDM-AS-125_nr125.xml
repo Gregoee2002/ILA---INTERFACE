@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-AS-125</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 125</idno>
+                <idno type="id">114</idno>
+                <idno type="entryId">gen-1786984905702-2k-maijtn</idno>
             </publicationStmt>
             <!-- Revisione assistita (cross-check con PDF Lane, p. 80): corrette le parentesi di restituzione (congetturale, Bean) nelle rr. 1-3 per farle aderire esattamente allo stampato: r.1 l'intera riga è congetturale ("['Ο δεῖνα Τρο-]"), non solo "[Ὁ δεῖνα]"; r.2 "[φί]μου Ζω[τι-]" anziché "[φίμου] Ζωτ[ι-]"; r.3 aggiunta parentesi mancante su "[κοῦ] Μην[ὶ]". Nessuna correzione di contenuto (stesso testo restituito). Pleiades aggiunto: Sagalassos = pleiades.stoa.org/places/639087 (verificato su topostext.org e mirror statico Pleiades), mantenendo il punto interrogativo già presente in Lane e nel draft sull'attribuzione del pezzo a questo sito (Robert, REG LXIX 1956 p. 175, ne dubitava). TM non reperito. -->
             <sourceDesc>

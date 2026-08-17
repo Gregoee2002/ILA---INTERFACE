@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-AS-172</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 172</idno>
+                <idno type="id">160</idno>
+                <idno type="entryId">gen-1786984905702-3u-ioj8yu</idno>
             </publicationStmt>
             <!-- Revisione assistita (cross-check con PDF Lane, CMRDM I 172, p. 109): testo greco corretto in più punti. R.1: limite della lacuna spostato per coincidere con lo stampato, "Ἀγα[θῇ] Τυ[χῇ]" -> "Ἀγ[αθῇ] Τύ[χῃ]". R.3 "Φλαίου(ου)" (abbreviazione inesistente nello stampato) -> "Φλαιουίου" (forma per esteso). R.4 "ποντ(ιφίκως)" (abbreviazione inesistente) -> "ποντίφικος" (per esteso). R.9: corretto un errore grave nel nome del vincitore, "Μάγνον" (Magnus, non attestato) -> "Μάγιον" (Magius), e corretto l'accento "Καλπουρνίον" -> "Καλπούρνιον"; corretto di conseguenza anche il nome nella descrizione layout. Corretti gli accenti di rr. 13-14 per farli coincidere con lo stampato ("πατρίς"->"πατρὶς", "θεμίδι"->"θέμιδι"). Nota: il draft riportava già fedelmente la ripetizione "νεικήσαντα" alle rr. 10-11, confermata presente anche nello stampato di Lane (non un errore). Tradotta in italiano la prosa descrittiva (support, layout, title, handNote), completata con dettagli mancanti dal PDF ("sottile", anno di ritrovamento 1912, luogo). Corretto Pleiades ref del placeName "ancient" da 652388 (ID errato/inesistente per Antiocheia Pisidiae, come già riscontrato nelle entry precedenti 160-171) a 609307, verificato su Wikidata e topostext.org. Italianizzato "Turkey" -> "Turchia". -->
             <sourceDesc>

@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-AS-197</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 197</idno>
+                <idno type="id">185</idno>
+                <idno type="entryId">gen-1786984905702-4j-0f5ybj</idno>
             </publicationStmt>
             <!-- Revisione assistita (cross-check PDF Lane, CMRDM I p.121, Hardie no.19): corretto il secondo dedicante da "Α. Ἀντώνιος" a "Λ. Ἀντώνιος" (lettera errata, verificata sul PDF); rimossa voce bibliografica "Lane, I, p. 38, no. 19" non presente a stampa (artefatto sistematico, vedi nota nr.191); corretto Pleiades ref da 652388 a 609307; tradotti i campi in prosa inglese. -->
             <sourceDesc>

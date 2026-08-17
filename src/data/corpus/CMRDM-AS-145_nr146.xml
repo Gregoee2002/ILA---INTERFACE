@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-AS-145</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 146</idno>
+                <idno type="id">134</idno>
+                <idno type="entryId">gen-1786984905702-34-3ez212</idno>
             </publicationStmt>
             <!-- Revisione assistita (cross-check PDF Lane): corretto Pleiades ID di Iconium (628920, non pertinente) con 648647, verificato su Pleiades e Trismegistos. Corretto il testo greco: l.6 "κεκολω-"→"κεχολω-" e l.8 "κατάχθό-"→"καταχθό-" (accento spurio). Aggiunti i dati di scoperta (Radet e Paris, aprile/maggio 1885, muro della torre a nord dell'acropoli; entro il 1902 nel giardino del Museo di Konya; non più visibile nel 1969, forse in deposito) e aggiornato il campo repository di conseguenza; tradotta la prosa inglese in italiano. -->
             <sourceDesc>

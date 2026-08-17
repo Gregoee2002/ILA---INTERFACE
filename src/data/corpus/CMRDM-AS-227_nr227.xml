@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-AS-227</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 227</idno>
+                <idno type="id">215</idno>
+                <idno type="entryId">gen-1786984905702-5d-fvs039</idno>
             </publicationStmt>
             <!-- Revisione 2026-08-16 (cross-check con PDF Lane, p.130, no. 227 = Hardie nos. 49-50): corretta la riga 5 dell'edizione da "is LV" a "is L V" (spazio tra le due sigle, come stampato). Tradotta la prosa inglese in italiano (titolo, support, layout, provenance). Corretto Pleiades ID di Antiocheia Pisidiae da 652388 a 609307. Rimossa voce bibliografica autoreferenziale fittizia "Lane, I, p. 41, nos. 49-50". -->
             <sourceDesc>

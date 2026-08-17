@@ -12,6 +12,8 @@
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 180</idno>
                 <!-- Revisione: (1) Pleiades ref corretto da 652388 a 609307 (verificato su topostext.org e Wikidata Q579468). (2) CORREZIONI TESTO GRECO, verificate sullo stampato Lane I, p. 116: rr. 1-2 "Καίσεν-/ίοι" → "Καισέν-/νιοι" (ν mancante nel draft: il gentilizio corretto è "Καισέννιοι", da Caesennius); rr. 7-8 "τεκμο-ρεύσαν-τες τῷ Μ-/ηνὶ εὐχή[ν]" → "τεκμο-ρεύσαν-τες τὸ β΄/Μηνὶ εὐχή[ν]" (il draft aveva inventato "τῷ" spezzando erroneamente "Μηνὶ"; lo stampato ha invece "τὸ β΄" = "per la seconda volta", coerente con la formula "Μηνὶ εὐχήν" senza articolo usata in tutte le altre entry del gruppo). (3) Tradotti in italiano layout/p, provenance e titolo. Numero di entry (180) confermato corrispondente al testo a stampa. -->
+                <idno type="id">168</idno>
+                <idno type="entryId">gen-1786984905702-42-g0p1l0</idno>
             </publicationStmt>
             <sourceDesc>
                 <msDesc>

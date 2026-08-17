@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-AS-212</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 212</idno>
+                <idno type="id">200</idno>
+                <idno type="entryId">gen-1786984905702-4y-s455ax</idno>
             </publicationStmt>
             <!-- Revisione 2026-08-16 (cross-check con PDF Lane, p.125): corretta l'estensione del supplemento nel patronimico — lo stampato mostra "Μνησιθέ[ου]" (solo le ultime due lettere "ου" perdute/integrate), mentre il draft segnava come perduto l'intero "[ησιθέου]" dopo "Μν", risultato non conforme allo stampato. Tradotta la prosa inglese in italiano; corretto Pleiades ID di Antiocheia Pisidiae da 652388 a 609307; rimossa voce bibliografica autoreferenziale fittizia "Lane, I, p. 39, no. 34". -->
             <sourceDesc>

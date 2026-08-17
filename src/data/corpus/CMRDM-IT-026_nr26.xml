@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-IT-026</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 26</idno>
+                <idno type="id">292</idno>
+                <idno type="entryId">gen-1786984905702-7t-e6k7xf</idno>
             </publicationStmt>
             <!-- Revisione: testo latino verificato, corrisponde esattamente allo stampato di Lane, nessuna correzione necessaria; corretto origDate, era incoerente (notBefore=notAfter="373" con testo "371-373 A.D."; ora notBefore="371" per riflettere l'intervallo corrispondente al proconsolato d'Africa di Sextius Rusticus indicato da Lane); titolo/support/layout tradotti in italiano, support arricchito col dato di ritrovamento (primavera 1949) da Lane; Pleiades ancient (423025, Roma) verificato corretto, nessuna modifica. -->
             <sourceDesc>

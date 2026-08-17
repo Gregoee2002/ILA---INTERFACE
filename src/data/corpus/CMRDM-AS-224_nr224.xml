@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-AS-224</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 224</idno>
+                <idno type="id">212</idno>
+                <idno type="entryId">gen-1786984905702-5a-r6m1so</idno>
             </publicationStmt>
             <!-- Revisione 2026-08-16 (cross-check con PDF Lane, p.129-130, no. 224 = Hardie no. 46): l'edizione presentava una terza riga fittizia "[Ἰού]λιος καὶ Παῦλος" con parentesi quadre che suggerivano lettere perdute/restaurate, mentre sulla pietra le righe sono solo due (ΜΕ / ΙΚΠ, lettere-sigla abbreviate); Lane propone lo scioglimento "Μηνὶ εὐχήν" per la prima riga e, congetturalmente, "Ἰούλιος καὶ Παῦλος" per la seconda, come interpretazione editoriale, non come terza riga epigrafica. Corretto usando <expan> sulle due righe reali. Tradotta la prosa inglese in italiano (titolo, support, layout, provenance). Corretto Pleiades ID di Antiocheia Pisidiae da 652388 a 609307. Rimossa voce bibliografica autoreferenziale fittizia "Lane, I, p. 40, no. 46". -->
             <sourceDesc>

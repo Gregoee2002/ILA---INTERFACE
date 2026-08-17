@@ -12,6 +12,7 @@
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 96</idno>
                     <idno type="id">64</idno>
+                <idno type="entryId">gen-1786984905702-1r-z17uq1</idno>
 </publicationStmt>
             <!-- Revisione assistita (cross-check PDF Lane): corretto testo greco (rigo 1 "Τυχάσ[ι]ος" non "-ας"; rigo 2 "Ἀπολλωνίου" per intero leggibile, non "Ἀπολλώνο[υ]"; rigo 4 "Κολιανοκωμή" non "Κολιβνοχωμη-"; rigo 5 Lane segnala che le ultime due sequenze "τη." e "-τη[ς]?" sembrano aggiunte in tempi diversi e affiancate, non un'unica parola come nel draft). Corretto Pleiades: l'ID nel draft (609310) non corrisponde a Nacoleia; l'ID corretto verificato su Pleiades/Wikipedia/Trismegistos è 609484. Tradotta in italiano la prosa descrittiva di Lane. -->
             <sourceDesc>

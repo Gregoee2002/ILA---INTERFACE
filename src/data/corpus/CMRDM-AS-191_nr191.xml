@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-AS-191</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 191</idno>
+                <idno type="id">179</idno>
+                <idno type="entryId">gen-1786984905702-4d-qezl8e</idno>
             </publicationStmt>
             <!-- Revisione assistita (cross-check PDF Lane, CMRDM I p.118, Hardie no.13): corretto Οὐέτιος in Οὐέττιος (geminazione tau) e ἀνεξίου in ἀνεψιοῦ (lettera ψ scambiata con ξ, parola inesistente "ἀνέξιος" corretta in "ἀνεψιός" = cugino/nipote); rimossa voce bibliografica "Lane, I, p. 37, no. 13" non presente nel testo a stampa (il pattern "Lane, I, p.NN, no.NN" ricorre sistematicamente in tutte le 16 schede di questo lotto con numeri di pagina incongruenti rispetto alla reale collocazione nel volume: verosimilmente un artefatto generato dall'estrazione); corretto Pleiades ref di Antiocheia Pisidiae da 652388 a 609307 (confermato su Wikidata e Vici.org); tradotti in italiano i campi in prosa inglese; nome completo del dedicante integrato nel titolo (mancava "Massimos/Μάξιμος"). -->
             <sourceDesc>

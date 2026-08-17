@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-AS-270</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 270</idno>
+                <idno type="id">257</idno>
+                <idno type="entryId">gen-1786984905702-6j-ffozxj</idno>
             </publicationStmt>
             <!-- Revisione: corretto Pleiades id 652388 (404) in 609307 (Antiocheia Pisidiae/Yalvaç); riga 2, rimossa la parola "δε" assente dallo stampato (Lane I, p. 146: dopo "Πρείμου" lo stampato mostra solo un simbolo decorativo di crescente lunare, non lettere greche — testo probabilmente frainteso dal simbolo tipografico) — "δε" non è grammaticalmente coerente col resto della frase ed è stato rimosso in quanto testo non presente a stampa. Rimossa la bibliografia fittizia "Lane, II, p. 47 (unpublished)" non presente a stampa per questa entry. Tradotta in italiano la prosa descrittiva inglese. -->
             <sourceDesc>

@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-AS-290</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 290</idno>
+                <idno type="id">277</idno>
+                <idno type="entryId">gen-1786984905702-73-pzx1he</idno>
             </publicationStmt>
             <!-- Revisione su collazione col PDF Lane (p. 153, no. 290): riga 2, corretta la lettera iniziale "Δουμ-" in "Σουμ-" come stampato (sigma, non delta). Righe 4-5, corretta l'accentazione errata di "γυναί-κος" (accento sulla sillaba sbagliata) in "γυναι-κὸς" come stampato e come richiesto dalla flessione di γυνή. Rimossa la bibliografia fittizia "Lane, II, p. 47 (unpublished)": nessuna bibliografia è riportata da Lane. Support/layout tradotti in italiano; corretto il nome "Doummaroudēs" in "Soummaroudēs" per coerenza col greco corretto. Corretto anche l'ID Pleiades del luogo di ritrovamento, errato in tutte le entry di questo lotto: "https://pleiades.stoa.org/places/652388" non corrisponde ad Antiochia di Pisidia; sostituito con l'ID corretto 609307 (verificato incrociando Pleiades DARE-location, Wikidata e la posizione "1 km da Yalvaç"). -->
             <sourceDesc>

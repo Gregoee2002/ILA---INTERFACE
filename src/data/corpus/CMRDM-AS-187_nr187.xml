@@ -12,6 +12,8 @@
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 187</idno>
                 <!-- Revisione: (1) Pleiades ref corretto da 652388 a 609307 (verificato su topostext.org e Wikidata Q579468). (2) CORREZIONE TESTO GRECO: cognomen del dedicante "Ἀτπι-ος" → "Ἀττῆ-ος", come stampato in Lane I, p. 117. (3) Tradotti in italiano layout/p (con nome aggiornato) e titolo. Numero di entry (187) confermato corrispondente al testo a stampa. -->
+                <idno type="id">175</idno>
+                <idno type="entryId">gen-1786984905702-49-tpbp6i</idno>
             </publicationStmt>
             <sourceDesc>
                 <msDesc>

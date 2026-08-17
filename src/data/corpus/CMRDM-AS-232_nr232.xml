@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-AS-232</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 232</idno>
+                <idno type="id">220</idno>
+                <idno type="entryId">gen-1786984905702-5i-2sx3g2</idno>
             </publicationStmt>
             <!-- Revisione 2026-08-16 (cross-check con PDF Lane, p.131, no. 232 = Hardie no. 55): corretto il nome del dedicante da "Ἄττος" (lettera mancante) a "Ἄττιος", come stampato; aggiunta la dieresi su "Κόϊντος" come da stampato. Tradotta la prosa inglese in italiano (titolo, support, layout, provenance). Corretto Pleiades ID di Antiocheia Pisidiae da 652388 a 609307. Rimossa voce bibliografica autoreferenziale fittizia "Lane, I, p. 41, no. 55". -->
             <sourceDesc>

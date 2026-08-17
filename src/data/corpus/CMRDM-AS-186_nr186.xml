@@ -12,6 +12,8 @@
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 186</idno>
                 <!-- Revisione: (1) Pleiades ref corretto da 652388 a 609307 (verificato su topostext.org e Wikidata Q579468). (2) CORREZIONE TESTO GRECO, verificata sullo stampato Lane I, p. 117: r.2 nome del dedicante "Ἀδλοῦ" (nome inesistente/inventato) → "Λόλου" (genitivo di Λόλος, nome anatolico attestato nell'area); r.1 accento "Εὐχήν" → "Εὐχὴν" (grave anziché acuto, corretto perché la parola non è a fine di proposizione ma seguita da "Λόλου Μηνὶ..."). (3) Tradotti in italiano layout/p (con nome aggiornato) e titolo. Numero di entry (186) confermato corrispondente al testo a stampa. -->
+                <idno type="id">174</idno>
+                <idno type="entryId">gen-1786984905702-48-oanth5</idno>
             </publicationStmt>
             <sourceDesc>
                 <msDesc>

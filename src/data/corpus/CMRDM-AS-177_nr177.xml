@@ -12,6 +12,8 @@
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 177</idno>
                 <!-- Revisione: (1) Pleiades ref corretto da 652388 a 609307 (verificato su topostext.org e Wikidata Q579468). (2) CORREZIONE TESTO GRECO r.1: "Τόχη" era un errore di trascrizione (parola inesistente in greco) per la formula dedicatoria standard "Ἀγαθῇ Τύχῃ" ("con Buona Fortuna"), chiaramente leggibile nello stampato (Lane I, p. 112) e confermata dalla lettura parallela di "Ἀγαθῇ" col medesimo iota sottoscritto dativo. Resto del testo (rr. 2-9) verificato conforme allo stampato. (3) Tradotti in italiano support/p, layout/p, provenance, handNote/p e titolo. (4) Aggiunte dimensioni presenti nello stampato ma assenti nel draft: larghezza a metà colonna (56,4 cm), altezza delle colonne (65 cm); arricchita la descrizione del layout con dettagli dello stampato (ornamento vegetale tra gli acroteri, ornamento circolare al centro del timpano, dentelli su entrambe le cornici, toro legato all'altare con una corda intorno alle corna, toro su un plinto rivolto verso l'altare a destra). Numero di entry (177) confermato corrispondente al testo a stampa. -->
+                <idno type="id">165</idno>
+                <idno type="entryId">gen-1786984905702-3z-30q8ve</idno>
             </publicationStmt>
             <sourceDesc>
                 <msDesc>

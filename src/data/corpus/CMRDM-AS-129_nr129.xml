@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-AS-129</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 129</idno>
+                <idno type="id">118</idno>
+                <idno type="entryId">gen-1786984905702-2o-d0rarc</idno>
             </publicationStmt>
             <!-- Revisione assistita (cross-check col PDF Lane, p. 84): testo greco corretto — riga 1 "Κοινὸς" (parola comune "comune/condiviso", priva di senso come inizio di un nome proprio) sostituita con "Κοίντος" (il prenome latino "Quintus" traslitterato, lettura certa di Lane); riga 4 integrata la lacuna reale "Ο[ὑ-]" (draft la presentava come lettura certa "Οὐ-"); AGGIUNTA riga 9 "ὑψίστῳ." (l'epiteto "Altissimo" riferito al dio), completamente assente dal draft — un'omissione dell'ultima riga di stampa che cambiava il senso della dedica. Corretta di conseguenza anche la descrizione in <layout> (il dedicante è Quintus Numerius, non "Koinonos"). Tradotta in italiano la prosa di <support> e <layout>, integrando i dettagli di rinvenimento (sostegno di un pilastro della moschea di Belen, 15 min da Yavuz, in gran parte interrato, copia presa da un abitante del villaggio) presenti nel PDF ma assenti dal draft. Pleiades: aggiunto l'identificativo corretto per Andeda (verificato su Pleiades e Numista, corrispondente a Yavuz/Korkuteli, Antalya). -->
             <sourceDesc>

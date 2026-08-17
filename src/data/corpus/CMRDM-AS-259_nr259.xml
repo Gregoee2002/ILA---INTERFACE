@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-AS-259</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 259</idno>
+                <idno type="id">247</idno>
+                <idno type="entryId">gen-1786984905702-69-1782hk</idno>
             </publicationStmt>
             <!-- Revisione: corretto Pleiades id 652388 (404) in 609307 (Antiocheia Pisidiae/Yalvaç); aggiunta all'edizione la prima riga della pietra, mancante nel draft: una serie di puntini a stampa (".............") indica una riga iniziale perduta prima di "τεκμορεύσας", coerente con la descrizione "stele broken at top" — resa con <gap>, righe successive rinumerate; rimossa citazione bibliografica fittizia "Lane, II, p. 47" non presente a stampa per questa entry (il testo dice solo "Unpublished"), sostituita con nota fedele; tradotta in italiano la prosa descrittiva inglese (support, layout, title). -->
             <sourceDesc>

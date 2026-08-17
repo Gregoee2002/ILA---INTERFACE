@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-AS-226</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 226</idno>
+                <idno type="id">214</idno>
+                <idno type="entryId">gen-1786984905702-5c-8eki18</idno>
             </publicationStmt>
             <!-- Revisione 2026-08-16 (cross-check con PDF Lane, p.130, no. 226 = Hardie no. 48): corretta l'estensione della lacuna nell'ultima riga da "ε[ὐχήν]." a "ε[ὐ]χήν." come stampato (nel draft la parentesi quadra copriva erroneamente l'intera parola invece della sola υ). Tradotta la prosa inglese in italiano (titolo, support, layout, provenance). Corretto Pleiades ID di Antiocheia Pisidiae da 652388 a 609307. Rimossa voce bibliografica autoreferenziale fittizia "Lane, I, p. 40, no. 48". -->
             <sourceDesc>

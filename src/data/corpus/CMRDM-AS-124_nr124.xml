@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-AS-124</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 124</idno>
+                <idno type="id">113</idno>
+                <idno type="entryId">gen-1786984905702-2j-s4d49m</idno>
             </publicationStmt>
             <!-- Revisione assistita (cross-check con PDF Lane, pp. 79-80): testo greco confermato conforme allo stampato (differenze di capitalizzazione dell'epiteto e di collocazione delle parentesi non toccate, convenzione già in uso nel corpus). Aggiunto in provenance il dato del ritrovamento (1959, accanto a una fontana presso un caffè; si dice portata da Tekke, appena a sud del villaggio) assente nel draft, tradotto in italiano. Pleiades: l'ID 609347 usato per "Askeriye area" risulta INESISTENTE (404 su Pleiades API e su mirror statico), verificato — sostituito con DA_COMPILARE. -->
             <sourceDesc>

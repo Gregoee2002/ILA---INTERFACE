@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-AS-275</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 275</idno>
+                <idno type="id">262</idno>
+                <idno type="entryId">gen-1786984905702-6o-elazuo</idno>
             </publicationStmt>
             <!-- Revisione su collazione col PDF Lane (p. 148, no. 275): rimosso un punto fermo aggiunto erroneamente a fine riga 1 (assente nello stampato). Rimossa la bibliografia fittizia "Lane, II, p. 47 (unpublished)": nessuna bibliografia è riportata da Lane per questa entry. Support/layout tradotti in italiano; corretto il nome "Tertios" in "Tritos" (dal greco Τρίτος). Accentazione di "τιος"/"Ἀνιη" alla riga 1 lasciata come nel draft: nello stampato non compaiono accenti su questo frammento di nome ma la lettura è a bassa risoluzione, segnalato come incerto. Corretto anche l'ID Pleiades del luogo di ritrovamento, errato in tutte le entry di questo lotto: "https://pleiades.stoa.org/places/652388" non corrisponde ad Antiochia di Pisidia; sostituito con l'ID corretto 609307 (verificato incrociando Pleiades DARE-location, Wikidata e la posizione "1 km da Yalvaç"). -->
             <sourceDesc>

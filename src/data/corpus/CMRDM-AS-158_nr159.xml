@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-AS-158</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 159</idno>
+                <idno type="id">147</idno>
+                <idno type="entryId">gen-1786984905702-3h-12lcxy</idno>
             </publicationStmt>
             <!-- Revisione assistita (cross-check con PDF Lane, CMRDM I 159, p. 100): tradotta in italiano la prosa descrittiva (support, layout, provenance, title); corretto Pleiades ref del placeName "ancient" (Ancyra) da 609382 (ID errato/inesistente per Ancyra) a 619103, verificato su topostext.org e Digital Atlas of the Roman Empire. Nessun errore nel testo (entry anepigrafe, nessuna iscrizione). Nota: <idno type="filename"> interno riporta "CMRDM-AS-158" mentre l'entry è la 159 (incongruenza di nomenclatura del file, non del numero CMRDM dichiarato, che è corretto). -->
             <sourceDesc>

@@ -12,6 +12,7 @@
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 101</idno>
                     <idno type="id">69</idno>
+                <idno type="entryId">gen-1786984905702-1w-rbgd5l</idno>
 </publicationStmt>
             <!-- Revisione assistita (cross-check PDF Lane): corretta in più punti la collocazione delle lacune rispetto allo stampato (restauro di Ramsay), che nel draft erano spostate includendo come "supplito" testo in realtà leggibile sulla pietra o viceversa (es. rigo 2 "Μόνιμον" è per intero leggibile, non "Μόνι[μον"; rigo 3 "λαμπαδάρχην" è per intero leggibile, non "Λα[μπαδάρχην"; rigo 4 "Ἀπόλλ[ωνος" non "Ἀπόλ[λωνος"; rigo 9 "ἀγορανομήσαντα" per intero leggibile). Corretto un nome di divinità travisato al rigo 6: "Ἀνγδίστεω[ς" (Agdistis/Angdistis, dea frigia), non "Ἀνηΐστεω[ς" come nel draft. Corretto Pleiades: l'ID nel draft (638813) corrisponde in realtà all'etnico dei Konaneis, non a Eumeneia; l'ID corretto per Eumeneia, verificato su Pleiades/ToposText/Wikidata, è 609382. Tradotta in italiano la prosa descrittiva di Lane. -->
             <sourceDesc>

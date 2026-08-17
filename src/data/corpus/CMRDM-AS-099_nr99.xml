@@ -12,6 +12,7 @@
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 99</idno>
                     <idno type="id">67</idno>
+                <idno type="entryId">gen-1786984905702-1u-8iq39s</idno>
 </publicationStmt>
             <!-- Revisione assistita (cross-check PDF Lane): il testo greco del draft era pesantemente alterato/allucinato (nomi propri sbagliati "Ἄπτιον"/"Γάελον"/"Γάελος" invece di "Ἄπψιον"/"Γάειον"/"Γάειος", verbo "κατέειρσεν" invece di "κατεειέρωσεν", suddivisione in 12 righe invece delle 9 reali, finale "Τειμεδᾶς...ανθᾶ" invece di "Τειμέας...ανός"). Riscritto interamente su 9 righe secondo lo stampato. Corretto Pleiades: l'ID nel draft (609293) corrisponde in realtà ad Acmonia, non a Cottiaeum; l'ID corretto per Kotiaeion/Cottiaeum, verificato su Pleiades e Wikipedia, è 609444. Tradotta in italiano la prosa descrittiva di Lane. -->
             <sourceDesc>

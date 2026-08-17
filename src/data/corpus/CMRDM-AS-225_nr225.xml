@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-AS-225</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 225</idno>
+                <idno type="id">213</idno>
+                <idno type="entryId">gen-1786984905702-5b-3pwzz2</idno>
             </publicationStmt>
             <!-- Revisione 2026-08-16 (cross-check con PDF Lane, p.130, no. 225 = Hardie no. 47): corrette righe 5-7 dell'edizione, allucinate/travisate nel draft (r.5 "[ίω]νο" invece di "[ω]νίου"; r.6 ridotta a una "V" isolata al posto di quattro punti di lacuna + "νιτ"; r.7 con parentesi quadre spostate rispetto allo stampato). Ripristinati i marcatori di lacuna (quattro punti = lettere perdute/illeggibili nello stampato) con <gap>. Tradotta la prosa inglese in italiano (titolo, support, layout, provenance). Corretto Pleiades ID di Antiocheia Pisidiae da 652388 a 609307. Rimossa voce bibliografica autoreferenziale fittizia "Lane, I, p. 40, no. 47". -->
             <sourceDesc>

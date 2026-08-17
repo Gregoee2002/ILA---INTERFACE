@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-AS-289</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 289</idno>
+                <idno type="id">276</idno>
+                <idno type="entryId">gen-1786984905702-72-cm0hy0</idno>
             </publicationStmt>
             <!-- Revisione su collazione col PDF Lane (p. 153, no. 289): rimossa alla riga 2 la sillaba "δε" dopo "Μαγνίλλα", che nello stampato di Lane non è testo ma un ornamento tipografico (una fioritura decorativa tra il nome e "τεκμορεύσασα", non una lettera greca) erroneamente trascritto come parola; per analogia con l'entry 270 (dove lo stesso ornamento dopo "Πρείμου" non era stato trascritto). Rimossa la bibliografia fittizia "Lane, II, p. 47 (unpublished)": nessuna bibliografia è riportata da Lane. Support/layout tradotti in italiano. Corretto anche l'ID Pleiades del luogo di ritrovamento, errato in tutte le entry di questo lotto: "https://pleiades.stoa.org/places/652388" non corrisponde ad Antiochia di Pisidia; sostituito con l'ID corretto 609307 (verificato incrociando Pleiades DARE-location, Wikidata e la posizione "1 km da Yalvaç"). -->
             <sourceDesc>

@@ -12,6 +12,7 @@
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 35</idno>
                     <idno type="id">7</idno>
+                <idno type="entryId">gen-1786984905702-6-f6xr0p</idno>
 </publicationStmt>
             <!-- REVISIONE (cross-check PDF Lane p. 23): "σύγγραφον" -> "ἔνγραφον" (l. 8, parola diversa); "Δαισίκου" -> "Ξανδικοῦ" (l. 9, mese errato); "εἰλασάμενοι" -> "εἰλασάμενυ" (l. 6, forma anomala ma è esattamente quanto stampato da Lane — probabile refuso nell'edizione originale, non corretto poiché il compito è la fedeltà al testo stampato, non l'emendazione grammaticale; segnalato per revisione umana); aggiunta data di rinvenimento "ca. 1886" (assente nel draft); Pleiades ref corretto 609032 (ID inesistente/404) -> 609441 (Kollyda/Goloida = Gölde, verificato via Pleiades API e Trismegistos TM Geo 33613); TM non trovato. -->
             <sourceDesc>

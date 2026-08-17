@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-AS-235</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 235</idno>
+                <idno type="id">223</idno>
+                <idno type="entryId">gen-1786984905702-5l-4ti3bi</idno>
             </publicationStmt>
             <!-- Revisione 2026-08-16 (cross-check con PDF Lane, p.133, no. 235 = Hardie no. 58): corretto il nome del dedicante, allucinato come "[Ο]νακαρνῶς Γαί-[ο]ς", in "[Ο]ὐακάρνιος Γά[ι-\nος]" come stampato, con le parentesi quadre riposizionate secondo la reale estensione della lacuna/restauro e aggiunto break="no" sulla riga che riceve la continuazione della parola spezzata. Tradotta la prosa inglese in italiano (titolo, support, layout, provenance). Corretto Pleiades ID di Antiocheia Pisidiae da 652388 a 609307. Rimossa voce bibliografica autoreferenziale fittizia "Lane, I, p. 41, no. 58". -->
             <sourceDesc>

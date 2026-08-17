@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-AS-246</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 246</idno>
+                <idno type="id">234</idno>
+                <idno type="entryId">gen-1786984905702-5w-3djmwe</idno>
             </publicationStmt>
             <!-- Revisione: ripristinata la riga di stampa r.1 "......σ" mancante nel draft (il testo a stampa ha tre righe, il draft ne aveva solo due, saltando la prima); corretta la notazione della lacuna r.2 da "[......]" a "......" (puntini, non parentesi quadre, per la parte non conservata secondo la tipografia di Lane); corretto Pleiades ref di Antiocheia Pisidiae da 652388 a 609307; rimossa voce bibliografica autoreferenziale fittizia "Lane, I, p. 42, no. 69" assente dal testo a stampa; tradotti in italiano titolo/support/layout/provenance. -->
             <sourceDesc>

@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-AS-294</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 294</idno>
+                <idno type="id">281</idno>
+                <idno type="entryId">gen-1786984905702-77-jan8ss</idno>
             </publicationStmt>
             <!-- Revisione su collazione col PDF Lane (p. 155, no. 294): riga 1, corretta "θωιος" (contiene una θ non stampata) in "ώνιος" come stampato. Riga 2, corretta "δίου" in "είου" come stampato (lettera e accento errati). Riga 4, corretta l'accentazione errata "[Μή]νὶ" (due accenti nella stessa parola) in "[Μη]νὶ" come stampato. Rimossa la bibliografia fittizia "Lane, II, p. 47 (seen by B. Levick in Konya, 1955)": si tratta di un formato di citazione fittizio riscontrato sistematicamente in questo lotto; il dato reale su Barbara Levick è però una nota di osservazione autoptica di Lane, non una citazione bibliografica, ed è stato spostato nel campo <provenance type="observed">. Support/layout tradotti in italiano. Corretto anche l'ID Pleiades del luogo di ritrovamento, errato in tutte le entry di questo lotto: "https://pleiades.stoa.org/places/652388" non corrisponde ad Antiochia di Pisidia; sostituito con l'ID corretto 609307 (verificato incrociando Pleiades DARE-location, Wikidata e la posizione "1 km da Yalvaç"). -->
             <sourceDesc>

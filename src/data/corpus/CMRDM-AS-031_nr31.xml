@@ -4,7 +4,7 @@
     <teiHeader>
         <fileDesc>
             <titleStmt>
-                <title><rs type="textType">Iscrizione greca</rs> Lastra di marmo(?) con rilievo di una gamba, Gyölde</title>
+                <title><rs type="textType">Iscrizione greca</rs> Lastra di marmo con rilievo di una gamba</title>
             </titleStmt>
             <publicationStmt>
                 <authority>CMRDM — Corpus Monumentorum Religionis Dei Menis</authority>
@@ -12,6 +12,7 @@
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 31</idno>
                     <idno type="id">3</idno>
+                <idno type="entryId">gen-1786984905702-2-l8w84z</idno>
 </publicationStmt>
             <!-- REVISIONE (cross-check PDF Lane p. 21): "Ἀξιοττήν<ῳ>" -> "Ἀξιεττηνῷ" (l. 1, il testo di Lane non presenta lacuna/correzione editoriale qui, la parola è completa e stampata con ε non ο); "Χά-" -> "χά-" (l. 2, minuscola, refuso di maiuscola a metà frase); aggiunta data di rinvenimento "found before 1880" e sorte del pezzo (portato al museo della Evangelike Schole, poi perduto), assenti nel draft; Pleiades ref corretto 609032 (ID inesistente/404) -> 609441 (Kollyda/Goloida = Gölde, verificato via Pleiades API e cross-check Trismegistos TM Geo 33613); TM non trovato. -->
             <sourceDesc>

@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-AS-162</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 163</idno>
+                <idno type="id">151</idno>
+                <idno type="entryId">gen-1786984905702-3l-hjlt7a</idno>
             </publicationStmt>
             <!-- Revisione assistita (cross-check con PDF Lane, CMRDM I 163, p. 102): testo greco corretto in più punti rispetto al draft, che presentava parole fuse/alterate rispetto allo stampato. R.1: ripristinato il verbo "θέτο" (posto, aoristo di τίθημι), sostituito nel draft dal dativo "θεῷ" che ne cancellava la sintassi; corretto "ἐπευξάδιον" -> "ἐπευχάδιον". R.2: "θεῷ" -> "θεῶι" (grafia con iota adscript di Lane). R.3: corretto l'accento di "Μούσαι" (errato) -> "Μοῦσαι" (corretto, prima sillaba); corretta la parola restituita a fine riga "[χου]" -> "[ξαι]" (προσεύξαι, non προσεύχου). R.4: ripristinate come parole distinte "σπένδ' εὖ σαῖσιν ἐπ' εὐτυχίαι[ς]", che nel draft erano fuse in forme inesistenti ("σπένδε εὐσαίσιν ἐπευτυχίαις"). Tradotta in italiano la prosa descrittiva (support, layout, title). Corretto Pleiades ref del placeName "ancient" da 652388 (errato) a 609307 (Antiocheia Pisidiae), verificato su Wikidata e topostext.org. -->
             <sourceDesc>

@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-AS-206</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 206</idno>
+                <idno type="id">194</idno>
+                <idno type="entryId">gen-1786984905702-4s-jwdy80</idno>
             </publicationStmt>
             <!-- Revisione assistita (cross-check PDF Lane, CMRDM I p.124, Hardie no.28): testo greco in buona parte allucinato nel draft. Testo reale a stampa: "Μ. Σεράπιος" (riga 1, nome del dedicante Marcus Serapios, non "Σέρασπος"); riga 2 lacuna di 9 caratteri seguita da "ις" (confermato, nessuna correzione); riga 3 "·ολ·τριανός" (draft aveva inventato "[Ο]ΑΛ· Τηπάνθος", testo e nome inesistenti nello stampato). Titolo e descrizione aggiornati di conseguenza. Rimossa voce bibliografica "Lane, I, p. 39, no. 28" non presente a stampa (artefatto sistematico, vedi nota nr.191); corretto Pleiades ref da 652388 a 609307; tradotti i campi in prosa inglese. -->
             <sourceDesc>

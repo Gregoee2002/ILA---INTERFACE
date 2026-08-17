@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-AS-161</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 162</idno>
+                <idno type="id">150</idno>
+                <idno type="entryId">gen-1786984905702-3k-2c5cla</idno>
             </publicationStmt>
             <!-- Revisione assistita (cross-check con PDF Lane, CMRDM I 162, p. 101): sostituito il segnaposto descrittivo "[pentameter palindrome arranged in concentric lozenges]" con il testo greco effettivo del pentametro riportato da Lane ("Ἀσκαίης ναέτην Μῆνα σέβων ἐθέμην."), assente dal draft originale. La disposizione fisica reale (losanghe concentriche leggibili a zigzag da un punto A centrale) non è rappresentabile linearmente in EpiDoc: il verso è reso su un'unica riga, come stampato da Lane; la nota su disposizione e frammenti resta nel commentario descrittivo. Tradotta in italiano la prosa descrittiva (support, layout, title); aggiunta precisazione "ricomposta in gesso nel museo" alle dimensioni. Corretto Pleiades ref del placeName "ancient" da 652388 (errato) a 609307 (Antiocheia Pisidiae), verificato su Wikidata e topostext.org. -->
             <sourceDesc>

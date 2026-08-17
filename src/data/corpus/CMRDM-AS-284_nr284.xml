@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-AS-284</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 284</idno>
+                <idno type="id">271</idno>
+                <idno type="entryId">gen-1786984905702-6x-w5q0hv</idno>
             </publicationStmt>
             <!-- Revisione su collazione col PDF Lane (p. 151, no. 284): il draft univa due righe fisiche distinte della pietra ("Κλ(α)ύδι-" e "ος Φρούγει τεκ-") in un'unica riga, portando il totale a 3 righe invece delle 4 stampate; ripristinata la divisione corretta e rinumerate le righe successive. Corretta l'espansione dell'abbreviazione: Lane supplisce solo la "α" tra parentesi ("Κλ(α)ύδι-ος"), non l'intera sillaba "αύδιο" come nel draft. Corretta anche l'accentazione/lettura di "Φρουγεῖ" in "Φρούγει" come stampato. Rimossa la bibliografia fittizia "Lane, II, p. 47 (unpublished)": nessuna bibliografia è riportata da Lane. Support/layout tradotti in italiano. Corretto anche l'ID Pleiades del luogo di ritrovamento, errato in tutte le entry di questo lotto: "https://pleiades.stoa.org/places/652388" non corrisponde ad Antiochia di Pisidia; sostituito con l'ID corretto 609307 (verificato incrociando Pleiades DARE-location, Wikidata e la posizione "1 km da Yalvaç"). -->
             <sourceDesc>

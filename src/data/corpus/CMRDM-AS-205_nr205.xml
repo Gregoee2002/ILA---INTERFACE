@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-AS-205</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 205</idno>
+                <idno type="id">193</idno>
+                <idno type="entryId">gen-1786984905702-4r-3mb49i</idno>
             </publicationStmt>
             <!-- Revisione assistita (cross-check PDF Lane, CMRDM I p.124, Hardie no.27): testo latino verificato, corrisponde esattamente allo stampato, nessuna correzione necessaria. Rimossa voce bibliografica "Lane, I, p. 39, no. 27" non presente a stampa (artefatto sistematico, vedi nota nr.191); corretto Pleiades ref da 652388 a 609307; tradotti i campi in prosa inglese. -->
             <sourceDesc>

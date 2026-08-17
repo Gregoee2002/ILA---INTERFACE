@@ -12,6 +12,7 @@
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 40</idno>
                     <idno type="id">12</idno>
+                <idno type="entryId">gen-1786984905702-b-60lfvx</idno>
 </publicationStmt>
             <!-- REVISIONE (cross-check PDF Lane p. 25): testo greco già corretto, nessuna modifica (solo differenza di accentazione su "Ἀξιοττηνῷ", non toccata); aggiunta provenienza "found before 1885 in house of Halil Kechagianni Moustafa" (assente nel draft); Pleiades ref per il toponimo antico "Koresa (?)" (etichetta di Lane, incerta) compilato con 609443 (Koresa, BAtlas 62 A4, verificato via Pleiades API e cross-check indipendente con le coordinate Wikipedia/Digital Atlas of the Roman Empire — coincidenti); l'identificazione stessa Ayazviran=Koresa resta l'ipotesi incerta di Lane (nota "?"): fonti moderne (Trismegistos place 34414, ToposText) tendono piuttosto a identificare Ayazviran con l'antica Iaza, sita a nord di Koresa secondo il Barrington Atlas — segnalato per revisione umana, ref non rimosso poiché corrisponde comunque al toponimo "Koresa" scritto nel campo; TM non trovato. -->
             <sourceDesc>

@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-AS-216</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 216</idno>
+                <idno type="id">204</idno>
+                <idno type="entryId">gen-1786984905702-52-wgx15m</idno>
             </publicationStmt>
             <!-- Revisione 2026-08-16 (cross-check con PDF Lane, p.127): testo greco confermato conforme allo stampato, nessuna modifica (l'accento su "εὐχήν"/"εὐχὴν" è una scelta editoriale non vincolante, non toccata). Tradotta la prosa inglese in italiano; corretto Pleiades ID di Antiocheia Pisidiae da 652388 a 609307; rimossa voce bibliografica autoreferenziale fittizia "Lane, I, p. 40, no. 38". -->
             <sourceDesc>

@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-AS-132</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 133</idno>
+                <idno type="id">121</idno>
+                <idno type="entryId">gen-1786984905702-2r-y1ddy4</idno>
             </publicationStmt>
             <!-- Revisione assistita (cross-check col PDF Lane, pp. 85-87): testo greco riga 1, numerale corretto da "ξξξξα΄ ξε΄" a "ςςςςα΄ κε΄" (lettura errata delle lettere numerali); riga 2 "χεῖρας"→"χεῖος" (lettura certa di Lane su questa pietra); riga 4 "οὓς εἴλικας" (frase senza senso) corretta in "βοῦς ἕλικας" ("buoi dalle corna ricurve", allucinazione di due parole su tre); riga 5 "ἐπερώτης" corretta in "ἐπερωτᾷς" (verbo di seconda persona coerente col resto del testo). Tradotta in italiano la prosa di <support> e <layout>, integrando i dati di rinvenimento (prima del 1890, presso il muro a ovest del tempio n. 3, spezzata in frammenti, area per il lancio dei dadi) presenti nel PDF ma assenti dal draft. Pleiades: l'ID 638853 usato per Termessus corrisponde in realtà a "Hamaxia" (verificato via API Pleiades) — sostituito con l'ID corretto di Termessos, 639139. -->
             <sourceDesc>

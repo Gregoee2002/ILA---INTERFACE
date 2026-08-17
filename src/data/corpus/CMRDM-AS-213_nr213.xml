@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-AS-213</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 213</idno>
+                <idno type="id">201</idno>
+                <idno type="entryId">gen-1786984905702-4z-790wzp</idno>
             </publicationStmt>
             <!-- Revisione 2026-08-16 (cross-check con PDF Lane, p.125): testo latino confermato conforme allo stampato ("P (?) L V S"), nessuna modifica. Tradotta la prosa inglese in italiano; corretto Pleiades ID di Antiocheia Pisidiae da 652388 a 609307; rimossa voce bibliografica autoreferenziale fittizia "Lane, I, p. 39, no. 35". -->
             <sourceDesc>

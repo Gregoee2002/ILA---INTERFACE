@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-AS-210</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 210</idno>
+                <idno type="id">198</idno>
+                <idno type="entryId">gen-1786984905702-4w-63qznj</idno>
             </publicationStmt>
             <!-- Revisione 2026-08-16 (cross-check con PDF Lane, p.125): testo greco riscritto ex novo perché sostanzialmente travisato nel draft. Lo stampato riporta "· · ·ς Κόιντος / [Λο]ύκιος Τροφί- / [μ]ου Κουΐνθου / υἱοὶ Μηνὶ εὐχήν." — lacuna iniziale di estensione ignota (resa con <gap>) seguita da "Κόιντος", non un supplemento "[Τ]ίς" come nel draft; nomi corretti da "Κόστος"→"Κόιντος", "Λουκίας"→"Λούκιος", "Κοίντου"→"Κουΐνθου" (Lane usa qui la traslitterazione "Κουΐνθου" per Quintus, distinta da "Κόιντος" della prima riga). Struttura: dedica di due o più figli di un "Loukios Trophimos (figlio di) Kouinthos" a Men. Tradotta la prosa inglese in italiano; corretto Pleiades ID di Antiocheia Pisidiae da 652388 a 609307; rimossa voce bibliografica autoreferenziale fittizia "Lane, I, p. 39, no. 32". -->
             <sourceDesc>

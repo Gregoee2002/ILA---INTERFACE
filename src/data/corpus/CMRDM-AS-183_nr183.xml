@@ -12,6 +12,8 @@
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 183</idno>
                 <!-- Revisione: (1) Pleiades ref corretto da 652388 a 609307 (verificato su topostext.org e Wikidata Q579468). (2) CORREZIONE TESTO GRECO: "[Ἀ]σκαηνε[ῷ]" → "[Ἀ]σκαηνῷ" (il draft aveva inserito una ε spuria e una parentesi di troppo attorno a ῷ; lo stampato Lane I, p. 116 mostra solo "[Ἀ]" come lettera restituita, con "σκαηνῷ" per il resto integro). (3) Tradotti in italiano layout/p, provenance e titolo. Numero di entry (183) confermato corrispondente al testo a stampa. -->
+                <idno type="id">171</idno>
+                <idno type="entryId">gen-1786984905702-45-t6qra4</idno>
             </publicationStmt>
             <sourceDesc>
                 <msDesc>

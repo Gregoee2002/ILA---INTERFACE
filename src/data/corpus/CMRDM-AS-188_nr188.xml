@@ -12,6 +12,8 @@
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 188</idno>
                 <!-- Revisione: (1) Pleiades ref corretto da 652388 a 609307 (verificato su topostext.org e Wikidata Q579468). (2) CORREZIONE TESTO GRECO, verificata sullo stampato Lane I, p. 117: r.1 "Σέπριος" → "Ἄπριος" (nome diverso da quanto stampato); r.2 "Κόν-του" → "Κοίν-του" (il draft omette lo iota: la forma corretta traslittera il praenomen latino "Quintus"). (3) Tradotti in italiano layout/p (con nomi aggiornati) e titolo. Numero di entry (188) confermato corrispondente al testo a stampa. -->
+                <idno type="id">176</idno>
+                <idno type="entryId">gen-1786984905702-4a-pvr8j4</idno>
             </publicationStmt>
             <sourceDesc>
                 <msDesc>

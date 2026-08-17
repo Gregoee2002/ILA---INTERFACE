@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-GR-017</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 17</idno>
+                <idno type="id">286</idno>
+                <idno type="entryId">gen-1786984905702-7n-jf854f</idno>
             </publicationStmt>
             <!-- Revisione: corretto il nome nella colonna destra della riga 1 (era "Δίδοστος", lettura errata; lo stampato ha "Διόδοτος"); corretta riga 2 (era lacuna fittizia "Μηνιω[στᾶν]" con testo invece interamente leggibile secondo Lane: "Μηνιαστᾶν"); titolo/support/layout tradotti in italiano, support arricchito col dato di ritrovamento (ca. 1886, villaggio di Lartos) da Lane; placeName modern tradotto (Greece -> Grecia); Pleiades ancient (589913, Lindos) verificato corretto, nessuna modifica. Riga 5 "Ἀντιοχεῖ" vs stampato che sembra "Ἀντιοχῆ": lettura ambigua dall'immagine, NON modificata — da verificare su copia migliore del testo. -->
             <sourceDesc>

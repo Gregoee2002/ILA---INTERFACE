@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-AS-192</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 192</idno>
+                <idno type="id">180</idno>
+                <idno type="entryId">gen-1786984905702-4e-8437i9</idno>
             </publicationStmt>
             <!-- Revisione assistita (cross-check PDF Lane, CMRDM I p.118, Hardie no.14): corretto il nome del dedicante da Αὐγίης a Αὔγμης (lettura errata, verificata ad alta risoluzione sul PDF); rimossa voce bibliografica "Lane, I, p. 37, no. 14" non presente a stampa (artefatto sistematico, vedi nota nr.191); corretto Pleiades ref di Antiocheia Pisidiae da 652388 a 609307 (verificato su Wikidata e Vici.org); tradotti in italiano i campi in prosa inglese. -->
             <sourceDesc>

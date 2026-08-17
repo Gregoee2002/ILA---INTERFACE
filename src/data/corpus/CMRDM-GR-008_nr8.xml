@@ -12,6 +12,7 @@
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 8</idno>
                     <idno type="id">97</idno>
+                <idno type="entryId">gen-1786984905702-7g-v4ummp</idno>
 </publicationStmt>
             <!-- Revisione: corretto il testo greco confrontandolo con lo stampato di Lane (p. 6): il nome della moglie "Ἑρατιὸν" (inesistente) corretto in "Ἐρώτιον" (Erotion), coerentemente aggiornata anche la resa in inglese nella descrizione del layout. Corretti gli attributi di datazione notBefore/notAfter-custom, che indicavano erroneamente un intervallo attorno all'anno 0 (-28/22) mentre il testo e Lane (citando Robert) datano l'iscrizione alla "late 3rd cent. B.C.": impostati a -233/-201. Corretto l'ID Pleiades del Pireo: quello presente nel draft (580069) risultava un luogo del tutto diverso (l'isola di Phabra/Fleves); sostituito con l'ID corretto di Peiraieus/Piraeus (580062), verificato su due fonti (Pleiades stesso e ToposText). Aggiunta la notizia sul probabile luogo di rinvenimento (scavi del Metroon, 1855), assente nel draft. TM number non compilato: nessuna corrispondenza certa trovata in Trismegistos per IG II² 4687a. -->
             <sourceDesc>

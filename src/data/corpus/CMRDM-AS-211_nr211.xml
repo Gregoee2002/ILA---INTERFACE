@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-AS-211</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 211</idno>
+                <idno type="id">199</idno>
+                <idno type="entryId">gen-1786984905702-4x-sr6gaq</idno>
             </publicationStmt>
             <!-- Revisione 2026-08-16 (cross-check con PDF Lane, p.125): testo greco confermato conforme allo stampato nella sostanza, nessuna modifica al testo; punto dubbio non risolto: lo stampato potrebbe leggersi "Ἀσ-κακηνῷ" invece di "Ἀσ-καηνῷ" nell'a-capo tra riga 1 e 2 — data l'ambiguità della resa a bassa risoluzione e la forma "Ἀσκαηνῷ" usata sistematicamente altrove nel corpus, non è stata modificata (segnalato, non corretto). Tradotta la prosa inglese in italiano; corretto Pleiades ID di Antiocheia Pisidiae da 652388 a 609307; rimossa voce bibliografica autoreferenziale fittizia "Lane, I, p. 39, no. 33". -->
             <sourceDesc>

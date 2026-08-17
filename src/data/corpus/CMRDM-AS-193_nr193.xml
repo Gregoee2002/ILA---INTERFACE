@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-AS-193</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 193</idno>
+                <idno type="id">181</idno>
+                <idno type="entryId">gen-1786984905702-4f-5tmaxu</idno>
             </publicationStmt>
             <!-- Revisione assistita (cross-check PDF Lane, CMRDM I p.118, Hardie no.15): l'edizione a stampa presenta DUE LETTURE ALTERNATIVE dello stesso testo di 3 righe (Hardie: "Μεινοδώρα..."; Ramsay: "Ἡ συνοδία..."), non due iscrizioni consecutive. Il draft le fondeva erroneamente in 6 righe sequenziali come se fossero entrambe scolpite sulla pietra: corretto riportando in edizione la lettura di Hardie (indicata da Lane come principale) e spostando la variante di Ramsay in apparato. Rimossa voce bibliografica "Lane, I, p. 38, no. 15" non presente a stampa (artefatto sistematico, vedi nota nr.191); corretto Pleiades ref da 652388 a 609307; tradotti i campi in prosa inglese. -->
             <sourceDesc>

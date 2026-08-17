@@ -12,6 +12,8 @@
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 182</idno>
                 <!-- Revisione: (1) Pleiades ref corretto da 652388 a 609307 (verificato su topostext.org e Wikidata Q579468). (2) Corretta la maiuscola iniziale del testo greco "οἱ"→"Οἱ" (coerente con l'uso di Lane e con le altre entry del gruppo, che capitalizzano sempre la prima lettera dell'iscrizione citata). Lacuna "Ἀν·····ον" (nome parzialmente perso) confermata reale nello stampato, non modificata. (3) Tradotto in italiano layout/p (arricchito coi dettagli dello stampato: due falci di luna con appendice nel naiskos centrale, una in ciascuno dei laterali, cerchi nei timpani), provenance e titolo. Numero di entry (182) confermato corrispondente al testo a stampa. -->
+                <idno type="id">170</idno>
+                <idno type="entryId">gen-1786984905702-44-bkcsv8</idno>
             </publicationStmt>
             <sourceDesc>
                 <msDesc>

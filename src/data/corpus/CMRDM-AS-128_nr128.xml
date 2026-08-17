@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-AS-128</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 128</idno>
+                <idno type="id">117</idno>
+                <idno type="entryId">gen-1786984905702-2n-tw36to</idno>
             </publicationStmt>
             <!-- Revisione assistita (cross-check col PDF Lane, pp. 83-84): testo greco corretto — riga 1 "δι[ὸ]ς" (lettura inventata "di Zeus", priva di senso nel contesto onomastico) sostituita con "δὶς" (lettura certa di Lane, "II", riferito al dedicante omonimo del nonno); "Μουσα[ο]υ" (con lacuna mal posta e lettera ι mancante) corretta in "Μουσαίο[υ]" (lacuna reale solo sulla υ finale); riga 3 rimossa la lacuna fittizia "[ίων]" — Lane legge "[ἰ]δίων" con lacuna solo sulla ἰ iniziale. Aggiornato repository con il nome del proprietario della casa (Arif Sertaç) e placeName "ancient" reso più fedele a Lane (che non identifica Aziziye con Hadriani, ma la colloca "a S. dei siti antichi di Hadriani e Moatra"). Tradotta in italiano la prosa di <support> e <layout>, con l'aggiunta dei dettagli di rinvenimento (acroteri, sovrastruttura rotonda, 1959, casa di Arif Sertaç) presenti nel PDF ma assenti dal draft. Pleiades: nessuna corrispondenza sicura per "Hadriani"/"Moatra" rispetto ad Aziziye (Lane li cita solo come riferimento geografico approssimativo, non come nome antico del sito) — lasciato DA_COMPILARE, segnalato. -->
             <sourceDesc>

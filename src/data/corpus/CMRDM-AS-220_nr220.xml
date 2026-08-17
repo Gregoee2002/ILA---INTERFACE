@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-AS-220</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 220</idno>
+                <idno type="id">208</idno>
+                <idno type="entryId">gen-1786984905702-56-wap88h</idno>
             </publicationStmt>
             <!-- Revisione 2026-08-16 (cross-check con PDF Lane, pp.128-129): correzione sostanziale del testo greco, travisato come sequenza di righe singole mentre Lane descrive un layout su più naiskoi paralleli. Testo corretto: riga condivisa "Μηνὶ εὐχήν." (assente nel draft) sotto i primi tre naiskoi, poi due righe di tre nomi ciascuna disposte in colonne parallele (nome sopra, patronimico sotto, per ciascuno dei tre naiskoi), infine "LLL" nel quarto naiskos. Corretti anche i nomi: "Ἱλάρων"→"Ἱμέρως" e "Ἑμρεσ[τ]ος"→"Εὐάρε[σ]τος" (entrambi inventati/travisati nel draft). Tradotta la prosa inglese in italiano; corretto Pleiades ID di Antiocheia Pisidiae da 652388 a 609307; rimossa voce bibliografica autoreferenziale fittizia "Lane, I, p. 40, no. 42". -->
             <sourceDesc>

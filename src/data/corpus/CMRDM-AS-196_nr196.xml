@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-AS-196</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 196</idno>
+                <idno type="id">184</idno>
+                <idno type="entryId">gen-1786984905702-4i-1b03pj</idno>
             </publicationStmt>
             <!-- Revisione assistita (cross-check PDF Lane, CMRDM I p.118-119, Hardie no.18): testo greco interamente allucinato nel draft. Testo reale a stampa: "[Φ]αΐδρος ['Α]κάσ[του] μετὰ τῶν ἰδίων Μηνὶ Ἀσκαηνῷ εὐχήν." (Phaidros figlio di Akastos, con i suoi, a Men Askaenos, per voto). Il draft aveva inventato un dedicante e patronimico diversi ("Φήδας [Ἀ]κάμτου") e un testo diverso ("μετὰ τῶν υἱίων" = "con i figli" invece del reale "μετὰ τῶν ἰδίων" = "con i suoi/la sua gente"). Titolo e descrizioni corrette di conseguenza. Rimossa voce bibliografica "Lane, I, p. 38, no. 18" non presente a stampa (artefatto sistematico, vedi nota nr.191); corretto Pleiades ref da 652388 a 609307; tradotti i campi in prosa inglese. -->
             <sourceDesc>

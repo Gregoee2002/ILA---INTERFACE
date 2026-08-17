@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-AS-254</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 254</idno>
+                <idno type="id">242</idno>
+                <idno type="entryId">gen-1786984905702-64-wffqh9</idno>
             </publicationStmt>
             <!-- Revisione confronto col PDF (Lane, CMRDM I, p. 140, n. 254): corretto il confine della parentesi quadra alla riga 2 da "[γος τεκμ]ορεύ-" a "[γος τεκμο]ρεύ-" come stampato; corretta la riga 5 da "[υἱῶν Γ. Φλαού-]" (bracket e accento errati, lacuna omessa) a "[.......καὶ υἱῶ]ν Γ. Φλαου-" per riflettere sia la lacuna realmente presente nello stampato sia il confine corretto tra testo integrato e visibile; corretta la riga 6 da "[βου Λόγου καὶ] Φλαούβου" (patronimico inventato, con -βου al posto di -ίου) a "[ίου Λόγου καὶ] Φλαουίου" come stampato; corretto l'ID Pleiades di Antiocheia Pisidiae da 652388 a 609307; tradotta in italiano la prosa descrittiva di Lane in titolo, support e layout; italianizzato "Turkey" in "Turchia". NOTA DI INCERTEZZA: alla riga 4, dopo "[ναικὸς]", Lane stampa un simbolo/legatura tipografica speciale (non la parola "καὶ" per esteso) — verosimilmente un compendio per καί, per analogia con un simbolo identico usato altrove nel volume (es. n. 270, "Πρείμου" seguito dallo stesso segno), ma non è stato possibile verificarne con certezza il significato esatto dalla scansione; il draft riporta "καὶ" come lettura interpretativa plausibile, non modificata per assenza di certezza — da ricontrollare sulla Pl. XIIIa citata in bibliografia. -->
             <sourceDesc>

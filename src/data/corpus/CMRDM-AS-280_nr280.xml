@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-AS-280</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 280</idno>
+                <idno type="id">267</idno>
+                <idno type="entryId">gen-1786984905702-6t-jzoftj</idno>
             </publicationStmt>
             <!-- Revisione su collazione col PDF Lane (p. 150, no. 280): riga 1, corretto "Ζω[σίμος]" in "Ζώ[σι]μος" — Lane marca come supplite solo le lettere "σι", non l'intero "σίμος" (che è invece leggibile sulla pietra); corretta di conseguenza la falsa lacuna. Riga 2, corretta l'accentazione errata "Ζωτίκος" (accento su sillaba sbagliata) in "Ζωτικὸς" come stampato. Rimossa la bibliografia fittizia "Lane, II, p. 47 (unpublished)": nessuna bibliografia è riportata da Lane. Support/layout tradotti in italiano. Corretto anche l'ID Pleiades del luogo di ritrovamento, errato in tutte le entry di questo lotto: "https://pleiades.stoa.org/places/652388" non corrisponde ad Antiochia di Pisidia; sostituito con l'ID corretto 609307 (verificato incrociando Pleiades DARE-location, Wikidata e la posizione "1 km da Yalvaç"). -->
             <sourceDesc>

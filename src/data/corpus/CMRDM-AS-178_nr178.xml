@@ -12,6 +12,8 @@
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 178</idno>
                 <!-- Revisione: (1) Pleiades ref corretto da 652388 a 609307 (verificato su topostext.org e Wikidata Q579468). (2) Tradotti in italiano support/p, layout/p e titolo. (3) Aggiunto dettaglio di ritrovamento presente nello stampato (Lane I, p. 113-114) ma assente nel draft: la pietra fu vista murata "nel muro del Djami, dentro la città, vicino alla caserma di Yalvaç", vista per la prima volta da W. Hamilton prima del 1842, testo più ampio dato da Sterrett. (4) Completata la bibliografia con le voci presenti nello stampato ma assenti nel draft: titolo completo di Hamilton ("Researches in Asia Minor, Pontus, and Armenia"), dettaglio Orelli-Henzen (vol. III, Zurigo, 1856), Le Bas-Waddington III, i, p. 446, no. 1818, Ramsay, Cities of St. Paul, 1907, p. 286, Social Basis, p. 143, no. 148. Testo latino verificato invariato rispetto allo stampato. Numero di entry (178) confermato corrispondente al testo a stampa. -->
+                <idno type="id">166</idno>
+                <idno type="entryId">gen-1786984905702-40-lciynz</idno>
             </publicationStmt>
             <sourceDesc>
                 <msDesc>

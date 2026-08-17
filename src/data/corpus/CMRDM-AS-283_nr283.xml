@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-AS-283</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 283</idno>
+                <idno type="id">270</idno>
+                <idno type="entryId">gen-1786984905702-6w-3kj9k9</idno>
             </publicationStmt>
             <!-- Revisione su collazione col PDF Lane (p. 151, no. 283): la riga 1 del draft ("μήρ Σαοπτό-") era un fraintendimento grave dello stampato. Lane descrive l'iscrizione come disposta "ai lati e sotto" la corona scolpita: la riga 1 stampata mostra infatti DUE frammenti di testo separati e non contigui, posti ai lati della corona ("μβρ" a sinistra, "σκοπτο" a destra, con ampio spazio intermedio), non un'unica parola continua. Il draft aveva fuso questi due frammenti in un nome inventato ("Σαοπτότωλης") con lettere che non corrispondono affatto allo stampato. Corretta la riga 1 riportando i due frammenti separati come stampati; il nome completo del dedicante resta sconosciuto/non integrabile. Rimossa la bibliografia fittizia "Lane, II, p. 47 (unpublished)": nessuna bibliografia è riportata da Lane. Support/layout tradotti in italiano e corretti di conseguenza, rimuovendo il nome inventato "Saoptōtōles". Corretto anche l'ID Pleiades del luogo di ritrovamento, errato in tutte le entry di questo lotto: "https://pleiades.stoa.org/places/652388" non corrisponde ad Antiochia di Pisidia; sostituito con l'ID corretto 609307 (verificato incrociando Pleiades DARE-location, Wikidata e la posizione "1 km da Yalvaç"). -->
             <sourceDesc>

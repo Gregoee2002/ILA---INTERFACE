@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-AS-153</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 154</idno>
+                <idno type="id">142</idno>
+                <idno type="entryId">gen-1786984905702-3c-dt9g50</idno>
             </publicationStmt>
             <!-- Revisione assistita (cross-check PDF Lane): corretto Pleiades ID di Lystra (629018, non pertinente) con l'ID corretto 648699, verificato su Pleiades e ToposText. Corretto il testo greco (restituzione di Ramsay): l.1 il nome proprio del dedicante "[Ὁ καλούμ]ενιος" era in realtà frainteso — Lane stampa "[Π. Καλου]ίσιος" (praenomen + nomen "Publius Calvisius") — e ripristinata la parola caduta "ζ[ῶ]ν" ("in vita", formula ricorrente); l.2 nome della moglie "Βάδε"→"Βάδι" e rimossa lacuna fittizia "[μ]νήμης"→"μνήμης"; l.3 "ὃς"→"Ὅς" (inizio di nuova proposizione), rimossa lacuna fittizia "[μ]νῆμα"→"μνῆμα", accento "κατο-"→"κάτο-"; l.4 "κεκολωμένους"→"κεχολωμένους". Aggiunti i dati di rinvenimento (Sterrett, 1885, Cimitero Orientale) e tradotta la prosa inglese in italiano. -->
             <sourceDesc>

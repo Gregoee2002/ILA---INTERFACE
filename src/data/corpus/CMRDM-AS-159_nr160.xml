@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-AS-159</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 160</idno>
+                <idno type="id">148</idno>
+                <idno type="entryId">gen-1786984905702-3i-9cralg</idno>
             </publicationStmt>
             <!-- Revisione assistita (cross-check con PDF Lane, CMRDM I 160, p. 100-101): tradotta in italiano la prosa descrittiva (support, layout, provenance, title). Corretto un refuso nel testo latino r.7 "VIir" -> "VIIr" (VII vir Augustalis, numerale romano 7, non "VI"+"ir"). Corretto Pleiades ref del placeName "ancient" (Antiocheia Pisidiae) da 652388 (ID errato) a 609307, verificato su Wikidata e topostext.org. -->
             <sourceDesc>

@@ -12,6 +12,7 @@
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 9</idno>
                     <idno type="id">98</idno>
+                <idno type="entryId">gen-1786984905702-7h-2zs9jp</idno>
 </publicationStmt>
             <!-- Revisione: corretto il testo greco confrontandolo con lo stampato di Lane (p. 6): il nome della moglie "Βασίλεια" (nome reale ma non quello stampato) corretto in "Βαβυλία" (nome attico attestato), aggiornata coerentemente la resa in inglese nella descrizione del layout; corretto l'articolo "τὸ Μηνὶ" (agrammaticale prima di dativo) in "τῷ Μηνὶ". Corretto l'ID Pleiades del Pireo: quello presente nel draft (580069) risultava un luogo del tutto diverso (l'isola di Phabra/Fleves); sostituito con l'ID corretto di Peiraieus/Piraeus (580062), verificato su due fonti (Pleiades stesso e ToposText). Aggiunta la data di rinvenimento (ca. 1879) e la misura del foro (ca. 55×35 cm), assenti nel draft. TM number non compilato: nessuna corrispondenza certa trovata in Trismegistos per IG II² 4685. -->
             <sourceDesc>

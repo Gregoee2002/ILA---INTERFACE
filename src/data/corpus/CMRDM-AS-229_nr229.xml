@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-AS-229</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 229</idno>
+                <idno type="id">217</idno>
+                <idno type="entryId">gen-1786984905702-5f-34xc48</idno>
             </publicationStmt>
             <!-- Revisione 2026-08-16 (cross-check con PDF Lane, p.131, no. 229 = Hardie no. 52): sostituito il generico "[...]" a inizio riga 1 con <gap reason="lost" extent="unknown"/>, coerente con i quattro punti di lacuna stampati. Corretto il nome della figlia da "Ἰσμήρη" (vocale e assenza di parentesi errate) a "Ἰσ[μ]άρη", come stampato. Tradotta la prosa inglese in italiano (titolo, support, layout, provenance). Corretto Pleiades ID di Antiocheia Pisidiae da 652388 a 609307. Rimossa voce bibliografica autoreferenziale fittizia "Lane, I, p. 41, no. 52". -->
             <sourceDesc>

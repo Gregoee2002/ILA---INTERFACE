@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-AS-274</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 274</idno>
+                <idno type="id">261</idno>
+                <idno type="entryId">gen-1786984905702-6n-gi5n3z</idno>
             </publicationStmt>
             <!-- Revisione su collazione col PDF Lane (p. 148, no. 274): il draft ometteva completamente la prima riga dell'iscrizione, una riga interamente perduta/illeggibile stampata da Lane come fila di puntini prima di "Ζωτ[ίκος...]"; reinserita come riga 1 e rinumerate di conseguenza le righe successive (ora 2-7), incluso il ripristino della separazione della parola finale "εὐχήν." su riga propria (riga 7). Rimossa la bibliografia fittizia "Lane, II, p. 47 (unpublished)": nessuna bibliografia è riportata da Lane per questa entry. Support/layout tradotti in italiano. Nota: alla penultima riga la lettera dopo "τε-" resta κ (kappa) di "τεκμορεύσας", come nelle entry vicine (271-273), nonostante una lettura visiva ambigua col chi nella scansione. Corretto anche l'ID Pleiades del luogo di ritrovamento, errato in tutte le entry di questo lotto: "https://pleiades.stoa.org/places/652388" non corrisponde ad Antiochia di Pisidia; sostituito con l'ID corretto 609307 (verificato incrociando Pleiades DARE-location, Wikidata e la posizione "1 km da Yalvaç"). -->
             <sourceDesc>

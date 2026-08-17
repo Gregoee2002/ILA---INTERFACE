@@ -12,6 +12,8 @@
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 176</idno>
                 <!-- Revisione: (1) Pleiades ref per Antiocheia Pisidiae corretto da 652388 a 609307 (verificato su topostext.org e Wikidata Q579468). (2) Tradotti in italiano support/p, layout/p, provenance, handNote/p e titolo. (3) Aggiunte dimensioni presenti nello stampato (Lane I, p. 111-112) ma assenti nel draft: altezza dell'appendice/lug alla base (8,5 cm), larghezza alla sommità dell'arco sopra la nicchia (18,2 cm), spessore (5-8 cm), altezza della nicchia (16,7 cm); aggiunto dettaglio "fibula" per la clamide. Numero di entry (176) confermato corrispondente al testo a stampa. Testo latino dell'iscrizione verificato invariato rispetto allo stampato. -->
+                <idno type="id">164</idno>
+                <idno type="entryId">gen-1786984905702-3y-y7970h</idno>
             </publicationStmt>
             <sourceDesc>
                 <msDesc>

@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-AS-140</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 141</idno>
+                <idno type="id">129</idno>
+                <idno type="entryId">gen-1786984905702-2z-a7wief</idno>
             </publicationStmt>
             <!-- Revisione assistita (cross-check col PDF Lane, p. 90): nessuna iscrizione (monumento anepigrafe, correttamente reso col campo edition vuoto). Tradotta in italiano la prosa di <support> e <layout>, mantenendo la cautela di Lane ("according to Perdrizet") sull'attribuzione al Museo Nazionale di Atene. Nessun toponimo antico dato da Lane per la provenienza: ref Pleiades lasciato DA_COMPILARE. -->
             <sourceDesc>

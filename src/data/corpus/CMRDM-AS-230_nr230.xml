@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-AS-230</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 230</idno>
+                <idno type="id">218</idno>
+                <idno type="entryId">gen-1786984905702-5g-n2uq74</idno>
             </publicationStmt>
             <!-- Revisione 2026-08-16 (cross-check con PDF Lane, p.131, no. 230 = Hardie no. 53): corretto il nome del dedicante, allucinato come "Ποσλάιος", in "Πούβλιος" (Publius), come stampato; corretto lo spezzamento/accento di "γυναικός" (righe 2-3), erroneamente reso "γυναί-κος" invece di "γυναι-κὸς". Tradotta la prosa inglese in italiano (titolo, support, layout, provenance). Corretto Pleiades ID di Antiocheia Pisidiae da 652388 a 609307. Rimossa voce bibliografica autoreferenziale fittizia "Lane, I, p. 41, no. 53". -->
             <sourceDesc>

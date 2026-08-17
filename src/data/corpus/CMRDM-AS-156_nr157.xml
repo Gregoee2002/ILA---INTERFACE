@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-AS-156</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 157</idno>
+                <idno type="id">145</idno>
+                <idno type="entryId">gen-1786984905702-3f-ce33ty</idno>
             </publicationStmt>
             <!-- Revisione assistita (cross-check PDF Lane): correzione grave — il draft omette interamente le prime tre righe stampate da Lane (righe intere di stampa mancanti), che contengono la dedica al dio con il suo epiteto: "Μηνὶ Ἀνδρωνηνῷ" (a Men Andronenos), verosimilmente l'epiteto locale che ha portato Lane a identificare il sito con l'antica Androna. Il draft iniziava direttamente con "Τρόπος καὶ Βελ-λα εὐχήν", omettendo il destinatario divino della dedica. Ripristinate le tre righe mancanti e corretto l'accento "Βελ-"→"Βέλ-". Aggiunto Pleiades ID *Androna (619107, sito incerto secondo il Barrington Atlas, localizzato "probabilmente a Topaklı" — corrisponde all'identificazione dubitativa "(?)" di Lane stesso), verificato su Pleiades (due ricerche indipendenti concordanti). Aggiunto il dato di rinvenimento (Anderson, 1898, pavimento di una moschea) e tradotta la prosa inglese in italiano. -->
             <sourceDesc>

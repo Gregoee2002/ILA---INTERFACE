@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-DA-020</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 20</idno>
+                <idno type="id">282</idno>
+                <idno type="entryId">gen-1786984905702-78-t0vblb</idno>
             </publicationStmt>
             <!-- Revisione: corretta riga 2 del testo latino (era "CHvastion(o)", lettura errata; lo stampato ha "Ci[l]vastion(o)", con la "l" segnata come integrazione da Daicoviciu); titolo/support/layout tradotti in italiano, support arricchito col dato di ritrovamento (1911, Orăştie/Várhely) da Lane; corretto Pleiades ancient (era 207660, ID non verificabile; ora 207527 = Ulpia Traiana Sarmizegetusa, corrispondente a Várhely/Sarmizegetusa comune, Hunedoara). -->
             <sourceDesc>

@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-AS-278</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 278</idno>
+                <idno type="id">265</idno>
+                <idno type="entryId">gen-1786984905702-6r-dwjtwq</idno>
             </publicationStmt>
             <!-- Revisione su collazione col PDF Lane (p. 149, no. 278): correzioni al testo greco per aderire allo stampato: riga 3 "Ποσείδ[........]" -> "Ποσειδ[····]" (accento non presente in Lane e lunghezza lacuna errata); riga 4 lacuna adeguata da 3 a 4 puntini; riga 5 "Τρόφων[......]" -> "Τροφον[····]" (lettera finale e accento errati: Lane stampa "ν" finale non accentato, non "ω"); riga 6 spostato il punto fermo dentro la parentesi quadra come nello stampato ("[εὐχήν.]"). Rimossa la bibliografia fittizia "Lane, II, p. 47 (unpublished)": nessuna bibliografia è riportata da Lane. Support/layout tradotti in italiano, con nomi tenuti nella forma frammentaria stampata (non integrati). Corretto anche l'ID Pleiades del luogo di ritrovamento, errato in tutte le entry di questo lotto: "https://pleiades.stoa.org/places/652388" non corrisponde ad Antiochia di Pisidia; sostituito con l'ID corretto 609307 (verificato incrociando Pleiades DARE-location, Wikidata e la posizione "1 km da Yalvaç"). -->
             <sourceDesc>

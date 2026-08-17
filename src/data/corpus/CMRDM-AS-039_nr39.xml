@@ -12,6 +12,7 @@
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 39</idno>
                     <idno type="id">11</idno>
+                <idno type="entryId">gen-1786984905702-a-g22t3z</idno>
 </publicationStmt>
             <!-- REVISIONE (cross-check PDF Lane p. 24-25): "Ὁρπαίου" -> "Γορπιαίου" (l. 1, nome del mese errato); "ηλ΄" -> "ηι΄" (l. 2, numerale giorno errato: ηλ'=38 non è un numero valido di giorno); aggiunta menzione dello scopritore "found by G. M. A. Hanfmann" (assente nel draft); Pleiades ref corretto 609032 (ID inesistente/404) -> 609441 (Kollyda/Goloida = Gölde, verificato via Pleiades API e Trismegistos TM Geo 33613); TM non trovato. -->
             <sourceDesc>

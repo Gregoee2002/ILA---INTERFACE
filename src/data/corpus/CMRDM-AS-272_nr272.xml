@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-AS-272</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 272</idno>
+                <idno type="id">259</idno>
+                <idno type="entryId">gen-1786984905702-6l-j7p5wn</idno>
             </publicationStmt>
             <!-- Revisione su collazione col PDF Lane (p. 147, no. 272): alla riga 3 il draft aggiungeva una "ς" certa dopo "ορεύσα" che nello stampato è invece lacuna ("τεκ[μ]ορεύσα[·····]"); rimossa la lettera inventata. Rimossa la bibliografia fittizia "Lane, II, p. 47 (unpublished)": Lane non riporta alcuna bibliografia per questa entry. Support/layout tradotti in italiano; segnalato che l'ultima riga si trova sulla base della lastra ("on base" in Lane). Numero di puntini delle lacune alle righe 1-2 non riverificabile con certezza dall'immagine PDF: lasciato come nel draft, da controllare in autopsia. Corretto anche l'ID Pleiades del luogo di ritrovamento, errato in tutte le entry di questo lotto: "https://pleiades.stoa.org/places/652388" non corrisponde ad Antiochia di Pisidia; sostituito con l'ID corretto 609307 (verificato incrociando Pleiades DARE-location, Wikidata e la posizione "1 km da Yalvaç"). -->
             <sourceDesc>

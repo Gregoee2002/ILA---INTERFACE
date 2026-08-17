@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-AS-255</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 255</idno>
+                <idno type="id">243</idno>
+                <idno type="entryId">gen-1786984905702-65-8omh0v</idno>
             </publicationStmt>
             <!-- Revisione: 1) corretto Pleiades id 652388 (404, non valido) in 609307 (Antiocheia Pisidiae/Yalvaç); 2) rimossa citazione bibliografica "Lane, II, p. 47" non presente a stampa per questa entry (appartiene alle entry precedenti 253-254 sulla stessa pagina, non a questa); 3) tradotta in italiano la prosa descrittiva inglese (support, layout, title). Testo greco verificato conforme allo stampato (Lane I, p. 140), nessuna modifica. -->
             <sourceDesc>

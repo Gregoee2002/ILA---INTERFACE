@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-GR-015</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 15</idno>
+                <idno type="id">284</idno>
+                <idno type="entryId">gen-1786984905702-7l-qbi8ci</idno>
             </publicationStmt>
             <!-- Revisione: corretta lacuna fittizia/lettera mancante in riga 6 (era "χαρι[ποι-]", manca la ν finale di χάριν, visibile nello stampato: ora "χάριν [ποι-]"); titolo/support/layout tradotti in italiano e arricchiti con dato di scavo (1886, J.T. Bent) dal testo di Lane; corretto Pleiades ancient (era 501594, ID non verificabile/inesistente; ora 501634 = Thasos); placeName modern e provenance tradotti (Greece -> Grecia) e provenance precisata con "Aliki". -->
             <sourceDesc>

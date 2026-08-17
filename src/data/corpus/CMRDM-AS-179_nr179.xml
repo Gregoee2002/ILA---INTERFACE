@@ -12,6 +12,8 @@
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 179</idno>
                 <!-- Revisione: (1) Pleiades ref corretto da 652388 a 609307 (verificato su topostext.org e Wikidata Q579468). (2) CORREZIONI TESTO GRECO (rr. 2-6), verificate sullo stampato Lane I, p. 114: nome 1 "Νεράτιας Ποδοτούμος" → "Α. Νεράτιος Πόστουμος" (praenomen Α. mancante, cognomen latino "Postumus" reso in greco, non "Ποδοτούμος" che non è una parola/nome attestato); nome 2 "Δεντιμᾶς Μάξιμος" → "Λ. Σέντιος Μάξιμος" (nome interamente diverso da quanto stampato); nome 3 "Γ. Οὐέξιος Οὐειτάλης" → "Γ. Οὐείβιος Οὐειτάλης"; nome 4 "Νεράτιας Α[...]ρ[...]" → "Α. Νεράτιος Α[...]ρ[...]" (praenomen Α. mancante). Ristrutturata la sequenza <lb> per riflettere il vero layout a quattro colonne (un nome per naiskos, letto colonna per colonna) anziché una singola sequenza continua. Nota per il revisore successivo: Lane segnala "For the second name, see no. 222" (cross-reference non riportabile in commentary per istruzioni del batch). (3) Tradotti in italiano layout/p, provenance e titolo, con nomi aggiornati. Numero di entry (179) confermato corrispondente al testo a stampa. -->
+                <idno type="id">167</idno>
+                <idno type="entryId">gen-1786984905702-41-wr5hhe</idno>
             </publicationStmt>
             <sourceDesc>
                 <msDesc>

@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-AS-198</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 198</idno>
+                <idno type="id">186</idno>
+                <idno type="entryId">gen-1786984905702-4k-olt0jb</idno>
             </publicationStmt>
             <!-- Revisione assistita (cross-check PDF Lane, CMRDM I p.121, Hardie no.20): testo greco verificato, nessun errore di trascrizione (la sillaba "ε" di riga 2 reca un punto sottoscritto nell'originale a stampa, segno editoriale di lettura incerta, non riprodotto nel draft ma senza conseguenze sul testo). Rimossa voce bibliografica "Lane, I, p. 38, no. 20" non presente a stampa (artefatto sistematico, vedi nota nr.191); corretto Pleiades ref da 652388 a 609307; tradotti i campi in prosa inglese. -->
             <sourceDesc>

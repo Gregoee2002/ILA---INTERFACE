@@ -11,6 +11,8 @@
                 <idno type="filename">CMRDM-AS-236</idno>
                 <idno type="TM"><!-- inserire TM number --></idno>
                 <idno type="CMRDM">CMRDM I 236</idno>
+                <idno type="id">224</idno>
+                <idno type="entryId">gen-1786984905702-5m-wfqyiu</idno>
             </publicationStmt>
             <!-- Revisione 2026-08-16 (cross-check con PDF Lane, p.133, no. 236 = Hardie no. 59): corretto il nome "Caethemerус" — che conteneva caratteri cirillici spuri ("ус" invece di "us") e una "e" in più — in "Cathemerus", come stampato. Tradotta la prosa inglese in italiano (titolo, support, layout, provenance). Corretto Pleiades ID di Antiocheia Pisidiae da 652388 a 609307. Rimossa voce bibliografica autoreferenziale fittizia "Lane, I, p. 41, no. 59". -->
             <sourceDesc>
