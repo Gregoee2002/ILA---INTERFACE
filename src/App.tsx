@@ -1603,6 +1603,14 @@ function Timeline({ monumenti, onSelect }: { monumenti: Monumento[], onSelect: (
   const LANE_GAP = 12;
   const LANE_STEP = 152;
   const BASE_CONNECTOR = 20;
+  // Il connettore non è più un segmento dritto ma una curva a "ramo": si scosta di
+  // "bow" pixel a metà percorso per poi rientrare esattamente sul punto dell'asse e
+  // sul box, senza mai spostarne la posizione (che resta ancorata all'anno vero).
+  // L'ampiezza cresce con la corsia — i rami più lontani dall'asse si aprono di più,
+  // come in una vera ramificazione — e il verso alterna per dare varietà visiva.
+  const FAN_BASE = 12;
+  const FAN_PER_LANE = 7;
+  const FAN_MAX = 34;
 
   const clusterLayout = useMemo(() => {
     const upLaneEdges: number[] = [];
@@ -1615,7 +1623,9 @@ function Timeline({ monumenti, onSelect }: { monumenti: Monumento[], onSelect: (
       let lane = laneEdges.findIndex(rightEdge => boxLeftEdge >= rightEdge + LANE_GAP);
       if (lane === -1) { lane = laneEdges.length; laneEdges.push(-Infinity); }
       laneEdges[lane] = left + CLUSTER_HALF_WIDTH;
-      return { cluster, left, side, lane };
+      const bowSign = idx % 2 === 0 ? 1 : -1;
+      const bow = Math.min(FAN_MAX, FAN_BASE + lane * FAN_PER_LANE) * bowSign;
+      return { cluster, left, side, lane, bow };
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [clusters, pxPerYear, yearMin]);
@@ -1824,11 +1834,12 @@ function Timeline({ monumenti, onSelect }: { monumenti: Monumento[], onSelect: (
 
                 {/* Asse: un'unica barra continua, sempre sopra a marcatori e diramazioni
                     (zIndex esplicito) così non può mai apparire spezzata da altri elementi.
-                    Un filo più in rilievo — spessore maggiore, ombra leggera — e si accende
-                    in teal al passaggio del mouse per segnalare che è interattivo. */}
+                    Più spessa e contrastata dei rami che ne partono (che restano sottili e
+                    al 40% di opacità) così si legge subito come il "tronco" della cronologia,
+                    e si accende in teal al passaggio del mouse per segnalare che è interattivo. */}
                 <div
-                  className={`absolute inset-x-0 top-0 rounded-full transition-colors duration-200 pointer-events-none ${hoverX !== null ? 'bg-accent/50' : 'bg-border'}`}
-                  style={{ height: 2, zIndex: 1, boxShadow: 'inset 0 1px 1px rgba(0,0,0,0.08), 0 1px 0 rgba(255,255,255,0.5)' }}
+                  className={`absolute inset-x-0 top-0 rounded-full transition-colors duration-200 pointer-events-none ${hoverX !== null ? 'bg-accent/60' : 'bg-ink/20'}`}
+                  style={{ height: 3, zIndex: 1, boxShadow: 'inset 0 1px 1px rgba(0,0,0,0.1), 0 1px 0 rgba(255,255,255,0.5)' }}
                 />
 
                 {/* Puntini di sospensione agli estremi: l'asse è ricavato dai dati reali, ma
@@ -1865,9 +1876,32 @@ function Timeline({ monumenti, onSelect }: { monumenti: Monumento[], onSelect: (
                     in clusterLayout con un algoritmo a intervalli (nessun overlap orizzontale
                     all'interno della stessa corsia). Ogni scheda del corpus rientra in esattamente
                     un cluster: nessuna va persa o spostata dal suo punto cronologico. */}
-                {clusterLayout.map(({ cluster, left, side, lane }, idx) => {
+                {clusterLayout.map(({ cluster, left, side, lane, bow }, idx) => {
                   const isGroup = cluster.items.length > 1;
                   const connectorHeight = BASE_CONNECTOR + lane * LANE_STEP;
+                  // Connettore a ramo: curva bezier che si scosta di "bow" px a metà
+                  // percorso e rientra esattamente sui due estremi (svgCx). Gli estremi
+                  // combaciano sempre col centro del wrapper flex sottostante, quindi con
+                  // punto sull'asse e box — la curvatura è solo estetica, non sposta nulla.
+                  const svgWidth = FAN_MAX * 2 + 6;
+                  const svgCx = svgWidth / 2;
+                  const connectorPath = `M ${svgCx} 0 C ${svgCx + bow} ${connectorHeight * 0.35}, ${svgCx + bow} ${connectorHeight * 0.65}, ${svgCx} ${connectorHeight}`;
+                  const connector = (
+                    <svg
+                      width={svgWidth}
+                      height={connectorHeight}
+                      style={{ overflow: 'visible', display: 'block' }}
+                    >
+                      <path
+                        d={connectorPath}
+                        fill="none"
+                        stroke="var(--accent)"
+                        strokeOpacity={0.4}
+                        strokeWidth={1.4}
+                        strokeLinecap="round"
+                      />
+                    </svg>
+                  );
                   return (
                     <div key={`cluster-${cluster.year}-${idx}`} className="absolute" style={{ left, top: 0, zIndex: 2 }}>
                       {/* Connettore + riquadro: ancorati al punto esatto sull'asse (0,0 del wrapper),
@@ -1878,14 +1912,14 @@ function Timeline({ monumenti, onSelect }: { monumenti: Monumento[], onSelect: (
                           style={{ left: 0, bottom: 0, transform: 'translateX(-50%)' }}
                         >
                           <TimelineBranchBox items={cluster.items} onSelect={onSelect} />
-                          <div className="w-px bg-accent/35" style={{ height: connectorHeight }} />
+                          {connector}
                         </div>
                       ) : (
                         <div
                           className="absolute flex flex-col items-center"
                           style={{ left: 0, top: 0, transform: 'translateX(-50%)' }}
                         >
-                          <div className="w-px bg-accent/35" style={{ height: connectorHeight }} />
+                          {connector}
                           <TimelineBranchBox items={cluster.items} onSelect={onSelect} />
                         </div>
                       )}
