@@ -6,6 +6,36 @@ import { PasswordGate } from './components/PasswordGate';
 
 const isStaticBuild = import.meta.env.VITE_STATIC_BUILD === 'true';
 
+// Ogni deploy su GitHub Pages sovrascrive dist/ con asset ri-hashati e
+// cancella quelli vecchi. Chi ha la pagina già aperta (o una index.html in
+// cache) da prima di un deploy prova a caricare il chunk col vecchio nome,
+// che non esiste più → "Importing a module script failed" / "Failed to
+// fetch dynamically imported module". Vite emette 'vite:preloadError'
+// apposta per questo caso: un reload risolve, quindi lo facciamo in
+// automatico (una sola volta, altrimenti loop infinito se l'errore è
+// un altro) invece di piantare l'utente su una schermata d'errore.
+const RELOAD_GUARD_KEY = 'ila-stale-chunk-reload';
+
+function isStaleChunkError(message: string): boolean {
+  return /module script|dynamically imported module|Failed to fetch/i.test(message);
+}
+
+function reloadOnceForStaleChunk(message: string): boolean {
+  if (!isStaleChunkError(message)) return false;
+  if (sessionStorage.getItem(RELOAD_GUARD_KEY)) return false;
+  sessionStorage.setItem(RELOAD_GUARD_KEY, '1');
+  window.location.reload();
+  return true;
+}
+
+if (isStaticBuild) {
+  window.addEventListener('vite:preloadError', (event) => {
+    if (reloadOnceForStaleChunk((event as any).payload?.message || 'preload error')) {
+      event.preventDefault();
+    }
+  });
+}
+
 // Solo sulla build GitHub Pages: nessun server.ts, quindi le route /api/*
 // vengono servite in-browser da apiShim.ts. Di default in modalità
 // "viewer" (legge lo snapshot statico incluso nel sito, nessun token
@@ -21,8 +51,14 @@ function StaticBoot({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     import('./lib/apiShim')
       .then(({ installApiShim }) => installApiShim())
-      .then(() => setReady(true))
-      .catch((e: any) => setError(e.message || String(e)));
+      .then(() => {
+        sessionStorage.removeItem(RELOAD_GUARD_KEY);
+        setReady(true);
+      })
+      .catch((e: any) => {
+        const message = e?.message || String(e);
+        if (!reloadOnceForStaleChunk(message)) setError(message);
+      });
   }, []);
 
   if (error) {
