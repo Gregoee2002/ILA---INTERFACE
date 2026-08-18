@@ -67,6 +67,7 @@ import { FlagsPanel } from './components/FlagsPanel';
 import { EntryFlagForm } from './components/EntryFlagForm';
 import { auth, loginWithGoogle, logout } from './lib/firebase';
 import { onAuthStateChanged, User } from 'firebase/auth';
+import ilaLogo from './assets/images/ila-logo.png';
 
 // Forma della risposta di GET /api/search (vedi src/lib/searchIndex.ts).
 // Dichiarato qui invece che importato dal modulo server per non accoppiare
@@ -1076,13 +1077,22 @@ function IconRail({
         transition={SPRING_SOFT}
         className="fixed inset-y-0 left-0 z-50 flex flex-col items-stretch bg-[var(--card)]/95 dark:bg-[var(--card)]/90 backdrop-blur-xl border-r border-border/40 overflow-hidden shadow-[4px_0_24px_-8px_rgba(var(--shadow-color),0.15)]"
       >
-        <div className={cn("flex items-center h-14 shrink-0", expanded ? "px-4 justify-start" : "justify-center")}>
-          <span
-            className="text-sm font-bold tracking-[0.15em] text-accent whitespace-nowrap"
-            style={{ fontFamily: '"Cinzel", serif' }}
-          >
-            ILA
-          </span>
+        <div className={cn("flex items-center h-14 shrink-0 gap-2", expanded ? "px-4 justify-start" : "justify-center")}>
+          <img src={ilaLogo} alt="ILA" className="h-8 w-8 shrink-0 object-contain" />
+          <AnimatePresence>
+            {expanded && (
+              <motion.span
+                initial={{ opacity: 0, x: -6 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -6 }}
+                transition={{ duration: 0.15 }}
+                className="text-sm font-bold tracking-[0.15em] text-accent whitespace-nowrap"
+                style={{ fontFamily: '"Cinzel", serif' }}
+              >
+                ILA
+              </motion.span>
+            )}
+          </AnimatePresence>
         </div>
 
         <div className="flex-1 flex flex-col gap-1 px-2 py-2 overflow-y-auto">
