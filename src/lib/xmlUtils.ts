@@ -447,26 +447,20 @@ function parseTeiElement(teiString: string): Monumento {
   }
 
   // Fallback 3: deduce region from CMRDM I numeric ranges if not explicitly coded.
-  // Only applied when the file explicitly belongs to the CMRDM corpus — identified
-  // by <idno type="corpus"> containing "CMRDM", <idno type="CMRDM">, or
-  // <authority> containing "CMRDM". Non-CMRDM files (e.g. I.Milet, IG, SEG)
-  // share the same numeric filename space and must not be mapped via these ranges.
+  // Only applied to CMRDM I records, keyed off the canonical <msIdentifier><idno>
+  // "CMRDM I <numero>" text (see estrazione corpus/numero più sotto) — MAI dal
+  // vecchio <idno type="filename">, che è un id interno indipendente dal vero
+  // numero di catalogo e produceva regioni sbagliate dopo ogni riscrittura.
   if (!regione) {
-    const isCMRDM =
-      /(<idno\s+type="corpus">[^<]*CMRDM[^<]*<\/idno>)/i.test(teiString) ||
-      /(<idno\s+[^>]*type="CMRDM")/i.test(teiString) ||
-      /(<authority>[^<]*CMRDM[^<]*<\/authority>)/i.test(teiString);
-    if (isCMRDM) {
-      const fnMatchForRegione = teiString.match(/<idno\s+type="filename">(\d+)<\/idno>/);
-      if (fnMatchForRegione) {
-        const n = parseInt(fnMatchForRegione[1], 10);
-        if (n >= 1 && n <= 19) regione = "Graecia";
-        else if (n >= 20 && n <= 27) regione = "Dacia";
-        else if (n >= 28 && n <= 47) regione = "Italia";
-        else if (n >= 48 && n <= 116) regione = "Asia Minor";
-        else if (n >= 117 && n <= 130) regione = "Dubia";
-        else if (n >= 131) regione = "Addenda";
-      }
+    const msCanonicalForRegione = (msIdnos[0] || "").match(/^CMRDM\s+I\s+(\d+)/i);
+    if (msCanonicalForRegione) {
+      const n = parseInt(msCanonicalForRegione[1], 10);
+      if (n >= 1 && n <= 19) regione = "Graecia";
+      else if (n >= 20 && n <= 27) regione = "Dacia";
+      else if (n >= 28 && n <= 47) regione = "Italia";
+      else if (n >= 48 && n <= 116) regione = "Asia Minor";
+      else if (n >= 117 && n <= 130) regione = "Dubia";
+      else if (n >= 131) regione = "Addenda";
     }
   }
 
@@ -1008,9 +1002,21 @@ function parseTeiElement(teiString: string): Monumento {
   }
 
   let corpus = "";
+  let numeroFromMsIdentifier = "";
+  // 0. <msIdentifier><idno>CMRDM <numero romano> <numero></idno> — formato canonico
+  // usato da tutte le schede reali del corpus (es. "CMRDM I 28"): ha priorità sugli
+  // altri pattern, che nei file reali non compaiono mai.
+  {
+    const msCanonicalMatch = (msIdnos[0] || "").match(/^(CMRDM\s+[IVXLCDM]+)\s+(\S.*)$/i);
+    if (msCanonicalMatch) {
+      corpus = msCanonicalMatch[1].trim();
+      numeroFromMsIdentifier = msCanonicalMatch[2].trim();
+    }
+  }
+
   // 1. <idno type="corpus"> — se presente, usa il suo contenuto testuale
   const idnoCorpusMatch = teiString.match(/<idno\s+type="corpus">([\s\S]*?)<\/idno>/);
-  if (idnoCorpusMatch) {
+  if (!corpus && idnoCorpusMatch) {
     corpus = unescapeXml(idnoCorpusMatch[1].trim());
   }
 
@@ -1043,10 +1049,10 @@ function parseTeiElement(teiString: string): Monumento {
     }
   }
 
-  let numero = "";
+  let numero = numeroFromMsIdentifier;
   // 1. <idno type="numero"> — se presente, usa il suo contenuto testuale
   const idnoNumeroMatch = teiString.match(/<idno\s+type="numero">([\s\S]*?)<\/idno>/);
-  if (idnoNumeroMatch) {
+  if (!numero && idnoNumeroMatch) {
     numero = unescapeXml(idnoNumeroMatch[1].trim());
   }
 
@@ -1194,9 +1200,15 @@ export function monumentiToXml(monumenti: Monumento[]): string {
     if (m.titolo && m.titolo.includes("<")) {
       titleContent = m.titolo;
     } else {
+      // Quando textTypes è vuoto va ricostruito il generico di default che il
+      // parser esclude deliberatamente da textTypes (vedi sopra, "iscrizione
+      // greca"): MAI m.tipo, che è il supporto fisico (stele/altare/blocco),
+      // un concetto diverso dal genere testuale — confonderli qui rendeva
+      // iscrizione/anepigr/textTypes tutti sbagliati dopo un semplice salvataggio.
+      const defaultRs = m.anepigr ? 'Anepigrafe' : (m.iscrizione !== false ? 'Iscrizione greca' : 'Monumento');
       const rs_parts = (m.textTypes && m.textTypes.length > 0)
         ? m.textTypes.map(t => `<rs type="textType">${escapeXml(t)}</rs>`).join(' ')
-        : (m.tipo ? `<rs type="textType">${escapeXml(m.tipo)}</rs>` : `<rs type="textType">Monumento</rs>`);
+        : `<rs type="textType">${escapeXml(defaultRs)}</rs>`;
       titleContent = `${rs_parts} ${escapeXml(m.titolo || '')}`;
     }
 
@@ -1224,18 +1236,19 @@ export function monumentiToXml(monumenti: Monumento[]): string {
     block += `                <msDesc>\n`;
     block += `                    <msIdentifier>\n`;
     block += `                        <repository>${escapeXml(m.luogo_cons || 'in situ or lost')}</repository>\n`;
-    if (m.msIdnos && m.msIdnos.length > 0) {
+    const corpus_val = m.corpus || "";
+    const numero_val = m.numero || "";
+    if (corpus_val || numero_val) {
+      // I campi corpus/numero sono la rappresentazione modificabile nell'editor:
+      // hanno sempre priorità sul valore grezzo msIdnos catturato al parsing,
+      // altrimenti le modifiche a "corpus" non si riflettono mai nell'XML.
+      block += `                        <idno>${escapeXml(`${corpus_val} ${numero_val}`.trim())}</idno>\n`;
+    } else if (m.msIdnos && m.msIdnos.length > 0) {
       for (const mid of m.msIdnos) {
         block += `                        <idno>${escapeXml(mid)}</idno>\n`;
       }
     } else {
-      const corpus_val = m.corpus || "";
-      const numero_val = m.numero || "";
-      if (corpus_val || numero_val) {
-        block += `                        <idno>${escapeXml(`${corpus_val} ${numero_val}`.trim())}</idno>\n`;
-      } else {
-        block += `                        <idno>${m.id}</idno>\n`;
-      }
+      block += `                        <idno>${m.id}</idno>\n`;
     }
     block += `                    </msIdentifier>\n`;
     

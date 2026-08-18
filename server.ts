@@ -207,153 +207,6 @@ async function startServer() {
     }
   }
 
-  // Patch-write: compute the updated XML (only editable metadata fields
-  // touched, everything else preserved byte-for-byte) WITHOUT writing it —
-  // il chiamante scrive su disco e specchia su GitHub in un unico punto
-  // (vedi writeCorpusFile), così le due copie non possono disallinearsi.
-  function patchXmlContent(filepath: string, m: any): string {
-    let xml = fs.readFileSync(filepath, 'utf-8');
-
-    // Helper: replace content of a simple tag
-    const replaceTag = (tag: string, newVal: string) => {
-      const re = new RegExp(`(<${tag}[^>]*>)[\\s\\S]*?(<\\/${tag}>)`);
-      if (re.test(xml) && newVal) {
-        xml = xml.replace(re, `$1${escXml(newVal)}$2`);
-      }
-    };
-
-    // Helper: replace attribute value
-    const replaceAttr = (tag: string, attr: string, newVal: string) => {
-      if (!newVal) return;
-      const re = new RegExp(`(<${tag}[^>]*${attr}=")[^"]*(")`);
-      xml = xml.replace(re, `$1${escXml(newVal)}$2`);
-    };
-
-    const escXml = (s: string) => s
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;');
-
-    // Editable metadata fields — surgical replacements only
-    if (m.titolo) {
-      // Replace only the text after the last </rs> in <title>
-      xml = xml.replace(
-        /(<title[^>]*>[\s\S]*?<\/rs>\s*)([\s\S]*?)(<\/title>)/,
-        (_, pre, _old, post) => `${pre}${escXml(m.titolo.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim())}${post}`
-      );
-    }
-
-    if (m.regione) {
-      // Update or add <placeName type="region">
-      if (/<placeName\s+type="region"/.test(xml)) {
-        xml = xml.replace(
-          /(<placeName\s+type="region"[^>]*>)[^<]*(<\/placeName>)/,
-          `$1${escXml(m.regione)}$2`
-        );
-      }
-    }
-
-    if (m.corpus) {
-      xml = xml.replace(
-        /(<idno\s+type="CMRDM"[^>]*corpus=")[^"]*(")/,
-        `$1${escXml(m.corpus)}$2`
-      );
-    }
-
-    if (m.numero) {
-      xml = xml.replace(
-        /(<idno\s+type="CMRDM"[^>]*numero=")[^"]*(")/,
-        `$1${escXml(m.numero)}$2`
-      );
-    }
-
-    if (m.facsimile_url) replaceAttr('graphic', 'url', m.facsimile_url);
-    if (m.facsimile_desc) {
-      // Scope to the <facsimile> block: a bare <desc> elsewhere must not be touched
-      xml = xml.replace(
-        /(<facsimile>[\s\S]*?<desc>)[\s\S]*?(<\/desc>[\s\S]*?<\/facsimile>)/,
-        `$1${escXml(m.facsimile_desc)}$2`
-      );
-    }
-    if (m.materiale) replaceTag('material', m.materiale);
-    if (m.tipo) replaceTag('objectType', m.tipo);
-
-    if (m.dim_altezza) replaceTag('height', m.dim_altezza);
-    if (m.dim_larghezza) replaceTag('width', m.dim_larghezza);
-    if (m.dim_profondita) replaceTag('depth', m.dim_profondita);
-
-    if (m.place_ref_ancient) replaceAttr('placeName type="ancient"', 'ref', m.place_ref_ancient);
-    if (m.place_ref_modern) replaceAttr('placeName type="modern"', 'ref', m.place_ref_modern);
-    if (m.tipo_ref) replaceAttr('objectType', 'ref', m.tipo_ref);
-    if (m.materialRef) replaceAttr('material', 'ref', m.materialRef);
-
-    // Write applicative id back into XML as <idno type="id">
-    if (m.id) {
-      if (/<idno\s+type="id">/.test(xml)) {
-        xml = xml.replace(/<idno\s+type="id">\d*<\/idno>/, `<idno type="id">${escXml(String(m.id))}</idno>`);
-      } else {
-        // Insert after last <idno> in publicationStmt
-        xml = xml.replace(
-          /(<\/publicationStmt>)/,
-          `        <idno type="id">${escXml(String(m.id))}</idno>\n$1`
-        );
-      }
-    }
-
-    // Write entryId back into XML as <idno type="entryId">
-    // (migrates legacy <idno type="firebaseId"> tags in place)
-    if (m.entryId) {
-      if (/<idno\s+type="entryId">/.test(xml)) {
-        xml = xml.replace(/<idno\s+type="entryId">[^<]*<\/idno>/, `<idno type="entryId">${escXml(m.entryId)}</idno>`);
-      } else if (/<idno\s+type="firebaseId">/.test(xml)) {
-        xml = xml.replace(/<idno\s+type="firebaseId">[^<]*<\/idno>/, `<idno type="entryId">${escXml(m.entryId)}</idno>`);
-      } else {
-        xml = xml.replace(
-          /(<\/publicationStmt>)/,
-          `        <idno type="entryId">${escXml(m.entryId)}</idno>\n$1`
-        );
-      }
-    }
-
-    // Add or update <revisionDesc>
-    if (m.revisions && m.revisions.length > 0) {
-      const revXml = m.revisions.map((r: any) =>
-        `    <change${r.date ? ` when="${escXml(r.date)}"` : ''}${r.who ? ` who="${escXml(r.who)}"` : ''}>${escXml(r.note || '')}</change>`
-      ).join('\n');
-      if (/<revisionDesc>/.test(xml)) {
-        xml = xml.replace(/<revisionDesc>[\s\S]*?<\/revisionDesc>/, `<revisionDesc>\n${revXml}\n  </revisionDesc>`);
-      } else {
-        xml = xml.replace('</teiHeader>', `  <revisionDesc>\n${revXml}\n  </revisionDesc>\n</teiHeader>`);
-      }
-    }
-
-    // Add, update or remove <xenoData><iconography> — unico punto di
-    // scrittura, condiviso con monumentiToXml (renderIconography), così le
-    // due strade (scheda nuova / patch scheda esistente) non possono
-    // divergere nel formato scritto su disco.
-    if ('iconografia' in m) {
-      const hasExisting = /[ \t]*<xenoData>[\s\S]*?<\/xenoData>\n?/.test(xml);
-      const rendered = renderIconography(m.iconografia, '    ');
-      if (rendered) {
-        if (hasExisting) {
-          xml = xml.replace(/[ \t]*<xenoData>[\s\S]*?<\/xenoData>\n?/, rendered + '\n');
-        } else if (/<\/profileDesc>\n?/.test(xml)) {
-          xml = xml.replace(/(<\/profileDesc>\n?)/, `$1${rendered}\n`);
-        } else if (/[ \t]*<revisionDesc>/.test(xml)) {
-          xml = xml.replace(/([ \t]*<revisionDesc>)/, `${rendered}\n$1`);
-        } else {
-          xml = xml.replace('</teiHeader>', `${rendered}\n</teiHeader>`);
-        }
-      } else if (hasExisting) {
-        // iconografia svuotata esplicitamente dall'editor: rimuove il blocco
-        xml = xml.replace(/[ \t]*<xenoData>[\s\S]*?<\/xenoData>\n?/, '');
-      }
-    }
-
-    return xml;
-  }
-
   // Scrive un file XML del corpus in un unico punto: locale + specchio su
   // GitHub (se configurato). Usare SEMPRE questa funzione invece di
   // fs.writeFileSync diretto per qualunque file dentro CORPUS_DIR, così le
@@ -456,15 +309,14 @@ async function startServer() {
           writtenFiles.add(filename);
 
           try {
-            if (fs.existsSync(filepath)) {
-              // File exists — patch only editable fields
-              const patched = patchXmlContent(filepath, m);
-              await writeCorpusFile(filename, patched, `Aggiorna ${filename}`);
-            } else {
-              // New entry — write full XML
-              const xml = monumentiToXml([m]);
-              await writeCorpusFile(filename, xml, `Nuova scheda ${filename}`);
-            }
+            // Riscrittura completa via monumentiToXml, sia per schede nuove che
+            // esistenti: il client manda sempre l'oggetto Monumento completo (non
+            // un patch parziale), e monumentiToXml è la stessa serializzazione
+            // già validata come fedele sull'intero corpus — un'unica strada,
+            // niente più divergenza col vecchio patchXmlContent basato su regex
+            // che copriva solo una manciata di campi.
+            const xml = monumentiToXml([m]);
+            await writeCorpusFile(filename, xml, `Aggiorna ${filename}`);
           } catch (e: any) {
             failures.push({ filename, error: e.message || String(e) });
           }
@@ -535,7 +387,11 @@ async function startServer() {
         });
       }
 
-      const patched = patchXmlContent(filepath, monumento);
+      // Riscrittura completa via monumentiToXml: il client manda sempre l'oggetto
+      // Monumento intero (vedi handleSaveMetadata in App.tsx, {...target, ...metadata}),
+      // non un vero patch parziale — "patch" qui si riferisce solo al fatto che
+      // tocchiamo un file alla volta, non tutto il corpus.
+      const patched = monumentiToXml([monumento]);
       await writeCorpusFile(filename, patched, `Aggiorna ${filename}`);
 
       rebuildBackup();

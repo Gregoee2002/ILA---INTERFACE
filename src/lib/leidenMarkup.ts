@@ -1123,6 +1123,13 @@ export interface IndexSuggestions {
   imperatori: string[];
 }
 
+export interface PersonSuggestion {
+  xmlId: string;
+  key?: string;
+  nymRef?: string;
+  name: string;
+}
+
 function textOfToken(t: MarkupToken): string {
   if (t.kind === "text") return t.value;
   return effectiveChildren(t).map(textOfToken).join("");
@@ -1173,4 +1180,42 @@ export function extractIndexSuggestions(testo: string): IndexSuggestions {
     onomastica: Array.from(onomastica),
     imperatori: Array.from(imperatori),
   };
+}
+
+/** Scandisce i <persName type="attested"> già codificati nell'edizione e ne ricava
+ *  l'identità di base (xml:id, key, nymRef, nome) per lo specchio listPerson.
+ *  L'xml:id è preso da `ref="#..."` quando presente, altrimenti dal `key`: sono la
+ *  stessa convenzione già in uso nei file del corpus (vedi nr. 12). Etnico e nota,
+ *  che non sono nel markup dell'edizione, restano affidati alla cura editoriale e
+ *  vengono preservati da chi chiama, non da questa funzione. */
+export function extractPersonsFromEdition(testo: string): PersonSuggestion[] {
+  const persons: PersonSuggestion[] = [];
+  const seen = new Set<string>();
+
+  const walk = (toks: MarkupToken[]) => {
+    for (const t of toks) {
+      if (t.kind !== "el") continue;
+      if (t.name === "persName" && t.attrs.type === "attested") {
+        const key = (t.attrs.key || "").trim();
+        const refAttr = (t.attrs.ref || "").trim();
+        const xmlId = refAttr ? refAttr.replace(/^#/, "") : key;
+        if (xmlId && !seen.has(xmlId)) {
+          seen.add(xmlId);
+          const nameChild = t.children.find(c => c.kind === "el" && c.name === "name");
+          const nymRef = nameChild && nameChild.kind === "el" ? nameChild.attrs.nymRef : undefined;
+          const name = (nameChild ? textOfToken(nameChild) : textOfToken(t)).trim();
+          persons.push({ xmlId, key: key || undefined, nymRef: nymRef || undefined, name });
+        }
+      }
+      walk(t.children);
+    }
+  };
+
+  try {
+    walk(parseEdition(testo));
+  } catch {
+    // markup malformato: nessun suggerimento, l'editor non si blocca per questo
+  }
+
+  return persons;
 }

@@ -10,7 +10,7 @@ import { xmlToMonumenti } from '../lib/xmlUtils';
 import { EditionMarkupEditor } from './EditionMarkupEditor';
 import { ICONOGRAPHY_LABELS } from '../lib/iconographyLabels';
 import { INSCRIPTION_TYPES, OBJECT_TYPES, MATERIALS, EXECUTION_TECHNIQUES, VocabTerm } from '../lib/eagleVocab';
-import { extractIndexSuggestions } from '../lib/leidenMarkup';
+import { extractIndexSuggestions, extractPersonsFromEdition } from '../lib/leidenMarkup';
 
 /** Le 18 sezioni canoniche, ora mappate su campi Monumento (già separati nel corpus). */
 export type SectionId =
@@ -98,13 +98,32 @@ const SECTION_FIELDS: Record<SectionId, (keyof Monumento)[]> = {
 };
 const SECTION_FIELDS_FLAT: (keyof Monumento)[] = Array.from(new Set(Object.values(SECTION_FIELDS).flat()));
 
-/** Gli indici (epiteti/divinità/onomastica/imperatori) non sono più campi liberi:
- *  sono sempre lo specchio esatto dei <persName> già codificati nell'edizione.
+/** Gli indici (epiteti/divinità/onomastica/imperatori/persone) non sono più campi
+ *  liberi: sono sempre lo specchio esatto dei <persName> già codificati nell'edizione.
  *  Nessuna digitazione manuale possibile: per aggiungere una voce all'indice si
- *  codifica il persName nel testo, non il contrario. */
+ *  codifica il persName nel testo, non il contrario.
+ *  Per le persone attestate (listPerson), etnico e nota sono cura editoriale che
+ *  non compare nel markup dell'edizione: vengono preservati quando l'xml:id è
+ *  ancora referenziato nel testo, e la voce viene rimossa solo se il persName
+ *  corrispondente sparisce dal testo. */
 function applyDerivedIndices(m: Monumento): Monumento {
   const idx = extractIndexSuggestions(m.testo || '');
-  return { ...m, epiteti: idx.epiteti, divinita: idx.divinita, onomastica: idx.onomastica, imperatori: idx.imperatori };
+  const found = extractPersonsFromEdition(m.testo || '');
+  const prevByXmlId = new Map((m.persone || []).map(p => [p.xmlId, p]));
+  const persone = found.map(f => {
+    const prev = prevByXmlId.get(f.xmlId);
+    return {
+      xmlId: f.xmlId,
+      key: f.key,
+      nymRef: f.nymRef,
+      name: f.name,
+      ethnicRef: prev?.ethnicRef,
+      ethnicNymRef: prev?.ethnicNymRef,
+      ethnicText: prev?.ethnicText,
+      note: prev?.note,
+    };
+  });
+  return { ...m, epiteti: idx.epiteti, divinita: idx.divinita, onomastica: idx.onomastica, imperatori: idx.imperatori, persone };
 }
 
 function diffSections(prev: Monumento, next: Monumento): SectionId[] {

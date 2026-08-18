@@ -114,97 +114,6 @@ function validateMonumentoShape(m: any): string | null {
   return checks.find(c => c !== null) ?? null;
 }
 
-function patchXmlContent(xml: string, m: any): string {
-  const replaceTag = (tag: string, newVal: string) => {
-    const re = new RegExp(`(<${tag}[^>]*>)[\\s\\S]*?(<\\/${tag}>)`);
-    if (re.test(xml) && newVal) xml = xml.replace(re, `$1${escXml(newVal)}$2`);
-  };
-  const replaceAttr = (tag: string, attr: string, newVal: string) => {
-    if (!newVal) return;
-    const re = new RegExp(`(<${tag}[^>]*${attr}=")[^"]*(")`);
-    xml = xml.replace(re, `$1${escXml(newVal)}$2`);
-  };
-  const escXml = (s: string) => s
-    .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
-
-  if (m.titolo) {
-    xml = xml.replace(
-      /(<title[^>]*>[\s\S]*?<\/rs>\s*)([\s\S]*?)(<\/title>)/,
-      (_: string, pre: string, _old: string, post: string) => `${pre}${escXml(m.titolo.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim())}${post}`
-    );
-  }
-  if (m.regione && /<placeName\s+type="region"/.test(xml)) {
-    xml = xml.replace(/(<placeName\s+type="region"[^>]*>)[^<]*(<\/placeName>)/, `$1${escXml(m.regione)}$2`);
-  }
-  if (m.corpus) {
-    xml = xml.replace(/(<idno\s+type="CMRDM"[^>]*corpus=")[^"]*(")/, `$1${escXml(m.corpus)}$2`);
-  }
-  if (m.numero) {
-    xml = xml.replace(/(<idno\s+type="CMRDM"[^>]*numero=")[^"]*(")/, `$1${escXml(m.numero)}$2`);
-  }
-  if (m.facsimile_url) replaceAttr("graphic", "url", m.facsimile_url);
-  if (m.facsimile_desc) {
-    xml = xml.replace(
-      /(<facsimile>[\s\S]*?<desc>)[\s\S]*?(<\/desc>[\s\S]*?<\/facsimile>)/,
-      `$1${escXml(m.facsimile_desc)}$2`
-    );
-  }
-  if (m.materiale) replaceTag("material", m.materiale);
-  if (m.tipo) replaceTag("objectType", m.tipo);
-  if (m.dim_altezza) replaceTag("height", m.dim_altezza);
-  if (m.dim_larghezza) replaceTag("width", m.dim_larghezza);
-  if (m.dim_profondita) replaceTag("depth", m.dim_profondita);
-  if (m.place_ref_ancient) replaceAttr('placeName type="ancient"', "ref", m.place_ref_ancient);
-  if (m.place_ref_modern) replaceAttr('placeName type="modern"', "ref", m.place_ref_modern);
-  if (m.tipo_ref) replaceAttr("objectType", "ref", m.tipo_ref);
-  if (m.materialRef) replaceAttr("material", "ref", m.materialRef);
-
-  if (m.id) {
-    if (/<idno\s+type="id">/.test(xml)) {
-      xml = xml.replace(/<idno\s+type="id">\d*<\/idno>/, `<idno type="id">${escXml(String(m.id))}</idno>`);
-    } else {
-      xml = xml.replace(/(<\/publicationStmt>)/, `        <idno type="id">${escXml(String(m.id))}</idno>\n$1`);
-    }
-  }
-  if (m.entryId) {
-    if (/<idno\s+type="entryId">/.test(xml)) {
-      xml = xml.replace(/<idno\s+type="entryId">[^<]*<\/idno>/, `<idno type="entryId">${escXml(m.entryId)}</idno>`);
-    } else if (/<idno\s+type="firebaseId">/.test(xml)) {
-      xml = xml.replace(/<idno\s+type="firebaseId">[^<]*<\/idno>/, `<idno type="entryId">${escXml(m.entryId)}</idno>`);
-    } else {
-      xml = xml.replace(/(<\/publicationStmt>)/, `        <idno type="entryId">${escXml(m.entryId)}</idno>\n$1`);
-    }
-  }
-  if (m.revisions && m.revisions.length > 0) {
-    const revXml = m.revisions.map((r: any) =>
-      `    <change${r.date ? ` when="${escXml(r.date)}"` : ""}${r.who ? ` who="${escXml(r.who)}"` : ""}>${escXml(r.note || "")}</change>`
-    ).join("\n");
-    if (/<revisionDesc>/.test(xml)) {
-      xml = xml.replace(/<revisionDesc>[\s\S]*?<\/revisionDesc>/, `<revisionDesc>\n${revXml}\n  </revisionDesc>`);
-    } else {
-      xml = xml.replace("</teiHeader>", `  <revisionDesc>\n${revXml}\n  </revisionDesc>\n</teiHeader>`);
-    }
-  }
-  if ("iconografia" in m) {
-    const hasExisting = /[ \t]*<xenoData>[\s\S]*?<\/xenoData>\n?/.test(xml);
-    const rendered = renderIconography(m.iconografia, "    ");
-    if (rendered) {
-      if (hasExisting) {
-        xml = xml.replace(/[ \t]*<xenoData>[\s\S]*?<\/xenoData>\n?/, rendered + "\n");
-      } else if (/<\/profileDesc>\n?/.test(xml)) {
-        xml = xml.replace(/(<\/profileDesc>\n?)/, `$1${rendered}\n`);
-      } else if (/[ \t]*<revisionDesc>/.test(xml)) {
-        xml = xml.replace(/([ \t]*<revisionDesc>)/, `${rendered}\n$1`);
-      } else {
-        xml = xml.replace("</teiHeader>", `${rendered}\n</teiHeader>`);
-      }
-    } else if (hasExisting) {
-      xml = xml.replace(/[ \t]*<xenoData>[\s\S]*?<\/xenoData>\n?/, "");
-    }
-  }
-  return xml;
-}
-
 // ── Store in-memory (sostituisce CORPUS_DIR) ─────────────────────────────
 
 function readCorpusFiles(): any[] {
@@ -327,13 +236,12 @@ async function handleRequest(url: URL, init: RequestInit | undefined): Promise<R
           const filename = rawFilename ? rawFilename.replace(/[^a-zA-Z0-9._-]/g, "_") : buildFilename(m);
           writtenFiles.add(filename);
           try {
-            if (corpusStore.has(filename)) {
-              const patched = patchXmlContent(corpusStore.get(filename)!, m);
-              await writeCorpusFile(filename, patched, `Aggiorna ${filename}`);
-            } else {
-              const xml = monumentiToXml([m]);
-              await writeCorpusFile(filename, xml, `Nuova scheda ${filename}`);
-            }
+            // Riscrittura completa via monumentiToXml, sia per schede nuove che
+            // esistenti — stessa scelta di server.ts: il chiamante manda sempre
+            // l'oggetto Monumento completo, e monumentiToXml è la serializzazione
+            // già validata come fedele sull'intero corpus.
+            const xml = monumentiToXml([m]);
+            await writeCorpusFile(filename, xml, `Aggiorna ${filename}`);
           } catch (e: any) {
             failures.push({ filename, error: e.message || String(e) });
           }
@@ -381,7 +289,7 @@ async function handleRequest(url: URL, init: RequestInit | undefined): Promise<R
       if (baseHash && (await sha256(currentXml)) !== baseHash) {
         return json({ error: "stale", message: `La scheda ${entryId} è stata modificata altrove da quando l'hai aperta qui. Ricarica i dati prima di salvare.` }, 409);
       }
-      const patched = patchXmlContent(currentXml, monumento);
+      const patched = monumentiToXml([monumento]);
       await writeCorpusFile(filename, patched, `Aggiorna ${filename}`);
       updateSearchIndex();
       return json({ status: "ok", _corpusFile: filename, _fileHash: await sha256(patched) });
