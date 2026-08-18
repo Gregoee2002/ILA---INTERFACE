@@ -35,11 +35,22 @@ jobs:
           fi
 
       # Scatto statico del corpus per chi visita con la sola password (senza
-      # token personale) — vedi scripts/build-corpus-snapshot.ts. Legge
-      # src/data/corpus/ dal checkout locale (fonte di verità, vedi
-      # README.md) e genera public/corpus-snapshot.json, che `vite build`
-      # copia poi in dist/.
+      # token personale) — vedi scripts/build-corpus-snapshot.ts. Se i secret
+      # DATA_REPO_TOKEN/DATA_REPO sono impostati, sincronizza prima il corpus
+      # LIVE dalla repo dati (dove scrive davvero l'editor, anche in "editor
+      # mode" sul sito statico) invece di leggere la copia in src/data/corpus/
+      # di QUESTO checkout, che altrimenti resta ferma all'ultimo commit di
+      # codice — causa delle modifiche "salvate ma mai visibili sul sito".
+      # Senza quei secret, comportamento precedente invariato (legge il
+      # checkout così com'è). Il nome DATA_REPO_TOKEN evita di scontrarsi con
+      # il secret riservato GITHUB_TOKEN che Actions fornisce già, scoped
+      # solo a questa repo.
       - run: npx tsx scripts/build-corpus-snapshot.ts
+        env:
+          GITHUB_TOKEN: ${{ secrets.DATA_REPO_TOKEN }}
+          GITHUB_REPO: ${{ vars.DATA_REPO || secrets.DATA_REPO }}
+          GITHUB_CORPUS_PATH: ${{ vars.DATA_REPO_CORPUS_PATH || secrets.DATA_REPO_CORPUS_PATH }}
+          GITHUB_BRANCH: ${{ vars.DATA_REPO_BRANCH || secrets.DATA_REPO_BRANCH }}
 
       # Solo `vite build`: la build statica non include server.ts (Express
       # non gira su GitHub Pages, vedi src/lib/apiShim.ts per l'equivalente
