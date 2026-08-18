@@ -1324,10 +1324,8 @@ function HomeView({ monumenti, onNavigate, onSearch }: { monumenti: Monumento[],
           </form>
         </div>
 
-        {/* Logo + sottotitolo, spostato in alto a destra come da riferimento */}
-        <div className="hidden lg:flex flex-col items-end text-right pr-16 pt-2 self-start select-none">
-          <img src={ilaLogo} alt="Index Lunae Antiquae" className="h-64 xl:h-80 w-auto object-contain" />
-        </div>
+        {/* Spazio riservato: vuoto per ora, in attesa di decidere cosa mostrarci */}
+        <div className="hidden lg:flex flex-col items-end text-right pr-16 pt-2 self-start select-none" />
       </div>
 
       {/* Catalogo in risalto: card scura, contrasto forte, identità distinta dalla griglia sottostante */}
@@ -2908,7 +2906,6 @@ export default function App() {
 
   const [loading, setLoading] = useState(true);
   const [showLanding, setShowLanding] = useState(true);
-  const landingMoon = useMemo(() => getMoonPhase(), []);
   const [activeView, setActiveView] = useState<AppView>('home');
   const [editorTargetEntryId, setEditorTargetEntryId] = useState<string | null>(null);
   const [hasNavigated, setHasNavigated] = useState(false);
@@ -4016,6 +4013,18 @@ export default function App() {
             initial={{ opacity: 1 }}
             exit={{ opacity: 0, transition: { duration: 0.6, ease: 'easeInOut' } }}
             className="fixed inset-0 z-[200] flex items-center justify-center bg-parchment"
+            style={{
+              // Sempre in tema chiaro, a prescindere dalla modalità notte
+              // attiva nel resto dell'app: il ritaglio del logo non è pulito
+              // sullo sfondo scuro, quindi qui le custom property del tema
+              // vengono fissate ai valori light indipendentemente da .dark
+              // sull'antenato (vedi :root in index.css).
+              ['--parchment' as any]: '#F7F4EC',
+              ['--ink' as any]: '#1E2A26',
+              ['--accent' as any]: '#1F8377',
+              ['--muted' as any]: '#6E6A5E',
+              ['--border' as any]: '#E1DBC8',
+            }}
           >
             <div
               className="absolute inset-0 pointer-events-none"
@@ -4033,31 +4042,12 @@ export default function App() {
             >
               <motion.div
                 initial={{ opacity: 0, scale: 0.85 }}
-                animate={{ opacity: 0.85, scale: 1 }}
+                animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 1, ease: EASE_OUT }}
-                className="mb-6"
+                className="mb-12"
               >
-                <MoonDisc illum={landingMoon.illum} waxing={landingMoon.waxing} size={64} opacity={0.7} />
+                <img src={ilaLogo} alt="Index Lunae Antiquae" className="h-40 md:h-52 w-auto object-contain" />
               </motion.div>
-
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.3, duration: 0.8 }}
-                className="text-[11px] font-sans uppercase tracking-[0.3em] text-muted mb-4"
-              >
-                Index lunae antiquae
-              </motion.div>
-
-              <motion.h1
-                initial={{ opacity: 0, letterSpacing: '0.4em' }}
-                animate={{ opacity: 1, letterSpacing: '0.15em' }}
-                transition={{ delay: 0.35, duration: 1.1, ease: EASE_OUT }}
-                className="text-6xl md:text-7xl font-bold text-accent leading-none mb-12"
-                style={{ fontFamily: '"Cinzel", serif' }}
-              >
-                ILA
-              </motion.h1>
 
               <motion.button
                 initial={{ opacity: 0, y: 8 }}
