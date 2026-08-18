@@ -1137,8 +1137,14 @@ function textOfToken(t: MarkupToken): string {
 
 /** Scandisce i <persName> già codificati nell'edizione e propone i valori
  *  per gli indici Divinità / Epiteti / Onomastica / Imperatori: legge il
- *  `key` canonico (mai lo riscrive), e il testo reale del <rs type="epithet">
- *  per l'epiteto così come attestato nell'iscrizione. */
+ *  `key` canonico (mai lo riscrive) e lo scompone in teonimo + epiteto/i
+ *  con lo stesso criterio di xmlUtils.parseXmlToMonumento (conta i <name>
+ *  figli per capire quanti token iniziali del key sono il teonimo).
+ *  NON usa il testo greco reale dell'<rs type="epithet"> per popolare
+ *  epiteti: quel testo è una forma flessa ("Τυράννου", "Τυράννῳ", ...) e,
+ *  mescolato con l'etichetta normalizzata derivata dal key ("Tyrannos"),
+ *  produceva duplicati per lo stesso epiteto — lo stesso problema che
+ *  xmlUtils.ts evita di reintrodurre (vedi commenti lì, Source 2/3). */
 export function extractIndexSuggestions(testo: string): IndexSuggestions {
   const divinita = new Set<string>();
   const epiteti = new Set<string>();
@@ -1152,11 +1158,19 @@ export function extractIndexSuggestions(testo: string): IndexSuggestions {
         const type = t.attrs.type;
         const key = (t.attrs.key || "").trim();
         if (type === "divine") {
-          if (key) divinita.add(key);
-          const epithetChild = t.children.find(c => c.kind === "el" && c.name === "rs" && c.attrs.type === "epithet");
-          if (epithetChild) {
-            const epiText = textOfToken(epithetChild).trim();
-            if (epiText) epiteti.add(epiText);
+          const nameChildren = t.children
+            .filter(c => c.kind === "el" && c.name === "name")
+            .map(c => textOfToken(c).trim())
+            .filter(Boolean);
+          if (key) {
+            const tokens = key.split(/\s+/);
+            const nameTokenCount = nameChildren.length > 0 ? nameChildren.length : 1;
+            const divName = tokens.slice(0, nameTokenCount).join(" ");
+            const epithetTokens = tokens.slice(nameTokenCount);
+            if (divName) divinita.add(divName);
+            epithetTokens.forEach(ep => { if (ep) epiteti.add(ep); });
+          } else if (nameChildren.length > 0) {
+            divinita.add(nameChildren.join(" "));
           }
         } else if (type === "ruler" || type === "emperor") {
           if (key) imperatori.add(key);
