@@ -254,11 +254,15 @@ const DivinityCard = ({ name, count, regions, epithetCount, onClick }: {
 
 // Grafo ramificato "obsidian": nodo centrale (la divinità) + epiteti disposti in
 // cerchio attorno, collegati da linee che si disegnano in ingresso. Ogni nodo
-// epiteto è cliccabile e porta alle attestazioni.
-const DivinityGraph = ({ divinity, epithets, onSelectEpithet }: {
+// epiteto è cliccabile e porta alle attestazioni con quell'epiteto; il nodo
+// centrale è cliccabile e porta a TUTTE le attestazioni della divinità,
+// incluse quelle senza epiteto (altrimenti irraggiungibili: la sola via
+// d'accesso alle attestazioni era passare per un epiteto co-occorrente).
+const DivinityGraph = ({ divinity, epithets, onSelectEpithet, onSelectAll }: {
   divinity: { name: string; count: number; regions: number };
   epithets: { name: string; count: number }[];
   onSelectEpithet: (name: string) => void;
+  onSelectAll: () => void;
   key?: string | number;
 }) => {
   const n = epithets.length;
@@ -296,18 +300,21 @@ const DivinityGraph = ({ divinity, epithets, onSelectEpithet }: {
           ))}
         </svg>
 
-        {/* Nodo centrale: la divinità */}
-        <motion.div
+        {/* Nodo centrale: la divinità — cliccabile, porta a tutte le sue attestazioni */}
+        <motion.button
+          onClick={onSelectAll}
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
+          whileHover={{ scale: 1.04 }}
           transition={{ duration: 0.5, ease: EASE_OUT }}
-          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10"
+          title={`Vedi tutte le attestazioni di ${divinity.name}`}
+          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 group"
         >
-          <div className="w-36 h-36 rounded-full flex flex-col items-center justify-center text-center px-3 border-2 border-accent/40 bg-[var(--card)]/90 backdrop-blur-xl shadow-[0_0_40px_-8px_rgba(var(--shadow-color),0.4)]">
+          <div className="w-36 h-36 rounded-full flex flex-col items-center justify-center text-center px-3 border-2 border-accent/40 bg-[var(--card)]/90 backdrop-blur-xl shadow-[0_0_40px_-8px_rgba(var(--shadow-color),0.4)] group-hover:border-accent group-hover:shadow-[0_0_48px_-6px_rgba(var(--shadow-color),0.55)] transition-all">
             <span className="text-2xl font-bold font-serif italic text-accent leading-tight">{divinity.name}</span>
-            <span className="text-[9px] font-sans font-bold uppercase tracking-widest text-muted mt-1">Divinità</span>
+            <span className="text-[9px] font-sans font-bold uppercase tracking-widest text-muted mt-1 group-hover:text-accent transition-colors">Vedi tutte ({divinity.count})</span>
           </div>
-        </motion.div>
+        </motion.button>
 
         {/* Nodi satellite: gli epiteti */}
         {nodes.map((node, i) => (
@@ -338,13 +345,17 @@ const DivinityGraph = ({ divinity, epithets, onSelectEpithet }: {
 
 // Helper per la lista attestazioni
 const AttestationList = ({
-  label, context, items, monumenti, onSelectMonumento
+  label, context, items, monumenti, onSelectMonumento, variant = 'epithet'
 }: {
   label: string;
   context?: string; // es. il nome della divinità di appartenenza, per il breadcrumb
   items: Monumento[];
   monumenti: Monumento[];
   onSelectMonumento: (m: Monumento) => void;
+  // 'all' = tutte le attestazioni di una divinità (incluse quelle senza
+  // epiteto), raggiunta dal nodo centrale del grafo; 'epithet' = drill-down
+  // su un epiteto specifico.
+  variant?: 'epithet' | 'all';
   key?: string | number;
 }) => (
   <motion.div {...fadeSwap} className="flex-1 flex flex-col overflow-hidden">
@@ -352,7 +363,9 @@ const AttestationList = ({
       <div className="text-[10px] font-sans font-bold uppercase tracking-[0.22em] text-accent/70 mb-1.5">
         {context ? <>{context} <ChevronRight className="inline h-3 w-3 -mt-0.5 mx-0.5" /> Elenco monumenti</> : 'Elenco monumenti'}
       </div>
-      <h3 className="text-2xl font-serif italic text-accent">Attestazioni per: "{label}"</h3>
+      <h3 className="text-2xl font-serif italic text-accent">
+        {variant === 'all' ? <>Tutte le attestazioni di &quot;{label}&quot;</> : <>Attestazioni per: &quot;{label}&quot;</>}
+      </h3>
     </div>
     <div className="flex-1 overflow-y-auto pr-4 custom-scrollbar">
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
@@ -395,6 +408,11 @@ const AttestationList = ({
     </div>
   </motion.div>
 );
+
+// Sentinella per "tutte le attestazioni della divinità" nello stato
+// selectedEpithet: distingue il drill-down per singolo epiteto dalla vista
+// che mostra ogni menzione della divinità, incluse quelle senza epiteto.
+const ALL_EPITHETS = '__all__';
 
 function EpithetStats({ monumenti, onSelectMonumento }: { monumenti: Monumento[], onSelectMonumento: (m: Monumento) => void }) {
   const [activeTab, setActiveTab] = useState<'divinita' | 'onomastica'>('divinita');
@@ -461,8 +479,14 @@ function EpithetStats({ monumenti, onSelectMonumento }: { monumenti: Monumento[]
   );
 
   // ── Monumenti per l'epiteto selezionato (nel contesto della divinità) ─────
+  // ALL_EPITHETS (click sul nodo centrale del grafo) → tutte le iscrizioni
+  // in cui la divinità è nominata, incluse quelle senza epiteto: filtra solo
+  // su divinita, senza richiedere un match su epiteti.
   const monumentsForEpithet = useMemo(() => {
     if (!selectedDivinity || !selectedEpithet) return [];
+    if (selectedEpithet === ALL_EPITHETS) {
+      return monumenti.filter(m => m.divinita?.includes(selectedDivinity));
+    }
     return monumenti.filter(m => m.divinita?.includes(selectedDivinity) && m.epiteti?.includes(selectedEpithet));
   }, [monumenti, selectedDivinity, selectedEpithet]);
 
@@ -576,14 +600,16 @@ function EpithetStats({ monumenti, onSelectMonumento }: { monumenti: Monumento[]
             divinity={selectedDivinityStats}
             epithets={selectedDivinityStats.epiteti}
             onSelectEpithet={(name) => setSelectedEpithet(name)}
+            onSelectAll={() => setSelectedEpithet(ALL_EPITHETS)}
           />
         )}
 
         {activeTab === 'divinita' && selectedDivinity && selectedEpithet && (
           <AttestationList
             key="divinita-attestations"
-            label={selectedEpithet}
-            context={selectedDivinity}
+            label={selectedEpithet === ALL_EPITHETS ? selectedDivinity : selectedEpithet}
+            context={selectedEpithet === ALL_EPITHETS ? undefined : selectedDivinity}
+            variant={selectedEpithet === ALL_EPITHETS ? 'all' : 'epithet'}
             items={monumentsForEpithet}
             monumenti={monumenti}
             onSelectMonumento={onSelectMonumento}
@@ -3485,6 +3511,7 @@ export default function App() {
           msIdnos: Array.isArray(m.msIdnos) ? m.msIdnos : [],
           // Identifiers
           tm: m.tm || '',
+          tmLink: m.tmLink || '',
           phi: Array.isArray(m.phi) ? m.phi : [],
           authority: m.authority || '',
           // Facsimile
@@ -5916,30 +5943,28 @@ export default function App() {
                             {/* Prosopografia (Personae) */}
                             {selectedMonumento.persone && selectedMonumento.persone.length > 0 && (
                               <div className="mt-4 pt-4 border-t border-border/20">
-                                <h3 className="text-xs font-bold uppercase text-accent tracking-widest mb-3 font-sans">Prosopografia</h3>
-                                <div className="space-y-4">
+                                <h3 className="text-xs font-bold uppercase text-muted tracking-widest mb-2 font-sans">Prosopografia</h3>
+                                <div className="divide-y divide-border/20">
                                   {selectedMonumento.persone.map((p, idx) => (
-                                    <div key={p.xmlId || idx} className="bg-white/40 dark:bg-black/20 p-4 border border-border/50 text-sm">
-                                      <div className="flex items-baseline gap-2 mb-1">
-                                        <span className="font-serif font-bold text-ink text-base">{p.name || p.nymRef || 'Sconosciuto'}</span>
-                                        {(p.key || p.xmlId) && <span className="text-[10px] text-muted font-mono tracking-tight">#{p.key || p.xmlId}</span>}
+                                    <div key={p.xmlId || idx} className="py-2 first:pt-0 text-sm">
+                                      <div className="flex items-baseline gap-2">
+                                        <span className="font-serif font-semibold text-ink/90">{p.name || p.nymRef || 'Sconosciuto'}</span>
+                                        {(p.key || p.xmlId) && <span className="text-[10px] text-muted/70 font-mono tracking-tight">#{p.key || p.xmlId}</span>}
+                                        {(p.ethnicText || p.ethnicRef) && (
+                                          <span className="text-xs text-muted font-serif">
+                                            {p.ethnicRef ? (
+                                              <a href={p.ethnicRef} target="_blank" rel="noopener noreferrer" className="text-accent/80 hover:underline">
+                                                {p.ethnicText || 'Link'}
+                                              </a>
+                                            ) : (
+                                              p.ethnicText
+                                            )}
+                                          </span>
+                                        )}
                                       </div>
-                                      
-                                      {(p.ethnicText || p.ethnicRef) && (
-                                        <div className="text-xs text-muted mb-2 font-serif">
-                                          <span className="font-sans font-semibold uppercase text-[9px] tracking-wider mr-1">Etnico:</span>
-                                          {p.ethnicRef ? (
-                                            <a href={p.ethnicRef} target="_blank" rel="noopener noreferrer" className="text-accent hover:underline">
-                                              {p.ethnicText || 'Link'}
-                                            </a>
-                                          ) : (
-                                            p.ethnicText
-                                          )}
-                                        </div>
-                                      )}
-                                      
+
                                       {p.note && (
-                                        <p className="text-xs text-ink/80 leading-relaxed border-l-2 border-accent/20 pl-3 italic font-serif">
+                                        <p className="text-xs text-muted/90 leading-relaxed italic font-serif mt-0.5">
                                           {p.note}
                                         </p>
                                       )}

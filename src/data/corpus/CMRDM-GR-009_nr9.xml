@@ -4,17 +4,15 @@
     <teiHeader>
         <fileDesc>
             <titleStmt>
-                <title><rs type="textType">Iscrizione greca</rs> Base di statua marmorea iscritta con foro per la statua</title>
+                <title><rs type="textType">Dedication</rs> Base di statua marmorea iscritta con foro per la statua</title>
             </titleStmt>
             <publicationStmt>
                 <authority>CMRDM — Corpus Monumentorum Religionis Dei Menis</authority>
-                <idno type="filename">CMRDM-GR-009</idno>
-                <idno type="TM"><!-- inserire TM number --></idno>
-                <idno type="CMRDM">CMRDM I 9</idno>
-                    <idno type="id">98</idno>
+                <idno type="filename">98</idno>
+                <idno type="id">98</idno>
                 <idno type="entryId">gen-1786984905702-7h-2zs9jp</idno>
-</publicationStmt>
-            <!-- Revisione: corretto il testo greco confrontandolo con lo stampato di Lane (p. 6): il nome della moglie "Βασίλεια" (nome reale ma non quello stampato) corretto in "Βαβυλία" (nome attico attestato), aggiornata coerentemente la resa in inglese nella descrizione del layout; corretto l'articolo "τὸ Μηνὶ" (agrammaticale prima di dativo) in "τῷ Μηνὶ". Corretto l'ID Pleiades del Pireo: quello presente nel draft (580069) risultava un luogo del tutto diverso (l'isola di Phabra/Fleves); sostituito con l'ID corretto di Peiraieus/Piraeus (580062), verificato su due fonti (Pleiades stesso e ToposText). Aggiunta la data di rinvenimento (ca. 1879) e la misura del foro (ca. 55×35 cm), assenti nel draft. TM number non compilato: nessuna corrispondenza certa trovata in Trismegistos per IG II² 4685. -->
+                <idno type="TM">TM 792689</idno>
+            </publicationStmt>
             <sourceDesc>
                 <msDesc>
                     <msIdentifier>
@@ -25,19 +23,19 @@
                         <objectDesc>
                             <supportDesc>
                                 <support>
-                                    <p>Base di statua marmorea iscritta con foro per la statua. Rinvenuta verso il 1879, ora nel Museo Epigrafico di Atene. Altezza 15 cm, lunghezza 75 cm, spessore 66 cm, foro ca. 55 × 35 cm.</p>
+                                    <p>Base di statua marmorea iscritta con foro per la statua. Il foro misura ca. 55 × 35 cm.</p>
                                     <material ref="https://www.eagle-network.eu/voc/material/lod/48.html">marble</material>
                                     <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/57.html">statue base</objectType>
-                                    <dimensions unit="cm">
-                                        <height>15</height>
-                                        <width></width>
-                                        <depth>66</depth>
+                                    <dimensions>
+                                        <height unit="cm">15</height>
+                                        <width unit="cm">75</width>
+                                        <depth unit="cm">66</depth>
                                     </dimensions>
                                 </support>
                             </supportDesc>
                             <layoutDesc>
                                 <layout>
-                                    <p>Base di statua marmorea con foro per l'inserimento della statua, recante una breve iscrizione dedicatoria di Dionysios e Babylia a Men.</p>
+                                    <p>Base di statua marmorea iscritta con foro per la statua</p>
                                     <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
                                 </layout>
                             </layoutDesc>
@@ -53,8 +51,8 @@
                             <origPlace>
                                 <placeName type="ancient" ref="https://pleiades.stoa.org/places/580062">Peiraieus</placeName>
                                 <placeName type="modern" ref="DA_COMPILARE">Piraeus, Greece</placeName>
+                                <placeName type="region">Graecia</placeName>
                             </origPlace>
-                            <origDate datingMethod="#julian" precision="low"></origDate>
                         </origin>
                         <provenance type="found">Piraeus, Grecia</provenance>
                         <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
@@ -62,17 +60,48 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Dionysios</term>
+                    <term>Babilylia</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Dionysios">
+                        <persName type="attested" key="Dionysios">
+                            <name nymRef="Διονύσιος">Διονύσιος</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Babilylia">
+                        <persName type="attested" key="Babilylia">
+                            <name nymRef="Βαβυλια">Βαβυλία</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Διονύσιος καὶ Βαβυλία τῷ Μηνὶ τὸ ἱερὸν ἀνέθεσαν.
+                    <lb n="1"/><persName type="attested" key="Dionysios"><name nymRef="Διονύσιος">Διονύσιος</name></persName> καὶ <persName type="attested" key="Babilylia"><name nymRef="Βαβυλια">Βαβυλία</name></persName> τῷ <persName type="divine" key="Men"><name nymRef="Μήν">Μηνὶ</name></persName> τὸ ἱερὸν ἀνέθεσαν.
                 </ab>
             </div>
-            <div type="apparatus"/>
-            <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
-            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="translation" xml:lang="it">
+                <p>Dionysios e Babylia dedicarono il santuario a Men</p>
+            </div>
+            <div type="translation" xml:lang="en">
+                <p>Dionysios and Babylia dedicated the sanctuary to Men</p>
+            </div>
+            <div type="commentary">
+                <p>DA_COMPILARE</p>
+            </div>
             <div type="bibliography">
                 <listBibl>
                     <bibl>C. Wachsmuth, Die Stadt Athen im Alterthum, Leipzig 1874-90, II, i, p. 163, note 1</bibl>
