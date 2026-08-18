@@ -1250,6 +1250,7 @@ function HomeView({ monumenti, onNavigate, onSearch }: { monumenti: Monumento[],
   const [homeQuery, setHomeQuery] = useState('');
   const [launching, setLaunching] = useState<AppView | null>(null);
   const [launchStage, setLaunchStage] = useState<'lit' | 'zoom' | null>(null);
+  const moon = useMemo(() => getMoonPhase(), []);
   const stats = useMemo(() => {
     const regioni = new Set(monumenti.map(m => m.regione).filter(Boolean));
     const citta = new Set(monumenti.map(m => m.citta).filter(Boolean));
@@ -1324,8 +1325,14 @@ function HomeView({ monumenti, onNavigate, onSearch }: { monumenti: Monumento[],
           </form>
         </div>
 
-        {/* Spazio riservato: vuoto per ora, in attesa di decidere cosa mostrarci */}
-        <div className="hidden lg:flex flex-col items-end text-right pr-16 pt-2 self-start select-none" />
+        {/* Fase lunare corrente — omaggio a Men, provvisorio al posto del logo */}
+        <div className="hidden lg:flex flex-col items-end text-right pr-8 select-none" title={`${moon.name} — giorno ${moon.day} del ciclo`}>
+          <MoonDisc illum={moon.illum} waxing={moon.waxing} size={88} opacity={0.55} />
+          <div className="mt-4 text-lg font-serif italic text-ink/70 leading-tight">{moon.name}</div>
+          <div className="text-[10px] font-sans font-bold uppercase tracking-[0.15em] text-muted/50 mt-1.5">
+            Mensis dies {moon.day} · {Math.round(moon.illum * 100)}% illuminata
+          </div>
+        </div>
       </div>
 
       {/* Catalogo in risalto: card scura, contrasto forte, identità distinta dalla griglia sottostante */}
