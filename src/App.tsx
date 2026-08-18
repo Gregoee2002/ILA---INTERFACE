@@ -1324,16 +1324,10 @@ function HomeView({ monumenti, onNavigate, onSearch }: { monumenti: Monumento[],
           </form>
         </div>
 
-        {/* Wordmark + sottotitolo, spostato in alto a destra come da riferimento */}
+        {/* Logo + sottotitolo, spostato in alto a destra come da riferimento */}
         <div className="hidden lg:flex flex-col items-end text-right pr-6 pt-2 self-start select-none">
-          <span
-            className="text-7xl xl:text-8xl font-bold tracking-[0.12em] leading-none mb-4 text-accent/50"
-            style={{ fontFamily: '"Cinzel", serif' }}
-          >
-            ILA
-          </span>
-          <p className="text-2xl italic font-serif text-ink/60 leading-tight">Index lunae antiquae</p>
-          <p className="text-sm font-sans font-bold uppercase tracking-[0.15em] text-muted/50 mt-3">Database Epigrafico</p>
+          <img src={ilaLogo} alt="Index Lunae Antiquae" className="h-40 xl:h-48 w-auto object-contain mb-3" />
+          <p className="text-sm font-sans font-bold uppercase tracking-[0.15em] text-muted/50">Database Epigrafico</p>
         </div>
       </div>
 
