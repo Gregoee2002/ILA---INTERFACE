@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo, useRef, useId, ChangeEvent } from 
 import { motion, AnimatePresence } from 'motion/react';
 import {
   Upload, Database, Save, Loader2, AlertTriangle, Check, X, Plus, Trash2,
-  ChevronRight, FileText, Search, Download, Sparkles, LogIn, ShieldCheck
+  ChevronRight, ChevronUp, ChevronDown, FileText, Search, Download, Sparkles, LogIn, ShieldCheck
 } from 'lucide-react';
 import { cn, stripAccents } from '../lib/utils';
 import { Monumento, OrigDate, Traduzione, Bibliografia, Revision, IconographicFigure, IconographicTrait } from '../types';
@@ -1075,23 +1075,78 @@ function renderSectionForm(
 
     case 'bibliography': {
       const bibl: Bibliografia[] = m.bibliografia || [];
+      // Convenzione di Lane: la lista è piatta, ma la prima voce che inizia
+      // con "Cf." segna il passaggio dalle edizioni precedenti del testo ai
+      // riferimenti di confronto. Nessun campo XML nuovo: si legge/scrive
+      // solo il testo, quindi il round-trip resta valido come oggi.
+      const isCf = (b: Bibliografia) => /^cf\.?\s/i.test((b.titolo || '').trim());
+      const cfIndex = bibl.findIndex(isCf);
       const update = (i: number, titolo: string) =>
         set('bibliografia', bibl.map((b, j) => j === i ? { titolo, punti_rif: b.punti_rif } : b)); // modificando si perde il rawXml, intenzionale
+      const remove = (i: number) => set('bibliografia', bibl.filter((_, j) => j !== i));
+      const move = (i: number, dir: -1 | 1) => {
+        const j = i + dir;
+        if (j < 0 || j >= bibl.length) return;
+        const next = [...bibl];
+        [next[i], next[j]] = [next[j], next[i]];
+        set('bibliografia', next);
+      };
+      const addAt = (index: number, titolo: string) => {
+        const next = [...bibl];
+        next.splice(index, 0, { titolo });
+        set('bibliografia', next);
+      };
+
+      const renderRow = (b: Bibliografia, i: number) => (
+        <div key={i} className="flex items-start gap-2">
+          <div className="flex flex-col mt-1.5">
+            <button
+              onClick={() => move(i, -1)}
+              disabled={i === 0}
+              title="Sposta su"
+              className="p-0.5 text-muted/50 hover:text-accent disabled:opacity-20 disabled:hover:text-muted/50 transition-colors"
+            ><ChevronUp className="w-3.5 h-3.5" /></button>
+            <button
+              onClick={() => move(i, 1)}
+              disabled={i === bibl.length - 1}
+              title="Sposta giù"
+              className="p-0.5 text-muted/50 hover:text-accent disabled:opacity-20 disabled:hover:text-muted/50 transition-colors"
+            ><ChevronDown className="w-3.5 h-3.5" /></button>
+          </div>
+          <TextInput className="flex-1" value={b.titolo} onChange={e => update(i, e.target.value)} />
+          {b.rawXml && <span title="Contiene markup TEI: la modifica lo converte in testo semplice" className="mt-2.5"><AlertTriangle className="w-3.5 h-3.5 text-amber-500/70" /></span>}
+          <button onClick={() => remove(i)} className="p-2 text-muted/50 hover:text-red-500 transition-colors"><Trash2 className="w-4 h-4" /></button>
+        </div>
+      );
+
+      const editions = cfIndex === -1 ? bibl.map((b, i) => ({ b, i })) : bibl.slice(0, cfIndex).map((b, i) => ({ b, i }));
+      const comparisons = cfIndex === -1 ? [] : bibl.slice(cfIndex).map((b, i) => ({ b, i: i + cfIndex }));
+
       return (
-        <div className="space-y-3 max-w-3xl">
-          {bibl.map((b, i) => (
-            <div key={i} className="flex items-start gap-3">
-              <TextInput className="flex-1" value={b.titolo} onChange={e => update(i, e.target.value)} />
-              {b.rawXml && <span title="Contiene markup TEI: la modifica lo converte in testo semplice" className="mt-2.5"><AlertTriangle className="w-3.5 h-3.5 text-amber-500/70" /></span>}
-              <button onClick={() => set('bibliografia', bibl.filter((_, j) => j !== i))} className="p-2 text-muted/50 hover:text-red-500 transition-colors"><Trash2 className="w-4 h-4" /></button>
-            </div>
-          ))}
-          <button
-            onClick={() => set('bibliografia', [...bibl, { titolo: '' }])}
-            className="inline-flex items-center gap-1.5 text-xs font-sans font-semibold uppercase tracking-[0.12em] text-accent hover:text-accent/70 transition-colors"
-          >
-            <Plus className="w-3.5 h-3.5" /> Aggiungi riferimento
-          </button>
+        <div className="space-y-6 max-w-3xl">
+          <div className="space-y-3">
+            <FieldLabel>Edizioni</FieldLabel>
+            {editions.length === 0 && <p className="text-xs text-muted/60 italic">Nessuna edizione precedente registrata.</p>}
+            {editions.map(({ b, i }) => renderRow(b, i))}
+            <button
+              onClick={() => addAt(cfIndex === -1 ? bibl.length : cfIndex, '')}
+              className="inline-flex items-center gap-1.5 text-xs font-sans font-semibold uppercase tracking-[0.12em] text-accent hover:text-accent/70 transition-colors"
+            >
+              <Plus className="w-3.5 h-3.5" /> Aggiungi edizione
+            </button>
+          </div>
+          <div className="space-y-3 border-t border-line/40 pt-4">
+            <FieldLabel>Bibliografia (cfr.)</FieldLabel>
+            <p className="text-[11px] text-muted/60">Le voci che iniziano con "Cf." separano le edizioni precedenti del testo dai riferimenti di confronto, come nel testo di Lane.</p>
+            {comparisons.length === 0 && <p className="text-xs text-muted/60 italic">Nessun riferimento di confronto.</p>}
+            {comparisons.map(({ b, i }) => renderRow(b, i))}
+            <button
+              onClick={() => addAt(bibl.length, cfIndex === -1 ? 'Cf. ' : '')}
+              className="inline-flex items-center gap-1.5 text-xs font-sans font-semibold uppercase tracking-[0.12em] text-accent hover:text-accent/70 transition-colors"
+            >
+              <Plus className="w-3.5 h-3.5" /> Aggiungi confronto (cf.)
+            </button>
+          </div>
         </div>
       );
     }
