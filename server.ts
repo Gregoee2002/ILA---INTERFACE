@@ -6,7 +6,7 @@ import crypto from "crypto";
 import { createServer as createViteServer } from "vite";
 import { GoogleGenAI } from "@google/genai";
 import { xmlToMonumenti, monumentiToXml, renderIconography } from "./src/lib/xmlUtils";
-import { pullCorpusFromGitHub, pushFileToGitHub, deleteFileFromGitHub, isGitHubConfigured, testGitHubAccess, pullDraftsFromGitHub, pullFlagsFileFromGitHub, pushFlagsFileToGitHub } from "./src/lib/githubStorage";
+import { pullCorpusFromGitHub, pushFileToGitHub, deleteFileFromGitHub, isGitHubConfigured, testGitHubAccess, pullDraftsFromGitHub, pullFlagsFileFromGitHub, pushFlagsFileToGitHub, scheduleRedeploy } from "./src/lib/githubStorage";
 import { EntryFlag } from "./src/types";
 import { buildSearchIndex, searchMonumenti } from "./src/lib/searchIndex";
 import MiniSearch from 'minisearch';
@@ -214,6 +214,10 @@ async function startServer() {
   async function writeCorpusFile(filename: string, content: string, commitMessage: string): Promise<void> {
     fs.writeFileSync(path.join(CORPUS_DIR, filename), content, 'utf-8');
     await pushFileToGitHub(filename, content, commitMessage);
+    // Fa comparire la modifica sul sito senza un redeploy manuale — vedi
+    // scheduleRedeploy in githubStorage.ts (no-op se DEPLOY_REPO non è
+    // configurato, nessuna regressione).
+    scheduleRedeploy();
   }
 
   // Elimina un file XML del corpus in un unico punto: locale + GitHub.

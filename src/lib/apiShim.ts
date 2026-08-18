@@ -33,7 +33,7 @@
 import { xmlToMonumenti, monumentiToXml, renderIconography } from "./xmlUtils";
 import { buildSearchIndex, searchMonumenti } from "./searchIndex";
 import MiniSearch from "minisearch";
-import { pullAllCorpusFiles, pushCorpusFile, deleteCorpusFile, testGitHubAccess, setStoredToken, clearStoredToken, pullFlagsFile, pushFlagsFile } from "./githubStorageBrowser";
+import { pullAllCorpusFiles, pushCorpusFile, deleteCorpusFile, testGitHubAccess, setStoredToken, clearStoredToken, pullFlagsFile, pushFlagsFile, scheduleRedeploy } from "./githubStorageBrowser";
 import { EntryFlag } from "../types";
 
 let corpusStore = new Map<string, string>(); // filename -> xml content
@@ -164,6 +164,10 @@ function buildBackup(): string {
 async function writeCorpusFile(filename: string, content: string, commitMessage: string): Promise<void> {
   corpusStore.set(filename, content);
   await pushCorpusFile(filename, content, commitMessage);
+  // Fa comparire la modifica sul sito senza un redeploy manuale — vedi
+  // scheduleRedeploy in githubStorageBrowser.ts (no-op se il PAT non ha
+  // anche il permesso Actions sul repository di codice).
+  scheduleRedeploy();
 }
 
 async function removeCorpusFile(filename: string, commitMessage: string): Promise<void> {

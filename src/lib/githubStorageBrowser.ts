@@ -273,6 +273,51 @@ export async function pushFlagsFile(content: string, message: string): Promise<v
   }
 }
 
+// ── Redeploy automatico del sito statico dopo un salvataggio ──────────
+// Vedi commento gemello in githubStorage.ts: il workflow di deploy vive
+// su un repository di CODICE separato (DEPLOY_REPO) e non parte mai da
+// solo quando si scrive qui su REPO (dati). Riusa lo stesso PAT personale
+// già inserito per sbloccare l'editing (getStoredToken/headers sopra): deve
+// avere, oltre a Contents su REPO, anche "Actions: Read and write" su
+// DEPLOY_REPO — impostabile scegliendo entrambi i repository nello stesso
+// fine-grained PAT. Se il token non ha quel permesso, il redeploy fallisce
+// in silenzio (solo un warning in console): il salvataggio resta comunque
+// riuscito.
+const DEPLOY_REPO = "Gregoee2002/ILA---INTERFACE";
+const DEPLOY_WORKFLOW = "deploy-pages.yml";
+const DEPLOY_BRANCH = "main";
+
+async function triggerPagesRedeploy(): Promise<void> {
+  const token = getStoredToken();
+  if (!token) return;
+  try {
+    const res = await fetch(
+      `${GITHUB_API}/repos/${DEPLOY_REPO}/actions/workflows/${DEPLOY_WORKFLOW}/dispatches`,
+      { method: "POST", headers: headers(), body: JSON.stringify({ ref: DEPLOY_BRANCH }) }
+    );
+    if (res.ok) {
+      console.log(`[githubStorageBrowser] Redeploy di ${DEPLOY_REPO} avviato dopo il salvataggio.`);
+    } else {
+      console.warn(`[githubStorageBrowser] Redeploy automatico non avviato (HTTP ${res.status}): il salvataggio è comunque riuscito. Il tuo PAT deve avere anche "Actions: Read and write" su ${DEPLOY_REPO}.`);
+    }
+  } catch (e: any) {
+    console.warn(`[githubStorageBrowser] Redeploy automatico non avviato: ${e.message || e}`);
+  }
+}
+
+// Stesso debounce di githubStorage.ts: un salvataggio massivo scrive
+// centinaia di file uno dopo l'altro, si accorpa in un'unica dispatch.
+let redeployTimer: ReturnType<typeof setTimeout> | null = null;
+const REDEPLOY_DEBOUNCE_MS = 8000;
+
+export function scheduleRedeploy(): void {
+  if (redeployTimer) clearTimeout(redeployTimer);
+  redeployTimer = setTimeout(() => {
+    redeployTimer = null;
+    void triggerPagesRedeploy();
+  }, REDEPLOY_DEBOUNCE_MS);
+}
+
 export async function testGitHubAccess(): Promise<{ ok: boolean; detail: string }> {
   try {
     const res = await fetch(`${GITHUB_API}/repos/${REPO}`, { headers: headers() });

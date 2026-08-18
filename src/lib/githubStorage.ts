@@ -360,6 +360,79 @@ export async function pushFileToGitHub(filename: string, content: string, messag
   }
 }
 
+// ── Redeploy automatico del sito statico dopo un salvataggio ──────────
+//
+// Il sito pubblico (GitHub Pages) è generato da un workflow separato
+// (.github/workflows/deploy-pages.yml) su un ALTRO repository — quello di
+// codice, non questo repository dati — e non parte mai da solo quando si
+// scrive qui. Senza questo, ogni salvataggio richiede un redeploy manuale
+// per comparire sul sito (vedi commit "lo snapshot statico non rifletteva
+// mai le modifiche fatte nell'editor").
+//
+// CONFIGURAZIONE — opzionale, oltre a GITHUB_TOKEN/GITHUB_REPO già in uso:
+//   DEPLOY_REPO       "utente/nome-repo" del repository di CODICE (quello
+//                     con .github/workflows/deploy-pages.yml). Se non
+//                     impostato, il redeploy automatico resta disattivo
+//                     (nessuna regressione: comportamento invariato).
+//   DEPLOY_WORKFLOW   opzionale, default "deploy-pages.yml"
+//   DEPLOY_BRANCH     opzionale, default "main"
+//
+// Riusa lo stesso GITHUB_TOKEN già configurato: deve avere, IN PIÙ del
+// permesso Contents su questo repository dati, anche il permesso
+// "Actions: Read and write" sul repository di codice (DEPLOY_REPO).
+function loadDeployTriggerConfig(): { repo: string; workflow: string; branch: string } | null {
+  const repo = process.env.DEPLOY_REPO;
+  if (!repo) return null;
+  return {
+    repo,
+    workflow: process.env.DEPLOY_WORKFLOW || "deploy-pages.yml",
+    branch: process.env.DEPLOY_BRANCH || "main",
+  };
+}
+
+let deployWarnedOnce = false;
+
+async function triggerPagesRedeploy(): Promise<void> {
+  if (!isGitHubConfigured()) return;
+  const deployCfg = loadDeployTriggerConfig();
+  if (!deployCfg) {
+    if (!deployWarnedOnce) {
+      console.log("[githubStorage] DEPLOY_REPO non impostato — redeploy automatico del sito dopo il salvataggio disattivo (serve un redeploy manuale per vedere le modifiche online).");
+      deployWarnedOnce = true;
+    }
+    return;
+  }
+  const cfg = getConfig();
+  try {
+    const res = await fetch(
+      `${GITHUB_API}/repos/${deployCfg.repo}/actions/workflows/${deployCfg.workflow}/dispatches`,
+      { method: "POST", headers: headers(cfg), body: JSON.stringify({ ref: deployCfg.branch }) }
+    );
+    if (res.ok) {
+      console.log(`[githubStorage] Redeploy di ${deployCfg.repo} avviato dopo il salvataggio.`);
+    } else {
+      console.warn(`[githubStorage] Redeploy automatico non avviato (HTTP ${res.status}): il salvataggio è comunque riuscito. Verifica che GITHUB_TOKEN abbia anche "Actions: Read and write" su ${deployCfg.repo}.`);
+    }
+  } catch (e: any) {
+    console.warn(`[githubStorage] Redeploy automatico non avviato: ${e.message || e}`);
+  }
+}
+
+// Un salvataggio massivo (es. "Riordina ID" su ~300 schede) scrive centinaia
+// di file uno dopo l'altro: senza debounce, ognuno farebbe partire una
+// dispatch separata. Si accorpano in un'unica chiamata, innescata solo
+// quando le scritture si fermano per un momento.
+let redeployTimer: ReturnType<typeof setTimeout> | null = null;
+const REDEPLOY_DEBOUNCE_MS = 8000;
+
+export function scheduleRedeploy(): void {
+  if (redeployTimer) clearTimeout(redeployTimer);
+  redeployTimer = setTimeout(() => {
+    redeployTimer = null;
+    void triggerPagesRedeploy();
+  }, REDEPLOY_DEBOUNCE_MS);
+}
+
 async function fetchCurrentSha(cfg: GitHubConfig, filename: string): Promise<string | null> {
   const url = `${GITHUB_API}/repos/${cfg.repo}/contents/${repoPath(cfg, filename)}?ref=${encodeURIComponent(cfg.branch)}`;
   // Vedi commento gemello in githubStorageBrowser.ts: la Contents API risponde
