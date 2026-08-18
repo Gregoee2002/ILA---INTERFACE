@@ -107,6 +107,7 @@ export interface Monumento {
   // Custom new fields for enhanced TEI coverage
   phi?: string[];
   tm?: string;
+  tmLink?: string;
   authority?: string;
   msIdnos?: string[];
   dim_altezza?: string;

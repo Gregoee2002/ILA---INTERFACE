@@ -266,9 +266,12 @@ function parseTeiElement(teiString: string): Monumento {
 
   // 3. Parse TM
   let tm = "";
-  const tmMatch = teiString.match(/<idno\s+type="TM">([\s\S]*?)<\/idno>/);
+  let tmLink = "";
+  const tmMatch = teiString.match(/<idno\s+type="TM"([^>]*)>([\s\S]*?)<\/idno>/);
   if (tmMatch) {
-    tm = unescapeXml(tmMatch[1].trim());
+    tm = unescapeXml(tmMatch[2].trim());
+    const refMatch = tmMatch[1].match(/ref="([^"]*)"/);
+    if (refMatch) tmLink = refMatch[1];
   }
 
   // 4. Parse PHI list
@@ -1091,6 +1094,7 @@ function parseTeiElement(teiString: string): Monumento {
     id,
     entryId,
     tm,
+    tmLink,
     phi,
     authority,
     titolo,
@@ -1224,7 +1228,10 @@ export function monumentiToXml(monumenti: Monumento[]): string {
     block += `                <idno type="filename">${m.id}</idno>\n`;
     if (m.id) block += `                <idno type="id">${m.id}</idno>\n`;
     if (m.entryId) block += `                <idno type="entryId">${escapeXml(m.entryId)}</idno>\n`;
-    if (m.tm) block += `                <idno type="TM">${escapeXml(m.tm)}</idno>\n`;
+    if (m.tm) {
+      const tmRefAttr = m.tmLink ? ` ref="${escapeXml(m.tmLink)}"` : "";
+      block += `                <idno type="TM"${tmRefAttr}>${escapeXml(m.tm)}</idno>\n`;
+    }
     if (m.phi && m.phi.length > 0) {
       for (const p of m.phi) {
         block += `                <idno type="PHI">${escapeXml(p)}</idno>\n`;

@@ -733,6 +733,10 @@ function renderSectionForm(
             <TextInput value={m.tm || ''} onChange={e => set('tm', e.target.value)} placeholder="—" />
           </div>
           <div>
+            <FieldLabel>Link TM</FieldLabel>
+            <TextInput value={m.tmLink || ''} onChange={e => set('tmLink', e.target.value)} placeholder="https://www.trismegistos.org/text/…" />
+          </div>
+          <div>
             <FieldLabel>Corpus</FieldLabel>
             <SuggestInput value={m.corpus || ''} onChange={v => set('corpus', v)} options={suggestions.corpus} placeholder="CMRDM I" />
           </div>
