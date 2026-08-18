@@ -1250,7 +1250,6 @@ function HomeView({ monumenti, onNavigate, onSearch }: { monumenti: Monumento[],
   const [homeQuery, setHomeQuery] = useState('');
   const [launching, setLaunching] = useState<AppView | null>(null);
   const [launchStage, setLaunchStage] = useState<'lit' | 'zoom' | null>(null);
-  const moon = useMemo(() => getMoonPhase(), []);
   const stats = useMemo(() => {
     const regioni = new Set(monumenti.map(m => m.regione).filter(Boolean));
     const citta = new Set(monumenti.map(m => m.citta).filter(Boolean));
@@ -1293,7 +1292,7 @@ function HomeView({ monumenti, onNavigate, onSearch }: { monumenti: Monumento[],
       className="absolute inset-0 flex flex-col overflow-y-auto overflow-x-hidden custom-scrollbar"
       style={{ position: 'absolute', inset: 0, overflowY: 'auto' }}
     >
-    <div className="w-full max-w-[1440px] mx-auto px-6 md:px-10 lg:px-14 pb-6">
+    <div className="w-full max-w-[1440px] mx-auto px-6 md:px-10 lg:px-14 pt-8 md:pt-10 lg:pt-12 pb-6">
       {/* Hero: narrativa+ricerca a sinistra, wordmark a bilanciare lo spazio a destra */}
       <div className="grid grid-cols-1 lg:grid-cols-[1.3fr_1fr] gap-6 items-center mb-8">
         <div>
@@ -1325,13 +1324,15 @@ function HomeView({ monumenti, onNavigate, onSearch }: { monumenti: Monumento[],
           </form>
         </div>
 
-        {/* Fase lunare corrente — omaggio a Men, provvisorio al posto del logo */}
-        <div className="hidden lg:flex flex-col items-end text-right pr-8 select-none" title={`${moon.name} — giorno ${moon.day} del ciclo`}>
-          <MoonDisc illum={moon.illum} waxing={moon.waxing} size={88} opacity={0.55} />
-          <div className="mt-4 text-lg font-serif italic text-ink/70 leading-tight">{moon.name}</div>
-          <div className="text-[10px] font-sans font-bold uppercase tracking-[0.15em] text-muted/50 mt-1.5">
-            Mensis dies {moon.day} · {Math.round(moon.illum * 100)}% illuminata
-          </div>
+        {/* Wordmark + sottotitolo, spostato in alto a destra come da riferimento */}
+        <div className="hidden lg:flex flex-col items-end text-right pr-6 pt-2 self-start select-none">
+          <span
+            className="text-7xl xl:text-8xl font-bold tracking-[0.12em] leading-none mb-4 text-accent/50"
+            style={{ fontFamily: '"Cinzel", serif' }}
+          >
+            ILA
+          </span>
+          <p className="text-sm font-sans font-bold uppercase tracking-[0.15em] text-muted/50">Database Epigrafico</p>
         </div>
       </div>
 
@@ -4048,12 +4049,12 @@ export default function App() {
               className="relative z-10 flex flex-col items-center text-center max-w-lg px-8"
             >
               <motion.div
-                initial={{ opacity: 0, scale: 0.85 }}
+                initial={{ opacity: 0, scale: 1.7 }}
                 animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 1, ease: EASE_OUT }}
+                transition={{ duration: 1.1, ease: EASE_OUT }}
                 className="mb-12"
               >
-                <img src={ilaLogo} alt="Index Lunae Antiquae" className="h-40 md:h-52 w-auto object-contain" />
+                <img src={ilaLogo} alt="Index Lunae Antiquae" className="h-52 sm:h-64 md:h-72 lg:h-80 w-auto object-contain" />
               </motion.div>
 
               <motion.button
