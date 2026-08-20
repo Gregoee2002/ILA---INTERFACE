@@ -47,7 +47,8 @@ import {
   GitCompare,
   KeyRound,
   Unlock,
-  Flag
+  Flag,
+  ExternalLink
 } from 'lucide-react';
 import { cn, EASE_OUT, EASE_IN, SPRING_SNAPPY, SPRING_SOFT } from './lib/utils';
 import { ICONOGRAPHY_LABELS } from './lib/iconographyLabels';
@@ -5624,6 +5625,23 @@ export default function App() {
                               <span className="bg-accent/10 text-accent text-[10px] font-bold px-2 py-0.5 rounded-sm uppercase tracking-tighter">
                                 {formatIlaLabel(selectedMonumento.id)}
                               </span>
+                              {selectedMonumento.tm && (
+                                selectedMonumento.tmLink ? (
+                                  <a
+                                    href={selectedMonumento.tmLink}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="inline-flex items-center gap-1 bg-sidebar text-muted hover:text-accent text-[10px] font-bold px-2 py-0.5 rounded-sm uppercase tracking-tighter shadow-sm transition-colors"
+                                    title="Apri la scheda su Trismegistos"
+                                  >
+                                    TM {selectedMonumento.tm} <ExternalLink className="h-2.5 w-2.5" />
+                                  </a>
+                                ) : (
+                                  <span className="bg-sidebar text-muted text-[10px] font-bold px-2 py-0.5 rounded-sm uppercase tracking-tighter">
+                                    TM {selectedMonumento.tm}
+                                  </span>
+                                )
+                              )}
                               {selectedMonumento.textTypes?.map((tt, idx) => (
                                 <span key={idx} className="bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-[10px] font-bold px-2 py-0.5 rounded-sm uppercase tracking-tighter shadow-sm">
                                   {tt}
