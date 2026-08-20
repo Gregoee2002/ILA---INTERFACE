@@ -455,9 +455,13 @@ function parseTeiElement(teiString: string): Monumento {
     if (geoMatch) regione = unescapeXml(geoMatch[1].trim());
   }
 
-  // Nessun fallback numerico: una scheda senza <placeName type="region"> o
-  // <geogName type="ancientRegion"> espliciti resta con regione vuota e va
-  // segnalata in revisione, mai indovinata dal numero di catalogo Lane.
+  // Niente fallback sul range numerico del catalogo Lane: verificato sui dati
+  // reali che non è affidabile (i file CMRDM-AS-028..047, tutti Asia Minor per
+  // contenuto e classificazione dei curatori, cadrebbero nella fascia "Italia"
+  // 28-47 della tabella sezionale di Lane). La regione corretta viene invece
+  // scritta esplicitamente in <placeName type="region"> per ogni scheda in
+  // fase di migrazione, a partire dal codice regione che i curatori avevano
+  // già assegnato nel nome file.
 
   let origPlace_nota = "";
   const origPlaceMatch = teiString.match(/<origPlace>([\s\S]*?)<\/origPlace>/);
