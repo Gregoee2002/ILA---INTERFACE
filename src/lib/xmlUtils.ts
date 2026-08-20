@@ -1,5 +1,11 @@
 import { Monumento, Traduzione, Bibliografia, OrigDate, IconographyData } from "../types";
 
+// Unica fonte per l'etichetta identificativa del record — sostituisce le
+// vecchie stringhe "corpus numero" (CMRDM I 29) costruite ad hoc in più punti.
+export function formatIlaLabel(id: number | undefined): string {
+  return `ILA ${id ?? '?'}`;
+}
+
 function escapeXml(unsafe: any): string {
   if (unsafe === undefined || unsafe === null) return "";
   return String(unsafe)
@@ -449,23 +455,9 @@ function parseTeiElement(teiString: string): Monumento {
     if (geoMatch) regione = unescapeXml(geoMatch[1].trim());
   }
 
-  // Fallback 3: deduce region from CMRDM I numeric ranges if not explicitly coded.
-  // Only applied to CMRDM I records, keyed off the canonical <msIdentifier><idno>
-  // "CMRDM I <numero>" text (see estrazione corpus/numero più sotto) — MAI dal
-  // vecchio <idno type="filename">, che è un id interno indipendente dal vero
-  // numero di catalogo e produceva regioni sbagliate dopo ogni riscrittura.
-  if (!regione) {
-    const msCanonicalForRegione = (msIdnos[0] || "").match(/^CMRDM\s+I\s+(\d+)/i);
-    if (msCanonicalForRegione) {
-      const n = parseInt(msCanonicalForRegione[1], 10);
-      if (n >= 1 && n <= 19) regione = "Graecia";
-      else if (n >= 20 && n <= 27) regione = "Dacia";
-      else if (n >= 28 && n <= 47) regione = "Italia";
-      else if (n >= 48 && n <= 116) regione = "Asia Minor";
-      else if (n >= 117 && n <= 130) regione = "Dubia";
-      else if (n >= 131) regione = "Addenda";
-    }
-  }
+  // Nessun fallback numerico: una scheda senza <placeName type="region"> o
+  // <geogName type="ancientRegion"> espliciti resta con regione vuota e va
+  // segnalata in revisione, mai indovinata dal numero di catalogo Lane.
 
   let origPlace_nota = "";
   const origPlaceMatch = teiString.match(/<origPlace>([\s\S]*?)<\/origPlace>/);
@@ -1004,92 +996,6 @@ function parseTeiElement(teiString: string): Monumento {
     }
   }
 
-  let corpus = "";
-  let numeroFromMsIdentifier = "";
-  // 0. <msIdentifier><idno>CMRDM <numero romano> <numero></idno> — formato canonico
-  // usato da tutte le schede reali del corpus (es. "CMRDM I 28"): ha priorità sugli
-  // altri pattern, che nei file reali non compaiono mai.
-  {
-    const msCanonicalMatch = (msIdnos[0] || "").match(/^(CMRDM\s+[IVXLCDM]+)\s+(\S.*)$/i);
-    if (msCanonicalMatch) {
-      corpus = msCanonicalMatch[1].trim();
-      numeroFromMsIdentifier = msCanonicalMatch[2].trim();
-    }
-  }
-
-  // 1. <idno type="corpus"> — se presente, usa il suo contenuto testuale
-  const idnoCorpusMatch = teiString.match(/<idno\s+type="corpus">([\s\S]*?)<\/idno>/);
-  if (!corpus && idnoCorpusMatch) {
-    corpus = unescapeXml(idnoCorpusMatch[1].trim());
-  }
-
-  // 2. <idno type="CMRDM" corpus="..."> — se presente, usa il valore dell'attributo corpus
-  if (!corpus) {
-    const cmrdmCorpusMatch = teiString.match(/<idno\s+[^>]*type="CMRDM"[^>]*corpus="([^"]*)"/) || teiString.match(/<idno\s+[^>]*corpus="([^"]*)"[^>]*type="CMRDM"/);
-    if (cmrdmCorpusMatch) {
-      corpus = unescapeXml(cmrdmCorpusMatch[1].trim());
-    }
-  }
-
-  // 3. <authority> — se contiene la stringa CMRDM, estrai CMRDM I / CMRDM II con una regex /(CMRDM\s+[IVX]+)/
-  if (!corpus && authority && authority.includes("CMRDM")) {
-    const authorityMatch = authority.match(/(CMRDM\s+[IVX]+)/);
-    if (authorityMatch) {
-      corpus = authorityMatch[1].trim();
-    }
-  }
-
-  // 4. <idno type="filename"> — nessun file del corpus usa i formati sopra:
-  // tutti codificano invece il codice regione nel filename, es. "CMRDM-AS-122".
-  // Estrai il segmento tra i due trattini.
-  if (!corpus) {
-    const filenameMatchForCorpus = teiString.match(/<idno\s+type="filename">([\s\S]*?)<\/idno>/);
-    if (filenameMatchForCorpus) {
-      const fnCorpusMatch = filenameMatchForCorpus[1].trim().match(/^CMRDM-([A-Z]+)-/i);
-      if (fnCorpusMatch) {
-        corpus = fnCorpusMatch[1].toUpperCase();
-      }
-    }
-  }
-
-  let numero = numeroFromMsIdentifier;
-  // 1. <idno type="numero"> — se presente, usa il suo contenuto testuale
-  const idnoNumeroMatch = teiString.match(/<idno\s+type="numero">([\s\S]*?)<\/idno>/);
-  if (!numero && idnoNumeroMatch) {
-    numero = unescapeXml(idnoNumeroMatch[1].trim());
-  }
-
-  // 2. <idno type="CMRDM" numero="..."> — se presente, usa il valore dell'attributo numero
-  if (!numero) {
-    const cmrdmNumeroMatch = teiString.match(/<idno\s+[^>]*type="CMRDM"[^>]*numero="([^"]*)"/) || teiString.match(/<idno\s+[^>]*numero="([^"]*)"[^>]*type="CMRDM"/);
-    if (cmrdmNumeroMatch) {
-      numero = unescapeXml(cmrdmNumeroMatch[1].trim());
-    }
-  }
-
-  // 3. <idno type="CMRDM"> — se presente, il suo contenuto è tipicamente nella forma CMRDM I 52; estrai l'ultimo token numerico con una regex /(\d+)$/
-  if (!numero) {
-    const idnoCMRDMContentMatch = teiString.match(/<idno\s+[^>]*type="CMRDM"[^>]*>([\s\S]*?)<\/idno>/) || teiString.match(/<idno\s+type="CMRDM">([\s\S]*?)<\/idno>/);
-    if (idnoCMRDMContentMatch) {
-      const content = unescapeXml(idnoCMRDMContentMatch[1].trim());
-      const numMatch = content.match(/(\d+)$/);
-      if (numMatch) {
-        numero = numMatch[1];
-      }
-    }
-  }
-
-  // 4. <idno type="filename"> — come ultimo fallback, se il valore è un numero intero usalo come numero
-  if (!numero) {
-    const filenameMatchForNumero = teiString.match(/<idno\s+type="filename">([\s\S]*?)<\/idno>/);
-    if (filenameMatchForNumero) {
-      const fnVal = filenameMatchForNumero[1].trim();
-      if (/^\d+$/.test(fnVal)) {
-        numero = fnVal;
-      }
-    }
-  }
-
   return {
     id,
     entryId,
@@ -1145,8 +1051,6 @@ function parseTeiElement(teiString: string): Monumento {
     textTypes,
     iscrizione,
     anepigr,
-    corpus,
-    numero,
     iconografia: extractIconography(teiString),
   } as Monumento;
 }
@@ -1225,7 +1129,6 @@ export function monumentiToXml(monumenti: Monumento[]): string {
     block += `            </titleStmt>\n`;
     block += `            <publicationStmt>\n`;
     block += `                <authority>${escapeXml(auth)}</authority>\n`;
-    block += `                <idno type="filename">${m.id}</idno>\n`;
     if (m.id) block += `                <idno type="id">${m.id}</idno>\n`;
     if (m.entryId) block += `                <idno type="entryId">${escapeXml(m.entryId)}</idno>\n`;
     if (m.tm) {
@@ -1243,19 +1146,13 @@ export function monumentiToXml(monumenti: Monumento[]): string {
     block += `                <msDesc>\n`;
     block += `                    <msIdentifier>\n`;
     block += `                        <repository>${escapeXml(m.luogo_cons || 'in situ or lost')}</repository>\n`;
-    const corpus_val = m.corpus || "";
-    const numero_val = m.numero || "";
-    if (corpus_val || numero_val) {
-      // I campi corpus/numero sono la rappresentazione modificabile nell'editor:
-      // hanno sempre priorità sul valore grezzo msIdnos catturato al parsing,
-      // altrimenti le modifiche a "corpus" non si riflettono mai nell'XML.
-      block += `                        <idno>${escapeXml(`${corpus_val} ${numero_val}`.trim())}</idno>\n`;
-    } else if (m.msIdnos && m.msIdnos.length > 0) {
+    // msIdentifier è il numero di inventario fisico dell'oggetto (museo), non
+    // il numero di catalogo Lane — quello vive solo in bibliografia. Si omette
+    // se ignoto, non si inventa un valore di ripiego.
+    if (m.msIdnos && m.msIdnos.length > 0) {
       for (const mid of m.msIdnos) {
         block += `                        <idno>${escapeXml(mid)}</idno>\n`;
       }
-    } else {
-      block += `                        <idno>${m.id}</idno>\n`;
     }
     block += `                    </msIdentifier>\n`;
     

@@ -96,12 +96,10 @@ async function startServer() {
 
   // ── Helpers ──────────────────────────────────────────────────────────────
 
-  // Build a safe filename from a Monumento: CMRDM-GR-001.xml or id-based fallback
+  // Build a safe filename from a Monumento: ILA-001.xml
   function buildFilename(m: any): string {
-    const corpus = (m.corpus || '').replace(/[^a-zA-Z0-9]/g, '').toUpperCase() || 'XX';
     const id = String(m.id || 0).padStart(3, '0');
-    const num = m.numero ? String(m.numero).padStart(3, '0') : id;
-    return `${corpus}-${num}.xml`;
+    return `ILA-${id}.xml`;
   }
 
   // Impronta del contenuto di un file del corpus, usata come controllo di
@@ -167,14 +165,9 @@ async function startServer() {
           // Attach filename + content hash for round-trip updates and
           // per-record staleness checks
           const fileHash = hashContent(xml);
-          const fileCorpusMatch = file.match(/^CMRDM-([A-Z]+)-/i);
           parsed.forEach(m => {
             (m as any)._corpusFile = file;
             (m as any)._fileHash = fileHash;
-            // Alcuni file legacy hanno <idno type="filename"> con un numero
-            // invece del pattern CMRDM-XX-NNN (vedi xmlUtils.ts): il nome
-            // file su disco resta comunque affidabile per il codice regione.
-            if (!m.corpus && fileCorpusMatch) m.corpus = fileCorpusMatch[1].toUpperCase();
           });
           monumenti.push(...parsed);
         }
