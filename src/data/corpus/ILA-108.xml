@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">stone</rs> Pietra iscritta con norme sacre per Men Tyrannos, zona del Laurion</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>ILA — Index Lunae Antiquae</authority>
+                <idno type="id">108</idno>
+                <idno type="entryId">local-9</idno>
+                <idno type="TM">&lt;!-- inserire TM number --&gt;</idno>
+            </publicationStmt>
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>Epigraphical Museum, Athens</repository>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Pietra iscritta con norme sacre per Men Tyrannos, zona del Laurion. Altezza 89 cm., larghezza 73 cm., spessore 9,5 cm.</p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/138.html">stone</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/250.html">stone</objectType>
+                                    <dimensions>
+                                        <height unit="metre">89</height>
+                                        <width unit="metre">73</width>
+                                        <depth unit="metre">9,5</depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>Grande pietra con crescente ben inciso in alto, fissata alla base da un incastro, recante una dettagliata legge sacra per il santuario di Men Tyrannos, comprendente norme di purità, obblighi sacrificali e regolamenti per gli eranistai.</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Height of letters: 0.9 cm.</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/570740">Sunium</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">Laurion area, Greece</placeName>
+                                <placeName type="region">Graecia</placeName>
+                            </origPlace>
+                        </origin>
+                        <provenance type="found">Zona del Laurion, Grecia</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+<ab>
+                    <lb n="1"/>Ξάνθος Λύκιος [Ξ]άνθου Ὁρίγιου Α[.] καθειδρύσατο [ἱ]ερ[ὸ]ν τοῦ Μ[ήνο]ς
+                    <lb n="2"/>Τυράννου, αἱρετίσαντος τοῦ θεοῦ, ἐπ᾽ ἀγαθῇ τύχ-ῃ. Καὶ [μηδένα]
+                    <lb n="3"/>ἀκάθαρτον προσαγεῖν. Καθαριζέσθω [δὲ ἀπὸ σκόρδων καὶ χοιρέων]
+                    <lb n="4"/>καὶ γυναικός. Λουσαμένους δὲ κατακεφαλὰ αὐθήμερον εἰσ[πορευ-]
+                    <lb n="5"/>εσθαι δ[ή]. Καὶ ἐκ τῶν γυναικέων διὰ ἑπτὰ ἡμερῶν λουσαμένην κατα-
+                    <lb n="6"/>κεφαλὰ εἰσπορεύεσθαι αὐθήμερον. Καὶ ἀπὸ νεκροῦ διὰ ἡμερῶν δ[έκα]
+                    <lb n="7"/>καὶ ἀπὸ φθορᾶς ἡμερῶν τεττaρακόντα, καὶ μηδένα θυσιάζειν ἄνευ
+                    <lb n="8"/>τοῦ καθειδρυσαμένου τὸ ἱερόν.
+                    <lb n="9"/>Ἐὰν δέ τις διασήται, ἀπρόσδεκτος
+                    <lb n="10"/>ἡ θυσία παρὰ τοῦ θεοῦ. Παρέχειν δὲ τῷ θεῷ τὸ καθῆκον, δεξιὸν
+                    <lb n="11"/>σκέλος καὶ δορὰν καὶ κεφαλὴν καὶ πόδας καὶ στηθύνιον καὶ ἔλαιον
+                    <lb n="12"/>ἐπὶ βωμὸν καὶ λύκνον καὶ σκίλας καὶ σπονδήν, καὶ εὐείλατος
+                    <lb n="13"/>γένοιτο ὁ θεὸς τοῖς θεραπεύουσιν ἁπλῇ τῇ ψυχῇ. Ἐὰν δέ τινα
+                    <lb n="14"/>ἀνθρώπινα πάσχῃ ἢ ἀσθενήσῃ ἢ ἀποδημήσῃ που, μηδένα ἀνθρώ-
+                    <lb n="15"/>πων ἐξουσίαν ἔχειν, ἐὰν μή ᾧ ἂν αὐτὸς παραδῷ. Ὃς ἂν δὲ πολυ-
+                    <lb n="16"/>πραγμονήσῃ τὰ τοῦ θεοῦ ἢ περιεργάσηται, ἁμαρτίαν ὀφείλετω Μηνὶ
+                    <lb n="17"/>Τυράννῳ, ἣν οὐ μὴ δύναται ἐξειλάσασθαι.
+                    <lb n="18"/>ὁ δὲ θυσιάζων τῇ ἑβδομῇ
+                    <lb n="19"/>τὰ καθήκοντα πάντα ποιείτω τῷ θεῷ. Λαμβανέτω [τ]ῆς θυσίας [ἧς]
+                    <lb n="20"/>ἂν φέρῃ σκέλος καὶ ὦμον, τὰ δὲ λοίπια κατακόπτετω ἐν τῷ ἱερῷ.
+                    <lb n="21"/>εἰ δέ τις
+                    <lb n="22"/>εἰ δέ τις προσφέρῃ θυσίαν τῷ θεῷ, ἐν νουμηνίας μέχρι πεντεκαι-
+                    <lb n="23"/>δεκάτης. Ἐὰν δέ τις τράπεζαν πληρώσῃ τῷ θεῷ, λαμβανέτω τὸ ἥμισυ.
+                    <lb n="24"/>Τοὺς δὲ βουλομένους ἔρανον συνάγειν Μηνὶ Τυράννῳ, ἐπ᾽ ἀγαθῇ τύ[χης].
+                </ab>
+            </div>
+            <div type="commentary">
+                <p>DA_COMPILARE</p>
+            </div>
+            <div type="bibliography">
+                <listBibl>
+                    <bibl>Lane, CMRDM I 13</bibl>
+                    <bibl>Gurlitt, loc. cit.</bibl>
+                    <bibl>Cordella, loc. cit.</bibl>
+                    <bibl>Foucart, loc. cit.</bibl>
+                    <bibl>Daremberg-Saglio, loc. cit.</bibl>
+                    <bibl>Drexler, loc. cit.</bibl>
+                    <bibl>Milchhöfer, loc. cit.</bibl>
+                    <bibl>Perdrizet, loc. cit.</bibl>
+                    <bibl>Michel, Recueil, 988</bibl>
+                    <bibl>P. Stengel, Hermes, XXXVI, 1901, p. 331-2</bibl>
+                    <bibl>J. Prott and L. Ziehen, Leges Graecorum Sacrae e Titulis Collectae, Leipzig 1906, II, I, 149, p. 148-153</bibl>
+                    <bibl>IG, II², 1366</bibl>
+                    <bibl>W. Dittenberger, Sylloge Inscriptionum Graecarum³, Leipzig, 1915-20, no. 1042</bibl>
+                    <bibl>Lane, I, p. 9, no. 14</bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

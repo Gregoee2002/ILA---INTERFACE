@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">altar</rs> Altare di marmo biancastro con iscrizione a Men Ouranios, zona di Saittae</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>ILA — Index Lunae Antiquae</authority>
+                <idno type="id">104</idno>
+                <idno type="entryId">local-5</idno>
+                <idno type="TM">&lt;!-- inserire TM number --&gt;</idno>
+            </publicationStmt>
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>in situ or lost</repository>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Altare di marmo biancastro con iscrizione a Men Ouranios, zona di Saittae. Altezza 80,5 cm, larghezza 36 cm.</p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/48.html">marble</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/29.html">altar</objectType>
+                                    <dimensions>
+                                        <height unit="metre">80,5</height>
+                                        <width unit="metre">36</width>
+                                        <depth unit="metre"></depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>Altare con modanature in basso e in alto. L'iscrizione invoca Men Ouranieos come grande dio celeste dotato del grande potere della divinità immortale.</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Height of letters: 2.7 to 3.3 cm.</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="DA_COMPILARE">Saittae area</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">Incikler, Turkey</placeName>
+                                <placeName type="region">Asia Minor</placeName>
+                            </origPlace>
+                        </origin>
+                        <provenance type="found">Incikler, Turchia</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+<ab>
+                    <lb n="1"/>Τῷ θεῷ ε-
+                    <lb n="2"/>ν οὐρανοῖς,
+                    <lb n="3"/>μέγας Μὴν
+                    <lb n="4"/>Οὐρανιός,
+                    <lb n="5"/>μεγάλη δυ-
+                    <lb n="6"/>ναμίς τοῦ ἀ-
+                    <lb n="7"/>θανάτου θε-
+                    <lb n="8"/>οῦ.
+                </ab>
+            </div>
+            <div type="commentary">
+                <p>DA_COMPILARE</p>
+            </div>
+            <div type="bibliography">
+                <listBibl>
+                    <bibl>Lane, CMRDM I 83</bibl>
+                    <bibl>K-P, II Reise, pp. 109-110, no. 211</bibl>
+                    <bibl>Robert, Anatolia, III, 1958, p. 128, note 101</bibl>
+                    <bibl>Lane, I, p. 22, no. 36</bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

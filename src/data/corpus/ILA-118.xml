@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Iscrizione greca</rs> — CMRDM I nr. 129: Piccolo altare rotondo con iscrizione per il sacerdote di Men Ouranios, Andeda (Belen)</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>ILA — Index Lunae Antiquae</authority>
+                <idno type="TM"><!-- inserire TM number --></idno>
+                <idno type="id">118</idno>
+                <idno type="entryId">gen-1786984905702-2o-d0rarc</idno>
+            </publicationStmt>
+            <!-- Revisione assistita (cross-check col PDF Lane, p. 84): testo greco corretto — riga 1 "Κοινὸς" (parola comune "comune/condiviso", priva di senso come inizio di un nome proprio) sostituita con "Κοίντος" (il prenome latino "Quintus" traslitterato, lettura certa di Lane); riga 4 integrata la lacuna reale "Ο[ὑ-]" (draft la presentava come lettura certa "Οὐ-"); AGGIUNTA riga 9 "ὑψίστῳ." (l'epiteto "Altissimo" riferito al dio), completamente assente dal draft — un'omissione dell'ultima riga di stampa che cambiava il senso della dedica. Corretta di conseguenza anche la descrizione in <layout> (il dedicante è Quintus Numerius, non "Koinonos"). Tradotta in italiano la prosa di <support> e <layout>, integrando i dettagli di rinvenimento (sostegno di un pilastro della moschea di Belen, 15 min da Yavuz, in gran parte interrato, copia presa da un abitante del villaggio) presenti nel PDF ma assenti dal draft. Pleiades: aggiunto l'identificativo corretto per Andeda (verificato su Pleiades e Numista, corrispondente a Yavuz/Korkuteli, Antalya). -->
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>in situ (sostegno di un pilastro della moschea)</repository>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Piccolo altare rotondo che sostiene un pilastro della moschea di Belen, a 15 minuti (a piedi?) da Yavuz. In gran parte interrato quando fu visto da Bean nel 1959; la maggior parte della trascrizione fu eseguita da un abitante del villaggio. Dimensioni non disponibili.</p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/138.html">stone</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/29.html">altar</objectType>
+                                    <dimensions unit="cm">
+                                        <height></height>
+                                        <width></width>
+                                        <depth></depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>Piccolo altare rotondo, senza rilievo. Quintus Numerius, sacerdote di Men Ouranios, dedicò questo altare al dio Altissimo in base a un responso oracolare (chrematismos).</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Height of letters: DA_COMPILARE.</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/638744">Andeda</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">Andya (Yavuz), Turkey</placeName>
+                                <placeName type="region">Asia Minor</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" precision="low"></origDate>
+                        </origin>
+                        <provenance type="found">Andya (Yavuz), Turchia</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+                <ab>
+                    <lb n="1"/>Κοίντος
+                    <lb n="2"/>Νούμερι-
+                    <lb n="3"/>ος ἱερεὺς
+                    <lb n="4"/>Μηνὸς Ο[ὑ-]
+                    <lb n="5"/>ρανίου κα-
+                    <lb n="6"/>τὰ χρήμα-
+                    <lb n="7"/>τισμὸν ἀνε-
+                    <lb n="8"/>θῆκε θεῷ
+                    <lb n="9"/>ὑψίστῳ.
+                </ab>
+            </div>
+            <div type="apparatus"/>
+            <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="bibliography">
+                <listBibl>
+                    <bibl>Lane, CMRDM I 129</bibl>
+                    <bibl>Bean, AS, X, 1960, p. 65, no. 115</bibl>
+                    <bibl>Robert, REG, LXXIV, 1961, p. 244, no. 748</bibl>
+                    <bibl>SEG, XIX, p. 263, no. 847</bibl>
+                    <bibl>Lane, I, p. 45, no. 11</bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

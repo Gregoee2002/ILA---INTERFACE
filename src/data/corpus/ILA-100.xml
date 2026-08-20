@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Iscrizione greca</rs> Pietra iscritta da Sunium</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>ILA — Index Lunae Antiquae</authority>
+                <idno type="TM"><!-- inserire TM number --></idno>
+                    <idno type="id">100</idno>
+                <idno type="entryId">gen-1786984905702-7j-i5j2gm</idno>
+</publicationStmt>
+            <!-- Revisione: corretto il testo greco confrontandolo con lo stampato di Lane (p. 7): la lettera integrata tra parentesi era erroneamente il theta ("Ξάν[θ]ος") mentre nello stampato è il nu ("Ξά[ν]θος") — corretta la posizione della lacuna. Corretto l'ID Pleiades di Sounion: quello presente nel draft (570740) risultava un luogo del tutto diverso (Tirinto, in Argolide); sostituito con l'ID corretto del sito/demo di Sounion (580107), verificato tramite la ricerca diretta su Pleiades (esistono più voci Sounion: cape 580108, settlement/deme 580107, Temple of Poseidon 580086 — scelta la voce "settlement and deme", la più pertinente per un rinvenimento epigrafico). Aggiunta la data di ritrovamento (ca. 1868), assente nel draft. TM number non compilato: nessuna corrispondenza certa trovata in Trismegistos per IG II² 4856. -->
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>in situ or lost</repository>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Pietra iscritta da Sunium. Rinvenuta verso il 1868. Dimensioni sconosciute.</p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/138.html">stone</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/250.html">stone</objectType>
+                                    <dimensions unit="cm">
+                                        <height></height>
+                                        <width></width>
+                                        <depth></depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>Pietra iscritta con breve dedica a Men Tyrannos.</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Altezza delle lettere: DA_COMPILARE.</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/580107">Sunium</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">Sounion, Greece</placeName>
+                                <placeName type="region">Graecia</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" precision="low"></origDate>
+                        </origin>
+                        <provenance type="found">Sounion, Grecia</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+                <ab>
+                    <lb n="1"/>Ξά[ν]θος Μ[ηνὶ Τυράννῳ].
+                </ab>
+            </div>
+            <div type="apparatus"/>
+            <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="bibliography">
+                <listBibl>
+                    <bibl>Lane, CMRDM I 11</bibl>
+                    <bibl>*Kumanudes, Palingenesia, Sept. 23, 1868, no. 3</bibl>
+                    <bibl>Drexler, op. cit., col. 2732</bibl>
+                    <bibl>IG, II², 4856</bibl>
+                    <bibl>Lane, I, p. 9, no. 12</bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

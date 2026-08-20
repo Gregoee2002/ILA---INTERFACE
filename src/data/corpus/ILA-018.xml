@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Iscrizione greca</rs> Stele di marmo spezzata in due con rilievo di figura femminile e mezzaluna, zona di Ayazviran</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>ILA — Index Lunae Antiquae</authority>
+                <idno type="TM"><!-- inserire TM number --></idno>
+                    <idno type="id">18</idno>
+                <idno type="entryId">gen-1786984905702-h-qjlxzl</idno>
+</publicationStmt>
+            <!-- REVISIONE: testo greco confrontato col PDF (Lane I, p. 50, no. A1, tav. pp. 30-31); il draft conteneva numerosi errori di trascrizione. Corretti: r. 1-2 spezzatura dell'abbreviazione "μη(νὸς)" riportata alla riga di Lane e aggiunto il numerale del giorno "ς΄" (6), assorbito per errore nel nome del mese ("Ἀρτεμεισίους" invece di "Ἀρτεμεισίου ς΄"); r. 3 nome proprio "Τραρίμη"→"Τροφίμη" (nome inesistente vs nome attestato); r. 4 "Κικιωνάδος"→"Κικιννάδος"; r. 5 "ὑπηρεσίαν"→"ὑπηρεσίας" (caso richiesto da "χάριν"); r. 6 "τάχεως"→"ταχέως"; r. 8 rimossa particella "τε" non presente in Lane ("μανῆναί τε ἐποίησεν"→"μανῆναι ἐποίησεν"); r. 9 "Τάρρηνην"→"Ταρσηνὴν"; r. 11 "Κορεσσα"→"Κόρεσα" (grafia del toponimo come stampata); rr. 12-14 verbi finali "στηλογραφῆσθαι"/"κατάγραφαι"→"στηλλογραφηθῆναι"/"καταγράψαι" (forme verbali diverse da quelle stampate, con "στηλλο-" a doppia lambda come nelle altre occorrenze del corpus). Aggiunto dettaglio del rinvenimento (P. Herrmann, prima del 1962) e della modanatura in alto. Pleiades: nessun ID verificabile per "Koresa" (non ha voce propria su pleiades.stoa.org), ref lasciato non compilato. TM number non reperibile. -->
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>in situ or lost</repository>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Stele di marmo spezzata in due, modanatura in cima, con rilievo di figura femminile e mezzaluna, zona di Ayazviran. Rinvenuta da P. Herrmann prima del 1962. Altezza 1,04 m., larghezza 42 cm., spessore 8 cm.</p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/48.html">marble</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/250.html">stele</objectType>
+                                    <dimensions unit="cm">
+                                        <height>1,04</height>
+                                        <width>42</width>
+                                        <depth>8</depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>Stele con rilievo raffigurante figura femminile, mezzaluna e ascia bipenne. Registra la punizione divina di Trarimes figlia di Artemidoros per essersi rifiutata di entrare al servizio di Men Axiottenos di Koresa.</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Altezza delle lettere: 1,5 cm.</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="DA_COMPILARE">Koresa (?)</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">Ayazviran, Turkey</placeName>
+                                <placeName type="region">Asia Minor</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" notBefore-custom="118" notAfter-custom="119" precision="medium">118-119 A.D.</origDate>
+                        </origin>
+                        <provenance type="found">Ayazviran, Turchia</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+                <ab>
+                    <lb n="1"/>Ἔτους σγ΄, μη(νὸς) Ἀρτεμεισίου ς΄, ἐ-
+                    <lb n="2"/>πὶ Τροφίμη, Ἀρτεμιδώρου Κι-
+                    <lb n="3"/>κιννάδος κληθεῖσα ὑπὸ τοῦ
+                    <lb n="4"/>θεοῦ εἰς ὑπηρεσίας χάριν μὴ
+                    <lb n="5"/>βουληθοῦσα ταχέως προσελ-
+                    <lb n="6"/>θεῖν ἐκολάσετο αὐτὴν καὶ μα-
+                    <lb n="7"/>νῆναι ἐποίησεν. Ἠρώτησε οὖν Μη-
+                    <lb n="8"/>τέρα Ταρσηνὴν καὶ Ἀπόλλωνα Ταρσί-
+                    <lb n="9"/>ον καὶ Μῆνα Ἀρτεμιδώρου Ἀξι-
+                    <lb n="10"/>οττηνὸν Κόρεσα κατέχοντα
+                    <lb n="11"/>καὶ ἐκέλευσεν στηλλογραφ-
+                    <lb n="12"/>ηθῆναι νέμεσιν καὶ καταγρά-
+                    <lb n="13"/>ψαι ἐμαυτὸν εἰς ὑπηρεσίαν
+                    <lb n="14"/>τοῖς θεοῖς.
+                </ab>
+            </div>
+            <div type="apparatus"/>
+            <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="bibliography">
+                <listBibl>
+                    <bibl>Lane, CMRDM I 47</bibl>
+                    <bibl>Herrmann, op. cit., p. 24, no. 18, Plate VI, no. 1</bibl>
+                    <bibl>Robert, REG, LXXVI, 1963, p. 166-7, no. 224</bibl>
+                    <bibl>Lane, I, p. 50, no. A1</bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

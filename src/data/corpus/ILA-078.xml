@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Iscrizione greca</rs> Altare con rilievo di testa di toro entro corona, area di Vetissus? (Yağcı Oğlu)</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>ILA — Index Lunae Antiquae</authority>
+                <idno type="TM"><!-- inserire TM number --></idno>
+                    <idno type="id">78</idno>
+                <idno type="entryId">gen-1786984905702-25-t1jan6</idno>
+</publicationStmt>
+            <!-- Revisione assistita (cross-check con PDF Lane, pp. 72): testo greco confermato conforme allo stampato (differenza di accento su ὑπὲ[ρ]/ὑπε[ρ] non toccata). Aggiunto in layout/provenance il dettaglio del ritrovamento ("solo un lato visibile"; scoperta di Calder e Ramsay nel 1912?) assente nel draft, tradotto in italiano. Pleiades per "Vetissus (?) area": nessun ID verificabile trovato (toponimo minore, incerto anche in Lane), lasciato DA_COMPILARE. TM non reperito. -->
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>in situ or lost</repository>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Altare con rilievo di testa di toro entro corona, area di Vetissus? (Yağcı Oğlu). Altezza 0,63 m, larghezza 0,58 m.</p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/138.html">stone</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/29.html">altar</objectType>
+                                    <dimensions unit="cm">
+                                        <height>0,63</height>
+                                        <width></width>
+                                        <depth></depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>Altare di cui è visibile un solo lato, con rilievo di testa di toro entro corona sulla modanatura superiore; l'iscrizione corre in parte tra le corna del toro. Dedica di Diogene figlio di Hermeros per sé e per i suoi figli.</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Height of letters: 0.02 to 0.03 m.</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="DA_COMPILARE">Vetissus (?) area</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">Yağcı Oğlu, near Sülüklü, Turkey</placeName>
+                                <placeName type="region">Asia Minor</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" precision="low"></origDate>
+                        </origin>
+                        <provenance type="found">Trovata da Calder e Ramsay nel 1912 (?) a Yağcı Oğlu, presso Sülüklü, Turchia.</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+                <ab>
+                    <lb n="1"/>[Δι]ογένης Ἑρμέρωτος ὑπε[ρ]
+                    <lb n="2"/>ἑαυτοῦ καὶ τέκνων Μηνὶ
+                    <lb n="3"/>εὐχήν.
+                </ab>
+            </div>
+            <div type="apparatus"/>
+            <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="bibliography">
+                <listBibl>
+                    <bibl>Lane, CMRDM I 110</bibl>
+                    <bibl>W.M. Calder, Klio, XXIV, 1930, p. 62</bibl>
+                    <bibl>SEG, VI, (1932), p. 15, no. 78</bibl>
+                    <bibl>MAMA, VII, p. 76, no. 311 and p. 137</bibl>
+                    <bibl>Lane, II, p. 44, Addenda, no. 1</bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

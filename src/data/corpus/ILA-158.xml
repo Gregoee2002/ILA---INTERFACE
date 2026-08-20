@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Iscrizione greca</rs> — CMRDM I nr. 170: Colonna tetragonale con iscrizione agonistica, santuario di Men Askaenos, Antiocheia Pisidiae</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>ILA — Index Lunae Antiquae</authority>
+                <idno type="TM"><!-- inserire TM number --></idno>
+                <idno type="id">158</idno>
+                <idno type="entryId">gen-1786984905702-3s-nxk3r6</idno>
+            </publicationStmt>
+            <!-- Revisione assistita (cross-check con PDF Lane, CMRDM I 170, pp. 107-108): numerose correzioni al testo greco. R.3 "Καίσεωι-" (non attestato) -> "Καισεννί-" (Kaisennios). Rr.14-15 "δι(ὰ) διδάσαν-τα κλήρους δ΄" -> "δι(α)βιβάσαν-τα κλήρους β΄" (verbo alterato e numerale errato: 4 invece di 2, corretto). R.18, nome dell'epistates alterato: "Λόμνον" -> "Δόμνον" (Domnos, non Lomnos), confermato anche dal confronto con l'entry 171 che riporta lo stesso funzionario. Corretti vari accenti (rr. 1,4,5,6,7,8,11,12,16,17) per farli coincidere con lo stampato. Tradotta in italiano la prosa descrittiva (support, layout, title); aggiunta la misura mancante "larghezza della modanatura superiore 44 cm". Corretto Pleiades ref del placeName "ancient" da 652388 (errato) a 609307 (Antiocheia Pisidiae), verificato su Wikidata e topostext.org. Nota non risolta: Lane stampa alla r.8 "Ῥωρωμαί-ων" con "ρω" duplicato (verificato a stampa pulita, non facsimile): trascritto fedelmente come da originale, ma è verosimilmente un refuso dello stampato del 1971 per "Ῥωμαίων" ("dei Romani"), da segnalare come possibile errata corrige di Lane, non del draft. -->
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>in situ (sanctuary cistern, north end)</repository>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Colonna tetragonale con modanature superiore e inferiore e iscrizione agonistica, dal santuario di Men Askaenos, Antiocheia Pisidiae, trovata nel 1912 all'estremità nord della cisterna del santuario. Altezza, secondo la fotografia, 1,36 m, larghezza del campo iscritto (fusto) ca. 40 cm, larghezza della modanatura superiore 44 cm.</p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/138.html">stone</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/103.html">column</objectType>
+                                    <dimensions unit="cm">
+                                        <height>1,36</height>
+                                        <width>40</width>
+                                        <depth></depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>Colonna tetragonale con modanature superiore e inferiore dall'estremità nord della cisterna del santuario. Stessi due agonoteti. Il vincitore Terenzio Ulpio Zosimo vince il pancrazio dei fanciulli e conduce la gara per sorteggio ai giochi Massimianei.</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Altezza delle lettere: 2,3 cm (r. 2).</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/609307">Antiocheia Pisidiae</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">Yalvaç, Turchia</placeName>
+                                <placeName type="region">Asia Minor</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" precision="low"></origDate>
+                        </origin>
+                        <provenance type="found">Yalvaç, Turchia</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+                <ab>
+                    <lb n="1"/>Ἀγαθῇ Τύχῃ.
+                    <lb n="2"/>Ἀγωνοθετούντων
+                    <lb n="3"/>διὰ βίου Γ. Καισεννί-
+                    <lb n="4"/>ου Πρόκλου Σταια-
+                    <lb n="5"/>νοῦ αὔγουρος πάτρω-
+                    <lb n="6"/>νος τῆς κολωνείας
+                    <lb n="7"/>καὶ Γ. Φλαίου Βαιβια-
+                    <lb n="8"/>νοῦ ἱππέως Ῥωρωμαί-
+                    <lb n="9"/>ων ἀρχιερέως διὰ βίου
+                    <lb n="10"/>τοῦ πατρίου θεοῦ Μη-
+                    <lb n="11"/>νὸς Τερέντιον Οὔλ-
+                    <lb n="12"/>πιον Ζώσιμον νεική-
+                    <lb n="13"/>σαντα παίδων παν-
+                    <lb n="14"/>κράτιον καὶ δι(α)βιβάσαν-
+                    <lb n="15"/>τα κλήρους β΄ ἀγῶνα
+                    <lb n="16"/>Μαξιμιάνειον ἡ πατρὶς
+                    <lb n="17"/>θέμιδι
+                    <lb n="18"/>ὑπὸ ἐπιστάτην Ἰούλιον Δόμνον.
+                </ab>
+            </div>
+            <div type="apparatus"/>
+            <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="bibliography">
+                <listBibl>
+                    <bibl>Lane, CMRDM I 170</bibl>
+                    <bibl>J.G.C. Anderson, op. cit., p. 291, no. 19, Plate XXIII</bibl>
+                    <bibl>Lane, I, p. 34, no. 24</bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Monumento senza iscrizione</rs> — CMRDM I nr. 175: Statuetta di marmo bianco di Men in piedi, santuario di Men Askaenos, Antiocheia Pisidiae</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>ILA — Index Lunae Antiquae</authority>
+                <idno type="TM"><!-- inserire TM number --></idno>
+                <!-- Revisione: (1) Pleiades ref per Antiocheia Pisidiae corretto da 652388 (ID inesistente/non pertinente) a 609307, verificato su topostext.org e Wikidata (Q579468); ID identico in tutte le entry 175-190 dello stesso batch. (2) Tradotti in italiano i campi support/p, layout/p, provenance, handNote/p e la parte descrittiva del titolo. (3) Aggiunti dettagli fisici presenti nello stampato di Lane (p. 111) ma assenti nel draft: ritrovamento nel 1912 nel santuario di Men a Yalvaç; gamba destra spezzata tra panneggio e piede; tracce del bastone anche sull'anca destra. Numero di entry (175) confermato corrispondente al testo a stampa (Lane I, p. 111, "175. Statuette..."). Nessuna correzione al testo greco: l'entry è anepigrafe (statuetta senza iscrizione), coerente con l'assenza di testo nel draft. -->
+                <idno type="id">163</idno>
+                <idno type="entryId">gen-1786984905702-3x-c2oqj1</idno>
+            </publicationStmt>
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>Istanbul Archaeological Museum, no. 1380</repository>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Statuetta di marmo bianco, trovata nel santuario di Men a Yalvaç nel 1912, ora nel Museo di Costantinopoli. Altezza 29,5 cm, di cui 4 cm per il plinto.</p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/48.html">marble</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/24.html">relief</objectType>
+                                    <dimensions unit="cm">
+                                        <height>29,5</height>
+                                        <width></width>
+                                        <depth></depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>Men rappresentato in piedi, panneggiato, con il braccio sinistro appoggiato a un pilastro. La mano sinistra è spezzata (forse reggeva un attributo). La testa e la falce di luna sono ugualmente spezzate, così come il braccio destro, che era sollevato a reggere un bastone di cui restano tracce sul plinto. Il piede sinistro è sollevato su un bucranio. La gamba destra è spezzata tra il fondo del panneggio e il piede, che resta attaccato al plinto. Sul plinto sono visibili anche le zampe di un gallo, vicino alla base del bastone. Vi sono tracce del bastone anche sull'anca destra.</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Altezza delle lettere: DA_COMPILARE (statuetta senza iscrizione).</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/609307">Antiocheia Pisidiae</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">Yalvaç, Turkey</placeName>
+                                <placeName type="region">Asia Minor</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" precision="low"></origDate>
+                        </origin>
+                        <provenance type="found">Yalvaç, Turchia</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+                <ab>
+                    <lb n="1"/>
+                </ab>
+            </div>
+            <div type="apparatus"/>
+            <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="bibliography">
+                <listBibl>
+                    <bibl>Lane, CMRDM I 175</bibl>
+                    <bibl>Mendel, Catalogue, III, p. 591, no. 1380</bibl>
+                    <bibl>J.G.C. Anderson, JRS, III, 1913, p. 274-6 and fig. 54</bibl>
+                    <bibl>Lane, I, p. 35, no. 31</bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

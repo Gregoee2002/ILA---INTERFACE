@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Iscrizione greca</rs> Altare di marmo con rilievo di Men a cavallo, Selmea (Gözören)</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>ILA — Index Lunae Antiquae</authority>
+                <idno type="TM"><!-- inserire TM number --></idno>
+                    <idno type="id">75</idno>
+                <idno type="entryId">gen-1786984905702-22-uw5sbb</idno>
+</publicationStmt>
+            <!-- Revisione assistita (cross-check PDF Lane): reintegrati vari segni diacritici omessi nel draft rispetto allo stampato (spirito su "Αὐρ.", "ὁ", accenti su "κὲ", "ὑπὲ[ρ]"); corretta la posizione della lacuna al rigo 4 "σω[τη-]" (non "σωτ[η-]" come nel draft) e al rigo 5 aggiunta la lacuna reale su "Σελμεην[ῷ]" (nel draft presentata come per intero leggibile). Corretto Pleiades: l'ID nel draft (609395) corrisponde in realtà ad Hadrianeia, un sito completamente diverso in Misia, non a Selmea; nessuna voce Pleiades affidabile è stata trovata per Selmea/Selmenoi, per cui il campo è stato riportato a DA_COMPILARE e segnalato. Tradotta in italiano la prosa descrittiva di Lane. -->
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>in situ o disperso</repository>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Altare di marmo con rilievo di Men a cavallo, Selmea (Gözören). Altezza 1.44 m, larghezza 34 cm, spessore 51 cm.</p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/48.html">marble</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/29.html">altar</objectType>
+                                    <dimensions unit="cm">
+                                        <height>1,44</height>
+                                        <width>34</width>
+                                        <depth>51</depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>Altare con rilievo di Men a cavallo verso destra, rivolto verso l'osservatore, con lancia nella mano destra e crescente dietro il collo. Sul retro, grappoli d'uva pendenti da un tralcio con due foglie. Dedica di Aurelio Papas figlio di Gaios, e di suo figlio Gaios Papas, per la propria salvezza, a Men di Selmea.</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Altezza delle lettere: 2.5–3 cm.</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="DA_COMPILARE">Selmea</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">Gözören, Turchia</placeName>
+                                <placeName type="region">Asia Minor</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" precision="low"></origDate>
+                        </origin>
+                        <provenance type="found">Gözören, Turchia</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+                <ab>
+                    <lb n="1"/>Αὐρ. Παπᾶς Γαίου
+                    <lb n="2"/>κὲ Γάιος Παπᾶς ὁ
+                    <lb n="3"/>υἱὸς αὐτοῦ ὑπὲ[ρ]
+                    <lb n="4"/>[τ]ῆς ἑαυτῶν σω[τη-]
+                    <lb n="5"/>[ρί]ας Μηνὶ Σελμεην[ῷ]
+                    <lb n="6"/>εὐχήν.
+                </ab>
+            </div>
+            <div type="apparatus"/>
+            <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="bibliography">
+                <listBibl>
+                    <bibl>Lane, CMRDM I 107</bibl>
+                    <bibl>J.G.C. Anderson, JHS, XIX, 1899, p. 299, no. 220</bibl>
+                    <bibl>MAMA, VII, p. 52, no. 243 and Plate XV</bibl>
+                    <bibl>Lane, I, p. 25, no. 17</bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

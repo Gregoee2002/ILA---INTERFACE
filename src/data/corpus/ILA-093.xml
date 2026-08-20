@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Monumento senza iscrizione</rs> Frammento di rilievo marmoreo dagli scavi dell'Agora ateniese</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>ILA — Index Lunae Antiquae</authority>
+                <idno type="TM"><!-- inserire TM number --></idno>
+                    <idno type="id">93</idno>
+                <idno type="entryId">gen-1786984905702-7c-0uhy5q</idno>
+</publicationStmt>
+            <!-- Revisione: aggiunta la data e le circostanze precise di ritrovamento riportate da Lane (scavi dell'Agora ateniese, 15 aprile 1936; frammento rotto in alto e ai lati, con probabile perno di incasso alla base), assenti nel draft. Verificato Pleiades (Athenae 579885, invariato, corretto). Nessun testo greco (monumento anepigrafe, conforme allo stampato). TM number non compilato: monumento senza iscrizione, non indicizzabile in Trismegistos. -->
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>Agora Museum, Athens</repository>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Frammento di rilievo marmoreo spezzato in alto e su entrambi i lati; alla base era presente, a quanto pare, una protome per l'inserimento in una base. Altezza 16 cm, larghezza 16,3 cm, spessore 3,7 cm. Rinvenuto negli scavi dell'Agora ateniese, 15 aprile 1936, ora nell'Agora Museum.</p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/48.html">marble</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/24.html">relief</objectType>
+                                    <dimensions unit="cm">
+                                        <height>16</height>
+                                        <width>16,3</width>
+                                        <depth>3,7</depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>Parte inferiore di Men seduto su una grande mezzaluna, con in mano un bastone. Sotto: figura maschile panneggiata, tavola con due galli e offerte votive, donna panneggiata e tre bambini.</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Altezza delle lettere: DA_COMPILARE.</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/579885">Athenae</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">Athens, Greece</placeName>
+                                <placeName type="region">Graecia</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" precision="low"></origDate>
+                        </origin>
+                        <provenance type="found">Rinvenuto negli scavi dell'Agora ateniese, 15 aprile 1936, Athens, Grecia.</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+                <ab>
+                    <lb n="1"/>
+                </ab>
+            </div>
+            <div type="apparatus"/>
+            <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="bibliography">
+                <listBibl>
+                    <bibl>Lane, CMRDM I 4</bibl>
+                    <bibl>Lane, I, p. 7, no. 5 and Pl. II, no. 2</bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">stele</rs> dedica di Apollonios figlio di Metrodoros Sparos a Helios Apollo Kisaulodenos e agli dei del santuario</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>ILA — Index Lunae Antiquae</authority>
+                <idno type="id">110</idno>
+                <idno type="entryId">gen-1784219221438-h8t5u8nl1pn</idno>
+            </publicationStmt>
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>Athens Epigraphical Museum, no. 4227</repository>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Stele di marmo iscritta, rinvenuta ca. 1875 a Sibile Tepe, sul versante orientale del Pagos (Smirne), spezzata in nove pezzi. Altezza 1,30 m [così stampato da Lane come &quot;cm.&quot;: vedi report], larghezza massima 49 cm., spessore massimo 9 cm.</p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/48.html">marble</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/250.html">stele</objectType>
+                                    <dimensions>
+                                        <height unit="metre">1,30</height>
+                                        <width unit="metre">49</width>
+                                        <depth unit="metre">9</depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>Lunga iscrizione dedicatoria di Apollonios figlio di Metrodoros Sparos, che elenca statue di culto, arredi ed edifici da lui costruiti e dedicati al dio e alla città all'interno del santuario.</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p></p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/550771">Smyrna</placeName>
+                                <placeName type="modern">Izmir, Turchia</placeName>
+                                <placeName type="region">Asia Minor</placeName>
+                            </origPlace>
+                        </origin>
+                        <provenance type="found">Rinvenuta ca. 1875 a Sibile Tepe, sul versante orientale del Pagos.</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                    <term>Kore Selene</term>
+                </keywords>
+            </textClass>
+        </profileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+                <ab>
+                    <lb n="1"/>Ἀπολλώνιος Μητροδώρου Σπάρος
+                    <lb n="2"/>ὁ πατὴρ τοῦ γενομένου ἱερέως Ἀπο<supplied reason="lost">λ</supplied>
+                    <lb n="3" break="no"/>λωνίου τοῦ Ἀπολλωνίου Σπάρου τοῦ
+                    <lb n="4"/>Ἡλίου Ἀπόλλωνος Κισαυλοδδηνοῦ, ἀ
+                    <lb n="5" break="no"/>νέθηκεν τῶι θεῶι καὶ τῆι πόλει τὰ κατασκευ
+                    <lb n="6" break="no"/>ασθέντα ὑπ᾽ αὐτοῦ, λαβὼν κατὰ ψήφισμα τὴν
+                    <lb n="7"/>ἀναγραφὴν ποιήσασθαι αὐτῶν ἐν στήλῃ. Καί
+                    <lb n="8"/>ἔστιν αὐτὸς ὁ θεὸς ἐπ<supplied reason="lost">ὶ β</supplied>ήματος μαρμαρίνου
+                    <lb n="9"/>καὶ ἡ παρακειμένη τῶι θεῶ<supplied reason="lost">ι</supplied> τράπεζα λίθου Λεσβί
+                    <lb n="10" break="no"/>ου ἔχουσα πόδας ἀνα<supplied reason="lost">γλύ</supplied>πτους γρύπας καὶ πρὸ αὐ
+                    <lb n="11" break="no"/>τῆς ἀβάκχηον μαρμάρινον πρὸς τὴν χρῆσιν τῶν
+                    <lb n="12"/>θυσιαζόντων καὶ θυμιατήριον τετράγωνον κα
+                    <lb n="13" break="no"/>τεσκευασμένον πέτρας Τηΐας ἔχον περίπυρον
+                    <lb n="14"/>σιδηροῦν καὶ ἄγαλμα μαρμάρινον Ἀρτέμιδος ἐ
+                    <lb n="15" break="no"/>πὶ παραστάδι μυλίνῃ καὶ <persName type="divine" key="Men">Μηνὸς</persName> ἄγαλμα ἐπὶ βάσει
+                    <lb n="16"/>μαρμαρίνῃ, καὶ τράπεζα ποικίλη τετράγωνος
+                    <lb n="17"/>καὶ βωμὸς μαρμάρινος ἔχων ἀετὸν ἐν ἑαυτῷ
+                    <lb n="18"/>Διὸς καὶ ναὸς ἐξυλωμένος καὶ κεκεραμωμέ
+                    <lb n="19" break="no"/>νος καὶ τεθυρωμένος καὶ κεκλειδωμένος,
+                    <lb n="20"/>ἐν ᾧ καθείδρυται ἀγάλματα Πλούτωνος Ἡ
+                    <lb n="21" break="no"/>λίου καὶ <persName type="divine" key="Kore Selene">Κούρης Σελήνης</persName> ἐπὶ βήματος
+                    <lb n="22"/>ἐμπεφιασμένα ἔχοντα καὶ παστῆον ξύλι
+                    <lb n="23" break="no"/>νον ναοειδὲς καὶ παστὸν λινοῦν, καὶ παρ᾽ ἑκατέ
+                    <lb n="24" break="no"/>ρα τῶν εἰσόδων βωμὸς Φωκαϊκὸς καὶ κλεῖν
+                    <lb n="25"/>κεχρυσωμένην καὶ ἐμπεφιασμένην πρὸς
+                    <lb n="26"/>τὴν λογήαν καὶ πομπὴν τῶν θεῶν καὶ στεγνὰ
+                    <lb n="27"/>ἐπίπεδα καὶ ἐπ᾽ αὐτῶν στοὰν κατωκοδομημέ
+                    <lb n="28" break="no"/>νην καὶ κεκεραμωμένην πρὸς τὴν οἴκησιν τῶν
+                    <lb n="29"/>ἱεροδούλων καὶ τὸν θεὸν θεραπευόντων καὶ
+                    <lb n="30"/>τὴν ἐνδώμησιν τοῦ τεμένους καὶ θεμελί
+                    <lb n="31" break="no"/>ωσιν ἐν τετραγόνῳ διὰ σπαράγματος, ἵνα
+                    <lb n="32"/>ἦν ἐπίπεδον ἐν ὁμαλῷ τὸ τέμενος, καὶ ὅπλα
+                    <lb n="33"/>τῷ θεῷ παρακείμενα τοῦ κόσμου χάριν
+                    <lb n="34"/>σιδηρᾶ ὀκτώ.
+                </ab>
+            </div>
+            <div type="bibliography">
+                <listBibl>
+                    <bibl>Lane, CMRDM I 28</bibl>
+                    <bibl>Mouseion kai Bibliotheke tes Evangelikes Scholes, II, i, 1876, no. ρξς'</bibl>
+                    <bibl>Drexler, op. cit., col. 2697</bibl>
+                    <bibl>Smirnoff, op. cit., p. 91, no. 5</bibl>
+                    <bibl>Dittenberger, SIG³, no. 996</bibl>
+                    <bibl>Lane I, p. 14, no. 1 and II, p. 44, no. 2</bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

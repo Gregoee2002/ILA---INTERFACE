@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Monumento senza iscrizione</rs> Frammento di rilievo marmoreo(?) noto da incisioni del 1687 e del 1700</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>ILA — Index Lunae Antiquae</authority>
+                <idno type="TM"><!-- inserire TM number --></idno>
+                    <idno type="id">92</idno>
+                <idno type="entryId">gen-1786984905702-7b-93twbf</idno>
+</publicationStmt>
+            <!-- Revisione: aggiunta la nota di Lane sulle circostanze di ritrovamento e conservazione ignote, assente nel draft. Verificato Pleiades (Athenae 579885, invariato, corretto: la sede è quella della rubrica di città "Athenae", Lane non indica un luogo di rinvenimento più preciso). Nessun testo greco (monumento anepigrafe, conforme allo stampato). TM number non compilato: monumento senza iscrizione, non indicizzabile in Trismegistos. -->
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>lost/unknown</repository>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Frammento di rilievo marmoreo(?) noto da un'incisione realizzata nel 1700 e da una precedente, inesatta, del 1687. Circostanze precise del ritrovamento e ubicazione attuale sconosciute.</p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/48.html">marble</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/24.html">relief</objectType>
+                                    <dimensions unit="cm">
+                                        <height></height>
+                                        <width></width>
+                                        <depth></depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>Men a cavallo di un ariete verso destra, di fronte. Uomo barbuto inginocchiato a sinistra, figura più giovane dietro di lui; donna inginocchiata a destra; tavola con offerte; due galli sotto la tavola.</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Altezza delle lettere: DA_COMPILARE.</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/579885">Athenae</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">Athens, Greece</placeName>
+                                <placeName type="region">Graecia</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" precision="low"></origDate>
+                        </origin>
+                        <provenance type="found">Athens, Grecia</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+                <ab>
+                    <lb n="1"/>
+                </ab>
+            </div>
+            <div type="apparatus"/>
+            <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="bibliography">
+                <listBibl>
+                    <bibl>Lane, CMRDM I 3</bibl>
+                    <bibl>*Gisbert Cuper, Harpocrates sive explicatio imagunculae argenteae perantiquae, Utrecht, 1687</bibl>
+                    <bibl>*Signa antiqua e museo Jacobi de Wilde, Amsterdam, 1700, p. 41</bibl>
+                    <bibl>Bergk, AZ, 1847, p. 47</bibl>
+                    <bibl>E. Gerhard, AZ, 1850, p. 158-9 and Pl. 15, no. 7</bibl>
+                    <bibl>Wolters, Festschrift für Otto Benndorf, Vienna, 1898, p. 126</bibl>
+                    <bibl>Lane, I, p. 7, no. 4</bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

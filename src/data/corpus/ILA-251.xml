@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Iscrizione greca</rs> — CMRDM I nr. 264: Lastra marmorea in otto frammenti con tre crescenti e dedica tekmor di Eudaimon, scavi del foro, Antiocheia Pisidiae</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>ILA — Index Lunae Antiquae</authority>
+                <idno type="TM"><!-- inserire TM number --></idno>
+                <idno type="id">251</idno>
+                <idno type="entryId">gen-1786984905702-6d-3jcd5l</idno>
+            </publicationStmt>
+            <!-- Revisione: corretto Pleiades id 652388 (404) in 609307 (Antiocheia Pisidiae/Yalvaç). CORREZIONE SOSTANZIALE del testo greco: lo stampato (Lane I, p. 144) riporta l'iscrizione per intero, SENZA alcuna parentesi quadra (testo interamente leggibile su questa lastra), con il nome "Εὐδαίμων" (Eudaimon, nome greco comune) — il draft riportava invece un nome interamente inventato "Ἐλμαζών" con lacune fittizie inserite dove il testo è leggibile per intero. Corretto anche il numerale alla riga 5: "τὸ β΄" (2, beta) e non "τὸ W΄" (carattere non pertinente, letto erroneamente). Aggiornati titolo e layout di conseguenza. Tradotta in italiano la prosa descrittiva inglese; bibliografia (Lane, I, p. 37, no. 42 e Pl. VI, no. 1) verificata genuina. -->
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>Konya Archaeological Museum</repository>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Lastra di marmo pressoché quadrata di cui sono conservati otto pezzi, trovata nello stesso momento e ora conservata nello stesso luogo dei precedenti. Altezza 38 cm, larghezza 40 cm, spessore 4 cm.</p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/48.html">marble</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/53.html">plaque</objectType>
+                                    <dimensions unit="cm">
+                                        <height>38</height>
+                                        <width>40</width>
+                                        <depth>4</depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>La placca reca rappresentazioni a rilievo di tre crescenti, disposti a V. Ogni crescente ha una protome (lug) alla base, e sembra così rappresentare un crescente autoportante che potrebbe essere collocato su una base. Reca anche la seguente iscrizione, di cui le prime due righe sono interrotte dal crescente più basso, mentre le righe restanti si trovano sotto i crescenti: Eudaimon figlio di Gnostos, avendo adempiuto il voto tekmor con i suoi propri figli adottivi, a Men Askaienos, per la seconda volta, voto.</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Altezza delle lettere: DA_COMPILARE.</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/609307">Antiocheia Pisidiae</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">Yalvaç, Turkey</placeName>
+                                <placeName type="region">Asia Minor</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" precision="low"></origDate>
+                        </origin>
+                        <provenance type="found">Yalvaç, Turchia</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+                <ab>
+                    <lb n="1"/>Εὐδαίμων Γνωστοῦ
+                    <lb n="2"/>υἱὸς
+                    <lb n="3"/>τεκμορεύσας μετὰ τῶν ἰδίων
+                    <lb n="4"/>θρεπτῶν Μηνὶ Ἀσκαηνῷ
+                    <lb n="5"/>τὸ β΄ εὐχήν.
+                </ab>
+            </div>
+            <div type="apparatus"/>
+            <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="bibliography">
+                <listBibl>
+                    <bibl>Lane, CMRDM I 264</bibl>
+                    <bibl>Lane, I, p. 37, no. 42 and Pl. VI, no. 1</bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

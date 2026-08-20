@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Iscrizione greca</rs> Stele di marmo con iscrizione di confessione, Ayazviran</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>ILA — Index Lunae Antiquae</authority>
+                <idno type="TM"><!-- inserire TM number --></idno>
+                    <idno type="id">14</idno>
+                <idno type="entryId">gen-1786984905702-d-5e1jk2</idno>
+</publicationStmt>
+            <!-- REVISIONE (cross-check PDF Lane p. 26-27): "Τασηι-νή" -> "Ταζη-νή" (l. 1-2, nome epiteto errato); "Μὲς" -> "Μὶς" (compare 2 volte, ll. 2-3); "Λασάνας" -> "Λαβάνας" (l. 2, nome epiteto errato); "οκη΄" -> "σκη΄" (l. 5, numerale anno errato: 228 dell'era sillana = 143/4 d.C., coerente con la data già presente nel file; οκη'=98 non torna); "ρε΄(βαστή)" -> "Σε(βαστῇ)" (l. 6, testo garbled, dovrebbe essere l'abbreviazione del mese "Sebaste"); "σήλλην" -> "στήλλην" (l. 7, lettera mancante); "τὴν γε-" -> "τὴν γ[ε-]" e "ὑπο" -> "ὑ[πὸ]" (ll. 8-9, ripristinate le parentesi editoriali di Lane per le lettere supplite); aggiunta provenienza dettagliata "found in 1911 in a field just east of Ayazviran, transported to house of Secbekoğlu Mustafa" (assente nel draft); Pleiades ref per "Koresa (?)" compilato con 609443 (Koresa, BAtlas 62 A4, verificato via Pleiades API); identificazione Ayazviran=Koresa resta ipotesi incerta di Lane, fonti moderne propendono per Ayazviran=Iaza — segnalato per revisione umana; TM non trovato. -->
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>in situ or lost</repository>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Stele di marmo bianco, più larga alla base, spezzata alla base, danneggiata in alto a destra e a sinistra. Rinvenuta nel 1911 in un campo appena a est di Ayazviran, trasportata nella casa di Secbekoğlu Mustafa. Altezza 42 cm., larghezza in cima 34,5 cm., alla base 37 cm., spessore 5 cm.</p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/48.html">marble</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/250.html">stele</objectType>
+                                    <dimensions unit="cm">
+                                        <height>42</height>
+                                        <width></width>
+                                        <depth>5</depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>Stele di confessione (stele di propiziazione) che registra la punizione divina e l'erezione di un'iscrizione di confessione da parte di Iulia Metra, dedicata a Megale Meter Tasene, Men Lasanas e Men Artemidarou.</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Altezza delle lettere: da 1,5 a 1,6 cm.</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/609443">Koresa (?)</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">Ayazviran, Turkey</placeName>
+                                <placeName type="region">Asia Minor</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" notBefore-custom="143" notAfter-custom="144" precision="medium">143-144 A.D.</origDate>
+                        </origin>
+                        <provenance type="found">Ayazviran, Turchia</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+                <ab>
+                    <lb n="1"/>[Με]γάλη Μήτ[ηρ Ταζη-]
+                    <lb n="2"/>νὴ καὶ Μὶς Λαβάνας [καὶ]
+                    <lb n="3"/>Μὶς Ἀρτεμιδώρου Δό-
+                    <lb n="4"/>ρου κώμην βασιλεύον-
+                    <lb n="5"/>τες. Ἔτους σκη΄, μη(νὸς) Δαισί-
+                    <lb n="6"/>ου Σε(βαστῇ), Ἰουλία Μητρὰ ἀνέ-
+                    <lb n="7"/>στησε στήλλην ἐπιζητη-
+                    <lb n="8"/>σάντων τῶν θεῶν τὴν γ[ε-]
+                    <lb n="9"/>γόνουσαν ἁμαρτίαν ὑ[πὸ]
+                    <lb n="10"/>[...]
+                </ab>
+            </div>
+            <div type="apparatus"/>
+            <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="bibliography">
+                <listBibl>
+                    <bibl>Lane, CMRDM I 42</bibl>
+                    <bibl>K-P, II Reise, p. 103, no. 204</bibl>
+                    <bibl>Steinleitner, op. cit., p. 10, no. 1</bibl>
+                    <bibl>M. Rostovzeff, SEHRE², Oxford, 1957, p. 656, note 6</bibl>
+                    <bibl>Herrmann, op. cit., p. 45, note 174</bibl>
+                    <bibl>Lane, I, p. 18, no. 20</bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

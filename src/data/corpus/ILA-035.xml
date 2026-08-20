@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Monumento senza iscrizione</rs> Statuetta fittile di Men giovane e nudo, Kula</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>ILA — Index Lunae Antiquae</authority>
+                <idno type="TM"><!-- inserire TM number --></idno>
+                    <idno type="id">35</idno>
+                <idno type="entryId">gen-1786984905702-y-vc9wnt</idno>
+</publicationStmt>
+            <!-- REVISIONE: nessun testo greco (monumento anepigrafe, correttamente lasciato vuoto). Aggiunti dettagli dal testo di Lane (rinvenuta a Kula; già nella collezione privata Schlumberger, non risulta più al Louvre; dimensioni sconosciute) e tradotta la prosa descrittiva in italiano. Pleiades: sostituito 609032 (ID errato, riscontrato riutilizzato per toponimi diversi nei batch precedenti) con 550659 (Koloe/Coloe presso Kula), verificato su topostext.org e Wikidata. TM number non reperibile (entry anepigrafe, comunque non applicabile). -->
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>lost/unknown (formerly Schlumberger collection)</repository>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Statuetta fittile di Men giovane e nudo, Kula. Già nella collezione privata di Schlumberger, non risulta più al Louvre. Dimensioni sconosciute.</p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/131.html">terracotta</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/24.html">relief</objectType>
+                                    <dimensions unit="cm">
+                                        <height></height>
+                                        <width></width>
+                                        <depth></depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>Statuetta fittile di Men giovane, grasso e nudo, seduto con mezzaluna al collo, cinghia sul petto, gallo nella mano destra, pigna nella sinistra, fiori tra i capelli.</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Height of letters: DA_COMPILARE.</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/550659">Coloe</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">Kula, Turkey</placeName>
+                                <placeName type="region">Asia Minor</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" precision="low"></origDate>
+                        </origin>
+                        <provenance type="found">Kula, Turchia</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+                <ab>
+                    <lb n="1"/>
+                </ab>
+            </div>
+            <div type="apparatus"/>
+            <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="bibliography">
+                <listBibl>
+                    <bibl>Lane, CMRDM I 64</bibl>
+                    <bibl>Schlumberger, Gazette Archéologique, VI, 1880, p. 191ff., Pl. XXXII</bibl>
+                    <bibl>Drexler, op. cit., col. 2704-5</bibl>
+                    <bibl>Zeitschrift für Numismatik, XIV, 1888, pp. 375-77</bibl>
+                    <bibl>Roscher, op. cit., p. 125b and Pl. III</bibl>
+                    <bibl>Smirnoff, op. cit., p. 119, fig. 3</bibl>
+                    <bibl>Perdrizet, op. cit., p. 59</bibl>
+                    <bibl>Lane, I, p. 19, no. 29</bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

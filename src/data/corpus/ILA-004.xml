@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Iscrizione greca</rs> Lastra di marmo(?) con rilievo di due occhi, Gyölde</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>ILA — Index Lunae Antiquae</authority>
+                <idno type="TM"><!-- inserire TM number --></idno>
+                    <idno type="id">4</idno>
+                <idno type="entryId">gen-1786984905702-3-5iwp5e</idno>
+</publicationStmt>
+            <!-- REVISIONE (cross-check PDF Lane p. 21-22): "Ἀξιοτ-τήνῳ" -> "Ἀξιοττηνῷ" (l. 2, trattino interno spurio: nel testo di Lane la parola è stampata per intero su un'unica riga, senza divisione); "... Αλι- Ποπλίου" -> "[...]λία Ποπλίου" (l. 3, il draft riportava lettere non corrispondenti a quanto stampato: Lane mostra tre puntini di lacuna seguiti da "λία", non "Αλι-"); aggiunta nota di rinvenimento (stesso luogo/tempo dell'entry 31, portato al museo della Evangelike Schole, apparentemente perduto); Pleiades ref corretto 609032 (ID inesistente/404) -> 609441 (Kollyda/Goloida = Gölde, verificato via Pleiades API e Trismegistos TM Geo 33613); TM non trovato. -->
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>lost/unknown</repository>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Lastra di marmo(?) con rilievo di due occhi, rinvenuta nello stesso momento e nello stesso luogo di CMRDM I 31 a Gyölde, parimenti trasportata al museo della Evangelike Schole. Apparentemente perduta.</p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/48.html">marble</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/53.html">plaque</objectType>
+                                    <dimensions unit="cm">
+                                        <height></height>
+                                        <width></width>
+                                        <depth></depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>Lastra con due occhi in rilievo e breve iscrizione a Men Ouranios e Men Axiottenos.</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Height of letters: DA_COMPILARE.</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/609441">Gyölde area (Kula)</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">Gyölde, Turkey</placeName>
+                                <placeName type="region">Asia Minor</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" precision="low"></origDate>
+                        </origin>
+                        <provenance type="found">Gyölde, Turchia</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+                <ab>
+                    <lb n="1"/>Μηνὶ Οὐρανίῳ
+                    <lb n="2"/>Μηνὶ Ἀξιοττηνῷ
+                    <lb n="3"/>[...]λία Ποπλίου
+                </ab>
+            </div>
+            <div type="apparatus"/>
+            <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="bibliography">
+                <listBibl>
+                    <bibl>Lane, CMRDM I 32</bibl>
+                    <bibl>Mouseion kai Bibliotheke, III, 1-2, 1878-80, p. 167, no. τλθ'</bibl>
+                    <bibl>Drexler, op. cit., col. 2700, no. 2</bibl>
+                    <bibl>Perdrizet, op. cit., p. 58, no. 3</bibl>
+                    <bibl>Lane, I, Lydia, no. 2</bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

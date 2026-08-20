@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Iscrizione greca</rs> Statuetta di terracotta su piedistallo a forma di I, Lydia (collezione Serrafian)</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>ILA — Index Lunae Antiquae</authority>
+                <idno type="TM"><!-- inserire TM number --></idno>
+                    <idno type="id">54</idno>
+                <idno type="entryId">gen-1786984905702-1h-vet7d8</idno>
+</publicationStmt>
+            <!-- REVISIONE: testo greco confrontato col PDF (Lane I, p. 50; testo stampato p. 56). Corretto r. 3: rimossa parentesi quadra spuria attorno a "ι" in "κατέχοντ[ι]" (lacuna fittizia: nello stampato la parola è integra e leggibile per intero, "κατέχοντι"). Corretta anche la descrizione del piedistallo: non è "a forma di I" ma a forma di staffa/parentesi rovesciata (⊓, aperta verso il basso), come da disegno a fondo pagina in Lane, "pensato per incastrarsi sopra qualcosa" — descrizione precedente ("I-shaped") errata. Tradotta in italiano la prosa descrittiva. Pleiades: nessun toponimo antico specifico indicato da Lane (provenienza "Lydia, esatta provenienza sconosciuta"); lasciato "DA_COMPILARE" come nel draft. TM number non reperibile. -->
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>private collection (Dikran Serrafian, Beirut)</repository>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Statuetta di terracotta, con un piedistallo a forma di staffa/parentesi rovesciata (aperta verso il basso), quindi pensato per incastrarsi sopra qualcosa. In possesso del sig. Dikran Serrafian di Beirut, Libano. Altezza, piedistallo compreso, 67 cm.</p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/131.html">terracotta</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/24.html">relief</objectType>
+                                    <dimensions unit="cm">
+                                        <height></height>
+                                        <width></width>
+                                        <depth></depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>Statuetta di terracotta raffigurante una figura femminile stante e panneggiata, testa e braccia spezzate. Dedica a Men Axiotta da parte di Deskylis figlia di Deskylos.</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Height of letters: DA_COMPILARE.</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="DA_COMPILARE">Lydia</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">Lydia, Turkey</placeName>
+                                <placeName type="region">Asia Minor</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" precision="low"></origDate>
+                        </origin>
+                        <provenance type="found">Lydia, Turchia</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+                <ab>
+                    <lb n="1"/>Δεσκυλίς Δεσκύλου
+                    <lb n="2"/>Μηνὶ Ἀρτεμιδώρου Ἀξι-
+                    <lb n="3"/>οττα κατέχοντι ὑπὲρ τῶν
+                    <lb n="4"/>τέκνων εὐχήν.
+                </ab>
+            </div>
+            <div type="apparatus"/>
+            <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="bibliography">
+                <listBibl>
+                    <bibl>Lane, CMRDM I 86</bibl>
+                    <bibl>Lane, I, p. 50</bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

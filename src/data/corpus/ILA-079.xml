@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Iscrizione greca</rs> Frammento di marmo con iscrizione, (Büyük) Beşkavak</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>ILA — Index Lunae Antiquae</authority>
+                <idno type="TM"><!-- inserire TM number --></idno>
+                    <idno type="id">79</idno>
+                <idno type="entryId">gen-1786984905702-26-ydjghl</idno>
+</publicationStmt>
+            <!-- Revisione assistita (cross-check con PDF Lane, p. 73): corretto il nome del dedicante alla riga 2, letto erroneamente "Κομινέος" nel draft mentre lo stampato reca "Κόρινθος" (cognomen "Corinthus", non "Cominius") — errore ripetuto anche nella descrizione (support/layout), corretta di conseguenza. Corretto il numerale dell'era galatica alla riga 6: "ρισ΄" (216) nel draft non corrisponde alla datazione 89-90 d.C. indicata da Lane, mentre "ριδ΄" (114) è coerente. Layout e provenance tradotti in italiano, aggiunto il dato del ritrovamento (spedizione di W.M. Calder, 1928) assente nel draft. Pleiades per l'area di Beşkavak: nessun ID verificabile, lasciato DA_COMPILARE. TM non reperito. -->
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>in situ or lost</repository>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Frammento di marmo con iscrizione, (Büyük) Beşkavak. Altezza 51 cm, larghezza 34 cm, spessore 9 cm.</p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/48.html">marble</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/189.html">fragment</objectType>
+                                    <dimensions unit="cm">
+                                        <height>51</height>
+                                        <width>34</width>
+                                        <depth>9</depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>Frammento spezzato tutt'intorno. Registra la dedica di un naos (tempio) a Men Pykenos da parte di Lucius Sergius Corinthus, a proprie spese, datata secondo l'era galatica al 89-90 d.C.</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Height of letters: 2.25 cm.</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="DA_COMPILARE">Beşkavak area</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">Büyük Beşkavak, Turkey</placeName>
+                                <placeName type="region">Asia Minor</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" notBefore-custom="89" notAfter-custom="90" precision="medium">89-90 A.D. (Galatian era)</origDate>
+                        </origin>
+                        <provenance type="found">Trovato dalla spedizione di W. M. Calder nel 1928 a (Büyük) Beşkavak, Turchia.</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+                <ab>
+                    <lb n="1"/>Λούκιος Σέργι[ος]
+                    <lb n="2"/>Κόρινθος Μην[ὶ ...]
+                    <lb n="3"/>πυκηνῷ εὐχὴν τὸ[ν]
+                    <lb n="4"/>τε ναὸν ἐκ τῶν ἰδίων
+                    <lb n="5"/>ἐποίησεν, ἔτους
+                    <lb n="6"/>ριδ΄.
+                </ab>
+            </div>
+            <div type="apparatus"/>
+            <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="bibliography">
+                <listBibl>
+                    <bibl>Lane, CMRDM I 111</bibl>
+                    <bibl>MAMA, VII, p. 105, no. 486 and Pl. 27</bibl>
+                    <bibl>Lane, I, p. 25, no. 20</bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

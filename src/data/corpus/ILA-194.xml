@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Iscrizione greca</rs> — CMRDM I nr. 206: Naiskos con dedica di Marcus Serapios, iscrizione parzialmente leggibile, muro del peribolo, Antiocheia Pisidiae</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>ILA — Index Lunae Antiquae</authority>
+                <idno type="TM"><!-- inserire TM number --></idno>
+                <idno type="id">194</idno>
+                <idno type="entryId">gen-1786984905702-4s-jwdy80</idno>
+            </publicationStmt>
+            <!-- Revisione assistita (cross-check PDF Lane, CMRDM I p.124, Hardie no.28): testo greco in buona parte allucinato nel draft. Testo reale a stampa: "Μ. Σεράπιος" (riga 1, nome del dedicante Marcus Serapios, non "Σέρασπος"); riga 2 lacuna di 9 caratteri seguita da "ις" (confermato, nessuna correzione); riga 3 "·ολ·τριανός" (draft aveva inventato "[Ο]ΑΛ· Τηπάνθος", testo e nome inesistenti nello stampato). Titolo e descrizione aggiornati di conseguenza. Rimossa voce bibliografica "Lane, I, p. 39, no. 28" non presente a stampa (artefatto sistematico, vedi nota nr.191); corretto Pleiades ref da 652388 a 609307; tradotti i campi in prosa inglese. -->
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>in situ (peribolos wall)</repository>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Naiskos con dedica di Marcus Serapios, iscrizione parzialmente leggibile, muro del peribolo, Antiocheia Pisidiae. </p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/138.html">stone</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/250.html">stone</objectType>
+                                    <dimensions unit="cm">
+                                        <height></height>
+                                        <width></width>
+                                        <depth></depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>Naiskos con crescente a linguetta nel campo, cerchio nel timpano. Iscrizione parzialmente leggibile, una riga sopra il crescente, il resto sotto.</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Altezza delle lettere: DA_COMPILARE.</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/609307">Antiocheia Pisidiae</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">Yalvaç, Turchia</placeName>
+                                <placeName type="region">Asia Minor</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" precision="low"></origDate>
+                        </origin>
+                        <provenance type="found">Yalvaç, Turchia</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+                <ab>
+                    <lb n="1"/>Μ. Σεράπιος
+                    <lb n="2"/>[.........]ις
+                    <lb n="3"/>·ολ·τριανός
+                </ab>
+            </div>
+            <div type="apparatus"/>
+            <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="bibliography">
+                <listBibl>
+                    <bibl>Lane, CMRDM I 206</bibl>
+                    <bibl>Hardie, JHS, XXXII, 1912, p. 132, no. 28 and fig. 11</bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Iscrizione greca</rs> — CMRDM I nr. 166: Colonna esagonale con iscrizione di vittoria, santuario di Men Askaenos, Antiocheia Pisidiae</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>ILA — Index Lunae Antiquae</authority>
+                <idno type="TM"><!-- inserire TM number --></idno>
+                <idno type="id">154</idno>
+                <idno type="entryId">gen-1786984905702-3o-qy8ac5</idno>
+            </publicationStmt>
+            <!-- Revisione assistita (cross-check con PDF Lane, CMRDM I 166, pp. 103-104): il draft omette per intero la prima riga di stampa dell'iscrizione ("Ἐπὶ ἀγωνο-"), che è stata reinserita come nuova r.1 con rinumerazione di tutte le righe successive (2-19, prima 1-18). Corretto il nome del vincitore, alterato nel draft: "Γνάδον Ρόττιον" (non attestato) -> "Γναῖον Δότ-τιον" (Gnaeus Dottius). Normalizzato in minuscolo il testo delle rr. 13-14 (già "νεικήσαν-τα σαλπι-"), che nel draft erano in maiuscolo da facsimile fotografico anziché seguire la trascrizione normalizzata a stampa di Lane. Corretto il numerale finale, reso nel draft con il carattere "W" (probabile errore di lettura ottica) -> "β΄" (theta iota beta-apice, "per la seconda volta"), confermato dal confronto con l'entry 171 che presenta lo stesso pattern tipografico. Tradotta in italiano la prosa descrittiva (support, layout, title); aggiunta la seconda misura di altezza "1,47 m secondo la fotografia" presente in Lane oltre a quella di Anderson. Corretto Pleiades ref del placeName "ancient" da 652388 (errato) a 609307 (Antiocheia Pisidiae), verificato su Wikidata e topostext.org. -->
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>in situ (sanctuary cistern, south end)</repository>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Colonna esagonale con iscrizione di vittoria, dal santuario di Men Askaenos, Antiocheia Pisidiae, trovata nel 1912 nello stesso momento all'estremità sud della cisterna. Altezza 1,50 m secondo Anderson, 1,47 m secondo la fotografia; larghezza del campo iscritto, secondo la fotografia, 20,8 cm.</p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/138.html">stone</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/103.html">column</objectType>
+                                    <dimensions unit="cm">
+                                        <height>1,50</height>
+                                        <width>20,8</width>
+                                        <depth></depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>Colonna esagonale dall'estremità sud della cisterna. Stesso agonoteta dei nrr. 164-165. Vincitore: Gneo Dottio Magno, nella gara di trombettieri ai giochi Massimianei.</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Altezza delle lettere: 2,8 cm.</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/609307">Antiocheia Pisidiae</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">Yalvaç, Turchia</placeName>
+                                <placeName type="region">Asia Minor</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" precision="low"></origDate>
+                        </origin>
+                        <provenance type="found">Yalvaç, Turchia</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+                <ab>
+                    <lb n="1"/>Ἐπὶ ἀγωνο-
+                    <lb n="2"/>θέτου διὰ
+                    <lb n="3"/>βίου Γ. Οὐλπί-
+                    <lb n="4"/>ου Βαιβιανοῦ
+                    <lb n="5"/>αὐγουρ(ος) καὶ
+                    <lb n="6"/>ἱερέως διὰ βί-
+                    <lb n="7"/>ου τοῦ πατρί-
+                    <lb n="8"/>ου θεοῦ Μη-
+                    <lb n="9"/>νὸς καὶ θεᾶς
+                    <lb n="10"/>Δήμητρος
+                    <lb n="11"/>Γναῖον Δότ-
+                    <lb n="12"/>τιον Μάγνον
+                    <lb n="13"/>νεικήσαν-
+                    <lb n="14"/>τα σαλπι-
+                    <lb n="15"/>κτὰς ἀγῶ-
+                    <lb n="16"/>να Μαξιμι-
+                    <lb n="17"/>άνειον ἡ
+                    <lb n="18"/>πατρὶς
+                    <lb n="19"/>θέμιδι β΄.
+                </ab>
+            </div>
+            <div type="apparatus"/>
+            <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="bibliography">
+                <listBibl>
+                    <bibl>Lane, CMRDM I 166</bibl>
+                    <bibl>J.G.C. Anderson, op. cit., p. 288, no. 14 and Plate XXI</bibl>
+                    <bibl>Année Épigraphique, 1914, p. 374, no. 263</bibl>
+                    <bibl>Lane, I, p. 33, no. 19</bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

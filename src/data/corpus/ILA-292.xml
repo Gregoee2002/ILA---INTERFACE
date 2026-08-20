@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Iscrizione latina</rs> — CMRDM I nr. 26: Altare iscritto frammentario presso S. Lorenzo in Piscibus, Rome</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>ILA — Index Lunae Antiquae</authority>
+                <idno type="TM"><!-- inserire TM number --></idno>
+                <idno type="id">292</idno>
+                <idno type="entryId">gen-1786984905702-7t-e6k7xf</idno>
+            </publicationStmt>
+            <!-- Revisione: testo latino verificato, corrisponde esattamente allo stampato di Lane, nessuna correzione necessaria; corretto origDate, era incoerente (notBefore=notAfter="373" con testo "371-373 A.D."; ora notBefore="371" per riflettere l'intervallo corrispondente al proconsolato d'Africa di Sextius Rusticus indicato da Lane); titolo/support/layout tradotti in italiano, support arricchito col dato di ritrovamento (primavera 1949) da Lane; Pleiades ancient (423025, Roma) verificato corretto, nessuna modifica. -->
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>Vatican Museum</repository>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Altare iscritto frammentario, trovato nella primavera del 1949 presso S. Lorenzo in Piscibus, Rome. </p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/138.html">stone</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/29.html">altar</objectType>
+                                    <dimensions unit="cm">
+                                        <height></height>
+                                        <width></width>
+                                        <depth></depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>Altare frammentario dedicato ai Dii Magni, alla Magna Mater, ad Attis e a Menotyrannus da Sextius Rusticus (proconsole d'Africa nel 371-3), Pater Patrum di Mithras.</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Height of letters: DA_COMPILARE.</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/423025">Roma</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">Rome, Italia</placeName>
+                                <placeName type="region">Italia</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" notBefore-custom="371" notAfter-custom="373" precision="low">371-373 A.D.</origDate>
+                        </origin>
+                        <provenance type="found">Roma, Italia</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="la">
+                <ab>
+                    <lb n="1"/>Diis [Magnis]
+                    <lb n="2"/>M(atri) D(eum) M(agnae) I(daeae) et A[ttidi Meno-]
+                    <lb n="3"/>tyranno [Sextius Rus-]
+                    <lb n="4"/>ticus V(ir) C(onsularis) [et inlust-]
+                    <lb n="5"/>ris Pater Pat[rum Dei In-]
+                    <lb n="6"/>victi Mithr[ae ......]
+                </ab>
+            </div>
+            <div type="apparatus"/>
+            <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="bibliography">
+                <listBibl>
+                    <bibl>Lane, CMRDM I 26</bibl>
+                    <bibl>B.M. Apollonj-Ghetti, A. Ferrua, E. Josi, E. Kirschbaum, Esplorazioni sotto la confessione di San Pietro in Vaticano, Vatican City, 1951, pp. 14-15, fig. 2</bibl>
+                    <bibl>Année Épigraphique, 1953, no. 237</bibl>
+                    <bibl>Vermaseren, op. cit., I, p. 165, no. 378</bibl>
+                    <bibl>Lane, I, p. 14, no. 5</bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

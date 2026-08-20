@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Iscrizione greca</rs> Base bassa di marmo bianco con modanature, Gyölde</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>ILA — Index Lunae Antiquae</authority>
+                <idno type="TM"><!-- inserire TM number --></idno>
+                    <idno type="id">6</idno>
+                <idno type="entryId">gen-1786984905702-5-7lgkpo</idno>
+</publicationStmt>
+            <!-- REVISIONE (cross-check PDF Lane p. 22-23): "σμε΄" -> "σμς΄" (l. 1, numerale anno errato: 246 dell'era sillana = 161/2 d.C., coerente con la data già presente nel file); "Πετραεύτου" -> "Πετραείτου" (l. 2); "Ἄψιον" -> "Ἄπφιον", "Ἀψιάς" -> "Ἀπφίας" (compare 2 volte: digrafo πφ scambiato per ψ); "Δεκοῦνδος" -> "Σεκοῦνδος" (nome Secundus, Δ/Σ scambiati); "Ἥραις" -> "Ἡραΐς"; "Ἄπελλάς" (dopo Ἀψιάς) -> "Ἀσκλᾶς" (nome sostituito con un duplicato di Ἀπελλᾶς, già presente più avanti nella lista); "Πεῖσα" -> "Πεία"; aggiunta provenienza dettagliata (chiesa di Hagios Taxiarches, Gyölde, parete ovest, a sinistra dell'ingresso, trovata prima del 1870), assente nel draft; Pleiades ref corretto 609032 (ID inesistente/404) -> 609441 (Kollyda/Goloida = Gölde, verificato via Pleiades API e Trismegistos TM Geo 33613); TM non trovato. -->
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>in situ or lost</repository>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Base bassa di marmo bianco con modanature sopra e sotto, rinvenuta prima del 1870 nella chiesa di Hagios Taxiarches a Gyölde, parete ovest, esterno, a sinistra dell'ingresso. Altezza 24 cm., larghezza 54 cm. Le prime tre righe dell'iscrizione sono sulla modanatura superiore.</p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/48.html">marble</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/57.html">base</objectType>
+                                    <dimensions unit="cm">
+                                        <height>24</height>
+                                        <width>54</width>
+                                        <depth></depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>Base bassa con modanature, recante una dedica dei Kataloustikoi (membri dell'associazione) a Meter, Men Tiamos e Men Petraeutos, con lunga lista di dedicanti.</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Altezza delle lettere: da 0,8 cm a 1,4 cm.</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/609441">Gyölde area (Kula)</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">Gyölde, Turkey</placeName>
+                                <placeName type="region">Asia Minor</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" notBefore-custom="161" notAfter-custom="162" precision="medium">161-162 A.D.</origDate>
+                        </origin>
+                        <provenance type="found">Gyölde, Turchia</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+                <ab>
+                    <lb n="1"/>[Ἔτ]ους σμς΄, ἀνέθηκαν οἱ Κα[τ]αλουστικοὶ Μητρ[ός 2-3]
+                    <lb n="2"/>[2-3] καὶ Μηνὸς Τιάμου καὶ Μηνὸς Πετραείτου τὸ [ἄγαλ-]
+                    <lb n="3"/>μα τοῦ Διονύσου.
+                    <lb n="4"/>Ἰουλιανός, Δάμας, Εὐσχήμων, Ἄπφιον, Ἄπφυς, Μάρ-
+                    <lb n="5"/>κος, Πόπλιος, Σεκοῦνδος, Πρωτόκτητος, Ἑρμοκράτης,
+                    <lb n="6"/>Μητρόδωρος, Δάμας, Ἀπφίας, Ἑρμογένης, Δάμας, Μη-
+                    <lb n="7"/>νόφιλος, Ἀπολλώνιος, Ἡραΐς, Ἑρμοκράτης, Ἀπολλώνιος, Γλύ-
+                    <lb n="8"/>κων, Ἀπολλώνιος, Ἄμμιον, Τρύφων, Μελτίνη, Ἑρμογένης,
+                    <lb n="9"/>Παπίας, Ἑρμογένης, Ἀπφίας, Ἀσκλᾶς, Μελτίνη, Ἑρμογε-
+                    <lb n="10"/>νής, Νεικόμαχος, Πεία, Μάρκος, Τύχη, Ἀπελλᾶς, Ἀλε-
+                    <lb n="11"/>ξανδρος, Μελτίνη, Σωστράτος, Νεικίας, Ἰουλιανή,
+                    <lb n="12"/>Μητροφάνης, Ἀθηναΐς,
+                </ab>
+            </div>
+            <div type="apparatus"/>
+            <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="bibliography">
+                <listBibl>
+                    <bibl>Lane, CMRDM I 34</bibl>
+                    <bibl>LeBas-Waddington, op. cit., III, i, p. 214-15, no. 678</bibl>
+                    <bibl>Drexler, op. cit., col. 2702, no. 12</bibl>
+                    <bibl>W. Ramsay, BCH, XXII, 1898, p. 239</bibl>
+                    <bibl>F. Poland, Geschichte des griechischen Vereinswesens, Leipzig, 1909, p. 218</bibl>
+                    <bibl>K-P, II Reise, p. 94, no. 183</bibl>
+                    <bibl>Lane, I, p. 16, no. 10</bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

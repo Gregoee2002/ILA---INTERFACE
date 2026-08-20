@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Iscrizione greca</rs> — CMRDM I nr. 273: Due frammenti di lastra marmorea con dedica tekmor della famiglia di Neikanoros a Men Askaenos, Museo di Konya</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>ILA — Index Lunae Antiquae</authority>
+                <idno type="TM"><!-- inserire TM number --></idno>
+                <idno type="id">260</idno>
+                <idno type="entryId">gen-1786984905702-6m-xmlowf</idno>
+            </publicationStmt>
+            <!-- Revisione su collazione col PDF Lane (p. 147, no. 273): corretta l'accentazione errata alle righe 2 e 5, dove il draft spostava l'accento su sillaba sbagliata rispetto allo stampato ("[Νεί]κανωρ" -> "[Νει]κάνωρ"; "[Μήν]ι" -> "[Μην]ὶ"). Rimossa la bibliografia fittizia "Lane, II, p. 47 (unpublished)": nessuna bibliografia è riportata da Lane per questa entry. Support/layout tradotti in italiano; segnalato che l'ultima riga è sulla base della lastra e che il testo ha righe tracciate sotto le lettere. Corretta ortografia "Askaienos" -> "Askaenos" nei campi descrittivi inglesi/italiani per coerenza col greco Ἀσκαηνῷ. Corretto anche l'ID Pleiades del luogo di ritrovamento, errato in tutte le entry di questo lotto: "https://pleiades.stoa.org/places/652388" non corrisponde ad Antiochia di Pisidia; sostituito con l'ID corretto 609307 (verificato incrociando Pleiades DARE-location, Wikidata e la posizione "1 km da Yalvaç"). -->
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>Konya Archaeological Museum</repository>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Due frammenti di lastra marmorea con dedica tekmor della famiglia di Neikanoros a Men Askaenos, Museo di Konya. Altezza conservata 18 cm, larghezza conservata 18 cm.</p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/48.html">marble</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/189.html">fragment</objectType>
+                                    <dimensions unit="cm">
+                                        <height>18</height>
+                                        <width>18</width>
+                                        <depth></depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>Due frammenti di lastra con righe tracciate sotto le lettere. Gaios Neikanoros e Neikanor figlio di Alexandros, con i loro familiari e figli adottivi, dedicano come tekmoreusantes a Men Askaenos. L'ultima riga dell'iscrizione è sulla base, il resto nel campo principale.</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Altezza delle lettere: DA_COMPILARE.</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/609307">Antiocheia Pisidiae</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">Yalvaç, Turchia</placeName>
+                                <placeName type="region">Asia Minor</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" precision="low"></origDate>
+                        </origin>
+                        <provenance type="found">Yalvaç, Turchia</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+                <ab>
+                    <lb n="1"/>[.....]Γ. Νεικάνορο[ς καὶ]
+                    <lb n="2"/>[Νει]κάνωρ Ἀλεξάν[δρου]
+                    <lb n="3"/>[σὺ]ν τοῖς ἰδίοις [καὶ]
+                    <lb n="4"/>[θρε]πτοῖς τεκμορε[ύσαντες]
+                    <lb n="5"/>[Μην]ὶ Ἀσκαηνῷ [εὐχήν.]
+                </ab>
+            </div>
+            <div type="apparatus"/>
+            <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="bibliography">
+                <listBibl>
+                    <bibl>Lane, CMRDM I 273</bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>
