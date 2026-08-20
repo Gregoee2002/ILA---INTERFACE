@@ -78,7 +78,7 @@ function collectDistinct(monumenti: Monumento[], field: keyof Monumento): string
 /** Campi Monumento che compongono ciascuna sezione (per il diff e per lo stato presente/assente). */
 const SECTION_FIELDS: Record<SectionId, (keyof Monumento)[]> = {
   title: ['titolo', 'textTypes'],
-  publication: ['authority', 'tm', 'phi'],
+  publication: ['authority', 'tm', 'tmLink', 'phi'],
   msIdentifier: ['luogo_cons', 'msIdnos'],
   support: ['dim', 'materiale', 'materialRef', 'tipo', 'tipo_ref', 'dim_altezza', 'dim_larghezza', 'dim_profondita', 'dim_unita'],
   layout: ['layout_desc', 'scrittura', 'scrittura_ref'],

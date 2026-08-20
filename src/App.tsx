@@ -4174,16 +4174,16 @@ export default function App() {
             <button onClick={() => setShowReindexConfirm(true)} className="text-muted flex items-center gap-1 border-l border-border/60 pl-4 hover:text-accent transition-colors">
               <Hash className="h-3 w-3" /> Riordina ID
             </button>
-            {!isStaticBuild && (
-              <button
-                onClick={syncFromGitHub}
-                disabled={importStatus.type === 'loading'}
-                className="text-muted flex items-center gap-1 border-l border-border/60 pl-4 hover:text-accent transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                title="Ricarica il corpus dal repository GitHub senza riavviare il server"
-              >
-                <RotateCcw className="h-3 w-3" /> Sincronizza da GitHub
-              </button>
-            )}
+            <button
+              onClick={syncFromGitHub}
+              disabled={importStatus.type === 'loading'}
+              className="text-muted flex items-center gap-1 border-l border-border/60 pl-4 hover:text-accent transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              title={isStaticBuild
+                ? "Ricarica il corpus da GitHub e rilancia la pubblicazione del sito, senza aspettare un nuovo commit di codice"
+                : "Ricarica il corpus dal repository GitHub senza riavviare il server"}
+            >
+              <RotateCcw className="h-3 w-3" /> Sincronizza da GitHub
+            </button>
             {importStatus.type !== 'idle' && (
               <div className={cn(
                 "flex items-center gap-2 border-l border-border/60 pl-4 text-[9px] font-bold uppercase tracking-widest",

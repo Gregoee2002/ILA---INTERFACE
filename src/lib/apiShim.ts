@@ -345,6 +345,32 @@ async function handleRequest(url: URL, init: RequestInit | undefined): Promise<R
       return json({ configured: true, ...result });
     }
 
+    // Rilancia a comando la ri-idratazione da GitHub (stessa di unlockEditing),
+    // per rendere visibile in questa sessione una modifica fatta a mano
+    // direttamente sul repo dati, e innesca anche il redeploy della build
+    // statica così diventa visibile a chiunque altro apra il sito.
+    if (path === "/api/corpus/sync" && method === "POST") {
+      if (!canWrite) return json({ error: "Modifica non abilitata. Sblocca l'editing con un token GitHub per sincronizzare." }, 403);
+      try {
+        const before = corpusStore.size;
+        corpusStore = await pullAllCorpusFiles();
+        updateSearchIndex();
+        const remoteFlags = await pullFlagsFile();
+        flagsStore = remoteFlags ? JSON.parse(remoteFlags) : [];
+        scheduleRedeploy();
+        return json({
+          status: "ok",
+          pulled: corpusStore.size,
+          skipped: [],
+          deletedLocally: [],
+          monumentiCount: readCorpusFiles().length,
+          previousCount: before,
+        });
+      } catch (e: any) {
+        return json({ error: e.message || "Sincronizzazione da GitHub fallita" }, 500);
+      }
+    }
+
     if (path === "/api/search" && method === "GET") {
       const q = url.searchParams.get("q") || "";
       const mode = url.searchParams.get("mode") === "AND" ? "AND" : "OR";
