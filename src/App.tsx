@@ -3413,6 +3413,40 @@ export default function App() {
     }
   };
 
+  // Rilancia sul server la sync da GitHub (stessa eseguita all'avvio), poi
+  // ricarica lo stato locale — così una modifica fatta direttamente sul
+  // repo dati diventa visibile senza dover riavviare il server.
+  const syncFromGitHub = async () => {
+    if (!effectiveAdmin) {
+      alert(`Solo l'amministratore (${ADMIN_EMAIL}) può forzare la sincronizzazione.`);
+      return;
+    }
+    setImportStatus({ type: 'loading', message: 'Sincronizzazione da GitHub in corso...' });
+    try {
+      const res = await fetch('/api/corpus/sync', { method: 'POST' });
+      const body = await res.json().catch(() => ({} as any));
+      if (!res.ok) throw new Error(body?.error || `HTTP ${res.status}`);
+
+      const freshRes = await fetch('/api/monumenti');
+      if (freshRes.ok) {
+        const fresh = await freshRes.json();
+        setMonumenti(fresh);
+        if (selectedMonumento) {
+          const updatedSelected = fresh.find((m: Monumento) => m.entryId === selectedMonumento.entryId);
+          if (updatedSelected) setSelectedMonumento(updatedSelected);
+        }
+      }
+      setImportStatus({
+        type: 'success',
+        message: `Sincronizzato: ${body.monumentiCount} schede (${body.pulled} scaricate${body.deletedLocally?.length ? `, ${body.deletedLocally.length} rimosse in locale` : ''}).`,
+      });
+      setTimeout(() => setImportStatus({ type: 'idle', message: '' }), 5000);
+    } catch (err: any) {
+      console.error("Sync from GitHub error", err);
+      setImportStatus({ type: 'error', message: `Errore nella sincronizzazione: ${err.message}` });
+    }
+  };
+
   const handleImportFileSelect = async (file: File) => {
     if (!file) return;
     setImportFileName(file.name);
@@ -4140,6 +4174,16 @@ export default function App() {
             <button onClick={() => setShowReindexConfirm(true)} className="text-muted flex items-center gap-1 border-l border-border/60 pl-4 hover:text-accent transition-colors">
               <Hash className="h-3 w-3" /> Riordina ID
             </button>
+            {!isStaticBuild && (
+              <button
+                onClick={syncFromGitHub}
+                disabled={importStatus.type === 'loading'}
+                className="text-muted flex items-center gap-1 border-l border-border/60 pl-4 hover:text-accent transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                title="Ricarica il corpus dal repository GitHub senza riavviare il server"
+              >
+                <RotateCcw className="h-3 w-3" /> Sincronizza da GitHub
+              </button>
+            )}
             {importStatus.type !== 'idle' && (
               <div className={cn(
                 "flex items-center gap-2 border-l border-border/60 pl-4 text-[9px] font-bold uppercase tracking-widest",

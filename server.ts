@@ -536,6 +536,42 @@ async function startServer() {
     res.json(result);
   });
 
+  // POST rilancia a comando la stessa sincronizzazione da GitHub fatta
+  // all'avvio (corpus + segnalazioni), senza dover riavviare il processo.
+  // Serve per rendere visibili modifiche fatte direttamente sul repo dati
+  // (es. a mano su GitHub) senza aspettare il prossimo restart del server.
+  app.post("/api/corpus/sync", async (req, res) => {
+    if (!isGitHubConfigured()) {
+      return res.status(400).json({ error: "Persistenza GitHub non configurata su questo server." });
+    }
+    try {
+      const corpusResult = await pullCorpusFromGitHub(
+        CORPUS_DIR,
+        (filepath, content) => fs.writeFileSync(filepath, content, "utf-8"),
+        (...parts) => path.join(...parts),
+        (dir) => fs.readdirSync(dir).filter(f => f.endsWith('.xml') && !f.startsWith('_')),
+        (filepath) => fs.unlinkSync(filepath)
+      );
+      const remoteFlags = await pullFlagsFileFromGitHub();
+      if (remoteFlags !== null) fs.writeFileSync(FLAGS_FILE, remoteFlags, "utf-8");
+
+      rebuildBackup();
+      const monumenti = readCorpusFiles();
+      updateSearchIndex(monumenti);
+
+      res.json({
+        status: "ok",
+        pulled: corpusResult.pulled,
+        skipped: corpusResult.skipped,
+        deletedLocally: corpusResult.deletedLocally,
+        monumentiCount: monumenti.length,
+      });
+    } catch (error: any) {
+      console.error("Error syncing from GitHub:", error);
+      res.status(500).json({ error: error.message || "Sincronizzazione da GitHub fallita" });
+    }
+  });
+
   // ── Segnalazioni collaboratori ───────────────────────────────────────────
 
   app.get("/api/flags", (req, res) => {
