@@ -119,6 +119,13 @@ const formatDate = (val?: number) => {
   return val < 0 ? `${abs} a.C.` : `${val} d.C.`;
 };
 
+const formatEraYear = (raw?: string) => {
+  if (!raw) return '';
+  const n = parseInt(raw, 10);
+  if (isNaN(n)) return raw;
+  return formatDate(n);
+};
+
 const formatDateRange = (start?: number, end?: number) => {
   if (start === undefined && end === undefined) return '-';
   // Treat 0 as "not set" — avoids showing "0 d.C." for uninitialized dates
@@ -5856,7 +5863,7 @@ export default function App() {
                                         <span className="font-medium text-xs select-all text-ink">{od.testo}</span>
                                         {od.notBeforeCustom && (
                                           <span className="text-muted text-[10px] font-sans ml-1 not-italic" style={{ fontStyle: 'normal' }}>
-                                            ({od.datingMethod || '#julian'}: {od.notBeforeCustom} / {od.notAfterCustom || ''})
+                                            ({formatEraYear(od.notBeforeCustom)}{od.notAfterCustom ? ` / ${formatEraYear(od.notAfterCustom)}` : ''})
                                           </span>
                                         )}
                                         {od.evidence && (

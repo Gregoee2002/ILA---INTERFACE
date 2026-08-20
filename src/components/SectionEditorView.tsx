@@ -60,9 +60,9 @@ const SECTION_META: SectionMeta[] = [
 
 const GROUPS: SectionMeta['group'][] = ['Intestazione', 'Storia', 'Testo', 'Apparato scientifico'];
 
-/** Le sei ripartizioni regionali del CMRDM (assegnate per fascia di numero, vedi xmlUtils),
+/** Le quattro ripartizioni regionali del CMRDM (assegnate per fascia di numero, vedi xmlUtils),
  *  offerte come suggerimento — il campo resta testo libero per i corpora non-CMRDM. */
-const CMRDM_REGIONS = ['Graecia', 'Dacia', 'Italia', 'Asia Minor', 'Dubia', 'Addenda'];
+const CMRDM_REGIONS = ['Graecia', 'Dacia', 'Italia', 'Asia Minor'];
 
 /** Suggerimenti di testo libero raccolti dai valori già distinti nel corpus in memoria:
  *  riduce le varianti di battitura sullo stesso repository o toponimo tra schede diverse. */
@@ -878,11 +878,9 @@ function renderSectionForm(
                   <Trash2 className="w-4 h-4" />
                 </button>
               </div>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+              <div className="grid grid-cols-2 gap-3">
                 <div><FieldLabel>Da (notBefore)</FieldLabel><TextInput value={d.notBeforeCustom || ''} onChange={e => update(i, { notBeforeCustom: e.target.value })} /></div>
                 <div><FieldLabel>A (notAfter)</FieldLabel><TextInput value={d.notAfterCustom || ''} onChange={e => update(i, { notAfterCustom: e.target.value })} /></div>
-                <div><FieldLabel>Precisione</FieldLabel><TextInput value={d.precision || ''} onChange={e => update(i, { precision: e.target.value })} /></div>
-                <div><FieldLabel>Evidenza</FieldLabel><TextInput value={d.evidence || ''} onChange={e => update(i, { evidence: e.target.value })} /></div>
               </div>
             </div>
           ))}
