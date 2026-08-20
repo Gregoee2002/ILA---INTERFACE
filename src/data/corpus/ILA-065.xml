@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Iscrizione greca</rs> Altare (?) di calcare con iscrizione molto consunta, Nacoleia</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>ILA — Index Lunae Antiquae</authority>
+                <idno type="TM"><!-- inserire TM number --></idno>
+                    <idno type="id">65</idno>
+                <idno type="entryId">gen-1786984905702-1s-6xts5u</idno>
+</publicationStmt>
+            <!-- Revisione assistita (cross-check PDF Lane): il testo greco del draft ("[...]σωμήτ[...] Μη[νὶ Εν]-δην [χα]ὶ Σύγνο[ι].") non corrisponde in alcun modo allo stampato ed è stato interamente riscritto secondo Lane ("Κωμηνοὶ Μηνὶ [ε]ὐχὴν [κα]ὶ Βέγνε[ι]."): dedica collettiva dei Komenoi (abitanti del villaggio di Kome) a Men e a Begnis. Corretto Pleiades come per nr. 96 (609310 diventa 609484, Nacoleia). Tradotta in italiano la prosa descrittiva di Lane. -->
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>in situ o disperso</repository>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Altare (?) di calcare, oppure, se tale, con modanature superiore e inferiore asportate. Scoperto da A. Cameron nel 1931, nel muro della moschea di Derebenek. Altezza 80 cm, larghezza 41 cm, spessore 38 cm.</p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/138.html">limestone</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/29.html">altar</objectType>
+                                    <dimensions unit="cm">
+                                        <height>80</height>
+                                        <width>41</width>
+                                        <depth>38</depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>Non vi sono tracce di alcun rilievo, ma è presente la seguente iscrizione, molto consunta e di difficile lettura: dedica collettiva dei Komenoi a Men e a Begnis.</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Altezza delle lettere: 3 cm.</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/609484">Nacoleia</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">Seyitgazi, Turchia</placeName>
+                                <placeName type="region">Asia Minor</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" precision="low"></origDate>
+                        </origin>
+                        <provenance type="found">Seyitgazi, Turchia</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+                <ab>
+                    <lb n="1"/>Κωμηνοὶ
+                    <lb n="2"/>Μηνὶ [ε]ὐ-
+                    <lb n="3"/>χὴν
+                    <lb n="4"/>[κα]ὶ Βέγνε[ι].
+                </ab>
+            </div>
+            <div type="apparatus"/>
+            <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="bibliography">
+                <listBibl>
+                    <bibl>Lane, CMRDM I 97</bibl>
+                    <bibl>MAMA, V, p. 101, no. 210 and Plate 48</bibl>
+                    <bibl>Lane, I, p. 24, no. 10a</bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

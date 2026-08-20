@@ -6,7 +6,7 @@ import {
 } from 'lucide-react';
 import { cn, stripAccents } from '../lib/utils';
 import { Monumento, OrigDate, Traduzione, Bibliografia, Revision, IconographicFigure, IconographicTrait } from '../types';
-import { xmlToMonumenti } from '../lib/xmlUtils';
+import { xmlToMonumenti, formatIlaLabel } from '../lib/xmlUtils';
 import { EditionMarkupEditor } from './EditionMarkupEditor';
 import { ICONOGRAPHY_LABELS } from '../lib/iconographyLabels';
 import { INSCRIPTION_TYPES, OBJECT_TYPES, MATERIALS, EXECUTION_TECHNIQUES, VocabTerm } from '../lib/eagleVocab';
@@ -60,8 +60,8 @@ const SECTION_META: SectionMeta[] = [
 
 const GROUPS: SectionMeta['group'][] = ['Intestazione', 'Storia', 'Testo', 'Apparato scientifico'];
 
-/** Le quattro ripartizioni regionali del CMRDM (assegnate per fascia di numero, vedi xmlUtils),
- *  offerte come suggerimento — il campo resta testo libero per i corpora non-CMRDM. */
+/** Ripartizioni regionali storicamente attestate nel corpus, offerte come
+ *  suggerimento — il campo resta testo libero per qualunque altro valore. */
 const CMRDM_REGIONS = ['Graecia', 'Dacia', 'Italia', 'Asia Minor'];
 
 /** Suggerimenti di testo libero raccolti dai valori già distinti nel corpus in memoria:
@@ -78,7 +78,7 @@ function collectDistinct(monumenti: Monumento[], field: keyof Monumento): string
 /** Campi Monumento che compongono ciascuna sezione (per il diff e per lo stato presente/assente). */
 const SECTION_FIELDS: Record<SectionId, (keyof Monumento)[]> = {
   title: ['titolo', 'textTypes'],
-  publication: ['authority', 'tm', 'phi', 'corpus', 'numero'],
+  publication: ['authority', 'tm', 'phi'],
   msIdentifier: ['luogo_cons', 'msIdnos'],
   support: ['dim', 'materiale', 'materialRef', 'tipo', 'tipo_ref', 'dim_altezza', 'dim_larghezza', 'dim_profondita', 'dim_unita'],
   layout: ['layout_desc', 'scrittura', 'scrittura_ref'],
@@ -371,7 +371,7 @@ export const SectionEditorView: React.FC<Props> = ({ monumenti, effectiveAdmin, 
   };
 
   const loadFromDb = (m: Monumento) => {
-    loadModel(m, { kind: 'db', filename: m._corpusFile || `${m.corpus || 'CMRDM'}-${m.numero || m.id}` });
+    loadModel(m, { kind: 'db', filename: m._corpusFile || formatIlaLabel(m.id) });
   };
 
   useEffect(() => {
@@ -425,7 +425,7 @@ export const SectionEditorView: React.FC<Props> = ({ monumenti, effectiveAdmin, 
         const assignedId = await onCreate(model);
         const created = { ...model, entryId: assignedId };
         setBaseModel(created); setModel(created);
-        setSource({ kind: 'db', filename: model._corpusFile || `${model.corpus || 'CMRDM'}-${model.numero || model.id}` });
+        setSource({ kind: 'db', filename: model._corpusFile || formatIlaLabel(model.id) });
         setSaveOk(`Scheda creata nel corpus (entryId: ${assignedId}).`);
       } else {
         // patch: solo i campi effettivamente cambiati, non l'intero oggetto
@@ -448,7 +448,7 @@ export const SectionEditorView: React.FC<Props> = ({ monumenti, effectiveAdmin, 
   const filteredMonumenti = useMemo(() => {
     const q = dbSearch.trim().toLowerCase();
     const list = q
-      ? monumenti.filter(m => [m.titolo, m.corpus, m.numero, m.citta, m._corpusFile].filter(Boolean).some(v => String(v).toLowerCase().includes(q)))
+      ? monumenti.filter(m => [m.titolo, formatIlaLabel(m.id), m.citta, m._corpusFile].filter(Boolean).some(v => String(v).toLowerCase().includes(q)))
       : monumenti;
     return list.slice(0, 80);
   }, [monumenti, dbSearch]);
@@ -460,7 +460,6 @@ export const SectionEditorView: React.FC<Props> = ({ monumenti, effectiveAdmin, 
     citta: collectDistinct(monumenti, 'citta'),
     luogo_moderno: collectDistinct(monumenti, 'luogo_moderno'),
     luogo_rit: collectDistinct(monumenti, 'luogo_rit'),
-    corpus: collectDistinct(monumenti, 'corpus'),
   }), [monumenti]);
 
   /* ── stato di ogni sezione per il rail ─────────────────────────── */
@@ -553,7 +552,7 @@ export const SectionEditorView: React.FC<Props> = ({ monumenti, effectiveAdmin, 
                 >
                   <FileText className="w-3.5 h-3.5 text-muted/50 group-hover:text-accent transition-colors shrink-0" />
                   <span className="text-sm font-serif text-ink truncate flex-1">
-                    {m.corpus && m.numero ? `${m.corpus} ${m.numero}` : m._corpusFile || `#${m.id}`}
+                    {m._corpusFile || formatIlaLabel(m.id)}
                     {m.titolo && <span className="text-muted/60 italic"> — {m.titolo}</span>}
                   </span>
                   <ChevronRight className="w-3.5 h-3.5 text-muted/30 group-hover:text-accent transition-colors shrink-0" />
@@ -578,7 +577,7 @@ export const SectionEditorView: React.FC<Props> = ({ monumenti, effectiveAdmin, 
         <div>
           <Eyebrow className="mb-2">Officina filologica · {source?.kind === 'db' ? 'Corpus' : 'File esterno'}</Eyebrow>
           <h2 className="text-xl md:text-2xl font-serif font-semibold text-ink flex items-center gap-3 flex-wrap">
-            {m.corpus && m.numero ? `${m.corpus} ${m.numero}` : source?.filename}
+            {formatIlaLabel(m.id)}
             {m.titolo && <span className="text-sm font-normal italic text-muted hidden md:inline">— {m.titolo}</span>}
           </h2>
         </div>
@@ -699,7 +698,7 @@ function renderSectionForm(
   m: Monumento,
   set: <K extends keyof Monumento>(k: K, v: Monumento[K]) => void,
   setEditionText: (xml: string) => void,
-  suggestions: { luogo_cons: string[]; citta: string[]; luogo_moderno: string[]; luogo_rit: string[]; corpus: string[] },
+  suggestions: { luogo_cons: string[]; citta: string[]; luogo_moderno: string[]; luogo_rit: string[] },
 ) {
   switch (id) {
     case 'title':
@@ -736,16 +735,8 @@ function renderSectionForm(
             <FieldLabel>Link TM</FieldLabel>
             <TextInput value={m.tmLink || ''} onChange={e => set('tmLink', e.target.value)} placeholder="https://www.trismegistos.org/text/…" />
           </div>
-          <div>
-            <FieldLabel>Corpus</FieldLabel>
-            <SuggestInput value={m.corpus || ''} onChange={v => set('corpus', v)} options={suggestions.corpus} placeholder="CMRDM I" />
-          </div>
-          <div>
-            <FieldLabel>Numero</FieldLabel>
-            <TextInput value={m.numero || ''} onChange={e => set('numero', e.target.value)} placeholder="69" />
-          </div>
           <div className="md:col-span-2 flex gap-6 text-xs text-muted font-serif italic pt-1">
-            <span>ID applicativo: <span className="not-italic font-semibold text-ink">{m.id || '—'}</span></span>
+            <span>ID applicativo: <span className="not-italic font-semibold text-ink">{formatIlaLabel(m.id)}</span></span>
             <span>entryId: <span className="not-italic font-semibold text-ink">{m.entryId || '—'}</span></span>
             <span className="text-muted/60">(assegnati automaticamente, non modificabili)</span>
           </div>

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Monumento senza iscrizione</rs> — CMRDM I nr. 141: Statuetta fittile di Men stante, provenienza incerta (Museo Nazionale di Atene)</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>ILA — Index Lunae Antiquae</authority>
+                <idno type="TM"><!-- inserire TM number --></idno>
+                <idno type="id">129</idno>
+                <idno type="entryId">gen-1786984905702-2z-a7wief</idno>
+            </publicationStmt>
+            <!-- Revisione assistita (cross-check col PDF Lane, p. 90): nessuna iscrizione (monumento anepigrafe, correttamente reso col campo edition vuoto). Tradotta in italiano la prosa di <support> e <layout>, mantenendo la cautela di Lane ("according to Perdrizet") sull'attribuzione al Museo Nazionale di Atene. Nessun toponimo antico dato da Lane per la provenienza: ref Pleiades lasciato DA_COMPILARE. -->
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>National Museum, Athens</repository>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Statuetta fittile di Men stante, conservata (secondo Perdrizet) al Museo Nazionale di Atene; provenienza incerta. Dimensioni non disponibili.</p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/131.html">terracotta</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/24.html">relief</objectType>
+                                    <dimensions unit="cm">
+                                        <height></height>
+                                        <width></width>
+                                        <depth></depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>Statuetta fittile di Men stante, con berretto frigio e crescente lunare alle spalle.</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Altezza delle lettere: DA_COMPILARE.</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="DA_COMPILARE">uncertain</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">uncertain</placeName>
+                                <placeName type="region">Asia Minor</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" precision="low"></origDate>
+                        </origin>
+                        <provenance type="found">Incerta</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+                <ab>
+                    <lb n="1"/>
+                </ab>
+            </div>
+            <div type="apparatus"/>
+            <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="bibliography">
+                <listBibl>
+                    <bibl>Lane, CMRDM I 141</bibl>
+                    <bibl>Perdrizet, BCH XX, 1896, p. 72, fig. 3</bibl>
+                    <bibl>Lane I, p. 15, no. 4</bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

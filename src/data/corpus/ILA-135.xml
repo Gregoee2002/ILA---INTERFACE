@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Iscrizione greca</rs> — CMRDM I nr. 147: Pietra con maledizione funeraria che invoca Men Katachthonios, zona di Konya</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>ILA — Index Lunae Antiquae</authority>
+                <idno type="TM"><!-- inserire TM number --></idno>
+                <idno type="id">135</idno>
+                <idno type="entryId">gen-1786984905702-35-5dft0c</idno>
+            </publicationStmt>
+            <!-- Revisione assistita (cross-check PDF Lane): corretto Pleiades ID di Iconium (628920, non pertinente) con 648647. Corretto il testo greco: l.1 nome proprio "Δάρχιο[ς"→"Λάρκιο[ς" (lettera errata); l.3 nome della moglie "Πωσιλά[ῃ"→"Πωσίλλη [" (lettura errata, ricostruita secondo Lane); l.5 ripristinata la parentesi di lacuna caduta e l'accento: "Ἐνορκῶ δε Μῆνα Κατάχθόνιον]"→"Ἐνορκῶ [δὲ Μῆνα Καταχθόνιον]"; l.6 "κατάχθονιους"→"καταχθονίους" (accento); l.8 "δε"→"δὲ"; l.9 "ἐπείσε[νέγκῃ ἤ"→"ἐπεισε[νέγκῃ ἢ"; l.12 "κολωμένο[ν.]"→"χολωμένο[ν.]" (κ/χ, errore ricorrente in questo gruppo). Aggiunti dati di rinvenimento (Konya(?), 1902(?), W. M. Ramsay) e tradotta la prosa inglese in italiano. -->
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>in situ or lost</repository>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Pietra con maledizione funeraria che invoca Men Katachthonios, zona di Konya. Rinvenuta a Konya(?) nel 1902(?) da W. M. Ramsay; dimensioni sconosciute.</p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/138.html">stone</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/250.html">stone</objectType>
+                                    <dimensions unit="cm">
+                                        <height></height>
+                                        <width></width>
+                                        <depth></depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>Pietra con maledizione funeraria che invoca Men Katachthonios e gli dèi ctonii, con ammenda di 2500 denari da versare al fisco in caso di violazione della tomba.</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Altezza delle lettere: DA_COMPILARE.</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/648647">Iconium</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">Konya, Turkey</placeName>
+                                <placeName type="region">Asia Minor</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" precision="low"></origDate>
+                        </origin>
+                        <provenance type="found">Konya, Turchia</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+                <ab>
+                    <lb n="1"/>Λάρκιο[ς ............]
+                    <lb n="2"/>ζῶν ἑαυ[τῷ καὶ τῇ γυναικὶ]
+                    <lb n="3"/>Πωσίλλη [καὶ τοῖς τέκνοις]
+                    <lb n="4"/>τὴν σο[ρὸν κατεσκεύασεν.]
+                    <lb n="5"/>Ἐνορκῶ [δὲ Μῆνα Καταχθόνιον]
+                    <lb n="6"/>καὶ θεοὺς [καταχθονίους μη-]
+                    <lb n="7"/>δένα ἀδικ[ήσειν τὸ μνῆμα μη-]
+                    <lb n="8"/>δὲ ἐπεισε[νεγκεῖν σῶμα, ὃς δ᾽]
+                    <lb n="9"/>ἂν ἐπεισε[νέγκῃ ἢ ἀδικήσῃ, δώσει]
+                    <lb n="10"/>τῷ φίσκῳ [δηνάρια δισχίλια]
+                    <lb n="11"/>πεντακόσ[ια καὶ ἕξει Μῆνα κε-]
+                    <lb n="12"/>χολωμένο[ν.]
+                </ab>
+            </div>
+            <div type="apparatus"/>
+            <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="bibliography">
+                <listBibl>
+                    <bibl>Lane, CMRDM I 147</bibl>
+                    <bibl>H.S. Cronin, JHS, XXII, 1902, pp. 346-7, no. 82</bibl>
+                    <bibl>Lane, I, p. 46, no. 5</bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

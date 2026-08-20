@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Iscrizione greca</rs> — CMRDM I nr. 254: Frammento di stele con dedica tekmor di G. Phlaouios Longos, Biblioteca di Yalvaç</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>ILA — Index Lunae Antiquae</authority>
+                <idno type="TM"><!-- inserire TM number --></idno>
+                <idno type="id">242</idno>
+                <idno type="entryId">gen-1786984905702-64-wffqh9</idno>
+            </publicationStmt>
+            <!-- Revisione confronto col PDF (Lane, CMRDM I, p. 140, n. 254): corretto il confine della parentesi quadra alla riga 2 da "[γος τεκμ]ορεύ-" a "[γος τεκμο]ρεύ-" come stampato; corretta la riga 5 da "[υἱῶν Γ. Φλαού-]" (bracket e accento errati, lacuna omessa) a "[.......καὶ υἱῶ]ν Γ. Φλαου-" per riflettere sia la lacuna realmente presente nello stampato sia il confine corretto tra testo integrato e visibile; corretta la riga 6 da "[βου Λόγου καὶ] Φλαούβου" (patronimico inventato, con -βου al posto di -ίου) a "[ίου Λόγου καὶ] Φλαουίου" come stampato; corretto l'ID Pleiades di Antiocheia Pisidiae da 652388 a 609307; tradotta in italiano la prosa descrittiva di Lane in titolo, support e layout; italianizzato "Turkey" in "Turchia". NOTA DI INCERTEZZA: alla riga 4, dopo "[ναικὸς]", Lane stampa un simbolo/legatura tipografica speciale (non la parola "καὶ" per esteso) — verosimilmente un compendio per καί, per analogia con un simbolo identico usato altrove nel volume (es. n. 270, "Πρείμου" seguito dallo stesso segno), ma non è stato possibile verificarne con certezza il significato esatto dalla scansione; il draft riporta "καὶ" come lettura interpretativa plausibile, non modificata per assenza di certezza — da ricontrollare sulla Pl. XIIIa citata in bibliografia. -->
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>Yalvaç Library (1967)</repository>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Frammento di stele con dedica tekmor di G. Phlaouios Longos, Biblioteca di Yalvaç. Larghezza conservata 22 cm., altezza 28,5 cm., spessore 4 cm.</p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/48.html">marble</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/189.html">fragment</objectType>
+                                    <dimensions unit="cm">
+                                        <height>28,5</height>
+                                        <width>22</width>
+                                        <depth>4</depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>Frammento di stele che conserva la porzione inferiore di un pilastro e della tabula ansata. Le prime quattro righe erano tra i pilastri, le ultime quattro sulla tabula ansata. G. Phlaouios Longos con la moglie e i figli dedica a Men Askaienos.</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Altezza delle lettere: DA_COMPILARE.</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/609307">Antiocheia Pisidiae</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">Yalvaç, Turchia</placeName>
+                                <placeName type="region">Asia Minor</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" precision="low"></origDate>
+                        </origin>
+                        <provenance type="found">Yalvaç, Turchia</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+                <ab>
+                    <lb n="1"/>[Γ. Φλάουιο]ς Λόν-
+                    <lb n="2"/>[γος τεκμο]ρεύ-
+                    <lb n="3"/>[σας μετ]ὰ γυ-
+                    <lb n="4"/>[ναικὸς] καὶ
+                    <lb n="5"/>[.......καὶ υἱῶ]ν Γ. Φλαου-
+                    <lb n="6"/>[ίου Λόγου καὶ] Φλαουίου
+                    <lb n="7"/>[.......... Μηνὶ] Ἀσκαινῷ
+                    <lb n="8"/>[εὐχήν.]
+                </ab>
+            </div>
+            <div type="apparatus"/>
+            <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="bibliography">
+                <listBibl>
+                    <bibl>Lane, CMRDM I 254</bibl>
+                    <bibl>Levick, AS, XVII, 1967, p. 118, no. 47 and Pl. XIIIa</bibl>
+                    <bibl>L. Robert, REG, LXXXI, 1968, loc. cit.</bibl>
+                    <bibl>Lane, II, p. 47</bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

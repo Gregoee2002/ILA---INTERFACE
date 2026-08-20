@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Iscrizione greca</rs> Piccolo altare con palmette e rilievo di cavaliere, Serea? (Kuyucak)</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>ILA — Index Lunae Antiquae</authority>
+                <idno type="TM"><!-- inserire TM number --></idno>
+                    <idno type="id">60</idno>
+                <idno type="entryId">gen-1786984905702-1n-6itecj</idno>
+</publicationStmt>
+            <!-- REVISIONE: testo greco confrontato col PDF (Lane I, p. 23, no. 5; testo stampato p. 61, con facsimile in maiuscolo e trascrizione normalizzata a fronte), verificato con ritaglio ingrandito. Il draft conteneva testo interamente inventato alle rr. 2-3: "σύν βιώτερι Περι-τω-ν Γ[αῖον] σωτηρ[ίας]" non corrisponde a nulla di stampato, e in particolare il nome del figlio "Gaios" non esiste nel testo di Lane — allucinazione totale, corretta con quanto effettivamente stampato: "σύνβιος περὶ τῶν ἰδίων σωτηρίας" ("la moglie, per la salvezza dei propri cari", senza menzione di un figlio specifico). Corretti anche i nomi propri: r. 1 "Σεῦνα Ὑσόνο[ς]"->"Ξεῦνα Ἰάσονο[ς]" (Xeuna, moglie di Iason — non "Seuna di Hyson"). Corretta di conseguenza la descrizione in layout/p, che attribuiva erroneamente la dedica a un padre con moglie per il figlio Gaios. Aggiunto dettaglio di rinvenimento assente dal draft (copiato da Sterrett nel 1883), tradotto in italiano insieme al resto della prosa descrittiva. Pleiades: toponimo antico "Serea?" segnalato come incerto dallo stesso Lane (punto interrogativo nell'originale); nessuna voce Pleiades verificabile; lasciato "DA_COMPILARE" come nel draft. TM number non reperibile. -->
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>in situ or lost</repository>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Piccolo altare con palmette e rilievo di cavaliere, Serea? (Kuyucak). Copiato da Sterrett nel 1883. Dimensioni sconosciute.</p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/138.html">stone</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/29.html">altar</objectType>
+                                    <dimensions unit="cm">
+                                        <height></height>
+                                        <width></width>
+                                        <depth></depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>Piccolo altare con palmette e divisione verticale nella modanatura superiore; testa di bue sul lato destro, cavaliere (Men?) sulla fronte. Xeuna, moglie di Iason, fece voto a Men Ouranios e Apollo per la salvezza dei propri cari.</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Height of letters: DA_COMPILARE.</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="DA_COMPILARE">Serea (?)</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">Kuyucak, near Eskişehir, Turkey</placeName>
+                                <placeName type="region">Asia Minor</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" precision="low"></origDate>
+                        </origin>
+                        <provenance type="found">Kuyucak, near Eskişehir, Turchia</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+                <ab>
+                    <lb n="1"/>Ξεῦνα Ἰάσονο[ς]
+                    <lb n="2"/>σύνβιος περὶ τῶ-
+                    <lb n="3"/>ν ἰδίων σωτηρί-
+                    <lb n="4"/>ας Μηνὶ Οὐρανί-
+                    <lb n="5"/>ῳ καὶ Ἀπόλλωνι
+                    <lb n="6"/>εὐχήν.
+                </ab>
+            </div>
+            <div type="apparatus"/>
+            <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="bibliography">
+                <listBibl>
+                    <bibl>Lane, CMRDM I 92</bibl>
+                    <bibl>Ramsay, ZVS, XXVIII, 1887, p. 394, no. 16</bibl>
+                    <bibl>Drexler, op. cit., col. 2711</bibl>
+                    <bibl>Ramsay, Bearing, p. 187, no. 3</bibl>
+                    <bibl>MAMA V, (1937) p. 150, no. R7</bibl>
+                    <bibl>Lane, I, p. 23, no. 5</bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

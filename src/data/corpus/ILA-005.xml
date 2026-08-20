@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Iscrizione greca</rs> Lastra di marmo(?) con rilievo di una mezzaluna, Gyölde</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>ILA — Index Lunae Antiquae</authority>
+                <idno type="TM"><!-- inserire TM number --></idno>
+                    <idno type="id">5</idno>
+                <idno type="entryId">gen-1786984905702-4-vj12d8</idno>
+</publicationStmt>
+            <!-- REVISIONE (cross-check PDF Lane p. 22): "σιδ΄" -> "σζ΄" (l. 1, numerale anno errato: 207 dell'era sillana = 122/3 d.C., coerente con la datazione già presente nel file; σιδ'=214 non torna); "Δαισίκου τδ΄" -> "Ξανδικοῦ βι΄" (l. 1, mese e giorno errati); "κατ᾽ ἐπιτάγην" -> "κατὰ ἐπιταγὴν" (l. 1, Lane stampa la forma non elisa); "Ἀξιοτ-τηνοῦ" -> "Ἀξιοττηνοῦ" (l. 3, trattino interno spurio); Pleiades ref corretto 609032 (ID inesistente/404) -> 609441 (Kollyda/Goloida = Gölde, verificato via Pleiades API e Trismegistos TM Geo 33613); TM non trovato. -->
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>in situ or lost</repository>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Lastra di marmo(?) con rilievo di una mezzaluna, rinvenuta prima del 1829 a Gyölde nella chiesa di Hagios Theodoros.</p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/48.html">marble</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/53.html">plaque</objectType>
+                                    <dimensions unit="cm">
+                                        <height></height>
+                                        <width></width>
+                                        <depth></depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>Lastra con mezzaluna in rilievo e iscrizione datata secondo l'era sillana (122-123 d.C.), dedica da parte di uno schiavo di Tiberius Philocalos a Men Axiottenos.</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Height of letters: DA_COMPILARE.</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/609441">Gyölde area (Kula)</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">Gyölde, Turkey</placeName>
+                                <placeName type="region">Asia Minor</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" notBefore-custom="122" notAfter-custom="123" precision="medium">122-123 A.D. (Sullan era)</origDate>
+                        </origin>
+                        <provenance type="found">Gyölde, Turchia</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+                <ab>
+                    <lb n="1"/>Ἔτους σζ΄, μη(νὸς) Ξανδικοῦ βι΄, κατὰ ἐπιταγὴν
+                    <lb n="2"/>Μηνὸς Ἀρτεμιδώρου
+                    <lb n="3"/>Ἀξιοττηνοῦ, Ἥπιος Τ[ι]βερίου Φιλοκάλου δοῦλος ὑπὲρ ἑαυτοῦ καὶ
+                    <lb n="4"/>τῶν τέκνων ἀνέθηκεν.
+                </ab>
+            </div>
+            <div type="apparatus"/>
+            <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="bibliography">
+                <listBibl>
+                    <bibl>Lane, CMRDM I 33</bibl>
+                    <bibl>CIG, (1828-77), 3448</bibl>
+                    <bibl>G. Keppel, Narrative of a journey across the Balcan, London, 1831, II, p. 357, no. 1</bibl>
+                    <bibl>P. LeBas and W.H. Waddington, Voyage Archéologique en Grèce et en Asie Mineure, Paris ca. 1870, III, i, p. 217, no. 680</bibl>
+                    <bibl>Drexler, col. 2700, no. 4</bibl>
+                    <bibl>Lane, I, p. 15, Lydia, no. 4</bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

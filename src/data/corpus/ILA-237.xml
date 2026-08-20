@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Iscrizione latina</rs> — CMRDM I nr. 249: Stele marmorea con ornamento a corona e falce di luna e dedica latina LVS, Antiocheia Pisidiae</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>ILA — Index Lunae Antiquae</authority>
+                <idno type="TM"><!-- inserire TM number --></idno>
+                <idno type="id">237</idno>
+                <idno type="entryId">gen-1786984905702-5z-n0ig1y</idno>
+            </publicationStmt>
+            <!-- Revisione confronto col PDF (Lane, CMRDM I, p. 138, n. 249): nessun errore testuale riscontrato nel testo latino né nelle dimensioni; corretto l'ID Pleiades di Antiocheia Pisidiae da 652388 a 609307; tradotta in italiano la prosa descrittiva di Lane in titolo, support e layout; italianizzato "Turkey" in "Turchia". -->
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>Konya Museum</repository>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Stele marmorea con ornamento a corona e falce di luna e dedica latina LVS, Antiocheia Pisidiae. Altezza 41 cm., larghezza 30 cm., spessore 5,5 cm.</p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/48.html">marble</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/250.html">stele</objectType>
+                                    <dimensions unit="cm">
+                                        <height>41</height>
+                                        <width>30</width>
+                                        <depth>5,5</depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>Stele con timpano, acroteri, ornamento circolare al centro. Ornamento nel campo come le estremità di una corona legate in un nodo, con falce di luna entro la corona. Dedica latina di M. Albucius Firmus LVS.</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Altezza delle lettere: DA_COMPILARE.</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/609307">Antiocheia Pisidiae</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">Yalvaç, Turchia</placeName>
+                                <placeName type="region">Asia Minor</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" precision="low"></origDate>
+                        </origin>
+                        <provenance type="found">Yalvaç, Turchia</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="la">
+                <ab>
+                    <lb n="1"/>M. Albucius Firmus
+                    <lb n="2"/>LVS
+                </ab>
+            </div>
+            <div type="apparatus"/>
+            <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="bibliography">
+                <listBibl>
+                    <bibl>Lane, CMRDM I 249</bibl>
+                    <bibl>Ramsay, Social Basis, p. 143, no. 149</bibl>
+                    <bibl>Lane, II, p. 47</bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

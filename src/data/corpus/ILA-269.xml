@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Iscrizione greca</rs> — CMRDM I nr. 282: Quattro frammenti di stele marmorea con busto di Men entro una corona e dedica parzialmente leggibile, Museo di Konya</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>ILA — Index Lunae Antiquae</authority>
+                <idno type="TM"><!-- inserire TM number --></idno>
+                <idno type="id">269</idno>
+                <idno type="entryId">gen-1786984905702-6v-wkbrm2</idno>
+            </publicationStmt>
+            <!-- Revisione su collazione col PDF Lane (p. 150, no. 282): rimosso un accento non stampato su "Λουκι" (riga 1) e uno spazio spurio dopo la prima lacuna della riga 2 (assente nello stampato); numero di puntini delle due lacune adeguato a 9 come nello stampato. Rimossa la bibliografia fittizia "Lane, II, p. 47 (unpublished)": nessuna bibliografia è riportata da Lane. Support/layout tradotti in italiano. Segnalo la nota editoriale di Lane sulla fine anomala dell'iscrizione con σύν postpositivo, non riportata nel commentary per esplicito divieto di riempire tale campo. Corretto anche l'ID Pleiades del luogo di ritrovamento, errato in tutte le entry di questo lotto: "https://pleiades.stoa.org/places/652388" non corrisponde ad Antiochia di Pisidia; sostituito con l'ID corretto 609307 (verificato incrociando Pleiades DARE-location, Wikidata e la posizione "1 km da Yalvaç"). -->
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>Konya Archaeological Museum</repository>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Quattro frammenti di stele marmorea con busto di Men entro una corona e dedica parzialmente leggibile, Museo di Konya. Altezza conservata 25 cm, larghezza 28 cm.</p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/48.html">marble</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/189.html">fragment</objectType>
+                                    <dimensions unit="cm">
+                                        <height>25</height>
+                                        <width>28</width>
+                                        <depth></depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>Stele con busto di Men (mezzaluna, berretto frigio) entro una corona legata da nastri in basso. Iscrizione nel campo sotto i nastri della corona e sul margine inferiore. Loukios [...]os con [...]otikos (dedica non conservata per intero; la fine dell'iscrizione con σύν risulta anomala).</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Altezza delle lettere: DA_COMPILARE.</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/609307">Antiocheia Pisidiae</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">Yalvaç, Turchia</placeName>
+                                <placeName type="region">Asia Minor</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" precision="low"></origDate>
+                        </origin>
+                        <provenance type="found">Yalvaç, Turchia</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+                <ab>
+                    <lb n="1"/>Λουκι[.........]ος
+                    <lb n="2"/>[....]ν[.........]ωτικῷ σύν
+                </ab>
+            </div>
+            <div type="apparatus"/>
+            <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="bibliography">
+                <listBibl>
+                    <bibl>Lane, CMRDM I 282</bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

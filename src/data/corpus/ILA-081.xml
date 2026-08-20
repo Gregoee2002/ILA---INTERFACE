@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Iscrizione greca</rs> Piccola stele con rilievo di falce lunare e iscrizione, area di Julia-Ipsus (Museo di Afyon)</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>ILA — Index Lunae Antiquae</authority>
+                <idno type="TM"><!-- inserire TM number --></idno>
+                    <idno type="id">81</idno>
+                <idno type="entryId">gen-1786984905702-28-esi7t2</idno>
+</publicationStmt>
+            <!-- Revisione assistita (cross-check con PDF Lane, p. 74): testo greco e descrizione fisica confermati conformi allo stampato (differenza di accento Διόμα/Διομᾶ non toccata). Pleiades corretto: l'ID 609467 puntava a "Meter Steunene" (santuario diverso) — ID corretto per Ipsos/Julia Ipsus verificato: 609415. -->
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>Afyon Karahissar Museum</repository>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Piccola stele con rilievo di falce lunare e iscrizione, area di Julia-Ipsus (Museo di Afyon). Alta circa 1 piede.</p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/138.html">stone</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/250.html">stele</objectType>
+                                    <dimensions unit="cm">
+                                        <height></height>
+                                        <width></width>
+                                        <depth></depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>Piccola stele, conservata per intero, con frontone e acroteri. Falce lunare a rilievo nel campo del frontone. Dedica a Men da parte di Pylades figlio di Diomas.</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Height of letters: DA_COMPILARE.</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/609415">Julia Ipsus (area)</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">Çay area, Turkey</placeName>
+                                <placeName type="region">Asia Minor</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" precision="low"></origDate>
+                        </origin>
+                        <provenance type="found">Zona di Çay, Turchia</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+                <ab>
+                    <lb n="1"/>Πυλάδης
+                    <lb n="2"/>Διόμα
+                    <lb n="3"/>Μηνὶ
+                    <lb n="4"/>εὐχήν.
+                </ab>
+            </div>
+            <div type="apparatus"/>
+            <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="bibliography">
+                <listBibl>
+                    <bibl>Lane, CMRDM I 113</bibl>
+                    <bibl>Lane, I, p. 26, no. 24, Plate IV, no. 2</bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

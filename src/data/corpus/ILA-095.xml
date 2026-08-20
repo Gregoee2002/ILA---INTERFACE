@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Monumento senza iscrizione</rs> Rilievo marmoreo conservato integro, Museo Nazionale di Atene</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>ILA — Index Lunae Antiquae</authority>
+                <idno type="TM"><!-- inserire TM number --></idno>
+                    <idno type="id">95</idno>
+                <idno type="entryId">gen-1786984905702-7e-oce4f9</idno>
+</publicationStmt>
+            <!-- Revisione: aggiunta la nota di Lane sulle circostanze di ritrovamento ignote (attestato prima del 1895), assente nel draft. Verificato Pleiades (Athenae 579885, invariato, corretto). Nessun testo greco (monumento anepigrafe, conforme allo stampato). TM number non compilato: monumento senza iscrizione, non indicizzabile in Trismegistos. -->
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>National Museum of Athens</repository>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Rilievo marmoreo conservato integro. Circostanze del ritrovamento sconosciute (prima del 1895). Altezza 41 cm, larghezza 43 cm. Ora al Museo Nazionale di Atene.</p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/48.html">marble</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/24.html">relief</objectType>
+                                    <dimensions unit="cm">
+                                        <height>41</height>
+                                        <width>43</width>
+                                        <depth></depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>Pan (nudo, con pelle di capra), Men (chitone, cintura, mantello, mezzaluna alle spalle, con bastone e gallo in mano) e una ninfa/devota panneggiata. Men è raffigurato di fronte.</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Altezza delle lettere: DA_COMPILARE.</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/579885">Athenae</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">Athens, Greece</placeName>
+                                <placeName type="region">Graecia</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" precision="low"></origDate>
+                        </origin>
+                        <provenance type="found">Athens, Grecia</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+                <ab>
+                    <lb n="1"/>
+                </ab>
+            </div>
+            <div type="apparatus"/>
+            <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="bibliography">
+                <listBibl>
+                    <bibl>Lane, CMRDM I 6</bibl>
+                    <bibl>Drexler, in Roscher, Lexikon, col. 2733-4, fig. 10</bibl>
+                    <bibl>Y. Smirnoff, in Stephanos (Studies Sokolov), St. Petersburg, 1895, pp. 114-117, no. 24, fig. 1</bibl>
+                    <bibl>P. Perdrizet, BCH, XX, 1896, pp. 77-8, fig. 5</bibl>
+                    <bibl>Svoronos, Das Athener Nationalmuseum, Athens 1903-11, Pl. 72, no. 1444</bibl>
+                    <bibl>S. Reinach, Répertoire des Reliefs, II, p. 356, no. 3</bibl>
+                    <bibl>M.P. Nilsson, Geschichte der Griechischen Religion, Munich 1950, II, Pl. 2, no. 2</bibl>
+                    <bibl>Lane, I, p. 8, no. 8 and Plate I, no. 2</bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Iscrizione latina</rs> Altare iscritto dalle fondamenta della basilica di San Pietro, Roma</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>ILA — Index Lunae Antiquae</authority>
+                <idno type="id">109</idno>
+                <idno type="entryId">local-10</idno>
+                <idno type="TM">&lt;!-- inserire TM number --&gt;</idno>
+            </publicationStmt>
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>lost/unknown</repository>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Altare iscritto dalle fondamenta della basilica di San Pietro, Roma.</p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/138.html">stone</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/29.html">altar</objectType>
+                                    <dimensions>
+                                        <height unit="metre"></height>
+                                        <width unit="metre"></width>
+                                        <depth unit="metre"></depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>Altare dedicato a Magna Mater, Attis e Menotyrannus Invictus da Clodius Hermogianus Caesarius, dedicato dopo un taurobolio e un criobolio, datato al 374 d.C.</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Height of letters: DA_COMPILARE.</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/423025">Roma</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">Rome, Italy</placeName>
+                                <placeName type="region">Italia</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" notBefore-custom="374" notAfter-custom="374" precision="high">374 A.D.</origDate>
+                        </origin>
+                        <provenance type="found">Roma, Italia</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+<ab>
+                    <lb n="1"/>Matri Deum Magnae
+                    <lb n="2"/>Idaeae Summae Pa-
+                    <lb n="3"/>renti, Hermae, et Attidi
+                    <lb n="4"/>Menotyranno Invicto
+                    <lb n="5"/>Clodius Hermogianus Caesarius
+                    <lb n="6"/>V(ir) C(onsularis) Procons. Africae
+                    <lb n="7"/>Praefect. Urbis Romae
+                    <lb n="8"/>XVvir S(acris) F(aciundis) taurobolio
+                    <lb n="9"/>criobolioque perfecto XIII Kal. Aug. diis animae
+                    <lb n="10"/>suae mentisque costodibus
+                    <lb n="11"/>aram dicavit
+                    <lb n="12"/>D(omino) N(ostro) Gratiano Aug. ter
+                    <lb n="13"/>et ...... Aequitio conss.
+                </ab>
+            </div>
+            <div type="commentary">
+                <p>DA_COMPILARE</p>
+            </div>
+            <div type="bibliography">
+                <listBibl>
+                    <bibl>Lane, CMRDM I 23</bibl>
+                    <bibl>CIL, VI, (1876), 499</bibl>
+                    <bibl>H. Dessau, Inscriptiones Latinae Selectae, Berlin, 1892-1914, 4147</bibl>
+                    <bibl>Lane, I, p. 13, no. 2</bibl>
+                    <bibl>R. Duthoy, The Taurobolium, Leiden, 1969, p. 14, no. 13</bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

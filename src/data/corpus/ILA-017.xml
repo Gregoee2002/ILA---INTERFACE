@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Iscrizione greca</rs> Due frammenti di stele di marmo bluastro con rilievo, Ayazviran</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>ILA — Index Lunae Antiquae</authority>
+                <idno type="TM"><!-- inserire TM number --></idno>
+                    <idno type="id">17</idno>
+                <idno type="entryId">gen-1786984905702-g-mxqtl5</idno>
+</publicationStmt>
+            <!-- REVISIONE: testo greco confrontato col PDF (Lane I, p. 18, no. 21, tav. p. 30). Corretti: rr. 1 e 4 confini della lacuna spostati per rispecchiare "[Θεῷ ἐπηκ]όῳ" e "[ριστ]ῶν" (non "[Θεῷ Ἐπη]κ[ό]ῳ"/"[ρισ]τῶν"); r. 1 "Ἐπη"→"ἐπη" (minuscola, non inizio testo); r. 2 rimossa lacuna fittizia su "Τρόφ[ι]μος" (interamente leggibile in Lane) e corretto "εὐχάμε-"→"εὐξάμε-" (χ→ξ); r. 3 "Ἐπιτυχῶν"→"ἐπιτυχὼν" (minuscola e accento come da stampa); r. 5 numero del giorno "ε΄"→"βι΄" (Lane stampa "Δίου βι΄", non "ε΄": errore di trascrizione del numerale, non una scelta editoriale). Aggiunti dettagli di rinvenimento dal testo di Lane (anno 1911, proprietari delle due case). Pleiades: nessun ID verificabile per "Koresa" (il sito è noto solo da Wikidata Q85774905 e Digital Atlas of the Roman Empire, non ha voce propria su pleiades.stoa.org) — ref lasciato non compilato, segnalato per verifica futura. TM number non reperibile. -->
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>in situ or lost</repository>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Due frammenti di stele di marmo bluastro con rilievo, che conservano parte del margine destro originale, Ayazviran. Rinvenuti nel 1911: il pezzo a (più grande, destro) fuori dalla casa di Tartaroğlu Mehmet Çanç, il pezzo b (più piccolo, sinistro) nella casa di Kadiroğlu Suleiman. Altezza 25 cm., larghezza 32 cm. (i due pezzi insieme), spessore 6,3 cm.</p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/48.html">marble</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/250.html">stele</objectType>
+                                    <dimensions unit="cm">
+                                        <height>25</height>
+                                        <width>32</width>
+                                        <depth>6,3</depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>Due frammenti che conservano parte del margine destro originale, con rilievo di tre figure (ragazza, uomo, donna) in piedi su una sporgenza. Dedica a Men Axiottenos Epekoos.</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Altezza delle lettere: 2,2 cm.</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="DA_COMPILARE">Koresa (?)</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">Ayazviran, Turkey</placeName>
+                                <placeName type="region">Asia Minor</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" precision="low"></origDate>
+                        </origin>
+                        <provenance type="found">Ayazviran, Turchia</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+                <ab>
+                    <lb n="1"/>[Θεῷ ἐπηκ]όῳ Μηνὶ Ἀξιτη-
+                    <lb n="2"/>[νῷ Τ]ρόφιμος εὐξάμε-
+                    <lb n="3"/>[νος] καὶ ἐπιτυχὼν εὐχα-
+                    <lb n="4"/>[ριστ]ῶν ἀνέθηκα
+                    <lb n="5"/>[......] μη(νὸς) Δίου βι΄
+                </ab>
+            </div>
+            <div type="apparatus"/>
+            <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="bibliography">
+                <listBibl>
+                    <bibl>Lane, CMRDM I 46</bibl>
+                    <bibl>K-P, II Reise, p. 105, no. 205</bibl>
+                    <bibl>Herrmann, op. cit., p. 45, note 176</bibl>
+                    <bibl>Lane, I, p. 18, no. 21</bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

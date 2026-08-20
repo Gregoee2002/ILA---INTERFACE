@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Iscrizione greca</rs> — CMRDM I nr. 168: Lastra semplice con iscrizione agonistica, santuario di Men Askaenos, Antiocheia Pisidiae</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>ILA — Index Lunae Antiquae</authority>
+                <idno type="TM"><!-- inserire TM number --></idno>
+                <idno type="id">156</idno>
+                <idno type="entryId">gen-1786984905702-3q-5p198s</idno>
+            </publicationStmt>
+            <!-- Revisione assistita (cross-check con PDF Lane, CMRDM I 168, pp. 105-106): sostituita per intero l'edizione, che nel draft era in parte trascritta erroneamente dal facsimile fotografico in maiuscolo mostrato da Lane (invece che dalla trascrizione normalizzata a stampa, presente subito sotto introdotta da "The stone bears the following inscription:"), e conteneva inoltre un nome del vincitore completamente alterato/inventato ("Λουκ(ίου) Τάμπο[υ] Φλαίο(υ) βανοῦ Ούκτόρεινον Ζωτίκο[ν]" invece del reale "Λού(κιον) Πάπιο[ν] Φλαο(υ)ιανὸν Οὐ[ι]κτορεῖνον Ζωτικ[ὸν]" = Lucius Papius Flavianus Victorinus Zoticus). Corretto di conseguenza anche il nome del vincitore nella descrizione layout (da "Lucius Tampius Flavios Baibanos Ouktoreinos Zotikos" a "Lucius Papius Flavianus Victorinus Zoticus"). Tradotta in italiano la prosa descrittiva (support, layout, title). Corretto Pleiades ref del placeName "ancient" da 652388 (errato) a 609307 (Antiocheia Pisidiae), verificato su Wikidata e topostext.org. -->
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>in situ (Kuşku mezarlık wall)</repository>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Lastra semplice con iscrizione agonistica, dal santuario di Men Askaenos, Antiocheia Pisidiae, murata nel muro del cimitero (mezarlık) di Kuşku, a Yalvaç. </p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/138.html">stone</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/250.html">stele</objectType>
+                                    <dimensions unit="cm">
+                                        <height></height>
+                                        <width></width>
+                                        <depth></depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>Lastra semplice con iscrizione agonistica. Due agonoteti: Gaio Caisenio Proclo Staiano e Gaio Flavio Baibiano, cavaliere, sommo sacerdote a vita di Men Askaenos. Vincitore: Lucio Papio Flaviano Vittorino Zotico, nel pancrazio dei fanciulli ai giochi Massimianei.</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Altezza delle lettere: DA_COMPILARE.</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/609307">Antiocheia Pisidiae</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">Yalvaç, Turchia</placeName>
+                                <placeName type="region">Asia Minor</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" precision="low"></origDate>
+                        </origin>
+                        <provenance type="found">Yalvaç, Turchia</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+                <ab>
+                    <lb n="1"/>Ἀγωνοθετο(ύ)ν[των]
+                    <lb n="2"/>[δ]ιὰ [β]ίου Γ. Καισεν[ίου]
+                    <lb n="3"/>Πρόκλου Στ[α]ιανο[ῦ]
+                    <lb n="4"/>[α]ὔγουρος, πάτρ[ωνος]
+                    <lb n="5"/>[τῆ]ς κολωνείας κα[ὶ]
+                    <lb n="6"/>Γ. Φλαίου Βαιβιανοῦ
+                    <lb n="7"/>ἱππέως Ῥωμαίων
+                    <lb n="8"/>ἀρχιερέως διὰ βίου
+                    <lb n="9"/>τοῦ πατρίου θεοῦ
+                    <lb n="10"/>Μηνὸς Λού(κιον) Πάπιο[ν]
+                    <lb n="11"/>Φλαο(υ)ιανὸν Οὐ[ι]-
+                    <lb n="12"/>κτορεῖνον Ζωτικ[ὸν]
+                    <lb n="13"/>νεικήσαντα παίδ[ων]
+                    <lb n="14"/>πανκράτιον ἀγῶν[α]
+                    <lb n="15"/>Μαξιμιάνειον ἡ π[ατρὶς]
+                    <lb n="16"/>θέμιδι.
+                </ab>
+            </div>
+            <div type="apparatus"/>
+            <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="bibliography">
+                <listBibl>
+                    <bibl>Lane, CMRDM I 168</bibl>
+                    <bibl>J.G.C. Anderson, op. cit., p. 289, no. 17 and fig. 65</bibl>
+                    <bibl>Lane, I, p. 33, no. 22</bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

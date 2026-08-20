@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Iscrizione greca</rs> Stele di marmo con rilievo di adoranti e iscrizione di confessione, Kula (Boston MFA)</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>ILA — Index Lunae Antiquae</authority>
+                <idno type="TM"><!-- inserire TM number --></idno>
+                    <idno type="id">34</idno>
+                <idno type="entryId">gen-1786984905702-x-ab59qc</idno>
+</publicationStmt>
+            <!-- REVISIONE: testo greco confrontato col PDF (Lane I, pp. 17-18, no. 19, tav. p. 43). Corretti: r. 1 "Ἀνδαεί τ[ι"→"Ἀνάειτι κ[αὶ" (epiteto della dea: Anaeitis, non "Andaeis"; il "καὶ" seguente è tra parentesi, non "τι"); r. 2 rimossa lacuna fittizia su "Τιάμου" (interamente leggibile in Lane) e "Μουσᾶς W"→"Μουσαῖς β΄" (nome del dedicante e numerale, non un carattere "W" privo di senso); r. 3 lacuna spostata da "σύ[μβιο]ς" a "σύμβι[ος"; r. 4 "Μουσ[οῦ το[ῦ υἱοῦ" (parentesi non bilanciate, testo corrotto) → "Μουσαίου το[ῦ ὑοῦ]"; rr. 5-6 rimosse lacune fittizie iniziali su "μαρτυροῦντες" e corretto "μεις"→"μις" (coerente con la grafia "δυνάμις" già vista in altre entry del corpus). Aggiunti dettagli di rinvenimento dal testo di Lane (marmo grezzo, spezzato a destra, al Museum of Fine Arts di Boston dal 1850 circa) e tradotta la prosa descrittiva in italiano. TM number non reperibile. -->
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>Museum of Fine Arts, Boston</repository>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Stele di marmo grezzo, rinvenuta a Kula, in possesso del Museum of Fine Arts di Boston dal 1850 circa. Leggermente danneggiata sul lato destro. Altezza 72 cm, larghezza 42 cm, spessore 6 cm.</p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/48.html">marble</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/250.html">stele</objectType>
+                                    <dimensions unit="cm">
+                                        <height>72</height>
+                                        <width>42</width>
+                                        <depth>6</depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>Stele con rilievo raffigurante un uomo, un bambino, una donna e un secondo bambino, con la mano destra alzata in adorazione. Dedica ad Artemide Anaeitis e Men Tiamos da parte di Mousais e della moglie Kalligeneia per il loro figlio.</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Height of letters: DA_COMPILARE.</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/550659">Coloe</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">Kula, Turkey</placeName>
+                                <placeName type="region">Asia Minor</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" notBefore-custom="196" notAfter-custom="197" precision="medium">196-197 A.D.</origDate>
+                        </origin>
+                        <provenance type="found">Kula, Turchia</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+                <ab>
+                    <lb n="1"/>Ἀρτέμιδι Ἀνάειτι κ[αὶ Μη-]
+                    <lb n="2"/>νὶ Τιάμου Μουσαῖς β΄ [καὶ]
+                    <lb n="3"/>Καλλιγένεια ἡ σύμβι[ος αὐ-]
+                    <lb n="4"/>τοῦ ὑπὲρ Μουσαίου το[ῦ ὑοῦ]
+                    <lb n="5"/>μαρτυροῦντες τὰς δ[υνά-]
+                    <lb n="6"/>μις τῶν θεῶν ἀπέδω[καν]
+                    <lb n="7"/>τὴν εὐχήν. Ἔτους σπα΄, [μη(νὸς)]
+                    <lb n="8"/>Δείου ι΄.
+                </ab>
+            </div>
+            <div type="apparatus"/>
+            <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="bibliography">
+                <listBibl>
+                    <bibl>Lane, CMRDM I 63</bibl>
+                    <bibl>Drexler, op. cit., col. 2704</bibl>
+                    <bibl>*M.F.A.B. 18th Annual Report, 1894, p. 20</bibl>
+                    <bibl>Archäologischer Anzeiger, IX, 1894, p. 95</bibl>
+                    <bibl>Reinach, RA, 1894, II, p. 117</bibl>
+                    <bibl>Wright, HSCP, VI, 1895, p. 56, Pl. II</bibl>
+                    <bibl>Bulletin MFAB, LVI, 1958, p. 72</bibl>
+                    <bibl>Lane, I, pp. 17-18, no. 19</bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

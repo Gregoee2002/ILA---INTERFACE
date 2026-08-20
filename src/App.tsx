@@ -53,7 +53,7 @@ import { cn, EASE_OUT, EASE_IN, SPRING_SNAPPY, SPRING_SOFT } from './lib/utils';
 import { ICONOGRAPHY_LABELS } from './lib/iconographyLabels';
 import { Monumento, FilterState, SortField, Traduzione, Bibliografia, Appunto, EntryFlag } from './types';
 import { RAW_DATA } from './data';
-import { monumentiToXml, xmlToMonumenti } from './lib/xmlUtils';
+import { monumentiToXml, xmlToMonumenti, formatIlaLabel } from './lib/xmlUtils';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { PleiadesMap } from './components/PleiadesMap';
@@ -776,7 +776,7 @@ function CorpusHealth({ monumenti, onSelectMonumento }: { monumenti: Monumento[]
               {missing.escapedMarkup.map(m => (
                 <button key={m.id} onClick={() => onSelectMonumento(m)}
                   className="text-xs font-sans border border-red-300 text-red-700 px-2 py-1 hover:bg-red-50 transition-colors">
-                  #{m.id} {m.corpus} {m.numero}
+                  {formatIlaLabel(m.id)}
                 </button>
               ))}
             </div>
@@ -2959,8 +2959,6 @@ export default function App() {
   
   const [filters, setFilters] = useState<FilterState>({
     searchText: '',
-    corpus: '',
-    numero: '',
     regione: '',
     citta: '',
     tipo: '',
@@ -3241,8 +3239,6 @@ export default function App() {
   };
 
   const regions = useMemo(() => Array.from(new Set(monumenti.map(m => m.regione).filter(Boolean).map(s => s.trim()))).sort(), [monumenti]);
-  const corpora = useMemo(() => Array.from(new Set(monumenti.map(m => m.corpus).filter(Boolean).map(s => s.trim()))).sort(), [monumenti]);
-  const numbers = useMemo(() => Array.from(new Set(monumenti.map(m => m.numero).filter(Boolean).map(s => s.trim()))).sort(), [monumenti]);
   const cities = useMemo(() => Array.from(new Set(monumenti.map(m => m.citta).filter(Boolean).map(s => s.trim()))).sort(), [monumenti]);
   const types = useMemo(() => Array.from(new Set(monumenti.map(m => m.tipo).filter(Boolean).map(s => s.trim()))).sort(), [monumenti]);
   const materials = useMemo(() => Array.from(new Set(monumenti.map(m => m.materiale).filter(Boolean).map(s => s.trim()))).sort(), [monumenti]);
@@ -3275,8 +3271,6 @@ export default function App() {
         const matchesSearch = searchResultIds === null || searchPending || searchResultIds.has(m.id);
         
         const matchesRegione = !filters.regione || m.regione === filters.regione;
-        const matchesCorpus = !filters.corpus || m.corpus === filters.corpus;
-        const matchesNumero = !filters.numero || m.numero === filters.numero;
         const matchesCitta = !filters.citta || m.citta === filters.citta;
         const matchesTipo = !filters.tipo || m.tipo === filters.tipo;
         const matchesMateriale = !filters.materiale || m.materiale === filters.materiale;
@@ -3293,7 +3287,7 @@ export default function App() {
 
         const matchesDate = (!m.data_inizio || !m.data_fine) || (m.data_inizio >= filters.dateRange[0] && m.data_fine <= filters.dateRange[1]);
 
-        return matchesSearch && matchesRegione && matchesCorpus && matchesNumero && matchesCitta && matchesTipo && matchesMateriale && matchesIconAttributo && matchesIconFunzione && matchesIconPosizione && matchesInscr && matchesAnep && matchesHasTrad && matchesNoTrad && matchesDate;
+        return matchesSearch && matchesRegione && matchesCitta && matchesTipo && matchesMateriale && matchesIconAttributo && matchesIconFunzione && matchesIconPosizione && matchesInscr && matchesAnep && matchesHasTrad && matchesNoTrad && matchesDate;
       })
       .sort((a, b) => {
         if (sortField === 'citta') {
@@ -3497,8 +3491,6 @@ export default function App() {
           tipo_ref: m.tipo_ref || '',
           materiale: m.materiale || '',
           materialRef: m.materialRef || '',
-          corpus: m.corpus || '',
-          numero: m.numero || '',
           // Dimensions
           dim: m.dim || '',
           dim_altezza: m.dim_altezza || '',
@@ -3747,7 +3739,7 @@ export default function App() {
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = `CMRDM-${m.corpus || 'XX'}-${String(m.id).padStart(3, '0')}.xml`;
+    link.download = `ILA-${String(m.id).padStart(3, '0')}.xml`;
     link.click();
     URL.revokeObjectURL(url);
   };
@@ -3883,17 +3875,15 @@ export default function App() {
     doc.text(`Catalogo esportato il ${new Date().toLocaleDateString()} - ${toExport.length} schede`, 14, 30);
     
     const tableData = toExport.map(m => [
-      m.id.toString(),
-      m.corpus || '-',
-      m.numero || '-',
+      formatIlaLabel(m.id),
       m.citta || '-',
       m.tipo || '-',
       m.materiale || '-'
     ]);
-    
+
     autoTable(doc, {
       startY: 40,
-      head: [['ID', 'Corpus', 'Numero', 'Città', 'Tipologia', 'Materiale']],
+      head: [['ID', 'Città', 'Tipologia', 'Materiale']],
       body: tableData,
       theme: 'grid',
       headStyles: { fillColor: [150, 140, 120] }, // A more "sepia" or parchment-like color matching the app
@@ -3921,7 +3911,7 @@ export default function App() {
         const combined = [...monumenti];
 
         data.forEach((parsedItem: any) => {
-          const fId = parsedItem.entryId || (parsedItem.corpus ? `cor-${parsedItem.corpus}-${parsedItem.numero || Date.now()}` : `local-${Date.now()}-${Math.random().toString(36).substr(2, 5)}`);
+          const fId = parsedItem.entryId || `local-${Date.now()}-${Math.random().toString(36).substr(2, 5)}`;
           parsedItem.entryId = fId;
 
           // Replace duplicate if entryId is already present
@@ -4426,38 +4416,6 @@ export default function App() {
               </div>
 
               <div className="animate-in fade-in slide-in-from-left-2 duration-300">
-                <label className="mb-2 block field-label">Corpus</label>
-                <div className="relative">
-                  <select 
-                    className="w-full bg-[var(--card)] dark:bg-black/25 border border-[var(--border)]/50 dark:border-white/5 rounded-xl pl-3 pr-8 py-2.5 font-sans text-xs outline-none shadow-inner focus:border-accent/50 focus:ring-1 focus:ring-accent/30 hover:bg-[var(--sidebar)] dark:hover:bg-black/40 cursor-pointer appearance-none transition-all duration-300"
-                    style={{ backgroundColor: 'var(--card)', color: 'var(--ink)', WebkitAppearance: 'none' as const, appearance: 'none' as const }}
-                    value={filters.corpus}
-                    onChange={(e) => setFilters(f => ({ ...f, corpus: e.target.value }))}
-                  >
-                    <option value="" className="bg-parchment dark:bg-sidebar text-ink">Tutti i Corpora</option>
-                    {corpora.map(c => <option key={c} value={c} className="bg-parchment dark:bg-sidebar text-ink">{c}</option>)}
-                  </select>
-                  <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted/50 pointer-events-none" />
-                </div>
-              </div>
-
-              <div className="animate-in fade-in slide-in-from-left-2 duration-300">
-                <label className="mb-2 block field-label">Numero</label>
-                <div className="relative">
-                  <select 
-                    className="w-full bg-[var(--card)] dark:bg-black/25 border border-[var(--border)]/50 dark:border-white/5 rounded-xl pl-3 pr-8 py-2.5 font-sans text-xs outline-none shadow-inner focus:border-accent/50 focus:ring-1 focus:ring-accent/30 hover:bg-[var(--sidebar)] dark:hover:bg-black/40 cursor-pointer appearance-none transition-all duration-300"
-                    style={{ backgroundColor: 'var(--card)', color: 'var(--ink)', WebkitAppearance: 'none' as const, appearance: 'none' as const }}
-                    value={filters.numero}
-                    onChange={(e) => setFilters(f => ({ ...f, numero: e.target.value }))}
-                  >
-                    <option value="" className="bg-parchment dark:bg-sidebar text-ink">Tutti i Numeri</option>
-                    {numbers.map(n => <option key={n} value={n} className="bg-parchment dark:bg-sidebar text-ink">{n}</option>)}
-                  </select>
-                  <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted/50 pointer-events-none" />
-                </div>
-              </div>
-
-              <div className="animate-in fade-in slide-in-from-left-2 duration-300">
                 <label className="mb-2 block field-label">Città / Località</label>
                 <div className="relative">
                   <select 
@@ -4587,7 +4545,7 @@ export default function App() {
                 <button 
                   id="reset-filters-btn"
                   onClick={() => setFilters({
-                    searchText: '', corpus: '', numero: '', regione: '', citta: '', tipo: '', materiale: '',
+                    searchText: '', regione: '', citta: '', tipo: '', materiale: '',
                     iconAttributo: '', iconFunzione: '', iconPosizione: '',
                     onlyInscr: false, onlyAnep: false, onlyHasTrad: false, onlyNoTrad: false,
                     dateRange: [-500, 500],
@@ -4651,7 +4609,7 @@ export default function App() {
                   </div>
   
                   <div className="flex-1 overflow-y-auto custom-scrollbar px-6">
-                    <div className="hidden md:grid md:grid-cols-[1.5rem_1.5fr_4fr_2fr_2fr_1.5rem] lg:grid-cols-[1.5rem_1.5fr_1.5fr_1fr_4fr_2fr_2fr_1.5rem] xl:grid-cols-[1.5rem_1fr_1fr_0.5fr_3fr_1.5fr_1fr_2.5fr_1.5rem] gap-2 border-b border-border py-4 text-[10px] font-bold uppercase tracking-tighter text-muted/60 sticky top-0 bg-[var(--card)]/95 backdrop-blur-md z-10 px-2 lg:px-0" >
+                    <div className="hidden md:grid md:grid-cols-[1.5rem_1.5fr_4fr_2fr_2fr_1.5rem] lg:grid-cols-[1.5rem_1.5fr_4fr_2fr_2fr_1.5rem] xl:grid-cols-[1.5rem_1fr_3fr_1.5fr_1fr_2.5fr_1.5rem] gap-2 border-b border-border py-4 text-[10px] font-bold uppercase tracking-tighter text-muted/60 sticky top-0 bg-[var(--card)]/95 backdrop-blur-md z-10 px-2 lg:px-0" >
                       <div className="flex items-center justify-center">
                         <button
                           onClick={() => selectedIds.size === filteredMonumenti.length ? deselectAll() : selectAll()}
@@ -4682,8 +4640,6 @@ export default function App() {
                         </button>
                       </div>
                       <div>ID</div>
-                      <div className="hidden lg:block">Corp.</div>
-                      <div className="hidden lg:block text-right">N.</div>
                       <div>Monumento</div>
                       <div className="text-right">Datazione</div>
                       <div>Tipologia</div>
@@ -4708,7 +4664,7 @@ export default function App() {
                             transition={{ backgroundColor: { duration: 0.25, ease: EASE_OUT }, layout: SPRING_SNAPPY }}
                             whileHover={!isSelected ? { backgroundColor: 'rgba(45,45,45,0.03)' } : undefined}
                             className={cn(
-                              "relative block md:grid md:grid-cols-[1.5rem_1.5fr_4fr_2fr_2fr_1.5rem] lg:grid-cols-[1.5rem_1.5fr_1.5fr_1fr_4fr_2fr_2fr_1.5rem] xl:grid-cols-[1.5rem_1fr_1fr_0.5fr_3fr_1.5fr_1fr_2.5fr_1.5rem] gap-2 border-b py-3 md:py-4 group items-center px-2 lg:px-0 min-h-[76px] md:h-[76px] overflow-hidden [&>div]:min-w-0",
+                              "relative block md:grid md:grid-cols-[1.5rem_1.5fr_4fr_2fr_2fr_1.5rem] lg:grid-cols-[1.5rem_1.5fr_4fr_2fr_2fr_1.5rem] xl:grid-cols-[1.5rem_1fr_3fr_1.5fr_1fr_2.5fr_1.5rem] gap-2 border-b py-3 md:py-4 group items-center px-2 lg:px-0 min-h-[76px] md:h-[76px] overflow-hidden [&>div]:min-w-0",
                               isSelected ? "border-accent/20" : "border-border/30 cursor-pointer"
                             )}
                             
@@ -4756,11 +4712,6 @@ export default function App() {
                                     <span className="font-mono text-[10px] font-bold text-accent bg-accent/5 px-1.5 py-0.5 rounded-sm border border-accent/10 tabular-nums">#{m.id.toString().padStart(3, '0')}</span>
                                     {searchResultIds?.has(m.id) && matchInSuppliedById.get(m.id) && (
                                       <span className="font-mono text-[8px] font-bold text-amber-700 bg-amber-500/10 px-1 py-0.5 rounded-sm border border-amber-500/20">RICOSTR.</span>
-                                    )}
-                                    {(m.corpus || m.numero) && (
-                                      <span className="text-[9px] font-sans font-bold text-muted/60 uppercase ml-1">
-                                        {m.corpus || ''} {m.numero || ''}
-                                      </span>
                                     )}
                                   </div>
                                   <span className="text-[10px] font-bold text-ink/75 tabular-nums shrink-0">{formatDateRange(m.data_inizio, m.data_fine)}</span>
@@ -4822,12 +4773,6 @@ export default function App() {
                                     RICOSTR.
                                   </span>
                                 )}
-                              </div>
-                              <div className="hidden lg:block">
-                                 <span className="text-[9px] font-sans font-bold text-muted/60 uppercase line-clamp-1">{m.corpus || '-'}</span>
-                              </div>
-                              <div className="hidden lg:block">
-                                 <span className="text-[9px] font-sans font-bold text-ink/70 tabular-nums block text-right">{m.numero || '-'}</span>
                               </div>
                               <div>
                                 <div className="text-sm font-bold text-ink line-clamp-1 group-hover:text-accent transition-colors">{getDisplayTitle(m)}</div>
@@ -5463,7 +5408,6 @@ export default function App() {
                                   <td className="p-1 px-2 font-mono text-[10px]">#{m.id}</td>
                                   <td className="p-1">
                                     <div className="font-bold truncate max-w-[150px]">{m.titolo || '[Nessuno]'}</div>
-                                    <div className="text-[9px] text-muted italic font-serif truncate max-w-[150px]">{m.corpus || '-'}{m.numero ? ` ${m.numero}` : ''}</div>
                                   </td>
                                   <td className="p-1 text-[10px] text-muted-foreground truncate max-w-[120px]">{m.citta || m.regione || '-'}</td>
                                 </tr>
@@ -5604,8 +5548,6 @@ export default function App() {
                           {[
                             { label: 'Regione', value: selectedMonumento.regione, type: 'regione' },
                             { label: 'Città', value: selectedMonumento.citta, type: 'citta' },
-                            { label: 'Corpus', value: selectedMonumento.corpus, type: 'corpus' },
-                            { label: 'Numero', value: selectedMonumento.numero, type: '' },
                             { label: 'Datazione', value: formatDateRange(selectedMonumento.data_inizio, selectedMonumento.data_fine), type: '' },
                             { label: 'Tipologia', value: selectedMonumento.tipo, type: 'tipo' },
                             { label: 'Materiale', value: selectedMonumento.materiale, type: '' }
@@ -5644,7 +5586,7 @@ export default function App() {
 
                       <EntryFlagForm
                         entryId={selectedMonumento.entryId ?? selectedMonumento.id?.toString() ?? ''}
-                        entryLabel={`${selectedMonumento.corpus || ''} ${selectedMonumento.numero || selectedMonumento.id || ''}`.trim()}
+                        entryLabel={formatIlaLabel(selectedMonumento.id)}
                         flags={flags}
                         effectiveAdmin={effectiveAdmin}
                         onLogin={isStaticBuild ? () => setShowUnlockModal(true) : loginWithGoogle}
@@ -5679,11 +5621,9 @@ export default function App() {
                         )}
                           <div>
                             <div className="flex flex-wrap items-center gap-2 mb-2">
-                              {(selectedMonumento.corpus || selectedMonumento.numero) && (
-                                <span className="bg-accent/10 text-accent text-[10px] font-bold px-2 py-0.5 rounded-sm uppercase tracking-tighter">
-                                  {selectedMonumento.corpus} {selectedMonumento.numero && `n. ${selectedMonumento.numero}`}
-                                </span>
-                              )}
+                              <span className="bg-accent/10 text-accent text-[10px] font-bold px-2 py-0.5 rounded-sm uppercase tracking-tighter">
+                                {formatIlaLabel(selectedMonumento.id)}
+                              </span>
                               {selectedMonumento.textTypes?.map((tt, idx) => (
                                 <span key={idx} className="bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-[10px] font-bold px-2 py-0.5 rounded-sm uppercase tracking-tighter shadow-sm">
                                   {tt}
@@ -6152,11 +6092,8 @@ export default function App() {
                     <X className="h-4 w-4" />
                   </button>
                   <div className="mb-6">
-                    {m.corpus && (
-                      <span className="text-[10px] font-bold uppercase text-accent tracking-widest font-sans">{m.corpus}</span>
-                    )}
                     <h4 className="text-2xl font-bold">{m.citta}</h4>
-                    <span className="text-xs text-muted font-sans uppercase font-bold tracking-tighter">ID #{m.id} • {m.regione}</span>
+                    <span className="text-xs text-muted font-sans uppercase font-bold tracking-tighter">{formatIlaLabel(m.id)} • {m.regione}</span>
                   </div>
 
                   <div className="space-y-8">

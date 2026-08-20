@@ -67,8 +67,6 @@ export interface Monumento {
   entryId?: string;
   id: number;
   titolo?: string;
-  corpus?: string;
-  numero?: string;
   conserv?: string;
   regione: string;
   citta: string;
@@ -138,8 +136,6 @@ export type SortField = keyof Monumento | 'epiteti';
 
 export interface FilterState {
   searchText: string;
-  corpus: string;
-  numero: string;
   regione: string;
   citta: string;
   tipo: string;
@@ -155,7 +151,7 @@ export interface FilterState {
   searchMode: 'AND' | 'OR';
 }
 
-export type TagType = 'regione' | 'citta' | 'tipo' | 'corpus' | 'epiteto' | 'onomastica' | 'divinita' | 'imperatori' | 'custom';
+export type TagType = 'regione' | 'citta' | 'tipo' | 'epiteto' | 'onomastica' | 'divinita' | 'imperatori' | 'custom';
 
 export interface Tag {
   type: TagType;
@@ -166,7 +162,7 @@ export interface Tag {
 export interface EntryFlag {
   id: string;
   entryId: string;
-  // Etichetta denormalizzata (es. "CMRDM AS 29") — resta leggibile nell'elenco
+  // Etichetta denormalizzata (es. "ILA 29") — resta leggibile nell'elenco
   // segnalazioni anche se la scheda viene nel frattempo rinumerata o rimossa.
   entryLabel: string;
   note: string;

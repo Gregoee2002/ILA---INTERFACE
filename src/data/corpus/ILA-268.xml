@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Iscrizione greca</rs> — CMRDM I nr. 281: Quattro frammenti di lastra marmorea con quattro mezzelune e dedica tekmor, Museo di Konya</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>ILA — Index Lunae Antiquae</authority>
+                <idno type="TM"><!-- inserire TM number --></idno>
+                <idno type="id">268</idno>
+                <idno type="entryId">gen-1786984905702-6u-lv15dk</idno>
+            </publicationStmt>
+            <!-- Revisione su collazione col PDF Lane (p. 150, no. 281): riga 1, allineato il confine della lacuna a quanto stampato ("Τειμόθε[ος]" -> "Τειμόθ[εος]"): Lane supplisce solo "εος", non "εος" più la ε precedente. Rimossa la bibliografia fittizia "Lane, II, p. 47 (unpublished)": nessuna bibliografia è riportata da Lane. Support/layout tradotti in italiano. Corretto anche l'ID Pleiades del luogo di ritrovamento, errato in tutte le entry di questo lotto: "https://pleiades.stoa.org/places/652388" non corrisponde ad Antiochia di Pisidia; sostituito con l'ID corretto 609307 (verificato incrociando Pleiades DARE-location, Wikidata e la posizione "1 km da Yalvaç"). -->
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>Konya Archaeological Museum</repository>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Quattro frammenti di lastra marmorea con quattro mezzelune e dedica tekmor, Museo di Konya. Altezza conservata 22 cm, larghezza conservata 23 cm.</p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/48.html">marble</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/189.html">fragment</objectType>
+                                    <dimensions unit="cm">
+                                        <height>22</height>
+                                        <width>23</width>
+                                        <depth></depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>Lastra con margine rilevato; quattro mezzelune in cima al campo. Teimotheos, con la moglie e i figli, avendo adempiuto il proprio voto tekmor, dedica a Men Askaenos.</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Altezza delle lettere: DA_COMPILARE.</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/609307">Antiocheia Pisidiae</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">Yalvaç, Turchia</placeName>
+                                <placeName type="region">Asia Minor</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" precision="low"></origDate>
+                        </origin>
+                        <provenance type="found">Yalvaç, Turchia</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+                <ab>
+                    <lb n="1"/>[.....]Τειμόθ[εος]
+                    <lb n="2"/>[μετ]ὰ γυναικὸς
+                    <lb n="3"/>[καὶ τέκν]ων τε[κμορεύσας]
+                    <lb n="4"/>[Μηνὶ Ἀ]σκ[αηνῷ
+                    <lb n="5"/>εὐχήν.]
+                </ab>
+            </div>
+            <div type="apparatus"/>
+            <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="bibliography">
+                <listBibl>
+                    <bibl>Lane, CMRDM I 281</bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

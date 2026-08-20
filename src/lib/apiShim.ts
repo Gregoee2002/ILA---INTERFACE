@@ -74,10 +74,8 @@ async function sha256(content: string): Promise<string> {
 // ── Stesse funzioni pure di server.ts (nessuna dipendenza Node) ─────────
 
 function buildFilename(m: any): string {
-  const corpus = (m.corpus || "").replace(/[^a-zA-Z0-9]/g, "").toUpperCase() || "XX";
   const id = String(m.id || 0).padStart(3, "0");
-  const num = m.numero ? String(m.numero).padStart(3, "0") : id;
-  return `${corpus}-${num}.xml`;
+  return `ILA-${id}.xml`;
 }
 
 function validateMonumentoShape(m: any): string | null {
@@ -122,13 +120,8 @@ function readCorpusFiles(): any[] {
     try {
       const parsed = xmlToMonumenti(xml);
       if (parsed.length > 0) {
-        const fileCorpusMatch = file.match(/^CMRDM-([A-Z]+)-/i);
         parsed.forEach((m: any) => {
           m._corpusFile = file;
-          // Alcuni file legacy hanno <idno type="filename"> con un numero
-          // invece del pattern CMRDM-XX-NNN (vedi xmlUtils.ts): il nome
-          // file su disco resta comunque affidabile per il codice regione.
-          if (!m.corpus && fileCorpusMatch) m.corpus = fileCorpusMatch[1].toUpperCase();
         });
         monumenti.push(...parsed);
       }

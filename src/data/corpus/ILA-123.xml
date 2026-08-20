@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Iscrizione greca</rs> — CMRDM I nr. 135: Grande pietra con epigramma dell'oracolo a dadi per Men Phosphoros, Sarаçık (Licia orientale)</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>ILA — Index Lunae Antiquae</authority>
+                <idno type="TM"><!-- inserire TM number --></idno>
+                <idno type="id">123</idno>
+                <idno type="entryId">gen-1786984905702-2t-gi04w3</idno>
+            </publicationStmt>
+            <!-- Revisione assistita (cross-check col PDF Lane, p. 88): pietra "molto consunta", con numerose lettere segnate come incerte da Lane (puntini sottoscritti, non riprodotti singolarmente nel testo). Corretto testo greco: riga 1 numerale "δδδγ΄ ξε΄"→"δςςςγ΄ κε΄"; riga 2 "Τέσσαρε"→"Τέσσαρα", "πέπτων"→"πείπτων", "ἐξίται"→"ἐξῖται", e soprattutto "πά[μπτο" (parola tronca e senza senso, con lacuna fittizia)→"πέμπτος," (lettura piena di Lane, nessuna lacuna); riga 3 "καίρ[ου τ᾽ ἐπατεύξ]η" (parola "ἐπατεύξ" inesistente)→"καιρ[οῦ τ]ε ἐπιτεύ[ξη]"; riga 4 "καίρόν" (doppio accento, errore tecnico)→"καιρόν"; riga 5 profondamente corretta: "ἐ[γχ]ειρεῖν"→"ἐ[γχ]ιρεῖν", "ἀγα[θ]ὸν"→"ἀγ[α]θὸν" (lacuna riposizionata), "κ(αὶ)"→"καὶ", e soprattutto "ἀγωγ(ία)" (parola inventata, "condotta/direzione")→"ἀγῶν(α)" (parola corretta, "contesta/gara", coerente con le altre copie dello stesso oracolo), "δ(ίκην)"→"δίκην", "τε΄" (con segno numerale erroneo)→"τε." Tradotta in italiano la prosa di <support> e <layout>. Pleiades: nessun ID applicabile — Lane stesso dichiara "ancient name unknown" per questo sito, lasciato DA_COMPILARE come da draft. -->
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>in situ or lost</repository>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Grande pietra con epigramma dell'oracolo a dadi per Men Phosphoros, trovata a terra prima del 1944, nella parte sud dell'"arx", Saraçık (Licia orientale). Ha anche un "crepido" superiore alto 30 cm e largo/spesso 86 cm ciascuno. Altezza 1,65 m, larghezza 66 cm, spessore 63 cm.</p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/138.html">stone</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/189.html">block</objectType>
+                                    <dimensions unit="cm">
+                                        <height>1,65</height>
+                                        <width>66</width>
+                                        <depth>63</depth>
+                                    </dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>Grande pietra con crepido superiore. Epigramma dell'oracolo a dadi sostanzialmente uguale, attribuito a Men Phosphoros, molto consunto.</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc>
+                            <handNote>
+                                <p>Height of letters: 1.5 cm (general); 2.5 cm (lines 1-3).</p>
+                            </handNote>
+                        </handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="DA_COMPILARE">unknown (east Lycia)</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">Saraçık, Turkey</placeName>
+                                <placeName type="region">Asia Minor</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" precision="low"></origDate>
+                        </origin>
+                        <provenance type="found">Saraçık, Turchia</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+                <ab>
+                    <lb n="1"/>δςςςγ΄ κε΄ Μηνὸς Φωσφόρου
+                    <lb n="2"/>[Τ]έσσαρα δ᾽ εἰ(ς) πείπτων, τρεῖς δε ἐξῖται, τρί᾽ ὁ πέμπτος,
+                    <lb n="3"/>[θά]ρσει, καίρον ἔχεις, πράξεις ἃ θέ[λ]εις, καιρ[οῦ τ]ε ἐπιτεύ[ξη]
+                    <lb n="4"/>εἰς ὁδὸν [ὁ]ρμηθῆναι, ἔχει καιρόν τινα ὁ μόχθος,
+                    <lb n="5"/>ἔργον τ᾽ ἐ[γχ]ιρεῖν ἀγ[α]θὸν καὶ ἀγῶν(α) δίκην τε.
+                </ab>
+            </div>
+            <div type="apparatus"/>
+            <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="bibliography">
+                <listBibl>
+                    <bibl>Lane, CMRDM I 135</bibl>
+                    <bibl>TAM, II, iii, (1944) 1222</bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>
