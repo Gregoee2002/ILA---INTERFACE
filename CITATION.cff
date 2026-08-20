@@ -1,11 +1,11 @@
 cff-version: 1.2.0
-message: "Se utilizzi questo software o l'interfaccia ILA nel tuo lavoro, ti chiediamo di citarlo come segue. Per la citazione del corpus epigrafico sottostante, cita l'edizione originale di Lane 1971–1978 indicata sotto."
-title: "ILA — Index Lunae Antiquae: interfaccia di consultazione del CMRDM"
+message: "Se utilizzi questo software o il database ILA nel tuo lavoro, ti chiediamo di citarlo come segue. Per la letteratura scientifica di riferimento sul culto di Men, cita anche l'edizione di Lane 1971–1978 indicata sotto."
+title: "ILA — Index Lunae Antiquae: database epigrafico del culto di Men"
 type: software
 authors:
   - family-names: Gregorio
     given-names: Gabriele
-    email: gabrielegregorio123@gmail.com
+    email: gabrielegregorio@hotmail.it
 repository-code: "https://github.com/Gregoee2002/ILA---INTERFACE"
 license: Apache-2.0
 license-url: "https://github.com/Gregoee2002/ILA---INTERFACE/blob/main/LICENSE"

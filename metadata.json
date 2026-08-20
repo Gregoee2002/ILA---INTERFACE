@@ -1,6 +1,6 @@
 {
-  "name": "Remix: CMDM — Corpus Query Interface",
-  "description": "Corpus of Monuments of the Cult of Men - Epigraphical query interface with filtering, editing, and data export.",
+  "name": "ILA — Index Lunae Antiquae",
+  "description": "Epigraphic database and query interface for monuments related to the cult of Men, with filtering, editing, and data export.",
   "requestFramePermissions": [],
   "majorCapabilities": [
     "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"

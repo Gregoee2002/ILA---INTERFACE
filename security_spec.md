@@ -1,4 +1,4 @@
-# Security Specification for CMDM
+# Security Specification for ILA
 
 ## 1. Data Invariants
 - A Monument must have a unique ID (number).

@@ -1,11 +1,16 @@
 # ILA — Index Lunae Antiquae
 
-Interfaccia web per la consultazione, l'editing controllato e l'esportazione
-del **CMRDM** (*Corpus Monumentorum Religionis Dei Menis*, E. N. Lane,
-1971–1978): il corpus epigrafico dedicato al culto del dio lunare frigio
-Men. Il progetto codifica le schede in **EpiDoc TEI XML** e le rende
-navigabili tramite ricerca full-text, filtri, mappa geografica e strumenti
-di revisione filologica.
+Database e interfaccia web per la consultazione, l'editing controllato e
+l'esportazione di un indice epigrafico dedicato al culto del dio lunare
+frigio Men. Le schede sono codificate in **EpiDoc TEI XML** e navigabili
+tramite ricerca full-text, filtri, mappa geografica e strumenti di
+revisione filologica.
+
+Il lavoro editoriale (trascrizioni, integrazioni, traduzioni) è condotto in
+autonomia sulla base delle fonti primarie disponibili; la letteratura
+scientifica di riferimento — a partire da E. N. Lane, *Corpus Monumentorum
+Religionis Dei Menis* (CMRDM), Brill, 1971–1978 — viene citata in
+bibliografia scheda per scheda, non riprodotta come testo sottostante.
 
 ## Funzionalità principali
 
@@ -57,17 +62,23 @@ firestore.rules   Regole di sicurezza del database
 
 ## Il corpus dei dati
 
-Le schede in `src/data/corpus/` sono la **fonte di verità**: transcrizione,
-traduzione e apparato critico vengono presi dal testo di Lane e mai
-inferiti o completati arbitrariamente. Le modifiche al corpus seguono una
-filosofia "patch-only" — vedi [`security_spec.md`](security_spec.md) per gli
+Le schede in `src/data/corpus/` sono la **fonte di verità** applicativa:
+nessun campo viene stimato o completato arbitrariamente, ogni dato assente
+dal markup resta assente. Le modifiche al corpus seguono una filosofia
+"patch-only" — vedi [`security_spec.md`](security_spec.md) per gli
 invarianti sui dati e [`README-autonomous.md`](README-autonomous.md) per i
 guardrail applicati anche alle modifiche automatizzate.
 
-⚠️ **Nota legale sul corpus**: il dataset XML è derivato da un'opera a
-stampa che potrebbe essere ancora protetta da copyright. Non è coperto
-dalla licenza open-source di questo repository — vedi [NOTICE](NOTICE) e
-la sezione Licenza qui sotto.
+Il progetto è in fase di transizione da una prima estrazione basata sul
+testo di Lane 1971 a una revisione editoriale indipendente (trascrizioni e
+integrazioni verificate autonomamente, Lane citato come riferimento
+bibliografico anziché riprodotto). Finché questa revisione non è completa
+su tutte le schede, resta valida la nota legale sotto.
+
+⚠️ **Nota legale sul corpus**: parte del dataset XML deriva ancora, in
+misura da verificare scheda per scheda, da un'opera a stampa che potrebbe
+essere protetta da copyright. Non è coperto dalla licenza open-source di
+questo repository — vedi [NOTICE](NOTICE) e la sezione Licenza qui sotto.
 
 ## Licenza
 
@@ -83,4 +94,4 @@ Se citi il progetto o il corpus in un lavoro accademico, vedi
 
 ## Contatti
 
-Gabriele Gregorio — [gabrielegregorio123@gmail.com](mailto:gabrielegregorio123@gmail.com)
+Gabriele Gregorio — [gabrielegregorio@hotmail.it](mailto:gabrielegregorio@hotmail.it)
