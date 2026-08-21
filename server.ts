@@ -6,8 +6,9 @@ import crypto from "crypto";
 import { createServer as createViteServer } from "vite";
 import { GoogleGenAI } from "@google/genai";
 import { xmlToMonumenti, monumentiToXml, renderIconography } from "./src/lib/xmlUtils";
-import { pullCorpusFromGitHub, pushFileToGitHub, deleteFileFromGitHub, isGitHubConfigured, testGitHubAccess, pullDraftsFromGitHub, pullFlagsFileFromGitHub, pushFlagsFileToGitHub, scheduleRedeploy } from "./src/lib/githubStorage";
-import { EntryFlag } from "./src/types";
+import { pullCorpusFromGitHub, pushFileToGitHub, deleteFileFromGitHub, isGitHubConfigured, testGitHubAccess, pullDraftsFromGitHub, pullFlagsFileFromGitHub, pushFlagsFileToGitHub, pullBugsFileFromGitHub, pushBugsFileToGitHub, scheduleRedeploy } from "./src/lib/githubStorage";
+import { EntryRegistro, BugReport } from "./src/types";
+import { normalizeRegistro } from "./src/lib/registroMigration";
 import { buildSearchIndex, searchMonumenti } from "./src/lib/searchIndex";
 import MiniSearch from 'minisearch';
 
@@ -25,8 +26,10 @@ async function startServer() {
   const BACKUP_FILE = path.join(CORPUS_DIR, "_teiCorpus.xml");
   // Legacy file — kept for backwards compatibility on first run
   const LEGACY_FILE = path.join(DATA_DIR, "monumenti.xml");
-  // Segnalazioni dei collaboratori (vedi flags.json su GitHub, radice repo).
+  // Registro dei collaboratori (vedi flags.json su GitHub, radice repo).
   const FLAGS_FILE = path.join(DATA_DIR, "flags.json");
+  // Bug segnalati dai collaboratori (vedi bugs.json su GitHub, radice repo).
+  const BUGS_FILE = path.join(DATA_DIR, "bugs.json");
 
   const ai = new GoogleGenAI({
     apiKey: process.env.GEMINI_API_KEY,
@@ -84,10 +87,17 @@ async function startServer() {
       const remote = await pullFlagsFileFromGitHub();
       if (remote !== null) fs.writeFileSync(FLAGS_FILE, remote, "utf-8");
     } catch (e: any) {
-      console.error("[githubStorage] Sync segnalazioni iniziale fallita — il server parte comunque con il filesystem locale (probabilmente vuoto o stale):", e.message || e);
+      console.error("[githubStorage] Sync registro iniziale fallita — il server parte comunque con il filesystem locale (probabilmente vuoto o stale):", e.message || e);
+    }
+    try {
+      const remoteBugs = await pullBugsFileFromGitHub();
+      if (remoteBugs !== null) fs.writeFileSync(BUGS_FILE, remoteBugs, "utf-8");
+    } catch (e: any) {
+      console.error("[githubStorage] Sync bug iniziale fallita — il server parte comunque con il filesystem locale (probabilmente vuoto o stale):", e.message || e);
     }
   }
   if (!fs.existsSync(FLAGS_FILE)) fs.writeFileSync(FLAGS_FILE, "[]", "utf-8");
+  if (!fs.existsSync(BUGS_FILE)) fs.writeFileSync(BUGS_FILE, "[]", "utf-8");
 
   // Costruisci l'indice di ricerca all'avvio
   updateSearchIndex(readCorpusFiles());
@@ -225,9 +235,25 @@ async function startServer() {
 
   // Legge/scrive flags.json in un unico punto: locale + specchio su GitHub
   // (se configurato), stesso pattern di writeCorpusFile.
-  function readFlags(): EntryFlag[] {
+  function readFlags(): EntryRegistro[] {
     try {
       const raw = fs.readFileSync(FLAGS_FILE, "utf-8");
+      return normalizeRegistro(JSON.parse(raw));
+    } catch {
+      return [];
+    }
+  }
+
+  async function writeFlags(flags: EntryRegistro[], commitMessage: string): Promise<void> {
+    const content = JSON.stringify(flags, null, 2);
+    fs.writeFileSync(FLAGS_FILE, content, "utf-8");
+    await pushFlagsFileToGitHub(content, commitMessage);
+  }
+
+  // Stesso pattern di readFlags/writeFlags, per i bug segnalati dai collaboratori.
+  function readBugs(): BugReport[] {
+    try {
+      const raw = fs.readFileSync(BUGS_FILE, "utf-8");
       const parsed = JSON.parse(raw);
       return Array.isArray(parsed) ? parsed : [];
     } catch {
@@ -235,10 +261,10 @@ async function startServer() {
     }
   }
 
-  async function writeFlags(flags: EntryFlag[], commitMessage: string): Promise<void> {
-    const content = JSON.stringify(flags, null, 2);
-    fs.writeFileSync(FLAGS_FILE, content, "utf-8");
-    await pushFlagsFileToGitHub(content, commitMessage);
+  async function writeBugs(bugs: BugReport[], commitMessage: string): Promise<void> {
+    const content = JSON.stringify(bugs, null, 2);
+    fs.writeFileSync(BUGS_FILE, content, "utf-8");
+    await pushBugsFileToGitHub(content, commitMessage);
   }
 
   // ── Routes ───────────────────────────────────────────────────────────────
@@ -554,6 +580,8 @@ async function startServer() {
       );
       const remoteFlags = await pullFlagsFileFromGitHub();
       if (remoteFlags !== null) fs.writeFileSync(FLAGS_FILE, remoteFlags, "utf-8");
+      const remoteBugs = await pullBugsFileFromGitHub();
+      if (remoteBugs !== null) fs.writeFileSync(BUGS_FILE, remoteBugs, "utf-8");
 
       rebuildBackup();
       const monumenti = readCorpusFiles();
@@ -572,7 +600,7 @@ async function startServer() {
     }
   });
 
-  // ── Segnalazioni collaboratori ───────────────────────────────────────────
+  // ── Registro collaboratori ────────────────────────────────────────────────
 
   app.get("/api/flags", (req, res) => {
     res.json(readFlags());
@@ -582,47 +610,100 @@ async function startServer() {
     try {
       const { entryId, entryLabel, note, author } = req.body || {};
       if (typeof entryId !== "string" || !entryId.trim()) return res.status(400).json({ error: "entryId mancante" });
-      if (typeof note !== "string" || !note.trim()) return res.status(400).json({ error: "Descrizione del problema mancante" });
+      if (typeof note !== "string" || !note.trim()) return res.status(400).json({ error: "Testo della nota mancante" });
       if (note.length > 4000) return res.status(400).json({ error: "note supera 4000 caratteri" });
       if (typeof entryLabel !== "string" || entryLabel.length > 200) return res.status(400).json({ error: "entryLabel non valida" });
-      if (author !== undefined && (typeof author !== "string" || author.length > 100)) return res.status(400).json({ error: "author supera 100 caratteri" });
+      if (typeof author !== "string" || !author.trim()) return res.status(400).json({ error: "Autore mancante" });
+      if (author.length > 100) return res.status(400).json({ error: "author supera 100 caratteri" });
 
-      const flag: EntryFlag = {
-        id: crypto.randomUUID(),
-        entryId,
-        entryLabel,
-        note: note.trim(),
-        author: author?.trim() || undefined,
-        status: "open",
-        createdAt: new Date().toISOString(),
-      };
+      const now = new Date().toISOString();
+      const nota = { id: crypto.randomUUID(), author: author.trim(), testo: note.trim(), createdAt: now };
       const flags = readFlags();
-      flags.push(flag);
-      await writeFlags(flags, `Segnalazione: ${entryLabel}`);
-      res.json(flag);
+      let registro = flags.find(f => f.entryId === entryId);
+      if (registro) {
+        registro.notes.push(nota);
+        registro.status = "open";
+        registro.resolvedAt = undefined;
+      } else {
+        registro = { entryId, entryLabel, status: "open", createdAt: now, notes: [nota] };
+        flags.push(registro);
+      }
+      await writeFlags(flags, `Registro: ${entryLabel}`);
+      res.json(registro);
     } catch (error: any) {
-      console.error("Error creating flag:", error);
-      res.status(500).json({ error: error.message || "Failed to save flag" });
+      console.error("Error creating registro note:", error);
+      res.status(500).json({ error: error.message || "Failed to save registro note" });
     }
   });
 
-  app.patch("/api/flags/:id", async (req, res) => {
+  app.patch("/api/flags/:entryId", async (req, res) => {
+    try {
+      const { entryId } = req.params;
+      const { status } = req.body || {};
+      if (status !== "open" && status !== "resolved") return res.status(400).json({ error: "status deve essere 'open' o 'resolved'" });
+
+      const flags = readFlags();
+      const registro = flags.find(f => f.entryId === entryId);
+      if (!registro) return res.status(404).json({ error: "Registro non trovato" });
+
+      registro.status = status;
+      registro.resolvedAt = status === "resolved" ? new Date().toISOString() : undefined;
+      await writeFlags(flags, status === "resolved" ? `Registro risolto: ${registro.entryLabel}` : `Registro riaperto: ${registro.entryLabel}`);
+      res.json(registro);
+    } catch (error: any) {
+      console.error("Error updating registro:", error);
+      res.status(500).json({ error: error.message || "Failed to update registro" });
+    }
+  });
+
+  // ── Bug segnalati dai collaboratori ───────────────────────────────────────
+
+  app.get("/api/bugs", (req, res) => {
+    res.json(readBugs());
+  });
+
+  app.post("/api/bugs", async (req, res) => {
+    try {
+      const { note, author } = req.body || {};
+      if (typeof note !== "string" || !note.trim()) return res.status(400).json({ error: "Descrizione del bug mancante" });
+      if (note.length > 4000) return res.status(400).json({ error: "note supera 4000 caratteri" });
+      if (typeof author !== "string" || !author.trim()) return res.status(400).json({ error: "Autore mancante" });
+      if (author.length > 100) return res.status(400).json({ error: "author supera 100 caratteri" });
+
+      const bug: BugReport = {
+        id: crypto.randomUUID(),
+        author: author.trim(),
+        testo: note.trim(),
+        status: "open",
+        createdAt: new Date().toISOString(),
+      };
+      const bugs = readBugs();
+      bugs.push(bug);
+      await writeBugs(bugs, `Bug: ${bug.testo.slice(0, 60)}`);
+      res.json(bug);
+    } catch (error: any) {
+      console.error("Error creating bug report:", error);
+      res.status(500).json({ error: error.message || "Failed to save bug report" });
+    }
+  });
+
+  app.patch("/api/bugs/:id", async (req, res) => {
     try {
       const { id } = req.params;
       const { status } = req.body || {};
       if (status !== "open" && status !== "resolved") return res.status(400).json({ error: "status deve essere 'open' o 'resolved'" });
 
-      const flags = readFlags();
-      const flag = flags.find(f => f.id === id);
-      if (!flag) return res.status(404).json({ error: "Segnalazione non trovata" });
+      const bugs = readBugs();
+      const bug = bugs.find(b => b.id === id);
+      if (!bug) return res.status(404).json({ error: "Bug non trovato" });
 
-      flag.status = status;
-      flag.resolvedAt = status === "resolved" ? new Date().toISOString() : undefined;
-      await writeFlags(flags, status === "resolved" ? `Segnalazione risolta: ${flag.entryLabel}` : `Segnalazione riaperta: ${flag.entryLabel}`);
-      res.json(flag);
+      bug.status = status;
+      bug.resolvedAt = status === "resolved" ? new Date().toISOString() : undefined;
+      await writeBugs(bugs, status === "resolved" ? `Bug risolto: ${bug.testo.slice(0, 60)}` : `Bug riaperto: ${bug.testo.slice(0, 60)}`);
+      res.json(bug);
     } catch (error: any) {
-      console.error("Error updating flag:", error);
-      res.status(500).json({ error: error.message || "Failed to update flag" });
+      console.error("Error updating bug report:", error);
+      res.status(500).json({ error: error.message || "Failed to update bug report" });
     }
   });
 

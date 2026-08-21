@@ -47,12 +47,13 @@ import {
   GitCompare,
   KeyRound,
   Unlock,
-  Flag,
+  NotebookPen,
+  Bug,
   ExternalLink
 } from 'lucide-react';
 import { cn, EASE_OUT, EASE_IN, SPRING_SNAPPY, SPRING_SOFT } from './lib/utils';
 import { ICONOGRAPHY_LABELS } from './lib/iconographyLabels';
-import { Monumento, FilterState, SortField, Traduzione, Bibliografia, Appunto, EntryFlag } from './types';
+import { Monumento, FilterState, SortField, Traduzione, Bibliografia, Appunto, EntryRegistro, BugReport } from './types';
 import { RAW_DATA } from './data';
 import { monumentiToXml, xmlToMonumenti, formatIlaLabel } from './lib/xmlUtils';
 import jsPDF from 'jspdf';
@@ -64,8 +65,9 @@ import { CooccurrenceHeatmap } from './components/CooccurrenceHeatmap';
 import { SectionEditorView } from './components/SectionEditorView';
 import { DraftReviewPanel } from './components/DraftReviewPanel';
 import { UnlockEditingModal } from './components/UnlockEditingModal';
-import { FlagsPanel } from './components/FlagsPanel';
-import { EntryFlagForm } from './components/EntryFlagForm';
+import { RegistroPanel } from './components/RegistroPanel';
+import { RegistroForm } from './components/RegistroForm';
+import { BugReportsPanel } from './components/BugReportsPanel';
 import { auth, loginWithGoogle, logout } from './lib/firebase';
 import { onAuthStateChanged, User } from 'firebase/auth';
 import ilaLogo from './assets/images/ila-logo.png';
@@ -82,7 +84,7 @@ interface SearchResult {
   matchInSupplied: boolean;
 }
 
-type AppView = 'home' | 'catalog' | 'stats' | 'timeline' | 'health' | 'map' | 'heatmap' | 'editor' | 'review' | 'flags';
+type AppView = 'home' | 'catalog' | 'stats' | 'timeline' | 'health' | 'map' | 'heatmap' | 'editor' | 'review' | 'flags' | 'bugs';
 
 // true sulla build GitHub Pages (vedi vite.config.ts / apiShim.ts): niente
 // server.ts, quindi le funzionalità che dipendevano da Gemini AI o dalla
@@ -931,7 +933,7 @@ function MoonDisc({ illum, waxing, size = 24, opacity = 0.55 }: { illum: number;
 }
 
 const RAIL_HOME_MOON = getMoonPhase();
-const RAIL_ITEMS: { view: AppView; label: string; icon: React.ReactNode }[] = [
+const RAIL_ITEMS: { view: AppView; label: string; icon: React.ReactNode; adminOnly?: boolean }[] = [
   { view: 'home', label: 'Home', icon: <MoonDisc illum={RAIL_HOME_MOON.illum} waxing={RAIL_HOME_MOON.waxing} size={16} opacity={0.7} /> },
   { view: 'catalog', label: 'Catalogo', icon: <Book className="h-4 w-4" /> },
   { view: 'map', label: 'Mappa', icon: <MapPin className="h-4 w-4" /> },
@@ -939,7 +941,8 @@ const RAIL_ITEMS: { view: AppView; label: string; icon: React.ReactNode }[] = [
   { view: 'stats', label: 'Statistiche Epiteti', icon: <BarChart2 className="h-4 w-4" /> },
   { view: 'heatmap', label: 'Heatmap Co-occorrenze', icon: <Columns className="h-4 w-4" /> },
   { view: 'health', label: 'Coerenza', icon: <Check className="h-4 w-4" /> },
-  { view: 'flags', label: 'Segnalazioni', icon: <Flag className="h-4 w-4" /> },
+  { view: 'flags', label: 'Registro', icon: <NotebookPen className="h-4 w-4" />, adminOnly: true },
+  { view: 'bugs', label: 'Bug', icon: <Bug className="h-4 w-4" />, adminOnly: true },
   { view: 'editor', label: 'Editor XML', icon: <Feather className="h-4 w-4" /> },
   // Pannello di revisione draft: dipende dalla cartella drafts/ (solo
   // lettura, popolata dalla pipeline locale) — non disponibile sulla build
@@ -965,16 +968,20 @@ function useIsDesktop(breakpointPx = 768) {
 function IconRail({
   activeView, onNavigate, theme, setTheme, isDarkModeActive,
   showSettings, setShowSettings, currentUser, loginWithGoogle, logout,
-  editingUnlocked, onUnlockClick, onLockClick,
+  editingUnlocked, onUnlockClick, onLockClick, effectiveAdmin,
 }: {
   activeView: AppView; onNavigate: (v: AppView) => void;
   theme: 'light' | 'dark' | 'system'; setTheme: (t: 'light' | 'dark' | 'system') => void; isDarkModeActive: boolean;
   showSettings: boolean; setShowSettings: (v: boolean | ((s: boolean) => boolean)) => void;
   currentUser: User | null; loginWithGoogle: () => void; logout: () => void;
   editingUnlocked: boolean; onUnlockClick: () => void; onLockClick: () => void;
+  effectiveAdmin: boolean;
 }) {
   const [expanded, setExpanded] = useState(false);
   const isDesktop = useIsDesktop();
+  // Registro e Bug sono voci riservate: nascoste finché l'editing non è
+  // sbloccato, non solo di sola lettura (vedi RegistroForm/BugReportsPanel).
+  const railItems = useMemo(() => RAIL_ITEMS.filter(item => !item.adminOnly || effectiveAdmin), [effectiveAdmin]);
 
   // Fase lunare reale: ciclo sinodico medio 29.53059 giorni, ancorato al novilunio del 6 gen 2000 18:14 UTC
   const moon = useMemo(() => getMoonPhase(), []);
@@ -982,7 +989,7 @@ function IconRail({
   if (!isDesktop) {
     return (
       <nav className="fixed inset-x-0 bottom-0 z-50 h-14 flex items-stretch bg-[var(--card)]/95 dark:bg-[var(--card)]/90 backdrop-blur-xl border-t border-border/40 shadow-[0_-4px_24px_-8px_rgba(var(--shadow-color),0.15)] overflow-x-auto overflow-y-hidden custom-scrollbar">
-        {RAIL_ITEMS.map(item => {
+        {railItems.map(item => {
           const active = activeView === item.view;
           return (
             <button
@@ -1104,7 +1111,7 @@ function IconRail({
         </div>
 
         <div className="flex-1 flex flex-col gap-1 px-2 py-2 overflow-y-auto">
-          {RAIL_ITEMS.map(item => {
+          {railItems.map(item => {
             const active = activeView === item.view;
             return (
               <button
@@ -1254,7 +1261,7 @@ function IconRail({
   );
 }
 
-function HomeView({ monumenti, onNavigate, onSearch }: { monumenti: Monumento[], onNavigate: (view: AppView) => void, onSearch: (q: string) => void }) {
+function HomeView({ monumenti, onNavigate, onSearch, effectiveAdmin }: { monumenti: Monumento[], onNavigate: (view: AppView) => void, onSearch: (q: string) => void, effectiveAdmin: boolean }) {
   const [homeQuery, setHomeQuery] = useState('');
   const [launching, setLaunching] = useState<AppView | null>(null);
   const [launchStage, setLaunchStage] = useState<'lit' | 'zoom' | null>(null);
@@ -1278,15 +1285,17 @@ function HomeView({ monumenti, onNavigate, onSearch }: { monumenti: Monumento[],
   const heroSection: { view: AppView; label: string; desc: string; icon: React.ReactNode } =
     { view: 'catalog', label: 'Catalogo', desc: 'Sfoglia e filtra tutte le schede epigrafiche del corpus.', icon: <Book className="h-6 w-6 md:h-7 md:w-7" /> };
 
-  const sections: { view: AppView; label: string; desc: string; icon: React.ReactNode }[] = [
+  const allSections: { view: AppView; label: string; desc: string; icon: React.ReactNode; adminOnly?: boolean }[] = [
     { view: 'map', label: 'Mappa', desc: 'I siti di ritrovamento, geolocalizzati sul territorio antico.', icon: <MapPin className="h-5 w-5" /> },
     { view: 'timeline', label: 'Cronologia', desc: 'Le iscrizioni disposte lungo la sequenza temporale.', icon: <Clock className="h-5 w-5" /> },
     { view: 'stats', label: 'Statistiche Epiteti', desc: 'Frequenza e distribuzione degli epiteti di Men.', icon: <BarChart2 className="h-5 w-5" /> },
     { view: 'heatmap', label: 'Heatmap Co-occorrenze', desc: 'Quali epiteti e attributi ricorrono insieme.', icon: <Columns className="h-5 w-5" /> },
     { view: 'health', label: 'Coerenza', desc: "Controlli di qualità e coerenza sui dati del corpus.", icon: <Check className="h-5 w-5" /> },
-    { view: 'flags', label: 'Segnalazioni', desc: 'Problemi segnalati dai collaboratori sulle schede del catalogo.', icon: <Flag className="h-5 w-5" /> },
+    { view: 'flags', label: 'Registro', desc: 'Lavorazioni in corso dei collaboratori sulle schede del catalogo.', icon: <NotebookPen className="h-5 w-5" />, adminOnly: true },
+    { view: 'bugs', label: 'Bug', desc: 'Problemi di funzionamento segnalati dai collaboratori.', icon: <Bug className="h-5 w-5" />, adminOnly: true },
     { view: 'editor', label: 'Editor XML', desc: 'Modifica le schede EpiDoc sezione per sezione, con riscrittura chirurgica.', icon: <Feather className="h-5 w-5" /> },
   ];
+  const sections = allSections.filter(s => !s.adminOnly || effectiveAdmin);
 
   const launchCard = (view: AppView) => {
     setLaunching(view);
@@ -3058,7 +3067,7 @@ export default function App() {
     } catch (e) {
       console.warn('Ricaricamento corpus live dopo sblocco fallito', e);
     }
-    fetchFlags();
+    // registri/bugs vengono caricati dall'effetto su effectiveAdmin, non qui.
   };
 
   const handleLockEditing = async () => {
@@ -3071,7 +3080,7 @@ export default function App() {
     } catch (e) {
       console.warn('Ricaricamento snapshot dopo blocco fallito', e);
     }
-    fetchFlags();
+    // registri/bugs vengono svuotati dall'effetto su effectiveAdmin, non qui.
   };
 
   // Il PAT resta in localStorage da uno sblocco precedente (vedi
@@ -3186,53 +3195,114 @@ export default function App() {
   // password vede il catalogo in sola lettura dallo snapshot statico.
   const effectiveAdmin = isStaticBuild ? editingUnlocked : (!!currentUser && currentUser.email === ADMIN_EMAIL);
 
-  // Segnalazioni dei collaboratori sulle schede del catalogo (vedi flags.json
-  // su GitHub). Sulla build statica restano vuote finché l'editing non è
-  // sbloccato (stesso PAT usato per salvare, vedi apiShim.ts) — non c'è uno
-  // snapshot statico per queste, a differenza del corpus.
-  const [flags, setFlags] = useState<EntryFlag[]>([]);
-  const [flagsLoading, setFlagsLoading] = useState(false);
+  // Registro di lavorazione dei collaboratori sulle schede del catalogo
+  // (vedi flags.json su GitHub) e bug segnalati sul funzionamento dell'app
+  // (bugs.json). Entrambi restano vuoti e non vengono nemmeno richiesti
+  // finché l'editing non è sbloccato (stesso PAT usato per salvare, vedi
+  // apiShim.ts) — sezioni riservate ai collaboratori, non c'è uno snapshot
+  // statico per queste, a differenza del corpus.
+  const [registri, setRegistri] = useState<EntryRegistro[]>([]);
+  const [registriLoading, setRegistriLoading] = useState(false);
+  const [bugs, setBugs] = useState<BugReport[]>([]);
+  const [bugsLoading, setBugsLoading] = useState(false);
 
-  const fetchFlags = async () => {
-    setFlagsLoading(true);
+  const fetchRegistri = async () => {
+    setRegistriLoading(true);
     try {
       const res = await fetch('/api/flags');
-      if (res.ok) setFlags(await res.json());
+      if (res.ok) setRegistri(await res.json());
     } catch (e) {
-      console.warn('Caricamento segnalazioni fallito', e);
+      console.warn('Caricamento registro fallito', e);
     } finally {
-      setFlagsLoading(false);
+      setRegistriLoading(false);
     }
   };
 
-  useEffect(() => { fetchFlags(); }, []);
+  const fetchBugs = async () => {
+    setBugsLoading(true);
+    try {
+      const res = await fetch('/api/bugs');
+      if (res.ok) setBugs(await res.json());
+    } catch (e) {
+      console.warn('Caricamento bug fallito', e);
+    } finally {
+      setBugsLoading(false);
+    }
+  };
 
-  const createFlag = async (entryId: string, entryLabel: string, note: string): Promise<{ ok: boolean; error?: string }> => {
+  // Solo se sbloccati: da viewer non c'è nulla da mostrare in queste
+  // sezioni (vedi RegistroPanel/BugReportsPanel, comunque nascoste dalla nav).
+  useEffect(() => {
+    if (effectiveAdmin) { fetchRegistri(); fetchBugs(); }
+    else { setRegistri([]); setBugs([]); }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [effectiveAdmin]);
+
+  const knownAuthors = useMemo(() => {
+    const set = new Set<string>();
+    registri.forEach(r => r.notes.forEach(n => n.author && set.add(n.author)));
+    bugs.forEach(b => b.author && set.add(b.author));
+    return Array.from(set).sort();
+  }, [registri, bugs]);
+
+  const createRegistroNote = async (entryId: string, entryLabel: string, author: string, note: string): Promise<{ ok: boolean; error?: string }> => {
     try {
       const res = await fetch('/api/flags', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ entryId, entryLabel, note }),
+        body: JSON.stringify({ entryId, entryLabel, author, note }),
       });
       const data = await res.json();
-      if (!res.ok) return { ok: false, error: data.error || 'Errore nel salvataggio della segnalazione' };
-      setFlags(prev => [...prev, data]);
+      if (!res.ok) return { ok: false, error: data.error || 'Errore nel salvataggio della nota' };
+      setRegistri(prev => prev.some(r => r.entryId === entryId) ? prev.map(r => r.entryId === entryId ? data : r) : [...prev, data]);
       return { ok: true };
     } catch (e: any) {
       return { ok: false, error: e.message || String(e) };
     }
   };
 
-  const updateFlagStatus = async (id: string, status: 'open' | 'resolved'): Promise<{ ok: boolean; error?: string }> => {
+  const updateRegistroStatus = async (entryId: string, status: 'open' | 'resolved'): Promise<{ ok: boolean; error?: string }> => {
     try {
-      const res = await fetch(`/api/flags/${encodeURIComponent(id)}`, {
+      const res = await fetch(`/api/flags/${encodeURIComponent(entryId)}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status }),
       });
       const data = await res.json();
-      if (!res.ok) return { ok: false, error: data.error || 'Errore nell\'aggiornamento della segnalazione' };
-      setFlags(prev => prev.map(f => f.id === id ? data : f));
+      if (!res.ok) return { ok: false, error: data.error || 'Errore nell\'aggiornamento del registro' };
+      setRegistri(prev => prev.map(r => r.entryId === entryId ? data : r));
+      return { ok: true };
+    } catch (e: any) {
+      return { ok: false, error: e.message || String(e) };
+    }
+  };
+
+  const createBugReport = async (author: string, note: string): Promise<{ ok: boolean; error?: string }> => {
+    try {
+      const res = await fetch('/api/bugs', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ author, note }),
+      });
+      const data = await res.json();
+      if (!res.ok) return { ok: false, error: data.error || 'Errore nel salvataggio del bug' };
+      setBugs(prev => [...prev, data]);
+      return { ok: true };
+    } catch (e: any) {
+      return { ok: false, error: e.message || String(e) };
+    }
+  };
+
+  const updateBugStatus = async (id: string, status: 'open' | 'resolved'): Promise<{ ok: boolean; error?: string }> => {
+    try {
+      const res = await fetch(`/api/bugs/${encodeURIComponent(id)}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status }),
+      });
+      const data = await res.json();
+      if (!res.ok) return { ok: false, error: data.error || 'Errore nell\'aggiornamento del bug' };
+      setBugs(prev => prev.map(b => b.id === id ? data : b));
       return { ok: true };
     } catch (e: any) {
       return { ok: false, error: e.message || String(e) };
@@ -4043,6 +4113,7 @@ export default function App() {
         editingUnlocked={editingUnlocked}
         onUnlockClick={() => setShowUnlockModal(true)}
         onLockClick={handleLockEditing}
+        effectiveAdmin={effectiveAdmin}
       />
       <div className="digital-seal">CDA</div>
 
@@ -4629,6 +4700,7 @@ export default function App() {
                 setActiveView('catalog');
                 setHasNavigated(true);
               }}
+              effectiveAdmin={effectiveAdmin}
             />
           )}
           {activeView === 'catalog' && (
@@ -5011,18 +5083,26 @@ export default function App() {
             </div>
           )}
           {activeView === 'health' && <CorpusHealth monumenti={monumenti} onSelectMonumento={(m) => { setSelectedMonumento(m); setActiveView('catalog'); }} />}
-          {activeView === 'flags' && (
-            <FlagsPanel
-              flags={flags}
-              loading={flagsLoading}
-              effectiveAdmin={effectiveAdmin}
-              onLogin={isStaticBuild ? () => setShowUnlockModal(true) : loginWithGoogle}
-              onResolve={id => updateFlagStatus(id, 'resolved')}
-              onReopen={id => updateFlagStatus(id, 'open')}
+          {activeView === 'flags' && effectiveAdmin && (
+            <RegistroPanel
+              registri={registri}
+              loading={registriLoading}
+              onResolve={entryId => updateRegistroStatus(entryId, 'resolved')}
+              onReopen={entryId => updateRegistroStatus(entryId, 'open')}
               onSelectEntry={entryId => {
                 const m = monumenti.find(x => x.entryId === entryId || x.id.toString() === entryId);
                 if (m) { setSelectedMonumento(m); setActiveView('catalog'); }
               }}
+            />
+          )}
+          {activeView === 'bugs' && effectiveAdmin && (
+            <BugReportsPanel
+              bugs={bugs}
+              loading={bugsLoading}
+              knownAuthors={knownAuthors}
+              onCreate={createBugReport}
+              onResolve={id => updateBugStatus(id, 'resolved')}
+              onReopen={id => updateBugStatus(id, 'open')}
             />
           )}
           {activeView === 'review' && <DraftReviewPanel />}
@@ -5629,15 +5709,15 @@ export default function App() {
                         </section>
                       )}
 
-                      <EntryFlagForm
+                      <RegistroForm
                         entryId={selectedMonumento.entryId ?? selectedMonumento.id?.toString() ?? ''}
                         entryLabel={formatIlaLabel(selectedMonumento.id)}
-                        flags={flags}
+                        registro={registri.find(r => r.entryId === (selectedMonumento.entryId ?? selectedMonumento.id?.toString() ?? ''))}
                         effectiveAdmin={effectiveAdmin}
-                        onLogin={isStaticBuild ? () => setShowUnlockModal(true) : loginWithGoogle}
-                        onCreate={createFlag}
-                        onResolve={id => updateFlagStatus(id, 'resolved')}
-                        onReopen={id => updateFlagStatus(id, 'open')}
+                        knownAuthors={knownAuthors}
+                        onCreate={createRegistroNote}
+                        onResolve={entryId => updateRegistroStatus(entryId, 'resolved')}
+                        onReopen={entryId => updateRegistroStatus(entryId, 'open')}
                       />
 
                        <div className="pt-6">

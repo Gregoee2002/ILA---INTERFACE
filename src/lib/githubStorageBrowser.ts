@@ -273,6 +273,56 @@ export async function pushFlagsFile(content: string, message: string): Promise<v
   }
 }
 
+// ── Bug segnalati dai collaboratori (bugs.json) ────────────────────────
+// Stesso file di githubStorage.ts, variante browser: vedi commento gemello
+// sopra per il perché di un file unico.
+const BUGS_PATH = "bugs.json";
+let bugsSha: string | null = null;
+
+export async function pullBugsFile(): Promise<string | null> {
+  const url = `${GITHUB_API}/repos/${REPO}/contents/${BUGS_PATH}?ref=${encodeURIComponent(BRANCH)}`;
+  const res = await fetch(url, { headers: headers() });
+  if (res.status === 404) { bugsSha = null; return null; }
+  if (!res.ok) throw new Error(`GitHub get bugs.json fallita (${res.status}): ${await res.text()}`);
+  const data = await res.json();
+  bugsSha = data.sha || null;
+  if (data.encoding !== "base64" || typeof data.content !== "string") {
+    throw new Error("Formato risposta inatteso per bugs.json");
+  }
+  return base64ToUtf8(data.content);
+}
+
+export async function pushBugsFile(content: string, message: string): Promise<void> {
+  const url = `${GITHUB_API}/repos/${REPO}/contents/${BUGS_PATH}`;
+  let sha = bugsSha;
+
+  for (let attempt = 1; attempt <= 3; attempt++) {
+    const body: Record<string, unknown> = {
+      message,
+      content: utf8ToBase64(content),
+      branch: BRANCH,
+    };
+    if (sha) body.sha = sha;
+
+    const res = await fetch(url, { method: "PUT", headers: headers(), body: JSON.stringify(body) });
+    if (res.ok) {
+      const data = await res.json();
+      bugsSha = data.content.sha;
+      return;
+    }
+
+    const detail = await res.text();
+    const isRaceConflict = res.status === 409 || res.status === 422;
+    if (isRaceConflict && attempt < 3) {
+      await new Promise(r => setTimeout(r, 150 * attempt));
+      const refreshedRes = await fetch(`${url}?ref=${encodeURIComponent(BRANCH)}`, { headers: headers(), cache: "no-store" });
+      sha = refreshedRes.ok ? (await refreshedRes.json()).sha : null;
+      continue;
+    }
+    throw new Error(`Scrittura GitHub fallita per bugs.json (${res.status}) dopo ${attempt} tentativi: ${detail}`);
+  }
+}
+
 // ── Redeploy automatico del sito statico dopo un salvataggio ──────────
 // Vedi commento gemello in githubStorage.ts: il workflow di deploy vive
 // su un repository di CODICE separato (DEPLOY_REPO) e non parte mai da

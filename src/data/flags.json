@@ -1,1 +1,36 @@
-[]
+[
+  {
+    "entryId": "gen-1786984905702-1-ot7s94",
+    "entryLabel": "ILA 2",
+    "status": "open",
+    "createdAt": "2026-08-17T21:11:13.400Z",
+    "notes": [
+      {
+        "id": "4eb85767-1937-48a7-86f3-5c0a3af752ad",
+        "author": "",
+        "testo": "Prova",
+        "createdAt": "2026-08-17T21:11:13.400Z"
+      },
+      {
+        "id": "08228db8-0c89-4b7c-867e-f44cf3650aab",
+        "author": "",
+        "testo": "In revisione\n\n-Gabriele",
+        "createdAt": "2026-08-21T14:41:38.384Z"
+      }
+    ]
+  },
+  {
+    "entryId": "gen-1786984905702-7h-2zs9jp",
+    "entryLabel": "CMRDM I 9",
+    "status": "open",
+    "createdAt": "2026-08-18T14:05:16.693Z",
+    "notes": [
+      {
+        "id": "c8f2ee46-0578-4c1d-91c6-678a4b75cd2a",
+        "author": "",
+        "testo": "In revisione \n\n- Gabriele",
+        "createdAt": "2026-08-18T14:05:16.693Z"
+      }
+    ]
+  }
+]

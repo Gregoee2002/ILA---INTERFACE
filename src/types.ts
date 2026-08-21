@@ -158,15 +158,35 @@ export interface Tag {
   value: string;
 }
 
-/** Segnalazione di un collaboratore su una scheda del catalogo (vedi flags.json). */
-export interface EntryFlag {
+/** Singola nota nel registro di lavorazione di una scheda (vedi EntryRegistro). */
+export interface RegistroNota {
   id: string;
+  author: string;
+  testo: string;
+  createdAt: string;
+}
+
+/**
+ * Registro di lavorazione di una scheda del catalogo (vedi flags.json): una
+ * sola voce per entry, che i collaboratori aggiornano nel tempo aggiungendo
+ * note (ognuna firmata da un autore) fino a risolverla.
+ */
+export interface EntryRegistro {
   entryId: string;
   // Etichetta denormalizzata (es. "ILA 29") — resta leggibile nell'elenco
-  // segnalazioni anche se la scheda viene nel frattempo rinumerata o rimossa.
+  // registro anche se la scheda viene nel frattempo rinumerata o rimossa.
   entryLabel: string;
-  note: string;
-  author?: string;
+  status: 'open' | 'resolved';
+  createdAt: string;
+  resolvedAt?: string;
+  notes: RegistroNota[];
+}
+
+/** Bug segnalato da un collaboratore sul funzionamento dell'app (non legato a una scheda). */
+export interface BugReport {
+  id: string;
+  author: string;
+  testo: string;
   status: 'open' | 'resolved';
   createdAt: string;
   resolvedAt?: string;

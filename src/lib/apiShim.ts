@@ -33,16 +33,18 @@
 import { xmlToMonumenti, monumentiToXml, renderIconography } from "./xmlUtils";
 import { buildSearchIndex, searchMonumenti } from "./searchIndex";
 import MiniSearch from "minisearch";
-import { pullAllCorpusFiles, pushCorpusFile, deleteCorpusFile, testGitHubAccess, setStoredToken, clearStoredToken, pullFlagsFile, pushFlagsFile, scheduleRedeploy } from "./githubStorageBrowser";
-import { EntryFlag } from "../types";
+import { pullAllCorpusFiles, pushCorpusFile, deleteCorpusFile, testGitHubAccess, setStoredToken, clearStoredToken, pullFlagsFile, pushFlagsFile, pullBugsFile, pushBugsFile, scheduleRedeploy } from "./githubStorageBrowser";
+import { EntryRegistro, BugReport } from "../types";
+import { normalizeRegistro } from "./registroMigration";
 
 let corpusStore = new Map<string, string>(); // filename -> xml content
 let searchIndex: MiniSearch<any> | null = null;
 let canWrite = false;
-// Segnalazioni: vuote in modalità viewer (niente snapshot statico per
-// queste, a differenza del corpus) — popolate da GitHub solo dopo
-// unlockEditing, stesso gate del corpus in scrittura. Vedi flags.json.
-let flagsStore: EntryFlag[] = [];
+// Registro/bug: vuoti in modalità viewer (niente snapshot statico per
+// questi, a differenza del corpus) — popolati da GitHub solo dopo
+// unlockEditing, stesso gate del corpus in scrittura. Vedi flags.json/bugs.json.
+let flagsStore: EntryRegistro[] = [];
+let bugsStore: BugReport[] = [];
 
 export function isEditingUnlocked(): boolean {
   return canWrite;
@@ -356,7 +358,9 @@ async function handleRequest(url: URL, init: RequestInit | undefined): Promise<R
         corpusStore = await pullAllCorpusFiles();
         updateSearchIndex();
         const remoteFlags = await pullFlagsFile();
-        flagsStore = remoteFlags ? JSON.parse(remoteFlags) : [];
+        flagsStore = normalizeRegistro(remoteFlags ? JSON.parse(remoteFlags) : []);
+        const remoteBugs = await pullBugsFile();
+        bugsStore = remoteBugs ? JSON.parse(remoteBugs) : [];
         scheduleRedeploy();
         return json({
           status: "ok",
@@ -388,40 +392,81 @@ async function handleRequest(url: URL, init: RequestInit | undefined): Promise<R
     }
 
     if (path === "/api/flags" && method === "POST") {
-      if (!canWrite) return json({ error: "Modifica non abilitata. Sblocca l'editing con un token GitHub per segnalare." }, 403);
+      if (!canWrite) return json({ error: "Modifica non abilitata. Sblocca l'editing con un token GitHub per scrivere nel registro." }, 403);
       const { entryId, entryLabel, note, author } = body || {};
       if (typeof entryId !== "string" || !entryId.trim()) return json({ error: "entryId mancante" }, 400);
-      if (typeof note !== "string" || !note.trim()) return json({ error: "Descrizione del problema mancante" }, 400);
+      if (typeof note !== "string" || !note.trim()) return json({ error: "Testo della nota mancante" }, 400);
       if (note.length > 4000) return json({ error: "note supera 4000 caratteri" }, 400);
       if (typeof entryLabel !== "string" || entryLabel.length > 200) return json({ error: "entryLabel non valida" }, 400);
-      if (author !== undefined && (typeof author !== "string" || author.length > 100)) return json({ error: "author supera 100 caratteri" }, 400);
+      if (typeof author !== "string" || !author.trim()) return json({ error: "Autore mancante" }, 400);
+      if (author.length > 100) return json({ error: "author supera 100 caratteri" }, 400);
 
-      const flag: EntryFlag = {
-        id: crypto.randomUUID(),
-        entryId,
-        entryLabel,
-        note: note.trim(),
-        author: author?.trim() || undefined,
-        status: "open",
-        createdAt: new Date().toISOString(),
-      };
-      flagsStore = [...flagsStore, flag];
-      await pushFlagsFile(JSON.stringify(flagsStore, null, 2), `Segnalazione: ${entryLabel}`);
-      return json(flag);
+      const now = new Date().toISOString();
+      const nota = { id: crypto.randomUUID(), author: author.trim(), testo: note.trim(), createdAt: now };
+      let registro = flagsStore.find(f => f.entryId === entryId);
+      if (registro) {
+        registro.notes = [...registro.notes, nota];
+        registro.status = "open";
+        registro.resolvedAt = undefined;
+        flagsStore = [...flagsStore];
+      } else {
+        registro = { entryId, entryLabel, status: "open", createdAt: now, notes: [nota] };
+        flagsStore = [...flagsStore, registro];
+      }
+      await pushFlagsFile(JSON.stringify(flagsStore, null, 2), `Registro: ${entryLabel}`);
+      return json(registro);
     }
 
     if (path.startsWith("/api/flags/") && method === "PATCH") {
-      if (!canWrite) return json({ error: "Modifica non abilitata. Sblocca l'editing con un token GitHub per aggiornare la segnalazione." }, 403);
-      const id = decodeURIComponent(path.slice("/api/flags/".length));
+      if (!canWrite) return json({ error: "Modifica non abilitata. Sblocca l'editing con un token GitHub per aggiornare il registro." }, 403);
+      const entryId = decodeURIComponent(path.slice("/api/flags/".length));
       const { status } = body || {};
       if (status !== "open" && status !== "resolved") return json({ error: "status deve essere 'open' o 'resolved'" }, 400);
-      const flag = flagsStore.find(f => f.id === id);
-      if (!flag) return json({ error: "Segnalazione non trovata" }, 404);
-      flag.status = status;
-      flag.resolvedAt = status === "resolved" ? new Date().toISOString() : undefined;
+      const registro = flagsStore.find(f => f.entryId === entryId);
+      if (!registro) return json({ error: "Registro non trovato" }, 404);
+      registro.status = status;
+      registro.resolvedAt = status === "resolved" ? new Date().toISOString() : undefined;
       flagsStore = [...flagsStore];
-      await pushFlagsFile(JSON.stringify(flagsStore, null, 2), status === "resolved" ? `Segnalazione risolta: ${flag.entryLabel}` : `Segnalazione riaperta: ${flag.entryLabel}`);
-      return json(flag);
+      await pushFlagsFile(JSON.stringify(flagsStore, null, 2), status === "resolved" ? `Registro risolto: ${registro.entryLabel}` : `Registro riaperto: ${registro.entryLabel}`);
+      return json(registro);
+    }
+
+    if (path === "/api/bugs" && method === "GET") {
+      return json(bugsStore);
+    }
+
+    if (path === "/api/bugs" && method === "POST") {
+      if (!canWrite) return json({ error: "Modifica non abilitata. Sblocca l'editing con un token GitHub per segnalare un bug." }, 403);
+      const { note, author } = body || {};
+      if (typeof note !== "string" || !note.trim()) return json({ error: "Descrizione del bug mancante" }, 400);
+      if (note.length > 4000) return json({ error: "note supera 4000 caratteri" }, 400);
+      if (typeof author !== "string" || !author.trim()) return json({ error: "Autore mancante" }, 400);
+      if (author.length > 100) return json({ error: "author supera 100 caratteri" }, 400);
+
+      const bug: BugReport = {
+        id: crypto.randomUUID(),
+        author: author.trim(),
+        testo: note.trim(),
+        status: "open",
+        createdAt: new Date().toISOString(),
+      };
+      bugsStore = [...bugsStore, bug];
+      await pushBugsFile(JSON.stringify(bugsStore, null, 2), `Bug: ${bug.testo.slice(0, 60)}`);
+      return json(bug);
+    }
+
+    if (path.startsWith("/api/bugs/") && method === "PATCH") {
+      if (!canWrite) return json({ error: "Modifica non abilitata. Sblocca l'editing con un token GitHub per aggiornare il bug." }, 403);
+      const id = decodeURIComponent(path.slice("/api/bugs/".length));
+      const { status } = body || {};
+      if (status !== "open" && status !== "resolved") return json({ error: "status deve essere 'open' o 'resolved'" }, 400);
+      const bug = bugsStore.find(b => b.id === id);
+      if (!bug) return json({ error: "Bug non trovato" }, 404);
+      bug.status = status;
+      bug.resolvedAt = status === "resolved" ? new Date().toISOString() : undefined;
+      bugsStore = [...bugsStore];
+      await pushBugsFile(JSON.stringify(bugsStore, null, 2), status === "resolved" ? `Bug risolto: ${bug.testo.slice(0, 60)}` : `Bug riaperto: ${bug.testo.slice(0, 60)}`);
+      return json(bug);
     }
 
     if (path === "/api/translate" || path.startsWith("/api/drafts/")) {
@@ -469,7 +514,9 @@ export async function unlockEditing(token: string): Promise<{ ok: boolean; detai
     corpusStore = await pullAllCorpusFiles();
     updateSearchIndex();
     const remoteFlags = await pullFlagsFile();
-    flagsStore = remoteFlags ? JSON.parse(remoteFlags) : [];
+    flagsStore = normalizeRegistro(remoteFlags ? JSON.parse(remoteFlags) : []);
+    const remoteBugs = await pullBugsFile();
+    bugsStore = remoteBugs ? JSON.parse(remoteBugs) : [];
     canWrite = true;
     return result;
   } catch (e: any) {
@@ -485,6 +532,7 @@ export async function lockEditing(): Promise<void> {
   canWrite = false;
   corpusStore = await loadSnapshot();
   flagsStore = [];
+  bugsStore = [];
   updateSearchIndex();
 }
 
