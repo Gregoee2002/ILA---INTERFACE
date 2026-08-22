@@ -60,15 +60,40 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="onomastica">
+                    <term>Marcus Claudius Clitomachus</term>
+                    <term>Cornelia Antonis</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Marcus Claudius Clitomachus">
+                        <persName type="attested" key="Marcus Claudius Clitomachus">
+                            <name>M.</name>
+                            <name>Cl.</name>
+                            <name>Clitomachus</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Cornelia Antonis">
+                        <persName type="attested" key="Cornelia Antonis">
+                            <name>Cornelia</name>
+                            <name>Antonis</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="la">
                 <ab>
-                    <lb n="1"/>M. Cl. Clito-
-                    <lb n="2"/>machus et
-                    <lb n="3"/>Cornelia An-
-                    <lb n="4"/>tonis uxor eius
+                    <lb n="1"/><persName type="attested" key="Marcus Claudius Clitomachus"><name>M.</name> <name>Cl.</name> <name>Clito-
+                    <lb n="2" break="no"/>machus</name></persName> et
+                    <lb n="3"/><persName type="attested" key="Cornelia Antonis"><name>Cornelia</name> <name>An-
+                    <lb n="4" break="no"/>tonis</name></persName> uxor eius
                     <lb n="5"/>LVS
                     <lb n="6"/>L V [S]
                 </ab>

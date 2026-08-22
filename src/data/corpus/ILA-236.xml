@@ -60,29 +60,52 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Loukas Tillios Kriton</term>
+                    <term>Noumeria Ouenousta</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Loukas Tillios Kriton">
+                        <persName type="attested" key="Loukas Tillios Kriton">
+                            <name nymRef="Λουκᾶς">Λουκᾶς</name>
+                            <name nymRef="Τίλλιος">Τίλλιος</name>
+                            <name nymRef="Κρίτων">Κρίτων</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Noumeria Ouenousta">
+                        <persName type="attested" key="Noumeria Ouenousta">
+                            <name nymRef="Νουμερία">Νουμερία</name>
+                            <name nymRef="Ουενοῦστα">Οὐενοῦστα</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <div type="textpart" subtype="section" n="a">
                     <ab>
-                        <lb n="1"/>Λουκᾶς
-                        <lb n="2"/>Τίλλιο-
-                        <lb n="3"/>ς Κρίτω-
-                        <lb n="4"/>ν
+                        <lb n="1"/><persName type="attested" key="Loukas Tillios Kriton"><name nymRef="Λουκᾶς">Λουκᾶς</name>
+                        <lb n="2"/><name nymRef="Τίλλιος">Τίλλιο<lb n="3" break="no"/>ς</name> <name nymRef="Κρίτων">Κρίτω<lb n="4" break="no"/>ν</name></persName>
                     </ab>
                 </div>
                 <div type="textpart" subtype="section" n="b">
                     <ab>
-                        <lb n="1"/>Νουμε-
-                        <lb n="2"/>ρία Οὐε-
-                        <lb n="3"/>νοῦστ-
-                        <lb n="4"/>α
+                        <lb n="1"/><persName type="attested" key="Noumeria Ouenousta"><name nymRef="Νουμερία">Νουμε<lb n="2" break="no"/>ρία</name> <name nymRef="Ουενοῦστα">Οὐε<lb n="3" break="no"/>νοῦστ<lb n="4" break="no"/>α</name></persName>
                     </ab>
                 </div>
                 <div type="textpart" subtype="section" n="c">
                     <ab>
-                        <lb n="1"/>Μηνὶ
+                        <lb n="1"/><persName type="divine" key="Men"><name nymRef="Μήν">Μηνὶ</name></persName>
                         <lb n="2"/>εὐχήν.
                     </ab>
                 </div>

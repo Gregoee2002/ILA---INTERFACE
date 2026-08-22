@@ -60,27 +60,74 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Gaios Ouettios</term>
+                    <term>Titos Ouettios Kapiton Neos</term>
+                    <term>Paula</term>
+                    <term>Maxima</term>
+                    <term>Priskos</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Gaios Ouettios">
+                        <persName type="attested" key="Gaios Ouettios">
+                            <name>Γ.</name>
+                            <name nymRef="Οὐέττιος">Οὐέττιος</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Titos Ouettios Kapiton Neos">
+                        <persName type="attested" key="Titos Ouettios Kapiton Neos">
+                            <name>Τ.</name>
+                            <name nymRef="Ουέττιος">Οὐέττιος</name>
+                            <name nymRef="Καπίτων">Καπίτων</name>
+                            <name nymRef="Νέος">Νέος</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Paula">
+                        <persName type="attested" key="Paula">
+                            <name nymRef="Παῦλα">Παῦλα</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Maxima">
+                        <persName type="attested" key="Maxima">
+                            <name nymRef="Μαξίμα">Μαξίμα</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Priskos">
+                        <persName type="attested" key="Priskos">
+                            <name nymRef="Πρίσκος">Πρίσκος</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>[Γ.] Οὐέττιο[ς ........]
-                    <lb n="2"/>[...]κ(αὶ) Τ. Οὐέτ[τιος]
-                    <lb n="3"/>[Κα]πίτων Ν[έος]
-                    <lb n="4"/>[κ(αὶ)] Παῦλα κ(αὶ) [.....]
-                    <lb n="5"/>[...] Μαξίμα [ἀδελ-]
-                    <lb n="6"/>φοὶ σὺν [...........]
-                    <lb n="7"/>τι κ(αὶ) Πρε[ίσκω θρε-]
-                    <lb n="8"/>πτοῖς τ[εκμορεύ-]
-                    <lb n="9"/>σαντες [Μηνὶ θεῷ]
-                    <lb n="10"/>τ(ῷ) πατ[ρίῳ]
-                    <lb n="11"/>εὐχή[ν].
+                    <lb n="1"/><persName type="attested" key="Gaios Ouettios"><supplied reason="lost"><name>Γ.</name></supplied> <name nymRef="Οὐέττιος">Οὐέττιο<gap reason="lost" extent="unknown"/></name></persName>
+                    <lb n="2"/><gap reason="lost" extent="unknown"/>κ(αὶ) <persName type="attested" key="Titos Ouettios Kapiton Neos"><name>Τ.</name> <name nymRef="Ουέττιος">Οὐέτ<supplied reason="lost">τιος</supplied></name>
+                    <lb n="3"/><name nymRef="Καπίτων"><supplied reason="lost">Κα</supplied>πίτων</name> <name nymRef="Νέος">Ν<supplied reason="lost">έος</supplied></name></persName>
+                    <lb n="4"/>κ(αὶ) <persName type="attested" key="Paula"><name nymRef="Παῦλα">Παῦλα</name></persName> κ(αὶ) <gap reason="lost" extent="unknown"/>
+                    <lb n="5"/><gap reason="lost" extent="unknown"/> <persName type="attested" key="Maxima"><name nymRef="Μαξίμα">Μαξίμα</name></persName> <supplied reason="lost">ἀδελ-</supplied>
+                    <lb n="6" break="no"/>φοὶ σὺν <gap reason="lost" extent="unknown"/>
+                    <lb n="7"/>τι κ(αὶ) <persName type="attested" key="Priskos"><name nymRef="Πρίσκος">Πρε<supplied reason="lost">ίσκω</supplied></name></persName> <supplied reason="lost">θρε-</supplied>
+                    <lb n="8" break="no"/>πτοῖς <supplied reason="lost">τ</supplied>εκμορεύ<supplied reason="lost">-</supplied>
+                    <lb n="9" break="no"/>σαντες <persName type="divine" key="Men Patrios"><supplied reason="lost"><name nymRef="Μήν">Μηνὶ</name> θεῷ</supplied>
+                    <lb n="10"/>τ(ῷ) <rs type="epithet">πατ<supplied reason="lost">ρίῳ</supplied></rs></persName>
+                    <lb n="11"/>εὐχή<supplied reason="lost">ν</supplied>.
                 </ab>
             </div>
             <div type="apparatus"/>
             <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
-            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>Testo ampiamente ricostruito da Lane su base congetturale (restauri di Barbara Levick, come segnalato nel layout): la quasi totalità dei nomi propri e delle desinenze qui marcate come persName è tra parentesi quadre nello stampato, cioè integrata e non direttamente leggibile sulla pietra. La struttura familiare (fratelli e sorelle Vettii più Priskos, non imparentato per nome) è desunta dal senso complessivo del testo secondo l'interpretazione di Lane.</p></div>
             <div type="bibliography">
                 <listBibl>
                     <bibl>Lane, CMRDM I 263</bibl>

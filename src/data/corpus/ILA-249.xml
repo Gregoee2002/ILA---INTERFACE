@@ -60,13 +60,37 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Askaenos</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Gaios Seroilios Myrtilos</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Gaios Seroilios Myrtilos">
+                        <persName type="attested" key="Gaios Seroilios Myrtilos">
+                            <name>Γ.</name>
+                            <name nymRef="Σεροϊλιος">Σεροϊλιος</name>
+                            <name nymRef="Μυρτίλος">Μυρτίλος</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Γ. Σεροϊλιος Μυρτίλος
-                    <lb n="2"/>τεκμορεύσας γ΄ Μηνὶ Ἀσκαηνῷ εὐχήν.
+                    <lb n="1"/><persName type="attested" key="Gaios Seroilios Myrtilos"><name>Γ.</name> <name nymRef="Σεροϊλιος">Σεροϊλιος</name> <name nymRef="Μυρτίλος">Μυρτίλος</name></persName>
+                    <lb n="2"/>τεκμορεύσας γ΄ <persName type="divine" key="Men Askaenos"><name nymRef="Μήν">Μηνὶ</name> <rs type="epithet">Ἀσκαηνῷ</rs></persName> εὐχήν.
                 </ab>
             </div>
             <div type="apparatus"/>

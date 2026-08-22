@@ -60,16 +60,51 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Askaenos</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Gaios Neikanoros</term>
+                    <term>Neikanor figlio di Alexandros</term>
+                    <term>Alexandros</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Gaios Neikanoros">
+                        <persName type="attested" key="Gaios Neikanoros">
+                            <name>Γ.</name>
+                            <name nymRef="Νεικάνωρ">Νεικάνωρ</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Neikanor figlio di Alexandros">
+                        <persName type="attested" key="Neikanor figlio di Alexandros">
+                            <name nymRef="Νεικάνωρ">Νεικάνωρ</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Alexandros">
+                        <persName type="attested" key="Alexandros">
+                            <name nymRef="Ἀλέξανδρος">Ἀλέξανδρος</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>[.....]Γ. Νεικάνορο[ς καὶ]
-                    <lb n="2"/>[Νει]κάνωρ Ἀλεξάν[δρου]
+                    <lb n="1"/><gap reason="lost" extent="unknown"/><persName type="attested" key="Gaios Neikanoros"><name>Γ.</name> <name nymRef="Νεικάνωρ">Νεικάνορο<supplied reason="lost">ς</supplied></name></persName> <supplied reason="lost">καὶ</supplied>
+                    <lb n="2"/><persName type="attested" key="Neikanor figlio di Alexandros"><name nymRef="Νεικάνωρ"><supplied reason="lost">Νει</supplied>κάνωρ</name> <persName type="attested" key="Alexandros"><name type="patronymic" nymRef="Ἀλέξανδρος">Ἀλεξάν<supplied reason="lost">δρου</supplied></name></persName></persName>
                     <lb n="3"/>[σὺ]ν τοῖς ἰδίοις [καὶ]
                     <lb n="4"/>[θρε]πτοῖς τεκμορε[ύσαντες]
-                    <lb n="5"/>[Μην]ὶ Ἀσκαηνῷ [εὐχήν.]
+                    <lb n="5"/><persName type="divine" key="Men Askaenos"><name nymRef="Μήν"><supplied reason="lost">Μην</supplied>ὶ</name> <rs type="epithet">Ἀσκαηνῷ</rs></persName> <supplied reason="lost">εὐχήν.</supplied>
                 </ab>
             </div>
             <div type="apparatus"/>

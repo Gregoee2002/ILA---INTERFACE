@@ -60,14 +60,38 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Askaenos</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Marcus Senpronios Karpos</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Marcus Senpronios Karpos">
+                        <persName type="attested" key="Marcus Senpronios Karpos">
+                            <name>Μ.</name>
+                            <name nymRef="Σενπρώνιος">Σενπρώνιος</name>
+                            <name nymRef="Κάρπος">Κάρπος</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Μ. Σενπρώνιος Κάρπος
+                    <lb n="1"/><persName type="attested" key="Marcus Senpronios Karpos"><name>Μ.</name> <name nymRef="Σενπρώνιος">Σενπρώνιος</name> <name nymRef="Κάρπος">Κάρπος</name></persName>
                     <lb n="2"/>τεκμορεύσας μετὰ τέκνων
-                    <lb n="3"/>Μηνὶ Ἀσκαηνῷ εὐχὴν δ΄.
+                    <lb n="3"/><persName type="divine" key="Men Askaenos"><name nymRef="Μήν">Μηνὶ</name> <rs type="epithet">Ἀσκαηνῷ</rs></persName> εὐχὴν δ΄.
                 </ab>
             </div>
             <div type="apparatus"/>

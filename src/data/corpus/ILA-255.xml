@@ -60,14 +60,42 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Askaenos</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Euboulos figlio di Sosios</term>
+                    <term>Sosios</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Euboulos figlio di Sosios">
+                        <persName type="attested" key="Euboulos figlio di Sosios">
+                            <name nymRef="Εὔβουλος">Εὔβουλος</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Sosios">
+                        <persName type="attested" key="Sosios">
+                            <name nymRef="Σώσιος">Σώσιος</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Εὔβουλος Σωσίου
+                    <lb n="1"/><persName type="attested" key="Euboulos figlio di Sosios"><name nymRef="Εὔβουλος">Εὔβουλος</name> <persName type="attested" key="Sosios"><name type="patronymic" nymRef="Σώσιος">Σωσίου</name></persName></persName>
                     <lb n="2"/>ὑπὲρ ἑαυτοῦ καὶ τέκνων
-                    <lb n="3"/>Μ(ηνὶ) Ἀ(σκαηνῷ) ε(ὐχήν).
+                    <lb n="3"/><persName type="divine" key="Men Askaenos"><name nymRef="Μήν">Μ(ηνὶ)</name> <rs type="epithet">Ἀ(σκαηνῷ)</rs></persName> ε(ὐχήν).
                 </ab>
             </div>
             <div type="apparatus"/>

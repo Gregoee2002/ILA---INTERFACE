@@ -60,13 +60,44 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="onomastica">
+                    <term>Marcus Claudius Clitomachus</term>
+                    <term>Claudius Priscus</term>
+                    <term>Taurus</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Marcus Claudius Clitomachus">
+                        <persName type="attested" key="Marcus Claudius Clitomachus">
+                            <name>M.</name>
+                            <name>Cl.</name>
+                            <name>Clitomachus</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Claudius Priscus">
+                        <persName type="attested" key="Claudius Priscus">
+                            <name>Cl.</name>
+                            <name>Prisco</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Taurus">
+                        <persName type="attested" key="Taurus">
+                            <name>Tauro</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="la">
                 <ab>
-                    <lb n="1"/>M. Cl. Clitomachus cum
-                    <lb n="2"/>fil(iis) Cl. Prisco et Tauro
+                    <lb n="1"/><persName type="attested" key="Marcus Claudius Clitomachus"><name>M.</name> <name>Cl.</name> <name>Clitomachus</name></persName> cum
+                    <lb n="2"/>fil(iis) <persName type="attested" key="Claudius Priscus"><name>Cl.</name> <name>Prisco</name></persName> et <persName type="attested" key="Taurus"><name>Tauro</name></persName>
                     <lb n="3"/>L V S
                 </ab>
             </div>

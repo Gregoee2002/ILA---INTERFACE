@@ -60,12 +60,28 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="onomastica">
+                    <term>Bassos</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Bassos">
+                        <persName type="attested" key="Bassos">
+                            <name nymRef="Βάσσος">Βάσσος</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Βάσσος
+                    <lb n="1"/><persName type="attested" key="Bassos"><name nymRef="Βάσσος">Βάσσος</name></persName>
                     <lb n="2"/>τεκμορ[εύσας]
                     <lb n="3"/>μετὰ τέ-
                     <lb n="4"/>κνων

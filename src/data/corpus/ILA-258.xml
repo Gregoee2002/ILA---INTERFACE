@@ -60,13 +60,31 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="onomastica">
+                    <term>Loukios Lollios Preiskos</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Loukios Lollios Preiskos">
+                        <persName type="attested" key="Loukios Lollios Preiskos">
+                            <name>Λ.</name>
+                            <name nymRef="Λόλλιος">Λόλλιος</name>
+                            <name nymRef="Πρεῖσκος">Πρεῖσκος</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Λ. Λόλ[λιο]ς Πρείσ-
-                    <lb n="2" break="no"/>κος τ[εκμορ]εύσας
+                    <lb n="1"/><persName type="attested" key="Loukios Lollios Preiskos"><name>Λ.</name> <name nymRef="Λόλλιος">Λόλ[λιο]ς</name> <name nymRef="Πρεῖσκος">Πρείσ-
+                    <lb n="2" break="no"/>κος</name></persName> τ[εκμορ]εύσας
                 </ab>
             </div>
             <div type="apparatus"/>

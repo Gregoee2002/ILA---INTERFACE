@@ -60,14 +60,36 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Askaenos</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Ionios</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Ionios">
+                        <persName type="attested" key="Ionios">
+                            <name nymRef="Ἰόνιος">Ἰόνιος</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Ἰόν(ιος) κατ(ὰ) τελ(ετήν)
+                    <lb n="1"/><persName type="attested" key="Ionios"><name nymRef="Ἰόνιος">Ἰόν(ιος)</name></persName> κατ(ὰ) τελ(ετήν)
                     <lb n="2"/>μετ(ὰ) τέκ(νων)
-                    <lb n="3"/>Μήν(ι) Ἀσκ(αηνῷ) εὐχ(ήν).
+                    <lb n="3"/><persName type="divine" key="Men Askaenos"><name nymRef="Μήν">Μήν(ι)</name> <rs type="epithet">Ἀσκ(αηνῷ)</rs></persName> εὐχ(ήν).
                 </ab>
             </div>
             <div type="apparatus"/>

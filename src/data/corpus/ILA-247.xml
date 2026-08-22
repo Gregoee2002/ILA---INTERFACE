@@ -60,6 +60,16 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Askaenos</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+            </textClass>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
@@ -68,7 +78,7 @@
                     <lb n="1"/><gap reason="lost" extent="unknown"/>
                     <lb n="2"/>Τεκμορεύσας
                     <lb n="3"/>σὺν γυναικί
-                    <lb n="4"/>Μηνὶ Ἀσκαηνῷ
+                    <lb n="4"/><persName type="divine" key="Men Askaenos"><name nymRef="Μήν">Μηνὶ</name> <rs type="epithet">Ἀσκαηνῷ</rs></persName>
                     <lb n="5"/>εὐχήν.
                 </ab>
             </div>

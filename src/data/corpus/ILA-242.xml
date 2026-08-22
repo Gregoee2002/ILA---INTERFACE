@@ -60,19 +60,43 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Askaenos</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Gaios Phlaouios Longos</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Gaios Phlaouios Longos">
+                        <persName type="attested" key="Gaios Phlaouios Longos">
+                            <name nymRef="Γάιος">Γ.</name>
+                            <name nymRef="Φλάουιος">Φλάουιος</name>
+                            <name nymRef="Λόγγος">Λόγγος</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>[Γ. Φλάουιο]ς Λόν-
-                    <lb n="2"/>[γος τεκμο]ρεύ-
-                    <lb n="3"/>[σας μετ]ὰ γυ-
-                    <lb n="4"/>[ναικὸς] καὶ
-                    <lb n="5"/>[.......καὶ υἱῶ]ν Γ. Φλαου-
-                    <lb n="6"/>[ίου Λόγου καὶ] Φλαουίου
-                    <lb n="7"/>[.......... Μηνὶ] Ἀσκαινῷ
-                    <lb n="8"/>[εὐχήν.]
+                    <lb n="1"/><persName type="attested" key="Gaios Phlaouios Longos"><supplied reason="lost"><name nymRef="Γάιος">Γ.</name> <name nymRef="Φλάουιος">Φλάουιο</name>ς</supplied> <name nymRef="Λόγγος">Λόν-
+                    <lb n="2" break="no"/><supplied reason="lost">γος</supplied></name></persName> <supplied reason="lost">τεκμο</supplied>ρεύ-
+                    <lb n="3" break="no"/><supplied reason="lost">σας μετ</supplied>ὰ γυ-
+                    <lb n="4" break="no"/><supplied reason="lost">ναικὸς</supplied> καὶ
+                    <lb n="5"/><gap reason="lost" extent="unknown"/><supplied reason="lost">καὶ υἱῶ</supplied>ν Γ. Φλαου-
+                    <lb n="6" break="no"/><supplied reason="lost">ίου Λόγου καὶ</supplied> Φλαουίου
+                    <lb n="7"/><gap reason="lost" extent="unknown"/> <persName type="divine" key="Men Askaenos"><supplied reason="lost"><name nymRef="Μήν">Μηνὶ</name></supplied> <rs type="epithet">Ἀσκαινῷ</rs></persName>
+                    <lb n="8"/><supplied reason="lost">εὐχήν.</supplied>
                 </ab>
             </div>
             <div type="apparatus"/>

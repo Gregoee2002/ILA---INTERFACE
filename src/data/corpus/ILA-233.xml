@@ -60,23 +60,63 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Askaenos</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>L. figlio di Antiochos</term>
+                    <term>Antiochos (padre)</term>
+                    <term>Antiochos (fratello)</term>
+                    <term>Maxima</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="L. figlio di Antiochos">
+                        <persName type="attested" key="L. figlio di Antiochos">
+                            <name>Λ.</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Antiochos (padre)">
+                        <persName type="attested" key="Antiochos (padre)">
+                            <name nymRef="Ἀντίοχος">Ἀντίοχος</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Antiochos (fratello)">
+                        <persName type="attested" key="Antiochos (fratello)">
+                            <name nymRef="Ἀντίοχος">Ἀντίοχος</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Maxima">
+                        <persName type="attested" key="Maxima">
+                            <name nymRef="Μαξίμα">Μαξίμα</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Λ. Ἀντιόχου καὶ
-                    <lb n="2"/>Ἀντίοχος ἀδελφὸς
-                    <lb n="3"/>καὶ Μαξίμα ἀδελφὴ
+                    <lb n="1"/><persName type="attested" key="L. figlio di Antiochos"><name>Λ.</name> <persName type="attested" key="Antiochos (padre)"><name type="patronymic" nymRef="Ἀντίοχος">Ἀντιόχου</name></persName></persName> καὶ
+                    <lb n="2"/><persName type="attested" key="Antiochos (fratello)"><name nymRef="Ἀντίοχος">Ἀντίοχος</name></persName> ἀδελφὸς
+                    <lb n="3"/>καὶ <persName type="attested" key="Maxima"><name nymRef="Μαξίμα">Μαξίμα</name></persName> ἀδελφὴ
                     <lb n="4"/>μετὰ τέκνων καὶ
                     <lb n="5"/>θρεπτῶν τεκμο-
-                    <lb n="6"/>ρεύσαντες Μηνὶ
-                    <lb n="7"/>Ἀσκαηνῷ εὐχήν.
+                    <lb n="6"/>ρεύσαντες <persName type="divine" key="Men Askaenos"><name nymRef="Μήν">Μηνὶ</name>
+                    <lb n="7"/><rs type="epithet">Ἀσκαηνῷ</rs></persName> εὐχήν.
                 </ab>
             </div>
             <div type="apparatus"/>
             <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
-            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>Lettura prosopografica non del tutto certa: "Λ. Ἀντιόχου" alla r. 1 è interpretato come nome abbreviato (Λ.) seguito dal patronimico genitivo "Ἀντιόχου" (figlio di Antiochos), coerente con il fatto che il fratello che segue subito dopo porta lo stesso nome del padre (omonimia frequente). Questa lettura non è però l'unica grammaticalmente possibile.</p></div>
             <div type="bibliography">
                 <listBibl>
                     <bibl>Lane, CMRDM I 245</bibl>

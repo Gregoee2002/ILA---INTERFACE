@@ -60,14 +60,38 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Askaenos</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Oueibios Phirmos Kapiton</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Oueibios Phirmos Kapiton">
+                        <persName type="attested" key="Oueibios Phirmos Kapiton">
+                            <name nymRef="Οὐείβιος">Οὐεἴβιος</name>
+                            <name nymRef="Φίρμος">Φίρμος</name>
+                            <name nymRef="Καπίτων">Καπίτων</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>[Οὐ]εἴβιος Φίρμος Καπίτων μετὰ
+                    <lb n="1"/><persName type="attested" key="Oueibios Phirmos Kapiton"><name nymRef="Οὐείβιος">[Οὐ]εἴβιος</name> <name nymRef="Φίρμος">Φίρμος</name> <name nymRef="Καπίτων">Καπίτων</name></persName> μετὰ
                     <lb n="2"/>[γυ]ναικὸς καὶ τέκνων τεκ[μ]ορεύσας
-                    <lb n="3"/>Μηνὶ Ἀσκαηνῷ εὐχήν.
+                    <lb n="3"/><persName type="divine" key="Men Askaenos"><name nymRef="Μήν">Μηνὶ</name> <rs type="epithet">Ἀσκαηνῷ</rs></persName> εὐχήν.
                 </ab>
             </div>
             <div type="apparatus"/>

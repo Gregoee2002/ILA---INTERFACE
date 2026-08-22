@@ -60,15 +60,43 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Askaenos</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Eudaimon figlio di Gnostos</term>
+                    <term>Gnostos</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Eudaimon figlio di Gnostos">
+                        <persName type="attested" key="Eudaimon figlio di Gnostos">
+                            <name nymRef="Εὐδαίμων">Εὐδαίμων</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Gnostos">
+                        <persName type="attested" key="Gnostos">
+                            <name nymRef="Γνωστός">Γνωστός</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Εὐδαίμων Γνωστοῦ
+                    <lb n="1"/><persName type="attested" key="Eudaimon figlio di Gnostos"><name nymRef="Εὐδαίμων">Εὐδαίμων</name> <persName type="attested" key="Gnostos"><name type="patronymic" nymRef="Γνωστός">Γνωστοῦ</name></persName></persName>
                     <lb n="2"/>υἱὸς
                     <lb n="3"/>τεκμορεύσας μετὰ τῶν ἰδίων
-                    <lb n="4"/>θρεπτῶν Μηνὶ Ἀσκαηνῷ
+                    <lb n="4"/>θρεπτῶν <persName type="divine" key="Men Askaenos"><name nymRef="Μήν">Μηνὶ</name> <rs type="epithet">Ἀσκαηνῷ</rs></persName>
                     <lb n="5"/>τὸ β΄ εὐχήν.
                 </ab>
             </div>

@@ -60,14 +60,34 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Keipios Asprinas</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Keipios Asprinas">
+                        <persName type="attested" key="Keipios Asprinas">
+                            <name nymRef="Κείπιος">Κείπιος</name>
+                            <name nymRef="Ἀσπρίνας">Ἀσπρίνας</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Κείπιος Ἀσπρίνας
+                    <lb n="1"/><persName type="attested" key="Keipios Asprinas"><name nymRef="Κείπιος">Κείπιος</name> <name nymRef="Ἀσπρίνας">Ἀσπρίνας</name></persName>
                     <lb n="2"/>[τε]κμορεύσας μετὰ
-                    <lb n="3"/>[γυ]ναικὸς Μηνὶ εὐχήν.
+                    <lb n="3"/>[γυ]ναικὸς <persName type="divine" key="Men"><name nymRef="Μήν">Μηνὶ</name></persName> εὐχήν.
                 </ab>
             </div>
             <div type="apparatus"/>

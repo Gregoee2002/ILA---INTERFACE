@@ -60,14 +60,33 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="onomastica">
+                    <term>Marcus Ulpius Pudens Pompeianus</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Marcus Ulpius Pudens Pompeianus">
+                        <persName type="attested" key="Marcus Ulpius Pudens Pompeianus">
+                            <name>M.</name>
+                            <name>Ulpius</name>
+                            <name>Pudens</name>
+                            <name>Pompeianus</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="la">
                 <ab>
-                    <lb n="1"/>M. Ulpius
-                    <lb n="2"/>Pudens
-                    <lb n="3"/>Pompeianus
+                    <lb n="1"/><persName type="attested" key="Marcus Ulpius Pudens Pompeianus"><name>M.</name> <name>Ulpius</name>
+                    <lb n="2"/><name>Pudens</name>
+                    <lb n="3"/><name>Pompeianus</name></persName>
                 </ab>
             </div>
             <div type="apparatus"/>

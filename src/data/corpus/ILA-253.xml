@@ -60,12 +60,40 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Patrios</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Maximos figlio di Loukios</term>
+                    <term>Loukios</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Maximos figlio di Loukios">
+                        <persName type="attested" key="Maximos figlio di Loukios">
+                            <name nymRef="Μάξιμος">Μάξιμος</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Loukios">
+                        <persName type="attested" key="Loukios">
+                            <name nymRef="Λούκιος">Λούκιος</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Μάξιμος Λουκίου τεκμορεύσας μετὰ τῶν ἰδίων Μηνὶ πατ(ρίῳ) εὐχήν.
+                    <lb n="1"/><persName type="attested" key="Maximos figlio di Loukios"><name nymRef="Μάξιμος">Μάξιμος</name> <persName type="attested" key="Loukios"><name type="patronymic" nymRef="Λούκιος">Λουκίου</name></persName></persName> τεκμορεύσας μετὰ τῶν ἰδίων <persName type="divine" key="Men Patrios"><name nymRef="Μήν">Μηνὶ</name> <rs type="epithet">πατ(ρίῳ)</rs></persName> εὐχήν.
                 </ab>
             </div>
             <div type="apparatus"/>

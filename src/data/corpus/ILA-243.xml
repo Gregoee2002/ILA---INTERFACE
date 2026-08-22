@@ -60,13 +60,32 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Protion</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Protion">
+                        <persName type="attested" key="Protion">
+                            <name nymRef="Πρωτίων">Πρωτίων</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Ἡ Τράπεζα Μηνός,
-                    <lb n="2"/>Πρωτίωνος εὐχή.
+                    <lb n="1"/>Ἡ Τράπεζα <persName type="divine" key="Men"><name nymRef="Μήν">Μηνός</name></persName>,
+                    <lb n="2"/><persName type="attested" key="Protion"><name nymRef="Πρωτίων">Πρωτίωνος</name></persName> εὐχή.
                 </ab>
             </div>
             <div type="apparatus"/>

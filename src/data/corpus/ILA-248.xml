@@ -60,21 +60,65 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="onomastica">
+                    <term>Quintus Licinius Naevius</term>
+                    <term>Aurelia Procula</term>
+                    <term>Aurelius Proculus</term>
+                    <term>Caius</term>
+                    <term>Lucius</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Quintus Licinius Naevius">
+                        <persName type="attested" key="Quintus Licinius Naevius">
+                            <name>Q.</name>
+                            <name>Licinius</name>
+                            <name>Naevius</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Aurelia Procula">
+                        <persName type="attested" key="Aurelia Procula">
+                            <name>Aurelia</name>
+                            <name>Procula</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Aurelius Proculus">
+                        <persName type="attested" key="Aurelius Proculus">
+                            <name>Aureli</name>
+                            <name>Proculus</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Caius">
+                        <persName type="attested" key="Caius">
+                            <name>C.</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Lucius">
+                        <persName type="attested" key="Lucius">
+                            <name>L.</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="la">
                 <ab>
-                    <lb n="1"/>Q. Licinius Naevius
-                    <lb n="2"/>f. et Aurelia Procula uxor
-                    <lb n="3"/>eius et Aureli Proculus et
-                    <lb n="4"/>C. et L. M. f.
+                    <lb n="1"/><persName type="attested" key="Quintus Licinius Naevius"><name>Q.</name> <name>Licinius</name> <name>Naevius</name></persName>
+                    <lb n="2"/>f. et <persName type="attested" key="Aurelia Procula"><name>Aurelia</name> <name>Procula</name></persName> uxor
+                    <lb n="3"/>eius et <persName type="attested" key="Aurelius Proculus"><name>Aureli</name> <name>Proculus</name></persName> et
+                    <lb n="4"/><persName type="attested" key="Caius"><name>C.</name></persName> et <persName type="attested" key="Lucius"><name>L.</name></persName> M. f.
                     <lb n="5"/>LVS
                 </ab>
             </div>
             <div type="apparatus"/>
             <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
-            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>C. e L. (r. 4) sono marcati come persone a sé, distinte da Q. Licinius Naevius, poiché la formula "M. f." (Marci filii, "figli di Marco") ne indica la filiazione da un Marcus non altrimenti nominato in questo testo, non da Naevius stesso; il legame di parentela tra questo Marcus e gli altri dedicanti resta indeterminato dalla sola iscrizione.</p></div>
             <div type="bibliography">
                 <listBibl>
                     <bibl>Lane, CMRDM I 261</bibl>

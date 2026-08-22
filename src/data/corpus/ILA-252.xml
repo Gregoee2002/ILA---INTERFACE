@@ -60,6 +60,25 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Phrouges</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Phrouges">
+                        <persName type="attested" key="Phrouges">
+                            <name nymRef="Φρούγης">Φρούγει</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
@@ -67,9 +86,9 @@
                 <ab>
                     <lb n="1"/>[.....]υμο[....]
                     <lb n="2"/>[.....]οικκ[..]
-                    <lb n="3"/>Φρούγει
+                    <lb n="3"/><persName type="attested" key="Phrouges"><name nymRef="Φρούγης">Φρούγει</name></persName>
                     <lb n="4"/>τεκμορεύσας
-                    <lb n="5"/>Μηνὶ εὐχήν.
+                    <lb n="5"/><persName type="divine" key="Men"><name nymRef="Μήν">Μηνὶ</name></persName> εὐχήν.
                 </ab>
             </div>
             <div type="apparatus"/>
