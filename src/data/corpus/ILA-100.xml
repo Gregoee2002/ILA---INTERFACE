@@ -60,12 +60,34 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Tyrannos</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Xanthos</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Xanthos">
+                        <persName type="attested" key="Xanthos">
+                            <name nymRef="Ξάνθος">Ξάνθος</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Ξά[ν]θος Μ[ηνὶ Τυράννῳ].
+                    <lb n="1"/><persName type="attested" key="Xanthos"><name nymRef="Ξάνθος">Ξά[ν]θος</name></persName> <persName type="divine" key="Men Tyrannos"><supplied reason="lost"><name nymRef="Μήν">Μηνὶ</name> <rs type="epithet">Τυράννῳ</rs></supplied></persName>.
                 </ab>
             </div>
             <div type="apparatus"/>

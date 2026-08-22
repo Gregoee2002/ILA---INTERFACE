@@ -59,15 +59,44 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Axiottenos</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Epaphroditos</term>
+                    <term>Klaudios Stratoneikos</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Epaphroditos">
+                        <persName type="attested" key="Epaphroditos">
+                            <name nymRef="Επαφρόδειτος">Ἐ[πα]φρόδειτος</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Klaudios Stratoneikos">
+                        <persName type="attested" key="Klaudios Stratoneikos">
+                            <name nymRef="Κλαύδιος">Κλαύδιος</name>
+                            <name nymRef="Στρατόνεικος">Στρατόνεικος</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
 <ab>
-                    <lb n="1"/>[Μήν]ι Ἀξιοττήνῳ Ἐ[πα-]
-                    <lb n="2"/>[φρόδ]ειτος οἰκο[γε-]
-                    <lb n="3"/>[νὸς Κλαύ]διο[υ Στρα-]
-                    <lb n="4"/>[τ]ονείκου εὐχά[με-
+                    <lb n="1"/><persName type="divine" key="Men Axiottenos"><supplied reason="lost"><name nymRef="Μήν">Μήν</name></supplied>ι <rs type="epithet">Ἀξιοττήνῳ</rs></persName> <persName type="attested" key="Epaphroditos"><name nymRef="Επαφρόδειτος">Ἐ[πα-]
+                    <lb n="2" break="no"/>φρόδ]ειτος</name></persName> οἰκο[γε-]
+                    <lb n="3" break="no"/>νὸς <persName type="attested" key="Klaudios Stratoneikos"><name nymRef="Κλαύδιος">Κλαύ]διο[υ</name> <name nymRef="Στρατόνεικος">Στρα-
+                    <lb n="4" break="no"/>τ]ονείκου</name></persName> εὐχά[με-
                     <lb n="5"/>νος ἐὰν σ]ῴζ[η]ται
                     <lb n="6"/>γυναῖκαν ἣν θέλω
                     <lb n="7"/>καὶ λα[βὼν] καὶ μὴ ἀ-

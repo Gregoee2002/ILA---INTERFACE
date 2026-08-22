@@ -58,15 +58,55 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Askaenos</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Gaios figlio di Gaios</term>
+                    <term>Gaios (padre) figlio di Loukios</term>
+                    <term>Loukios</term>
+                    <term>Pancharpe</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Gaios figlio di Gaios">
+                        <persName type="attested" key="Gaios figlio di Gaios">
+                            <name nymRef="Γάιος">Γάιος</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Gaios (padre) figlio di Loukios">
+                        <persName type="attested" key="Gaios (padre) figlio di Loukios">
+                            <name nymRef="Γάιος">Γάιος</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Loukios">
+                        <persName type="attested" key="Loukios">
+                            <name nymRef="Λούκιος">Λούκιος</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Pancharpe">
+                        <persName type="attested" key="Pancharpe">
+                            <name nymRef="Πανχάρπη">Πανχάρπη</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
 <ab>
-                    <lb n="1"/>Γαῖος Γαίου τοῦ Λουκίου
+                    <lb n="1"/><persName type="attested" key="Gaios figlio di Gaios"><name nymRef="Γάιος">Γαῖος</name> <persName type="attested" key="Gaios (padre) figlio di Loukios"><name type="patronymic" nymRef="Γάιος">Γαίου</name> τοῦ <persName type="attested" key="Loukios"><name type="patronymic" nymRef="Λούκιος">Λουκίου</name></persName></persName></persName>
                     <lb n="2"/>τεκμορεύσας σὺν καὶ
-                    <lb n="3"/>Πανχάρπῃ θρεπτῷ
-                    <lb n="4"/>ἰδίῳ Μηνὶ Ἀσκαηνῷ
+                    <lb n="3"/><persName type="attested" key="Pancharpe"><name nymRef="Πανχάρπη">Πανχάρπῃ</name></persName> θρεπτῷ
+                    <lb n="4"/>ἰδίῳ <persName type="divine" key="Men Askaenos"><name nymRef="Μήν">Μηνὶ</name> <rs type="epithet">Ἀσκαηνῷ</rs></persName>
                     <lb n="5"/>εὐχήν.
                 </ab>
             </div>

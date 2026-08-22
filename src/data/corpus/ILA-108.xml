@@ -58,13 +58,42 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Tyrannos</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Xanthos</term>
+                    <term>Xanthos (padre)</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Xanthos">
+                        <persName type="attested" key="Xanthos">
+                            <name nymRef="Ξάνθος">Ξάνθος</name>
+                        </persName>
+                        <placeName type="ethnic" ref="https://pleiades.stoa.org/places/638965" nymRef="Λύκιος">Λύκιος</placeName>
+                    </person>
+                    <person xml:id="Xanthos (padre)">
+                        <persName type="attested" key="Xanthos (padre)">
+                            <name nymRef="Ξάνθος">Ξάνθος</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
 <ab>
-                    <lb n="1"/>Ξάνθος Λύκιος [Ξ]άνθου Ὁρίγιου Α[.] καθειδρύσατο [ἱ]ερ[ὸ]ν τοῦ Μ[ήνο]ς
-                    <lb n="2"/>Τυράννου, αἱρετίσαντος τοῦ θεοῦ, ἐπ᾽ ἀγαθῇ τύχ-ῃ. Καὶ [μηδένα]
+                    <lb n="1"/><persName type="attested" key="Xanthos"><name nymRef="Ξάνθος">Ξάνθος</name></persName> <placeName type="ethnic" ref="https://pleiades.stoa.org/places/638965" nymRef="Λύκιος">Λύκιος</placeName> <persName type="attested" key="Xanthos (padre)"><name type="patronymic" nymRef="Ξάνθος">[Ξ]άνθου</name></persName> Ὁρίγιου Α[.] καθειδρύσατο [ἱ]ερ[ὸ]ν τοῦ <persName type="divine" key="Men Tyrannos"><name nymRef="Μήν">Μ[ήνο]ς</name>
+                    <lb n="2"/><rs type="epithet">Τυράννου</rs></persName>, αἱρετίσαντος τοῦ θεοῦ, ἐπ᾽ ἀγαθῇ τύχ-ῃ. Καὶ [μηδένα]
                     <lb n="3"/>ἀκάθαρτον προσαγεῖν. Καθαριζέσθω [δὲ ἀπὸ σκόρδων καὶ χοιρέων]
                     <lb n="4"/>καὶ γυναικός. Λουσαμένους δὲ κατακεφαλὰ αὐθήμερον εἰσ[πορευ-]
                     <lb n="5"/>εσθαι δ[ή]. Καὶ ἐκ τῶν γυναικέων διὰ ἑπτὰ ἡμερῶν λουσαμένην κατα-
@@ -78,19 +107,19 @@
                     <lb n="13"/>γένοιτο ὁ θεὸς τοῖς θεραπεύουσιν ἁπλῇ τῇ ψυχῇ. Ἐὰν δέ τινα
                     <lb n="14"/>ἀνθρώπινα πάσχῃ ἢ ἀσθενήσῃ ἢ ἀποδημήσῃ που, μηδένα ἀνθρώ-
                     <lb n="15"/>πων ἐξουσίαν ἔχειν, ἐὰν μή ᾧ ἂν αὐτὸς παραδῷ. Ὃς ἂν δὲ πολυ-
-                    <lb n="16"/>πραγμονήσῃ τὰ τοῦ θεοῦ ἢ περιεργάσηται, ἁμαρτίαν ὀφείλετω Μηνὶ
-                    <lb n="17"/>Τυράννῳ, ἣν οὐ μὴ δύναται ἐξειλάσασθαι.
+                    <lb n="16"/>πραγμονήσῃ τὰ τοῦ θεοῦ ἢ περιεργάσηται, ἁμαρτίαν ὀφείλετω <persName type="divine" key="Men Tyrannos"><name nymRef="Μήν">Μηνὶ</name>
+                    <lb n="17"/><rs type="epithet">Τυράννῳ</rs></persName>, ἣν οὐ μὴ δύναται ἐξειλάσασθαι.
                     <lb n="18"/>ὁ δὲ θυσιάζων τῇ ἑβδομῇ
                     <lb n="19"/>τὰ καθήκοντα πάντα ποιείτω τῷ θεῷ. Λαμβανέτω [τ]ῆς θυσίας [ἧς]
                     <lb n="20"/>ἂν φέρῃ σκέλος καὶ ὦμον, τὰ δὲ λοίπια κατακόπτετω ἐν τῷ ἱερῷ.
                     <lb n="21"/>εἰ δέ τις
                     <lb n="22"/>εἰ δέ τις προσφέρῃ θυσίαν τῷ θεῷ, ἐν νουμηνίας μέχρι πεντεκαι-
                     <lb n="23"/>δεκάτης. Ἐὰν δέ τις τράπεζαν πληρώσῃ τῷ θεῷ, λαμβανέτω τὸ ἥμισυ.
-                    <lb n="24"/>Τοὺς δὲ βουλομένους ἔρανον συνάγειν Μηνὶ Τυράννῳ, ἐπ᾽ ἀγαθῇ τύ[χης].
+                    <lb n="24"/>Τοὺς δὲ βουλομένους ἔρανον συνάγειν <persName type="divine" key="Men Tyrannos"><name nymRef="Μήν">Μηνὶ</name> <rs type="epithet">Τυράννῳ</rs></persName>, ἐπ᾽ ἀγαθῇ τύ[χης].
                 </ab>
             </div>
             <div type="commentary">
-                <p>DA_COMPILARE</p>
+                <p>Alla r. 1, "Ὁρίγιου Α[.]" dopo il patronimico "[Ξ]άνθου" non è stato interpretato come ulteriore elemento onomastico (nonno, etnico o toponimo): il senso resta incerto e non è tagliato da alcun elemento strutturale. Testo parallelo (stessa lex sacra) alla scheda ILA-107, dove compare solo la forma abbreviata "Ξάνθος Λύκιος" senza patronimico.</p>
             </div>
             <div type="bibliography">
                 <listBibl>

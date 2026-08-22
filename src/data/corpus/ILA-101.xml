@@ -59,27 +59,87 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Anaeitis</term>
+                    <term>Tiamou</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Artemis</term>
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Ioukoundos (genero)</term>
+                    <term>Tatia</term>
+                    <term>Sokrates</term>
+                    <term>Sokrateia</term>
+                    <term>Moschas</term>
+                    <term>Ioukoundos (nipote)</term>
+                    <term>Menekrates</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Ioukoundos (genero)">
+                        <persName type="attested" key="Ioukoundos (genero)">
+                            <name nymRef="Ἰουκοῦνδος">Ἰουκούνδος</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Tatia">
+                        <persName type="attested" key="Tatia">
+                            <name nymRef="Τατία">Τατία</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Sokrates">
+                        <persName type="attested" key="Sokrates">
+                            <name nymRef="Σωκράτης">Σωκράτης</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Sokrateia">
+                        <persName type="attested" key="Sokrateia">
+                            <name nymRef="Σωκρατεία">Σωκρατεία</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Moschas">
+                        <persName type="attested" key="Moschas">
+                            <name nymRef="Μοσχᾶς">Μοσχᾶς</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Ioukoundos (nipote)">
+                        <persName type="attested" key="Ioukoundos (nipote)">
+                            <name nymRef="Ἰουκοῦνδος">Ἰουκοῦνδος</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Menekrates">
+                        <persName type="attested" key="Menekrates">
+                            <name nymRef="Μενεκράτης">Μενεκράτης</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
                     <lb n="1"/><date calendar="sullan">Ἔτους σμβ΄, μη<supplied reason="lost">(νὸς)</supplied></date> Παναίμου W.
-                    <lb n="2"/>Μεγάλη Ἄρτεμις Ἀνάει-
-                    <lb n="3"/>τις καὶ Μὴν Τιάμου. Ἐπὶ
-                    <lb n="4"/>Ἰουκούνδος ἐγένετο ἐν
+                    <lb n="2"/>Μεγάλη <persName type="divine" key="Artemis Anaeitis"><name nymRef="Ἄρτεμις">Ἄρτεμις</name> <rs type="epithet">Ἀνάει-
+                    <lb n="3" break="no"/>τις</rs></persName> καὶ <persName type="divine" key="Men Tiamou"><name nymRef="Μήν">Μὴν</name> <rs type="epithet">Τιάμου</rs></persName>. Ἐπὶ
+                    <lb n="4"/><persName type="attested" key="Ioukoundos (genero)"><name nymRef="Ἰουκοῦνδος">Ἰουκούνδος</name></persName> ἐγένετο ἐν
                     <lb n="5"/>διαθέσει μανικῇ καὶ ὑπὸ πάν-
                     <lb n="6"/>των διεφημίσθη ὡς ὑπὸ
-                    <lb n="7"/>Τατίας τῆς πενθερᾶς αὐ-
+                    <lb n="7"/><persName type="attested" key="Tatia"><name nymRef="Τατία">Τατίας</name></persName> τῆς πενθερᾶς αὐ-
                     <lb n="8"/>τοῦ φάρμακον αὐτῷ διδόσ-
-                    <lb n="9"/>θαι, ἡ δὲ Τατίας ἐπέστησεν
+                    <lb n="9"/>θαι, ἡ δὲ <persName type="attested" key="Tatia"><name nymRef="Τατία">Τατίας</name></persName> ἐπέστησεν
                     <lb n="10"/>σκῆπτρον καὶ ἄρας ἔθηκεν
                     <lb n="11"/>ἐν τῷ ναῷ ὡς ἀδυνοποιού-
                     <lb n="12"/>σα περὶ τοῦ πεφημίσθαι αὐ-
                     <lb n="13"/>τὴ ἐν συνειδήσει τοιαύτῃ.
                     <lb n="14"/>Οἱ θεοὶ αὐτὴν ἐποίησαν ἐ[ν]
                     <lb n="15"/>κολάσει, ἣν οὐ διέφυγεν. Ὁ-
-                    <lb n="16"/>μοίως καὶ Σωκράτης, ὁ υἱὸς
+                    <lb n="16"/>μοίως καὶ <persName type="attested" key="Sokrates"><name nymRef="Σωκράτης">Σωκράτης</name></persName>, ὁ υἱὸς
                     <lb n="17"/>αὐτῆς, παράγων τὴν ἰσόδον
                     <lb n="18"/>τὴν εἰς τὸ ἄλσος ἀπάγουσαν,
                     <lb n="19"/>δρεπάνων κρατῶν ἀμπελοτό-
@@ -92,16 +152,16 @@
                     <lb n="26"/>ἄρας τὰς γενομένας ἐν τῷ
                     <lb n="27"/>ναῷ, ἃς λύσαν τὰ Ἰουκούνδου
                     <lb n="28"/>καὶ Μοσχίου, ἔγγονοι δὲ τῆς
-                    <lb n="29"/>Τατίας, Σωκρατεία καὶ Μοσχᾶς
-                    <lb n="30"/>καὶ Ἰουκοῦνδος καὶ Μενεκρά-
-                    <lb n="31"/>της, κατὰ πάντα ἐξειλάσαμενοι
+                    <lb n="29"/><persName type="attested" key="Tatia"><name nymRef="Τατία">Τατίας</name></persName>, <persName type="attested" key="Sokrateia"><name nymRef="Σωκρατεία">Σωκρατεία</name></persName> καὶ <persName type="attested" key="Moschas"><name nymRef="Μοσχᾶς">Μοσχᾶς</name></persName>
+                    <lb n="30"/>καὶ <persName type="attested" key="Ioukoundos (nipote)"><name nymRef="Ἰουκοῦνδος">Ἰουκοῦνδος</name></persName> καὶ <persName type="attested" key="Menekrates"><name nymRef="Μενεκράτης">Μενεκρά-
+                    <lb n="31" break="no"/>της</name></persName>, κατὰ πάντα ἐξειλάσαμενοι
                     <lb n="32"/>τοὺς θεοὺς καὶ ἀπὸ νοῦν εὐλογοῦ-
                     <lb n="33"/>μεν στηλογραφήσαντες τὰς δυ-
                     <lb n="34"/>νάμεις τῶν θεῶν.
                 </ab>
             </div>
             <div type="commentary">
-                <p>DA_COMPILARE</p>
+                <p>Alla r. 27-28, "τὰ Ἰουκούνδου καὶ Μοσχίου" (genitivi) non è stato marcato come ulteriore riferimento onomastico: il senso esatto di questo sintagma — se indichi proprietà, discendenza o altro — resta incerto senza il commento critico di Lane, e i due nomi coincidono già con quelli del genero Ioukoundos (r. 4) e di un possibile figlio Moschion non altrimenti attestato nel testo.</p>
             </div>
             <div type="bibliography">
                 <listBibl>

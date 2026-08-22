@@ -58,6 +58,16 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Ouranios</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+            </textClass>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
@@ -65,8 +75,8 @@
 <ab>
                     <lb n="1"/>Τῷ θεῷ ε-
                     <lb n="2"/>ν οὐρανοῖς,
-                    <lb n="3"/>μέγας Μὴν
-                    <lb n="4"/>Οὐρανιός,
+                    <lb n="3"/>μέγας <persName type="divine" key="Men Ouranios"><name nymRef="Μήν">Μὴν</name>
+                    <lb n="4"/><rs type="epithet">Οὐρανιός</rs></persName>,
                     <lb n="5"/>μεγάλη δυ-
                     <lb n="6"/>ναμίς τοῦ ἀ-
                     <lb n="7"/>θανάτου θε-

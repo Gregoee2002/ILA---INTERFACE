@@ -59,16 +59,39 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                    <term>Magna Mater</term>
+                    <term>Attis</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Clodius Hermogianus Caesarius</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Clodius Hermogianus Caesarius">
+                        <persName type="attested" key="Clodius Hermogianus Caesarius">
+                            <name>Clodius</name>
+                            <name>Hermogianus</name>
+                            <name>Caesarius</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
 <ab>
-                    <lb n="1"/>Matri Deum Magnae
-                    <lb n="2"/>Idaeae Summae Pa-
-                    <lb n="3"/>renti, Hermae, et Attidi
-                    <lb n="4"/>Menotyranno Invicto
-                    <lb n="5"/>Clodius Hermogianus Caesarius
+                    <lb n="1"/><persName type="divine" key="Magna Mater"><name>Matri</name> <name>Deum</name> <name>Magnae</name>
+                    <lb n="2" break="no"/><name>Idaeae</name> <rs type="epithet">Summae Pa-
+                    <lb n="3" break="no"/>renti</rs></persName>, Hermae, et <persName type="divine" key="Attis"><name>Attidi</name></persName>
+                    <lb n="4"/><persName type="divine" key="Men Tyrannos"><name nymRef="Μήν">Menotyranno</name> <rs type="epithet">Invicto</rs></persName>
+                    <lb n="5"/><persName type="attested" key="Clodius Hermogianus Caesarius"><name>Clodius</name> <name>Hermogianus</name> <name>Caesarius</name></persName>
                     <lb n="6"/>V(ir) C(onsularis) Procons. Africae
                     <lb n="7"/>Praefect. Urbis Romae
                     <lb n="8"/>XVvir S(acris) F(aciundis) taurobolio

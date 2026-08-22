@@ -58,14 +58,37 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Augelastos</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Aurelius Marcianus</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Aurelius Marcianus">
+                        <persName type="attested" key="Aurelius Marcianus">
+                            <name>Aur.</name>
+                            <name>Marcianus</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
 <ab>
-                    <lb n="1"/>Μηνὶ Αὐγε-
-                    <lb n="2"/>λ̣ά̣[σ]τῳ Αυρ.
-                    <lb n="3"/>Marcianus
+                    <lb n="1"/><persName type="divine" key="Men Augelastos"><name nymRef="Μήν">Μηνὶ</name> <rs type="epithet">Αὐγε-
+                    <lb n="2" break="no"/>λ̣ά̣[σ]τῳ</rs></persName> <persName type="attested" key="Aurelius Marcianus"><name>Αυρ.</name>
+                    <lb n="3"/><name>Marcianus</name></persName>
                     <lb n="4"/>[s]ignifer
                     <lb n="5"/>l[e]g(ionis) voto
                     <lb n="6"/>posuit.
