@@ -60,6 +60,36 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                    <term>Demeter</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Gaios Oulpios Baibianos</term>
+                    <term>Gnaios Dottios Magnos</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Gaios Oulpios Baibianos">
+                        <persName type="attested" key="Gaios Oulpios Baibianos">
+                            <name>Γ.</name>
+                            <name nymRef="Ούλπιος">Οὐλπίου</name>
+                            <name nymRef="Βαιβιανός">Βαιβιανοῦ</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Gnaios Dottios Magnos">
+                        <persName type="attested" key="Gnaios Dottios Magnos">
+                            <name nymRef="Γναῖος">Γναῖον</name>
+                            <name nymRef="Δόττιος">Δόττιον</name>
+                            <name nymRef="Μάγνος">Μάγνον</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
@@ -67,16 +97,16 @@
                 <ab>
                     <lb n="1"/>Ἐπὶ ἀγωνο-
                     <lb n="2"/>θέτου διὰ
-                    <lb n="3"/>βίου Γ. Οὐλπί-
-                    <lb n="4"/>ου Βαιβιανοῦ
+                    <lb n="3"/>βίου <persName type="attested" key="Gaios Oulpios Baibianos"><name>Γ.</name> <name nymRef="Ούλπιος">Οὐλπί-
+                    <lb n="4" break="no"/>ου</name> <name nymRef="Βαιβιανός">Βαιβιανοῦ</name></persName>
                     <lb n="5"/>αὐγουρ(ος) καὶ
                     <lb n="6"/>ἱερέως διὰ βί-
-                    <lb n="7"/>ου τοῦ πατρί-
-                    <lb n="8"/>ου θεοῦ Μη-
-                    <lb n="9"/>νὸς καὶ θεᾶς
-                    <lb n="10"/>Δήμητρος
-                    <lb n="11"/>Γναῖον Δότ-
-                    <lb n="12"/>τιον Μάγνον
+                    <lb n="7" break="no"/>ου τοῦ πατρί-
+                    <lb n="8" break="no"/>ου <persName type="divine" key="Men">θεοῦ Μη-
+                    <lb n="9" break="no"/>νὸς</persName> καὶ <persName type="divine" key="Demeter"><name nymRef="Δημήτηρ">θεᾶς
+                    <lb n="10"/>Δήμητρος</name></persName>
+                    <lb n="11"/><persName type="attested" key="Gnaios Dottios Magnos"><name nymRef="Γναῖος">Γναῖον</name> <name nymRef="Δόττιος">Δότ-
+                    <lb n="12" break="no"/>τιον</name> <name nymRef="Μάγνος">Μάγνον</name></persName>
                     <lb n="13"/>νεικήσαν-
                     <lb n="14"/>τα σαλπι-
                     <lb n="15"/>κτὰς ἀγῶ-

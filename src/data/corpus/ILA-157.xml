@@ -60,6 +60,35 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Gaios Phlaouios Baibianos</term>
+                    <term>Loukios Ioulios Lomnos</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Gaios Phlaouios Baibianos">
+                        <persName type="attested" key="Gaios Phlaouios Baibianos">
+                            <name>Γ.</name>
+                            <name nymRef="Φλάουιος">Φλαίου</name>
+                            <name nymRef="Βαιβιανός">Βα[ι]βιανοῦ</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Loukios Ioulios Lomnos">
+                        <persName type="attested" key="Loukios Ioulios Lomnos">
+                            <name>[Λ.]</name>
+                            <name nymRef="Ιούλιος">Ἰούλιον</name>
+                            <name nymRef="Λόμνος">Λό[μ]νον</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
@@ -69,14 +98,14 @@
                     <lb n="2"/>[.............]
                     <lb n="3"/>[.... πατρωνος τῆς]
                     <lb n="4"/>κολωνείας
-                    <lb n="5"/>καὶ Γ. Φλαίου Βα[ι-]
-                    <lb n="6"/>βιανοῦ ἱππ[έως]
+                    <lb n="5"/>καὶ <persName type="attested" key="Gaios Phlaouios Baibianos"><name>Γ.</name> <name nymRef="Φλάουιος">Φλαίου</name> <name nymRef="Βαιβιανός">Βα[ι-]
+                    <lb n="6" break="no"/>βιανοῦ</name></persName> ἱππ[έως]
                     <lb n="7"/>Ῥωμαίων ἀρχι[ε-]
-                    <lb n="8"/>ρέως διὰ βίου
+                    <lb n="8" break="no"/>ρέως διὰ βίου
                     <lb n="9"/>τοῦ πατρίου
-                    <lb n="10"/>θεοῦ Μηνὸ[ς]
-                    <lb n="11"/>[Λ.] Ἰούλιον Λό-
-                    <lb n="12"/>[μ]νον νει[κήσαντα]
+                    <lb n="10"/><persName type="divine" key="Men"><name nymRef="Μήν">θεοῦ Μηνὸ[ς]</name></persName>
+                    <lb n="11"/><persName type="attested" key="Loukios Ioulios Lomnos"><name>[Λ.]</name> <name nymRef="Ιούλιος">Ἰούλιον</name> <name nymRef="Λόμνος">Λό-
+                    <lb n="12" break="no"/>[μ]νον</name></persName> νει[κήσαντα]
                     <lb n="13"/>[..............]
                 </ab>
             </div>

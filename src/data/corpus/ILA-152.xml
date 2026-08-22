@@ -60,23 +60,53 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                    <term>Demeter</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Gaios Oulpios Baibianos</term>
+                    <term>Tiberios Klaudios Markianos</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Gaios Oulpios Baibianos">
+                        <persName type="attested" key="Gaios Oulpios Baibianos">
+                            <name>Γ.</name>
+                            <name nymRef="Ούλπιος">Οὐλπίου</name>
+                            <name nymRef="Βαιβιανός">Βαιβιανοῦ</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Tiberios Klaudios Markianos">
+                        <persName type="attested" key="Tiberios Klaudios Markianos">
+                            <name>Τιβ.</name>
+                            <name nymRef="Κλαύδιος">Κλαύδιον</name>
+                            <name nymRef="Μαρκιανός">Μαρκιανὸν</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
                     <lb n="1"/>Ἐπὶ ἀγωνο-
-                    <lb n="2"/>θέτου Γ. Οὐλ-
-                    <lb n="3"/>πίου Βαιβια-
-                    <lb n="4"/>νοῦ αὐγου-
-                    <lb n="5"/>ρ(ος) καὶ ἱερέως
+                    <lb n="2"/>θέτου <persName type="attested" key="Gaios Oulpios Baibianos"><name>Γ.</name> <name nymRef="Ούλπιος">Οὐλ-
+                    <lb n="3" break="no"/>πίου</name> <name nymRef="Βαιβιανός">Βαιβια-
+                    <lb n="4" break="no"/>νοῦ</name></persName> αὐγου-
+                    <lb n="5" break="no"/>ρ(ος) καὶ ἱερέως
                     <lb n="6"/>[δ]ιὰ βίου τοῦ
-                    <lb n="7"/>[πα]τρίου θε-
-                    <lb n="8"/>[οῦ] Μηνὸς
-                    <lb n="9"/>[καὶ] θεᾶς Δή-
-                    <lb n="10"/>[μητρ]ος Τιβ.
-                    <lb n="11"/>Κλαύδιον
-                    <lb n="12"/>Μαρκιανὸν
+                    <lb n="7"/>[πα]τρίου <persName type="divine" key="Men">θε-
+                    <lb n="8" break="no"/>[οῦ] <name nymRef="Μήν">Μηνὸς</name></persName>
+                    <lb n="9"/>[καὶ] <persName type="divine" key="Demeter"><name nymRef="Δημήτηρ">θεᾶς Δή-
+                    <lb n="10" break="no"/>[μητρ]ος</name></persName> <persName type="attested" key="Tiberios Klaudios Markianos"><name>Τιβ.</name>
+                    <lb n="11"/><name nymRef="Κλαύδιος">Κλαύδιον</name>
+                    <lb n="12"/><name nymRef="Μαρκιανός">Μαρκιανὸν</name></persName>
                     <lb n="13"/>νεικήσαν-
                     <lb n="14"/>τα πάλην, ὃν
                     <lb n="15"/>ἀποδυσάμε-

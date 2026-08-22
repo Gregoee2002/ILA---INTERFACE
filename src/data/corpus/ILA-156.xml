@@ -60,23 +60,63 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Gaios Kaisenios Proklos Staianos</term>
+                    <term>Gaios Phlaouios Baibianos</term>
+                    <term>Loukios Papios Phlaouianos Oiktoreinos Zotikos</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Gaios Kaisenios Proklos Staianos">
+                        <persName type="attested" key="Gaios Kaisenios Proklos Staianos">
+                            <name>Γ.</name>
+                            <name nymRef="Καισένιος">Καισεν[ίου]</name>
+                            <name nymRef="Πρόκλος">Πρόκλου</name>
+                            <name nymRef="Σταιανός">Στ[α]ιανο[ῦ]</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Gaios Phlaouios Baibianos">
+                        <persName type="attested" key="Gaios Phlaouios Baibianos">
+                            <name>Γ.</name>
+                            <name nymRef="Φλάουιος">Φλαίου</name>
+                            <name nymRef="Βαιβιανός">Βαιβιανοῦ</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Loukios Papios Phlaouianos Oiktoreinos Zotikos">
+                        <persName type="attested" key="Loukios Papios Phlaouianos Oiktoreinos Zotikos">
+                            <name>Λού(κιον)</name>
+                            <name nymRef="Πάπιος">Πάπιο[ν]</name>
+                            <name nymRef="Φλαουιανός">Φλαο(υ)ιανὸν</name>
+                            <name nymRef="Οικτορεῖνος">Οὐ[ι]κτορεῖνον</name>
+                            <name nymRef="Ζωτικός">Ζωτικ[ὸν]</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
                     <lb n="1"/>Ἀγωνοθετο(ύ)ν[των]
-                    <lb n="2"/>[δ]ιὰ [β]ίου Γ. Καισεν[ίου]
-                    <lb n="3"/>Πρόκλου Στ[α]ιανο[ῦ]
+                    <lb n="2"/>[δ]ιὰ [β]ίου <persName type="attested" key="Gaios Kaisenios Proklos Staianos"><name>Γ.</name> <name nymRef="Καισένιος">Καισεν[ίου]</name>
+                    <lb n="3"/><name nymRef="Πρόκλος">Πρόκλου</name> <name nymRef="Σταιανός">Στ[α]ιανο[ῦ]</name></persName>
                     <lb n="4"/>[α]ὔγουρος, πάτρ[ωνος]
                     <lb n="5"/>[τῆ]ς κολωνείας κα[ὶ]
-                    <lb n="6"/>Γ. Φλαίου Βαιβιανοῦ
+                    <lb n="6"/><persName type="attested" key="Gaios Phlaouios Baibianos"><name>Γ.</name> <name nymRef="Φλάουιος">Φλαίου</name> <name nymRef="Βαιβιανός">Βαιβιανοῦ</name></persName>
                     <lb n="7"/>ἱππέως Ῥωμαίων
                     <lb n="8"/>ἀρχιερέως διὰ βίου
-                    <lb n="9"/>τοῦ πατρίου θεοῦ
-                    <lb n="10"/>Μηνὸς Λού(κιον) Πάπιο[ν]
-                    <lb n="11"/>Φλαο(υ)ιανὸν Οὐ[ι]-
-                    <lb n="12"/>κτορεῖνον Ζωτικ[ὸν]
+                    <lb n="9"/>τοῦ πατρίου <persName type="divine" key="Men">θεοῦ
+                    <lb n="10" break="no"/>Μηνὸς</persName> <persName type="attested" key="Loukios Papios Phlaouianos Oiktoreinos Zotikos"><name>Λού(κιον)</name> <name nymRef="Πάπιος">Πάπιο[ν]</name>
+                    <lb n="11"/><name nymRef="Φλαουιανός">Φλαο(υ)ιανὸν</name> <name nymRef="Οικτορεῖνος">Οὐ[ι]-
+                    <lb n="12" break="no"/>κτορεῖνον</name> <name nymRef="Ζωτικός">Ζωτικ[ὸν]</name></persName>
                     <lb n="13"/>νεικήσαντα παίδ[ων]
                     <lb n="14"/>πανκράτιον ἀγῶν[α]
                     <lb n="15"/>Μαξιμιάνειον ἡ π[ατρὶς]

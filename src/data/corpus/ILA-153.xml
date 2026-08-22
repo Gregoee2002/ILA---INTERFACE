@@ -60,6 +60,36 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                    <term>Demeter</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Gaios Oulpios Baibianos</term>
+                    <term>Loukios Plotios Markianos</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Gaios Oulpios Baibianos">
+                        <persName type="attested" key="Gaios Oulpios Baibianos">
+                            <name>Γ.</name>
+                            <name nymRef="Ούλπιος">Οὐλπίου</name>
+                            <name nymRef="Βαιβιανός">Βαιβιανοῦ</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Loukios Plotios Markianos">
+                        <persName type="attested" key="Loukios Plotios Markianos">
+                            <name>Λ.</name>
+                            <name nymRef="Πλώτιος">Πλώτιον</name>
+                            <name nymRef="Μαρκιανός">Μαρκιανόν</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
@@ -67,18 +97,18 @@
                 <ab>
                     <lb n="1"/>Ἐπὶ ἀγωνο-
                     <lb n="2"/>θέτου διὰ βί-
-                    <lb n="3"/>ου Γ. Οὐλπί-
-                    <lb n="4"/>ου Βαιβια-
-                    <lb n="5"/>νοῦ αὐγου-
-                    <lb n="6"/>ρος καὶ ἱερέ-
-                    <lb n="7"/>ως διὰ βίου
+                    <lb n="3"/>ου <persName type="attested" key="Gaios Oulpios Baibianos"><name>Γ.</name> <name nymRef="Ούλπιος">Οὐλπί-
+                    <lb n="4" break="no"/>ου</name> <name nymRef="Βαιβιανός">Βαιβια-
+                    <lb n="5" break="no"/>νοῦ</name></persName> αὐγου-
+                    <lb n="6" break="no"/>ρος καὶ ἱερέ-
+                    <lb n="7" break="no"/>ως διὰ βίου
                     <lb n="8"/>τοῦ πατρίου
-                    <lb n="9"/>θεοῦ Μηνὸς
-                    <lb n="10"/>καὶ θεᾶς Δή-
-                    <lb n="11"/>μητρος Λ.
-                    <lb n="12"/>Πλώτιον
-                    <lb n="13"/>Μαρκιαν-
-                    <lb n="14"/>[όν .........]
+                    <lb n="9"/><persName type="divine" key="Men"><name nymRef="Μήν">θεοῦ Μηνὸς</name></persName>
+                    <lb n="10"/>καὶ <persName type="divine" key="Demeter"><name nymRef="Δημήτηρ">θεᾶς Δή-
+                    <lb n="11" break="no"/>μητρος</name></persName> <persName type="attested" key="Loukios Plotios Markianos"><name>Λ.</name>
+                    <lb n="12"/><name nymRef="Πλώτιος">Πλώτιον</name>
+                    <lb n="13"/><name nymRef="Μαρκιανός">Μαρκιαν-
+                    <lb n="14" break="no"/>[όν]</name></persName> [.........]
                 </ab>
             </div>
             <div type="apparatus"/>

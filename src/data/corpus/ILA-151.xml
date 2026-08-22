@@ -60,20 +60,39 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Protion</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Protion">
+                        <persName type="attested" key="Protion">
+                            <name nymRef="Πρωτίων">Πρωτίων</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
                     <lb n="1"/>Στήλην τοι καὶ τοῦτον ἐπευχάδιον θέτο βωμ[ὸν]
-                    <lb n="2"/>Πρωτίων Ἀσκαίης τῷ μεδέοντι θεῶι,
+                    <lb n="2"/><persName type="attested" key="Protion"><name nymRef="Πρωτίων">Πρωτίων</name></persName> Ἀσκαίης τῷ μεδέοντι <persName type="divine" key="Men">θεῶι</persName>,
                     <lb n="3"/>τὸν Μοῦσαι θρέψαντο, σὺ δ᾽ ὦ παροδεῖτα προσεύ[ξαι]
                     <lb n="4"/>χαίρων καὶ σπένδ᾽ εὖ σαῖσιν ἐπ᾽ εὐτυχίαι[ς]
                 </ab>
             </div>
             <div type="apparatus"/>
             <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
-            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>Il testo non nomina esplicitamente "Μήν": si rivolge genericamente a "τῷ μεδέοντι θεῷ" ("il dio che presiede"). L'identificazione con Men Askaenos, adottata qui nel persName, si basa sulla provenienza dal santuario di Men Askaenos (contesto archeologico), non su un teonimo presente nel testo conservato.</p></div>
             <div type="bibliography">
                 <listBibl>
                     <bibl>Lane, CMRDM I 163</bibl>

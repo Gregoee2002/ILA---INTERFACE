@@ -60,6 +60,42 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Gaios Phlaouios Baibianos</term>
+                    <term>Terentios Oulpios Markellos</term>
+                    <term>Ioulios Domnos</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Gaios Phlaouios Baibianos">
+                        <persName type="attested" key="Gaios Phlaouios Baibianos">
+                            <name>Γ.</name>
+                            <name>Φλ.</name>
+                            <name nymRef="Βαιβιανός">Βαιβιανοῦ</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Terentios Oulpios Markellos">
+                        <persName type="attested" key="Terentios Oulpios Markellos">
+                            <name nymRef="Τερέντιος">Τερέντιον</name>
+                            <name nymRef="Ούλπιος">Οὔλπιον</name>
+                            <name nymRef="Μάρκελλος">Μάρκελλον</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Ioulios Domnos">
+                        <persName type="attested" key="Ioulios Domnos">
+                            <name nymRef="Ιούλιος">Ἰούλιον</name>
+                            <name nymRef="Δόμνος">Δόμνον</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
@@ -67,21 +103,21 @@
                 <ab>
                     <lb n="1"/>Ἀγαθῇ Τύχῃ.
                     <lb n="2"/>Ἀγωνοθετοῦντος
-                    <lb n="3"/>διὰ βίου Γ. Φλ. Βαιβια-
-                    <lb n="4"/>νοῦ ποντίφικος δ΄
+                    <lb n="3"/>διὰ βίου <persName type="attested" key="Gaios Phlaouios Baibianos"><name>Γ.</name> <name>Φλ.</name> <name nymRef="Βαιβιανός">Βαιβια-
+                    <lb n="4" break="no"/>νοῦ</name></persName> ποντίφικος δ΄
                     <lb n="5"/>ἱππέως Ῥωμαίων
                     <lb n="6"/>πάτρων(ος) τῆς κολωνείας
                     <lb n="7"/>ἀρχιερέως διὰ βίου τοῦ πα-
-                    <lb n="8"/>τρίου θεοῦ Μηνὸς Τε-
-                    <lb n="9"/>ρέντιον Οὔλπιον Μάρ-
-                    <lb n="10"/>κελλον νεικήσαν-
+                    <lb n="8" break="no"/>τρίου <persName type="divine" key="Men"><name nymRef="Μήν">θεοῦ Μηνὸς</name></persName> <persName type="attested" key="Terentios Oulpios Markellos"><name nymRef="Τερέντιος">Τε-
+                    <lb n="9" break="no"/>ρέντιον</name> <name nymRef="Ούλπιος">Οὔλπιον</name> <name nymRef="Μάρκελλος">Μάρ-
+                    <lb n="10" break="no"/>κελλον</name></persName> νεικήσαν-
                     <lb n="11"/>τα παίδων πανκράτιον
                     <lb n="12"/>ἀγῶνα Μαξιμιάνει-
                     <lb n="13"/>ον διαβιβάσαντα κλή-
                     <lb n="14"/>ρους β΄ ἡ πατρὶς
                     <lb n="15"/>θέμιδι
-                    <lb n="16"/>ὑπὸ ἐπιστάτην Ἰούλιον
-                    <lb n="17"/>Δόμνον
+                    <lb n="16"/>ὑπὸ ἐπιστάτην <persName type="attested" key="Ioulios Domnos"><name nymRef="Ιούλιος">Ἰούλιον</name>
+                    <lb n="17"/><name nymRef="Δόμνος">Δόμνον</name></persName>
                 </ab>
             </div>
             <div type="apparatus"/>

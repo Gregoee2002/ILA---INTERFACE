@@ -60,6 +60,36 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                    <term>Demeter</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Gaios Oulpios Baibianos</term>
+                    <term>Ioulios Kordios Theodoros</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Gaios Oulpios Baibianos">
+                        <persName type="attested" key="Gaios Oulpios Baibianos">
+                            <name>Γ.</name>
+                            <name nymRef="Ούλπιος">Οὐλπίου</name>
+                            <name nymRef="Βαιβιανός">Βαιβιανοῦ</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Ioulios Kordios Theodoros">
+                        <persName type="attested" key="Ioulios Kordios Theodoros">
+                            <name nymRef="Ιούλιος">Ἰούλιον</name>
+                            <name nymRef="Κόρδιος">Κόρδιον</name>
+                            <name nymRef="Θεόδωρος">Θεόδωρον</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
@@ -67,17 +97,17 @@
                 <ab>
                     <lb n="1"/>Ἐπὶ ἀγωνο-
                     <lb n="2"/>θέτου διὰ
-                    <lb n="3"/>βίου Γ. Οὐλ-
-                    <lb n="4"/>πίου Βαιβι-
-                    <lb n="5"/>ανοῦ αὐγου(ρος)
+                    <lb n="3"/>βίου <persName type="attested" key="Gaios Oulpios Baibianos"><name>Γ.</name> <name nymRef="Ούλπιος">Οὐλ-
+                    <lb n="4" break="no"/>πίου</name> <name nymRef="Βαιβιανός">Βαιβι-
+                    <lb n="5" break="no"/>ανοῦ</name></persName> αὐγου(ρος)
                     <lb n="6"/>καὶ ἱερέως
                     <lb n="7"/>διὰ βίου τοῦ
-                    <lb n="8"/>πατρίου θε-
-                    <lb n="9"/>οῦ Μηνὸς καὶ
-                    <lb n="10"/>θε(ᾶς) Δήμητρος
-                    <lb n="11"/>Ἰούλιον Κόρ-
-                    <lb n="12"/>διον Θεόδω-
-                    <lb n="13"/>ρον νεική-
+                    <lb n="8"/>πατρίου <persName type="divine" key="Men">θε-
+                    <lb n="9" break="no"/>οῦ Μηνὸς</persName> καὶ
+                    <lb n="10"/><persName type="divine" key="Demeter"><name nymRef="Δημήτηρ">θε(ᾶς) Δήμητρος</name></persName>
+                    <lb n="11"/><persName type="attested" key="Ioulios Kordios Theodoros"><name nymRef="Ιούλιος">Ἰούλιον</name> <name nymRef="Κόρδιος">Κόρ-
+                    <lb n="12" break="no"/>διον</name> <name nymRef="Θεόδωρος">Θεόδω-
+                    <lb n="13" break="no"/>ρον</name></persName> νεική-
                     <lb n="14"/>σαντα πάλην
                     <lb n="15"/>ἀγῶνα Μα-
                     <lb n="16"/>ξιμιάνειον

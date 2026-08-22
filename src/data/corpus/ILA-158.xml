@@ -60,6 +60,51 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Gaios Kaisenios Proklos Staianos</term>
+                    <term>Gaios Phlaouios Baibianos</term>
+                    <term>Terentios Oulpios Zosimos</term>
+                    <term>Ioulios Domnos</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Gaios Kaisenios Proklos Staianos">
+                        <persName type="attested" key="Gaios Kaisenios Proklos Staianos">
+                            <name>Γ.</name>
+                            <name nymRef="Καισένιος">Καισεννίου</name>
+                            <name nymRef="Πρόκλος">Πρόκλου</name>
+                            <name nymRef="Σταιανός">Σταιανοῦ</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Gaios Phlaouios Baibianos">
+                        <persName type="attested" key="Gaios Phlaouios Baibianos">
+                            <name>Γ.</name>
+                            <name nymRef="Φλάουιος">Φλαίου</name>
+                            <name nymRef="Βαιβιανός">Βαιβιανοῦ</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Terentios Oulpios Zosimos">
+                        <persName type="attested" key="Terentios Oulpios Zosimos">
+                            <name nymRef="Τερέντιος">Τερέντιον</name>
+                            <name nymRef="Ούλπιος">Οὔλπιον</name>
+                            <name nymRef="Ζώσιμος">Ζώσιμον</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Ioulios Domnos">
+                        <persName type="attested" key="Ioulios Domnos">
+                            <name nymRef="Ιούλιος">Ἰούλιον</name>
+                            <name nymRef="Δόμνος">Δόμνον</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
@@ -67,22 +112,22 @@
                 <ab>
                     <lb n="1"/>Ἀγαθῇ Τύχῃ.
                     <lb n="2"/>Ἀγωνοθετούντων
-                    <lb n="3"/>διὰ βίου Γ. Καισεννί-
-                    <lb n="4"/>ου Πρόκλου Σταια-
-                    <lb n="5"/>νοῦ αὔγουρος πάτρω-
-                    <lb n="6"/>νος τῆς κολωνείας
-                    <lb n="7"/>καὶ Γ. Φλαίου Βαιβια-
-                    <lb n="8"/>νοῦ ἱππέως Ῥωρωμαί-
-                    <lb n="9"/>ων ἀρχιερέως διὰ βίου
-                    <lb n="10"/>τοῦ πατρίου θεοῦ Μη-
-                    <lb n="11"/>νὸς Τερέντιον Οὔλ-
-                    <lb n="12"/>πιον Ζώσιμον νεική-
+                    <lb n="3"/>διὰ βίου <persName type="attested" key="Gaios Kaisenios Proklos Staianos"><name>Γ.</name> <name nymRef="Καισένιος">Καισεννί-
+                    <lb n="4" break="no"/>ου</name> <name nymRef="Πρόκλος">Πρόκλου</name> <name nymRef="Σταιανός">Σταια-
+                    <lb n="5" break="no"/>νοῦ</name></persName> αὔγουρος πάτρω-
+                    <lb n="6" break="no"/>νος τῆς κολωνείας
+                    <lb n="7"/>καὶ <persName type="attested" key="Gaios Phlaouios Baibianos"><name>Γ.</name> <name nymRef="Φλάουιος">Φλαίου</name> <name nymRef="Βαιβιανός">Βαιβια-
+                    <lb n="8" break="no"/>νοῦ</name></persName> ἱππέως Ῥωρωμαί-
+                    <lb n="9" break="no"/>ων ἀρχιερέως διὰ βίου
+                    <lb n="10"/>τοῦ πατρίου <persName type="divine" key="Men">θεοῦ Μη-
+                    <lb n="11" break="no"/>νὸς</persName> <persName type="attested" key="Terentios Oulpios Zosimos"><name nymRef="Τερέντιος">Τερέντιον</name> <name nymRef="Ούλπιος">Οὔλ-
+                    <lb n="12" break="no"/>πιον</name> <name nymRef="Ζώσιμος">Ζώσιμον</name></persName> νεική-
                     <lb n="13"/>σαντα παίδων παν-
                     <lb n="14"/>κράτιον καὶ δι(α)βιβάσαν-
                     <lb n="15"/>τα κλήρους β΄ ἀγῶνα
                     <lb n="16"/>Μαξιμιάνειον ἡ πατρὶς
                     <lb n="17"/>θέμιδι
-                    <lb n="18"/>ὑπὸ ἐπιστάτην Ἰούλιον Δόμνον.
+                    <lb n="18"/>ὑπὸ ἐπιστάτην <persName type="attested" key="Ioulios Domnos"><name nymRef="Ιούλιος">Ἰούλιον</name> <name nymRef="Δόμνος">Δόμνον</name></persName>.
                 </ab>
             </div>
             <div type="apparatus"/>
