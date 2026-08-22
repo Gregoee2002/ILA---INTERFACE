@@ -204,85 +204,74 @@ const getTintClass = (str: string) => {
   return `glass-card-tint-${rem}`;
 };
 
-const StatsCard = ({ name, count, regions, badge, onClick }: {
-  name: string; count: number; regions: number; badge: string; onClick: () => void;
-  key?: string | number;
-}) => (
-  <div
-    onClick={onClick}
-    className={cn("p-6 group cursor-pointer", getTintClass(name))}
-  >
-    <div className="flex justify-between items-start mb-4">
-      <span className="text-lg font-bold text-ink font-serif leading-tight">{name}</span>
-      <span className="bg-accent text-white text-[10px] px-2 py-1 font-bold rounded-sm group-hover:scale-110 transition-transform shrink-0 ml-2">
-        {count} OCC.
-      </span>
-    </div>
-    <div className="flex items-center justify-between">
-      <div className="flex items-center gap-2 text-[10px] font-sans font-bold uppercase text-muted">
-        <MapPin className="h-3 w-3" />
-        <span>{regions} {regions === 1 ? 'Regione' : 'Regioni'}</span>
-      </div>
-      <span className="text-[8px] font-sans font-bold uppercase tracking-widest text-accent/50 border border-accent/20 px-1.5 py-0.5 rounded-sm">
-        {badge}
-      </span>
-    </div>
-  </div>
-);
-
 // Card "protagonista" per una divinità: nome, occorrenze, regioni, numero di epiteti
-const DivinityCard = ({ name, count, regions, epithetCount, onClick }: {
-  name: string; count: number; regions: number; epithetCount: number; onClick: () => void;
-  key?: string | number;
-}) => (
-  <motion.div
-    onClick={onClick}
-    whileHover={{ y: -3 }}
-    transition={SPRING_SOFT}
-    className={cn("p-6 group cursor-pointer relative overflow-hidden", getTintClass(name))}
-  >
-    <div className="flex justify-between items-start mb-4">
-      <span className="text-xl font-bold text-ink font-serif italic leading-tight">{name}</span>
-      <span className="bg-accent text-white text-[10px] px-2 py-1 font-bold rounded-sm group-hover:scale-110 transition-transform shrink-0 ml-2">
-        {count} OCC.
-      </span>
-    </div>
-    <div className="flex items-center gap-4 text-[10px] font-sans font-bold uppercase text-muted relative z-10">
-      <span className="flex items-center gap-1.5">
-        <MapPin className="h-3 w-3" />
-        {regions} {regions === 1 ? 'Regione' : 'Regioni'}
-      </span>
-      <span className="flex items-center gap-1.5">
-        <TagIcon className="h-3 w-3" />
-        {epithetCount} {epithetCount === 1 ? 'Epiteto' : 'Epiteti'}
-      </span>
-    </div>
-    <div className="absolute -bottom-3 -right-1 text-[76px] font-serif italic text-accent/[0.06] leading-none select-none pointer-events-none group-hover:text-accent/[0.1] transition-colors">
-      {name.charAt(0)}
-    </div>
-  </motion.div>
-);
+// Elenco divinità: righe tipografiche in ordine di frequenza (niente più
+// card colorate). Ogni riga porta nome, occorrenze, regioni ed epiteti come
+// testo/badge sobri; una barra proporzionale al conteggio dà un riferimento
+// visivo immediato senza ricorrere al colore per distinguere le voci.
+const DivinityList = ({ items, onSelect }: {
+  items: { name: string; count: number; regions: number; epiteti: { name: string; count: number }[] }[];
+  onSelect: (name: string) => void;
+}) => {
+  const maxCount = Math.max(1, ...items.map(d => d.count));
+  return (
+    <motion.div {...fadeSwap} className="flex-1 overflow-y-auto custom-scrollbar pr-2">
+      <div className="divide-y divide-border/50">
+        {items.map((d, i) => (
+          <motion.button
+            key={d.name}
+            onClick={() => onSelect(d.name)}
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3, delay: Math.min(i, 20) * 0.02, ease: EASE_OUT }}
+            className="w-full text-left group py-4 px-2 flex items-center gap-6 hover:bg-accent/[0.04] transition-colors"
+          >
+            <span className="w-40 shrink-0 text-lg font-serif italic text-ink group-hover:text-accent transition-colors truncate">
+              {d.name}
+            </span>
+            <div className="flex-1 min-w-0 flex items-center gap-3">
+              <div className="flex-1 h-1.5 bg-border/40 rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-accent/60 rounded-full transition-all"
+                  style={{ width: `${Math.max(4, (d.count / maxCount) * 100)}%` }}
+                />
+              </div>
+              <span className="w-10 shrink-0 text-right text-xs font-sans font-bold text-muted tabular-nums">
+                {d.count}×
+              </span>
+            </div>
+            <div className="hidden md:flex items-center gap-4 shrink-0 text-[10px] font-sans font-bold uppercase tracking-widest text-muted/70 w-40">
+              <span className="flex items-center gap-1">
+                <MapPin className="h-3 w-3" />
+                {d.regions}
+              </span>
+              <span className="flex items-center gap-1">
+                <TagIcon className="h-3 w-3" />
+                {d.epiteti.length}
+              </span>
+            </div>
+            <ChevronRight className="h-4 w-4 text-border group-hover:text-accent group-hover:translate-x-0.5 transition-all shrink-0" />
+          </motion.button>
+        ))}
+      </div>
+      {items.length === 0 && (
+        <div className="text-center py-12 text-muted/40 text-sm italic">Nessuna divinità trovata per questo filtro.</div>
+      )}
+    </motion.div>
+  );
+};
 
-// Grafo ramificato "obsidian": nodo centrale (la divinità) + epiteti disposti in
-// cerchio attorno, collegati da linee che si disegnano in ingresso. Ogni nodo
-// epiteto è cliccabile e porta alle attestazioni con quell'epiteto; il nodo
-// centrale è cliccabile e porta a TUTTE le attestazioni della divinità,
-// incluse quelle senza epiteto (altrimenti irraggiungibili: la sola via
-// d'accesso alle attestazioni era passare per un epiteto co-occorrente).
-const DivinityGraph = ({ divinity, epithets, onSelectEpithet, onSelectAll }: {
+// Elenco epiteti di una divinità: righe ordinate per frequenza, con barra
+// proporzionale (stesso linguaggio visivo di DivinityList). "Vedi tutte" in
+// cima resta l'unico modo di raggiungere le attestazioni senza epiteto.
+const EpithetList = ({ divinity, epithets, onSelectEpithet, onSelectAll }: {
   divinity: { name: string; count: number; regions: number };
   epithets: { name: string; count: number }[];
   onSelectEpithet: (name: string) => void;
   onSelectAll: () => void;
   key?: string | number;
 }) => {
-  const n = epithets.length;
-  const R = 36; // raggio dei nodi in % del contenitore
-  const nodes = epithets.map((e, i) => {
-    const angle = (2 * Math.PI * i) / Math.max(n, 1) - Math.PI / 2;
-    return { ...e, x: 50 + R * Math.cos(angle), y: 50 + R * Math.sin(angle) };
-  });
-
+  const maxCount = Math.max(1, ...epithets.map(e => e.count));
   return (
     <motion.div {...fadeSwap} className="flex-1 flex flex-col overflow-hidden">
       <div className="mb-4 flex items-center gap-3 text-[10px] font-sans font-bold uppercase tracking-widest text-muted">
@@ -293,59 +282,51 @@ const DivinityGraph = ({ divinity, epithets, onSelectEpithet, onSelectAll }: {
         <span>{epithets.length} {epithets.length === 1 ? 'epiteto' : 'epiteti'} co-occorrenti</span>
       </div>
 
-      <div className="relative flex-1 min-h-[480px]">
-        {/* Linee di collegamento, disegnate in ingresso */}
-        <svg className="absolute inset-0 w-full h-full pointer-events-none" preserveAspectRatio="none">
-          {nodes.map((node, i) => (
-            <motion.line
-              key={node.name}
-              x1="50%" y1="50%"
-              x2={`${node.x}%`} y2={`${node.y}%`}
-              stroke="var(--accent)"
-              strokeOpacity={0.25}
-              strokeWidth={1}
-              initial={{ pathLength: 0, opacity: 0 }}
-              animate={{ pathLength: 1, opacity: 1 }}
-              transition={{ duration: 0.6, delay: 0.05 * i, ease: EASE_OUT }}
-            />
-          ))}
-        </svg>
-
-        {/* Nodo centrale: la divinità — cliccabile, porta a tutte le sue attestazioni */}
-        <motion.button
+      <div className="flex-1 overflow-y-auto custom-scrollbar pr-2">
+        <button
           onClick={onSelectAll}
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          whileHover={{ scale: 1.04 }}
-          transition={{ duration: 0.5, ease: EASE_OUT }}
-          title={`Vedi tutte le attestazioni di ${divinity.name}`}
-          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 group"
+          className="w-full text-left group py-4 px-2 flex items-center justify-between border-b-2 border-accent/30 hover:bg-accent/[0.04] transition-colors mb-1"
         >
-          <div className="w-36 h-36 rounded-full flex flex-col items-center justify-center text-center px-3 border-2 border-accent/40 bg-[var(--card)]/90 backdrop-blur-xl shadow-[0_0_40px_-8px_rgba(var(--shadow-color),0.4)] group-hover:border-accent group-hover:shadow-[0_0_48px_-6px_rgba(var(--shadow-color),0.55)] transition-all">
-            <span className="text-2xl font-bold font-serif italic text-accent leading-tight">{divinity.name}</span>
-            <span className="text-[9px] font-sans font-bold uppercase tracking-widest text-muted mt-1 group-hover:text-accent transition-colors">Vedi tutte ({divinity.count})</span>
-          </div>
-        </motion.button>
+          <span className="text-base font-sans font-bold uppercase tracking-widest text-accent">
+            Vedi tutte le attestazioni di {divinity.name}
+          </span>
+          <span className="flex items-center gap-2 text-xs font-sans font-bold text-muted">
+            {divinity.count}×
+            <ChevronRight className="h-4 w-4 text-accent group-hover:translate-x-0.5 transition-all" />
+          </span>
+        </button>
 
-        {/* Nodi satellite: gli epiteti */}
-        {nodes.map((node, i) => (
-          <motion.button
-            key={node.name}
-            onClick={() => onSelectEpithet(node.name)}
-            initial={{ opacity: 0, scale: 0.6 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.4, delay: 0.15 + 0.05 * i, ease: EASE_OUT }}
-            whileHover={{ scale: 1.08 }}
-            style={{ left: `${node.x}%`, top: `${node.y}%` }}
-            className="absolute -translate-x-1/2 -translate-y-1/2 z-10 flex flex-col items-center justify-center text-center px-3 py-3 rounded-full w-24 h-24 group border border-accent/30 bg-[var(--card)]/90 backdrop-blur-md shadow-[0_8px_24px_-8px_rgba(var(--shadow-color),0.25)] hover:border-accent hover:shadow-[0_0_24px_-4px_rgba(var(--shadow-color),0.5)] transition-all"
-          >
-            <span className="text-xs font-bold font-serif italic text-ink group-hover:text-accent transition-colors leading-tight">{node.name}</span>
-            <span className="text-[9px] font-sans font-bold text-muted mt-1">{node.count}×</span>
-          </motion.button>
-        ))}
+        <div className="divide-y divide-border/50">
+          {epithets.map((e, i) => (
+            <motion.button
+              key={e.name}
+              onClick={() => onSelectEpithet(e.name)}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3, delay: Math.min(i, 20) * 0.02, ease: EASE_OUT }}
+              className="w-full text-left group py-3.5 px-2 flex items-center gap-6 hover:bg-accent/[0.04] transition-colors"
+            >
+              <span className="w-44 shrink-0 text-base font-serif italic text-ink group-hover:text-accent transition-colors truncate">
+                {e.name}
+              </span>
+              <div className="flex-1 min-w-0 flex items-center gap-3">
+                <div className="flex-1 h-1.5 bg-border/40 rounded-full overflow-hidden">
+                  <div
+                    className="h-full bg-accent/60 rounded-full transition-all"
+                    style={{ width: `${Math.max(4, (e.count / maxCount) * 100)}%` }}
+                  />
+                </div>
+                <span className="w-10 shrink-0 text-right text-xs font-sans font-bold text-muted tabular-nums">
+                  {e.count}×
+                </span>
+              </div>
+              <ChevronRight className="h-4 w-4 text-border group-hover:text-accent group-hover:translate-x-0.5 transition-all shrink-0" />
+            </motion.button>
+          ))}
+        </div>
 
-        {nodes.length === 0 && (
-          <div className="absolute inset-0 flex items-center justify-center text-muted/40 text-sm italic text-center px-8">
+        {epithets.length === 0 && (
+          <div className="text-center py-12 text-muted/40 text-sm italic">
             Nessun epiteto co-occorrente per questa divinità nello stesso monumento.
           </div>
         )}
@@ -420,6 +401,113 @@ const AttestationList = ({
   </motion.div>
 );
 
+// Distanza dal bordo superiore del contenitore, in pixel, a cui è ancorato
+// il "marcatore" della rubrica: la voce il cui centro è più vicino a questa
+// linea viene evidenziata mentre si scorre, effetto rolodex/elenco telefonico.
+const RUBRICA_MARKER_OFFSET = 96;
+
+// Onomastica come rubrica: elenco alfabetico verticale su tutta l'altezza
+// disponibile, raggruppato per iniziale. La voce più vicina al marcatore
+// fisso (linea d'accento a RUBRICA_MARKER_OFFSET px dall'alto) si evidenzia
+// dinamicamente durante lo scroll, come sfogliando un vero elenco cartaceo.
+const OnomasticaRubrica = ({ items, onSelect }: {
+  items: { name: string; regions: string[] }[];
+  onSelect: (name: string) => void;
+}) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const itemRefs = useRef<Map<string, HTMLButtonElement>>(new Map());
+  const [activeName, setActiveName] = useState<string | null>(items[0]?.name ?? null);
+  const rafPending = useRef(false);
+
+  const updateActive = () => {
+    rafPending.current = false;
+    const container = containerRef.current;
+    if (!container) return;
+    const markerY = container.getBoundingClientRect().top + RUBRICA_MARKER_OFFSET;
+    let closestName: string | null = null;
+    let closestDist = Infinity;
+    itemRefs.current.forEach((el, name) => {
+      const rect = el.getBoundingClientRect();
+      const center = rect.top + rect.height / 2;
+      const dist = Math.abs(center - markerY);
+      if (dist < closestDist) { closestDist = dist; closestName = name; }
+    });
+    if (closestName) setActiveName(closestName);
+  };
+
+  const onScroll = () => {
+    if (rafPending.current) return;
+    rafPending.current = true;
+    requestAnimationFrame(updateActive);
+  };
+
+  useLayoutEffect(() => { updateActive(); }, [items]);
+
+  let lastLetter = '';
+
+  return (
+    <motion.div {...fadeSwap} className="flex-1 flex overflow-hidden">
+      <div className="relative flex-1 flex flex-col overflow-hidden">
+        {/* Marcatore fisso: linea d'accento all'altezza di RUBRICA_MARKER_OFFSET */}
+        <div
+          className="absolute left-0 right-0 border-t-2 border-accent/70 pointer-events-none z-10"
+          style={{ top: RUBRICA_MARKER_OFFSET }}
+        >
+          <span className="absolute -left-1 -top-[5px] w-2 h-2 rounded-full bg-accent" />
+        </div>
+        <div
+          ref={containerRef}
+          onScroll={onScroll}
+          className="flex-1 overflow-y-auto custom-scrollbar px-2"
+          style={{ paddingTop: RUBRICA_MARKER_OFFSET, paddingBottom: RUBRICA_MARKER_OFFSET }}
+        >
+          {items.map(item => {
+            const letter = item.name.charAt(0).toUpperCase();
+            const showLetter = letter !== lastLetter;
+            lastLetter = letter;
+            const isActive = item.name === activeName;
+            return (
+              <React.Fragment key={item.name}>
+                {showLetter && (
+                  <div className="pt-4 pb-1 pl-2 text-[10px] font-sans font-bold uppercase tracking-[0.3em] text-accent/40 select-none">
+                    {letter}
+                  </div>
+                )}
+                <button
+                  ref={el => { if (el) itemRefs.current.set(item.name, el); else itemRefs.current.delete(item.name); }}
+                  onClick={() => onSelect(item.name)}
+                  className={cn(
+                    "w-full text-left flex items-center justify-between gap-3 px-2 py-2.5 border-b border-border/40 transition-all duration-200",
+                    isActive ? "pl-4" : "pl-2"
+                  )}
+                >
+                  <span className={cn(
+                    "font-serif transition-all duration-200 truncate",
+                    isActive ? "text-xl italic text-accent font-bold" : "text-sm text-ink/70"
+                  )}>
+                    {item.name}
+                  </span>
+                  {item.regions.length > 0 && (
+                    <span className={cn(
+                      "shrink-0 text-[9px] font-sans font-bold uppercase tracking-widest transition-opacity duration-200",
+                      isActive ? "text-accent/70 opacity-100" : "text-muted/40 opacity-0 group-hover:opacity-100"
+                    )}>
+                      {item.regions.join(', ')}
+                    </span>
+                  )}
+                </button>
+              </React.Fragment>
+            );
+          })}
+          {items.length === 0 && (
+            <div className="text-center py-12 text-muted/40 text-sm italic">Nessun nome trovato per questo filtro.</div>
+          )}
+        </div>
+      </div>
+    </motion.div>
+  );
+};
+
 // Sentinella per "tutte le attestazioni della divinità" nello stato
 // selectedEpithet: distingue il drill-down per singolo epiteto dalla vista
 // che mostra ogni menzione della divinità, incluse quelle senza epiteto.
@@ -458,6 +546,7 @@ function EpithetStats({ monumenti, onSelectMonumento }: { monumenti: Monumento[]
         name,
         count,
         regions: regions[name]?.size || 0,
+        regionsList: Array.from(regions[name] || []),
         epiteti: Object.entries(coEpiteti[name] || {})
           .map(([ename, ecount]) => ({ name: ename, count: ecount }))
           .sort((a, b) => b.count - a.count)
@@ -465,7 +554,25 @@ function EpithetStats({ monumenti, onSelectMonumento }: { monumenti: Monumento[]
       .sort((a, b) => b.count - a.count);
   }, [monumenti]);
 
-  // ── Statistiche onomastica ────────────────────────────────────────────────
+  const [divinitaRegionFilter, setDivinitaRegionFilter] = useState('');
+  const divinitaRegions = useMemo(
+    () => Array.from(new Set(divstats.flatMap(d => d.regionsList))).sort(),
+    [divstats]
+  );
+  const filteredDivstats = useMemo(
+    () => divinitaRegionFilter
+      ? divstats.filter(d => d.regionsList.includes(divinitaRegionFilter))
+      : divstats,
+    [divstats, divinitaRegionFilter]
+  );
+
+  // ── Onomastica: rubrica alfabetica ─────────────────────────────────────────
+  // I nomi attestati non si ripetono quasi mai (a differenza delle divinità):
+  // niente più aggregazione per "numero di attestazioni" o "numero di
+  // regioni" come unità significativa — solo un indice navigabile in ordine
+  // alfabetico, con un filtro per regione (l'unico raggruppamento che ha
+  // ancora senso qui).
+  const [onomasticaRegionFilter, setOnomasticaRegionFilter] = useState('');
   const onostats = useMemo(() => {
     const counts: Record<string, number> = {};
     const regions: Record<string, Set<string>> = {};
@@ -477,9 +584,21 @@ function EpithetStats({ monumenti, onSelectMonumento }: { monumenti: Monumento[]
       });
     });
     return Object.entries(counts)
-      .map(([name, count]) => ({ name, count, regions: regions[name]?.size || 0 }))
-      .sort((a, b) => b.count - a.count);
+      .map(([name, count]) => ({ name, count, regions: Array.from(regions[name] || []) }))
+      .sort((a, b) => a.name.localeCompare(b.name));
   }, [monumenti]);
+
+  const onomasticaRegions = useMemo(
+    () => Array.from(new Set(onostats.flatMap(o => o.regions))).sort(),
+    [onostats]
+  );
+
+  const filteredOnostats = useMemo(
+    () => onomasticaRegionFilter
+      ? onostats.filter(o => o.regions.includes(onomasticaRegionFilter))
+      : onostats,
+    [onostats, onomasticaRegionFilter]
+  );
 
   const totalDivinita = divstats.length;
   const totalOnomastica = onostats.length;
@@ -538,7 +657,7 @@ function EpithetStats({ monumenti, onSelectMonumento }: { monumenti: Monumento[]
               ? (selectedDivinity
                   ? 'Epiteti co-occorrenti con questa divinità nel corpus.'
                   : 'Le divinità attestate nel corpus. Seleziona una divinità per esplorarne gli epiteti.')
-              : 'Frequenza e distribuzione geografica delle persone attestate.'}
+              : 'Indice alfabetico delle persone attestate nel corpus. Ogni nome è pressoché unico: qui non si tratta di statistiche, ma di un elenco da consultare.'}
           </p>
         </div>
         {anySelection && (
@@ -591,28 +710,36 @@ function EpithetStats({ monumenti, onSelectMonumento }: { monumenti: Monumento[]
       {/* Contenuto: dissolvenza tra i livelli di navigazione */}
       <AnimatePresence mode="wait">
         {activeTab === 'divinita' && !selectedDivinity && (
-          <motion.div key="divinita-grid" {...fadeSwap} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 overflow-y-auto pr-4 custom-scrollbar px-2">
-            {divstats.map(s => (
-              <DivinityCard
-                key={s.name}
-                name={s.name}
-                count={s.count}
-                regions={s.regions}
-                epithetCount={s.epiteti.length}
-                onClick={() => setSelectedDivinity(s.name)}
-              />
-            ))}
-            {divstats.length === 0 && (
-              <div className="col-span-4 text-center py-12 text-muted/40 text-sm italic">
+          <motion.div key="divinita-list" {...fadeSwap} className="flex-1 flex flex-col overflow-hidden">
+            {divstats.length > 0 && (
+              <div className="mb-2 flex items-center justify-end">
+                <div className="relative w-56">
+                  <select
+                    className="w-full bg-[var(--card)] dark:bg-black/25 border border-[var(--border)]/50 dark:border-white/5 rounded-xl pl-3 pr-8 py-2 font-sans text-xs outline-none shadow-inner focus:border-accent/50 focus:ring-1 focus:ring-accent/30 hover:bg-[var(--sidebar)] dark:hover:bg-black/40 cursor-pointer appearance-none transition-all duration-300"
+                    style={{ backgroundColor: 'var(--card)', color: 'var(--ink)', WebkitAppearance: 'none' as const, appearance: 'none' as const }}
+                    value={divinitaRegionFilter}
+                    onChange={(e) => setDivinitaRegionFilter(e.target.value)}
+                  >
+                    <option value="" className="bg-parchment dark:bg-sidebar text-ink">Tutte le Regioni</option>
+                    {divinitaRegions.map(r => <option key={r} value={r} className="bg-parchment dark:bg-sidebar text-ink">{r}</option>)}
+                  </select>
+                  <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted/50 pointer-events-none" />
+                </div>
+              </div>
+            )}
+            {divstats.length === 0 ? (
+              <div className="text-center py-12 text-muted/40 text-sm italic">
                 Nessuna divinità estratta. Verifica che il corpus contenga tag &lt;persName type="divine"&gt;.
               </div>
+            ) : (
+              <DivinityList items={filteredDivstats} onSelect={setSelectedDivinity} />
             )}
           </motion.div>
         )}
 
         {activeTab === 'divinita' && selectedDivinity && !selectedEpithet && selectedDivinityStats && (
-          <DivinityGraph
-            key="divinita-graph"
+          <EpithetList
+            key="divinita-epiteti"
             divinity={selectedDivinityStats}
             epithets={selectedDivinityStats.epiteti}
             onSelectEpithet={(name) => setSelectedEpithet(name)}
@@ -633,21 +760,27 @@ function EpithetStats({ monumenti, onSelectMonumento }: { monumenti: Monumento[]
         )}
 
         {activeTab === 'onomastica' && !selected && (
-          <motion.div key="onomastica-grid" {...fadeSwap} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 overflow-y-auto pr-4 custom-scrollbar px-2">
-            {onostats.map(s => (
-              <StatsCard
-                key={s.name}
-                name={s.name}
-                count={s.count}
-                regions={s.regions}
-                badge="ATTESTAZIONE"
-                onClick={() => setSelected(s.name)}
-              />
-            ))}
-            {onostats.length === 0 && (
-              <div className="col-span-4 text-center py-12 text-muted/40 text-sm italic">
+          <motion.div key="onomastica-rubrica" {...fadeSwap} className="flex-1 flex flex-col overflow-hidden">
+            <div className="mb-4 flex items-center justify-end animate-in fade-in slide-in-from-left-2 duration-300">
+              <div className="relative w-56">
+                <select
+                  className="w-full bg-[var(--card)] dark:bg-black/25 border border-[var(--border)]/50 dark:border-white/5 rounded-xl pl-3 pr-8 py-2 font-sans text-xs outline-none shadow-inner focus:border-accent/50 focus:ring-1 focus:ring-accent/30 hover:bg-[var(--sidebar)] dark:hover:bg-black/40 cursor-pointer appearance-none transition-all duration-300"
+                  style={{ backgroundColor: 'var(--card)', color: 'var(--ink)', WebkitAppearance: 'none' as const, appearance: 'none' as const }}
+                  value={onomasticaRegionFilter}
+                  onChange={(e) => setOnomasticaRegionFilter(e.target.value)}
+                >
+                  <option value="" className="bg-parchment dark:bg-sidebar text-ink">Tutte le Regioni</option>
+                  {onomasticaRegions.map(r => <option key={r} value={r} className="bg-parchment dark:bg-sidebar text-ink">{r}</option>)}
+                </select>
+                <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted/50 pointer-events-none" />
+              </div>
+            </div>
+            {onostats.length === 0 ? (
+              <div className="text-center py-12 text-muted/40 text-sm italic">
                 Nessun nome di persona estratto. Verifica che il corpus contenga tag &lt;persName type="attested"&gt;.
               </div>
+            ) : (
+              <OnomasticaRubrica items={filteredOnostats} onSelect={setSelected} />
             )}
           </motion.div>
         )}
