@@ -534,6 +534,11 @@ const RUBRICA_MARKER_OFFSET = 96;
 // disponibile, raggruppato per iniziale. La voce più vicina al marcatore
 // fisso (linea d'accento a RUBRICA_MARKER_OFFSET px dall'alto) si evidenzia
 // dinamicamente durante lo scroll, come sfogliando un vero elenco cartaceo.
+// Indice alfabetico completo (A-Z + "#" per nomi che non iniziano con una
+// lettera, es. "[...]lia figlia di Poplios") per la colonna di selezione
+// rapida a sinistra della rubrica.
+const RUBRICA_ALPHABET = ['#', ...'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')];
+
 const OnomasticaRubrica = ({ items, onSelect }: {
   items: { name: string; regions: string[] }[];
   onSelect: (name: string) => void;
@@ -567,10 +572,59 @@ const OnomasticaRubrica = ({ items, onSelect }: {
 
   useLayoutEffect(() => { updateActive(); }, [items]);
 
+  // Prima voce per ogni lettera, per l'indice laterale A-Z: quali lettere
+  // hanno almeno un nome (le altre restano disabilitate) e a quale voce
+  // saltare quando si clicca una lettera.
+  const letterFirstItem = useMemo(() => {
+    const map: Record<string, string> = {};
+    items.forEach(item => {
+      const raw = item.name.charAt(0).toUpperCase();
+      const letter = /[A-Z]/.test(raw) ? raw : '#';
+      if (!map[letter]) map[letter] = item.name;
+    });
+    return map;
+  }, [items]);
+
+  const scrollToLetter = (letter: string) => {
+    const container = containerRef.current;
+    const targetName = letterFirstItem[letter];
+    const el = targetName ? itemRefs.current.get(targetName) : undefined;
+    if (!container || !el) return;
+    const markerY = container.getBoundingClientRect().top + RUBRICA_MARKER_OFFSET;
+    const elY = el.getBoundingClientRect().top;
+    container.scrollTo({ top: container.scrollTop + (elY - markerY), behavior: 'smooth' });
+  };
+
+  const activeLetter = activeName
+    ? (/[A-Z]/.test(activeName.charAt(0).toUpperCase()) ? activeName.charAt(0).toUpperCase() : '#')
+    : null;
+
   let lastLetter = '';
 
   return (
-    <motion.div {...fadeSwap} className="flex-1 flex overflow-hidden">
+    <motion.div {...fadeSwap} className="flex-1 flex overflow-hidden gap-1">
+      {/* Indice alfabetico laterale: salta direttamente alla prima voce di
+          una lettera. Le lettere senza alcun nome restano disabilitate. */}
+      <div className="hidden sm:flex flex-col shrink-0 w-6 py-1">
+        {RUBRICA_ALPHABET.map(letter => {
+          const available = !!letterFirstItem[letter];
+          return (
+            <button
+              key={letter}
+              disabled={!available}
+              onClick={() => scrollToLetter(letter)}
+              className={cn(
+                "flex-1 flex items-center justify-center text-[9px] font-sans font-bold uppercase transition-all duration-150",
+                !available && "text-muted/20 cursor-default",
+                available && letter === activeLetter && "text-accent scale-125 font-black",
+                available && letter !== activeLetter && "text-muted/60 hover:text-accent hover:scale-110"
+              )}
+            >
+              {letter}
+            </button>
+          );
+        })}
+      </div>
       <div className="relative flex-1 flex flex-col overflow-hidden">
         {/* Marcatore fisso: linea d'accento all'altezza di RUBRICA_MARKER_OFFSET */}
         <div
@@ -582,43 +636,45 @@ const OnomasticaRubrica = ({ items, onSelect }: {
         <div
           ref={containerRef}
           onScroll={onScroll}
-          className="flex-1 overflow-y-auto custom-scrollbar px-2"
+          className="flex-1 overflow-y-auto custom-scrollbar px-4"
           style={{ paddingTop: RUBRICA_MARKER_OFFSET, paddingBottom: RUBRICA_MARKER_OFFSET }}
         >
+          {/* Indice "a sommario di libro": ogni lettera è un capitolo, i
+              nomi sotto sono le sue voci indentate — nome a sinistra,
+              regione a destra, come in un indice editoriale. */}
           {items.map(item => {
-            const letter = item.name.charAt(0).toUpperCase();
+            const raw = item.name.charAt(0).toUpperCase();
+            const letter = /[A-Z]/.test(raw) ? raw : '#';
             const showLetter = letter !== lastLetter;
             lastLetter = letter;
             const isActive = item.name === activeName;
             return (
               <React.Fragment key={item.name}>
                 {showLetter && (
-                  <div className="pt-4 pb-1 pl-2 text-[10px] font-sans font-bold uppercase tracking-[0.3em] text-accent/40 select-none">
-                    {letter}
+                  <div
+                    className="pt-7 pb-1 text-sm font-serif text-ink select-none"
+                    style={{ fontVariant: 'small-caps', letterSpacing: '0.08em' }}
+                  >
+                    {letter === '#' ? '—' : letter}
                   </div>
                 )}
                 <button
                   ref={el => { if (el) itemRefs.current.set(item.name, el); else itemRefs.current.delete(item.name); }}
                   onClick={() => onSelect(item.name)}
-                  className={cn(
-                    "w-full text-left flex items-center justify-between gap-3 px-2 py-2.5 border-b border-border/40 transition-all duration-200",
-                    isActive ? "pl-4" : "pl-2"
-                  )}
+                  className="w-full text-left flex items-baseline justify-between gap-4 py-1.5 pl-6 pr-1 transition-all duration-200"
                 >
                   <span className={cn(
                     "font-serif transition-all duration-200 truncate",
-                    isActive ? "text-xl italic text-accent font-bold" : "text-sm text-ink/70"
+                    isActive ? "text-accent font-bold" : "text-ink/80"
                   )}>
                     {item.name}
                   </span>
-                  {item.regions.length > 0 && (
-                    <span className={cn(
-                      "shrink-0 text-[9px] font-sans font-bold uppercase tracking-widest transition-opacity duration-200",
-                      isActive ? "text-accent/70 opacity-100" : "text-muted/40 opacity-0 group-hover:opacity-100"
-                    )}>
-                      {item.regions.join(', ')}
-                    </span>
-                  )}
+                  <span className={cn(
+                    "shrink-0 text-xs font-serif italic tracking-wide transition-colors duration-200",
+                    isActive ? "text-accent" : "text-muted/50"
+                  )}>
+                    {item.regions[0] || ''}
+                  </span>
                 </button>
               </React.Fragment>
             );
