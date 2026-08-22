@@ -60,15 +60,35 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Koïntos Lollios</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Koïntos Lollios">
+                        <persName type="attested" key="Koïntos Lollios">
+                            <name nymRef="Κόϊντος">Κ.</name>
+                            <name nymRef="Λόλλιος">Λόλλιος</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Κ. Λόλλιος μετὰ γυναικό-
-                    <lb n="2"/>ς καὶ ἀδελφοῦ καὶ
+                    <lb n="1"/><persName type="attested" key="Koïntos Lollios"><name nymRef="Κόϊντος">Κ.</name> <name nymRef="Λόλλιος">Λόλλιος</name></persName> μετὰ γυναικό-
+                    <lb n="2" break="no"/>ς καὶ ἀδελφοῦ καὶ
                     <lb n="3"/>θρεπτοῦ τεκμορεύσαν-
-                    <lb n="4"/>τες Μηνὶ εὐχήν.
+                    <lb n="4" break="no"/>τες <persName type="divine" key="Men"><name nymRef="Μήν">Μηνὶ</name></persName> εὐχήν.
                 </ab>
             </div>
             <div type="apparatus"/>

@@ -60,12 +60,29 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="onomastica">
+                    <term>Marcus Serapios</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Marcus Serapios">
+                        <persName type="attested" key="Marcus Serapios">
+                            <name nymRef="Μᾶρκος">Μ.</name>
+                            <name nymRef="Σεράπιος">Σεράπιος</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Μ. Σεράπιος
+                    <lb n="1"/><persName type="attested" key="Marcus Serapios"><name nymRef="Μᾶρκος">Μ.</name> <name nymRef="Σεράπιος">Σεράπιος</name></persName>
                     <lb n="2"/>[.........]ις
                     <lb n="3"/>·ολ·τριανός
                 </ab>

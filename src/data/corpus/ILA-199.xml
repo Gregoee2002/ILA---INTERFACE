@@ -60,19 +60,45 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Askaenos</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Kastor figlio di Dionysios</term>
+                    <term>Dionysios</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Kastor figlio di Dionysios">
+                        <persName type="attested" key="Kastor figlio di Dionysios">
+                            <name nymRef="Κάστωρ">Κάστωρ</name>
+                            <persName type="attested" key="Dionysios">
+                                <name type="patronymic" nymRef="Διονύσιος">Διονυσίου</name>
+                            </persName>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Μηνὶ Ἀσκ-
-                    <lb n="2"/>αηνῷ
+                    <lb n="1"/><persName type="divine" key="Men Askaenos"><name nymRef="Μήν">Μηνὶ</name> <rs type="epithet">Ἀσκ-
+                    <lb n="2" break="no"/>αηνῷ</rs></persName>
                     <lb n="3"/>εὐχήν
-                    <lb n="4"/>Κάστωρ
-                    <lb n="5"/>Διονυσί-
-                    <lb n="6"/>ου μετὰ
+                    <lb n="4"/><persName type="attested" key="Kastor figlio di Dionysios"><name nymRef="Κάστωρ">Κάστωρ</name>
+                    <lb n="5"/><persName type="attested" key="Dionysios"><name type="patronymic" nymRef="Διονύσιος">Διονυσί-
+                    <lb n="6" break="no"/>ου</name></persName></persName> μετὰ
                     <lb n="7"/>τῶν ἰδίω-
-                    <lb n="8"/>ν.
+                    <lb n="8" break="no"/>ν.
                 </ab>
             </div>
             <div type="apparatus"/>

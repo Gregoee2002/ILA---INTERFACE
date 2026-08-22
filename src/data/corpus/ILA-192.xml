@@ -60,16 +60,41 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Kalikles</term>
+                    <term>Menemachos</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Kalikles">
+                        <persName type="attested" key="Kalikles">
+                            <name nymRef="Καλικλῆς">[Κ]αλικλῆς</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Menemachos figlio di Kalikles">
+                        <persName type="attested" key="Menemachos figlio di Kalikles">
+                            <name nymRef="Μενέμαχος">Μενέμαχος</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>[Κ]αλικλῆς
+                    <lb n="1"/><persName type="attested" key="Kalikles"><name nymRef="Καλικλῆς">[Κ]αλικλῆς</name></persName>
                     <lb n="2"/>καὶ υἱὸς αὐτ-
-                    <lb n="3"/>οῦ Μενέ-
-                    <lb n="4"/>μαχος Μη-
-                    <lb n="5"/>νὶ εὐχήν.
+                    <lb n="3" break="no"/>οῦ <persName type="attested" key="Menemachos figlio di Kalikles"><name nymRef="Μενέμαχος">Μενέ-
+                    <lb n="4" break="no"/>μαχος</name></persName> <persName type="divine" key="Men"><name nymRef="Μήν">Μη-
+                    <lb n="5" break="no"/>νὶ</name></persName> εὐχήν.
                 </ab>
             </div>
             <div type="apparatus"/>

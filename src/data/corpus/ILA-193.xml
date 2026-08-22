@@ -60,14 +60,34 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="onomastica">
+                    <term>Lucius Valerius Niger</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Lucius Valerius Niger">
+                        <persName type="attested" key="Lucius Valerius Niger">
+                            <name nymRef="Lucius">L.</name>
+                            <name nymRef="Valerius">Vale-
+                            rius</name>
+                            <name nymRef="Niger">Ni-
+                            ger</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="la">
                 <ab>
-                    <lb n="1"/>L. Vale-
-                    <lb n="2"/>rius Ni-
-                    <lb n="3"/>ger L V S.
+                    <lb n="1"/><persName type="attested" key="Lucius Valerius Niger"><name nymRef="Lucius">L.</name> <name nymRef="Valerius">Vale-
+                    <lb n="2" break="no"/>rius</name> <name nymRef="Niger">Ni-
+                    <lb n="3" break="no"/>ger</name></persName> L V S.
                 </ab>
             </div>
             <div type="apparatus"/>

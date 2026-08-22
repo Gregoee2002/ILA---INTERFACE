@@ -60,14 +60,38 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Askaenos</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Marcus Ioulios Helios</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Marcus Ioulios Helios">
+                        <persName type="attested" key="Marcus Ioulios Helios">
+                            <name nymRef="Μᾶρκος">Μ.</name>
+                            <name nymRef="Ἰούλιος">Ἰούλιος</name>
+                            <name nymRef="Ἥλιος">Ἥλιος</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Μ. Ἰούλιος
-                    <lb n="2"/>Ἥλιος Μηνὶ
-                    <lb n="3"/>Ἀσκαηνῷ εὐ(χήν).
+                    <lb n="1"/><persName type="attested" key="Marcus Ioulios Helios"><name nymRef="Μᾶρκος">Μ.</name> <name nymRef="Ἰούλιος">Ἰούλιος</name>
+                    <lb n="2"/><name nymRef="Ἥλιος">Ἥλιος</name></persName> <persName type="divine" key="Men Askaenos"><name nymRef="Μήν">Μηνὶ</name>
+                    <lb n="3"/><rs type="epithet">Ἀσκαηνῷ</rs></persName> εὐ(χήν).
                 </ab>
             </div>
             <div type="apparatus"/>

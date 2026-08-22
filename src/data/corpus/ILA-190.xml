@@ -60,16 +60,40 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Askaenos</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Dionysios Ioulios Keleros</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Dionysios Ioulios Keleros">
+                        <persName type="attested" key="Dionysios Ioulios Keleros">
+                            <name nymRef="Διονύσιος">Διονύσιος</name>
+                            <name nymRef="Ἰούλιος">Ἰούλιος</name>
+                            <name nymRef="Κέλερος">Κέλερος</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Διονύσιος Ἰούλι-
-                    <lb n="2"/>ος Κέλερος με-
-                    <lb n="3"/>τὰ γυναικὸς καὶ
-                    <lb n="4"/>θρεπτοῦ Μη[νὶ] Ἀσ-
-                    <lb n="5"/>[καηνῷ] εὐχήν.
+                    <lb n="1"/><persName type="attested" key="Dionysios Ioulios Keleros"><name nymRef="Διονύσιος">Διονύσιος</name> <name nymRef="Ἰούλιος">Ἰούλι-
+                    <lb n="2" break="no"/>ος</name> <name nymRef="Κέλερος">Κέλερος</name></persName> με-
+                    <lb n="3" break="no"/>τὰ γυναικὸς καὶ
+                    <lb n="4"/>θρεπτοῦ <persName type="divine" key="Men Askaenos"><name nymRef="Μήν">Μη[νὶ]</name> <rs type="epithet">Ἀσ-
+                    <lb n="5" break="no"/>[καηνῷ]</rs></persName> εὐχήν.
                 </ab>
             </div>
             <div type="apparatus"/>

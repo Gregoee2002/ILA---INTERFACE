@@ -60,16 +60,39 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Askaenos</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Publius Beteilios</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Publius Beteilios">
+                        <persName type="attested" key="Publius Beteilios">
+                            <name nymRef="Πόπλιος">Π.</name>
+                            <name nymRef="Βετείλιος">Βετεί(λιος)</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Π. Βετεί(λιος) τέκτων
+                    <lb n="1"/><persName type="attested" key="Publius Beteilios"><name nymRef="Πόπλιος">Π.</name> <name nymRef="Βετείλιος">Βετεί(λιος)</name></persName> τέκτων
                     <lb n="2"/>τεκμορεύσας
                     <lb n="3"/>μετὰ γυναικὸς
                     <lb n="4"/>καὶ ἀνεψίου
-                    <lb n="5"/>Μη(νὶ) Ἀσ(καηνῷ) εὐχήν.
+                    <lb n="5"/><persName type="divine" key="Men Askaenos"><name nymRef="Μήν">Μη(νὶ)</name> <rs type="epithet">Ἀσ(καηνῷ)</rs></persName> εὐχήν.
                 </ab>
             </div>
             <div type="apparatus"/>

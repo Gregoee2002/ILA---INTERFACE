@@ -60,15 +60,42 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Loukios Trophimos Kouinthos</term>
+                    <term>Koïntos (figlio di Loukios Trophimos Kouinthos)</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Loukios Trophimos Kouinthos">
+                        <persName type="attested" key="Loukios Trophimos Kouinthos">
+                            <name nymRef="Λούκιος">[Λο]ύκιος</name>
+                            <name nymRef="Τρόφιμος">Τροφί[μ]ου</name>
+                            <name nymRef="Κουΐνθος">Κουΐνθου</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Koïntos (figlio di Loukios Trophimos Kouinthos)">
+                        <persName type="attested" key="Koïntos (figlio di Loukios Trophimos Kouinthos)">
+                            <name nymRef="Κόϊντος">Κόιντος</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/><gap reason="lost" extent="unknown"/>ς Κόιντος
-                    <lb n="2"/><supplied reason="lost">Λο</supplied>ύκιος Τροφί-
-                    <lb n="3"/><supplied reason="lost">μ</supplied>ου Κουΐνθου
-                    <lb n="4"/>υἱοὶ Μηνὶ εὐχήν.
+                    <lb n="1"/><gap reason="lost" extent="unknown"/>ς <persName type="attested" key="Koïntos (figlio di Loukios Trophimos Kouinthos)"><name nymRef="Κόϊντος">Κόιντος</name></persName>
+                    <lb n="2"/><persName type="attested" key="Loukios Trophimos Kouinthos"><name nymRef="Λούκιος"><supplied reason="lost">Λο</supplied>ύκιος</name> <name nymRef="Τρόφιμος">Τροφί-
+                    <lb n="3" break="no"/><supplied reason="lost">μ</supplied>ου</name> <name nymRef="Κουΐνθος">Κουΐνθου</name></persName>
+                    <lb n="4"/>υἱοὶ <persName type="divine" key="Men"><name nymRef="Μήν">Μηνὶ</name></persName> εὐχήν.
                 </ab>
             </div>
             <div type="apparatus"/>
