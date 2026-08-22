@@ -4,13 +4,13 @@
     <teiHeader>
         <fileDesc>
             <titleStmt>
-                <title><rs type="textType">Dedication</rs> Base di statua marmorea iscritta con foro per la statua</title>
+                <title><rs type="textType">Dedication</rs> Base di statua marmorea iscritta con foro</title>
             </titleStmt>
             <publicationStmt>
                 <authority>ILA — Index Lunae Antiquae</authority>
                 <idno type="id">98</idno>
                 <idno type="entryId">gen-1786984905702-7h-2zs9jp</idno>
-                <idno type="TM">TM 792689</idno>
+                <idno type="TM" ref="www.trismegistos.org/text/792689">792689</idno>
             </publicationStmt>
             <sourceDesc>
                 <msDesc>
@@ -87,7 +87,7 @@
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
-                <ab>
+<ab>
                     <lb n="1"/><persName type="attested" key="Dionysios"><name nymRef="Διονύσιος">Διονύσιος</name></persName> καὶ <persName type="attested" key="Babilylia"><name nymRef="Βαβυλια">Βαβυλία</name></persName> τῷ <persName type="divine" key="Men"><name nymRef="Μήν">Μηνὶ</name></persName> τὸ ἱερὸν ἀνέθεσαν.
                 </ab>
             </div>

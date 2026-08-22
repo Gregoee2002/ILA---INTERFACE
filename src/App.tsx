@@ -294,7 +294,15 @@ const DivinityDiagonalList = ({ items, onSelect, searchTerm }: {
           className="flex-1 overflow-y-auto overflow-x-hidden custom-scrollbar"
           style={{ paddingTop: RUBRICA_MARKER_OFFSET, paddingBottom: RUBRICA_MARKER_OFFSET }}
         >
-          <div className="relative" style={{ height: totalHeight }}>
+          {/* minWidth garantisce che il contenitore abbia davvero
+              altrettanta larghezza scrollabile quanto richiesto dall'ultima
+              riga: senza, il browser blocca scrollLeft al massimo che
+              riesce a calcolare dal contenuto effettivamente presente, e il
+              pan smette di seguire la diagonale ben prima dell'ultima voce
+              (restava comunque selezionabile, solo non più raggiunta dalla
+              vista). +240 = spazio per contatore ed eventuale badge epiteto
+              a destra del punto sull'ultima riga. */}
+          <div className="relative" style={{ height: totalHeight, minWidth: tickX(sorted.length - 1) + 240 }}>
             {sorted.length > 1 && (
               <svg className="absolute inset-0 pointer-events-none" width="100%" height={totalHeight} preserveAspectRatio="none">
                 <line
@@ -579,7 +587,10 @@ const OnomasticaRubrica = ({ items, onSelect }: {
     if (closestName) setActiveName(closestName);
     if (closestRect) {
       const r: DOMRect = closestRect;
-      setMarkerTop(r.top - containerRect.top + r.height / 2);
+      // Sotto il testo (bordo inferiore della riga), non a metà altezza:
+      // a metà attraverserebbe il nome come una barratura invece di
+      // sottolinearlo.
+      setMarkerTop(r.bottom - containerRect.top);
     }
     setRowDist(dist);
   };
@@ -6216,8 +6227,6 @@ export default function App() {
                       
                     </div>
                     
-                    <p className="font-sans text-[11px] font-bold uppercase tracking-[0.3em] text-accent mb-12">Registro Monografico & Analisi Epigrafica</p>
-
                     {/* Advanced EpiDoc / TEI Metadata Summary Card (Visible only when not editing) */}
                     {true && (
                       <div className="space-y-8 animate-in fade-in duration-300 mb-12">
@@ -6261,7 +6270,7 @@ export default function App() {
                                 <span className="text-ink font-serif italic text-xs capitalize">{selectedMonumento.tipo || "non specificato"}</span>
                                 {selectedMonumento.tipo_ref && (
                                   <a href={selectedMonumento.tipo_ref} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-[9px] text-accent hover:underline ml-2 align-middle font-mono">
-                                    🦅 EAGLE Object Link ↗
+                                    EAGLE Object Link ↗
                                   </a>
                                 )}
                               </div>
@@ -6271,7 +6280,7 @@ export default function App() {
                                 <span className="text-ink font-serif italic text-xs capitalize">{selectedMonumento.materiale || "non specificato"}</span>
                                 {selectedMonumento.materialRef && (
                                   <a href={selectedMonumento.materialRef} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-[9px] text-accent hover:underline ml-2 align-middle font-mono">
-                                    🦅 EAGLE Material Link ↗
+                                    EAGLE Material Link ↗
                                   </a>
                                 )}
                               </div>

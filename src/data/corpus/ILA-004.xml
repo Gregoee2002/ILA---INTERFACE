@@ -8,11 +8,10 @@
             </titleStmt>
             <publicationStmt>
                 <authority>ILA — Index Lunae Antiquae</authority>
-                <idno type="TM"><!-- inserire TM number --></idno>
-                    <idno type="id">4</idno>
+                <idno type="id">4</idno>
                 <idno type="entryId">gen-1786984905702-3-5iwp5e</idno>
-</publicationStmt>
-            <!-- REVISIONE (cross-check PDF Lane p. 21-22): "Ἀξιοτ-τήνῳ" -> "Ἀξιοττηνῷ" (l. 2, trattino interno spurio: nel testo di Lane la parola è stampata per intero su un'unica riga, senza divisione); "... Αλι- Ποπλίου" -> "[...]λία Ποπλίου" (l. 3, il draft riportava lettere non corrispondenti a quanto stampato: Lane mostra tre puntini di lacuna seguiti da "λία", non "Αλι-"); aggiunta nota di rinvenimento (stesso luogo/tempo dell'entry 31, portato al museo della Evangelike Schole, apparentemente perduto); Pleiades ref corretto 609032 (ID inesistente/404) -> 609441 (Kollyda/Goloida = Gölde, verificato via Pleiades API e Trismegistos TM Geo 33613); TM non trovato. -->
+                <idno type="TM">&lt;!-- inserire TM number --&gt;</idno>
+            </publicationStmt>
             <sourceDesc>
                 <msDesc>
                     <msIdentifier>
@@ -25,10 +24,10 @@
                                     <p>Lastra di marmo(?) con rilievo di due occhi, rinvenuta nello stesso momento e nello stesso luogo di CMRDM I 31 a Gyölde, parimenti trasportata al museo della Evangelike Schole. Apparentemente perduta.</p>
                                     <material ref="https://www.eagle-network.eu/voc/material/lod/48.html">marble</material>
                                     <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/53.html">plaque</objectType>
-                                    <dimensions unit="cm">
-                                        <height></height>
-                                        <width></width>
-                                        <depth></depth>
+                                    <dimensions>
+                                        <height unit="metre"></height>
+                                        <width unit="metre"></width>
+                                        <depth unit="metre"></depth>
                                     </dimensions>
                                 </support>
                             </supportDesc>
@@ -52,7 +51,6 @@
                                 <placeName type="modern" ref="DA_COMPILARE">Gyölde, Turkey</placeName>
                                 <placeName type="region">Asia Minor</placeName>
                             </origPlace>
-                            <origDate datingMethod="#julian" precision="low"></origDate>
                         </origin>
                         <provenance type="found">Gyölde, Turchia</provenance>
                         <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
@@ -70,18 +68,20 @@
                     <term>Men</term>
                 </keywords>
                 <keywords scheme="onomastica">
-                    <term>[...]lia figlia di Poplios</term>
+                    <term>*lia figlia di Poplios</term>
                     <term>Poplios</term>
                 </keywords>
             </textClass>
             <particDesc>
                 <listPerson>
-                    <person xml:id="[...]lia figlia di Poplios">
-                        <persName type="attested" key="[...]lia figlia di Poplios">
-                            <name>[...]λία</name>
-                            <persName type="attested" key="Poplios">
-                                <name type="patronymic" nymRef="Πόπλιος">Ποπλίου</name>
-                            </persName>
+                    <person xml:id="*lia figlia di Poplios">
+                        <persName type="attested" key="*lia figlia di Poplios">
+                            <name>[...]λία Ποπλίου</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Poplios">
+                        <persName type="attested" key="Poplios">
+                            <name nymRef="Πόπλιος">Ποπλίου</name>
                         </persName>
                     </person>
                 </listPerson>
@@ -94,12 +94,12 @@
                 <ab>
                     <lb n="1"/><persName type="divine" key="Men Ouranios"><name nymRef="Μήν">Μηνὶ</name> <rs type="epithet">Οὐρανίῳ</rs></persName>
                     <lb n="2"/><persName type="divine" key="Men Axiottenos"><name nymRef="Μήν">Μηνὶ</name> <rs type="epithet">Ἀξιοττηνῷ</rs></persName>
-                    <lb n="3"/><persName type="attested" key="[...]lia figlia di Poplios"><name>[...]λία</name> <persName type="attested" key="Poplios"><name type="patronymic" nymRef="Πόπλιος">Ποπλίου</name></persName></persName>
+                    <lb n="3"/><persName type="attested" key="*lia figlia di Poplios">[...]λία <persName type="attested" key="Poplios"><name type="patronymic" nymRef="Πόπλιος">Ποπλίου</name></persName></persName>
                 </ab>
             </div>
-            <div type="apparatus"/>
-            <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
-            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="commentary">
+                <p>DA_COMPILARE</p>
+            </div>
             <div type="bibliography">
                 <listBibl>
                     <bibl>Lane, CMRDM I 32</bibl>

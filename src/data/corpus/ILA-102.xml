@@ -4,7 +4,7 @@
     <teiHeader>
         <fileDesc>
             <titleStmt>
-                <title><rs type="textType">stele</rs> Stele di marmo bianco con rilievo di Men, Tarsi? (Kölekoy)</title>
+                <title><rs type="textType">stele</rs> <rs type="textType">Confession inscription</rs> Stele di marmo bianco con rilievo di Men, Tarsi? (Kölekoy)</title>
             </titleStmt>
             <publicationStmt>
                 <authority>ILA — Index Lunae Antiquae</authority>
@@ -86,6 +86,7 @@
                     <bibl>Herrmann, op. cit., p. 30, no. 21, Plate VIII, no. 2</bibl>
                     <bibl>Robert, REG, LXXVI, 1963, p. 170, no. 235</bibl>
                     <bibl>Lane, I, p. 50, no. A2</bibl>
+                    <bibl>Petzl, Die Beichtinschriften im römischen Kleinasien und der Fromme und Gerechte Gott (1998), 9-11, Abb. 3</bibl>
                 </listBibl>
             </div>
         </body>
