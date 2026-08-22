@@ -60,25 +60,54 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="divinita">
+                    <term>Demeter</term>
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Publius Ailios Menekrates</term>
+                    <term>Berios Bassos</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Publius Ailios Menekrates">
+                        <persName type="attested" key="Publius Ailios Menekrates">
+                            <name nymRef="Πόπλιος">Π(όπλιον)</name>
+                            <name nymRef="Αἴλιος">Αἴλιον</name>
+                            <name nymRef="Μενεκράτης">Μενεκράτην</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Berios Bassos">
+                        <persName type="attested" key="Berios Bassos">
+                            <name nymRef="Βέριος">Βερίου</name>
+                            <name nymRef="Βάσσος">Βάσσου</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
                     <lb n="1"/>ΟΜ
-                    <lb n="2"/>Π(όπλιον) Αἴλιον Μενεκράτην
-                    <lb n="3"/>τῇ ἱερείᾳ τῆς Δήμητρος
+                    <lb n="2"/><persName type="attested" key="Publius Ailios Menekrates"><name nymRef="Πόπλιος">Π(όπλιον)</name> <name nymRef="Αἴλιος">Αἴλιον</name> <name nymRef="Μενεκράτης">Μενεκράτην</name></persName>
+                    <lb n="3"/>τῇ ἱερείᾳ τῆς <persName type="divine" key="Demeter"><name nymRef="Δημήτηρ">Δήμητρος</name></persName>
                     <lb n="4"/>ἀνενέγκαντα καὶ καθιέρω-
-                    <lb n="5"/>σαντα καλάθον περιάργυρον
-                    <lb n="6"/>τὸν λείποντα τοῖς τῆς Δήμη-
-                    <lb n="7"/>τρος μυστηρίοις, καὶ τῷ προκα-
-                    <lb n="8"/>θημένῳ τῆς κώμης Μηνὶ ση-
+                    <lb n="5" break="no"/>σαντα καλάθον περιάργυρον
+                    <lb n="6"/>τὸν λείποντα τοῖς τῆς <persName type="divine" key="Demeter"><name nymRef="Δημήτηρ">Δήμη-
+                    <lb n="7" break="no"/>τρος</name></persName> μυστηρίοις, καὶ τῷ προκα-
+                    <lb n="8" break="no"/>θημένῳ τῆς κώμης <persName type="divine" key="Men"><name nymRef="Μήν">Μηνὶ</name></persName> ση-
                     <lb n="9"/>μήαν περιάργυρον, τὴν προ-
                     <lb n="10"/>πομπεύουσαν τῶν μυστηρί-
                     <lb n="11"/>ων αὐτοῦ. Διὰ τε τοῦτο καθι-
                     <lb n="12"/>έρωσεν ὑπὲρ τῆς ἱεροσύνης
-                    <lb n="13"/>εἰς τὰς ἐπιθυσίας τῆς Δήμη-
-                    <lb n="14"/>τρος τὰ πρὸ τῆς οἰκίας ἐργα-
+                    <lb n="13"/>εἰς τὰς ἐπιθυσίας τῆς <persName type="divine" key="Demeter"><name nymRef="Δημήτηρ">Δήμη-
+                    <lb n="14" break="no"/>τρος</name></persName> τὰ πρὸ τῆς οἰκίας ἐργα-
                     <lb n="15"/>στήρια εἰς τὸ κατ᾽ ἐνιαυτὸν
                     <lb n="16"/>ἕκαστον τῇ τοῦ καλάθου
                     <lb n="17"/>ἀναφορᾷ τοὺς κληρωθέν-
@@ -88,7 +117,7 @@
                     <lb n="21"/>οἰκίᾳ αὐτοῦ διὰ παντὸς τοῦ
                     <lb n="22"/>βίου.
                     <lb n="23"/>Ἐπὶ ἄρχοντος τῆς κατοικίας
-                    <lb n="24"/>Βερίου Βάσσου φιλοσεβάστου καὶ
+                    <lb n="24"/><persName type="attested" key="Berios Bassos"><name nymRef="Βέριος">Βερίου</name> <name nymRef="Βάσσος">Βάσσου</name></persName> φιλοσεβάστου καὶ
                     <lb n="25"/>τῶν συναρχόντων αὐτοῦ.
                 </ab>
             </div>

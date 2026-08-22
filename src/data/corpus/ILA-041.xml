@@ -60,20 +60,47 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Axiottenos</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                    <term>Anaeitis</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Amias</term>
+                    <term>Apollonios</term>
+                    <term>Demophilos</term>
+                    <term>Pateres</term>
+                    <term>Tryphaina</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Amias"><persName type="attested" key="Amias"><name nymRef="Ἀμιάς">Ἀμιὰς</name></persName></person>
+                    <person xml:id="Apollonios"><persName type="attested" key="Apollonios"><name nymRef="Ἀπολλώνιος">Ἀπολλώνιος</name></persName></person>
+                    <person xml:id="Demophilos"><persName type="attested" key="Demophilos"><name nymRef="Δημόφιλος">Δημόφιλος</name></persName></person>
+                    <person xml:id="Pateres"><persName type="attested" key="Pateres"><name nymRef="Πατέρης">Πατερῆ</name></persName></person>
+                    <person xml:id="Tryphaina"><persName type="attested" key="Tryphaina"><name nymRef="Τρύφαινα">Τρύφαινα</name></persName></person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
                     <lb n="1"/>Ἔτους ροη΄, μη(νὸς) Δείου δ΄,
-                    <lb n="2"/>Ἀμιὰς ἡ γυνὴ καὶ οἱ υἱοὶ
-                    <lb n="3"/>Ἀπολλώνιος καὶ Δημό-
-                    <lb n="4"/>φιλος ἐτείμησαν Πατερῆ
-                    <lb n="5"/>καὶ Τρύφαινα ἡ θρεπτή.
+                    <lb n="2"/><persName type="attested" key="Amias"><name nymRef="Ἀμιάς">Ἀμιὰς</name></persName> ἡ γυνὴ καὶ οἱ υἱοὶ
+                    <lb n="3"/><persName type="attested" key="Apollonios"><name nymRef="Ἀπολλώνιος">Ἀπολλώνιος</name></persName> καὶ <persName type="attested" key="Demophilos"><name nymRef="Δημόφιλος">Δημό-
+                    <lb n="4" break="no"/>φιλος</name></persName> ἐτείμησαν <persName type="attested" key="Pateres"><name nymRef="Πατέρης">Πατερῆ</name></persName>
+                    <lb n="5"/>καὶ <persName type="attested" key="Tryphaina"><name nymRef="Τρύφαινα">Τρύφαινα</name></persName> ἡ θρεπτή.
                     <lb n="6"/>Ἵνα μὴ τις προσαμάρτῃ τῇ
                     <lb n="7"/>στήλῃ ἢ τῷ μνημείῳ, σκή-
-                    <lb n="8"/>πτρα ἐπέστησαν τοῦ Ἀξ[ι-]
-                    <lb n="9"/>οτ-τηνοῦ καὶ Ἀναείτιδος.
+                    <lb n="8"/>πτρα ἐπέστησαν <persName type="divine" key="Men Axiottenos">τοῦ Ἀξ[ι-]
+                    <lb n="9" break="no"/>οτ-τηνοῦ</persName> καὶ <persName type="divine" key="Anaeitis"><name nymRef="Ἀνάειτις">Ἀναείτιδος</name></persName>.
                 </ab>
             </div>
             <div type="apparatus"/>

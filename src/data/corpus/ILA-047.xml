@@ -60,17 +60,39 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Axiottenos</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Aristoneikos</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Aristoneikos">
+                        <persName type="attested" key="Aristoneikos">
+                            <name nymRef="Ἀριστόνεικος">Ἀρίστ[ονεί-κου]</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>[····ω]ν Ἀρίστ[ονεί-]
-                    <lb n="2"/>[κου ἐλεη]θεὶς καὶ ἄμ[αρ-]
+                    <lb n="1"/>[····ω]ν <persName type="attested" key="Aristoneikos"><name nymRef="Ἀριστόνεικος">Ἀρίστ[ονεί-]
+                    <lb n="2" break="no"/>[κου]</name></persName> [ἐλεη]θεὶς καὶ ἄμ[αρ-]
                     <lb n="3"/>[τήσας κα]ταπίπτω εἰς ἀ[σ-]
                     <lb n="4"/>[θένειαν] καὶ ὁμολογῶ τ[ὸ]
-                    <lb n="5"/>[ἁμάτρημ]α Μηνὶ Ἀξιω[τ-]
-                    <lb n="6"/>[τηνῷ καὶ στη]λογρ[αφῶ].
+                    <lb n="5"/>[ἁμάτρημ]α <persName type="divine" key="Men Axiottenos"><name nymRef="Μήν">Μηνὶ</name> <rs type="epithet">Ἀξιω[τ-]
+                    <lb n="6" break="no"/>[τηνῷ]</rs></persName> καὶ στη]λογρ[αφῶ].
                 </ab>
             </div>
             <div type="apparatus"/>

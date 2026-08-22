@@ -60,6 +60,16 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Tymoleites</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+            </textClass>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
@@ -67,7 +77,7 @@
                 <ab>
                     <lb n="1"/>[.......... εἴ τις] δ[έ τινα]
                     <lb n="2"/>[τῶν προδηλου]μένων ἔξω βάλῃ,
-                    <lb n="3"/>[......... Μ]ηνὸς Τυμωλεί[του]
+                    <lb n="3"/>[......... <persName type="divine" key="Men Tymoleites"><name nymRef="Μήν">Μ]ηνὸς</name> <rs type="epithet">Τυμωλεί[του]</rs></persName>
                     <lb n="4"/>[καὶ τῶν θεῶν τ]ῶν ἄλλων πάν[των]
                     <lb n="5"/>[κεχολωμένων] τύχοιτο μετὰ πάν-
                     <lb n="6"/>[ωλείας πάντ]ων μήτε θρεμμά-

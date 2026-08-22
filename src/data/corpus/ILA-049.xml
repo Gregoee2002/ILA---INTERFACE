@@ -60,6 +60,30 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="divinita">
+                    <term>Attis</term>
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Domitia</term>
+                    <term>Lysimachos</term>
+                    <term>Rhouphos</term>
+                    <term>Lepidos</term>
+                    <term>Asinnios</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Domitia"><persName type="attested" key="Domitia"><name nymRef="Δομιτία">Δομιτίας</name></persName></person>
+                    <person xml:id="Lysimachos"><persName type="attested" key="Lysimachos"><name nymRef="Λυσίμαχος">Λυσι-μάχου</name></persName></person>
+                    <person xml:id="Rhouphos"><persName type="attested" key="Rhouphos"><name nymRef="Ῥοῦφος">Ῥοῦφος</name></persName></person>
+                    <person xml:id="Lepidos"><persName type="attested" key="Lepidos"><name nymRef="Λέπιδος">Λέπιδο[ς]</name></persName></person>
+                    <person xml:id="Asinnios"><persName type="attested" key="Asinnios"><name nymRef="Ἀσίννιος">Ἀσίννιος</name></persName></person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
@@ -68,24 +92,24 @@
                     <lb n="1"/>καὶ ὅσοις ἀπενεμ[ήθη ὕδωρ: κρήνη]
                     <lb n="2"/>γυμνασίῳ γερουσι[ακῷ ἐναντία, κρήνη]
                     <lb n="3"/>μυστηρίοις δυσὶ[ν ἐναντία, κρήνη]
-                    <lb n="4"/>Δομιτίας (ἑκοντάχους) ε΄, κρήνη ε[···········]
+                    <lb n="4"/><persName type="attested" key="Domitia"><name nymRef="Δομιτία">Δομιτίας</name></persName> (ἑκοντάχους) ε΄, κρήνη ε[···········]
                     <lb n="5"/>κρήνη Δηναεῖτ(ις) πρὸς τοῖς [·····]
-                    <lb n="6"/>κρήνη μυστηρίῳ Ἄττει ἐνα-
+                    <lb n="6"/>κρήνη μυστηρίῳ <persName type="divine" key="Attis"><name nymRef="Ἄττις">Ἄττει</name></persName> ἐνα-
                     <lb n="7"/>[ντία ἀπόρρυ]τος εἰς τὸ Διός, συναγωγῆ[ς κρήνη],
                     <lb n="8"/>κρήνη πρὸς τῷ Ὠδείῳ (ἑκοντάχους) γ΄, [κρήνη····]
                     <lb n="9"/>του πρὸς τῇ διστέγῳ τῆς [····· οὗ καὶ]
                     <lb n="10"/>πύργοι (τετράμφορα) β΄, ἀνδροφυλακί[ου κρήνη ἢ ἐπὶ]
                     <lb n="11"/>τῇ καθόδῳ ἀγορᾶς πρὸς τ[······· ὕδωρ]
                     <lb n="12"/>πέμπει, κρήνη ἐν τοῖς [·············]
-                    <lb n="13"/>ρίου, ἀπὸ ὑδρείο[υ κρήνη, κρήνη Λυσι-]
-                    <lb n="14"/>μάχου (ἑκοντάχους) γ΄, κρήνη π[······· πρὸς τῷ]
+                    <lb n="13"/>ρίου, ἀπὸ ὑδρείο[υ κρήνη, κρήνη <persName type="attested" key="Lysimachos">Λυσι-]
+                    <lb n="14" break="no"/>μάχου</persName> (ἑκοντάχους) γ΄, κρήνη π[······· πρὸς τῷ]
                     <lb n="15"/>Μηνογενείῳ (ἑκοντάχους) γ΄, κρή[νη Ἀρσινόης,]
                     <lb n="16"/>ἀπὸ τῆς Ἀρσινόης κρ[ήνη ἀπόρρυτος]
-                    <lb n="17"/>περὶ τὸ Μηνός, κρήνη ἐ[ν···········]
+                    <lb n="17"/>περὶ τὸ <persName type="divine" key="Men"><name nymRef="Μήν">Μηνός</name></persName>, κρήνη ἐ[ν···········]
                     <lb n="18"/>του πρὸς τῇ πύλῃ, κρ[ῆναι ἃς κατεσκεύασαν]
-                    <lb n="19"/>Ῥοῦφος καὶ Λέπιδο[ς··············]
+                    <lb n="19"/><persName type="attested" key="Rhouphos"><name nymRef="Ῥοῦφος">Ῥοῦφος</name></persName> καὶ <persName type="attested" key="Lepidos"><name nymRef="Λέπιδος">Λέπιδο[ς]</name></persName>[··············]
                     <lb n="20"/>Αὐρηλία Ἰουλία Μηνο[·············]
-                    <lb n="21"/>δρα (τετράμφορα) β΄, Ἀσίννιος Μ[············]
+                    <lb n="21"/>δρα (τετράμφορα) β΄, <persName type="attested" key="Asinnios"><name nymRef="Ἀσίννιος">Ἀσίννιος</name></persName> Μ[············]
                     <lb n="22"/>νος (τετράμφορα) α΄, Φλ. Σεκ[·············]
                 </ab>
             </div>

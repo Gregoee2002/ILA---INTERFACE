@@ -60,6 +60,27 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                    <term>Zeus</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Menogenes Boutas</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Menogenes Boutas">
+                        <persName type="attested" key="Menogenes Boutas">
+                            <name nymRef="Μηνογένης">Μηνογένης</name>
+                            <name nymRef="Βούτας">Βούτας</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
@@ -68,11 +89,11 @@
                     <lb n="1"/>[·············]νος ἔδωκεν ἡμεῖν [τὸ·············]
                     <lb n="2"/>[·············]οις ἀνθρώποις συνοχῆς[··········]
                     <lb n="3"/>[··············]αν ὥραν ἡμεῖν ὧν ἐπέταξεν [θεὸς···]
-                    <lb n="4"/>[·············]ωμεν μὲν Μηνὸς καὶ Διὸς καὶ Κ[····]
+                    <lb n="4"/>[·············]ωμεν μὲν <persName type="divine" key="Men"><name nymRef="Μήν">Μηνὸς</name></persName> καὶ <persName type="divine" key="Zeus"><name nymRef="Ζεύς">Διὸς</name></persName> καὶ Κ[····]
                     <lb n="5"/>[··········κ]αὶ τῶν κρατούντων θεῶν Σεβα[στῶν·····]
                     <lb n="6"/>[···········]ήσπισεν ἄνθρωπος ὑπὸ θεῶν[···········]
                     <lb n="7"/>[···········]όσοις βωμοῖς καὶ [χ]άριν ἔσχεν οἷς σ[··]
-                    <lb n="8"/>[···········κ]αὶ Μηνογένης Βούτας ο[ἱ·············]
+                    <lb n="8"/>[···········κ]αὶ <persName type="attested" key="Menogenes Boutas"><name nymRef="Μηνογένης">Μηνογένης</name> <name nymRef="Βούτας">Βούτας</name></persName> ο[ἱ·············]
                     <lb n="9"/>[·········τ]οῖς ἰδίοις μηδὲν ἐνλείπων κα[ὶ·········]
                     <lb n="10"/>[·········ι]κῆς, ἧς καὶ μαντοσύνη κέκληται ὑπὸ θεῶ[ν]
                     <lb n="11"/>[·····]α ἐνέργειαν περὶ (τ)ῆς κατοικίας καὶ τῶν κρατούντω[ν],

@@ -60,14 +60,37 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Tiamos</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Artemis Anaeitis</term>
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Alexandra</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Alexandra">
+                        <persName type="attested" key="Alexandra">
+                            <name nymRef="Ἀλεξάνδρα">Ἀ[λε-ξάνδρα]</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Ἀρτέμιδι Ἀνάε[ιτι]
-                    <lb n="2"/>καὶ Μηνὶ Τιάμου Ἀ[λε-]
-                    <lb n="3"/>ξάνδρα ὑπὲρ τῶν
+                    <lb n="1"/><persName type="divine" key="Artemis Anaeitis"><name nymRef="Ἄρτεμις">Ἀρτέμιδι</name> <rs type="epithet">Ἀνάε[ιτι]</rs></persName>
+                    <lb n="2"/>καὶ <persName type="divine" key="Men Tiamos"><name nymRef="Μήν">Μηνὶ</name> <rs type="epithet">Τιάμου</rs></persName> <persName type="attested" key="Alexandra"><name nymRef="Ἀλεξάνδρα">Ἀ[λε-]
+                    <lb n="3" break="no"/>ξάνδρα</name></persName> ὑπὲρ τῶν
                     <lb n="4"/>μαστῶν εὐχὴν
                     <lb n="5"/>ἀνέστησαν.
                 </ab>

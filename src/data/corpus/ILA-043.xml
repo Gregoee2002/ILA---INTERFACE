@@ -60,14 +60,36 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Tiamos</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Phronimos</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Phronimos">
+                        <persName type="attested" key="Phronimos">
+                            <name nymRef="Φρόνιμος">Φρό-νιμος</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Μηνὶ Τιά-
-                    <lb n="2"/>μου Φρό-
-                    <lb n="3"/>νιμος
+                    <lb n="1"/><persName type="divine" key="Men Tiamos"><name nymRef="Μήν">Μηνὶ</name> <rs type="epithet">Τιά-
+                    <lb n="2" break="no"/>μου</rs></persName> <persName type="attested" key="Phronimos"><name nymRef="Φρόνιμος">Φρό-
+                    <lb n="3" break="no"/>νιμος</name></persName>
                     <lb n="4"/>εὐχήν.
                 </ab>
             </div>

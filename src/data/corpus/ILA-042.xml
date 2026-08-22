@@ -60,20 +60,44 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Axiettenos</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Eutychos</term>
+                    <term>Ioulia Tabilla</term>
+                    <term>Epigone</term>
+                    <term>Niketes</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Eutychos"><persName type="attested" key="Eutychos"><name nymRef="Εὔτυχος">Εὔτυχος</name></persName></person>
+                    <person xml:id="Ioulia Tabilla"><persName type="attested" key="Ioulia Tabilla"><name nymRef="Ἰουλία">Ἰουλίας</name> <name nymRef="Ταβίλλα">Ταβίλλης</name></persName></person>
+                    <person xml:id="Epigone"><persName type="attested" key="Epigone"><name nymRef="Ἐπιγόνη">Ἐπιγόνῃ</name></persName></person>
+                    <person xml:id="Niketes"><persName type="attested" key="Niketes"><name nymRef="Νικήτης">Νεική[τ]ου</name></persName></person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Εὔτυχος Ἰου-
-                    <lb n="2"/>λίας Ταβίλλης
+                    <lb n="1"/><persName type="attested" key="Eutychos"><name nymRef="Εὔτυχος">Εὔτυχος</name></persName> <persName type="attested" key="Ioulia Tabilla"><name nymRef="Ἰουλία">Ἰου-
+                    <lb n="2" break="no"/>λίας</name> <name nymRef="Ταβίλλα">Ταβίλλης</name></persName>
                     <lb n="3"/>δοῦλος πραγμα-
                     <lb n="4"/>τευτὴς σὺν
                     <lb n="5"/>καὶ τῇ γυναικὶ
-                    <lb n="6"/>Ἐπιγόνῃ εὐχὴν
-                    <lb n="7"/>ὑπὲρ υἱοῦ Νεική-
-                    <lb n="8"/>[τ]ου Μηνὶ Ἀξι-
-                    <lb n="9"/>εττηνῷ διὰ
+                    <lb n="6"/><persName type="attested" key="Epigone"><name nymRef="Ἐπιγόνη">Ἐπιγόνῃ</name></persName> εὐχὴν
+                    <lb n="7"/>ὑπὲρ υἱοῦ <persName type="attested" key="Niketes"><name nymRef="Νικήτης">Νεική-
+                    <lb n="8" break="no"/>[τ]ου</name></persName> <persName type="divine" key="Men Axiettenos"><name nymRef="Μήν">Μηνὶ</name> <rs type="epithet">Ἀξι-
+                    <lb n="9" break="no"/>εττηνῷ</rs></persName> διὰ
                     <lb n="10"/>τὸ σωθῆναι αὐ-
                     <lb n="11"/>τὸν ὑπὸ τοῦ θε-
                     <lb n="12"/>οῦ ἀσθενοῦντα.
