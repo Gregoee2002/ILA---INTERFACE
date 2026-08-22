@@ -239,7 +239,13 @@ const DivinityDiagonalList = ({ items, onSelect, searchTerm }: {
   const containerRef = useRef<HTMLDivElement>(null);
   const itemRefs = useRef<Map<string, HTMLDivElement>>(new Map());
   const [activeName, setActiveName] = useState<string | null>(sorted[0]?.name ?? null);
+  // Distanza (px) di ogni riga dal marcatore, per la dissolvenza/scala
+  // continua qui sotto: senza questo la lista, pur scorrendo davvero,
+  // "sente" poco viva — l'unico elemento sempre uguale (la linea diagonale)
+  // finisce per catturare più attenzione del testo che invece si muove.
+  const [rowDist, setRowDist] = useState<Record<string, number>>({});
   const rafPending = useRef(false);
+  const FADE_RANGE = 170;
 
   const updateActive = () => {
     rafPending.current = false;
@@ -248,12 +254,15 @@ const DivinityDiagonalList = ({ items, onSelect, searchTerm }: {
     const markerY = container.getBoundingClientRect().top + RUBRICA_MARKER_OFFSET;
     let closestName: string | null = null;
     let closestDist = Infinity;
+    const dist: Record<string, number> = {};
     itemRefs.current.forEach((el, name) => {
       const rect = el.getBoundingClientRect();
-      const dist = Math.abs(rect.top + rect.height / 2 - markerY);
-      if (dist < closestDist) { closestDist = dist; closestName = name; }
+      const d = Math.abs(rect.top + rect.height / 2 - markerY);
+      dist[name] = d;
+      if (d < closestDist) { closestDist = d; closestName = name; }
     });
     if (closestName) setActiveName(closestName);
+    setRowDist(dist);
   };
   const onScroll = () => {
     if (rafPending.current) return;
@@ -286,7 +295,7 @@ const DivinityDiagonalList = ({ items, onSelect, searchTerm }: {
                 <line
                   x1={tickX(0)} y1={DIAGONAL_ROW_H / 2}
                   x2={tickX(sorted.length - 1)} y2={(sorted.length - 1) * DIAGONAL_ROW_H + DIAGONAL_ROW_H / 2}
-                  stroke="var(--border)" strokeWidth={1}
+                  stroke="var(--border)" strokeWidth={0.75} strokeOpacity={0.5}
                 />
               </svg>
             )}
@@ -296,26 +305,42 @@ const DivinityDiagonalList = ({ items, onSelect, searchTerm }: {
               const match = isMatch(d);
               const dimmed = searchActive && !match;
               const epitetoHit = matchedEpiteto(d);
+              // Dissolvenza/scala continua in base alla distanza dal
+              // marcatore: fa "sentire" il testo in movimento durante lo
+              // scroll, non solo la linea diagonale (sempre uguale a se
+              // stessa). Disattivata mentre una ricerca è attiva, per non
+              // sommare due sistemi di enfasi diversi.
+              const proximity = Math.max(0, 1 - (rowDist[d.name] ?? FADE_RANGE) / FADE_RANGE);
+              const rowStyle: React.CSSProperties = {
+                top: i * DIAGONAL_ROW_H, height: DIAGONAL_ROW_H,
+                opacity: searchActive ? undefined : 0.4 + proximity * 0.6,
+                transform: searchActive ? undefined : `scale(${0.96 + proximity * 0.04})`,
+              };
               return (
                 <div
                   key={d.name}
                   ref={el => { if (el) itemRefs.current.set(d.name, el); else itemRefs.current.delete(d.name); }}
-                  className="absolute inset-x-0"
-                  style={{ top: i * DIAGONAL_ROW_H, height: DIAGONAL_ROW_H }}
+                  className="absolute inset-x-0 transition-[opacity,transform] duration-150 ease-out"
+                  style={rowStyle}
                 >
                   <button
                     onClick={() => onSelect(d.name)}
                     className={cn(
-                      "relative w-full h-full text-left hover:bg-accent/[0.04] transition-all duration-200",
+                      "group relative w-full h-full text-left hover:bg-accent/[0.04] active:bg-accent/10 transition-all duration-200",
                       dimmed && "opacity-30"
                     )}
                   >
+                    {/* Feedback immediato al click, indipendente dal marcatore
+                        (che resta ancorato allo scroll e non "salta" al
+                        click — spostarlo di scatto sarebbe più confusionario
+                        di questo lieve rinforzo istantaneo sulla riga
+                        premuta). */}
                     <span
                       className="absolute top-0 bottom-0 flex items-center justify-end pr-3"
                       style={{ left: 0, width: Math.max(0, x - 8) }}
                     >
                       <span className={cn(
-                        "font-serif transition-all duration-200 truncate",
+                        "font-serif transition-all duration-200 truncate group-active:text-accent",
                         isActive ? "text-xl italic text-accent font-bold"
                           : match ? "text-base text-accent font-bold"
                           : "text-sm text-ink/70"
@@ -325,7 +350,7 @@ const DivinityDiagonalList = ({ items, onSelect, searchTerm }: {
                     </span>
                     <span
                       className={cn(
-                        "absolute -translate-x-1/2 -translate-y-1/2 rounded-full transition-all duration-200",
+                        "absolute -translate-x-1/2 -translate-y-1/2 rounded-full transition-all duration-200 group-active:bg-accent",
                         match ? "bg-accent" : "bg-accent/50"
                       )}
                       style={{ left: x, top: '50%', width: isActive || match ? 6 : 4, height: isActive || match ? 6 : 4 }}
@@ -335,7 +360,7 @@ const DivinityDiagonalList = ({ items, onSelect, searchTerm }: {
                       style={{ left: x + 8, right: 0 }}
                     >
                       <span className={cn(
-                        "font-sans font-bold tabular-nums transition-all duration-200 shrink-0",
+                        "font-sans font-bold tabular-nums transition-all duration-200 shrink-0 group-active:text-accent",
                         isActive || match ? "text-sm text-accent" : "text-xs text-muted"
                       )}>
                         {d.count}×
@@ -748,6 +773,14 @@ function EpithetStats({ monumenti, onSelectMonumento }: { monumenti: Monumento[]
     }
   };
 
+  // Torna direttamente alla lista diagonale delle divinità, saltando il
+  // livello intermedio degli epiteti — utile da dentro le attestazioni,
+  // dove "Indietro" da solo richiederebbe due click.
+  const goToDivinityList = () => {
+    setSelectedDivinity(null);
+    setSelectedEpithet(null);
+  };
+
   return (
     <div className="flex-1 flex flex-col overflow-hidden">
       {/* Header */}
@@ -767,12 +800,22 @@ function EpithetStats({ monumenti, onSelectMonumento }: { monumenti: Monumento[]
           </p>
         </div>
         {anySelection && (
-          <button
-            onClick={goBack}
-            className="text-[10px] font-sans font-bold uppercase tracking-widest text-accent border border-accent px-4 py-2 hover:bg-accent hover:text-white transition-all"
-          >
-            ← Indietro
-          </button>
+          <div className="flex items-center gap-2">
+            {activeTab === 'divinita' && selectedEpithet && (
+              <button
+                onClick={goToDivinityList}
+                className="text-[10px] font-sans font-bold uppercase tracking-widest text-muted border border-border px-4 py-2 hover:bg-accent hover:text-white hover:border-accent transition-all"
+              >
+                ← Tutte le divinità
+              </button>
+            )}
+            <button
+              onClick={goBack}
+              className="text-[10px] font-sans font-bold uppercase tracking-widest text-accent border border-accent px-4 py-2 hover:bg-accent hover:text-white transition-all"
+            >
+              ← Indietro
+            </button>
+          </div>
         )}
       </motion.div>
 
@@ -1338,7 +1381,7 @@ function IconRail({
       <AnimatePresence>
         {expanded && (
           <motion.div
-            className="fixed inset-0 z-40 bg-ink/5"
+            className="fixed inset-0 z-40 bg-ink/20 backdrop-blur-[1px]"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -4361,7 +4404,7 @@ export default function App() {
 
   return (
     <MotionConfig reducedMotion="user">
-    <div className="flex h-dvh w-full flex-col bg-parchment text-ink font-serif overflow-hidden relative pb-14 md:pb-0 md:pl-14" style={{ height: '100dvh' }}>
+    <div className="flex h-dvh w-full flex-col bg-parchment text-ink font-serif overflow-hidden relative pb-14 md:pb-0 md:pl-16" style={{ height: '100dvh' }}>
       <IconRail
         activeView={activeView}
         onNavigate={(v) => { setActiveView(v); setHasNavigated(true); }}
