@@ -60,15 +60,38 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Tiamos</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Artemis Anaeitis</term>
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Mousais II</term>
+                    <term>Kalligeneia</term>
+                    <term>Mousaios (figlio)</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Mousais II"><persName type="attested" key="Mousais II"><name nymRef="Μουσαῖς">Μουσαῖς</name> β΄</persName></person>
+                    <person xml:id="Kalligeneia"><persName type="attested" key="Kalligeneia"><name nymRef="Καλλιγένεια">Καλλιγένεια</name></persName></person>
+                    <person xml:id="Mousaios (figlio)"><persName type="attested" key="Mousaios (figlio)"><name nymRef="Μουσαῖος">Μουσαίου</name></persName></person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Ἀρτέμιδι Ἀνάειτι κ[αὶ Μη-]
-                    <lb n="2"/>νὶ Τιάμου Μουσαῖς β΄ [καὶ]
-                    <lb n="3"/>Καλλιγένεια ἡ σύμβι[ος αὐ-]
-                    <lb n="4"/>τοῦ ὑπὲρ Μουσαίου το[ῦ ὑοῦ]
+                    <lb n="1"/><persName type="divine" key="Artemis Anaeitis"><name nymRef="Ἄρτεμις">Ἀρτέμιδι</name> <rs type="epithet">Ἀνάειτι</rs></persName> κ[αὶ <persName type="divine" key="Men Tiamos"><name nymRef="Μήν">Μη-
+                    <lb n="2" break="no"/>νὶ</name> <rs type="epithet">Τιάμου</rs></persName> <persName type="attested" key="Mousais II"><name nymRef="Μουσαῖς">Μουσαῖς</name> β΄</persName> [καὶ]
+                    <lb n="3"/><persName type="attested" key="Kalligeneia"><name nymRef="Καλλιγένεια">Καλλιγένεια</name></persName> ἡ σύμβι[ος αὐ-]
+                    <lb n="4" break="no"/>τοῦ ὑπὲρ <persName type="attested" key="Mousaios (figlio)"><name nymRef="Μουσαῖος">Μουσαίου</name></persName> το[ῦ ὑοῦ]
                     <lb n="5"/>μαρτυροῦντες τὰς δ[υνά-]
                     <lb n="6"/>μις τῶν θεῶν ἀπέδω[καν]
                     <lb n="7"/>τὴν εὐχήν. Ἔτους σπα΄, [μη(νὸς)]

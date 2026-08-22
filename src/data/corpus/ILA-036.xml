@@ -60,14 +60,34 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Axittenos</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Onesime</term>
+                    <term>Tyrannos (figlio di Onesime)</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Onesime"><persName type="attested" key="Onesime"><name nymRef="Ὀνησίμη">Ὀνησίμη</name></persName></person>
+                    <person xml:id="Tyrannos (figlio di Onesime)"><persName type="attested" key="Tyrannos (figlio di Onesime)"><name nymRef="Τύραννος">Τυράννου</name></persName></person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Μηνὶ Ἀξιττηνῷ
-                    <lb n="2"/>Ὀνησίμη ἡ μήτηρ ὑπὲρ
-                    <lb n="3"/>τοῦ υοῦ Τυράννου, ἐπει-
+                    <lb n="1"/><persName type="divine" key="Men Axittenos"><name nymRef="Μήν">Μηνὶ</name> <rs type="epithet">Ἀξιττηνῷ</rs></persName>
+                    <lb n="2"/><persName type="attested" key="Onesime"><name nymRef="Ὀνησίμη">Ὀνησίμη</name></persName> ἡ μήτηρ ὑπὲρ
+                    <lb n="3"/>τοῦ υοῦ <persName type="attested" key="Tyrannos (figlio di Onesime)"><name nymRef="Τύραννος">Τυράννου</name></persName>, ἐπει-
                     <lb n="4"/>δὴ τὸν πόδα πονήσας εὐ-
                     <lb n="5"/>λογοῦσα ἀνέθηκα. Ἔτους
                     <lb n="6"/>τνδ΄, μη(νὸς) ς΄ Ξανδικοῦ θι΄.

@@ -60,15 +60,50 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Petraeites</term>
+                    <term>Labanes</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Metrophanes figlio di Philippikos</term>
+                    <term>Phlabianos figlio di Philippikos</term>
+                    <term>Philippikos</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Metrophanes figlio di Philippikos">
+                        <persName type="attested" key="Metrophanes figlio di Philippikos">
+                            <name nymRef="Μητροφάνης">Μητροφάνης</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Phlabianos figlio di Philippikos">
+                        <persName type="attested" key="Phlabianos figlio di Philippikos">
+                            <name nymRef="Φλαβιανός">Φλαβια-νὸς</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Philippikos">
+                        <persName type="attested" key="Philippikos">
+                            <name type="patronymic" nymRef="Φιλιππικός">Φιλιππικοῦ</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
                     <lb n="1"/>Ἔτους σϙε΄, μη(νὸς) Περειτίου η΄,
-                    <lb n="2"/>Μηνὶ Πετραείτῃ καὶ Μηνὶ Λα-
-                    <lb n="3"/>βάνῃ Μητροφάνης καὶ Φλαβια-
-                    <lb n="4"/>νὸς οἱ Φιλιππικοῦ καταλειφθ-
+                    <lb n="2"/><persName type="divine" key="Men Petraeites"><name nymRef="Μήν">Μηνὶ</name> <rs type="epithet">Πετραείτῃ</rs></persName> καὶ <persName type="divine" key="Men Labanes"><name nymRef="Μήν">Μηνὶ</name> <rs type="epithet">Λα-
+                    <lb n="3" break="no"/>βάνῃ</rs></persName> <persName type="attested" key="Metrophanes figlio di Philippikos"><name nymRef="Μητροφάνης">Μητροφάνης</name></persName> καὶ <persName type="attested" key="Phlabianos figlio di Philippikos"><name nymRef="Φλαβιανός">Φλαβια-
+                    <lb n="4" break="no"/>νὸς</name></persName> οἱ <persName type="attested" key="Philippikos"><name type="patronymic" nymRef="Φιλιππικός">Φιλιππικοῦ</name></persName> καταλειφθ-
                     <lb n="5"/>έντες ὑπὸ τῶν γονέων ἐν ὀρ-
                     <lb n="6"/>φανείᾳ καὶ ἐνίων ἀνθρώπων ἐ-
                     <lb n="7"/>πιβουλευσάντων αὐτοῖς ἐκ τῆ[ς]

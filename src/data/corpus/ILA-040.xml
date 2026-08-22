@@ -60,20 +60,64 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Axiottenos</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Demetrios figlio di Timaos</term>
+                    <term>Timaos</term>
+                    <term>Ammia</term>
+                    <term>Demophilos</term>
+                    <term>Zenas</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Demetrios figlio di Timaos">
+                        <persName type="attested" key="Demetrios figlio di Timaos">
+                            <name nymRef="Δημήτριος">Δημήτριος</name>
+                            <persName type="attested" key="Timaos">
+                                <name type="patronymic" nymRef="Τιμάος">Τειμάου</name>
+                            </persName>
+                        </persName>
+                    </person>
+                    <person xml:id="Ammia">
+                        <persName type="attested" key="Ammia">
+                            <name nymRef="Ἀμμία">Ἀμμία</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Demophilos">
+                        <persName type="attested" key="Demophilos">
+                            <name nymRef="Δημόφιλος">Δη-μόφιλον</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Zenas">
+                        <persName type="attested" key="Zenas">
+                            <name nymRef="Ζηνᾶς">Ζηνᾶς</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
                     <lb n="1"/>Ἔτους ρπγ΄, μη(νὸς) Πανήμου
-                    <lb n="2"/>ς΄, Δημήτριος Τειμάου καὶ
-                    <lb n="3"/>Ἀμμία ἡ γυνὴ αὐτοῦ Δη-
-                    <lb n="4"/>μόφιλον τὸν ἑαυτῶν υἱ-
-                    <lb n="5"/>ὸν καὶ Ζηνᾶς ὁ ἀδελφὸς
+                    <lb n="2"/>ς΄, <persName type="attested" key="Demetrios figlio di Timaos"><name nymRef="Δημήτριος">Δημήτριος</name> <persName type="attested" key="Timaos"><name type="patronymic" nymRef="Τιμάος">Τειμάου</name></persName></persName> καὶ
+                    <lb n="3"/><persName type="attested" key="Ammia"><name nymRef="Ἀμμία">Ἀμμία</name></persName> ἡ γυνὴ αὐτοῦ <persName type="attested" key="Demophilos"><name nymRef="Δημόφιλος">Δη-
+                    <lb n="4" break="no"/>μόφιλον</name></persName> τὸν ἑαυτῶν υἱ-
+                    <lb n="5" break="no"/>ὸν καὶ <persName type="attested" key="Zenas"><name nymRef="Ζηνᾶς">Ζηνᾶς</name></persName> ὁ ἀδελφὸς
                     <lb n="6"/>αὐτοῦ ἐτείμησαν. Εἰ δέ
                     <lb n="7"/>τις προσαμαρτάνῃ τῷ μνημεί-
-                    <lb n="8"/>ῳ, τεύξηται τοῦ Ἀξιοττη-
-                    <lb n="9"/>νοῦ κεχολωμένου.
+                    <lb n="8"/>ῳ, τεύξηται <persName type="divine" key="Men Axiottenos">τοῦ Ἀξιοττη-
+                    <lb n="9" break="no"/>νοῦ</persName> κεχολωμένου.
                 </ab>
             </div>
             <div type="apparatus"/>

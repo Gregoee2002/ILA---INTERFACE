@@ -60,15 +60,37 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Petraeites</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Markos</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Markos">
+                        <persName type="attested" key="Markos">
+                            <name nymRef="Μᾶρκος">Μάρκου</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
                     <lb n="1"/>[Ἔτ]ους τηλ΄, μ[η(νὸς)...]
-                    <lb n="2"/>[·]ονις ὑπὲρ Μάρκου τοῦ
-                    <lb n="3"/>[ὑ]οῦ εὐξαμένη Μηνὶ
-                    <lb n="4"/>[Π]ετραείτῃ εὐλογῶ.
+                    <lb n="2"/>[·]ονις ὑπὲρ <persName type="attested" key="Markos"><name nymRef="Μᾶρκος">Μάρκου</name></persName> τοῦ
+                    <lb n="3"/>[ὑ]οῦ εὐξαμένη <persName type="divine" key="Men Petraeites"><name nymRef="Μήν">Μηνὶ</name>
+                    <lb n="4"/><rs type="epithet">[Π]ετραείτῃ</rs></persName> εὐλογῶ.
                 </ab>
             </div>
             <div type="apparatus"/>

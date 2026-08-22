@@ -60,14 +60,46 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Diodotou</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Alexandros figlio di Thalousa</term>
+                    <term>Thalousa</term>
+                    <term>Ioulios</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Alexandros figlio di Thalousa">
+                        <persName type="attested" key="Alexandros figlio di Thalousa">
+                            <name nymRef="Ἀλέξανδρος">Ἀλέξανδρος</name>
+                            <persName type="attested" key="Thalousa">
+                                <name type="patronymic" nymRef="Θαλοῦσα">Θαλού-σης</name>
+                            </persName>
+                        </persName>
+                    </person>
+                    <person xml:id="Ioulios">
+                        <persName type="attested" key="Ioulios">
+                            <name nymRef="Ἰούλιος">Ἰουλίου</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Μῆνα ἐγ Διοδότου
-                    <lb n="2"/>Ἀλέξανδρος Θαλού-
-                    <lb n="3"/>σης μετὰ Ἰουλίου καὶ
+                    <lb n="1"/><persName type="divine" key="Men Diodotou"><name nymRef="Μήν">Μῆνα</name> <rs type="epithet">ἐγ Διοδότου</rs></persName>
+                    <lb n="2"/><persName type="attested" key="Alexandros figlio di Thalousa"><name nymRef="Ἀλέξανδρος">Ἀλέξανδρος</name> <persName type="attested" key="Thalousa"><name type="patronymic" nymRef="Θαλοῦσα">Θαλού-
+                    <lb n="3" break="no"/>σης</name></persName></persName> μετὰ <persName type="attested" key="Ioulios"><name nymRef="Ἰούλιος">Ἰουλίου</name></persName> καὶ
                     <lb n="4"/>τῆς ἀδελφῆς ἐλυτρώ-
                     <lb n="5"/>σαντο τὸν θεὸν ἐξ εἰδό-
                     <lb n="6"/>των καὶ μὴ εἰδότων.

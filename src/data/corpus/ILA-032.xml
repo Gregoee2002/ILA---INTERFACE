@@ -60,18 +60,52 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Tyrannos</term>
+                    <term>Ogmenos</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                    <term>Zeus</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Artemidoros figlio di Diodotos</term>
+                    <term>Diodotos</term>
+                    <term>Amias</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Artemidoros figlio di Diodotos">
+                        <persName type="attested" key="Artemidoros figlio di Diodotos">
+                            <name nymRef="Ἀρτεμίδωρος">Ἀρτεμίδω[ρο]ς</name>
+                            <persName type="attested" key="Diodotos">
+                                <name type="patronymic" nymRef="Διόδοτος">Διοδότου</name>
+                            </persName>
+                        </persName>
+                    </person>
+                    <person xml:id="Amias">
+                        <persName type="attested" key="Amias">
+                            <name nymRef="Ἀμιάς">Ἀμιὰς</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>[Ἔτ]ους σκζ΄, Ἀρτεμίδω[ρο-]
-                    <lb n="2"/>ς Διοδότου καὶ Ἀμιὰς
+                    <lb n="1"/>[Ἔτ]ους σκζ΄, <persName type="attested" key="Artemidoros figlio di Diodotos"><name nymRef="Ἀρτεμίδωρος">Ἀρτεμίδω[ρο-]
+                    <lb n="2" break="no"/>ς</name> <persName type="attested" key="Diodotos"><name type="patronymic" nymRef="Διόδοτος">Διοδότου</name></persName></persName> καὶ <persName type="attested" key="Amias"><name nymRef="Ἀμιάς">Ἀμιὰς</name></persName>
                     <lb n="3"/>μετὰ τῶν συγγενῶν ἐξ ἰδό-
-                    <lb n="4"/>των καὶ μὴ ἰδότων λύτρ-
-                    <lb n="5"/>ον κατ᾽ ἐπιταγὴν Μηνὶ
-                    <lb n="6"/>Τυράννῳ καὶ Διὶ Ὀγμην-
-                    <lb n="7"/>ῷ καὶ τοῖς σὺν αὐτῷ θεοῖς.
+                    <lb n="4" break="no"/>των καὶ μὴ ἰδότων λύτρ-
+                    <lb n="5" break="no"/>ον κατ᾽ ἐπιταγὴν <persName type="divine" key="Men Tyrannos"><name nymRef="Μήν">Μηνὶ</name>
+                    <lb n="6"/><rs type="epithet">Τυράννῳ</rs></persName> καὶ <persName type="divine" key="Zeus Ogmenos"><name nymRef="Ζεύς">Διὶ</name> <rs type="epithet">Ὀγμην-
+                    <lb n="7" break="no"/>ῷ</rs></persName> καὶ τοῖς σὺν αὐτῷ θεοῖς.
                 </ab>
             </div>
             <div type="apparatus"/>

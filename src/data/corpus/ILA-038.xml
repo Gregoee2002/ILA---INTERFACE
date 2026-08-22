@@ -60,16 +60,44 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Petraeites</term>
+                    <term>Tazene</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                    <term>Meter</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Philippikos figlio di Tatianos</term>
+                    <term>Tatianos</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Philippikos figlio di Tatianos">
+                        <persName type="attested" key="Philippikos figlio di Tatianos">
+                            <name nymRef="Φιλιππικός">Φιλλιππι-κός</name>
+                            <persName type="attested" key="Tatianos">
+                                <name type="patronymic" nymRef="Τατιανός">Τατιαν[οῦ]</name>
+                            </persName>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Μέγας [Μὴν]
-                    <lb n="2"/>Πετραείτης [τὴν κώμην βα-]
+                    <lb n="1"/><persName type="divine" key="Men Petraeites"><name nymRef="Μήν">Μέγας [Μὴν]</name>
+                    <lb n="2"/><rs type="epithet">Πετραείτης</rs></persName> [τὴν κώμην βα-]
                     <lb n="3"/>σιλεύων κ(αὶ) μ[εγάλη θεῶν]
-                    <lb n="4"/>Μήτηρ Ταζη[νή. Φιλλιππι-]
-                    <lb n="5"/>κὸς Τατιαν[οῦ, ἐπειδὴ λύ-]
+                    <lb n="4"/><persName type="divine" key="Meter Tazene"><name nymRef="Μήτηρ">Μήτηρ</name> <rs type="epithet">Ταζη[νή]</rs></persName>. <persName type="attested" key="Philippikos figlio di Tatianos"><name nymRef="Φιλιππικός">[Φιλλιππι-
+                    <lb n="5" break="no"/>κός]</name> <persName type="attested" key="Tatianos"><name type="patronymic" nymRef="Τατιανός">Τατιαν</name></persName></persName>[οῦ, ἐπειδὴ λύ-]
                     <lb n="6"/>μην ἐποίησ[α ἐπιορκήσας,]
                     <lb n="7"/>ἀπελεγχθε[ὶς ὑπὸ τῶν ἀν-]
                     <lb n="8"/>τιδίκων νῦ[ν ἱλασάμενος]

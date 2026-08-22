@@ -60,13 +60,34 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Tiamos</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Anaeitis</term>
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Meltine</term>
+                    <term>Glykon</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Meltine"><persName type="attested" key="Meltine"><name nymRef="Μελτίνη">Μελτίνη</name></persName></person>
+                    <person xml:id="Glykon"><persName type="attested" key="Glykon"><name nymRef="Γλύκων">Γλύκων</name></persName></person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Θεᾷ Ἀνάειτι καὶ Μηνὶ Τιάμου
-                    <lb n="2"/>Μελτίνη καὶ Γλύκων ἀπέδω-
+                    <lb n="1"/>Θεᾷ <persName type="divine" key="Anaeitis"><name nymRef="Ἀνάειτις">Ἀνάειτι</name></persName> καὶ <persName type="divine" key="Men Tiamos"><name nymRef="Μήν">Μηνὶ</name> <rs type="epithet">Τιάμου</rs></persName>
+                    <lb n="2"/><persName type="attested" key="Meltine"><name nymRef="Μελτίνη">Μελτίνη</name></persName> καὶ <persName type="attested" key="Glykon"><name nymRef="Γλύκων">Γλύκων</name></persName> ἀπέδω-
                     <lb n="3"/>καν τὸ ἱεροποίημα εὐχαρισ-
                     <lb n="4"/>τοῦντες. Ἔτους τ΄, μη(νὸς) Ξανδικοῦ.
                 </ab>
