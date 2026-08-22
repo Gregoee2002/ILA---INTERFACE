@@ -223,15 +223,19 @@ const DivinityDiagonalList = ({ items, onSelect, searchTerm }: {
   searchTerm?: string;
 }) => {
   const sorted = useMemo(() => [...items].sort((a, b) => a.name.localeCompare(b.name)), [items]);
-  const term = (searchTerm || '').trim().toLowerCase();
+  // Case-sensitive: i teonimi ed epiteti latinizzati del corpus si
+  // distinguono per capitalizzazione (es. "Men" vs un ipotetico "men"), e
+  // una ricerca insensibile al maiuscolo/minuscolo darebbe troppi falsi
+  // positivi su termini brevi.
+  const term = (searchTerm || '').trim();
   const searchActive = term.length > 0;
   const matchedEpiteto = (d: { name: string; epiteti: { name: string; count: number }[] }): string | null => {
     if (!searchActive) return null;
-    const hit = d.epiteti.find(e => e.name.toLowerCase().includes(term));
+    const hit = d.epiteti.find(e => e.name.includes(term));
     return hit ? hit.name : null;
   };
   const isMatch = (d: { name: string; epiteti: { name: string; count: number }[] }) =>
-    searchActive && (d.name.toLowerCase().includes(term) || matchedEpiteto(d) !== null);
+    searchActive && (d.name.includes(term) || matchedEpiteto(d) !== null);
   const containerRef = useRef<HTMLDivElement>(null);
   const itemRefs = useRef<Map<string, HTMLDivElement>>(new Map());
   const [activeName, setActiveName] = useState<string | null>(sorted[0]?.name ?? null);
