@@ -210,9 +210,9 @@ const getTintClass = (str: string) => {
 // poster di tour date. Scorrevole, con la voce sotto il marcatore fisso
 // leggermente evidenziata durante lo scroll (stessa meccanica della
 // rubrica onomastica, vedi RUBRICA_MARKER_OFFSET).
-const DIAGONAL_ROW_H = 40;
-const DIAGONAL_STEP_X = 15;
-const DIAGONAL_BASE_X = 190;
+const DIAGONAL_ROW_H = 32;
+const DIAGONAL_STEP_X = 32;
+const DIAGONAL_BASE_X = 160;
 
 const DivinityDiagonalList = ({ items, onSelect, searchTerm }: {
   items: { name: string; count: number; epiteti: { name: string; count: number }[] }[];
@@ -244,6 +244,11 @@ const DivinityDiagonalList = ({ items, onSelect, searchTerm }: {
   // "sente" poco viva — l'unico elemento sempre uguale (la linea diagonale)
   // finisce per catturare più attenzione del testo che invece si muove.
   const [rowDist, setRowDist] = useState<Record<string, number>>({});
+  // Il marcatore non è più fisso a RUBRICA_MARKER_OFFSET: insegue la voce
+  // attiva (quella più vicina a quell'altezza), quindi si sposta di pochi
+  // px riga per riga invece di restare rigido — vedi il <motion.div> più
+  // sotto che anima questo valore.
+  const [markerTop, setMarkerTop] = useState(RUBRICA_MARKER_OFFSET);
   const rafPending = useRef(false);
   const FADE_RANGE = 170;
 
@@ -251,17 +256,34 @@ const DivinityDiagonalList = ({ items, onSelect, searchTerm }: {
     rafPending.current = false;
     const container = containerRef.current;
     if (!container) return;
-    const markerY = container.getBoundingClientRect().top + RUBRICA_MARKER_OFFSET;
+    // Tutte le letture di layout (getBoundingClientRect) PRIMA di qualunque
+    // scrittura (scrollLeft più sotto): scriverlo prima forzerebbe un
+    // reflow sincrono a ogni frame di scroll, con conseguenti scatti.
+    const containerRect = container.getBoundingClientRect();
+    const markerY = containerRect.top + RUBRICA_MARKER_OFFSET;
     let closestName: string | null = null;
     let closestDist = Infinity;
+    let closestRect: DOMRect | null = null;
     const dist: Record<string, number> = {};
     itemRefs.current.forEach((el, name) => {
       const rect = el.getBoundingClientRect();
       const d = Math.abs(rect.top + rect.height / 2 - markerY);
       dist[name] = d;
-      if (d < closestDist) { closestDist = d; closestName = name; }
+      if (d < closestDist) { closestDist = d; closestName = name; closestRect = rect; }
     });
+    // Panoramica orizzontale agganciata allo scroll verticale, ma smorzata
+    // (una frazione della pendenza reale, non 1:1): segue la diagonale
+    // quel tanto che serve a non perdere le voci più indentate, senza
+    // l'effetto "camera che insegue" troppo marcato di un aggancio pieno
+    // (il contenitore resta overflow-x hidden per l'utente — lo scrollLeft
+    // è solo programmatico). Scritto per ultimo, dopo tutte le letture.
+    const PAN_DAMPING = 0.45;
+    container.scrollLeft = container.scrollTop * (DIAGONAL_STEP_X / DIAGONAL_ROW_H) * PAN_DAMPING;
     if (closestName) setActiveName(closestName);
+    if (closestRect) {
+      const r: DOMRect = closestRect;
+      setMarkerTop(r.top - containerRect.top + r.height / 2);
+    }
     setRowDist(dist);
   };
   const onScroll = () => {
@@ -277,12 +299,13 @@ const DivinityDiagonalList = ({ items, onSelect, searchTerm }: {
   return (
     <motion.div {...fadeSwap} className="flex-1 flex overflow-hidden">
       <div className="relative flex-1 flex flex-col overflow-hidden">
-        <div
+        <motion.div
           className="absolute left-0 right-0 border-t-2 border-accent/70 pointer-events-none z-10"
-          style={{ top: RUBRICA_MARKER_OFFSET }}
+          animate={{ top: markerTop }}
+          transition={SPRING_SOFT}
         >
           <span className="absolute -left-1 -top-[5px] w-2 h-2 rounded-full bg-accent" />
-        </div>
+        </motion.div>
         <div
           ref={containerRef}
           onScroll={onScroll}
@@ -529,6 +552,9 @@ const AttestationList = ({
 // il "marcatore" della rubrica: la voce il cui centro è più vicino a questa
 // linea viene evidenziata mentre si scorre, effetto rolodex/elenco telefonico.
 const RUBRICA_MARKER_OFFSET = 96;
+// Ampiezza (px) dell'arco di indentazione di ogni sezione alfabetica della
+// rubrica onomastica: vedi il commento sopra OnomasticaRubrica.
+const RUBRICA_ARC_AMPLITUDE = 46;
 
 // Onomastica come rubrica: elenco alfabetico verticale su tutta l'altezza
 // disponibile, raggruppato per iniziale. La voce più vicina al marcatore
@@ -546,22 +572,51 @@ const OnomasticaRubrica = ({ items, onSelect }: {
   const containerRef = useRef<HTMLDivElement>(null);
   const itemRefs = useRef<Map<string, HTMLButtonElement>>(new Map());
   const [activeName, setActiveName] = useState<string | null>(items[0]?.name ?? null);
+  // Distanza (px) di ogni voce dal marcatore, per la dissolvenza qui sotto.
+  const [rowDist, setRowDist] = useState<Record<string, number>>({});
+  // Il marcatore insegue la voce attiva invece di restare fisso — vedi il
+  // <motion.div> più sotto.
+  const [markerTop, setMarkerTop] = useState(RUBRICA_MARKER_OFFSET);
   const rafPending = useRef(false);
+  const FADE_RANGE = 170;
+
+  // Quante voci ha ogni lettera: serve a disegnare un arco unico (un solo
+  // "semicerchio", non un'onda che oscilla) lungo l'intera sezione, a
+  // prescindere da quanti nomi contiene — vedi la dissolvenza per
+  // compensare la sua scarsa percettibilità sui gruppi grandi.
+  const letterGroupSize = useMemo(() => {
+    const sizes: Record<string, number> = {};
+    items.forEach(item => {
+      const raw = item.name.charAt(0).toUpperCase();
+      const letter = /[A-Z]/.test(raw) ? raw : '#';
+      sizes[letter] = (sizes[letter] || 0) + 1;
+    });
+    return sizes;
+  }, [items]);
 
   const updateActive = () => {
     rafPending.current = false;
     const container = containerRef.current;
     if (!container) return;
-    const markerY = container.getBoundingClientRect().top + RUBRICA_MARKER_OFFSET;
+    const containerRect = container.getBoundingClientRect();
+    const markerY = containerRect.top + RUBRICA_MARKER_OFFSET;
     let closestName: string | null = null;
     let closestDist = Infinity;
+    let closestRect: DOMRect | null = null;
+    const dist: Record<string, number> = {};
     itemRefs.current.forEach((el, name) => {
       const rect = el.getBoundingClientRect();
       const center = rect.top + rect.height / 2;
-      const dist = Math.abs(center - markerY);
-      if (dist < closestDist) { closestDist = dist; closestName = name; }
+      const d = Math.abs(center - markerY);
+      dist[name] = d;
+      if (d < closestDist) { closestDist = d; closestName = name; closestRect = rect; }
     });
     if (closestName) setActiveName(closestName);
+    if (closestRect) {
+      const r: DOMRect = closestRect;
+      setMarkerTop(r.top - containerRect.top + r.height / 2);
+    }
+    setRowDist(dist);
   };
 
   const onScroll = () => {
@@ -600,6 +655,7 @@ const OnomasticaRubrica = ({ items, onSelect }: {
     : null;
 
   let lastLetter = '';
+  let letterRowIndex = 0;
 
   return (
     <motion.div {...fadeSwap} className="flex-1 flex overflow-hidden gap-1">
@@ -626,13 +682,14 @@ const OnomasticaRubrica = ({ items, onSelect }: {
         })}
       </div>
       <div className="relative flex-1 flex flex-col overflow-hidden">
-        {/* Marcatore fisso: linea d'accento all'altezza di RUBRICA_MARKER_OFFSET */}
-        <div
+        {/* Marcatore: insegue la voce attiva invece di restare fisso */}
+        <motion.div
           className="absolute left-0 right-0 border-t-2 border-accent/70 pointer-events-none z-10"
-          style={{ top: RUBRICA_MARKER_OFFSET }}
+          animate={{ top: markerTop }}
+          transition={SPRING_SOFT}
         >
           <span className="absolute -left-1 -top-[5px] w-2 h-2 rounded-full bg-accent" />
-        </div>
+        </motion.div>
         <div
           ref={containerRef}
           onScroll={onScroll}
@@ -640,14 +697,31 @@ const OnomasticaRubrica = ({ items, onSelect }: {
           style={{ paddingTop: RUBRICA_MARKER_OFFSET, paddingBottom: RUBRICA_MARKER_OFFSET }}
         >
           {/* Indice "a sommario di libro": ogni lettera è un capitolo, i
-              nomi sotto sono le sue voci indentate — nome a sinistra,
-              regione a destra, come in un indice editoriale. */}
+              nomi sotto sono le sue voci — nome a sinistra, regione a
+              destra, come in un indice editoriale. L'indentazione segue
+              un'onda morbida (un mezzo giro di seno per voce, azzerata a
+              ogni nuova lettera) invece di un rientro fisso: è
+              l'andamento "a semicerchio" del sommario di riferimento, dove
+              le voci non sono mai tutte allineate sullo stesso margine. */}
           {items.map(item => {
             const raw = item.name.charAt(0).toUpperCase();
             const letter = /[A-Z]/.test(raw) ? raw : '#';
             const showLetter = letter !== lastLetter;
             lastLetter = letter;
+            if (showLetter) letterRowIndex = 0;
+            const groupSize = letterGroupSize[letter] || 1;
+            // Un solo arco (mezzo seno) per l'intera sezione: 0 alla prima
+            // voce, picco a metà, 0 all'ultima. Su lettere con molti nomi
+            // sale/scende così piano da essere quasi impercettibile nella
+            // sola indentazione — da qui la dissolvenza qui sotto, che
+            // aggiunge un secondo segnale (l'opacità/distanza dal
+            // marcatore) indipendente dalla dimensione del gruppo.
+            const arcIndent = groupSize > 1
+              ? RUBRICA_ARC_AMPLITUDE * Math.sin((Math.PI * letterRowIndex) / (groupSize - 1))
+              : 0;
+            letterRowIndex++;
             const isActive = item.name === activeName;
+            const proximity = Math.max(0, 1 - (rowDist[item.name] ?? FADE_RANGE) / FADE_RANGE);
             return (
               <React.Fragment key={item.name}>
                 {showLetter && (
@@ -661,7 +735,8 @@ const OnomasticaRubrica = ({ items, onSelect }: {
                 <button
                   ref={el => { if (el) itemRefs.current.set(item.name, el); else itemRefs.current.delete(item.name); }}
                   onClick={() => onSelect(item.name)}
-                  className="w-full text-left flex items-baseline justify-between gap-4 py-1.5 pl-6 pr-1 transition-all duration-200"
+                  className="w-full text-left flex items-baseline justify-between gap-4 py-1.5 pr-1 transition-[opacity,color] duration-200"
+                  style={{ paddingLeft: 24 + arcIndent, opacity: 0.4 + proximity * 0.6 }}
                 >
                   <span className={cn(
                     "font-serif transition-all duration-200 truncate",
