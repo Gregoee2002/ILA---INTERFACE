@@ -60,16 +60,28 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Phosphoros</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                    <term>Zeus</term>
+                    <term>Hermes</term>
+                </keywords>
+            </textClass>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>ςςςςα΄ κε΄ Μηνὸς Φωσφόρου
+                    <lb n="1"/>ςςςςα΄ κε΄ <persName type="divine" key="Men Phosphoros"><name nymRef="Μήν">Μηνὸς</name> <rs type="epithet">Φωσφόρου</rs></persName>
                     <lb n="2"/>τέσσαρες ἐξεῖται, πέμπτος χεῖος, τάδε φράζει,
                     <lb n="3"/>ὡς ἄρνας κατέχουσι λύκοι κρατεροί τε λέοντες
                     <lb n="4"/>βοῦς ἕλικας, πάντων τούτων καὶ σύ κρατήσεις
-                    <lb n="5"/>καὶ πάντ᾽ ἔσται σοι, ὅσ᾽ ἐπερωτᾷς, σὺν Διὸς Ἑρμῇ.
+                    <lb n="5"/>καὶ πάντ᾽ ἔσται σοι, ὅσ᾽ ἐπερωτᾷς, σὺν <persName type="divine" key="Zeus">Διὸς</persName> <persName type="divine" key="Hermes">Ἑρμῇ</persName>.
                 </ab>
             </div>
             <div type="apparatus"/>

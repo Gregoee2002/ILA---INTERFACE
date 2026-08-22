@@ -60,12 +60,22 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Phosphoros</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+            </textClass>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>κε΄ δςςςγ΄ Μηνὸς Φωσφόρου
+                    <lb n="1"/>κε΄ δςςςγ΄ <persName type="divine" key="Men Phosphoros"><name nymRef="Μήν">Μηνὸς</name> <rs type="epithet">Φωσφόρου</rs></persName>
                     <lb n="2"/>Τέσσαρα δ᾽ εἰς πείπτων, τρεῖς δ᾽ ἐξεῖται, τρί᾽ ὁ πέμπτος
                     <lb n="3"/>θάρσε, καίρον ἔχεις, πράξεις δ᾽ ἃ θέλεις, ἐπιτεύξῃ
                     <lb n="4"/>εἰς ὁδὸν ὁρμηθῆναι. Ἔχει καρπόν τιν᾽ ὁ μόχθος,
