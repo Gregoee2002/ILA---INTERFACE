@@ -60,23 +60,51 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Katachthonios</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Larkios</term>
+                    <term>Posilla</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Larkios">
+                        <persName type="attested" key="Larkios">
+                            <name nymRef="Λάρκιος">Λάρκιο[ς]</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Posilla">
+                        <persName type="attested" key="Posilla">
+                            <name nymRef="Ποσίλλη">Πωσίλλη</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Λάρκιο[ς ............]
+                    <lb n="1"/><persName type="attested" key="Larkios"><name nymRef="Λάρκιος">Λάρκιο[ς]</name></persName> [............]
                     <lb n="2"/>ζῶν ἑαυ[τῷ καὶ τῇ γυναικὶ]
-                    <lb n="3"/>Πωσίλλη [καὶ τοῖς τέκνοις]
+                    <lb n="3"/><persName type="attested" key="Posilla"><name nymRef="Ποσίλλη">Πωσίλλη</name></persName> [καὶ τοῖς τέκνοις]
                     <lb n="4"/>τὴν σο[ρὸν κατεσκεύασεν.]
-                    <lb n="5"/>Ἐνορκῶ [δὲ Μῆνα Καταχθόνιον]
+                    <lb n="5"/>Ἐνορκῶ <persName type="divine" key="Men Katachthonios"><supplied reason="lost">δὲ <name nymRef="Μήν">Μῆνα</name> <rs type="epithet">Καταχθόνιον</rs></supplied></persName>
                     <lb n="6"/>καὶ θεοὺς [καταχθονίους μη-]
                     <lb n="7"/>δένα ἀδικ[ήσειν τὸ μνῆμα μη-]
                     <lb n="8"/>δὲ ἐπεισε[νεγκεῖν σῶμα, ὃς δ᾽]
                     <lb n="9"/>ἂν ἐπεισε[νέγκῃ ἢ ἀδικήσῃ, δώσει]
                     <lb n="10"/>τῷ φίσκῳ [δηνάρια δισχίλια]
-                    <lb n="11"/>πεντακόσ[ια καὶ ἕξει Μῆνα κε-]
-                    <lb n="12"/>χολωμένο[ν.]
+                    <lb n="11"/>πεντακόσ[ια καὶ ἕξει] <persName type="divine" key="Men"><name nymRef="Μήν">Μῆνα</name></persName> κε-
+                    <lb n="12" break="no"/>χολωμένο[ν].
                 </ab>
             </div>
             <div type="apparatus"/>

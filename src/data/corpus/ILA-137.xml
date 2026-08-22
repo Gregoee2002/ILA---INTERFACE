@@ -60,25 +60,62 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Katachthonios</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Aulos Ioulios Philemon</term>
+                    <term>Ioulia Mamathia</term>
+                    <term>Daphnos</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Aulos Ioulios Philemon">
+                        <persName type="attested" key="Aulos Ioulios Philemon">
+                            <name nymRef="Αύλος">Αὖλος</name>
+                            <name nymRef="Ιούλιος">Ἰούλιος</name>
+                            <name nymRef="Φιλήμων">Φιλήμων</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Ioulia Mamathia">
+                        <persName type="attested" key="Ioulia Mamathia">
+                            <name nymRef="Ιουλία">Ἰουλία</name>
+                            <name nymRef="Μαμάθια">Μαμάθια</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Daphnos">
+                        <persName type="attested" key="Daphnos">
+                            <name nymRef="Δάφνος">Δάφν]ῳ</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Αὖλος Ἰούλι-
-                    <lb n="2"/>ος Φιλήμων κ-
-                    <lb n="3"/>αὶ Ἰουλία Μα-
-                    <lb n="4"/>μάθια Δάφν-
-                    <lb n="5"/>ῳ υἱῷ
+                    <lb n="1"/><persName type="attested" key="Aulos Ioulios Philemon"><name nymRef="Αύλος">Αὖλος</name> <name nymRef="Ιούλιος">Ἰούλι-
+                    <lb n="2" break="no"/>ος</name> <name nymRef="Φιλήμων">Φιλήμων</name></persName> κ-
+                    <lb n="3" break="no"/>αὶ <persName type="attested" key="Ioulia Mamathia"><name nymRef="Ιουλία">Ἰουλία</name> <name nymRef="Μαμάθια">Μα-
+                    <lb n="4" break="no"/>μάθια</name></persName> <persName type="attested" key="Daphnos"><name nymRef="Δάφνος">Δάφν-
+                    <lb n="5" break="no"/>ῳ</name></persName> υἱῷ
                     <lb n="6"/>μνήμης χά-
                     <lb n="7"/>ριν. Ὅς δ᾽ ἂν ἀ-
                     <lb n="8"/>δικήσῃ τὴν σ-
                     <lb n="9"/>τήλην ἢ ἀ-
                     <lb n="10"/>ποκόψει ἕξει
-                    <lb n="11"/>τὸν Μῆνα κε-
-                    <lb n="12"/>χολωμένον
-                    <lb n="13"/>τὸν Καταχθόνι-
-                    <lb n="14"/>ον.
+                    <lb n="11"/>τὸν <persName type="divine" key="Men Katachthonios"><name nymRef="Μήν">Μῆνα</name></persName> κε-
+                    <lb n="12" break="no"/>χολωμένον
+                    <lb n="13"/>τὸν <persName type="divine" key="Men Katachthonios"><rs type="epithet">Καταχθόνι-
+                    <lb n="14" break="no"/>ον</rs></persName>.
                 </ab>
             </div>
             <div type="apparatus"/>

@@ -60,15 +60,45 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Katachthonios</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Apuleius Euphrosynos</term>
+                    <term>Aurelia Masgaris</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Apuleius Euphrosynos">
+                        <persName type="attested" key="Apuleius Euphrosynos">
+                            <name nymRef="Απουλήιος">Ἀπουλ[ήιος]</name>
+                            <name nymRef="Ευφρόσυνος">Ε]ὐφρόσυνος</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Aurelia Masgaris">
+                        <persName type="attested" key="Aurelia Masgaris">
+                            <name nymRef="Αυρηλία">Αὐρη[λ]ία</name>
+                            <name nymRef="Μάσγαρις">Μάσγαρις</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Ἀπουλ[ήιος Ε]ὐφρόσυνος καὶ Αὐρη[λ]ία
-                    <lb n="2"/>Μάσγαρις ἡ γυνή αὐτοῦ μνήμης χάριν.
-                    <lb n="3"/>Ἐπεξορκίζομεν Μῆνας κατα-
-                    <lb n="4"/>χθονίους μετὰ ἡμᾶς μηκέτι μηδί-
+                    <lb n="1"/><persName type="attested" key="Apuleius Euphrosynos"><name nymRef="Απουλήιος">Ἀπουλ[ήιος</name> <name nymRef="Ευφρόσυνος">Ε]ὐφρόσυνος</name></persName> καὶ <persName type="attested" key="Aurelia Masgaris"><name nymRef="Αυρηλία">Αὐρη[λ]ία</name>
+                    <lb n="2"/><name nymRef="Μάσγαρις">Μάσγαρις</name></persName> ἡ γυνή αὐτοῦ μνήμης χάριν.
+                    <lb n="3"/>Ἐπεξορκίζομεν <persName type="divine" key="Men Katachthonios"><name nymRef="Μήν">Μῆνας</name> <rs type="epithet">κατα-
+                    <lb n="4" break="no"/>χθονίους</rs></persName> μετὰ ἡμᾶς μηκέτι μηδί-
                     <lb n="5"/>νὰ τεθῆναι. Εἰ δὲ ποτέ τις θέλῃ ἀνῦξε
                     <lb n="6"/>ἢ κακυργήσει εἰδούν, δώσει Σ΄ ε΄ τῷ ἱερῷ
                 </ab>

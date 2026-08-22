@@ -60,15 +60,45 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Katachthonios</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Marcus Aelius Oktaouios</term>
+                    <term>Domnilla</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Marcus Aelius Oktaouios">
+                        <persName type="attested" key="Marcus Aelius Oktaouios">
+                            <name>Μ.</name>
+                            <name nymRef="Αίλιος">Αἴλιος</name>
+                            <name nymRef="Οχτάουιος">Ὀχ[τ]άουιος</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Domnilla">
+                        <persName type="attested" key="Domnilla">
+                            <name nymRef="Δομνίλλα">Δομνίλλῃ</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Μ. Αἴλιος Ὀχ[τ]ά-
-                    <lb n="2"/>ουιος ἑαυτῷ
+                    <lb n="1"/><persName type="attested" key="Marcus Aelius Oktaouios"><name>Μ.</name> <name nymRef="Αίλιος">Αἴλιος</name> <name nymRef="Οχτάουιος">Ὀχ[τ]ά-
+                    <lb n="2" break="no"/>ουιος</name></persName> ἑαυτῷ
                     <lb n="3"/>ζῶν καὶ γυναικὶ
-                    <lb n="4"/>Δομνίλλῃ καὶ
+                    <lb n="4"/><persName type="attested" key="Domnilla"><name nymRef="Δομνίλλα">Δομνίλλῃ</name></persName> καὶ
                     <lb n="5"/>τέκνοις ἐποίησεν
                     <lb n="6"/>τὴν λάρνακα καὶ
                     <lb n="7"/>τὸν βωμόν, ἑτέρῳ
@@ -76,8 +106,8 @@
                     <lb n="9"/>εἶναι εἰσενεχθ[ῆ-]
                     <lb n="10"/>ναι. Ἐὰν δέ τις ἐ-
                     <lb n="11"/>πεισβιάσηται
-                    <lb n="12"/>ἔχοιτο Μῆνα Κα-
-                    <lb n="13"/>ταχθόνιον κε-
+                    <lb n="12"/>ἔχοιτο <persName type="divine" key="Men Katachthonios"><name nymRef="Μήν">Μῆνα</name> <rs type="epithet">Κα-
+                    <lb n="13" break="no"/>ταχθόνιον</rs></persName> κε-
                     <lb n="14"/>χολωμένον.
                 </ab>
             </div>

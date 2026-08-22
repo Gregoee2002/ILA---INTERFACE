@@ -60,14 +60,42 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Katachthonios</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Eleutheros</term>
+                    <term>Tieia</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Eleutheros">
+                        <persName type="attested" key="Eleutheros">
+                            <name nymRef="Ελεύθερος">Ἐλεύ]θερος</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Tieia">
+                        <persName type="attested" key="Tieia">
+                            <name nymRef="Τιεία">Τιεί[ᾳ]</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>[.......... Ἐλεύ-]
-                    <lb n="2"/>θερος [τῇ γυ-]
-                    <lb n="3"/>ναικὶ Τιεί[ᾳ μνή-]
+                    <lb n="1"/>[.......... <persName type="attested" key="Eleutheros">Ἐλεύ-
+                    <lb n="2" break="no"/>θερος</persName>] [τῇ γυ-]
+                    <lb n="3"/>ναικὶ <persName type="attested" key="Tieia"><name nymRef="Τιεία">Τιεί[ᾳ]</name></persName> [μνή-]
                     <lb n="4"/>μης χάριν.
                     <lb n="5"/>Ἐάν τις τὴν στήλην
                     <lb n="6"/>ἀδικήσει, κεχολω-

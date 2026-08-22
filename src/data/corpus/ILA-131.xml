@@ -60,13 +60,35 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Katachthonios</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Aramoos</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Aramoos">
+                        <persName type="attested" key="Aramoos">
+                            <name nymRef="Αράμοος">Ἀραμόου</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>[Ἡ δεῖνα] Ἀραμόου ἑαυτῇ καὶ ἀνδρὶ μνήμης χάριν, ἐνο-
-                    <lb n="2"/>[ρκιζόμεθα δ]ὲ Μῆνα καταχθόνιον εἰς τοῦτο μνημεῖον μη-
+                    <lb n="1"/>[Ἡ δεῖνα] <persName type="attested" key="Aramoos"><name type="patronymic" nymRef="Αράμοος">Ἀραμόου</name></persName> ἑαυτῇ καὶ ἀνδρὶ μνήμης χάριν, ἐνο-
+                    <lb n="2"/>[ρκιζόμεθα δ]ὲ <persName type="divine" key="Men Katachthonios"><name nymRef="Μήν">Μῆνα</name> <rs type="epithet">καταχθόνιον</rs></persName> εἰς τοῦτο μνημεῖον μη-
                     <lb n="3"/>δένα εἰσελθεῖν.
                 </ab>
             </div>

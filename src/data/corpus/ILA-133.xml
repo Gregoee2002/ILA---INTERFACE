@@ -60,23 +60,53 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Katachthonios</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Marcus Ulpius Herakleitos</term>
+                    <term>Klaudia</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Marcus Ulpius Herakleitos">
+                        <persName type="attested" key="Marcus Ulpius Herakleitos">
+                            <name>Μ.</name>
+                            <name nymRef="Ούλπιος">Οὔλπιος</name>
+                            <name nymRef="Ηράκλειτος">Ἡράκλειτος</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Klaudia">
+                        <persName type="attested" key="Klaudia">
+                            <name nymRef="Κλαυδία">Κλαυδ[ίᾳ]</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Μ. Οὔλπιος Ἡρά-
-                    <lb n="2"/>κλειτος ἑαυτ[ῷ]
-                    <lb n="3"/>καὶ Κλαυδ[ίᾳ γυν-
-                    <lb n="4"/>[α]ικὶ αὐτοῦ καὶ τε-
+                    <lb n="1"/><persName type="attested" key="Marcus Ulpius Herakleitos"><name>Μ.</name> <name nymRef="Ούλπιος">Οὔλπιος</name> <name nymRef="Ηράκλειτος">Ἡρά-
+                    <lb n="2" break="no"/>κλειτος</name></persName> ἑαυτ[ῷ]
+                    <lb n="3"/>καὶ <persName type="attested" key="Klaudia"><name nymRef="Κλαυδία">Κλαυδ[ίᾳ</name> γυν-
+                    <lb n="4" break="no"/>[α]ικὶ</persName> αὐτοῦ καὶ τε-
                     <lb n="5"/>κνοῖς αὐτῶν τήν
                     <lb n="6"/>[λ]άρνακα καὶ τὸν βω-
                     <lb n="7"/>μόν, ἄλλῳ δὲ μὴ θε-
                     <lb n="8"/>ῖναι. Ὃ δ᾽ ἄν ἐ-
                     <lb n="9"/>[π]ισβιάσηται ἢ
                     <lb n="10"/>ἀ[δ]ικήσει ἔχοιτο
-                    <lb n="11"/>[Μ]ῆνα Καταχθόνι-
-                    <lb n="12"/>ον κεχολωμέ-
+                    <lb n="11"/><persName type="divine" key="Men Katachthonios"><name nymRef="Μήν">[Μ]ῆνα</name> <rs type="epithet">Καταχθόνι-
+                    <lb n="12" break="no"/>ον</rs></persName> κεχολωμέ-
                     <lb n="13"/>νον.
                 </ab>
             </div>

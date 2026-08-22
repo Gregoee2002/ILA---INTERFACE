@@ -60,15 +60,26 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Soter</term>
+                    <term>Ploutodotes</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+            </textClass>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Μηνὶ
-                    <lb n="2"/>Σωτῆρι καὶ
-                    <lb n="3"/>Πλουτο-
-                    <lb n="4" break="no"/>δώτηι
+                    <lb n="1"/><persName type="divine" key="Men Soter Ploutodotes"><name nymRef="Μήν">Μηνὶ</name>
+                    <lb n="2"/><rs type="epithet">Σωτῆρι</rs> καὶ
+                    <lb n="3"/><rs type="epithet">Πλουτο-
+                    <lb n="4" break="no"/>δώτηι</rs></persName>
                 </ab>
             </div>
             <div type="apparatus"/>

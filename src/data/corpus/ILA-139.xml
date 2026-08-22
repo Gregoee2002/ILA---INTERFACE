@@ -60,21 +60,49 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Chthonios</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Hermios</term>
+                    <term>Manios</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Hermios">
+                        <persName type="attested" key="Hermios">
+                            <name nymRef="Ερμίας">Ἑρμίου</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Manios">
+                        <persName type="attested" key="Manios">
+                            <name nymRef="Μάνιος">Μάν-ίῳ</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
                     <lb n="1"/>Ἐάν τις ἀδικήσει τή-
-                    <lb n="2"/>[ν] ἱστήλην Ἑρμίου [χεχολω-]
-                    <lb n="3"/>[μένον ἐχ]έτω [Μ]ῆνα χθόν[ι]ο[ν].
-                    <lb n="4"/>Ἀνέστησεν δὲ Μάν-
-                    <lb n="5"/>ίῳ.
+                    <lb n="2"/>[ν] ἱστήλην <persName type="attested" key="Hermios"><name nymRef="Ερμίας">Ἑρμίου</name></persName> [χεχολω-]
+                    <lb n="3"/>[μένον ἐχ]έτω <persName type="divine" key="Men Chthonios"><name nymRef="Μήν">[Μ]ῆνα</name> <rs type="epithet">χθόν[ι]ο[ν]</rs></persName>.
+                    <lb n="4"/>Ἀνέστησεν δὲ <persName type="attested" key="Manios"><name nymRef="Μάνιος">Μάν-
+                    <lb n="5" break="no"/>ίῳ</name></persName>.
                 </ab>
             </div>
             <div type="apparatus"/>
             <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
-            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>Il soggetto di "Ἀνέστησεν" (chi eresse la stele, r. 4) non è nominato nel testo conservato: potrebbe essere lo stesso Hermios (menzionato alla r. 2 come proprietario della stele) oppure una persona non altrimenti indicata. Manios, in dativo, ne è il beneficiario/dedicatario; il rapporto tra Hermios e Manios non è specificato dal testo.</p></div>
             <div type="bibliography">
                 <listBibl>
                     <bibl>Lane, CMRDM I 151</bibl>

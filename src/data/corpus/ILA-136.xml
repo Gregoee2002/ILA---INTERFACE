@@ -60,22 +60,62 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Katachthonios</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Doudes figlia di Menedemos</term>
+                    <term>Menedemos</term>
+                    <term>Patrokles</term>
+                    <term>Teimon</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Doudes figlia di Menedemos">
+                        <persName type="attested" key="Doudes figlia di Menedemos">
+                            <name nymRef="Δούδης">[Δο]ύδης</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Menedemos">
+                        <persName type="attested" key="Menedemos">
+                            <name type="patronymic" nymRef="Μενέδημος">Μ[ενεδήμου]</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Patrokles">
+                        <persName type="attested" key="Patrokles">
+                            <name nymRef="Πατροκλής">Πα]τροκλεῖ</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Teimon">
+                        <persName type="attested" key="Teimon">
+                            <name nymRef="Τείμων">Τείμονα</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>[Δο]ύδης Μ[ενεδήμου ....... Πα]τροκλεῖ τῷ ἀνδρί
+                    <lb n="1"/><persName type="attested" key="Doudes figlia di Menedemos"><name nymRef="Δούδης">[Δο]ύδης</name> <persName type="attested" key="Menedemos"><name type="patronymic" nymRef="Μενέδημος">Μ[ενεδήμου]</name></persName></persName> [....... <persName type="attested" key="Patrokles"><name nymRef="Πατροκλής">Πα]τροκλεῖ</name></persName> τῷ ἀνδρί
                     <lb n="2"/>αὐτῆς τὸν κείονα ἀνέστησεν, μ(νήμης) χ(άριν),
-                    <lb n="3"/>[.........]τος καὶ Τείμονα θρεπτοὺς αὐτοῦ
+                    <lb n="3"/>[.........]τος καὶ <persName type="attested" key="Teimon"><name nymRef="Τείμων">Τείμονα</name></persName> θρεπτοὺς αὐτοῦ
                     <lb n="4"/>[..........] ἐλεύθερον [...................]
-                    <lb n="5"/>Ὀρχίσζω Μῆνα Καταχθόνιον μηδένα [ἕτερον]
+                    <lb n="5"/>Ὀρχίσζω <persName type="divine" key="Men Katachthonios"><name nymRef="Μήν">Μῆνα</name> <rs type="epithet">Καταχθόνιον</rs></persName> μηδένα [ἕτερον]
                     <lb n="6"/>[ἐσενεχθῆναι] εἰ μὴ μόνον τὴν δούλην μου [........]
                 </ab>
             </div>
             <div type="apparatus"/>
             <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
-            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>Il primo dei due θρεπτοί (r. 3, "[.........]τος") ha il nome quasi interamente perduto: resta solo la desinenza "-τος", non sufficiente a identificarlo o normalizzarlo, per cui non è stato inserito in un persName.</p></div>
             <div type="bibliography">
                 <listBibl>
                     <bibl>Lane, CMRDM I 148</bibl>
