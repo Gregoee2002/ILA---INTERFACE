@@ -60,15 +60,41 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Kamareites</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Herakleides figlio di Menekrates</term>
+                    <term>Menekrates</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Herakleides figlio di Menekrates">
+                        <persName type="attested" key="Herakleides figlio di Menekrates">
+                            <name nymRef="Ἡρακλείδης">Ἡρακλείδης</name>
+                            <persName type="attested" key="Menekrates">
+                                <name type="patronymic" nymRef="Μενεκράτης">Με-νεκράτους</name>
+                            </persName>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>[Μηνὶ Καμα-]
-                    <lb n="2"/>ρείτῃ ε[ὐχὴν]
-                    <lb n="3"/>Ἡρακλείδης Με-
-                    <lb n="4"/>νεκράτους,
+                    <lb n="1"/><persName type="divine" key="Men Kamareites"><name nymRef="Μήν">[Μηνὶ</name> <rs type="epithet">Καμα-
+                    <lb n="2" break="no"/>ρείτῃ]</rs></persName> ε[ὐχὴν]
+                    <lb n="3"/><persName type="attested" key="Herakleides figlio di Menekrates"><name nymRef="Ἡρακλείδης">Ἡρακλείδης</name> <persName type="attested" key="Menekrates"><name type="patronymic" nymRef="Μενεκράτης">Με-
+                    <lb n="4" break="no"/>νεκράτους</name></persName></persName>,
                     <lb n="5"/>ἔτους ρνα΄, μη-
                     <lb n="6"/>νὸς Γορπιαίου
                     <lb n="7"/>ἀνέθηκεν.

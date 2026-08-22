@@ -60,15 +60,43 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Tiamos</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Artemis Anaeitis</term>
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Alexandros figlio di Teimotheos Glykon</term>
+                    <term>Teimotheos Glykon</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Alexandros figlio di Teimotheos Glykon">
+                        <persName type="attested" key="Alexandros figlio di Teimotheos Glykon">
+                            <name nymRef="Ἀλέξανδρος">Ἀ-λέξανδρος</name>
+                            <persName type="attested" key="Teimotheos Glykon">
+                                <name type="patronymic" nymRef="Τειμόθεος">Τειμόθεος</name>
+                                <name type="patronymic" nymRef="Γλύκων">Γλύκων</name>
+                            </persName>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Ἀρτέμιδι Ἀνάειτι
-                    <lb n="2"/>καὶ Μηνὶ Τιάμου Ἀ-
-                    <lb n="3"/>λέξανδρος Τειμό-
-                    <lb n="4"/>θεος Γλύκων τῶν
+                    <lb n="1"/><persName type="divine" key="Artemis Anaeitis"><name nymRef="Ἄρτεμις">Ἀρτέμιδι</name> <rs type="epithet">Ἀνάειτι</rs></persName>
+                    <lb n="2"/>καὶ <persName type="divine" key="Men Tiamos"><name nymRef="Μήν">Μηνὶ</name> <rs type="epithet">Τιάμου</rs></persName> <persName type="attested" key="Alexandros figlio di Teimotheos Glykon"><name nymRef="Ἀλέξανδρος">Ἀ-
+                    <lb n="3" break="no"/>λέξανδρος</name> <persName type="attested" key="Teimotheos Glykon"><name type="patronymic" nymRef="Τειμόθεος">Τειμό-
+                    <lb n="4" break="no"/>θεος</name> <name type="patronymic" nymRef="Γλύκων">Γλύκων</name></persName></persName> τῶν
                     <lb n="5"/>Βολλάδος καὶ οἱ συν-
                     <lb n="6"/>βολαφόροι ἐγλυτρω-
                     <lb n="7"/>[σάμεν]οι ἀνέστη-

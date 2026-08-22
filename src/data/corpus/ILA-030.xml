@@ -60,13 +60,36 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Tiamos</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Artemis Anaeitis</term>
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Meltine</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Meltine">
+                        <persName type="attested" key="Meltine">
+                            <name nymRef="Μελτίνη">Μελτίνη</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Ἀρτέμιδι Ἀνάειτι καὶ
-                    <lb n="2"/>Μηνὶ Τιάμου Μελτίνη
+                    <lb n="1"/><persName type="divine" key="Artemis Anaeitis"><name nymRef="Ἄρτεμις">Ἀρτέμιδι</name> <rs type="epithet">Ἀνάειτι</rs></persName> καὶ
+                    <lb n="2"/><persName type="divine" key="Men Tiamos"><name nymRef="Μήν">Μηνὶ</name> <rs type="epithet">Τιάμου</rs></persName> <persName type="attested" key="Meltine"><name nymRef="Μελτίνη">Μελτίνη</name></persName>
                     <lb n="3"/>[ὑ]πὲρ τῆς ὁλοκληρίας
                     <lb n="4"/>[τῶν] ποδῶν εὐχὴν
                     <lb n="5"/>[ἀνέσ]τησεν.

@@ -60,13 +60,39 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Axiottenos</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Tatiane figlia di Herpes</term>
+                    <term>Herpes</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Tatiane figlia di Herpes">
+                        <persName type="attested" key="Tatiane figlia di Herpes">
+                            <name nymRef="Τατιανή">Τατιανὴ</name>
+                            <persName type="attested" key="Herpes">
+                                <name type="patronymic" nymRef="Ἕρπης">Ἑρ-που</name>
+                            </persName>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Μηνὶ Ἀξιοττηνῷ. Τατιανὴ Ἑρ-
-                    <lb n="2"/>που εὐξαμένη ταῦρον ὑ-
+                    <lb n="1"/><persName type="divine" key="Men Axiottenos"><name nymRef="Μήν">Μηνὶ</name> <rs type="epithet">Ἀξιοττηνῷ</rs></persName>. <persName type="attested" key="Tatiane figlia di Herpes"><name nymRef="Τατιανή">Τατιανὴ</name> <persName type="attested" key="Herpes"><name type="patronymic" nymRef="Ἕρπης">Ἑρ-
+                    <lb n="2" break="no"/>που</name></persName></persName> εὐξαμένη ταῦρον ὑ-
                     <lb n="3"/>πὲρ ἀδελφῶν καὶ ἀκουσ-
                     <lb n="4"/>θεῖσα, μὴ δυνασθεῖσα δὲ
                     <lb n="5"/>ἀποδοῦναι ταῦρον, ἠρώτη-

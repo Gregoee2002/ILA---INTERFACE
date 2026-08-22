@@ -60,25 +60,92 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="divinita">
+                    <term>Zeus Masphalatenos</term>
+                    <term>Men Tiamos</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Ioulianos figlio di Menekrates</term>
+                    <term>Menekrates</term>
+                    <term>Menekrates figlio di Diodoros</term>
+                    <term>Diodoros</term>
+                    <term>Dionysios figlio di Papias</term>
+                    <term>Papias</term>
+                    <term>Hermogenes figlio di Hermippos</term>
+                    <term>Hermippos</term>
+                    <term>Loukios figlio di Onesimos</term>
+                    <term>Onesimos</term>
+                    <term>Diogenes figlio di Glykon</term>
+                    <term>Glykon</term>
+                    <term>Diogenes figlio di Maximos</term>
+                    <term>Maximos</term>
+                    <term>Trophimos figlio di Hermippos</term>
+                    <term>Hermippos (2)</term>
+                    <term>Apollonios II</term>
+                    <term>Theodoros II</term>
+                    <term>Markianos II</term>
+                    <term>Menandros figlio di Hermogenes</term>
+                    <term>Hermogenes (1)</term>
+                    <term>Hermogenes figlio di Statianos</term>
+                    <term>Statianos</term>
+                    <term>Metrodoros figlio di Euelpistos</term>
+                    <term>Euelpistos</term>
+                    <term>Asklepiades figlio di Markianos</term>
+                    <term>Markianos</term>
+                    <term>Asklepiades figlio di Dionysios</term>
+                    <term>Dionysios (2)</term>
+                    <term>Hermogenes figlio di Trophimos</term>
+                    <term>Trophimos (2)</term>
+                    <term>Babylos figlio di Hermogenes</term>
+                    <term>Hermogenes (3)</term>
+                    <term>Hermogenes (supervisore)</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Ioulianos figlio di Menekrates"><persName type="attested" key="Ioulianos figlio di Menekrates"><name nymRef="Ἰουλιανός">Ἰουλ(ι)ανὸς</name> <persName type="attested" key="Menekrates"><name type="patronymic" nymRef="Μενεκράτης">Μενεκράτου</name></persName></persName></person>
+                    <person xml:id="Menekrates figlio di Diodoros"><persName type="attested" key="Menekrates figlio di Diodoros"><name nymRef="Μενεκράτης">Μενεκράτης</name> <persName type="attested" key="Diodoros"><name type="patronymic" nymRef="Διόδωρος">Διοδώρου</name></persName></persName></person>
+                    <person xml:id="Dionysios figlio di Papias"><persName type="attested" key="Dionysios figlio di Papias"><name nymRef="Διονύσιος">Διονύσιος</name> <persName type="attested" key="Papias"><name type="patronymic" nymRef="Παπίας">Παπίου</name></persName></persName></person>
+                    <person xml:id="Hermogenes figlio di Hermippos"><persName type="attested" key="Hermogenes figlio di Hermippos"><name nymRef="Ἑρμογένης">Ἑρμογένης</name> <persName type="attested" key="Hermippos"><name type="patronymic" nymRef="Ἕρμιππος">Ἑρμίππου</name></persName></persName></person>
+                    <person xml:id="Loukios figlio di Onesimos"><persName type="attested" key="Loukios figlio di Onesimos"><name nymRef="Λούκιος">Λούκιος</name> <persName type="attested" key="Onesimos"><name type="patronymic" nymRef="Ὀνήσιμος">Ὀνησίμου</name></persName></persName></person>
+                    <person xml:id="Diogenes figlio di Glykon"><persName type="attested" key="Diogenes figlio di Glykon"><name nymRef="Διογένης">Διογένης</name> <persName type="attested" key="Glykon"><name type="patronymic" nymRef="Γλύκων">Γλύκωνος</name></persName></persName></person>
+                    <person xml:id="Diogenes figlio di Maximos"><persName type="attested" key="Diogenes figlio di Maximos"><name nymRef="Διογένης">Διογένης</name> <persName type="attested" key="Maximos"><name type="patronymic" nymRef="Μάξιμος">Μαξίμου</name></persName></persName></person>
+                    <person xml:id="Trophimos figlio di Hermippos"><persName type="attested" key="Trophimos figlio di Hermippos"><name nymRef="Τρόφιμος">Τρόφιμο[ς]</name> <persName type="attested" key="Hermippos (2)"><name type="patronymic" nymRef="Ἕρμιππος">Ἑρμίππου</name></persName></persName></person>
+                    <person xml:id="Apollonios II"><persName type="attested" key="Apollonios II"><name nymRef="Ἀπολλώνιος">Ἀπολλώνιος</name> β΄</persName></person>
+                    <person xml:id="Theodoros II"><persName type="attested" key="Theodoros II"><name nymRef="Θεόδωρος">Θεόδωρος</name> β΄</persName></person>
+                    <person xml:id="Markianos II"><persName type="attested" key="Markianos II"><name nymRef="Μαρκιανός">Μαρκιανὸς</name> β΄</persName></person>
+                    <person xml:id="Menandros figlio di Hermogenes"><persName type="attested" key="Menandros figlio di Hermogenes"><name nymRef="Μένανδρος">Μένανδρος</name> <persName type="attested" key="Hermogenes (1)"><name type="patronymic" nymRef="Ἑρμογένης">Ἑρμογένου</name></persName></persName></person>
+                    <person xml:id="Hermogenes figlio di Statianos"><persName type="attested" key="Hermogenes figlio di Statianos"><name nymRef="Ἑρμογένης">Ἑρμογένης</name> <persName type="attested" key="Statianos"><name type="patronymic" nymRef="Στατιανός">Στατιανοῦ</name></persName></persName></person>
+                    <person xml:id="Metrodoros figlio di Euelpistos"><persName type="attested" key="Metrodoros figlio di Euelpistos"><name nymRef="Μητρόδωρος">Μητρόδωρος</name> <persName type="attested" key="Euelpistos"><name type="patronymic" nymRef="Εὐέλπιστος">Εὐελπίστου</name></persName></persName></person>
+                    <person xml:id="Asklepiades figlio di Markianos"><persName type="attested" key="Asklepiades figlio di Markianos"><name nymRef="Ἀσκληπιάδης">Ἀσκληπιάδης</name> <persName type="attested" key="Markianos"><name type="patronymic" nymRef="Μαρκιανός">Μαρκιανοῦ</name></persName></persName></person>
+                    <person xml:id="Asklepiades figlio di Dionysios"><persName type="attested" key="Asklepiades figlio di Dionysios"><name nymRef="Ἀσκληπιάδης">Ἀσκληπιάδης</name> <persName type="attested" key="Dionysios (2)"><name type="patronymic" nymRef="Διονύσιος">Διονύσιου</name></persName></persName></person>
+                    <person xml:id="Hermogenes figlio di Trophimos"><persName type="attested" key="Hermogenes figlio di Trophimos"><name nymRef="Ἑρμογένης">Ἑρμογένης</name> <persName type="attested" key="Trophimos (2)"><name type="patronymic" nymRef="Τρόφιμος">Τροφίμου</name></persName></persName></person>
+                    <person xml:id="Babylos figlio di Hermogenes"><persName type="attested" key="Babylos figlio di Hermogenes"><name nymRef="Βάβηλος">Βάβηλος</name> <persName type="attested" key="Hermogenes (3)"><name type="patronymic" nymRef="Ἑρμογένης">Ἑρμογένου</name></persName></persName></person>
+                    <person xml:id="Hermogenes (supervisore)"><persName type="attested" key="Hermogenes (supervisore)"><name nymRef="Ἑρμογένης">Ἑρμογένου</name></persName></person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
                     <lb n="1"/>Ἱερὰ συμβιώσεως καὶ νεωτέρα κατ᾽ ἐπι-
-                    <lb n="2"/>ταγὴν τοῦ κοιρίου τυράννου Διὸς Μας-
-                    <lb n="3"/>φαλατηνοῦ καὶ Μηνὶ Τιάμου εὐχήν. Ἰουλ(ι)-
-                    <lb n="4"/>ανὸς Μενεκράτου, Μενεκράτης Διοδώ-
-                    <lb n="5"/>ρου, Διονύσιος Παπίου, Ἑρμογένης Ἑρ-
-                    <lb n="6"/>μίππου, Λούκιος Ὀνησίμου, Διογένης
-                    <lb n="7"/>Γλύκωνος, Διογένης Μαξίμου, Τρόφιμο[ς]
-                    <lb n="8"/>Ἑρμίππου, Ἀπολλώνιος β΄, Θεόδωρος β΄,
-                    <lb n="9"/>Μαρκιανὸς β΄, Μένανδρος Ἑρμογένου, Ἑρ-
-                    <lb n="10"/>μογένης Στατιανοῦ, Μητρόδωρος Εὐελπίστ-
-                    <lb n="11"/>ου, Ἀσκληπιάδης Μαρκιανοῦ, Ἀσκληπιά-
-                    <lb n="12"/>δης Διονύσιου, Ἑρμογένης Τροφίμου,
-                    <lb n="13"/>Βάβηλος Ἑρμογένου, ἐπιμελησαμένων
-                    <lb n="14"/>Ἰουλιανοῦ καὶ Ἑρμογένου. Ἔτους σνς΄, μη(νὸς) Δ(ύστρου).
+                    <lb n="2"/>ταγὴν τοῦ κοιρίου τυράννου <persName type="divine" key="Zeus Masphalatenos"><name nymRef="Ζεύς">Διὸς</name> <rs type="epithet">Μας-
+                    <lb n="3" break="no"/>φαλατηνοῦ</rs></persName> καὶ <persName type="divine" key="Men Tiamos"><name nymRef="Μήν">Μηνὶ</name> <rs type="epithet">Τιάμου</rs></persName> εὐχήν. <persName type="attested" key="Ioulianos figlio di Menekrates"><name nymRef="Ἰουλιανός">Ἰουλ(ι)-
+                    <lb n="4" break="no"/>ανὸς</name> <persName type="attested" key="Menekrates"><name type="patronymic" nymRef="Μενεκράτης">Μενεκράτου</name></persName></persName>, <persName type="attested" key="Menekrates figlio di Diodoros"><name nymRef="Μενεκράτης">Μενεκράτης</name> <persName type="attested" key="Diodoros"><name type="patronymic" nymRef="Διόδωρος">Διοδώ-
+                    <lb n="5" break="no"/>ρου</name></persName></persName>, <persName type="attested" key="Dionysios figlio di Papias"><name nymRef="Διονύσιος">Διονύσιος</name> <persName type="attested" key="Papias"><name type="patronymic" nymRef="Παπίας">Παπίου</name></persName></persName>, <persName type="attested" key="Hermogenes figlio di Hermippos"><name nymRef="Ἑρμογένης">Ἑρμογένης</name> <persName type="attested" key="Hermippos"><name type="patronymic" nymRef="Ἕρμιππος">Ἑρ-
+                    <lb n="6" break="no"/>μίππου</name></persName></persName>, <persName type="attested" key="Loukios figlio di Onesimos"><name nymRef="Λούκιος">Λούκιος</name> <persName type="attested" key="Onesimos"><name type="patronymic" nymRef="Ὀνήσιμος">Ὀνησίμου</name></persName></persName>, <persName type="attested" key="Diogenes figlio di Glykon"><name nymRef="Διογένης">Διογένης</name>
+                    <lb n="7"/><persName type="attested" key="Glykon"><name type="patronymic" nymRef="Γλύκων">Γλύκωνος</name></persName></persName>, <persName type="attested" key="Diogenes figlio di Maximos"><name nymRef="Διογένης">Διογένης</name> <persName type="attested" key="Maximos"><name type="patronymic" nymRef="Μάξιμος">Μαξίμου</name></persName></persName>, <persName type="attested" key="Trophimos figlio di Hermippos"><name nymRef="Τρόφιμος">Τρόφιμο[ς]</name>
+                    <lb n="8"/><persName type="attested" key="Hermippos (2)"><name type="patronymic" nymRef="Ἕρμιππος">Ἑρμίππου</name></persName></persName>, <persName type="attested" key="Apollonios II"><name nymRef="Ἀπολλώνιος">Ἀπολλώνιος</name> β΄</persName>, <persName type="attested" key="Theodoros II"><name nymRef="Θεόδωρος">Θεόδωρος</name> β΄</persName>,
+                    <lb n="9"/><persName type="attested" key="Markianos II"><name nymRef="Μαρκιανός">Μαρκιανὸς</name> β΄</persName>, <persName type="attested" key="Menandros figlio di Hermogenes"><name nymRef="Μένανδρος">Μένανδρος</name> <persName type="attested" key="Hermogenes (1)"><name type="patronymic" nymRef="Ἑρμογένης">Ἑρμογένου</name></persName></persName>, <persName type="attested" key="Hermogenes figlio di Statianos"><name nymRef="Ἑρμογένης">Ἑρ-
+                    <lb n="10" break="no"/>μογένης</name> <persName type="attested" key="Statianos"><name type="patronymic" nymRef="Στατιανός">Στατιανοῦ</name></persName></persName>, <persName type="attested" key="Metrodoros figlio di Euelpistos"><name nymRef="Μητρόδωρος">Μητρόδωρος</name> <persName type="attested" key="Euelpistos"><name type="patronymic" nymRef="Εὐέλπιστος">Εὐελπίστ-
+                    <lb n="11" break="no"/>ου</name></persName></persName>, <persName type="attested" key="Asklepiades figlio di Markianos"><name nymRef="Ἀσκληπιάδης">Ἀσκληπιάδης</name> <persName type="attested" key="Markianos"><name type="patronymic" nymRef="Μαρκιανός">Μαρκιανοῦ</name></persName></persName>, <persName type="attested" key="Asklepiades figlio di Dionysios"><name nymRef="Ἀσκληπιάδης">Ἀσκληπιά-
+                    <lb n="12" break="no"/>δης</name> <persName type="attested" key="Dionysios (2)"><name type="patronymic" nymRef="Διονύσιος">Διονύσιου</name></persName></persName>, <persName type="attested" key="Hermogenes figlio di Trophimos"><name nymRef="Ἑρμογένης">Ἑρμογένης</name> <persName type="attested" key="Trophimos (2)"><name type="patronymic" nymRef="Τρόφιμος">Τροφίμου</name></persName></persName>,
+                    <lb n="13"/><persName type="attested" key="Babylos figlio di Hermogenes"><name nymRef="Βάβηλος">Βάβηλος</name> <persName type="attested" key="Hermogenes (3)"><name type="patronymic" nymRef="Ἑρμογένης">Ἑρμογένου</name></persName></persName>, ἐπιμελησαμένων
+                    <lb n="14"/><persName type="attested" key="Ioulianos figlio di Menekrates"><name nymRef="Ἰουλιανός">Ἰουλιανοῦ</name></persName> καὶ <persName type="attested" key="Hermogenes (supervisore)"><name nymRef="Ἑρμογένης">Ἑρμογένου</name></persName>. Ἔτους σνς΄, μη(νὸς) Δ(ύστρου).
                 </ab>
             </div>
             <div type="apparatus"/>

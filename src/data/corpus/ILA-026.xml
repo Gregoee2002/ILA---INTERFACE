@@ -60,18 +60,58 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Hermippos figlio di Hermippos</term>
+                    <term>Dionysios</term>
+                    <term>Apollonios</term>
+                    <term>Orpheus</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Hermippos figlio di Hermippos">
+                        <persName type="attested" key="Hermippos figlio di Hermippos">
+                            <name nymRef="Ἕρμιππος">Ἕρμιππος</name>
+                            <persName type="attested" key="Hermippos (padre)">
+                                <name type="patronymic" nymRef="Ἕρμιππος">Ἑρμίππο[υ]</name>
+                            </persName>
+                        </persName>
+                    </person>
+                    <person xml:id="Dionysios">
+                        <persName type="attested" key="Dionysios">
+                            <name nymRef="Διονύσιος">Διονυσίου</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Apollonios">
+                        <persName type="attested" key="Apollonios">
+                            <name nymRef="Ἀπολλώνιος">Ἀπολλωνίου</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Orpheus">
+                        <persName type="attested" key="Orpheus">
+                            <name nymRef="Ὀρφεύς">Ὀρφέος</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
                     <lb n="1"/>[Ἔτου]ς σγζ΄, μη(νὸς) Πανήμ[ου· Ἐπεὶ]
-                    <lb n="2"/>Ἕρμιππος Ἑρμίππο[υ ................]
-                    <lb n="3"/>σετο τὸν θεὸν Μῆνα ΚΓ[................]
-                    <lb n="4"/>μετὰ τῶν ἰδίων ἀδελφῶν Διονυσίου, Ἀ-
-                    <lb n="5"/>πολλωνίου, Ὀρφέος ἀ[πέκτεινε ........]
+                    <lb n="2"/><persName type="attested" key="Hermippos figlio di Hermippos"><name nymRef="Ἕρμιππος">Ἕρμιππος</name> <persName type="attested" key="Hermippos (padre)"><name type="patronymic" nymRef="Ἕρμιππος">Ἑρμίππο[υ]</name></persName></persName> ................]
+                    <lb n="3"/>σετο τὸν θεὸν <persName type="divine" key="Men"><name nymRef="Μήν">Μῆνα</name></persName> ΚΓ[................]
+                    <lb n="4"/>μετὰ τῶν ἰδίων ἀδελφῶν <persName type="attested" key="Dionysios"><name nymRef="Διονύσιος">Διονυσίου</name></persName>, Ἀ-
+                    <lb n="5" break="no"/><persName type="attested" key="Apollonios"><name nymRef="Ἀπολλώνιος">πολλωνίου</name></persName>, <persName type="attested" key="Orpheus"><name nymRef="Ὀρφεύς">Ὀρφέος</name></persName> ἀ[πέκτεινε ........]
                     <lb n="6"/>τὸν ἐπιζητηθέντ[α ...... μετὰ]
-                    <lb n="7"/>Διονυσίου τοῦ ἀδελ[φοῦ· ...... μετὰ]
+                    <lb n="7"/><persName type="attested" key="Dionysios"><name nymRef="Διονύσιος">Διονυσίου</name></persName> τοῦ ἀδελ[φοῦ· ...... μετὰ]
                     <lb n="8"/>τὸ τετελευτηκένα[ι αὐτοὺς ...........]
                 </ab>
             </div>

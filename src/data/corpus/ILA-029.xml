@@ -60,17 +60,59 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Axiottenos</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Hermogenes figlio di Glykon</term>
+                    <term>Glykon</term>
+                    <term>Nitonis figlia di Philoxenos</term>
+                    <term>Philoxenos</term>
+                    <term>Artemidoros</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Hermogenes figlio di Glykon">
+                        <persName type="attested" key="Hermogenes figlio di Glykon">
+                            <name nymRef="Ἑρμογένης">Ἑρμογένης</name>
+                            <persName type="attested" key="Glykon">
+                                <name type="patronymic" nymRef="Γλύκων">Γλύκωνος</name>
+                            </persName>
+                        </persName>
+                    </person>
+                    <person xml:id="Nitonis figlia di Philoxenos">
+                        <persName type="attested" key="Nitonis figlia di Philoxenos">
+                            <name nymRef="Νιτωνίς">Νιτωνὶς</name>
+                            <persName type="attested" key="Philoxenos">
+                                <name type="patronymic" nymRef="Φιλόξενος">Φιλοξένου</name>
+                            </persName>
+                        </persName>
+                    </person>
+                    <person xml:id="Artemidoros">
+                        <persName type="attested" key="Artemidoros">
+                            <name nymRef="Ἀρτεμίδωρος">Ἀρτεμίδωρος</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>[Μ]ηνὶ Ἀξιοττ(η)νῷ. Ἐπὶ
-                    <lb n="2"/>Ἑρμογένης Γλύκωνος
-                    <lb n="3"/>καὶ Νιτωνὶς Φιλοξένου
-                    <lb n="4"/>ἐλοιδώρησαν Ἀρτεμί-
-                    <lb n="5"/>δωρον περὶ οἴνου, Ἀρτε-
-                    <lb n="6"/>μίδωρος πιττάκιον ἔ-
+                    <lb n="1"/><persName type="divine" key="Men Axiottenos">[Μ]ηνὶ Ἀξιοττ(η)νῷ</persName>. Ἐπὶ
+                    <lb n="2"/><persName type="attested" key="Hermogenes figlio di Glykon"><name nymRef="Ἑρμογένης">Ἑρμογένης</name> <persName type="attested" key="Glykon"><name type="patronymic" nymRef="Γλύκων">Γλύκωνος</name></persName></persName>
+                    <lb n="3"/>καὶ <persName type="attested" key="Nitonis figlia di Philoxenos"><name nymRef="Νιτωνίς">Νιτωνὶς</name> <persName type="attested" key="Philoxenos"><name type="patronymic" nymRef="Φιλόξενος">Φιλοξένου</name></persName></persName>
+                    <lb n="4"/>ἐλοιδώρησαν <persName type="attested" key="Artemidoros"><name nymRef="Ἀρτεμίδωρος">Ἀρτεμί-
+                    <lb n="5" break="no"/>δωρον</name></persName> περὶ οἴνου, <persName type="attested" key="Artemidoros"><name nymRef="Ἀρτεμίδωρος">Ἀρτε-
+                    <lb n="6" break="no"/>μίδωρος</name></persName> πιττάκιον ἔ-
                     <lb n="7"/>δωκεν. Ὁ θεὸς ἐκολά-
                     <lb n="8"/>σετο τὸν Ἑρμογένην
                     <lb n="9"/>καὶ εἰλάσετο τὸν θε-

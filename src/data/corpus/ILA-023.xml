@@ -60,12 +60,40 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Hoseos</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Manes</term>
+                    <term>Banas</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Manes">
+                        <persName type="attested" key="Manes">
+                            <name nymRef="Μάνης">Μάνης</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Banas">
+                        <persName type="attested" key="Banas">
+                            <name nymRef="Βάνας">Βάνας</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Μ[ηνὶ] Ὁσήῳ Μάνης καὶ Βάνας ὁ
+                    <lb n="1"/><persName type="divine" key="Men Hoseos"><name nymRef="Μήν">Μ[ηνὶ]</name> <rs type="epithet">Ὁσήῳ</rs></persName> <persName type="attested" key="Manes"><name nymRef="Μάνης">Μάνης</name></persName> καὶ <persName type="attested" key="Banas"><name nymRef="Βάνας">Βάνας</name></persName> ὁ
                     <lb n="2"/>Μ[......]λλιωλιας ἡ μήτηρ αὐτῶν
                     <lb n="3"/>τὸ πρόπυλον ει ον
                 </ab>

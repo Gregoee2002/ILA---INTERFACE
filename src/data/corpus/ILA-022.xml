@@ -60,31 +60,67 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Atimis</term>
+                    <term>Tiamos</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Megale Meter</term>
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Apollonios</term>
+                    <term>Skollos</term>
+                    <term>Tatias figlia di Skollos</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Apollonios">
+                        <persName type="attested" key="Apollonios">
+                            <name nymRef="Ἀπολλώνιος">Ἀπολλώνιος</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Skollos">
+                        <persName type="attested" key="Skollos">
+                            <name nymRef="Σκόλλος">Σκόλλῳ</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Tatias figlia di Skollos">
+                        <persName type="attested" key="Tatias figlia di Skollos">
+                            <name nymRef="Τατιάς">Τατιὰς</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>[Μεγάλη Μήτηρ Ἄτιμις]
-                    <lb n="2"/>[καὶ μέγας Μὴν Τιάμου τὴν ···]
+                    <lb n="1"/><persName type="divine" key="Megale Meter Atimis"><name nymRef="Μήτηρ">[Μεγάλη Μήτηρ</name> <rs type="epithet">Ἄτιμις]</rs></persName>
+                    <lb n="2"/>[καὶ μέγας <persName type="divine" key="Men Tiamos"><name nymRef="Μήν">Μὴν</name> <rs type="epithet">Τιάμου</rs></persName> τὴν ···]
                     <lb n="3"/>[... κώμην βασιλεύ]ων καὶ ἡ δύ-
-                    <lb n="4"/>[ναμις αὐτῶν μεγάλη.] Ἀπολλώνιος
-                    <lb n="5"/>[Σκόλλῳ παρέθε]το Ἀπολλωνί-
-                    <lb n="6"/>ῳ [ὑπάρχοντα χαλκ]οῦ ✳ μ(ύρια). Εἶτα ἀπα(ι)-
-                    <lb n="7"/>τοῦντος τοῦ Ἀπολλωνίου τὸν χαλ-
-                    <lb n="8"/>κὸν παρὰ τοῦ Σκόλλου ὤμοσε τοὺς
+                    <lb n="4" break="no"/>[ναμις αὐτῶν μεγάλη.] <persName type="attested" key="Apollonios">Ἀπολλώνιος</persName>
+                    <lb n="5"/>[<persName type="attested" key="Skollos">Σκόλλῳ</persName> παρέθε]το <persName type="attested" key="Apollonios">Ἀπολλωνί-
+                    <lb n="6" break="no"/>ῳ</persName> [ὑπάρχοντα χαλκ]οῦ ✳ μ(ύρια). Εἶτα ἀπα(ι)-
+                    <lb n="7" break="no"/>τοῦντος τοῦ <persName type="attested" key="Apollonios">Ἀπολλωνίου</persName> τὸν χαλ-
+                    <lb n="8" break="no"/>κὸν παρὰ τοῦ <persName type="attested" key="Skollos">Σκόλλου</persName> ὤμοσε τοὺς
                     <lb n="9"/>προγεγραμ(μ)ένους θεοὺς ἰς προ-
                     <lb n="10"/>θεσμίαν ἀποδοῦναι τὸ
                     <lb n="11"/>συναχθὲν κεφάλαιον. Μὴ τηρήσαντος
                     <lb n="12"/>αὐτοῦ τὴν πίστιν παρεχώρησεν
-                    <lb n="13"/>τῇ θεῷ ὁ Ἀπολλώνιος. Κολασθέν-
-                    <lb n="14"/>τος οὖν τοῦ Σκόλλου ὑπὸ τῶν θε-
-                    <lb n="15"/>ῶν ἰς θανάτου λόγον μετὰ τὴν [τε-]
-                    <lb n="16"/>λευτὴν αὐτοῦ ἐπεζητήθη ὑπὸ τ[ῶν]
-                    <lb n="17"/>θεῶν. Τατιὰς οὖν ἡ θυγάτηρ αὐτοῦ
+                    <lb n="13"/>τῇ θεῷ ὁ <persName type="attested" key="Apollonios">Ἀπολλώνιος</persName>. Κολασθέν-
+                    <lb n="14" break="no"/>τος οὖν τοῦ <persName type="attested" key="Skollos">Σκόλλου</persName> ὑπὸ τῶν θε-
+                    <lb n="15" break="no"/>ῶν ἰς θανάτου λόγον μετὰ τὴν [τε-]
+                    <lb n="16" break="no"/>λευτὴν αὐτοῦ ἐπεζητήθη ὑπὸ τ[ῶν]
+                    <lb n="17"/>θεῶν. <persName type="attested" key="Tatias figlia di Skollos">Τατιὰς</persName> οὖν ἡ θυγάτηρ αὐτοῦ
                     <lb n="18"/>ἔλοισε τοὺς ὅρκους καὶ νῦν εἴλα-
-                    <lb n="19"/>σαμένη εὐλογεῖ Μητρὶ Ἀτίμιτι
-                    <lb n="20"/>καὶ Μηνὶ Τιάμου. Ἔτους σγ΄, μη(νὸς)
+                    <lb n="19" break="no"/>σαμένη εὐλογεῖ <persName type="divine" key="Megale Meter Atimis"><name nymRef="Μήτηρ">Μητρὶ</name> <rs type="epithet">Ἀτίμιτι</rs></persName>
+                    <lb n="20"/>καὶ <persName type="divine" key="Men Tiamos"><name nymRef="Μήν">Μηνὶ</name> <rs type="epithet">Τιάμου</rs></persName>. Ἔτους σγ΄, μη(νὸς)
                     <lb n="21"/>Ξανδικοῦ εἰ΄.
                 </ab>
             </div>

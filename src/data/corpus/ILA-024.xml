@@ -60,6 +60,31 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Masphalatenos</term>
+                    <term>Tiamos</term>
+                    <term>Tyrannos</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Zeus</term>
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Dionysios</term>
+                    <term>Diodoros</term>
+                    <term>Hermogenes Balerios</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Dionysios"><persName type="attested" key="Dionysios"><name nymRef="Διονύσιος">Διονυσίου</name></persName></person>
+                    <person xml:id="Diodoros"><persName type="attested" key="Diodoros"><name nymRef="Διόδωρος">Διοδώρου</name></persName></person>
+                    <person xml:id="Hermogenes Balerios"><persName type="attested" key="Hermogenes Balerios"><name nymRef="Ἑρμογένης">Ἑρμογένους</name> <name nymRef="Βαλέριος">Βαλερίου</name></persName></person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
@@ -67,15 +92,15 @@
                 <ab>
                     <lb n="1"/>Κατὰ τὴν τῶν θεῶν ἐπιτα-
                     <lb n="2"/>γὴν ἱερὸς δοῦμος εὐχὴν
-                    <lb n="3"/>Διὶ Μασφαλατηνῷ καὶ Μηνὶ
-                    <lb n="4"/>Τιάμου καὶ Μηνὶ Τυράννῳ
+                    <lb n="3"/><persName type="divine" key="Zeus Masphalatenos"><name nymRef="Ζεύς">Διὶ</name> <rs type="epithet">Μασφαλατηνῷ</rs></persName> καὶ <persName type="divine" key="Men Tiamos"><name nymRef="Μήν">Μηνὶ</name>
+                    <lb n="4"/><rs type="epithet">Τιάμου</rs></persName> καὶ <persName type="divine" key="Men Tyrannos"><name nymRef="Μήν">Μηνὶ</name> <rs type="epithet">Τυράννῳ</rs></persName>
                     <lb n="5"/>ἐκέλευσεν τηρεῖσθαι ἀ-
                     <lb n="6"/>πὸ ἡμερῶν θ΄. Εἴ τις δὲ τού-
                     <lb n="7"/>των ἀπειθήσι, ἀναγνώσ-
                     <lb n="8"/>εται τὰς δυνάμις τοῦ Δι-
                     <lb n="9"/>ός. Ἐπιμελησαμένου
-                    <lb n="10"/>Διονυσίου, Διοδώρου,
-                    <lb n="11"/>καὶ Ἑρμογένους Βαλερίου,
+                    <lb n="10"/><persName type="attested" key="Dionysios"><name nymRef="Διονύσιος">Διονυσίου</name></persName>, <persName type="attested" key="Diodoros"><name nymRef="Διόδωρος">Διοδώρου</name></persName>,
+                    <lb n="11"/>καὶ <persName type="attested" key="Hermogenes Balerios"><name nymRef="Ἑρμογένης">Ἑρμογένους</name> <name nymRef="Βαλέριος">Βαλερίου</name></persName>,
                     <lb n="12"/>ἔτους σνς΄, μη(νὸς) Δύστρου.
                 </ab>
             </div>
