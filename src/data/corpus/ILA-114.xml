@@ -60,21 +60,49 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Epekoos</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Trophimos</term>
+                    <term>Zotikos</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Trophimos">
+                        <persName type="attested" key="Trophimos">
+                            <name nymRef="Τρόφιμος">Τρο[φί]μου</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Zotikos">
+                        <persName type="attested" key="Zotikos">
+                            <name nymRef="Ζωτικός">Ζω[τι-κοῦ]</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>[Ὁ δεῖνα Τρο-]
-                    <lb n="2"/>[φί]μου Ζω[τι-]
-                    <lb n="3"/>[κοῦ] Μην[ὶ]
-                    <lb n="4"/>Ἐπηκόῳ εὐ-
+                    <lb n="1"/>[Ὁ δεῖνα <persName type="attested" key="Trophimos">Τρο-
+                    <lb n="2" break="no"/>[φί]μου</persName>] <persName type="attested" key="Zotikos">Ζω[τι-]
+                    <lb n="3" break="no"/>[κοῦ]</persName> <persName type="divine" key="Men Epekoos"><name nymRef="Μήν">Μην[ὶ]</name>
+                    <lb n="4"/><rs type="epithet">Ἐπηκόῳ</rs></persName> εὐ-
                     <lb n="5"/>χήν.
                 </ab>
             </div>
             <div type="apparatus"/>
             <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
-            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>Il nome proprio del dedicante non è conservato: "[Ὁ δεῖνα]" è il segnaposto editoriale di Lane stesso per un nome perduto (letteralmente "il tale"), non un nome reale — per questo non è stato inserito in un persName. Restano leggibili solo i due patronimici (di due generazioni?) Trophimos e Zotikos.</p></div>
             <div type="bibliography">
                 <listBibl>
                     <bibl>Lane, CMRDM I 125</bibl>

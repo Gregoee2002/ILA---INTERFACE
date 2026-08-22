@@ -60,15 +60,44 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Plouristreon</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Aurelius Artemon figlio di Hermokles</term>
+                    <term>Hermokles</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Aurelius Artemon figlio di Hermokles">
+                        <persName type="attested" key="Aurelius Artemon figlio di Hermokles">
+                            <name>Αυρ.</name>
+                            <name nymRef="Αρτέμων">Ἀρτέμωνα</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Hermokles">
+                        <persName type="attested" key="Hermokles">
+                            <name nymRef="Ερμοκλής">Ἑρμοκλ[έ]ους</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>οἱ περὶ Αυρ.
-                    <lb n="2"/>Ἀρτέμωνα Ἑρμοκλ[έ]-
-                    <lb n="3" break="no"/>ους φράτρα Μηνὶ
-                    <lb n="4"/>Πλουριστρέων εὐχήν.
+                    <lb n="1"/>οἱ περὶ <persName type="attested" key="Aurelius Artemon figlio di Hermokles"><name>Αυρ.</name>
+                    <lb n="2"/><name nymRef="Αρτέμων">Ἀρτέμωνα</name></persName> <persName type="attested" key="Hermokles"><name type="patronymic" nymRef="Ερμοκλής">Ἑρμοκλ[έ]-
+                    <lb n="3" break="no"/>ους</name></persName> φράτρα <persName type="divine" key="Men Plouristreon"><name nymRef="Μήν">Μηνὶ</name>
+                    <lb n="4"/><rs type="epithet">Πλουριστρέων</rs></persName> εὐχήν.
                 </ab>
             </div>
             <div type="apparatus"/>

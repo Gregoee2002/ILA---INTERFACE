@@ -60,12 +60,22 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Epekoos</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+            </textClass>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>[Μη]νὶ Ἐπηκόῳ εὐχ[ήν].
+                    <lb n="1"/><persName type="divine" key="Men Epekoos"><name nymRef="Μήν">[Μη]νὶ</name> <rs type="epithet">Ἐπηκόῳ</rs></persName> εὐχ[ήν].
                 </ab>
             </div>
             <div type="apparatus"/>

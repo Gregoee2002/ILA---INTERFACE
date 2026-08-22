@@ -62,18 +62,40 @@
                 <keywords scheme="divinita">
                     <term>Men</term>
                     <term>Kore Selene</term>
+                    <term>Helios Apollo Kisaulodenos</term>
+                    <term>Artemis</term>
+                    <term>Zeus</term>
+                    <term>Plouton Helios</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Apollonios figlio di Metrodoros Sparos</term>
+                    <term>Apollonios (figlio) figlio di Apollonios Sparos</term>
                 </keywords>
             </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Apollonios figlio di Metrodoros Sparos">
+                        <persName type="attested" key="Apollonios figlio di Metrodoros Sparos">
+                            <name nymRef="Απολλώνιος">Ἀπολλώνιος</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Apollonios (figlio) figlio di Apollonios Sparos">
+                        <persName type="attested" key="Apollonios (figlio) figlio di Apollonios Sparos">
+                            <name nymRef="Απολλώνιος">Ἀπολλωνίου</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
         </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Ἀπολλώνιος Μητροδώρου Σπάρος
-                    <lb n="2"/>ὁ πατὴρ τοῦ γενομένου ἱερέως Ἀπο<supplied reason="lost">λ</supplied>
-                    <lb n="3" break="no"/>λωνίου τοῦ Ἀπολλωνίου Σπάρου τοῦ
-                    <lb n="4"/>Ἡλίου Ἀπόλλωνος Κισαυλοδδηνοῦ, ἀ
+                    <lb n="1"/><persName type="attested" key="Apollonios figlio di Metrodoros Sparos"><name nymRef="Απολλώνιος">Ἀπολλώνιος</name> <persName type="attested" key="Metrodoros"><name type="patronymic" nymRef="Μητρόδωρος">Μητροδώρου</name></persName> Σπάρος</persName>
+                    <lb n="2"/>ὁ πατὴρ τοῦ γενομένου ἱερέως <persName type="attested" key="Apollonios (figlio) figlio di Apollonios Sparos"><name nymRef="Απολλώνιος">Ἀπο<supplied reason="lost">λ</supplied>
+                    <lb n="3" break="no"/>λωνίου</name> τοῦ <persName type="attested" key="Apollonios figlio di Metrodoros Sparos"><name nymRef="Απολλώνιος">Ἀπολλωνίου</name> Σπάρου</persName></persName> τοῦ
+                    <lb n="4"/><persName type="divine" key="Helios Apollo Kisaulodenos"><name nymRef="Ήλιος">Ἡλίου</name> <rs type="epithet">Ἀπόλλωνος</rs> <rs type="epithet">Κισαυλοδδηνοῦ</rs></persName>, ἀ
                     <lb n="5" break="no"/>νέθηκεν τῶι θεῶι καὶ τῆι πόλει τὰ κατασκευ
                     <lb n="6" break="no"/>ασθέντα ὑπ᾽ αὐτοῦ, λαβὼν κατὰ ψήφισμα τὴν
                     <lb n="7"/>ἀναγραφὴν ποιήσασθαι αὐτῶν ἐν στήλῃ. Καί
@@ -83,14 +105,14 @@
                     <lb n="11" break="no"/>τῆς ἀβάκχηον μαρμάρινον πρὸς τὴν χρῆσιν τῶν
                     <lb n="12"/>θυσιαζόντων καὶ θυμιατήριον τετράγωνον κα
                     <lb n="13" break="no"/>τεσκευασμένον πέτρας Τηΐας ἔχον περίπυρον
-                    <lb n="14"/>σιδηροῦν καὶ ἄγαλμα μαρμάρινον Ἀρτέμιδος ἐ
+                    <lb n="14"/>σιδηροῦν καὶ ἄγαλμα μαρμάρινον <persName type="divine" key="Artemis"><name nymRef="Άρτεμις">Ἀρτέμιδος</name></persName> ἐ
                     <lb n="15" break="no"/>πὶ παραστάδι μυλίνῃ καὶ <persName type="divine" key="Men">Μηνὸς</persName> ἄγαλμα ἐπὶ βάσει
                     <lb n="16"/>μαρμαρίνῃ, καὶ τράπεζα ποικίλη τετράγωνος
                     <lb n="17"/>καὶ βωμὸς μαρμάρινος ἔχων ἀετὸν ἐν ἑαυτῷ
-                    <lb n="18"/>Διὸς καὶ ναὸς ἐξυλωμένος καὶ κεκεραμωμέ
+                    <lb n="18"/><persName type="divine" key="Zeus"><name nymRef="Ζεύς">Διὸς</name></persName> καὶ ναὸς ἐξυλωμένος καὶ κεκεραμωμέ
                     <lb n="19" break="no"/>νος καὶ τεθυρωμένος καὶ κεκλειδωμένος,
-                    <lb n="20"/>ἐν ᾧ καθείδρυται ἀγάλματα Πλούτωνος Ἡ
-                    <lb n="21" break="no"/>λίου καὶ <persName type="divine" key="Kore Selene">Κούρης Σελήνης</persName> ἐπὶ βήματος
+                    <lb n="20"/>ἐν ᾧ καθείδρυται ἀγάλματα <persName type="divine" key="Plouton Helios"><name nymRef="Πλούτων">Πλούτωνος</name> <rs type="epithet">Ἡ
+                    <lb n="21" break="no"/>λίου</rs></persName> καὶ <persName type="divine" key="Kore Selene">Κούρης Σελήνης</persName> ἐπὶ βήματος
                     <lb n="22"/>ἐμπεφιασμένα ἔχοντα καὶ παστῆον ξύλι
                     <lb n="23" break="no"/>νον ναοειδὲς καὶ παστὸν λινοῦν, καὶ παρ᾽ ἑκατέ
                     <lb n="24" break="no"/>ρα τῶν εἰσόδων βωμὸς Φωκαϊκὸς καὶ κλεῖν

@@ -60,14 +60,39 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Menogas figlio di Trophimos</term>
+                    <term>Trophimos</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Menogas figlio di Trophimos">
+                        <persName type="attested" key="Menogas figlio di Trophimos">
+                            <name nymRef="Μηνογᾶς">Μηνογᾶς</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Trophimos">
+                        <persName type="attested" key="Trophimos">
+                            <name nymRef="Τρόφιμος">Τρόφιμος</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Μηνογᾶς
-                    <lb n="2"/>Τροφίμο[υ]
-                    <lb n="3"/>Μηνὶ εὐ-
+                    <lb n="1"/><persName type="attested" key="Menogas figlio di Trophimos"><name nymRef="Μηνογᾶς">Μηνογᾶς</name>
+                    <lb n="2"/><persName type="attested" key="Trophimos"><name type="patronymic" nymRef="Τρόφιμος">Τροφίμο[υ]</name></persName></persName>
+                    <lb n="3"/><persName type="divine" key="Men"><name nymRef="Μήν">Μηνὶ</name></persName> εὐ-
                     <lb n="4"/>χήν.
                 </ab>
             </div>

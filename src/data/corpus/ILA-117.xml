@@ -60,14 +60,33 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Mousaios</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Mousaios">
+                        <persName type="attested" key="Mousaios">
+                            <name nymRef="Μουσαῖος">Μουσαίο[υ]</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>[.....]ας δὶς Μουσαίο[υ]
+                    <lb n="1"/>[.....]ας δὶς <persName type="attested" key="Mousaios"><name type="patronymic" nymRef="Μουσαῖος">Μουσαίο[υ]</name></persName>
                     <lb n="2"/>τὸν βωμὸν ἐκ τῶν
-                    <lb n="3"/>[ἰ]δίων Μηνὶ εὐχήν.
+                    <lb n="3"/>[ἰ]δίων <persName type="divine" key="Men"><name nymRef="Μήν">Μηνὶ</name></persName> εὐχήν.
                 </ab>
             </div>
             <div type="apparatus"/>

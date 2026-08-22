@@ -60,25 +60,49 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Ouranios</term>
+                    <term>Hypsistos</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Kointos Noumerios</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Kointos Noumerios">
+                        <persName type="attested" key="Kointos Noumerios">
+                            <name nymRef="Κόϊντος">Κοίντος</name>
+                            <name nymRef="Νουμέριος">Νούμεριος</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Κοίντος
-                    <lb n="2"/>Νούμερι-
-                    <lb n="3"/>ος ἱερεὺς
-                    <lb n="4"/>Μηνὸς Ο[ὑ-]
-                    <lb n="5"/>ρανίου κα-
-                    <lb n="6"/>τὰ χρήμα-
-                    <lb n="7"/>τισμὸν ἀνε-
-                    <lb n="8"/>θῆκε θεῷ
-                    <lb n="9"/>ὑψίστῳ.
+                    <lb n="1"/><persName type="attested" key="Kointos Noumerios"><name nymRef="Κόϊντος">Κοίντος</name>
+                    <lb n="2"/><name nymRef="Νουμέριος">Νούμερι-
+                    <lb n="3" break="no"/>ος</name></persName> ἱερεὺς
+                    <lb n="4"/><persName type="divine" key="Men Ouranios"><name nymRef="Μήν">Μηνὸς</name> <rs type="epithet">Ο[ὑ-]
+                    <lb n="5" break="no"/>ρανίου</rs></persName> κα-
+                    <lb n="6" break="no"/>τὰ χρήμα-
+                    <lb n="7" break="no"/>τισμὸν ἀνε-
+                    <lb n="8" break="no"/>θῆκε <persName type="divine" key="Theos Hypsistos"><name>θεῷ</name>
+                    <lb n="9"/><rs type="epithet">ὑψίστῳ</rs></persName>.
                 </ab>
             </div>
             <div type="apparatus"/>
             <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
-            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>"Θεῷ ὑψίστῳ" (r. 8-9) è stato codificato come identità divina separata da Men Ouranios, non come ulteriore epiteto dello stesso: grammaticalmente introduce il destinatario della dedica dopo la menzione del sacerdozio ("ἱερεὺς Μηνὸς Οὐρανίου... ἀνέθηκε θεῷ ὑψίστῳ"). È tuttavia molto plausibile, come frequente in Asia Minore, che si tratti di un'identificazione dello stesso Men Ouranios con il concetto del "dio Altissimo" (Theos Hypsistos), non di una seconda divinità distinta.</p></div>
             <div type="bibliography">
                 <listBibl>
                     <bibl>Lane, CMRDM I 129</bibl>

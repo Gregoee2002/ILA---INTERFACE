@@ -60,14 +60,25 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Epiphanes</term>
+                    <term>Askaenos</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+            </textClass>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
                     <lb n="1"/>Ὅρος ἱερὸς καὶ ἄσυ-
-                    <lb n="2" break="no"/>λος θεοῦ ἐπιφανοῦ[ς]
-                    <lb n="3"/>Μηνὸς Ἀσκ[α]ηνοῦ.
+                    <lb n="2" break="no"/>λος <persName type="divine" key="Men Askaenos">θεοῦ <rs type="epithet">ἐπιφανοῦ[ς]</rs>
+                    <lb n="3"/><name nymRef="Μήν">Μηνὸς</name> <rs type="epithet">Ἀσκ[α]ηνοῦ</rs></persName>.
                 </ab>
             </div>
             <div type="apparatus"/>
