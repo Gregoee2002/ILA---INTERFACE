@@ -420,7 +420,32 @@ const EpithetTree = ({ divinity, epithets, onSelectEpithet, onSelectAll }: {
 }) => {
   const maxCount = Math.max(1, ...epithets.map(e => e.count));
   const totalHeight = Math.max(epithets.length, 1) * EPITHET_TREE_ROW_H;
-  const SPINE_X = 20;
+  const ROOT_COL_W = 208; // deve combaciare con w-52 sulla colonna radice
+  const BRANCH_PAD_L = 4; // deve combaciare con pl-1 sulla colonna rami
+
+  // Per far sì che il raccordo dalla radice raggiunga davvero ogni epiteto
+  // (non un solo trattino fisso) serve un SVG che copra l'intera riga —
+  // radice fissa compresa — e ridisegni le curve verso ogni voce
+  // attualmente visibile man mano che la colonna dei rami scorre.
+  const rowAreaRef = useRef<HTMLDivElement>(null);
+  const branchScrollRef = useRef<HTMLDivElement>(null);
+  const [rowAreaHeight, setRowAreaHeight] = useState(0);
+  const [scrollTop, setScrollTop] = useState(0);
+  const rafPending = useRef(false);
+
+  const measure = () => {
+    rafPending.current = false;
+    if (rowAreaRef.current) setRowAreaHeight(rowAreaRef.current.clientHeight);
+    if (branchScrollRef.current) setScrollTop(branchScrollRef.current.scrollTop);
+  };
+  const onBranchScroll = () => {
+    if (rafPending.current) return;
+    rafPending.current = true;
+    requestAnimationFrame(measure);
+  };
+  useLayoutEffect(() => { measure(); }, [epithets]);
+
+  const rootY = rowAreaHeight / 2;
 
   return (
     <motion.div {...fadeSwap} className="flex-1 flex flex-col overflow-hidden">
@@ -432,7 +457,26 @@ const EpithetTree = ({ divinity, epithets, onSelectEpithet, onSelectAll }: {
         <span>{epithets.length} {epithets.length === 1 ? 'epiteto' : 'epiteti'} co-occorrenti</span>
       </div>
 
-      <div className="flex-1 flex items-center overflow-hidden">
+      <div ref={rowAreaRef} className="flex-1 flex items-center overflow-hidden relative">
+        {/* Raccordo radice→rami: un'unica curva per ogni epiteto
+            attualmente visibile, ridisegnata a ogni scroll — una vera
+            ramificazione dal nome della divinità, non un trattino fisso. */}
+        {rowAreaHeight > 0 && (
+          <svg className="absolute inset-0 pointer-events-none z-10" width="100%" height={rowAreaHeight}>
+            {epithets.map((e, i) => {
+              const childY = i * EPITHET_TREE_ROW_H - scrollTop + EPITHET_TREE_ROW_H / 2;
+              if (childY < -EPITHET_TREE_ROW_H || childY > rowAreaHeight + EPITHET_TREE_ROW_H) return null;
+              const childX = ROOT_COL_W + BRANCH_PAD_L;
+              return (
+                <path
+                  key={e.name}
+                  d={`M ${ROOT_COL_W} ${rootY} C ${ROOT_COL_W + 40} ${rootY}, ${childX - 40} ${childY}, ${childX} ${childY}`}
+                  fill="none" stroke="var(--border)" strokeWidth={1}
+                />
+              );
+            })}
+          </svg>
+        )}
         {/* Radice: nome della divinità, transizione condivisa con la sua
             voce sulla diagonale (stesso layoutId) — visivamente "resta" lei
             mentre il resto della diagonale sfuma via. */}
@@ -448,41 +492,27 @@ const EpithetTree = ({ divinity, epithets, onSelectEpithet, onSelectAll }: {
               {divinity.count}× — vedi tutte
             </span>
           </button>
-          {/* Ramo di raccordo tra la radice (fissa) e la spina (che scorre
-              nella colonna a destra): resta ancorato al centro verticale. */}
-          <div className="absolute top-1/2 right-0 w-5 border-t border-accent/40" />
         </div>
 
         {/* Colonna dei rami: scrollabile in verticale, indipendente dalla
             radice — essenziale per Men e le sue decine di epiteti. */}
-        <div className="flex-1 h-full overflow-y-auto custom-scrollbar pl-1">
+        <div
+          ref={branchScrollRef}
+          onScroll={onBranchScroll}
+          className="flex-1 h-full overflow-y-auto custom-scrollbar pl-1"
+        >
           {epithets.length === 0 ? (
             <div className="h-full flex items-center text-muted/40 text-sm italic">
               Nessun epiteto co-occorrente per questa divinità nello stesso monumento.
             </div>
           ) : (
             <div className="relative" style={{ height: totalHeight }}>
-              <svg className="absolute inset-0 pointer-events-none" width="100%" height={totalHeight} preserveAspectRatio="none">
-                <line
-                  x1={SPINE_X} y1={EPITHET_TREE_ROW_H / 2}
-                  x2={SPINE_X} y2={(epithets.length - 1) * EPITHET_TREE_ROW_H + EPITHET_TREE_ROW_H / 2}
-                  stroke="var(--border)" strokeWidth={1}
-                />
-                {epithets.map((e, i) => (
-                  <line
-                    key={e.name}
-                    x1={SPINE_X} y1={i * EPITHET_TREE_ROW_H + EPITHET_TREE_ROW_H / 2}
-                    x2={SPINE_X + 20} y2={i * EPITHET_TREE_ROW_H + EPITHET_TREE_ROW_H / 2}
-                    stroke="var(--border)" strokeWidth={1}
-                  />
-                ))}
-              </svg>
               {epithets.map((e, i) => (
                 <button
                   key={e.name}
                   onClick={() => onSelectEpithet(e.name)}
                   className="group absolute inset-x-0 flex items-center gap-4 hover:bg-accent/[0.04] transition-colors"
-                  style={{ top: i * EPITHET_TREE_ROW_H, height: EPITHET_TREE_ROW_H, paddingLeft: SPINE_X + 28 }}
+                  style={{ top: i * EPITHET_TREE_ROW_H, height: EPITHET_TREE_ROW_H, paddingLeft: 24 }}
                 >
                   <span className="w-40 shrink-0 text-left text-base font-serif italic text-ink group-hover:text-accent transition-colors truncate">
                     {e.name}
