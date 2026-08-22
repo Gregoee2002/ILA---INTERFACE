@@ -60,21 +60,43 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Askaenos</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Heliophon</term>
+                    <term>Antiochos</term>
+                    <term>Ponteios Markos</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Heliophon"><persName type="attested" key="Heliophon"><name nymRef="Ἡλιοφῶν">Ἡλι-οφῶντος</name></persName></person>
+                    <person xml:id="Antiochos"><persName type="attested" key="Antiochos"><name nymRef="Ἀντίοχος">Ἀντιόχου</name></persName></person>
+                    <person xml:id="Ponteios Markos"><persName type="attested" key="Ponteios Markos"><name nymRef="Ποντήιος">Ποντε-ίου</name> <name nymRef="Μᾶρκος">Μάρ-κου</name></persName></person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
                     <lb n="1"/>Ἀγαθῇ τύχῃ, ἔτους σνδ΄.
-                    <lb n="2"/>Μηνὶ Ἀσκαη-
-                    <lb n="3"/>νῷ
-                    <lb n="4"/>φράτρα Ἡλι-
-                    <lb n="5"/>οφῶντος
-                    <lb n="6"/>Ἀντιόχου
-                    <lb n="7"/>καὶ Ποντε-
-                    <lb n="8"/>ίου Μάρ-
-                    <lb n="9"/>κο
-                    <lb n="10"/>υ
+                    <lb n="2"/><persName type="divine" key="Men Askaenos"><name nymRef="Μήν">Μηνὶ</name> <rs type="epithet">Ἀσκαη-
+                    <lb n="3" break="no"/>νῷ</rs></persName>
+                    <lb n="4"/>φράτρα <persName type="attested" key="Heliophon"><name nymRef="Ἡλιοφῶν">Ἡλι-
+                    <lb n="5" break="no"/>οφῶντος</name></persName>
+                    <lb n="6"/><persName type="attested" key="Antiochos"><name nymRef="Ἀντίοχος">Ἀντιόχου</name></persName>
+                    <lb n="7"/>καὶ <persName type="attested" key="Ponteios Markos"><name nymRef="Ποντήιος">Ποντε-
+                    <lb n="8" break="no"/>ίου</name> <name nymRef="Μᾶρκος">Μάρ-
+                    <lb n="9" break="no"/>κο
+                    <lb n="10" break="no"/>υ</name></persName>
                     <lb n="11"/>ἀνέθηκαν
                 </ab>
             </div>

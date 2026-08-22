@@ -60,14 +60,40 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Tiamos</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Seleukos figlio di Seleukos</term>
+                    <term>Seleukos (padre)</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Seleukos figlio di Seleukos">
+                        <persName type="attested" key="Seleukos figlio di Seleukos">
+                            <name nymRef="Σέλευκος">Σέλευκος</name>
+                            <persName type="attested" key="Seleukos (padre)">
+                                <name type="patronymic" nymRef="Σέλευκος">Σε-λεύκου</name>
+                            </persName>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Σέλευκος Σε-
-                    <lb n="2"/>λεύκου Μηνὶ Τι-
-                    <lb n="3"/>άμου εὐχήν.
+                    <lb n="1"/><persName type="attested" key="Seleukos figlio di Seleukos"><name nymRef="Σέλευκος">Σέλευκος</name> <persName type="attested" key="Seleukos (padre)"><name type="patronymic" nymRef="Σέλευκος">Σε-
+                    <lb n="2" break="no"/>λεύκου</name></persName></persName> <persName type="divine" key="Men Tiamos"><name nymRef="Μήν">Μηνὶ</name> <rs type="epithet">Τι-
+                    <lb n="3" break="no"/>άμου</rs></persName> εὐχήν.
                 </ab>
             </div>
             <div type="apparatus"/>

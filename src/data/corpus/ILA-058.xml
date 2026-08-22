@@ -60,14 +60,42 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Gallikos</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Asklepias</term>
+                    <term>Diogenes</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Asklepias">
+                        <persName type="attested" key="Asklepias">
+                            <name nymRef="Ἀσκληπιάς">Ἀσκληπιὰς</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Diogenes">
+                        <persName type="attested" key="Diogenes">
+                            <name nymRef="Διογένης">Διογένου</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Γαλλικῷ Ἀσκληπιὰς
+                    <lb n="1"/><persName type="divine" key="Men Gallikos"><rs type="epithet">Γαλλικῷ</rs></persName> <persName type="attested" key="Asklepias"><name nymRef="Ἀσκληπιάς">Ἀσκληπιὰς</name></persName>
                     <lb n="2"/>κώμης Κερυζέων πα(ι)-
-                    <lb n="3"/>δίσχη Διογένου
+                    <lb n="3" break="no"/>δίσχη <persName type="attested" key="Diogenes"><name nymRef="Διογένης">Διογένου</name></persName>
                     <lb n="4"/>λύτρον.
                 </ab>
             </div>

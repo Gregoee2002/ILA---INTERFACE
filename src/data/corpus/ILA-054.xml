@@ -60,14 +60,40 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Artemidorou Axiotta</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Deskylis figlia di Deskylos</term>
+                    <term>Deskylos</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Deskylis figlia di Deskylos">
+                        <persName type="attested" key="Deskylis figlia di Deskylos">
+                            <name nymRef="Δεσκυλίς">Δεσκυλίς</name>
+                            <persName type="attested" key="Deskylos">
+                                <name type="patronymic" nymRef="Δέσκυλος">Δεσκύλου</name>
+                            </persName>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Δεσκυλίς Δεσκύλου
-                    <lb n="2"/>Μηνὶ Ἀρτεμιδώρου Ἀξι-
-                    <lb n="3"/>οττα κατέχοντι ὑπὲρ τῶν
+                    <lb n="1"/><persName type="attested" key="Deskylis figlia di Deskylos"><name nymRef="Δεσκυλίς">Δεσκυλίς</name> <persName type="attested" key="Deskylos"><name type="patronymic" nymRef="Δέσκυλος">Δεσκύλου</name></persName></persName>
+                    <lb n="2"/><persName type="divine" key="Men Artemidorou Axiotta"><name nymRef="Μήν">Μηνὶ</name> <rs type="epithet">Ἀρτεμιδώρου Ἀξι-
+                    <lb n="3" break="no"/>οττα</rs></persName> κατέχοντι ὑπὲρ τῶν
                     <lb n="4"/>τέκνων εὐχήν.
                 </ab>
             </div>

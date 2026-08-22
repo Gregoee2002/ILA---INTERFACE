@@ -60,16 +60,38 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Axiottenos</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Artemon</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Artemon">
+                        <persName type="attested" key="Artemon">
+                            <name nymRef="Ἀρτέμων">Ἀρτέμων</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Μηνὶ
-                    <lb n="2"/>Ἀξιοτ-
-                    <lb n="3"/>τηνῷ
+                    <lb n="1"/><persName type="divine" key="Men Axiottenos"><name nymRef="Μήν">Μηνὶ</name>
+                    <lb n="2"/><rs type="epithet">Ἀξιοτ-
+                    <lb n="3" break="no"/>τηνῷ</rs></persName>
                     <lb n="4"/>καὶ θείῳ
-                    <lb n="5"/>Ἀρτέμων τὸ
+                    <lb n="5"/><persName type="attested" key="Artemon"><name nymRef="Ἀρτέμων">Ἀρτέμων</name></persName> τὸ
                     <lb n="6"/>πηαρις κατ᾽ ἐπ-
                     <lb n="7"/>(ιτα)γὴν ἀνέθηκεν
                     <lb n="8"/>ἐπὶ τὰ ἴχνη.

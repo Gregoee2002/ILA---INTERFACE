@@ -60,16 +60,43 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Hosios</term>
+                    <term>Dikaios</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Niketas figlio di Pardalas</term>
+                    <term>Pardalas</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Niketas figlio di Pardalas">
+                        <persName type="attested" key="Niketas figlio di Pardalas">
+                            <name nymRef="Νικήτας">Νεικήτας</name>
+                            <persName type="attested" key="Pardalas">
+                                <name type="patronymic" nymRef="Παρδαλᾶς">Παρδ-αλᾶ</name>
+                            </persName>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
                     <lb n="1"/>[Ἔτ]ους σοε΄ ἀ[····]
-                    <lb n="2"/>Νεικήτας Παρδ-
-                    <lb n="3"/>αλᾶ Μηνὶ θεῷ
+                    <lb n="2"/><persName type="attested" key="Niketas figlio di Pardalas"><name nymRef="Νικήτας">Νεικήτας</name> <persName type="attested" key="Pardalas"><name type="patronymic" nymRef="Παρδαλᾶς">Παρδ-
+                    <lb n="3" break="no"/>αλᾶ</name></persName></persName> <persName type="divine" key="Men Hosios Dikaios"><name nymRef="Μήν">Μηνὶ</name> θεῷ
                     <lb n="4"/>εὐχὴν
-                    <lb n="5"/>ὁσίῳ κ(αὶ) δικέῳ.
+                    <lb n="5"/><rs type="epithet">ὁσίῳ</rs> κ(αὶ) <rs type="epithet">δικέῳ</rs></persName>.
                     <lb n="6"/>Ἡ Ἀλιανῶν κα-
                     <lb n="7"/>τοικία. Σῷζε
                     <lb n="8"/>τὴν κατοικί-

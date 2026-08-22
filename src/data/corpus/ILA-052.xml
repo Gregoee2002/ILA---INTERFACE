@@ -60,13 +60,36 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Plastene</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Meter</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Kalleiso Orpheus</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Kalleiso Orpheus">
+                        <persName type="attested" key="Kalleiso Orpheus">
+                            <name nymRef="Καλλεισώ">Καλλεισὼς</name>
+                            <name nymRef="Ὀρφεύς">Ὀρφεὺς</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Μητρὶ θεῶν Πλαστήνῃ
-                    <lb n="2"/>Καλλεισὼς Ὀρφεὺς
+                    <lb n="1"/><persName type="divine" key="Meter Plastene"><name nymRef="Μήτηρ">Μητρὶ θεῶν</name> <rs type="epithet">Πλαστήνῃ</rs></persName>
+                    <lb n="2"/><persName type="attested" key="Kalleiso Orpheus"><name nymRef="Καλλεισώ">Καλλεισὼς</name> <name nymRef="Ὀρφεύς">Ὀρφεὺς</name></persName>
                     <lb n="3"/>ἀνέθηκεν.
                 </ab>
             </div>

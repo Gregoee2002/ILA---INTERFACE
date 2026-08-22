@@ -60,15 +60,45 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="divinita">
+                    <term>Hekate</term>
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Kyntiane figlia di Kyntianos</term>
+                    <term>Kyntianos</term>
+                    <term>Paian</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Kyntiane figlia di Kyntianos">
+                        <persName type="attested" key="Kyntiane figlia di Kyntianos">
+                            <name nymRef="Κυντιανή">Κυντιανὴ</name>
+                            <persName type="attested" key="Kyntianos">
+                                <name type="patronymic" nymRef="Κυντιανός">Κυντιανοῦ</name>
+                            </persName>
+                        </persName>
+                    </person>
+                    <person xml:id="Paian">
+                        <persName type="attested" key="Paian">
+                            <name nymRef="Παιάν">Παιᾶνος</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Κυντιανὴ Κυντιανοῦ
+                    <lb n="1"/><persName type="attested" key="Kyntiane figlia di Kyntianos"><name nymRef="Κυντιανή">Κυντιανὴ</name> <persName type="attested" key="Kyntianos"><name type="patronymic" nymRef="Κυντιανός">Κυντιανοῦ</name></persName></persName>
                     <lb n="2"/>ὑπὲρ τεκέως ἀνέθηκε
-                    <lb n="3"/>τᾷ Ἑκάτᾳ καὶ Μανὶ τὸν
-                    <lb n="4"/>υἱέα τῷ Παιᾶνος.
+                    <lb n="3"/>τᾷ <persName type="divine" key="Hekate"><name nymRef="Ἑκάτη">Ἑκάτᾳ</name></persName> καὶ <persName type="divine" key="Men"><name nymRef="Μήν">Μανὶ</name></persName> τὸν
+                    <lb n="4"/>υἱέα τῷ <persName type="attested" key="Paian"><name nymRef="Παιάν">Παιᾶνος</name></persName>.
                 </ab>
             </div>
             <div type="apparatus"/>

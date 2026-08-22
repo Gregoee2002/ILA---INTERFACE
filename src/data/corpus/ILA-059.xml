@@ -60,14 +60,37 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Papas figlio di Papas</term>
+                    <term>Papas (padre)</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Papas figlio di Papas">
+                        <persName type="attested" key="Papas figlio di Papas">
+                            <name nymRef="Παπᾶς">Παπᾶ</name>
+                            <persName type="attested" key="Papas (padre)">
+                                <name type="patronymic" nymRef="Παπᾶς">Παπᾶς</name>
+                            </persName>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Παπᾶ Παπᾶς
+                    <lb n="1"/><persName type="attested" key="Papas figlio di Papas"><name nymRef="Παπᾶς">Παπᾶ</name> <persName type="attested" key="Papas (padre)"><name type="patronymic" nymRef="Παπᾶς">Παπᾶς</name></persName></persName>
                     <lb n="2"/>(ὑπὲρ) τέκνων σωτ-
-                    <lb n="3"/>ηρίας Μηνὶ
+                    <lb n="3" break="no"/>ηρίας <persName type="divine" key="Men"><name nymRef="Μήν">Μηνὶ</name></persName>
                     <lb n="4"/>εὐχήν.
                 </ab>
             </div>

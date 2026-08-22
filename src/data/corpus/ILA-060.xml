@@ -60,16 +60,43 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Ouranios</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                    <term>Apollon</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Xeuna moglie di Iason</term>
+                    <term>Iason</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Xeuna moglie di Iason">
+                        <persName type="attested" key="Xeuna moglie di Iason">
+                            <name nymRef="Ξεῦνα">Ξεῦνα</name>
+                            <persName type="attested" key="Iason">
+                                <name type="patronymic" nymRef="Ἰάσων">Ἰάσονο[ς]</name>
+                            </persName>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Ξεῦνα Ἰάσονο[ς]
+                    <lb n="1"/><persName type="attested" key="Xeuna moglie di Iason"><name nymRef="Ξεῦνα">Ξεῦνα</name> <persName type="attested" key="Iason"><name type="patronymic" nymRef="Ἰάσων">Ἰάσονο[ς]</name></persName></persName>
                     <lb n="2"/>σύνβιος περὶ τῶ-
-                    <lb n="3"/>ν ἰδίων σωτηρί-
-                    <lb n="4"/>ας Μηνὶ Οὐρανί-
-                    <lb n="5"/>ῳ καὶ Ἀπόλλωνι
+                    <lb n="3" break="no"/>ν ἰδίων σωτηρί-
+                    <lb n="4" break="no"/>ας <persName type="divine" key="Men Ouranios"><name nymRef="Μήν">Μηνὶ</name> <rs type="epithet">Οὐρανί-
+                    <lb n="5" break="no"/>ῳ</rs></persName> καὶ <persName type="divine" key="Apollon"><name nymRef="Ἀπόλλων">Ἀπόλλωνι</name></persName>
                     <lb n="6"/>εὐχήν.
                 </ab>
             </div>
