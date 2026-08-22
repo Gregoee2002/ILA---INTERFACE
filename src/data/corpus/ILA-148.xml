@@ -60,22 +60,52 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="onomastica">
+                    <term>Tiberius Claudius Epinicus</term>
+                    <term>Drosera</term>
+                    <term>Miletos</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Tiberius Claudius Epinicus">
+                        <persName type="attested" key="Tiberius Claudius Epinicus">
+                            <name>Ti.</name>
+                            <name>Claudius</name>
+                            <name>Epinicus</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Drosera">
+                        <persName type="attested" key="Drosera">
+                            <name>Droserae</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Miletos">
+                        <persName type="attested" key="Miletos">
+                            <name>Mileti</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="la">
                 <ab>
                     <lb n="1"/>LVS
-                    <lb n="2"/>Ti. Claudiu[s]
-                    <lb n="3"/>Epinicus
+                    <lb n="2"/><persName type="attested" key="Tiberius Claudius Epinicus"><name>Ti.</name> <name>Claudiu[s]</name>
+                    <lb n="3"/><name>Epinicus</name></persName>
                     <lb n="4"/>Proc(urator) et Prae-
                     <lb n="5"/>gustator et
                     <lb n="6"/>a secretis Aug(usti)
                     <lb n="7"/>VIIr aug(ustalis) c(oloniae) c(aesariae)
                     <lb n="8"/>d(ecreto) d(ecurionum) ex mandatu
                     <lb n="9"/>Caristianor(um)
-                    <lb n="10"/>Droserae et
-                    <lb n="11"/>Mileti parenti-
+                    <lb n="10"/><persName type="attested" key="Drosera"><name>Droserae</name></persName> et
+                    <lb n="11"/><persName type="attested" key="Miletos"><name>Mileti</name></persName> parenti-
                     <lb n="12"/>um suorum
                     <lb n="13"/>posuit.
                 </ab>

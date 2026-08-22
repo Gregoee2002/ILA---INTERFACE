@@ -60,20 +60,46 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Publius Calvisius</term>
+                    <term>Badis</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Publius Calvisius">
+                        <persName type="attested" key="Publius Calvisius">
+                            <name>Π.</name>
+                            <name nymRef="Καλουίσιος">Καλου]ίσιος</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Badis">
+                        <persName type="attested" key="Badis">
+                            <name nymRef="Βάδις">Βάδ]ι</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>[Π. Καλου]ίσιος ζ[ῶ]ν φρονῶν ἐπόησεν ἑαυτῷ
-                    <lb n="2"/>[καὶ Βάδ]ι τῇ ἰδ[ίᾳ] γυναικί· μνήμης ἕνεκεν·
-                    <lb n="3"/>[Ὅς δ᾽ ἄν ἀδ]ικήσῃ τὸ μνῆμα, Μῆνα ἄνωθεν καὶ κάτο-
+                    <lb n="1"/>[<persName type="attested" key="Publius Calvisius"><name>Π.</name> <name nymRef="Καλουίσιος">Καλου]ίσιος</name></persName> ζ[ῶ]ν φρονῶν ἐπόησεν ἑαυτῷ
+                    <lb n="2"/>[καὶ <persName type="attested" key="Badis"><name nymRef="Βάδις">Βάδ]ι</name></persName> τῇ ἰδ[ίᾳ] γυναικί· μνήμης ἕνεκεν·
+                    <lb n="3"/>[Ὅς δ᾽ ἄν ἀδ]ικήσῃ τὸ μνῆμα, <persName type="divine" key="Men">Μῆνα</persName> ἄνωθεν καὶ κάτο-
                     <lb n="4"/>[θεν κεχολωμένους ἔχοιτο.]
                 </ab>
             </div>
             <div type="apparatus"/>
             <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
-            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>"Ἄνωθεν καὶ κάτοθεν" ("dall'alto e dal basso", r. 3-4) qualifica Men come dio insieme celeste e ctonio, ma non è stato codificato come coppia di epiteti in rs type="epithet": sono avverbi, non forme aggettivali standard come Οὐράνιος/Καταχθόνιος usate altrove nel corpus.</p></div>
             <div type="bibliography">
                 <listBibl>
                     <bibl>Lane, CMRDM I 154</bibl>

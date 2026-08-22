@@ -60,14 +60,33 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Achylas</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Achylas">
+                        <persName type="attested" key="Achylas">
+                            <name nymRef="Αχύλας">Ἀχύλας</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Ἀχύλας
+                    <lb n="1"/><persName type="attested" key="Achylas"><name nymRef="Αχύλας">Ἀχύλας</name></persName>
                     <lb n="2"/>ΜΕΝΙΔΣΕΚΟ
-                    <lb n="3"/>Μηνὶ εὐχήν.
+                    <lb n="3"/><persName type="divine" key="Men"><name nymRef="Μήν">Μηνὶ</name></persName> εὐχήν.
                 </ab>
             </div>
             <div type="apparatus"/>

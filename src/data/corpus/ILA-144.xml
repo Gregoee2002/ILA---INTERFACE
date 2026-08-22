@@ -60,24 +60,71 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Ouranios</term>
+                    <term>Katachthonios</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Athenaios figlio di Neikanoros</term>
+                    <term>Neikomedes figlio di Neikanoros</term>
+                    <term>Neikanoros figlio di Athenaios</term>
+                    <term>Athenaios (nonno)</term>
+                    <term>Tattis figlia di Tateus</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Athenaios figlio di Neikanoros">
+                        <persName type="attested" key="Athenaios figlio di Neikanoros">
+                            <name nymRef="Αθηναῖος">[Ἀ]θηνα[ῖος]</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Neikomedes figlio di Neikanoros">
+                        <persName type="attested" key="Neikomedes figlio di Neikanoros">
+                            <name nymRef="Νεικομήδης">Νεικομήδης</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Neikanoros figlio di Athenaios">
+                        <persName type="attested" key="Neikanoros figlio di Athenaios">
+                            <name nymRef="Νεικάνωρ">Νεικάνωρ</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Athenaios (nonno)">
+                        <persName type="attested" key="Athenaios (nonno)">
+                            <name nymRef="Αθηναῖος">Ἀθηναίου</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Tattis figlia di Tateus">
+                        <persName type="attested" key="Tattis figlia di Tateus">
+                            <name nymRef="Τάττις">Τάττιν</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>[Ἀ]θηνα[ῖος καὶ Νει-]
-                    <lb n="2"/>κομήδης, υἱο[ὶ] Νεικά-
-                    <lb n="3"/>νορος, Νεικάνορα
-                    <lb n="4"/>Ἀθηναίου τὸν ἑαυτῶν
-                    <lb n="5"/>πατέρα καὶ Τάττιν Τα-
-                    <lb n="6"/>τέου[ς] γ΄ Νεικομήδους
+                    <lb n="1"/><persName type="attested" key="Athenaios figlio di Neikanoros"><name nymRef="Αθηναῖος">[Ἀ]θηνα[ῖος</name></persName> καὶ <persName type="attested" key="Neikomedes figlio di Neikanoros"><name nymRef="Νεικομήδης">Νει-]
+                    <lb n="2" break="no"/>κομήδης</name></persName>, υἱο[ὶ] <persName type="attested" key="Neikanoros figlio di Athenaios"><name type="patronymic" nymRef="Νεικάνωρ">Νεικά-
+                    <lb n="3" break="no"/>νορος</name></persName>, <persName type="attested" key="Neikanoros figlio di Athenaios"><name nymRef="Νεικάνωρ">Νεικάνορα</name></persName>
+                    <lb n="4"/><persName type="attested" key="Athenaios (nonno)"><name type="patronymic" nymRef="Αθηναῖος">Ἀθηναίου</name></persName> τὸν ἑαυτῶν
+                    <lb n="5"/>πατέρα καὶ <persName type="attested" key="Tattis figlia di Tateus"><name nymRef="Τάττις">Τάττιν</name> <name type="patronymic">Τα-
+                    <lb n="6" break="no"/>τέου[ς]</name></persName> γ΄ Νεικομήδους
                     <lb n="7"/>τὴν μητέρα αὐτῶν,
                     <lb n="8"/>οἱ κτίσαντες τὸν τά-
                     <lb n="9"/>φον εὐνοίας ἕνεκεν,
-                    <lb n="10"/>ἐνορκίζω δὲ Μή-
-                    <lb n="11"/>νας τόν τε Οὐράνι-
-                    <lb n="12"/>ον καὶ τοὺς Κατα-
-                    <lb n="13"/>χθονίους μὴ ἐξ[εῖ-]
+                    <lb n="10"/>ἐνορκίζω δὲ <persName type="divine" key="Men Ouranios Katachthonios"><name nymRef="Μήν">Μή-
+                    <lb n="11" break="no"/>νας</name> τόν τε <rs type="epithet">Οὐράνι-
+                    <lb n="12" break="no"/>ον</rs> καὶ τοὺς <rs type="epithet">Κατα-
+                    <lb n="13" break="no"/>χθονίους</rs></persName> μὴ ἐξ[εῖ-]
                     <lb n="14"/>ναί τινι πωλῆσαι
                     <lb n="15"/>τὸ περίβολον τοῦ
                     <lb n="16"/>τά[φ]ου, μήτε ἀγορά-
@@ -87,7 +134,7 @@
             </div>
             <div type="apparatus"/>
             <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
-            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>Alla r. 5-7, il rapporto tra "Τάττιν Τατέου[ς]" (Tattis, figlia di Tateus), il numerale "γ΄" e "Νεικομήδους" non è chiaro dal solo testo: non è stato interpretato né come ulteriore patronimico né come titolo, e "Νεικομήδους" non è stato ri-taggato qui per evitare di forzare un collegamento (omonimia con il figlio Neikomedes, r. 1-2) non esplicitato dalla sintassi.</p></div>
             <div type="bibliography">
                 <listBibl>
                     <bibl>Lane, CMRDM I 156</bibl>

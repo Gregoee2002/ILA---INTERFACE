@@ -60,6 +60,13 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="divinita">
+                    <term>Theos Ouindieinos</term>
+                </keywords>
+            </textClass>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
@@ -68,16 +75,16 @@
                     <lb n="1"/>[···]Ν[········]
                     <lb n="2"/>ου Ἀδρια-
                     <lb n="3"/>νοπο λείτη-
-                    <lb n="4"/>ς θεῷ
-                    <lb n="5"/>Οὐιν-
-                    <lb n="6"/>δίει-
-                    <lb n="7"/>νῷ
+                    <lb n="4"/>ς <persName type="divine" key="Theos Ouindieinos"><name>θεῷ</name>
+                    <lb n="5"/><rs type="epithet">Οὐιν-
+                    <lb n="6" break="no"/>δίει-
+                    <lb n="7" break="no"/>νῷ</rs></persName>
                     <lb n="8"/>εὐχήν.
                 </ab>
             </div>
             <div type="apparatus"/>
             <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
-            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>Il testo invoca genericamente "θεῷ Οὐινδιεινῷ" (un dio con epiteto locale Ouindieinos), non "Μηνί" esplicitamente: l'identificazione con Men, suggerita dal contesto iconografico (busto di Men con serpenti sul monumento) e discussa nella nota di revisione, resta un'inferenza, non un dato testuale diretto — per questo la divinità è stata marcata come "Theos Ouindieinos" e non "Men Ouindieinos".</p></div>
             <div type="bibliography">
                 <listBibl>
                     <bibl>Lane, CMRDM I 153</bibl>

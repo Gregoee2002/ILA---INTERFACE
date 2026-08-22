@@ -60,28 +60,59 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Diadoumenos</term>
+                    <term>Heliade</term>
+                    <term>Artemeisia</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Diadoumenos">
+                        <persName type="attested" key="Diadoumenos">
+                            <name nymRef="Διαδούμενος">Διαδούμενος</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Heliade">
+                        <persName type="attested" key="Heliade">
+                            <name nymRef="Ηλιάς">Ἡλιάδι</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Artemeisia">
+                        <persName type="attested" key="Artemeisia">
+                            <name nymRef="Αρτεμεισία">Ἀρτεμεισίαν</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Διαδούμε-
-                    <lb n="2"/>νος ἑαυτῷ καὶ
-                    <lb n="3"/>Ἡλιάδι τῇ συνβ[ί-]
+                    <lb n="1"/><persName type="attested" key="Diadoumenos"><name nymRef="Διαδούμενος">Διαδούμε-
+                    <lb n="2" break="no"/>νος</name></persName> ἑαυτῷ καὶ
+                    <lb n="3"/><persName type="attested" key="Heliade"><name nymRef="Ηλιάς">Ἡλιάδι</name></persName> τῇ συνβ[ί-]
                     <lb n="4"/>ῳ τὸν βωμὸν
                     <lb n="5"/>καὶ τὴν στήλην
                     <lb n="6"/>καὶ τὰ πέλτα, καὶ
                     <lb n="7"/>ἐνορκῶ τρῖς θ[εοὺς]
-                    <lb n="8"/>Μήνας ἀνεπιλύ[τως]
+                    <lb n="8"/><persName type="divine" key="Men"><name nymRef="Μήν">Μήνας</name></persName> ἀνεπιλύ[τως]
                     <lb n="9"/>μηδένα ἕτερον ἐ-
-                    <lb n="10"/>πεισενεχθῆναι ἢ
-                    <lb n="11"/>μόνην Ἀρτεμεισίαν τὴν
+                    <lb n="10" break="no"/>πεισενεχθῆναι ἢ
+                    <lb n="11"/>μόνην <persName type="attested" key="Artemeisia"><name nymRef="Αρτεμεισία">Ἀρτεμεισίαν</name></persName> τὴν
                     <lb n="12"/>ἐμήν.
                 </ab>
             </div>
             <div type="apparatus"/>
             <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
-            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>Il testo invoca "τρεῖς θεοὺς Μήνας" (r. 7-8), letteralmente "tre dèi Men": una forma plurale/triadica del dio non altrimenti specificata da epiteti distintivi in questo passo, marcata con un unico persName data l'assenza di elementi testuali per distinguere le tre manifestazioni.</p></div>
             <div type="bibliography">
                 <listBibl>
                     <bibl>Lane, CMRDM I 155</bibl>

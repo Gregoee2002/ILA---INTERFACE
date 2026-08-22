@@ -60,16 +60,36 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                    <term>Demeter</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Lysimachos</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Lysimachos">
+                        <persName type="attested" key="Lysimachos">
+                            <name nymRef="Λυσίμαχος">Λυσιμαχ[ος]</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
                     <lb n="1"/>στ[έφανος]
-                    <lb n="2"/>ἱερεὺς θ[εοῦ Μηνὸς καὶ θεᾶς]
-                    <lb n="3"/>Δήμητ[ρος ...........]
+                    <lb n="2"/>ἱερεὺς <persName type="divine" key="Men">θ[εοῦ <name nymRef="Μήν">Μηνὸς</name> καὶ θεᾶς]</persName>
+                    <lb n="3"/><persName type="divine" key="Demeter"><name nymRef="Δημήτηρ">Δήμητ[ρος]</name></persName> [...........]
                     <lb n="4"/>[π]άντα [τὸν βίον ........]
-                    <lb n="5"/>Λυσιμαχ[...............]
+                    <lb n="5"/><persName type="attested" key="Lysimachos"><name nymRef="Λυσίμαχος">Λυσιμαχ[ος]</name></persName>[...............]
                     <lb n="6"/>στέφαν[................]
                     <lb n="7"/>ἱερεὺς τὸ δ'[...]
                 </ab>
