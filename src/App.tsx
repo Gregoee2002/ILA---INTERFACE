@@ -36,7 +36,6 @@ import {
   Moon,
   Sun,
   Monitor,
-  Tag as TagIcon,
   Filter,
   Check,
   AlertTriangle,
@@ -205,65 +204,161 @@ const getTintClass = (str: string) => {
 };
 
 // Card "protagonista" per una divinità: nome, occorrenze, regioni, numero di epiteti
-// Elenco divinità: righe tipografiche in ordine di frequenza (niente più
-// card colorate). Ogni riga porta nome, occorrenze, regioni ed epiteti come
-// testo/badge sobri; una barra proporzionale al conteggio dà un riferimento
-// visivo immediato senza ricorrere al colore per distinguere le voci.
-const DivinityList = ({ items, onSelect }: {
-  items: { name: string; count: number; regions: number; epiteti: { name: string; count: number }[] }[];
+// Elenco divinità "a locandina": ordine alfabetico, ogni riga scalata verso
+// destra rispetto alla precedente (nome a sinistra del punto, attestazioni a
+// destra), collegate da un'unica linea diagonale — stesso linguaggio di un
+// poster di tour date. Scorrevole, con la voce sotto il marcatore fisso
+// leggermente evidenziata durante lo scroll (stessa meccanica della
+// rubrica onomastica, vedi RUBRICA_MARKER_OFFSET).
+const DIAGONAL_ROW_H = 40;
+const DIAGONAL_STEP_X = 15;
+const DIAGONAL_BASE_X = 190;
+
+const DivinityDiagonalList = ({ items, onSelect, searchTerm }: {
+  items: { name: string; count: number; epiteti: { name: string; count: number }[] }[];
   onSelect: (name: string) => void;
+  // Termine di ricerca epiteti/divinità: non filtra la lista, evidenzia le
+  // righe che hanno un epiteto (o un nome) corrispondente — vedi
+  // EpithetStats per l'input di ricerca.
+  searchTerm?: string;
 }) => {
-  const maxCount = Math.max(1, ...items.map(d => d.count));
+  const sorted = useMemo(() => [...items].sort((a, b) => a.name.localeCompare(b.name)), [items]);
+  const term = (searchTerm || '').trim().toLowerCase();
+  const searchActive = term.length > 0;
+  const matchedEpiteto = (d: { name: string; epiteti: { name: string; count: number }[] }): string | null => {
+    if (!searchActive) return null;
+    const hit = d.epiteti.find(e => e.name.toLowerCase().includes(term));
+    return hit ? hit.name : null;
+  };
+  const isMatch = (d: { name: string; epiteti: { name: string; count: number }[] }) =>
+    searchActive && (d.name.toLowerCase().includes(term) || matchedEpiteto(d) !== null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const itemRefs = useRef<Map<string, HTMLDivElement>>(new Map());
+  const [activeName, setActiveName] = useState<string | null>(sorted[0]?.name ?? null);
+  const rafPending = useRef(false);
+
+  const updateActive = () => {
+    rafPending.current = false;
+    const container = containerRef.current;
+    if (!container) return;
+    const markerY = container.getBoundingClientRect().top + RUBRICA_MARKER_OFFSET;
+    let closestName: string | null = null;
+    let closestDist = Infinity;
+    itemRefs.current.forEach((el, name) => {
+      const rect = el.getBoundingClientRect();
+      const dist = Math.abs(rect.top + rect.height / 2 - markerY);
+      if (dist < closestDist) { closestDist = dist; closestName = name; }
+    });
+    if (closestName) setActiveName(closestName);
+  };
+  const onScroll = () => {
+    if (rafPending.current) return;
+    rafPending.current = true;
+    requestAnimationFrame(updateActive);
+  };
+  useLayoutEffect(() => { updateActive(); }, [sorted]);
+
+  const tickX = (i: number) => DIAGONAL_BASE_X + i * DIAGONAL_STEP_X;
+  const totalHeight = sorted.length * DIAGONAL_ROW_H;
+
   return (
-    <motion.div {...fadeSwap} className="flex-1 overflow-y-auto custom-scrollbar pr-2">
-      <div className="divide-y divide-border/50">
-        {items.map((d, i) => (
-          <motion.button
-            key={d.name}
-            onClick={() => onSelect(d.name)}
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3, delay: Math.min(i, 20) * 0.02, ease: EASE_OUT }}
-            className="w-full text-left group py-4 px-2 flex items-center gap-6 hover:bg-accent/[0.04] transition-colors"
-          >
-            <span className="w-40 shrink-0 text-lg font-serif italic text-ink group-hover:text-accent transition-colors truncate">
-              {d.name}
-            </span>
-            <div className="flex-1 min-w-0 flex items-center gap-3">
-              <div className="flex-1 h-1.5 bg-border/40 rounded-full overflow-hidden">
-                <div
-                  className="h-full bg-accent/60 rounded-full transition-all"
-                  style={{ width: `${Math.max(4, (d.count / maxCount) * 100)}%` }}
+    <motion.div {...fadeSwap} className="flex-1 flex overflow-hidden">
+      <div className="relative flex-1 flex flex-col overflow-hidden">
+        <div
+          className="absolute left-0 right-0 border-t-2 border-accent/70 pointer-events-none z-10"
+          style={{ top: RUBRICA_MARKER_OFFSET }}
+        >
+          <span className="absolute -left-1 -top-[5px] w-2 h-2 rounded-full bg-accent" />
+        </div>
+        <div
+          ref={containerRef}
+          onScroll={onScroll}
+          className="flex-1 overflow-y-auto overflow-x-hidden custom-scrollbar"
+          style={{ paddingTop: RUBRICA_MARKER_OFFSET, paddingBottom: RUBRICA_MARKER_OFFSET }}
+        >
+          <div className="relative" style={{ height: totalHeight }}>
+            {sorted.length > 1 && (
+              <svg className="absolute inset-0 pointer-events-none" width="100%" height={totalHeight} preserveAspectRatio="none">
+                <line
+                  x1={tickX(0)} y1={DIAGONAL_ROW_H / 2}
+                  x2={tickX(sorted.length - 1)} y2={(sorted.length - 1) * DIAGONAL_ROW_H + DIAGONAL_ROW_H / 2}
+                  stroke="var(--border)" strokeWidth={1}
                 />
-              </div>
-              <span className="w-10 shrink-0 text-right text-xs font-sans font-bold text-muted tabular-nums">
-                {d.count}×
-              </span>
-            </div>
-            <div className="hidden md:flex items-center gap-4 shrink-0 text-[10px] font-sans font-bold uppercase tracking-widest text-muted/70 w-40">
-              <span className="flex items-center gap-1">
-                <MapPin className="h-3 w-3" />
-                {d.regions}
-              </span>
-              <span className="flex items-center gap-1">
-                <TagIcon className="h-3 w-3" />
-                {d.epiteti.length}
-              </span>
-            </div>
-            <ChevronRight className="h-4 w-4 text-border group-hover:text-accent group-hover:translate-x-0.5 transition-all shrink-0" />
-          </motion.button>
-        ))}
+              </svg>
+            )}
+            {sorted.map((d, i) => {
+              const x = tickX(i);
+              const isActive = d.name === activeName;
+              const match = isMatch(d);
+              const dimmed = searchActive && !match;
+              const epitetoHit = matchedEpiteto(d);
+              return (
+                <div
+                  key={d.name}
+                  ref={el => { if (el) itemRefs.current.set(d.name, el); else itemRefs.current.delete(d.name); }}
+                  className="absolute inset-x-0"
+                  style={{ top: i * DIAGONAL_ROW_H, height: DIAGONAL_ROW_H }}
+                >
+                  <button
+                    onClick={() => onSelect(d.name)}
+                    className={cn(
+                      "relative w-full h-full text-left hover:bg-accent/[0.04] transition-all duration-200",
+                      dimmed && "opacity-30"
+                    )}
+                  >
+                    <span
+                      className="absolute top-0 bottom-0 flex items-center justify-end pr-3"
+                      style={{ left: 0, width: Math.max(0, x - 8) }}
+                    >
+                      <span className={cn(
+                        "font-serif transition-all duration-200 truncate",
+                        isActive ? "text-xl italic text-accent font-bold"
+                          : match ? "text-base text-accent font-bold"
+                          : "text-sm text-ink/70"
+                      )}>
+                        {d.name}
+                      </span>
+                    </span>
+                    <span
+                      className={cn(
+                        "absolute -translate-x-1/2 -translate-y-1/2 rounded-full transition-all duration-200",
+                        match ? "bg-accent" : "bg-accent/50"
+                      )}
+                      style={{ left: x, top: '50%', width: isActive || match ? 6 : 4, height: isActive || match ? 6 : 4 }}
+                    />
+                    <span
+                      className="absolute top-0 bottom-0 flex items-center justify-start pl-3 gap-2"
+                      style={{ left: x + 8, right: 0 }}
+                    >
+                      <span className={cn(
+                        "font-sans font-bold tabular-nums transition-all duration-200 shrink-0",
+                        isActive || match ? "text-sm text-accent" : "text-xs text-muted"
+                      )}>
+                        {d.count}×
+                      </span>
+                      {epitetoHit && (
+                        <span className="text-[10px] font-sans font-bold uppercase tracking-widest text-accent/70 bg-accent/10 px-1.5 py-0.5 rounded-sm truncate">
+                          {epitetoHit}
+                        </span>
+                      )}
+                    </span>
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+          {sorted.length === 0 && (
+            <div className="text-center py-12 text-muted/40 text-sm italic">Nessuna divinità trovata per questo filtro.</div>
+          )}
+        </div>
       </div>
-      {items.length === 0 && (
-        <div className="text-center py-12 text-muted/40 text-sm italic">Nessuna divinità trovata per questo filtro.</div>
-      )}
     </motion.div>
   );
 };
 
 // Elenco epiteti di una divinità: righe ordinate per frequenza, con barra
-// proporzionale (stesso linguaggio visivo di DivinityList). "Vedi tutte" in
-// cima resta l'unico modo di raggiungere le attestazioni senza epiteto.
+// proporzionale al conteggio. "Vedi tutte" in cima resta l'unico modo di
+// raggiungere le attestazioni senza epiteto.
 const EpithetList = ({ divinity, epithets, onSelectEpithet, onSelectAll }: {
   divinity: { name: string; count: number; regions: number };
   epithets: { name: string; count: number }[];
@@ -518,6 +613,11 @@ function EpithetStats({ monumenti, onSelectMonumento }: { monumenti: Monumento[]
   const [selectedDivinity, setSelectedDivinity] = useState<string | null>(null);
   const [selectedEpithet, setSelectedEpithet] = useState<string | null>(null);
   const [selected, setSelected] = useState<string | null>(null); // solo per l'onomastica
+  // Ricerca epiteti (principale) / divinità: non filtra la lista, evidenzia
+  // nella vista diagonale tutte le divinità che hanno un epiteto (o un nome)
+  // corrispondente — utile per vedere a colpo d'occhio quante e quali
+  // divinità condividono lo stesso epiteto.
+  const [epithetSearch, setEpithetSearch] = useState('');
 
   // ── Statistiche divinità, con epiteti co-occorrenti e relativo conteggio ──
   const divstats = useMemo(() => {
@@ -650,7 +750,9 @@ function EpithetStats({ monumenti, onSelectMonumento }: { monumenti: Monumento[]
       <motion.div {...scrollReveal} className="mb-8 flex justify-between items-end">
         <div>
           <div className="text-[10px] font-sans font-bold uppercase tracking-[0.22em] text-accent/70 mb-2">Statistiche del Corpus</div>
-          <h2 className="text-3xl md:text-4xl font-bold italic mb-2">Divinità &amp; Onomastica</h2>
+          <h2 className="text-3xl md:text-4xl font-bold italic mb-2">
+            {activeTab === 'divinita' ? 'Divinità' : 'Onomastica'}
+          </h2>
           <div className="ornament-rule !my-0 mb-3 max-w-[6rem] mx-0" />
           <p className="text-sm text-muted font-serif">
             {activeTab === 'divinita'
@@ -712,8 +814,27 @@ function EpithetStats({ monumenti, onSelectMonumento }: { monumenti: Monumento[]
         {activeTab === 'divinita' && !selectedDivinity && (
           <motion.div key="divinita-list" {...fadeSwap} className="flex-1 flex flex-col overflow-hidden">
             {divstats.length > 0 && (
-              <div className="mb-2 flex items-center justify-end">
-                <div className="relative w-56">
+              <div className="mb-2 flex items-center justify-end gap-3">
+                <div className="relative flex-1 max-w-xs">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted/50 pointer-events-none" />
+                  <input
+                    type="text"
+                    value={epithetSearch}
+                    onChange={(e) => setEpithetSearch(e.target.value)}
+                    placeholder="Cerca epiteto o divinità…"
+                    className="w-full bg-[var(--card)] dark:bg-black/25 border border-[var(--border)]/50 dark:border-white/5 rounded-xl pl-9 pr-8 py-2 font-sans text-xs outline-none shadow-inner focus:border-accent/50 focus:ring-1 focus:ring-accent/30 hover:bg-[var(--sidebar)] dark:hover:bg-black/40 transition-all duration-300"
+                    style={{ backgroundColor: 'var(--card)', color: 'var(--ink)' }}
+                  />
+                  {epithetSearch && (
+                    <button
+                      onClick={() => setEpithetSearch('')}
+                      className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted/50 hover:text-accent transition-colors"
+                    >
+                      <X className="h-3.5 w-3.5" />
+                    </button>
+                  )}
+                </div>
+                <div className="relative w-56 shrink-0">
                   <select
                     className="w-full bg-[var(--card)] dark:bg-black/25 border border-[var(--border)]/50 dark:border-white/5 rounded-xl pl-3 pr-8 py-2 font-sans text-xs outline-none shadow-inner focus:border-accent/50 focus:ring-1 focus:ring-accent/30 hover:bg-[var(--sidebar)] dark:hover:bg-black/40 cursor-pointer appearance-none transition-all duration-300"
                     style={{ backgroundColor: 'var(--card)', color: 'var(--ink)', WebkitAppearance: 'none' as const, appearance: 'none' as const }}
@@ -732,7 +853,7 @@ function EpithetStats({ monumenti, onSelectMonumento }: { monumenti: Monumento[]
                 Nessuna divinità estratta. Verifica che il corpus contenga tag &lt;persName type="divine"&gt;.
               </div>
             ) : (
-              <DivinityList items={filteredDivstats} onSelect={setSelectedDivinity} />
+              <DivinityDiagonalList items={filteredDivstats} onSelect={setSelectedDivinity} searchTerm={epithetSearch} />
             )}
           </motion.div>
         )}
