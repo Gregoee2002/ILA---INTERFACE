@@ -60,14 +60,37 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Askaenos</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Lytronios Markeianos</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Lytronios Markeianos">
+                        <persName type="attested" key="Lytronios Markeianos">
+                            <name nymRef="Λυτρόνιος">Λυτρόνιος</name>
+                            <name nymRef="Μαρκειανός">Μαρκε[ιαν]ός</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Λυτρόνιος
-                    <lb n="2"/>Μαρκε[ιαν]ός
-                    <lb n="3"/>[Μ]ηνὶ Ἀσκα[ηνῷ]
+                    <lb n="1"/><persName type="attested" key="Lytronios Markeianos"><name nymRef="Λυτρόνιος">Λυτρόνιος</name>
+                    <lb n="2"/><name nymRef="Μαρκειανός">Μαρκε[ιαν]ός</name></persName>
+                    <lb n="3"/><persName type="divine" key="Men Askaenos"><name nymRef="Μήν">[Μ]ηνὶ</name> <rs type="epithet">Ἀσκα[ηνῷ]</rs></persName>
                     <lb n="4"/>εὐχ[ήν].
                 </ab>
             </div>

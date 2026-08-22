@@ -60,16 +60,38 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Askaenos</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Teimotheos</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Teimotheos">
+                        <persName type="attested" key="Teimotheos">
+                            <name nymRef="Τειμόθεος">Τειμόθεος</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>[.....]Τειμόθ[εος]
+                    <lb n="1"/>[.....]<persName type="attested" key="Teimotheos"><name nymRef="Τειμόθεος">Τειμόθ<supplied reason="lost">εος</supplied></name></persName>
                     <lb n="2"/>[μετ]ὰ γυναικὸς
                     <lb n="3"/>[καὶ τέκν]ων τε[κμορεύσας]
-                    <lb n="4"/>[Μηνὶ Ἀ]σκ[αηνῷ
-                    <lb n="5"/>εὐχήν.]
+                    <lb n="4"/><persName type="divine" key="Men Askaenos"><supplied reason="lost"><name nymRef="Μήν">Μηνὶ</name> <rs type="epithet">Ἀ</rs></supplied><rs type="epithet">σκ<supplied reason="lost">αηνῷ</supplied></rs></persName>
+                    <lb n="5"/><supplied reason="lost">εὐχήν.</supplied>
                 </ab>
             </div>
             <div type="apparatus"/>

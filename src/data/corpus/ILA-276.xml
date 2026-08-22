@@ -60,15 +60,38 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Askaenos</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Ouettia Magnilla</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Ouettia Magnilla">
+                        <persName type="attested" key="Ouettia Magnilla">
+                            <name nymRef="Ουεττία">Οὐέτ[τι]α</name>
+                            <name nymRef="Μαγνίλλα">Μαγνίλλα</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Οὐέτ[τι]α
-                    <lb n="2"/>Μαγνίλλα
+                    <lb n="1"/><persName type="attested" key="Ouettia Magnilla"><name nymRef="Ουεττία">Οὐέτ[τι]α</name>
+                    <lb n="2"/><name nymRef="Μαγνίλλα">Μαγνίλλα</name></persName>
                     <lb n="3"/>τεκμορεύσασα
-                    <lb n="4"/>Μηνὶ Ἀσκαηνῷ
+                    <lb n="4"/><persName type="divine" key="Men Askaenos"><name nymRef="Μήν">Μηνὶ</name> <rs type="epithet">Ἀσκαηνῷ</rs></persName>
                     <lb n="5"/>εὐχήν.
                 </ab>
             </div>

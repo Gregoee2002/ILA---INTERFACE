@@ -60,16 +60,46 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Askaenos</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Gaios Herouleios Markos</term>
+                    <term>Markellos</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Gaios Herouleios Markos">
+                        <persName type="attested" key="Gaios Herouleios Markos">
+                            <name>Γ.</name>
+                            <name nymRef="Ηρουλήιος">Ἡούλειος</name>
+                            <name nymRef="Μάρκος">Μᾶρκος</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Markellos">
+                        <persName type="attested" key="Markellos">
+                            <name nymRef="Μάρκελλος">Μάρκελλος</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Γ. Ἡούλειος Μᾶρκος
-                    <lb n="2"/>καὶ Μάρ        κελλος
+                    <lb n="1"/><persName type="attested" key="Gaios Herouleios Markos"><name>Γ.</name> <name nymRef="Ηρουλήιος">Ἡούλειος</name> <name nymRef="Μάρκος">Μᾶρκος</name></persName>
+                    <lb n="2"/>καὶ <persName type="attested" key="Markellos"><name nymRef="Μάρκελλος">Μάρ        κελλος</name></persName>
                     <lb n="3"/>ἀδελφοὶ
                     <lb n="4"/>τεκμορεύσαντες μετὰ
-                    <lb n="5"/>θρεπτοῦ Μηνὶ Ἀσκαηνῷ εὐχήν.
+                    <lb n="5"/>θρεπτοῦ <persName type="divine" key="Men Askaenos"><name nymRef="Μήν">Μηνὶ</name> <rs type="epithet">Ἀσκαηνῷ</rs></persName> εὐχήν.
                 </ab>
             </div>
             <div type="apparatus"/>

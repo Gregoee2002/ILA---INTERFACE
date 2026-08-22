@@ -60,15 +60,38 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="onomastica">
+                    <term>Hephaistion</term>
+                    <term>Diodotos Engenes figlio di Hephaistion</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Hephaistion">
+                        <persName type="attested" key="Hephaistion">
+                            <name nymRef="Ἡφαιστίων">Ἡφαιστίων</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Diodotos Engenes figlio di Hephaistion">
+                        <persName type="attested" key="Diodotos Engenes figlio di Hephaistion">
+                            <name nymRef="Διόδοτος">Διόδοτος</name>
+                            <name nymRef="Εγγενής">Ἐγγενής</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Τὸ κοινὸν                     Διόδοτος
-                    <lb n="2"/>τὸ Μηνιαστᾶν              Ἐγγενής
+                    <lb n="1"/>Τὸ κοινὸν                     <persName type="attested" key="Diodotos Engenes figlio di Hephaistion"><name nymRef="Διόδοτος">Διόδοτος</name>
+                    <lb n="2"/>τὸ Μηνιαστᾶν              <name nymRef="Εγγενής">Ἐγγενής</name></persName>
                     <lb n="3"/>ἐτίμασε                        υἱός
-                    <lb n="4"/>Ἡφαιστίωνα                    Ἡφαιστίωνος
+                    <lb n="4"/><persName type="attested" key="Hephaistion"><name nymRef="Ἡφαιστίων">Ἡφαιστίωνα</name></persName>                    <persName type="attested" key="Hephaistion"><name type="patronymic" nymRef="Ἡφαιστίων">Ἡφαιστίωνος</name></persName>
                     <lb n="5"/>Ἀντιοχεῖ θαλίνῳ στεφάνῳ
                     <lb n="6"/>Χρηστοὶ χαίρετε.
                 </ab>

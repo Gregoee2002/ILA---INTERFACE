@@ -60,17 +60,43 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Patrios</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Titos Klaudios Pasinianos Neos Soummaroudes</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Titos Klaudios Pasinianos Neos Soummaroudes">
+                        <persName type="attested" key="Titos Klaudios Pasinianos Neos Soummaroudes">
+                            <name>Τ.</name>
+                            <name nymRef="Κλαύδιος">Κλαύδιος</name>
+                            <name nymRef="Πασινιανός">Πασινιανὸς</name>
+                            <name nymRef="Νέος">Νέος</name>
+                            <name nymRef="Σουμμαρούδης">Σουμμαρούδης</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Τ. Κλαύδιος Πασι-
-                    <lb n="2"/>νιανὸς Νέος Σουμ-
-                    <lb n="3"/>μαρούδης τεκμο-
-                    <lb n="4"/>ρεύσας μετὰ γυναι-
-                    <lb n="5"/>κὸς καὶ ἀδελφῶν
-                    <lb n="6"/>Μηνὶ Πατρί[ῳ]
+                    <lb n="1"/><persName type="attested" key="Titos Klaudios Pasinianos Neos Soummaroudes"><name>Τ.</name> <name nymRef="Κλαύδιος">Κλαύδιος</name> <name nymRef="Πασινιανός">Πασι-
+                    <lb n="2" break="no"/>νιανὸς</name> <name nymRef="Νέος">Νέος</name> <name nymRef="Σουμμαρούδης">Σουμ-
+                    <lb n="3" break="no"/>μαρούδης</name></persName> τεκμο-
+                    <lb n="4" break="no"/>ρεύσας μετὰ γυναι-
+                    <lb n="5" break="no"/>κὸς καὶ ἀδελφῶν
+                    <lb n="6"/><persName type="divine" key="Men Patrios"><name nymRef="Μήν">Μηνὶ</name> <rs type="epithet">Πατρί[ῳ]</rs></persName>
                     <lb n="7"/>εὐχήν.
                 </ab>
             </div>

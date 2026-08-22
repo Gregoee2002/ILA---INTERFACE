@@ -60,12 +60,31 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Aristokydes</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Aristokydes">
+                        <persName type="attested" key="Aristokydes">
+                            <name nymRef="Ἀριστοκύδης">Ἀριστοκύδης</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Ἀριστοκύδης Μηνί
+                    <lb n="1"/><persName type="attested" key="Aristokydes"><name nymRef="Ἀριστοκύδης">Ἀριστοκύδης</name></persName> <persName type="divine" key="Men"><name nymRef="Μήν">Μηνί</name></persName>
                 </ab>
             </div>
             <div type="apparatus"/>

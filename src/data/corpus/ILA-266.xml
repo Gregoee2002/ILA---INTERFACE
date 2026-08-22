@@ -60,18 +60,41 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="onomastica">
+                    <term>Titos Ouisennos Maximos (padre)</term>
+                    <term>Titos Ouisennos Maximos (figlio)</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Titos Ouisennos Maximos (padre)">
+                        <persName type="attested" key="Titos Ouisennos Maximos (padre)">
+                            <name nymRef="Τίτος">Τίτος</name>
+                            <name nymRef="Ουίσεννος">Οὐίσεννος</name>
+                            <name nymRef="Μάξιμος">Μάξιμος</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Titos Ouisennos Maximos (figlio)">
+                        <persName type="attested" key="Titos Ouisennos Maximos (figlio)">
+                            <name nymRef="Τίτος">Τίτος</name>
+                            <name nymRef="Ουίσεννος">Οὐίσεννος</name>
+                            <name nymRef="Μάξιμος">Μάξιμος</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Τίτος Οὐίσενν-
-                    <lb n="2" break="no"/>ος Μάξιμος τε-
+                    <lb n="1"/><persName type="attested" key="Titos Ouisennos Maximos (padre)"><name nymRef="Τίτος">Τίτος</name> <name nymRef="Ουίσεννος">Οὐίσενν<lb n="2" break="no"/>ος</name> <name nymRef="Μάξιμος">Μάξιμος</name></persName> τε-
                     <lb n="3" break="no"/>κμορεύσας μετὰ
                     <lb n="4"/>γυνα[ι]κὸς καὶ τέ-
-                    <lb n="5" break="no"/>κνου Τίτου Οὐίσεννο-
-                    <lb n="6" break="no"/>υ Μαξί-
-                    <lb n="7" break="no"/>μου.
+                    <lb n="5" break="no"/>κνου <persName type="attested" key="Titos Ouisennos Maximos (figlio)"><name nymRef="Τίτος">Τίτου</name> <name nymRef="Ουίσεννος">Οὐίσεννο<lb n="6" break="no"/>υ</name> <name nymRef="Μάξιμος">Μαξί<lb n="7" break="no"/>μου</name></persName>.
                 </ab>
             </div>
             <div type="apparatus"/>

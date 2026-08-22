@@ -60,16 +60,38 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                    <term>Magna Mater</term>
+                    <term>Attis</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Caelius Hilarianus</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Caelius Hilarianus">
+                        <persName type="attested" key="Caelius Hilarianus">
+                            <name>Caelius</name>
+                            <name>Hilarianus</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="la">
                 <ab>
-                    <lb n="1"/>M(atri) D(eum) M(agnae) I(daeae)
-                    <lb n="2"/>et Attidi Meno-
-                    <lb n="3"/>tyranno conser-
-                    <lb n="4"/>vatoribus suis Cae-
-                    <lb n="5"/>lius Hilarianus V(ir) C(onsularis)
+                    <lb n="1"/><persName type="divine" key="Magna Mater"><name>M(atri)</name> <name>D(eum)</name> <name>M(agnae)</name> <name>I(daeae)</name></persName>
+                    <lb n="2"/>et <persName type="divine" key="Attis"><name>Attidi</name></persName> <persName type="divine" key="Men Tyrannos"><name nymRef="Μήν">Meno-
+                    <lb n="3" break="no"/>tyranno</name></persName> conser-
+                    <lb n="4" break="no"/>vatoribus suis <persName type="attested" key="Caelius Hilarianus"><name>Cae-
+                    <lb n="5" break="no"/>lius</name> <name>Hilarianus</name></persName> V(ir) C(onsularis)
                     <lb n="6"/>Duodecimbyr
                     <lb n="7"/>Urbis Romae
                     <lb n="8"/>P(ater) S(acrorum) et Hieroceryx

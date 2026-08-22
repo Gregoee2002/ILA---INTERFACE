@@ -60,16 +60,43 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Sanctus</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                    <term>Magna Mater</term>
+                    <term>Attis</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Alfenius Ceionus Iulianus Kamenius</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Alfenius Ceionus Iulianus Kamenius">
+                        <persName type="attested" key="Alfenius Ceionus Iulianus Kamenius">
+                            <name>Alfenius</name>
+                            <name>Ceionus</name>
+                            <name>Iulianus</name>
+                            <name>Kamenius</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="la">
                 <ab>
                     <lb n="1"/>Diis Magnis
-                    <lb n="2"/>M(atri) D(eum) M(agnae) I(daeae) et
-                    <lb n="3"/>Attidi Sancto Menotyranno
-                    <lb n="4"/>Alfenius Ceionus Iulianus
-                    <lb n="5"/>Kamenius V(ir) C(onsularis) VIIvir Epul(onum)
+                    <lb n="2"/><persName type="divine" key="Magna Mater"><name>M(atri)</name> <name>D(eum)</name> <name>M(agnae)</name> <name>I(daeae)</name></persName> et
+                    <lb n="3"/><persName type="divine" key="Attis Sanctus"><name>Attidi</name> <rs type="epithet">Sancto</rs></persName> <persName type="divine" key="Men Tyrannos"><name nymRef="Μήν">Menotyranno</name></persName>
+                    <lb n="4"/><persName type="attested" key="Alfenius Ceionus Iulianus Kamenius"><name>Alfenius</name> <name>Ceionus</name> <name>Iulianus</name>
+                    <lb n="5" break="no"/><name>Kamenius</name></persName> V(ir) C(onsularis) VIIvir Epul(onum)
                     <lb n="6"/>Pater et Hieroceryx sacr(orum) S(ummi) I(nvicti)
                     <lb n="7"/>Mitrae, Hierofanta Haecatae,
                     <lb n="8"/>Archboucolus Dei Liberi

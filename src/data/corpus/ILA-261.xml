@@ -60,17 +60,44 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Askaenos</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Zotikos</term>
+                    <term>Eutychis</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Zotikos">
+                        <persName type="attested" key="Zotikos">
+                            <name nymRef="Ζωτικός">Ζωτικός</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Eutychis">
+                        <persName type="attested" key="Eutychis">
+                            <name nymRef="Εὐτυχίς">Εὐτυχίς</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>[..............]
-                    <lb n="2"/>Ζωτ[ίκος μετὰ ....]
-                    <lb n="3"/>τος καὶ Εὐτυχί-
-                    <lb n="4"/>δος ἰδίων τε-
-                    <lb n="5"/>κμορεύσας
-                    <lb n="6"/>Μηνὶ Ἀσκαηνῷ
+                    <lb n="1"/><gap reason="lost" extent="unknown"/>
+                    <lb n="2"/><persName type="attested" key="Zotikos"><name nymRef="Ζωτικός">Ζωτ<supplied reason="lost">ίκος</supplied></name></persName> <supplied reason="lost">μετὰ</supplied> <gap reason="lost" extent="unknown"/>
+                    <lb n="3"/>τος καὶ <persName type="attested" key="Eutychis"><name nymRef="Εὐτυχίς">Εὐτυχί<lb n="4" break="no"/>δος</name></persName> ἰδίων τε-
+                    <lb n="5" break="no"/>κμορεύσας
+                    <lb n="6"/><persName type="divine" key="Men Askaenos"><name nymRef="Μήν">Μηνὶ</name> <rs type="epithet">Ἀσκαηνῷ</rs></persName>
                     <lb n="7"/>εὐχήν.
                 </ab>
             </div>

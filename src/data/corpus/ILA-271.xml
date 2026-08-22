@@ -60,15 +60,36 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Tiberios Klaudios Phrouges</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Tiberios Klaudios Phrouges">
+                        <persName type="attested" key="Tiberios Klaudios Phrouges">
+                            <name nymRef="Τιβέριος">Τιβέριος</name>
+                            <name nymRef="Κλαύδιος">Κλ(α)ύδιος</name>
+                            <name nymRef="Φρούγης">Φρούγει</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>[Τιβ]έριος Κλ(α)ύδι-
-                    <lb n="2" break="no"/>ος Φρούγει τεκ-
-                    <lb n="3" break="no"/>μορεύσας Μη-
-                    <lb n="4" break="no"/>νὶ εὐχήν.
+                    <lb n="1"/><persName type="attested" key="Tiberios Klaudios Phrouges"><name nymRef="Τιβέριος">[Τιβ]έριος</name> <name nymRef="Κλαύδιος">Κλ(α)ύδι-
+                    <lb n="2" break="no"/>ος</name> <name nymRef="Φρούγης">Φρούγει</name></persName> τεκ-
+                    <lb n="3" break="no"/>μορεύσας <persName type="divine" key="Men"><name nymRef="Μήν">Μη-
+                    <lb n="4" break="no"/>νὶ</name></persName> εὐχήν.
                 </ab>
             </div>
             <div type="apparatus"/>

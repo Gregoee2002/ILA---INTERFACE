@@ -60,22 +60,45 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Askaenos</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>oulios Tares</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="oulios Tares">
+                        <persName type="attested" key="oulios Tares">
+                            <name>ούλιος</name>
+                            <name>Ταρε</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>[.....]ούλιος Ταρε[.....]
+                    <lb n="1"/>[.....]<persName type="attested" key="oulios Tares"><name>ούλιος</name> <name>Ταρε</name></persName>[.....]
                     <lb n="2"/>τεκμορεύσα[ς]
                     <lb n="3"/>μετὰ γυναικ[ός]
                     <lb n="4"/>καὶ τέκνων κ[αὶ]
-                    <lb n="5"/>θρεπτῶν Μην[ὶ]
-                    <lb n="6"/>Ἀσκαηνῷ [εὐχήν.]
+                    <lb n="5"/>θρεπτῶν <persName type="divine" key="Men Askaenos"><name nymRef="Μήν">Μην[ὶ]</name>
+                    <lb n="6"/><rs type="epithet">Ἀσκαηνῷ</rs></persName> [εὐχήν.]
                 </ab>
             </div>
             <div type="apparatus"/>
             <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
-            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>Nome del dedicante incompleto: solo la desinenza "-ούλιος" (verosimilmente da [Ἰ]ούλιος, ma non certo) e il frammento "Ταρε-" sono conservati; il layout di Lane lo indica con un punto interrogativo ("Tares (?)").</p></div>
             <div type="bibliography">
                 <listBibl>
                     <bibl>Lane, CMRDM I 287</bibl>

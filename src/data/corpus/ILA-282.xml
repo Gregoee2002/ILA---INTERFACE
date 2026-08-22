@@ -60,14 +60,38 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Cilvastionus</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Gaius Petronius Iustus</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Gaius Petronius Iustus">
+                        <persName type="attested" key="Gaius Petronius Iustus">
+                            <name>G.</name>
+                            <name>Petr(onius)</name>
+                            <name>Iustus</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="la">
                 <ab>
-                    <lb n="1"/>Meni
-                    <lb n="2"/>Ci[l]vastion(o)
-                    <lb n="3"/>G(aius) Petr(onius) Iustus
+                    <lb n="1"/><persName type="divine" key="Men Cilvastionus"><name nymRef="Μήν">Meni</name>
+                    <lb n="2"/><rs type="epithet">Ci[l]vastion(o)</rs></persName>
+                    <lb n="3"/><persName type="attested" key="Gaius Petronius Iustus"><name>G(aius)</name> <name>Petr(onius)</name> <name>Iustus</name></persName>
                     <lb n="4"/>corn(icularius) proc(uratoris)
                     <lb n="5"/>ex voto
                 </ab>

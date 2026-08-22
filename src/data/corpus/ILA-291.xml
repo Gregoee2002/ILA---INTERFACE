@@ -60,15 +60,41 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Sanctus</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                    <term>Magna Mater</term>
+                    <term>Attis</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Quintus Claudius Flavianus</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Quintus Claudius Flavianus">
+                        <persName type="attested" key="Quintus Claudius Flavianus">
+                            <name>Q.</name>
+                            <name>Claudius</name>
+                            <name>Flavianus</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="la">
                 <ab>
-                    <lb n="1"/>M(atri) D(eum) M(agnae) I(daeae)
-                    <lb n="2"/>et Attidi Sancto
-                    <lb n="3"/>Menotyranno
-                    <lb n="4"/>Q. Claudius Flavianus
+                    <lb n="1"/><persName type="divine" key="Magna Mater"><name>M(atri)</name> <name>D(eum)</name> <name>M(agnae)</name> <name>I(daeae)</name></persName>
+                    <lb n="2"/>et <persName type="divine" key="Attis Sanctus"><name>Attidi</name> <rs type="epithet">Sancto</rs></persName>
+                    <lb n="3"/><persName type="divine" key="Men Tyrannos"><name nymRef="Μήν">Menotyranno</name></persName>
+                    <lb n="4"/><persName type="attested" key="Quintus Claudius Flavianus"><name>Q.</name> <name>Claudius</name> <name>Flavianus</name></persName>
                     <lb n="5"/>V(ir) C(onsularis) Pont(ifex) Maior
                     <lb n="6"/>XV vir S(acris) F(aciundis) Septem-
                     <lb n="7"/>vir Epulonum

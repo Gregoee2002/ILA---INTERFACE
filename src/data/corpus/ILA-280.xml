@@ -60,22 +60,52 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Askaenos</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Poublios Klaudios</term>
+                    <term>Maria Gaia</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Poublios Klaudios">
+                        <persName type="attested" key="Poublios Klaudios">
+                            <name>Π.</name>
+                            <name nymRef="Κλαύδιος">Κλαύδιος</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Maria Gaia">
+                        <persName type="attested" key="Maria Gaia">
+                            <name nymRef="Μαρία">Μαρία</name>
+                            <name nymRef="Γαία">Γαία</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
                     <lb n="1"/>[καὶ τ]έκνου Μηνο[.....]
-                    <lb n="2"/>Π. Κλαύδιος [.......]
+                    <lb n="2"/><persName type="attested" key="Poublios Klaudios"><name>Π.</name> <name nymRef="Κλαύδιος">Κλαύδιος</name></persName> [.......]
                     <lb n="3"/>τεκμορεύσα[ς μετὰ]
-                    <lb n="4"/>Μαρίας Γαία[ς γυναι-]
-                    <lb n="5" break="no"/>κὸς
-                    <lb n="6"/>Μη[νὶ Ἀσκαηνῷ εὐχήν.]
+                    <lb n="4"/><persName type="attested" key="Maria Gaia"><name nymRef="Μαρία">Μαρίας</name> <name nymRef="Γαία">Γαία[ς</name> γυναι-]
+                    <lb n="5" break="no"/>κὸς</persName>
+                    <lb n="6"/><persName type="divine" key="Men Askaenos"><name nymRef="Μήν">Μη[νὶ</name> <rs type="epithet">Ἀσκαηνῷ</rs></persName> <supplied reason="lost">εὐχήν.</supplied>
                 </ab>
             </div>
             <div type="apparatus"/>
             <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
-            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>Alla r. 1, "Μηνο[.....]" non è stato marcato come nome divino: il contesto ("[καὶ τ]έκνου", "e del figlio") indica che si tratta piuttosto dell'inizio del nome proprio del figlio (un nome in Μηνο-, es. Μηνόφιλος), non del teonimo Men, qui usato altrove in forma dativa "Μηνί".</p></div>
             <div type="bibliography">
                 <listBibl>
                     <bibl>Lane, CMRDM I 293</bibl>

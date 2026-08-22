@@ -60,16 +60,44 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Patrios</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Auxanon</term>
+                    <term>Markia</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Auxanon">
+                        <persName type="attested" key="Auxanon">
+                            <name nymRef="Αὐξάνων">Αὐξάνων</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Markia">
+                        <persName type="attested" key="Markia">
+                            <name nymRef="Μαρκία">Μαρκίας</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
                     <lb n="1"/>[....]ωνήτιος Πωλι-
-                    <lb n="2"/>[....] Αὐξάνων με-
-                    <lb n="3"/>[τὰ γυ]ναικὸς Μαρκίας καὶ
+                    <lb n="2"/>[....] <persName type="attested" key="Auxanon"><name nymRef="Αὐξάνων">Αὐξάνων</name></persName> με-
+                    <lb n="3" break="no"/>[τὰ γυ]ναικὸς <persName type="attested" key="Markia"><name nymRef="Μαρκία">Μαρκίας</name></persName> καὶ
                     <lb n="4"/>τέ[κν]ων καὶ θρεπτοῦ
-                    <lb n="5"/>Μηνὶ Πατρίῳ εὐχήν.
+                    <lb n="5"/><persName type="divine" key="Men Patrios"><name nymRef="Μήν">Μηνὶ</name> <rs type="epithet">Πατρίῳ</rs></persName> εὐχήν.
                 </ab>
             </div>
             <div type="apparatus"/>

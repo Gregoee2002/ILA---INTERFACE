@@ -60,15 +60,37 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Askaenos</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Tritos</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Tritos">
+                        <persName type="attested" key="Tritos">
+                            <name nymRef="Τρίτος">Τρίτος</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
                     <lb n="1"/>[......]τίος Ἀνίη[...]
-                    <lb n="2"/>[......]Τρίτος [.....]
-                    <lb n="3"/>[τεκμορ]εύσας Μη[νὶ]
-                    <lb n="4"/>[Ἀσκαην]ῷ εὐχήν.
+                    <lb n="2"/>[......]<persName type="attested" key="Tritos"><name nymRef="Τρίτος">Τρίτος</name></persName> [.....]
+                    <lb n="3"/>[τεκμορ]εύσας <persName type="divine" key="Men Askaenos"><name nymRef="Μήν">Μη<supplied reason="lost">νὶ</supplied></name>
+                    <lb n="4"/><rs type="epithet"><supplied reason="lost">Ἀσκαην</supplied>ῷ</rs></persName> εὐχήν.
                 </ab>
             </div>
             <div type="apparatus"/>

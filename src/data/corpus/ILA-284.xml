@@ -60,6 +60,29 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Tyrannos</term>
+                    <term>Dionysos</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Laeos</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Laeos">
+                        <persName type="attested" key="Laeos">
+                            <name nymRef="Λαέος">Λαέος</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
@@ -68,16 +91,16 @@
                     <lb n="1"/>[illegible line]
                     <lb n="2"/>ἀνέθη-
                     <lb n="3"/>κεν θεῷ
-                    <lb n="4"/>Μηνὶ Τυράν-
-                    <lb n="5"/>νῳ Διονύσῳ
-                    <lb n="6"/>Λαέου χάριν [ποι-]
+                    <lb n="4"/><persName type="divine" key="Men Tyrannos Dionysos"><name nymRef="Μήν">Μηνὶ</name> <rs type="epithet">Τυράν-
+                    <lb n="5" break="no"/>νῳ</rs> <rs type="epithet">Διονύσῳ</rs></persName>
+                    <lb n="6"/><persName type="attested" key="Laeos"><name nymRef="Λαέος">Λαέου</name></persName> χάριν [ποι-]
                     <lb n="7"/>ου]σα ...
                     <lb n="8"/>[illegible line]
                 </ab>
             </div>
             <div type="apparatus"/>
             <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
-            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>"Μηνὶ Τυράννῳ Διονύσῳ" è stato codificato come un'unica identità divina con due epiteti, seguendo l'interpretazione di Lane (titolo: "Men Tirannos Dioniso") di un'associazione sincretica locale tra Men Tyrannos e Dioniso; non è l'unica lettura possibile del testo, che potrebbe anche invocare due entità distinte.</p></div>
             <div type="bibliography">
                 <listBibl>
                     <bibl>Lane, CMRDM I 15</bibl>

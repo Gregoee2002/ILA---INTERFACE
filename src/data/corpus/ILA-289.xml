@@ -60,6 +60,18 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Tyrannos</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                    <term>Rhea</term>
+                    <term>Attis</term>
+                </keywords>
+            </textClass>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
@@ -67,8 +79,8 @@
                 <ab>
                     <lb n="1"/>ἐξεμ-
                     <lb n="2"/>τονυμιν θ[εοῖσι]
-                    <lb n="3"/>ἀθανάτοις [Ῥείη τε καὶ Ἄττει]
-                    <lb n="4"/>Μηνοτύ[ραννω· .....]
+                    <lb n="3"/>ἀθανάτοις <supplied reason="lost"><persName type="divine" key="Rhea"><name nymRef="Ῥέα">Ῥείη</name></persName> τε καὶ <persName type="divine" key="Attis"><name nymRef="Ἄττις">Ἄττει</name></persName></supplied>
+                    <lb n="4"/><persName type="divine" key="Men Tyrannos"><name nymRef="Μήν">Μηνοτύ<supplied reason="lost">ραννω</supplied></name></persName>· .....]
                     <lb n="5"/>... ια ...
                 </ab>
             </div>
