@@ -60,16 +60,39 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Augmes figlio di Ilaros</term>
+                    <term>Ilaros</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Augmes figlio di Ilaros">
+                        <persName type="attested" key="Augmes figlio di Ilaros">
+                            <name nymRef="Αὔγμης">Αὔγμης</name>
+                            <persName type="attested" key="Ilaros">
+                                <name type="patronymic" nymRef="Ἵλαρος">Ἰλάρου</name>
+                            </persName>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Αὔγμης Ἰλάρου
+                    <lb n="1"/><persName type="attested" key="Augmes figlio di Ilaros"><name nymRef="Αὔγμης">Αὔγμης</name> <persName type="attested" key="Ilaros"><name type="patronymic" nymRef="Ἵλαρος">Ἰλάρου</name></persName></persName>
                     <lb n="2"/>τεκμορεύ-
-                    <lb n="3"/>σας (μετά) θρεπ-
-                    <lb n="4"/>τοῦ συντρόφου
-                    <lb n="5"/>Μηνὶ εὐχήν.
+                    <lb n="3" break="no"/>σας (μετά) θρεπ-
+                    <lb n="4" break="no"/>τοῦ συντρόφου
+                    <lb n="5"/><persName type="divine" key="Men"><name nymRef="Μήν">Μηνὶ</name></persName> εὐχήν.
                 </ab>
             </div>
             <div type="apparatus"/>

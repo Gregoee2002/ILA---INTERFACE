@@ -60,14 +60,33 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Meinodora</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Meinodora">
+                        <persName type="attested" key="Meinodora">
+                            <name nymRef="Μεινοδώρα">Μεινοδώ[ρα]</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Μεινοδώ[ρ-
-                    <lb n="2"/>α] Μηνὶ εὐ-
-                    <lb n="3"/>χήν.
+                    <lb n="1"/><persName type="attested" key="Meinodora"><name nymRef="Μεινοδώρα">Μεινοδώ[ρ-
+                    <lb n="2" break="no"/>α]</name></persName> <persName type="divine" key="Men"><name nymRef="Μήν">Μηνὶ</name></persName> εὐ-
+                    <lb n="3" break="no"/>χήν.
                 </ab>
             </div>
             <div type="apparatus"><p>Lettura alternativa delle stesse 3 righe secondo Ramsay (JRS VIII, 1918, p. 109): <foreign xml:lang="grc">Ἡ συνοδία Μηνὶ εὐχήν</foreign> ("la synodia [associazione], per voto"), invece di Μεινοδώρα (nome proprio femminile) secondo Hardie.</p></div>

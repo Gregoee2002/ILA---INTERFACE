@@ -60,17 +60,39 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Askaenos</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Zosimos</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Zosimos">
+                        <persName type="attested" key="Zosimos">
+                            <name nymRef="Ζώσιμος">Ζώσιμος</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Ζώσιμ-
-                    <lb n="2"/>ος μετὰ τ-
-                    <lb n="3"/>έκνων
-                    <lb n="4"/>Μηνὶ Ἀσ-
-                    <lb n="5"/>καηνῷ εὐ-
-                    <lb n="6"/>χήν.
+                    <lb n="1"/><persName type="attested" key="Zosimos"><name nymRef="Ζώσιμος">Ζώσιμ-
+                    <lb n="2" break="no"/>ος</name></persName> μετὰ τ-
+                    <lb n="3" break="no"/>έκνων
+                    <lb n="4"/><persName type="divine" key="Men Askaenos"><name nymRef="Μήν">Μηνὶ</name> <rs type="epithet">Ἀσ-
+                    <lb n="5" break="no"/>καηνῷ</rs></persName> εὐ-
+                    <lb n="6" break="no"/>χήν.
                 </ab>
             </div>
             <div type="apparatus"/>

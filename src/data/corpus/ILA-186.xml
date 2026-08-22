@@ -60,15 +60,38 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Askaenos</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Marcus Eros</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Marcus Eros">
+                        <persName type="attested" key="Marcus Eros">
+                            <name nymRef="Μᾶρκος">Μ.</name>
+                            <name nymRef="Ἔρως">Ἔρως</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Μ. Ἔρως μ-
-                    <lb n="2"/>ετὰ τέκνω[ν]
-                    <lb n="3"/>Μηνὶ Ἀσκαην-
-                    <lb n="4"/>ῷ εὐχήν.
+                    <lb n="1"/><persName type="attested" key="Marcus Eros"><name nymRef="Μᾶρκος">Μ.</name> <name nymRef="Ἔρως">Ἔρως</name></persName> μ-
+                    <lb n="2" break="no"/>ετὰ τέκνω[ν]
+                    <lb n="3"/><persName type="divine" key="Men Askaenos"><name nymRef="Μήν">Μηνὶ</name> <rs type="epithet">Ἀσκαην-
+                    <lb n="4" break="no"/>ῷ</rs></persName> εὐχήν.
                 </ab>
             </div>
             <div type="apparatus"/>

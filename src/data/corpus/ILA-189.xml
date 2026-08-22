@@ -60,12 +60,35 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Askaenos</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Flavius Patroeinus</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Flavius Patroeinus">
+                        <persName type="attested" key="Flavius Patroeinus">
+                            <name nymRef="Φλάουιος">Φλάουιος</name>
+                            <name nymRef="Πατρούεινος">Πατρούεινος</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Φλάουιος Πατρούεινος Μηνὶ Ἀσκαηνῷ εὐχήν.
+                    <lb n="1"/><persName type="attested" key="Flavius Patroeinus"><name nymRef="Φλάουιος">Φλάουιος</name> <name nymRef="Πατρούεινος">Πατρούεινος</name></persName> <persName type="divine" key="Men Askaenos"><name nymRef="Μήν">Μηνὶ</name> <rs type="epithet">Ἀσκαηνῷ</rs></persName> εὐχήν.
                 </ab>
             </div>
             <div type="apparatus"/>

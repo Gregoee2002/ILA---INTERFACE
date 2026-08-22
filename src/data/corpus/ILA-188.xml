@@ -60,12 +60,40 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="onomastica">
+                    <term>Argeia</term>
+                    <term>Demetrius</term>
+                    <term>Potamos</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Argeia">
+                        <persName type="attested" key="Argeia">
+                            <name nymRef="Ἀργεία">Ἀργεία</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Demetrius">
+                        <persName type="attested" key="Demetrius">
+                            <name nymRef="Demetrius">Demetrius</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Potamos">
+                        <persName type="attested" key="Potamos">
+                            <name nymRef="Ποταμός">Ποταμό[ς]</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Ἀργεία<cb/><foreign xml:lang="la">Demetrius</foreign><cb/>Ποταμό[ς]
+                    <lb n="1"/><persName type="attested" key="Argeia"><name nymRef="Ἀργεία">Ἀργεία</name></persName><cb/><persName type="attested" key="Demetrius"><foreign xml:lang="la"><name nymRef="Demetrius">Demetrius</name></foreign></persName><cb/><persName type="attested" key="Potamos"><name nymRef="Ποταμός">Ποταμό[ς]</name></persName>
                     <lb n="2"/>εὐχήν
                     <lb n="3"/>LVS
                 </ab>

@@ -60,17 +60,43 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Askaenos</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Phaidros figlio di Akastos</term>
+                    <term>Akastos</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Phaidros figlio di Akastos">
+                        <persName type="attested" key="Phaidros figlio di Akastos">
+                            <name nymRef="Φαίδρος">[Φ]αΐδρος</name>
+                            <persName type="attested" key="Akastos">
+                                <name type="patronymic" nymRef="Ἄκαστος">['Α]κάσ[του]</name>
+                            </persName>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>[Φ]αΐδρος
-                    <lb n="2"/>['Α]κάσ[του]
+                    <lb n="1"/><persName type="attested" key="Phaidros figlio di Akastos"><name nymRef="Φαίδρος">[Φ]αΐδρος</name>
+                    <lb n="2"/><persName type="attested" key="Akastos"><name type="patronymic" nymRef="Ἄκαστος">['Α]κάσ[του]</name></persName></persName>
                     <lb n="3"/>μετὰ τῶ-
-                    <lb n="4"/>ν ἰδίων
-                    <lb n="5"/>Μηνὶ Ἀσ-
-                    <lb n="6"/>καηνῷ
+                    <lb n="4" break="no"/>ν ἰδίων
+                    <lb n="5"/><persName type="divine" key="Men Askaenos"><name nymRef="Μήν">Μηνὶ</name> <rs type="epithet">Ἀσ-
+                    <lb n="6" break="no"/>καηνῷ</rs></persName>
                     <lb n="7"/>εὐχήν.
                 </ab>
             </div>

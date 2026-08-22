@@ -60,22 +60,75 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Gamos figlio di Abaskantos</term>
+                    <term>Abaskantos</term>
+                    <term>Loukas</term>
+                    <term>Poumpoumlios</term>
+                    <term>Eudoxos</term>
+                    <term>Loukios</term>
+                    <term>Poumpoulios</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Gamos figlio di Abaskantos">
+                        <persName type="attested" key="Gamos figlio di Abaskantos">
+                            <name nymRef="Γάμος">Γάμος</name>
+                            <persName type="attested" key="Abaskantos">
+                                <name type="patronymic" nymRef="Ἀβάσκαντος">Ἀβασκάντου</name>
+                            </persName>
+                        </persName>
+                    </person>
+                    <person xml:id="Loukas (fratello)">
+                        <persName type="attested" key="Loukas (fratello)">
+                            <name nymRef="Λουκᾶς">Λουκᾶς</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Poumpoumlios (fratello)">
+                        <persName type="attested" key="Poumpoumlios (fratello)">
+                            <name nymRef="Πουμπούμλιος">Πουμπούμλιος</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Eudoxos (fratello)">
+                        <persName type="attested" key="Eudoxos (fratello)">
+                            <name nymRef="Εὔδοξος">Εὔδοξος</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Loukios (figlio di Gamos)">
+                        <persName type="attested" key="Loukios (figlio di Gamos)">
+                            <name nymRef="Λούκιος">Λούκιος</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Poumpoulios (figlio di Gamos)">
+                        <persName type="attested" key="Poumpoulios (figlio di Gamos)">
+                            <name nymRef="Πουμπούλιος">Πουμπούλιος</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Μηνὶ εὐχὴν
-                    <lb n="2"/>Γάμος Ἀβασκάντου
-                    <lb n="3"/>ὑὸς καὶ Λουκᾶς καὶ
-                    <lb n="4"/>Πουμπούμλιος
-                    <lb n="5"/>καὶ Εὔδοξος.
-                    <lb n="6"/>Μηνὶ
+                    <lb n="1"/><persName type="divine" key="Men"><name nymRef="Μήν">Μηνὶ</name></persName> εὐχὴν
+                    <lb n="2"/><persName type="attested" key="Gamos figlio di Abaskantos"><name nymRef="Γάμος">Γάμος</name> <persName type="attested" key="Abaskantos"><name type="patronymic" nymRef="Ἀβάσκαντος">Ἀβασκάντου</name></persName></persName>
+                    <lb n="3"/>ὑὸς καὶ <persName type="attested" key="Loukas (fratello)"><name nymRef="Λουκᾶς">Λουκᾶς</name></persName> καὶ
+                    <lb n="4"/><persName type="attested" key="Poumpoumlios (fratello)"><name nymRef="Πουμπούμλιος">Πουμπούμλιος</name></persName>
+                    <lb n="5"/>καὶ <persName type="attested" key="Eudoxos (fratello)"><name nymRef="Εὔδοξος">Εὔδοξος</name></persName>.
+                    <lb n="6"/><persName type="divine" key="Men"><name nymRef="Μήν">Μηνὶ</name></persName>
                     <lb n="7"/>εὐχὴν
-                    <lb n="8"/>Γάμος Ἀβασκάγ[τ-
-                    <lb n="9"/>ου] με(τὰ) γυν[αικὸς],
-                    <lb n="10"/>Λούκιος υἱός,
-                    <lb n="11"/>Πουμπούλιος
+                    <lb n="8"/><persName type="attested" key="Gamos figlio di Abaskantos"><name nymRef="Γάμος">Γάμος</name> <persName type="attested" key="Abaskantos"><name type="patronymic" nymRef="Ἀβάσκαντος">Ἀβασκάγ[τ-
+                    <lb n="9" break="no"/>ου]</name></persName></persName> με(τὰ) γυν[αικὸς],
+                    <lb n="10"/><persName type="attested" key="Loukios (figlio di Gamos)"><name nymRef="Λούκιος">Λούκιος</name></persName> υἱός,
+                    <lb n="11"/><persName type="attested" key="Poumpoulios (figlio di Gamos)"><name nymRef="Πουμπούλιος">Πουμπούλιος</name></persName>
                     <lb n="12"/>υἱός.
                 </ab>
             </div>

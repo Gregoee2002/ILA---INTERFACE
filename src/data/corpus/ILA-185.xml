@@ -60,14 +60,41 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Publius Antonios</term>
+                    <term>Loukios Antonios</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Publius Antonios">
+                        <persName type="attested" key="Publius Antonios">
+                            <name nymRef="Πόπλιος">Π.</name>
+                            <name nymRef="Ἀντώνιος">Ἀντώνιος</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Loukios Antonios">
+                        <persName type="attested" key="Loukios Antonios">
+                            <name nymRef="Λούκιος">Λ.</name>
+                            <name nymRef="Ἀντώνιος">Ἀντώνιος</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Π. Ἀντώνιος
-                    <lb n="2"/>Λ. Ἀντώνιος
-                    <lb n="3"/>Μηνὶ εὐχήν.
+                    <lb n="1"/><persName type="attested" key="Publius Antonios"><name nymRef="Πόπλιος">Π.</name> <name nymRef="Ἀντώνιος">Ἀντώνιος</name></persName>
+                    <lb n="2"/><persName type="attested" key="Loukios Antonios"><name nymRef="Λούκιος">Λ.</name> <name nymRef="Ἀντώνιος">Ἀντώνιος</name></persName>
+                    <lb n="3"/><persName type="divine" key="Men"><name nymRef="Μήν">Μηνὶ</name></persName> εὐχήν.
                 </ab>
             </div>
             <div type="apparatus"/>
