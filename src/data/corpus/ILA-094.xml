@@ -60,12 +60,21 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="divinita">
+                    <term>Pan</term>
+                    <term>Men</term>
+                    <term>Nymphai</term>
+                </keywords>
+            </textClass>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>ὁ Πάν, ὁ Μήν, χαίρετε νύνφαι καλαί, ὕε κύε ὑπέρχυε.
+                    <lb n="1"/>ὁ <persName type="divine" key="Pan"><name nymRef="Πάν">Πάν</name></persName>, ὁ <persName type="divine" key="Men"><name nymRef="Μήν">Μήν</name></persName>, χαίρετε <persName type="divine" key="Nymphai"><name nymRef="Νύμφαι">νύνφαι</name></persName> καλαί, ὕε κύε ὑπέρχυε.
                 </ab>
             </div>
             <div type="apparatus"/>

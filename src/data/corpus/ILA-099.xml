@@ -60,12 +60,31 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Mithradates</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Mithradates">
+                        <persName type="attested" key="Mithradates">
+                            <name nymRef="Μιθραδάτης">Μιτραδάτης</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Μιτραδάτης καὶ ἡ γυνὴ Μηνὶ [ἀνέθηκαν].
+                    <lb n="1"/><persName type="attested" key="Mithradates"><name nymRef="Μιθραδάτης">Μιτραδάτης</name></persName> καὶ ἡ γυνὴ <persName type="divine" key="Men"><name nymRef="Μήν">Μηνὶ</name></persName> [ἀνέθηκαν].
                 </ab>
             </div>
             <div type="apparatus"/>

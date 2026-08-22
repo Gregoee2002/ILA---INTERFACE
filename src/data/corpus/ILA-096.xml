@@ -60,15 +60,40 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Ouranios</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Isis</term>
+                    <term>Sarapis</term>
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Aurelios Epaphroditos</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Aurelios Epaphroditos">
+                        <persName type="attested" key="Aurelios Epaphroditos">
+                            <name nymRef="Αὐρήλιος">Αὐρ.</name>
+                            <name nymRef="Ἐπαφρόδειτος">Ἐπαφρόδει-τος</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Ἱερεὺς στολιστὴς Ἴσιδος
-                    <lb n="2"/>καὶ Σεράπιδος Αὐρ. Ἐπαφρόδει-
-                    <lb n="3"/>τος τῷ Οὐρανίῳ Μηνὶ εὐχα-
-                    <lb n="4"/>[ρ]ιστήριον ἀνέθηκα.
+                    <lb n="1"/>Ἱερεὺς στολιστὴς <persName type="divine" key="Isis"><name nymRef="Ἶσις">Ἴσιδος</name></persName>
+                    <lb n="2"/>καὶ <persName type="divine" key="Sarapis"><name nymRef="Σάραπις">Σεράπιδος</name></persName> <persName type="attested" key="Aurelios Epaphroditos"><name nymRef="Αὐρήλιος">Αὐρ.</name> <name nymRef="Ἐπαφρόδειτος">Ἐπαφρόδει-
+                    <lb n="3" break="no"/>τος</name></persName> τῷ <persName type="divine" key="Men Ouranios"><rs type="epithet">Οὐρανίῳ</rs> <name nymRef="Μήν">Μηνὶ</name></persName> εὐχα-
+                    <lb n="4" break="no"/>[ρ]ιστήριον ἀνέθηκα.
                 </ab>
             </div>
             <div type="apparatus"/>

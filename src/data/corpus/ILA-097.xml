@@ -60,16 +60,35 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Demetrios</term>
+                    <term>Erotion</term>
+                    <term>Glaukos</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Demetrios"><persName type="attested" key="Demetrios"><name nymRef="Δημήτριος">Δημήτριος</name></persName></person>
+                    <person xml:id="Erotion"><persName type="attested" key="Erotion"><name nymRef="Ἐρώτιον">Ἐρώτιον</name></persName></person>
+                    <person xml:id="Glaukos"><persName type="attested" key="Glaukos"><name nymRef="Γλαῦκος">Γλαύκου</name></persName></person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Δημήτριος
+                    <lb n="1"/><persName type="attested" key="Demetrios"><name nymRef="Δημήτριος">Δημήτριος</name></persName>
                     <lb n="2"/>καὶ ἡ γυνὴ
-                    <lb n="3"/>Ἐρώτιον Μηνὶ
+                    <lb n="3"/><persName type="attested" key="Erotion"><name nymRef="Ἐρώτιον">Ἐρώτιον</name></persName> <persName type="divine" key="Men"><name nymRef="Μήν">Μηνὶ</name></persName>
                     <lb n="4"/>ἐπὶ ἱερέας
-                    <lb n="5"/>Γλαύκου.
+                    <lb n="5"/><persName type="attested" key="Glaukos"><name nymRef="Γλαῦκος">Γλαύκου</name></persName>.
                 </ab>
             </div>
             <div type="apparatus"/>
