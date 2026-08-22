@@ -60,14 +60,37 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Tychasios figlio di Apollonios</term>
+                    <term>Apollonios</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Tychasios figlio di Apollonios">
+                        <persName type="attested" key="Tychasios figlio di Apollonios">
+                            <name nymRef="Τυχάσιος">Τυχάσ[ι]ος</name>
+                            <persName type="attested" key="Apollonios">
+                                <name type="patronymic" nymRef="Ἀπολλώνιος">Ἀπολλωνίου</name>
+                            </persName>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Τυχάσ[ι]ος
-                    <lb n="2"/>Ἀπολλωνίου
-                    <lb n="3"/>Μηνὶ εὐχὴν
+                    <lb n="1"/><persName type="attested" key="Tychasios figlio di Apollonios"><name nymRef="Τυχάσιος">Τυχάσ[ι]ος</name>
+                    <lb n="2"/><persName type="attested" key="Apollonios"><name type="patronymic" nymRef="Ἀπολλώνιος">Ἀπολλωνίου</name></persName></persName>
+                    <lb n="3"/><persName type="divine" key="Men"><name nymRef="Μήν">Μηνὶ</name></persName> εὐχὴν
                     <lb n="4"/>Κολιανοκωμή
                     <lb n="5"/>τη.          -τη[ς]?
                 </ab>

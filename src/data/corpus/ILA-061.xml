@@ -60,13 +60,23 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Italikos</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+            </textClass>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
                     <lb n="1"/>Οὐεζαεῖται
-                    <lb n="2"/>Μηνὶ Ἰταλ[ι]κῷ
+                    <lb n="2"/><persName type="divine" key="Men Italikos"><name nymRef="Μήν">Μηνὶ</name> <rs type="epithet">Ἰταλ[ι]κῷ</rs></persName>
                     <lb n="3"/>ἐξ ἐπιτα[γ]ῆς.
                 </ab>
             </div>

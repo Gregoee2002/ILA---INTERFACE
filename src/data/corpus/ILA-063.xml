@@ -60,15 +60,37 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Ouranios</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Photion</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Photion">
+                        <persName type="attested" key="Photion">
+                            <name nymRef="Φωτίων">Φωτίων</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Φωτίων κ(αὶ) γυ-
-                    <lb n="2"/>γὴ αὐτοῦ (ὑ)πὲρ
-                    <lb n="3"/>[τ]έκνων Μη-
-                    <lb n="4"/>νὶ Οὐρανίω
+                    <lb n="1"/><persName type="attested" key="Photion"><name nymRef="Φωτίων">Φωτίων</name></persName> κ(αὶ) γυ-
+                    <lb n="2" break="no"/>γὴ αὐτοῦ (ὑ)πὲρ
+                    <lb n="3"/>[τ]έκνων <persName type="divine" key="Men Ouranios"><name nymRef="Μήν">Μη-
+                    <lb n="4" break="no"/>νὶ</name> <rs type="epithet">Οὐρανίω</rs></persName>
                     <lb n="5"/>εὐχή[ν].
                 </ab>
             </div>

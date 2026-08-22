@@ -60,19 +60,56 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Soter</term>
+                    <term>Askaenos</term>
+                    <term>Angdistis</term>
+                    <term>Sebaste</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Zeus</term>
+                    <term>Apollon</term>
+                    <term>Men</term>
+                    <term>Meter theon</term>
+                    <term>Agathos Daimon</term>
+                    <term>Isis</term>
+                    <term>Eirene</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Aurelios Monimos figlio di Aristone Zenodotos</term>
+                    <term>Aristone Zenodotos</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Aurelios Monimos figlio di Aristone Zenodotos">
+                        <persName type="attested" key="Aurelios Monimos figlio di Aristone Zenodotos">
+                            <name nymRef="Αὐρήλιος">[Αὐρήλιον]</name>
+                            <name nymRef="Μόνιμος">Μόνιμον</name>
+                            <persName type="attested" key="Aristone Zenodotos">
+                                <name type="patronymic" nymRef="Ἀρίστων">Ἀρίστων[ος]</name>
+                                <name type="patronymic" nymRef="Ζηνόδοτος">[Ζηνόδο-τον]</name>
+                            </persName>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Ὁ δῆμος ἐτεί[μησεν Αὐρήλιον]
-                    <lb n="2"/>Μόνιμον Ἀρίστων[ος Ζηνόδο-]
-                    <lb n="3"/>τον λαμπαδάρχην ἱ[ερέα Διὸς]
-                    <lb n="4"/>Σωτῆρος καὶ Ἀπόλλ[ωνος καὶ]
-                    <lb n="5"/>Μηνὸς Ἀσκαηνοῦ [καὶ Μητρὸς]
-                    <lb n="6"/>θεῶν Ἀνγδίστεω[ς καὶ Ἀγαθοῦ]
-                    <lb n="7"/>Δαίμονος καὶ Εἴσε[ιδος καὶ Σε-]
-                    <lb n="8"/>βαστῆς Εἰρήνης, σ[τρατηγὸν]
+                    <lb n="1"/>Ὁ δῆμος ἐτεί[μησεν <persName type="attested" key="Aurelios Monimos figlio di Aristone Zenodotos"><name nymRef="Αὐρήλιος">Αὐρήλιον]</name>
+                    <lb n="2" break="no"/><name nymRef="Μόνιμος">Μόνιμον</name> <persName type="attested" key="Aristone Zenodotos"><name type="patronymic" nymRef="Ἀρίστων">Ἀρίστων[ος</name> <name type="patronymic" nymRef="Ζηνόδοτος">Ζηνόδο-]
+                    <lb n="3" break="no"/>τον]</name></persName></persName> λαμπαδάρχην ἱ[ερέα <persName type="divine" key="Zeus Soter"><name nymRef="Ζεύς">Διὸς]</name>
+                    <lb n="4" break="no"/><rs type="epithet">Σωτῆρος</rs></persName> καὶ <persName type="divine" key="Apollon"><name nymRef="Ἀπόλλων">Ἀπόλλ[ωνος</name></persName> καὶ]
+                    <lb n="5"/><persName type="divine" key="Men Askaenos"><name nymRef="Μήν">Μηνὸς</name> <rs type="epithet">Ἀσκαηνοῦ</rs></persName> [καὶ <persName type="divine" key="Meter theon Angdistis"><name nymRef="Μήτηρ">Μητρὸς]</name>
+                    <lb n="6" break="no"/>θεῶν <rs type="epithet">Ἀνγδίστεω[ς]</rs></persName> [καὶ <persName type="divine" key="Agathos Daimon"><name nymRef="Ἀγαθὸς Δαίμων">Ἀγαθοῦ]</name>
+                    <lb n="7" break="no"/><name nymRef="Ἀγαθὸς Δαίμων">Δαίμονος</name></persName> καὶ <persName type="divine" key="Isis"><name nymRef="Ἶσις">Εἴσε[ιδος]</name></persName> [καὶ Σε-]
+                    <lb n="8" break="no"/><persName type="divine" key="Sebaste Eirene"><rs type="epithet">βαστῆς</rs> <name nymRef="Εἰρήνη">Εἰρήνης</name></persName>, σ[τρατηγὸν]
                     <lb n="9"/>τῆς πόλεως τὸ ἕκτον [χρεοφυλα-]
                     <lb n="10"/>κήσαντα καὶ ἐγλογισ[τεύσαντα]
                     <lb n="11"/>καὶ ἀγορανομήσαντα κ[αὶ εἰρηναρ-]

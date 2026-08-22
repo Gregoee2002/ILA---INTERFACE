@@ -60,20 +60,67 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Soteira</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Hekate</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Apphion</term>
+                    <term>Gaeios (padre)</term>
+                    <term>Apellas</term>
+                    <term>Gaeios (figlio)</term>
+                    <term>Timeas Mourmateanos</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Apphion">
+                        <persName type="attested" key="Apphion">
+                            <name nymRef="Ἄπψιον">Ἄπψιον</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Gaeios (padre)">
+                        <persName type="attested" key="Gaeios (padre)">
+                            <name nymRef="Γάειος">Γάειον</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Apellas">
+                        <persName type="attested" key="Apellas">
+                            <name nymRef="Ἀπελλᾶς">Ἀπελλᾶς</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Gaeios (figlio)">
+                        <persName type="attested" key="Gaeios (figlio)">
+                            <name nymRef="Γάειος">Γάειος</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Timeas Mourmateanos">
+                        <persName type="attested" key="Timeas Mourmateanos">
+                            <name nymRef="Τειμέας">Τειμέ-ας</name>
+                            <name nymRef="Μουρματεανός">Μου-ρματε-ανός</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Ἄπψιον τὸν ἑαυτῆς σύνβιον Γάειον κατεειέρωσεν σωτίρῃ Ἑ-
-                    <lb n="2"/>κάτῃ καὶ Ἀπελλᾶς καὶ Γάειος ἐτείμησαν τοὺς ἑαυτῶν γο-
-                    <lb n="3"/>νῖς μν-
-                    <lb n="4"/>ήμης
+                    <lb n="1"/><persName type="attested" key="Apphion"><name nymRef="Ἄπψιον">Ἄπψιον</name></persName> τὸν ἑαυτῆς σύνβιον <persName type="attested" key="Gaeios (padre)"><name nymRef="Γάειος">Γάειον</name></persName> κατεειέρωσεν <persName type="divine" key="Hekate Soteira"><name nymRef="Ἑκάτη">σωτίρῃ Ἑ-
+                    <lb n="2" break="no"/>κάτῃ</name></persName> καὶ <persName type="attested" key="Apellas"><name nymRef="Ἀπελλᾶς">Ἀπελλᾶς</name></persName> καὶ <persName type="attested" key="Gaeios (figlio)"><name nymRef="Γάειος">Γάειος</name></persName> ἐτείμησαν τοὺς ἑαυτῶν γο-
+                    <lb n="3" break="no"/>νῖς μν-
+                    <lb n="4" break="no"/>ήμης
                     <lb n="5"/>χάριν.
-                    <lb n="6"/>Τειμέ-
-                    <lb n="7"/>ας Μου-
-                    <lb n="8"/>ρματε-
-                    <lb n="9"/>ανός.
+                    <lb n="6"/><persName type="attested" key="Timeas Mourmateanos"><name nymRef="Τειμέας">Τειμέ-
+                    <lb n="7" break="no"/>ας</name> <name nymRef="Μουρματεανός">Μου-
+                    <lb n="8" break="no"/>ρματε-
+                    <lb n="9" break="no"/>ανός</name></persName>.
                 </ab>
             </div>
             <div type="apparatus"/>

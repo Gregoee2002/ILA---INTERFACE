@@ -60,15 +60,41 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Ouranios</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Tata figlia di Tatas</term>
+                    <term>Tatas</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Tata figlia di Tatas">
+                        <persName type="attested" key="Tata figlia di Tatas">
+                            <name nymRef="Τάτα">[Τατ]α</name>
+                            <persName type="attested" key="Tatas">
+                                <name type="patronymic" nymRef="Τατάς">Τατάδρος</name>
+                            </persName>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>[Τατ]α Τατάδρος
+                    <lb n="1"/><persName type="attested" key="Tata figlia di Tatas"><name nymRef="Τάτα">[Τατ]α</name> <persName type="attested" key="Tatas"><name type="patronymic" nymRef="Τατάς">Τατάδρος</name></persName></persName>
                     <lb n="2"/>[ὑπ]ὲρ παιδίων
-                    <lb n="3"/>[αὐτ]ῆς Μηνὶ Οὐρα-
-                    <lb n="4"/>[νίῳ εὐχ]ήν.
+                    <lb n="3"/>[αὐτ]ῆς <persName type="divine" key="Men Ouranios"><name nymRef="Μήν">Μηνὶ</name> <rs type="epithet">Οὐρα-
+                    <lb n="4" break="no"/>[νίῳ</rs></persName> εὐχ]ήν.
                 </ab>
             </div>
             <div type="apparatus"/>

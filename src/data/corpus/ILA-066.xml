@@ -60,6 +60,16 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Touites</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+            </textClass>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
@@ -67,9 +77,9 @@
                 <ab>
                     <lb n="1"/>Ἀεζηνο-
                     <lb n="2"/>ί ἐνχώρι-
-                    <lb n="3"/>οι Μηνὶ
-                    <lb n="4"/>Τουιτη-
-                    <lb n="5"/>[ν]ῷ εὐχήν.
+                    <lb n="3"/>οι <persName type="divine" key="Men Touites"><name nymRef="Μήν">Μηνὶ</name>
+                    <lb n="4"/><rs type="epithet">Τουιτη-
+                    <lb n="5" break="no"/>[ν]ῷ</rs></persName> εὐχήν.
                 </ab>
             </div>
             <div type="apparatus"/>

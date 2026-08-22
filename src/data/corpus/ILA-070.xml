@@ -60,14 +60,36 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Kaoulenos</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Agathopous</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Agathopous">
+                        <persName type="attested" key="Agathopous">
+                            <name nymRef="Ἀγαθόπους">Ἀγαθόπο-υς</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Ἀγαθόπο-
-                    <lb n="2"/>υς Καουλη-          Μηνὶ
-                    <lb n="3"/>νῷ εὐχήν.
+                    <lb n="1"/><persName type="attested" key="Agathopous"><name nymRef="Ἀγαθόπους">Ἀγαθόπο-
+                    <lb n="2" break="no"/>υς</name></persName> <persName type="divine" key="Men Kaoulenos"><rs type="epithet">Καουλη-</rs>          <name nymRef="Μήν">Μηνὶ</name>
+                    <lb n="3"/><rs type="epithet">νῷ</rs></persName> εὐχήν.
                 </ab>
             </div>
             <div type="apparatus"/>
