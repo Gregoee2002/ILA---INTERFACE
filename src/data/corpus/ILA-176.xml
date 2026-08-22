@@ -60,15 +60,42 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Hermes Aprios</term>
+                    <term>Zotikos Kointos</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Hermes Aprios">
+                        <persName type="attested" key="Hermes Aprios">
+                            <name nymRef="Ερμής">Ἑρμῆς</name>
+                            <name nymRef="Άπριος">Ἄπριος</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Zotikos Kointos">
+                        <persName type="attested" key="Zotikos Kointos">
+                            <name nymRef="Ζωτικός">Ζωτικοῦ</name>
+                            <name nymRef="Κόϊντος">Κοίντου</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Ἑρμῆς Ἄπριος
-                    <lb n="2"/>με(τὰ) Ζωτικοῦ Κοίν-
-                    <lb n="3"/>του Μηνὶ εὐ-
-                    <lb n="4"/>χήν.
+                    <lb n="1"/><persName type="attested" key="Hermes Aprios"><name nymRef="Ερμής">Ἑρμῆς</name> <name nymRef="Άπριος">Ἄπριος</name></persName>
+                    <lb n="2"/>με(τὰ) <persName type="attested" key="Zotikos Kointos"><name nymRef="Ζωτικός">Ζωτικοῦ</name> <name nymRef="Κόϊντος">Κοίν-
+                    <lb n="3" break="no"/>του</name></persName> <persName type="divine" key="Men"><name nymRef="Μήν">Μηνὶ</name></persName> εὐ-
+                    <lb n="4" break="no"/>χήν.
                 </ab>
             </div>
             <div type="apparatus"/>

@@ -60,13 +60,35 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="onomastica">
+                    <term>Loukios figlio di Poubnouaios</term>
+                    <term>Poubnouaios</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Loukios figlio di Poubnouaios">
+                        <persName type="attested" key="Loukios figlio di Poubnouaios">
+                            <name nymRef="Λούκιος">Λούκιος</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Poubnouaios">
+                        <persName type="attested" key="Poubnouaios">
+                            <name nymRef="Πουβνουαῖος">Πουβνουαῖος</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Λούκιος υἱὸς
-                    <lb n="2"/>Πουβνουαῖος
+                    <lb n="1"/><persName type="attested" key="Loukios figlio di Poubnouaios"><name nymRef="Λούκιος">Λούκιος</name></persName> υἱὸς
+                    <lb n="2"/><persName type="attested" key="Poubnouaios"><name type="patronymic" nymRef="Πουβνουαῖος">Πουβνουαῖος</name></persName>
                     <lb n="3"/>εὐχήν.
                 </ab>
             </div>

@@ -60,13 +60,33 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Hostilia Orestina</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Hostilia Orestina">
+                        <persName type="attested" key="Hostilia Orestina">
+                            <name nymRef="Οστιλία">Ὁστιλία</name>
+                            <name nymRef="Ορεστεῖνα">Ὀρεστεῖνα</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Ὁστιλία Ὀρεστεῖνα μετὰ
-                    <lb n="2"/>τέκνων Μηνὶ εὐχήν.
+                    <lb n="1"/><persName type="attested" key="Hostilia Orestina"><name nymRef="Οστιλία">Ὁστιλία</name> <name nymRef="Ορεστεῖνα">Ὀρεστεῖνα</name></persName> μετὰ
+                    <lb n="2"/>τέκνων <persName type="divine" key="Men"><name nymRef="Μήν">Μηνὶ</name></persName> εὐχήν.
                 </ab>
             </div>
             <div type="apparatus"/>

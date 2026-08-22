@@ -60,36 +60,76 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Askaenos</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Servilia</term>
+                    <term>Loukios</term>
+                    <term>Proklos</term>
+                    <term>Hermas</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Servilia">
+                        <persName type="attested" key="Servilia">
+                            <name nymRef="Σερουιλία">Σερουειλία</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Loukios">
+                        <persName type="attested" key="Loukios">
+                            <name nymRef="Λούκιος">Λου(κίος)</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Proklos">
+                        <persName type="attested" key="Proklos">
+                            <name nymRef="Πρόκλος">Πρόκλο[ς]</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Hermas">
+                        <persName type="attested" key="Hermas">
+                            <name nymRef="Ερμάς">Ἑρμᾶς</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Σερου-
-                    <lb n="2"/>ειλία
-                    <lb n="3"/>Μηνὶ
-                    <lb n="4"/>Ἀσκαη-
-                    <lb n="5"/>νῷ εὐχήν.
-                    <lb n="6"/>Λου(κίος) υἱ-
-                    <lb n="7"/>ος Μ-
-                    <lb n="8"/>ηνὶ Ἀσκ-
-                    <lb n="9"/>αηνῷ
+                    <lb n="1"/><persName type="attested" key="Servilia"><name nymRef="Σερουιλία">Σερου-
+                    <lb n="2" break="no"/>ειλία</name></persName>
+                    <lb n="3"/><persName type="divine" key="Men Askaenos"><name nymRef="Μήν">Μηνὶ</name>
+                    <lb n="4"/><rs type="epithet">Ἀσκαη-
+                    <lb n="5" break="no"/>νῷ</rs></persName> εὐχήν.
+                    <lb n="6"/><persName type="attested" key="Loukios"><name nymRef="Λούκιος">Λου(κίος)</name></persName> υἱ-
+                    <lb n="7" break="no"/>ος <persName type="divine" key="Men Askaenos"><name nymRef="Μήν">Μ-
+                    <lb n="8" break="no"/>ηνὶ</name> <rs type="epithet">Ἀσκ-
+                    <lb n="9" break="no"/>αηνῷ</rs></persName>
                     <lb n="10"/>εὐχήν.
-                    <lb n="11"/>Πρόκλο[ς]
-                    <lb n="12"/>υἱος Μ-
-                    <lb n="13"/>ηνὶ Ἀσκ-
-                    <lb n="14"/>αηνῷ
+                    <lb n="11"/><persName type="attested" key="Proklos"><name nymRef="Πρόκλος">Πρόκλο[ς]</name></persName>
+                    <lb n="12"/>υἱος <persName type="divine" key="Men Askaenos"><name nymRef="Μήν">Μ-
+                    <lb n="13" break="no"/>ηνὶ</name> <rs type="epithet">Ἀσκ-
+                    <lb n="14" break="no"/>αηνῷ</rs></persName>
                     <lb n="15"/>εὐχήν.
-                    <lb n="16"/>Ἑρμᾶς
-                    <lb n="17"/>Μηνὶ Ἀ-
-                    <lb n="18"/>σκαη-
-                    <lb n="19"/>νῷ εὐχ-
-                    <lb n="20"/>ή [ν].
+                    <lb n="16"/><persName type="attested" key="Hermas"><name nymRef="Ερμάς">Ἑρμᾶς</name></persName>
+                    <lb n="17"/><persName type="divine" key="Men Askaenos"><name nymRef="Μήν">Μηνὶ</name> <rs type="epithet">Ἀ-
+                    <lb n="18" break="no"/>σκαη-
+                    <lb n="19" break="no"/>νῷ</rs></persName> εὐχ-
+                    <lb n="20" break="no"/>ή [ν].
                 </ab>
             </div>
             <div type="apparatus"/>
             <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
-            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>"Λου(κίος) υἱός" e "Πρόκλο[ς] υἱος" (r. 6-7, 11-12) non specificano di chi siano figli: non è stato assunto che siano figli di Servilia (prima dedica del gruppo) in assenza di un genitivo esplicito che lo confermi.</p></div>
             <div type="bibliography">
                 <listBibl>
                     <bibl>Lane, CMRDM I 184</bibl>

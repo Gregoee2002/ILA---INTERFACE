@@ -60,19 +60,50 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Askaenos</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Gaios Ouettios Oumbrikianos Maximos</term>
+                    <term>Gaios</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Gaios Ouettios Oumbrikianos Maximos">
+                        <persName type="attested" key="Gaios Ouettios Oumbrikianos Maximos">
+                            <name nymRef="Γάϊος">Γ.</name>
+                            <name nymRef="Οὐέττιος">Οὐέττιος</name>
+                            <name nymRef="Οὐμβρικιανός">Οὐμβρικιανὸς</name>
+                            <name nymRef="Μάξιμος">Μάξιμος</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Gaios (cugino)">
+                        <persName type="attested" key="Gaios (cugino)">
+                            <name nymRef="Γάϊος">Γαίου</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Γ. Οὐέττιος
-                    <lb n="2"/>Οὐμβρικιανὸς
-                    <lb n="3"/>Μάξιμος
-                    <lb n="4"/>μετὰ Γαίου
+                    <lb n="1"/><persName type="attested" key="Gaios Ouettios Oumbrikianos Maximos"><name nymRef="Γάϊος">Γ.</name> <name nymRef="Οὐέττιος">Οὐέττιος</name>
+                    <lb n="2"/><name nymRef="Οὐμβρικιανός">Οὐμβρικιανὸς</name>
+                    <lb n="3"/><name nymRef="Μάξιμος">Μάξιμος</name></persName>
+                    <lb n="4"/>μετὰ <persName type="attested" key="Gaios (cugino)"><name nymRef="Γάϊος">Γαίου</name></persName>
                     <lb n="5"/>ἀνεψιοῦ τεκμο-
-                    <lb n="6"/>ρεύσαντες Μηνὶ
-                    <lb n="7"/>Ἀσκαηνῷ εὐχ-
-                    <lb n="8"/>ήν.
+                    <lb n="6" break="no"/>ρεύσαντες <persName type="divine" key="Men Askaenos"><name nymRef="Μήν">Μηνὶ</name>
+                    <lb n="7"/><rs type="epithet">Ἀσκαηνῷ</rs></persName> εὐχ-
+                    <lb n="8" break="no"/>ήν.
                 </ab>
             </div>
             <div type="apparatus"/>

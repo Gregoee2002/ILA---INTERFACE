@@ -60,12 +60,22 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Askaenos</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+            </textClass>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Ἡ σύνοδο[ς Μ]ηνὶ [Ἀ]σκαηνῷ.
+                    <lb n="1"/>Ἡ σύνοδο[ς] <persName type="divine" key="Men Askaenos"><name nymRef="Μήν">[Μ]ηνὶ</name> <rs type="epithet">[Ἀ]σκαηνῷ</rs></persName>.
                 </ab>
             </div>
             <div type="apparatus"/>

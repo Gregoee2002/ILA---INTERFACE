@@ -60,13 +60,33 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Loukios Attes</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Loukios Attes">
+                        <persName type="attested" key="Loukios Attes">
+                            <name nymRef="Λούκιος">Λούκιος</name>
+                            <name nymRef="Αττής">Ἀττῆος</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Λούκιος Ἀττῆ-
-                    <lb n="2"/>ος Μηνὶ εὐχήν.
+                    <lb n="1"/><persName type="attested" key="Loukios Attes"><name nymRef="Λούκιος">Λούκιος</name> <name nymRef="Αττής">Ἀττῆ-
+                    <lb n="2" break="no"/>ος</name></persName> <persName type="divine" key="Men"><name nymRef="Μήν">Μηνὶ</name></persName> εὐχήν.
                 </ab>
             </div>
             <div type="apparatus"/>

@@ -60,12 +60,31 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Asklepiades</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Asklepiades">
+                        <persName type="attested" key="Asklepiades">
+                            <name nymRef="Ασκληπιάδης">Ἀσκληπιάδης</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Μηνὶ Ἀσκληπιάδης
+                    <lb n="1"/><persName type="divine" key="Men"><name nymRef="Μήν">Μηνὶ</name></persName> <persName type="attested" key="Asklepiades"><name nymRef="Ασκληπιάδης">Ἀσκληπιάδης</name></persName>
                     <lb n="2"/>εὐχήν.
                 </ab>
             </div>
