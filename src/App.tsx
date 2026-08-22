@@ -353,14 +353,17 @@ const DivinityDiagonalList = ({ items, onSelect, searchTerm }: {
                       className="absolute top-0 bottom-0 flex items-center justify-end pr-3"
                       style={{ left: 0, width: Math.max(0, x - 8) }}
                     >
-                      <span className={cn(
-                        "font-serif transition-all duration-200 truncate group-active:text-accent",
-                        isActive ? "text-2xl italic text-accent font-bold"
-                          : match ? "text-lg text-accent font-bold"
-                          : "text-base text-ink/70"
-                      )}>
+                      <motion.span
+                        layoutId={`divname-${d.name}`}
+                        className={cn(
+                          "font-serif transition-all duration-200 truncate group-active:text-accent",
+                          isActive ? "text-2xl italic text-accent font-bold"
+                            : match ? "text-lg text-accent font-bold"
+                            : "text-base text-ink/70"
+                        )}
+                      >
                         {d.name}
-                      </span>
+                      </motion.span>
                     </span>
                     <span
                       className={cn(
@@ -399,10 +402,16 @@ const DivinityDiagonalList = ({ items, onSelect, searchTerm }: {
   );
 };
 
-// Elenco epiteti di una divinità: righe ordinate per frequenza, con barra
-// proporzionale al conteggio. "Vedi tutte" in cima resta l'unico modo di
-// raggiungere le attestazioni senza epiteto.
-const EpithetList = ({ divinity, epithets, onSelectEpithet, onSelectAll }: {
+const EPITHET_TREE_ROW_H = 40;
+
+// Albero genealogico orizzontale: la divinità come radice a sinistra
+// (stesso layoutId della sua voce sulla diagonale, per una transizione
+// fluida invece di un cambio di vista secco), una spina verticale con un
+// ramo orizzontale per ogni epiteto. La colonna dei rami è scrollabile
+// verticalmente e indipendente dalla radice (fissa) — necessario per
+// divinità come Men, che ha decine di epiteti: senza scroll indipendente
+// l'albero diventerebbe altissimo o i nodi illeggibili.
+const EpithetTree = ({ divinity, epithets, onSelectEpithet, onSelectAll }: {
   divinity: { name: string; count: number; regions: number };
   epithets: { name: string; count: number }[];
   onSelectEpithet: (name: string) => void;
@@ -410,6 +419,9 @@ const EpithetList = ({ divinity, epithets, onSelectEpithet, onSelectAll }: {
   key?: string | number;
 }) => {
   const maxCount = Math.max(1, ...epithets.map(e => e.count));
+  const totalHeight = Math.max(epithets.length, 1) * EPITHET_TREE_ROW_H;
+  const SPINE_X = 20;
+
   return (
     <motion.div {...fadeSwap} className="flex-1 flex flex-col overflow-hidden">
       <div className="mb-4 flex items-center gap-3 text-[10px] font-sans font-bold uppercase tracking-widest text-muted">
@@ -420,54 +432,77 @@ const EpithetList = ({ divinity, epithets, onSelectEpithet, onSelectAll }: {
         <span>{epithets.length} {epithets.length === 1 ? 'epiteto' : 'epiteti'} co-occorrenti</span>
       </div>
 
-      <div className="flex-1 overflow-y-auto custom-scrollbar pr-2">
-        <button
-          onClick={onSelectAll}
-          className="w-full text-left group py-4 px-2 flex items-center justify-between border-b-2 border-accent/30 hover:bg-accent/[0.04] transition-colors mb-1"
-        >
-          <span className="text-base font-sans font-bold uppercase tracking-widest text-accent">
-            Vedi tutte le attestazioni di {divinity.name}
-          </span>
-          <span className="flex items-center gap-2 text-xs font-sans font-bold text-muted">
-            {divinity.count}×
-            <ChevronRight className="h-4 w-4 text-accent group-hover:translate-x-0.5 transition-all" />
-          </span>
-        </button>
-
-        <div className="divide-y divide-border/50">
-          {epithets.map((e, i) => (
-            <motion.button
-              key={e.name}
-              onClick={() => onSelectEpithet(e.name)}
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3, delay: Math.min(i, 20) * 0.02, ease: EASE_OUT }}
-              className="w-full text-left group py-3.5 px-2 flex items-center gap-6 hover:bg-accent/[0.04] transition-colors"
+      <div className="flex-1 flex items-center overflow-hidden">
+        {/* Radice: nome della divinità, transizione condivisa con la sua
+            voce sulla diagonale (stesso layoutId) — visivamente "resta" lei
+            mentre il resto della diagonale sfuma via. */}
+        <div className="shrink-0 w-52 flex flex-col items-end pr-5 relative">
+          <button onClick={onSelectAll} className="group text-right">
+            <motion.span
+              layoutId={`divname-${divinity.name}`}
+              className="block text-2xl italic font-bold text-accent font-serif leading-tight group-hover:opacity-80 transition-opacity"
             >
-              <span className="w-44 shrink-0 text-base font-serif italic text-ink group-hover:text-accent transition-colors truncate">
-                {e.name}
-              </span>
-              <div className="flex-1 min-w-0 flex items-center gap-3">
-                <div className="flex-1 h-1.5 bg-border/40 rounded-full overflow-hidden">
-                  <div
-                    className="h-full bg-accent/60 rounded-full transition-all"
-                    style={{ width: `${Math.max(4, (e.count / maxCount) * 100)}%` }}
-                  />
-                </div>
-                <span className="w-10 shrink-0 text-right text-xs font-sans font-bold text-muted tabular-nums">
-                  {e.count}×
-                </span>
-              </div>
-              <ChevronRight className="h-4 w-4 text-border group-hover:text-accent group-hover:translate-x-0.5 transition-all shrink-0" />
-            </motion.button>
-          ))}
+              {divinity.name}
+            </motion.span>
+            <span className="block text-xs font-sans font-bold text-muted mt-1">
+              {divinity.count}× — vedi tutte
+            </span>
+          </button>
+          {/* Ramo di raccordo tra la radice (fissa) e la spina (che scorre
+              nella colonna a destra): resta ancorato al centro verticale. */}
+          <div className="absolute top-1/2 right-0 w-5 border-t border-accent/40" />
         </div>
 
-        {epithets.length === 0 && (
-          <div className="text-center py-12 text-muted/40 text-sm italic">
-            Nessun epiteto co-occorrente per questa divinità nello stesso monumento.
-          </div>
-        )}
+        {/* Colonna dei rami: scrollabile in verticale, indipendente dalla
+            radice — essenziale per Men e le sue decine di epiteti. */}
+        <div className="flex-1 h-full overflow-y-auto custom-scrollbar pl-1">
+          {epithets.length === 0 ? (
+            <div className="h-full flex items-center text-muted/40 text-sm italic">
+              Nessun epiteto co-occorrente per questa divinità nello stesso monumento.
+            </div>
+          ) : (
+            <div className="relative" style={{ height: totalHeight }}>
+              <svg className="absolute inset-0 pointer-events-none" width="100%" height={totalHeight} preserveAspectRatio="none">
+                <line
+                  x1={SPINE_X} y1={EPITHET_TREE_ROW_H / 2}
+                  x2={SPINE_X} y2={(epithets.length - 1) * EPITHET_TREE_ROW_H + EPITHET_TREE_ROW_H / 2}
+                  stroke="var(--border)" strokeWidth={1}
+                />
+                {epithets.map((e, i) => (
+                  <line
+                    key={e.name}
+                    x1={SPINE_X} y1={i * EPITHET_TREE_ROW_H + EPITHET_TREE_ROW_H / 2}
+                    x2={SPINE_X + 20} y2={i * EPITHET_TREE_ROW_H + EPITHET_TREE_ROW_H / 2}
+                    stroke="var(--border)" strokeWidth={1}
+                  />
+                ))}
+              </svg>
+              {epithets.map((e, i) => (
+                <button
+                  key={e.name}
+                  onClick={() => onSelectEpithet(e.name)}
+                  className="group absolute inset-x-0 flex items-center gap-4 hover:bg-accent/[0.04] transition-colors"
+                  style={{ top: i * EPITHET_TREE_ROW_H, height: EPITHET_TREE_ROW_H, paddingLeft: SPINE_X + 28 }}
+                >
+                  <span className="w-40 shrink-0 text-left text-base font-serif italic text-ink group-hover:text-accent transition-colors truncate">
+                    {e.name}
+                  </span>
+                  <div className="flex-1 min-w-0 flex items-center gap-3 pr-4">
+                    <div className="flex-1 max-w-[140px] h-1.5 bg-border/40 rounded-full overflow-hidden">
+                      <div
+                        className="h-full bg-accent/60 rounded-full transition-all"
+                        style={{ width: `${Math.max(4, (e.count / maxCount) * 100)}%` }}
+                      />
+                    </div>
+                    <span className="w-10 shrink-0 text-right text-xs font-sans font-bold text-muted tabular-nums">
+                      {e.count}×
+                    </span>
+                  </div>
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
     </motion.div>
   );
@@ -997,7 +1032,7 @@ function EpithetStats({ monumenti, onSelectMonumento }: { monumenti: Monumento[]
         )}
 
         {activeTab === 'divinita' && selectedDivinity && !selectedEpithet && selectedDivinityStats && (
-          <EpithetList
+          <EpithetTree
             key="divinita-epiteti"
             divinity={selectedDivinityStats}
             epithets={selectedDivinityStats.epiteti}
