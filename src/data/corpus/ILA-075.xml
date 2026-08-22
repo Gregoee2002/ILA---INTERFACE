@@ -60,16 +60,50 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Selmeenos</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Aurelios Papas figlio di Gaios</term>
+                    <term>Gaios (padre)</term>
+                    <term>Gaios Papas (figlio)</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Aurelios Papas figlio di Gaios">
+                        <persName type="attested" key="Aurelios Papas figlio di Gaios">
+                            <name nymRef="Αὐρήλιος">Αὐρ.</name>
+                            <name nymRef="Παπᾶς">Παπᾶς</name>
+                            <persName type="attested" key="Gaios (padre)">
+                                <name type="patronymic" nymRef="Γάιος">Γαίου</name>
+                            </persName>
+                        </persName>
+                    </person>
+                    <person xml:id="Gaios Papas (figlio)">
+                        <persName type="attested" key="Gaios Papas (figlio)">
+                            <name nymRef="Γάιος">Γάιος</name>
+                            <name nymRef="Παπᾶς">Παπᾶς</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Αὐρ. Παπᾶς Γαίου
-                    <lb n="2"/>κὲ Γάιος Παπᾶς ὁ
+                    <lb n="1"/><persName type="attested" key="Aurelios Papas figlio di Gaios"><name nymRef="Αὐρήλιος">Αὐρ.</name> <name nymRef="Παπᾶς">Παπᾶς</name> <persName type="attested" key="Gaios (padre)"><name type="patronymic" nymRef="Γάιος">Γαίου</name></persName></persName>
+                    <lb n="2"/>κὲ <persName type="attested" key="Gaios Papas (figlio)"><name nymRef="Γάιος">Γάιος</name> <name nymRef="Παπᾶς">Παπᾶς</name></persName> ὁ
                     <lb n="3"/>υἱὸς αὐτοῦ ὑπὲ[ρ]
                     <lb n="4"/>[τ]ῆς ἑαυτῶν σω[τη-]
-                    <lb n="5"/>[ρί]ας Μηνὶ Σελμεην[ῷ]
+                    <lb n="5"/>[ρί]ας <persName type="divine" key="Men Selmeenos"><name nymRef="Μήν">Μηνὶ</name> <rs type="epithet">Σελμεην[ῷ]</rs></persName>
                     <lb n="6"/>εὐχήν.
                 </ab>
             </div>

@@ -60,13 +60,23 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Selmenos</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+            </textClass>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
                     <lb n="1"/>[······]αιο[ς]
-                    <lb n="2"/>[Μηνὶ Σε]λμηνῷ
+                    <lb n="2"/><persName type="divine" key="Men Selmenos"><name nymRef="Μήν">[Μηνὶ</name> <rs type="epithet">Σε]λμηνῷ</rs></persName>
                     <lb n="3"/>[εὐ]χήν
                     <lb n="4"/>αρσυ          ιο
                 </ab>

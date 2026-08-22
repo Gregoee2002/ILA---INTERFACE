@@ -60,13 +60,36 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Diogenes figlio di Hermeros</term>
+                    <term>Hermeros</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Diogenes figlio di Hermeros">
+                        <persName type="attested" key="Diogenes figlio di Hermeros">
+                            <name nymRef="Διογένης">[Δι]ογένης</name>
+                            <persName type="attested" key="Hermeros">
+                                <name type="patronymic" nymRef="Ἕρμερως">Ἑρμέρωτος</name>
+                            </persName>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>[Δι]ογένης Ἑρμέρωτος ὑπε[ρ]
-                    <lb n="2"/>ἑαυτοῦ καὶ τέκνων Μηνὶ
+                    <lb n="1"/><persName type="attested" key="Diogenes figlio di Hermeros"><name nymRef="Διογένης">[Δι]ογένης</name> <persName type="attested" key="Hermeros"><name type="patronymic" nymRef="Ἕρμερως">Ἑρμέρωτος</name></persName></persName> ὑπε[ρ]
+                    <lb n="2"/>ἑαυτοῦ καὶ τέκνων <persName type="divine" key="Men"><name nymRef="Μήν">Μηνὶ</name></persName>
                     <lb n="3"/>εὐχήν.
                 </ab>
             </div>

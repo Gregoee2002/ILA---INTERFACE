@@ -60,22 +60,78 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Tolyseus</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Apollonios figlio di Menis</term>
+                    <term>Menis (di Mesanbrios)</term>
+                    <term>Mesanbrios</term>
+                    <term>Aurelios Philiros figlio di Demetrios</term>
+                    <term>Demetrios (di Mikkios)</term>
+                    <term>Mikkios</term>
+                    <term>Aurelios Papes figlio di Midas</term>
+                    <term>Midas</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Apollonios figlio di Menis">
+                        <persName type="attested" key="Apollonios figlio di Menis">
+                            <name nymRef="Ἀπολλώνιος">Ἀπολλώνι-ος</name>
+                            <persName type="attested" key="Menis (di Mesanbrios)">
+                                <name type="patronymic" nymRef="Μήνις">Μήνιδος</name>
+                                <persName type="attested" key="Mesanbrios">
+                                    <name type="patronymic" nymRef="Μεσάνβριος">Μεσάνβριο[ς]</name>
+                                </persName>
+                            </persName>
+                        </persName>
+                    </person>
+                    <person xml:id="Aurelios Philiros figlio di Demetrios">
+                        <persName type="attested" key="Aurelios Philiros figlio di Demetrios">
+                            <name nymRef="Αὐρήλιος">Αὐρ.</name>
+                            <name nymRef="Φίλιρος">Φιλί-ρος</name>
+                            <persName type="attested" key="Demetrios (di Mikkios)">
+                                <name type="patronymic" nymRef="Δημήτριος">Δημητρίου</name>
+                                <persName type="attested" key="Mikkios">
+                                    <name type="patronymic" nymRef="Μίκκιος">[Μ]ικκίου</name>
+                                </persName>
+                            </persName>
+                        </persName>
+                    </person>
+                    <person xml:id="Aurelios Papes figlio di Midas">
+                        <persName type="attested" key="Aurelios Papes figlio di Midas">
+                            <name nymRef="Αὐρήλιος">Αὐρ.</name>
+                            <name nymRef="Πάπης">Πάπης</name>
+                            <persName type="attested" key="Midas">
+                                <name type="patronymic" nymRef="Μίδας">Μίδα</name>
+                            </persName>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Ἀπολλώνι-
-                    <lb n="2"/>ος Μήνιδος γ΄
-                    <lb n="3"/>Μεσάνβριο[ς]
+                    <lb n="1"/><persName type="attested" key="Apollonios figlio di Menis"><name nymRef="Ἀπολλώνιος">Ἀπολλώνι-
+                    <lb n="2" break="no"/>ος</name> <persName type="attested" key="Menis (di Mesanbrios)"><name type="patronymic" nymRef="Μήνις">Μήνιδος</name> γ΄
+                    <lb n="3"/><persName type="attested" key="Mesanbrios"><name type="patronymic" nymRef="Μεσάνβριος">Μεσάνβριο[ς]</name></persName></persName></persName>
                     <lb n="4"/>ἱερατεύων
-                    <lb n="5"/>Μηνὶ Τολησέ-
-                    <lb n="6"/>ων εὐχήν.
-                    <lb n="7"/>Ἔτους ςλσ΄, Αὐρ. Φιλί-
-                    <lb n="8"/>ρος Δημητρίου [Μ]ικ-
-                    <lb n="9"/>κίου ἱεράσατο.
-                    <lb n="10"/>Ἔτους ζλσ΄, Αὐρ. Πάπης
-                    <lb n="11"/>Μίδα ἱεράσατο ἐκ τῶν
+                    <lb n="5"/><persName type="divine" key="Men Tolyseus"><name nymRef="Μήν">Μηνὶ</name> <rs type="epithet">Τολησέ-
+                    <lb n="6" break="no"/>ων</rs></persName> εὐχήν.
+                    <lb n="7"/>Ἔτους ςλσ΄, <persName type="attested" key="Aurelios Philiros figlio di Demetrios"><name nymRef="Αὐρήλιος">Αὐρ.</name> <name nymRef="Φίλιρος">Φιλί-
+                    <lb n="8" break="no"/>ρος</name> <persName type="attested" key="Demetrios (di Mikkios)"><name type="patronymic" nymRef="Δημήτριος">Δημητρίου</name> <persName type="attested" key="Mikkios"><name type="patronymic" nymRef="Μίκκιος">[Μ]ικ-
+                    <lb n="9" break="no"/>κίου</name></persName></persName></persName> ἱεράσατο.
+                    <lb n="10"/>Ἔτους ζλσ΄, <persName type="attested" key="Aurelios Papes figlio di Midas"><name nymRef="Αὐρήλιος">Αὐρ.</name> <name nymRef="Πάπης">Πάπης</name>
+                    <lb n="11"/><persName type="attested" key="Midas"><name type="patronymic" nymRef="Μίδας">Μίδα</name></persName></persName> ἱεράσατο ἐκ τῶν
                     <lb n="12"/>ἰδίων θελίως.
                     <lb n="13"/>ΙΙ Α
                     <lb n="14"/>Ρ ΙΙ ΙΙ ΤΟ Μοδίωνο[ς]

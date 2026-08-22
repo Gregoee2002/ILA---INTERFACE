@@ -60,14 +60,38 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Pykenos</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Lucius Sergius Corinthus</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Lucius Sergius Corinthus">
+                        <persName type="attested" key="Lucius Sergius Corinthus">
+                            <name nymRef="Λούκιος">Λούκιος</name>
+                            <name nymRef="Σέργιος">Σέργι[ος]</name>
+                            <name nymRef="Κόρινθος">Κόρινθος</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Λούκιος Σέργι[ος]
-                    <lb n="2"/>Κόρινθος Μην[ὶ ...]
-                    <lb n="3"/>πυκηνῷ εὐχὴν τὸ[ν]
+                    <lb n="1"/><persName type="attested" key="Lucius Sergius Corinthus"><name nymRef="Λούκιος">Λούκιος</name> <name nymRef="Σέργιος">Σέργι[ος]</name>
+                    <lb n="2"/><name nymRef="Κόρινθος">Κόρινθος</name></persName> <persName type="divine" key="Men Pykenos"><name nymRef="Μήν">Μην[ὶ]</name> ...]
+                    <lb n="3"/><rs type="epithet">πυκηνῷ</rs></persName> εὐχὴν τὸ[ν]
                     <lb n="4"/>τε ναὸν ἐκ τῶν ἰδίων
                     <lb n="5"/>ἐποίησεν, ἔτους
                     <lb n="6"/>ριδ΄.

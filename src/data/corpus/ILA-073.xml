@@ -60,15 +60,41 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Askaenos</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Demosthenes figlio di Diotimos</term>
+                    <term>Diotimos</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Demosthenes figlio di Diotimos">
+                        <persName type="attested" key="Demosthenes figlio di Diotimos">
+                            <name nymRef="Δημοσθένης">Δη-[μοσθέν]ης</name>
+                            <persName type="attested" key="Diotimos">
+                                <name type="patronymic" nymRef="Διότιμος">Διο[τείμου]</name>
+                            </persName>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
                     <lb n="1"/>Ὑπὲρ δήμου Ἀππολη-
-                    <lb n="2"/>νῶν σωτηρίας Μηνὶ
-                    <lb n="3"/>Ἀσκαηνῷ εὐχὴν Δη-
-                    <lb n="4"/>[μοσθέν]ης Διο[τείμου].
+                    <lb n="2"/>νῶν σωτηρίας <persName type="divine" key="Men Askaenos"><name nymRef="Μήν">Μηνὶ</name>
+                    <lb n="3"/><rs type="epithet">Ἀσκαηνῷ</rs></persName> εὐχὴν <persName type="attested" key="Demosthenes figlio di Diotimos"><name nymRef="Δημοσθένης">Δη-
+                    <lb n="4" break="no"/>[μοσθέν]ης</name> <persName type="attested" key="Diotimos"><name type="patronymic" nymRef="Διότιμος">Διο[τείμου]</name></persName></persName>.
                 </ab>
             </div>
             <div type="apparatus"/>

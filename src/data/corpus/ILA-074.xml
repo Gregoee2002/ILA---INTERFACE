@@ -60,14 +60,42 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Askaenos</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Petronios</term>
+                    <term>Appas figlio di Petronios</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Petronios">
+                        <persName type="attested" key="Petronios">
+                            <name nymRef="Πετρώνιος">[Πετ]ρώνιος</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Appas figlio di Petronios">
+                        <persName type="attested" key="Appas figlio di Petronios">
+                            <name nymRef="Ἄππας">Ἄππας</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>[Πετ]ρώνιος
-                    <lb n="2"/>[····]εὺς Ἄππας ὑε[ι-]
-                    <lb n="3"/>[ὸς αὐτοῦ Μ]ηνὶ Ἀσκαηνῷ
+                    <lb n="1"/><persName type="attested" key="Petronios"><name nymRef="Πετρώνιος">[Πετ]ρώνιος</name></persName>
+                    <lb n="2"/>[····]εὺς <persName type="attested" key="Appas figlio di Petronios"><name nymRef="Ἄππας">Ἄππας</name></persName> ὑε[ι-]
+                    <lb n="3"/>[ὸς αὐτοῦ <persName type="divine" key="Men Askaenos"><name nymRef="Μήν">Μ]ηνὶ</name> <rs type="epithet">Ἀσκαηνῷ</rs></persName>
                     <lb n="4"/>[εὐχ]ήν.
                 </ab>
             </div>

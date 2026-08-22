@@ -60,13 +60,20 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+            </textClass>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
                     <lb n="1"/>[ὁ δῆ]μος Σελμηνῶν
-                    <lb n="2"/>[Μ]ηνὶ εὐχήν.
+                    <lb n="2"/><persName type="divine" key="Men">[Μ]ηνὶ</persName> εὐχήν.
                 </ab>
             </div>
             <div type="apparatus"/>
