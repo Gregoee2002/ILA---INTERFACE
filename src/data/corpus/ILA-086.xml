@@ -68,6 +68,35 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Askainos</term>
+                    <term>Agoraios</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Hekate</term>
+                    <term>Men</term>
+                    <term>Hermes</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Kallikrates figlio di Molossos</term>
+                    <term>Molossos</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Kallikrates figlio di Molossos">
+                        <persName type="attested" key="Kallikrates figlio di Molossos">
+                            <name nymRef="Καλλικράτης">Καλλικράτης</name>
+                            <persName type="attested" key="Molossos">
+                                <name type="patronymic" nymRef="Μόλοσσος">Μολοσσοῦ</name>
+                            </persName>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
@@ -78,7 +107,7 @@
                     <lb n="3"/>ἕκαστον φιλανθρώπως καὶ πλεῖσ-
                     <lb n="4"/>τας ἐγγύας ὑπὲρ πολλῶν ἐκτε[ί-]
                     <lb n="5"/>σαντα καὶ ἱερεύσαντα πρὸ πό-
-                    <lb n="6"/>λεως τῆς Ἑκάτης ὁσίως καὶ
+                    <lb n="6"/>λεως τῆς <persName type="divine" key="Hekate"><name nymRef="Ἑκάτη">Ἑκάτης</name></persName> ὁσίως καὶ
                     <lb n="7"/>εὐσεβῶς. Συνεχωρήθη αὐτῷ
                     <lb n="8"/>καὶ ἐνταφὴν ἐν τῷ γυμνασίῳ,
                     <lb n="9"/>δίδοσθαι δὲ αὐτῷ καὶ ἀπὸ
@@ -86,8 +115,8 @@
                     <lb n="11"/>ἐξεῖναι δὲ αὐτῷ καὶ τοὺς στε-
                     <lb n="12"/>φάνους φορεῖν οἷς ἐστεφανώ-
                     <lb n="13"/>ται ὅταν βούληται.
-                    <lb n="14"/>Καλλικράτης Μολοσσοῦ ἱερεὺς
-                    <lb n="15"/>Μηνὸς Ἀσκαινοῦ καὶ Ἑρμοῦ Ἀγοραίου
+                    <lb n="14"/><persName type="attested" key="Kallikrates figlio di Molossos"><name nymRef="Καλλικράτης">Καλλικράτης</name> <persName type="attested" key="Molossos"><name type="patronymic" nymRef="Μόλοσσος">Μολοσσοῦ</name></persName></persName> ἱερεὺς
+                    <lb n="15"/><persName type="divine" key="Men Askainos"><name nymRef="Μήν">Μηνὸς</name> <rs type="epithet">Ἀσκαινοῦ</rs></persName> καὶ <persName type="divine" key="Hermes Agoraios"><name nymRef="Ἑρμῆς">Ἑρμοῦ</name> <rs type="epithet">Ἀγοραίου</rs></persName>
                     <lb n="16"/>τὰς τῶν προπατόρων τιμὰς
                     <lb n="17"/>ἐπισκευάσας ἀποκαθέστησεν.
                 </ab>

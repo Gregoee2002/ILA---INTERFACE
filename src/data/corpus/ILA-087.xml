@@ -60,14 +60,43 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Askainos</term>
+                    <term>Agoraios</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Herakles</term>
+                    <term>Men</term>
+                    <term>Hermes</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Kallikrates figlio di Molossos</term>
+                    <term>Molossos</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Kallikrates figlio di Molossos">
+                        <persName type="attested" key="Kallikrates figlio di Molossos">
+                            <name nymRef="Καλλικράτης">Καλλικράτης</name>
+                            <persName type="attested" key="Molossos">
+                                <name type="patronymic" nymRef="Μόλοσσος">Μολο[σσοῦ]</name>
+                            </persName>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Ἡρακλεῖ καὶ τῷ [δή]μ[ῳ] [τ]ὴν [τρά]πεζαν
-                    <lb n="2"/>Καλλικράτης Μολο[σσοῦ ἱε]ρ[εὺς] Μηνὸς
-                    <lb n="3"/>Ἀ[σκ]αινοῦ καὶ Ἑρμοῦ [Ἀγο]ραίου
+                    <lb n="1"/><persName type="divine" key="Herakles"><name nymRef="Ἡρακλῆς">Ἡρακλεῖ</name></persName> καὶ τῷ [δή]μ[ῳ] [τ]ὴν [τρά]πεζαν
+                    <lb n="2"/><persName type="attested" key="Kallikrates figlio di Molossos"><name nymRef="Καλλικράτης">Καλλικράτης</name> <persName type="attested" key="Molossos"><name type="patronymic" nymRef="Μόλοσσος">Μολο[σσοῦ]</name></persName></persName> ἱε]ρ[εὺς] <persName type="divine" key="Men Askainos"><name nymRef="Μήν">Μηνὸς</name>
+                    <lb n="3"/><rs type="epithet">Ἀ[σκ]αινοῦ</rs></persName> καὶ <persName type="divine" key="Hermes Agoraios"><name nymRef="Ἑρμῆς">Ἑρμοῦ</name> <rs type="epithet">[Ἀγο]ραίου</rs></persName>
                 </ab>
             </div>
             <div type="apparatus"/>

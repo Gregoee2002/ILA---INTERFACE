@@ -60,13 +60,36 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Appas figlio di Alexandros</term>
+                    <term>Alexandros</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Appas figlio di Alexandros">
+                        <persName type="attested" key="Appas figlio di Alexandros">
+                            <name nymRef="Ἄππας">Ἄππας</name>
+                            <persName type="attested" key="Alexandros">
+                                <name type="patronymic" nymRef="Ἀλέξανδρος">Ἀλεξάνδρο-υ</name>
+                            </persName>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Ἄππας Ἀλεξάνδρο-
-                    <lb n="2"/>υ Μηνὶ εὐχήν.
+                    <lb n="1"/><persName type="attested" key="Appas figlio di Alexandros"><name nymRef="Ἄππας">Ἄππας</name> <persName type="attested" key="Alexandros"><name type="patronymic" nymRef="Ἀλέξανδρος">Ἀλεξάνδρο-
+                    <lb n="2" break="no"/>υ</name></persName></persName> <persName type="divine" key="Men"><name nymRef="Μήν">Μηνὶ</name></persName> εὐχήν.
                 </ab>
             </div>
             <div type="apparatus"/>

@@ -60,14 +60,37 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Pylades figlio di Diomas</term>
+                    <term>Diomas</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Pylades figlio di Diomas">
+                        <persName type="attested" key="Pylades figlio di Diomas">
+                            <name nymRef="Πυλάδης">Πυλάδης</name>
+                            <persName type="attested" key="Diomas">
+                                <name type="patronymic" nymRef="Διόμας">Διόμα</name>
+                            </persName>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Πυλάδης
-                    <lb n="2"/>Διόμα
-                    <lb n="3"/>Μηνὶ
+                    <lb n="1"/><persName type="attested" key="Pylades figlio di Diomas"><name nymRef="Πυλάδης">Πυλάδης</name>
+                    <lb n="2"/><persName type="attested" key="Diomas"><name type="patronymic" nymRef="Διόμας">Διόμα</name></persName></persName>
+                    <lb n="3"/><persName type="divine" key="Men"><name nymRef="Μήν">Μηνὶ</name></persName>
                     <lb n="4"/>εὐχήν.
                 </ab>
             </div>

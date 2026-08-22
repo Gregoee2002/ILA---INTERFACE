@@ -60,15 +60,52 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Artemon figlio di Ailios</term>
+                    <term>Ailios</term>
+                    <term>Rhodon figlio di Neogos</term>
+                    <term>Neogos (di Sosos)</term>
+                    <term>Sosos</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Artemon figlio di Ailios">
+                        <persName type="attested" key="Artemon figlio di Ailios">
+                            <name nymRef="Ἀρτέμων">[Ἀρτέ]μων</name>
+                            <persName type="attested" key="Ailios">
+                                <name type="patronymic" nymRef="Αἴλιος">Αἰλίο[υ]</name>
+                            </persName>
+                        </persName>
+                    </person>
+                    <person xml:id="Rhodon figlio di Neogos">
+                        <persName type="attested" key="Rhodon figlio di Neogos">
+                            <name nymRef="Ῥόδων">[Ῥό]δων</name>
+                            <persName type="attested" key="Neogos (di Sosos)">
+                                <name type="patronymic" nymRef="Νέωγος">Νεωγ[ος]</name>
+                                <persName type="attested" key="Sosos">
+                                    <name type="patronymic" nymRef="Σῶσος">Σώσου</name>
+                                </persName>
+                            </persName>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>[Ἀρτέ]μων Αἰλίο[υ] Μυ[.............]
+                    <lb n="1"/><persName type="attested" key="Artemon figlio di Ailios"><name nymRef="Ἀρτέμων">[Ἀρτέ]μων</name> <persName type="attested" key="Ailios"><name type="patronymic" nymRef="Αἴλιος">Αἰλίο[υ]</name></persName></persName> Μυ[.............]
                     <lb n="2"/>ἠργάσετο
-                    <lb n="3"/>[Ῥό]δων Νεωγ[ος] Σώσου, παρ[ε]-
-                    <lb n="4"/>δρος τοῦ Μηνὸς κλεί-
+                    <lb n="3"/><persName type="attested" key="Rhodon figlio di Neogos"><name nymRef="Ῥόδων">[Ῥό]δων</name> <persName type="attested" key="Neogos (di Sosos)"><name type="patronymic" nymRef="Νέωγος">Νεωγ[ος]</name> <persName type="attested" key="Sosos"><name type="patronymic" nymRef="Σῶσος">Σώσου</name></persName></persName></persName>, παρ[ε]-
+                    <lb n="4" break="no"/>δρος τοῦ <persName type="divine" key="Men"><name nymRef="Μήν">Μηνὸς</name></persName> κλεί-
                     <lb n="5"/>νας δύο σὺν καταρτισμῷ
                     <lb n="6"/>καὶ τραπέζας δύο
                     <lb n="7"/>[ἀ]νακλιτήρια τέσσερα
