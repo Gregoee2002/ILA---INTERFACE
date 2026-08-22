@@ -60,14 +60,44 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Artemidorou</term>
+                    <term>Axiottenos</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Epios</term>
+                    <term>Tiberios Philokalos</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Epios">
+                        <persName type="attested" key="Epios">
+                            <name nymRef="Ἤπιος">Ἥπιος</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Tiberios Philokalos">
+                        <persName type="attested" key="Tiberios Philokalos">
+                            <name nymRef="Τιβέριος">Τ[ι]βερίου</name>
+                            <name nymRef="Φιλόκαλος">Φιλοκάλου</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
                     <lb n="1"/>Ἔτους σζ΄, μη(νὸς) Ξανδικοῦ βι΄, κατὰ ἐπιταγὴν
-                    <lb n="2"/>Μηνὸς Ἀρτεμιδώρου
-                    <lb n="3"/>Ἀξιοττηνοῦ, Ἥπιος Τ[ι]βερίου Φιλοκάλου δοῦλος ὑπὲρ ἑαυτοῦ καὶ
+                    <lb n="2"/><persName type="divine" key="Men Artemidorou Axiottenos"><name nymRef="Μήν">Μηνὸς</name> <rs type="epithet">Ἀρτεμιδώρου</rs>
+                    <lb n="3"/><rs type="epithet">Ἀξιοττηνοῦ</rs></persName>, <persName type="attested" key="Epios"><name nymRef="Ἤπιος">Ἥπιος</name></persName> <persName type="attested" key="Tiberios Philokalos"><name nymRef="Τιβέριος">Τ[ι]βερίου</name> <name nymRef="Φιλόκαλος">Φιλοκάλου</name></persName> δοῦλος ὑπὲρ ἑαυτοῦ καὶ
                     <lb n="4"/>τῶν τέκνων ἀνέθηκεν.
                 </ab>
             </div>

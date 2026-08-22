@@ -60,15 +60,47 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Axiottenos</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Elpis figlia di Andronikos</term>
+                    <term>Andronikos</term>
+                    <term>Epikrates</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Elpis figlia di Andronikos">
+                        <persName type="attested" key="Elpis figlia di Andronikos">
+                            <name nymRef="Ἐλπίς">Ἐλπὶς</name>
+                            <persName type="attested" key="Andronikos">
+                                <name type="patronymic" nymRef="Ἀνδρόνικος">Ἀνδρονίκο[υ]</name>
+                            </persName>
+                        </persName>
+                    </person>
+                    <person xml:id="Epikrates">
+                        <persName type="attested" key="Epikrates">
+                            <name nymRef="Ἐπικράτης">Ἐπικρ[ά-][το]υ</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>[Ἀξι]ο[τη]ν[ῷ] ἐ[ξ] Ἐπικρ[ά-]
-                    <lb n="2"/>[το]υ Ἐλπὶς Ἀνδρονίκο[υ]
+                    <lb n="1"/><persName type="divine" key="Men Axiottenos">[Ἀξι]ο[τη]ν[ῷ]</persName> ἐ[ξ] <persName type="attested" key="Epikrates"><name nymRef="Ἐπικράτης">Ἐπικρ[ά-]
+                    <lb n="2" break="no"/>[το]υ</name></persName> <persName type="attested" key="Elpis figlia di Andronikos"><name nymRef="Ἐλπίς">Ἐλπὶς</name> <persName type="attested" key="Andronikos"><name type="patronymic" nymRef="Ἀνδρόνικος">Ἀνδρονίκο[υ]</name></persName></persName>
                     <lb n="3"/>εὐξαμένη ὑπὲρ τοῦ ἡμι-
-                    <lb n="4"/>όνου εὐχήν.
+                    <lb n="4" break="no"/>όνου εὐχήν.
                 </ab>
             </div>
             <div type="apparatus"/>

@@ -60,23 +60,129 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Tiamos</term>
+                    <term>Petraeites</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Meter</term>
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Ioulianos</term>
+                    <term>Damas (1)</term>
+                    <term>Euschemon</term>
+                    <term>Apphion</term>
+                    <term>Apphys</term>
+                    <term>Markos (1)</term>
+                    <term>Poplios</term>
+                    <term>Sekoundos</term>
+                    <term>Protoktetos</term>
+                    <term>Hermokrates (1)</term>
+                    <term>Metrodoros</term>
+                    <term>Damas (2)</term>
+                    <term>Apphias (1)</term>
+                    <term>Hermogenes (1)</term>
+                    <term>Damas (3)</term>
+                    <term>Menophilos</term>
+                    <term>Apollonios (1)</term>
+                    <term>Heraïs</term>
+                    <term>Hermokrates (2)</term>
+                    <term>Apollonios (2)</term>
+                    <term>Glykon</term>
+                    <term>Apollonios (3)</term>
+                    <term>Ammion</term>
+                    <term>Tryphon</term>
+                    <term>Meltine (1)</term>
+                    <term>Hermogenes (2)</term>
+                    <term>Papias</term>
+                    <term>Hermogenes (3)</term>
+                    <term>Apphias (2)</term>
+                    <term>Asklas</term>
+                    <term>Meltine (2)</term>
+                    <term>Hermogenes (4)</term>
+                    <term>Neikomachos</term>
+                    <term>Peia</term>
+                    <term>Markos (2)</term>
+                    <term>Tyche</term>
+                    <term>Apellas</term>
+                    <term>Alexandros</term>
+                    <term>Meltine (3)</term>
+                    <term>Sostratos</term>
+                    <term>Neikias</term>
+                    <term>Ioulianeē</term>
+                    <term>Metrophanes</term>
+                    <term>Athenaïs</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Ioulianos"><persName type="attested" key="Ioulianos"><name nymRef="Ἰουλιανός">Ἰουλιανός</name></persName></person>
+                    <person xml:id="Damas (1)"><persName type="attested" key="Damas (1)"><name nymRef="Δάμας">Δάμας</name></persName></person>
+                    <person xml:id="Euschemon"><persName type="attested" key="Euschemon"><name nymRef="Εὐσχήμων">Εὐσχήμων</name></persName></person>
+                    <person xml:id="Apphion"><persName type="attested" key="Apphion"><name nymRef="Ἄπφιον">Ἄπφιον</name></persName></person>
+                    <person xml:id="Apphys"><persName type="attested" key="Apphys"><name nymRef="Ἄπφυς">Ἄπφυς</name></persName></person>
+                    <person xml:id="Markos (1)"><persName type="attested" key="Markos (1)"><name nymRef="Μᾶρκος">Μάρκος</name></persName></person>
+                    <person xml:id="Poplios"><persName type="attested" key="Poplios"><name nymRef="Πόπλιος">Πόπλιος</name></persName></person>
+                    <person xml:id="Sekoundos"><persName type="attested" key="Sekoundos"><name nymRef="Σεκοῦνδος">Σεκοῦνδος</name></persName></person>
+                    <person xml:id="Protoktetos"><persName type="attested" key="Protoktetos"><name nymRef="Πρωτόκτητος">Πρωτόκτητος</name></persName></person>
+                    <person xml:id="Hermokrates (1)"><persName type="attested" key="Hermokrates (1)"><name nymRef="Ἑρμοκράτης">Ἑρμοκράτης</name></persName></person>
+                    <person xml:id="Metrodoros"><persName type="attested" key="Metrodoros"><name nymRef="Μητρόδωρος">Μητρόδωρος</name></persName></person>
+                    <person xml:id="Damas (2)"><persName type="attested" key="Damas (2)"><name nymRef="Δάμας">Δάμας</name></persName></person>
+                    <person xml:id="Apphias (1)"><persName type="attested" key="Apphias (1)"><name nymRef="Ἀπφίας">Ἀπφίας</name></persName></person>
+                    <person xml:id="Hermogenes (1)"><persName type="attested" key="Hermogenes (1)"><name nymRef="Ἑρμογένης">Ἑρμογένης</name></persName></person>
+                    <person xml:id="Damas (3)"><persName type="attested" key="Damas (3)"><name nymRef="Δάμας">Δάμας</name></persName></person>
+                    <person xml:id="Menophilos"><persName type="attested" key="Menophilos"><name nymRef="Μηνόφιλος">Μηνόφιλος</name></persName></person>
+                    <person xml:id="Apollonios (1)"><persName type="attested" key="Apollonios (1)"><name nymRef="Ἀπολλώνιος">Ἀπολλώνιος</name></persName></person>
+                    <person xml:id="Heraïs"><persName type="attested" key="Heraïs"><name nymRef="Ἡραΐς">Ἡραΐς</name></persName></person>
+                    <person xml:id="Hermokrates (2)"><persName type="attested" key="Hermokrates (2)"><name nymRef="Ἑρμοκράτης">Ἑρμοκράτης</name></persName></person>
+                    <person xml:id="Apollonios (2)"><persName type="attested" key="Apollonios (2)"><name nymRef="Ἀπολλώνιος">Ἀπολλώνιος</name></persName></person>
+                    <person xml:id="Glykon"><persName type="attested" key="Glykon"><name nymRef="Γλύκων">Γλύκων</name></persName></person>
+                    <person xml:id="Apollonios (3)"><persName type="attested" key="Apollonios (3)"><name nymRef="Ἀπολλώνιος">Ἀπολλώνιος</name></persName></person>
+                    <person xml:id="Ammion"><persName type="attested" key="Ammion"><name nymRef="Ἄμμιον">Ἄμμιον</name></persName></person>
+                    <person xml:id="Tryphon"><persName type="attested" key="Tryphon"><name nymRef="Τρύφων">Τρύφων</name></persName></person>
+                    <person xml:id="Meltine (1)"><persName type="attested" key="Meltine (1)"><name nymRef="Μελτίνη">Μελτίνη</name></persName></person>
+                    <person xml:id="Hermogenes (2)"><persName type="attested" key="Hermogenes (2)"><name nymRef="Ἑρμογένης">Ἑρμογένης</name></persName></person>
+                    <person xml:id="Papias"><persName type="attested" key="Papias"><name nymRef="Παπίας">Παπίας</name></persName></person>
+                    <person xml:id="Hermogenes (3)"><persName type="attested" key="Hermogenes (3)"><name nymRef="Ἑρμογένης">Ἑρμογένης</name></persName></person>
+                    <person xml:id="Apphias (2)"><persName type="attested" key="Apphias (2)"><name nymRef="Ἀπφίας">Ἀπφίας</name></persName></person>
+                    <person xml:id="Asklas"><persName type="attested" key="Asklas"><name nymRef="Ἀσκλᾶς">Ἀσκλᾶς</name></persName></person>
+                    <person xml:id="Meltine (2)"><persName type="attested" key="Meltine (2)"><name nymRef="Μελτίνη">Μελτίνη</name></persName></person>
+                    <person xml:id="Hermogenes (4)"><persName type="attested" key="Hermogenes (4)"><name nymRef="Ἑρμογένης">Ἑρμογενής</name></persName></person>
+                    <person xml:id="Neikomachos"><persName type="attested" key="Neikomachos"><name nymRef="Νεικόμαχος">Νεικόμαχος</name></persName></person>
+                    <person xml:id="Peia"><persName type="attested" key="Peia"><name nymRef="Πεία">Πεία</name></persName></person>
+                    <person xml:id="Markos (2)"><persName type="attested" key="Markos (2)"><name nymRef="Μᾶρκος">Μάρκος</name></persName></person>
+                    <person xml:id="Tyche"><persName type="attested" key="Tyche"><name nymRef="Τύχη">Τύχη</name></persName></person>
+                    <person xml:id="Apellas"><persName type="attested" key="Apellas"><name nymRef="Ἀπελλᾶς">Ἀπελλᾶς</name></persName></person>
+                    <person xml:id="Alexandros"><persName type="attested" key="Alexandros"><name nymRef="Ἀλέξανδρος">Ἀλεξανδρος</name></persName></person>
+                    <person xml:id="Meltine (3)"><persName type="attested" key="Meltine (3)"><name nymRef="Μελτίνη">Μελτίνη</name></persName></person>
+                    <person xml:id="Sostratos"><persName type="attested" key="Sostratos"><name nymRef="Σώστρατος">Σωστράτος</name></persName></person>
+                    <person xml:id="Neikias"><persName type="attested" key="Neikias"><name nymRef="Νεικίας">Νεικίας</name></persName></person>
+                    <person xml:id="Ioulianeē"><persName type="attested" key="Ioulianeē"><name nymRef="Ἰουλιανή">Ἰουλιανή</name></persName></person>
+                    <person xml:id="Metrophanes"><persName type="attested" key="Metrophanes"><name nymRef="Μητροφάνης">Μητροφάνης</name></persName></person>
+                    <person xml:id="Athenaïs"><persName type="attested" key="Athenaïs"><name nymRef="Ἀθηναΐς">Ἀθηναΐς</name></persName></person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>[Ἔτ]ους σμς΄, ἀνέθηκαν οἱ Κα[τ]αλουστικοὶ Μητρ[ός 2-3]
-                    <lb n="2"/>[2-3] καὶ Μηνὸς Τιάμου καὶ Μηνὸς Πετραείτου τὸ [ἄγαλ-]
-                    <lb n="3"/>μα τοῦ Διονύσου.
-                    <lb n="4"/>Ἰουλιανός, Δάμας, Εὐσχήμων, Ἄπφιον, Ἄπφυς, Μάρ-
-                    <lb n="5"/>κος, Πόπλιος, Σεκοῦνδος, Πρωτόκτητος, Ἑρμοκράτης,
-                    <lb n="6"/>Μητρόδωρος, Δάμας, Ἀπφίας, Ἑρμογένης, Δάμας, Μη-
-                    <lb n="7"/>νόφιλος, Ἀπολλώνιος, Ἡραΐς, Ἑρμοκράτης, Ἀπολλώνιος, Γλύ-
-                    <lb n="8"/>κων, Ἀπολλώνιος, Ἄμμιον, Τρύφων, Μελτίνη, Ἑρμογένης,
-                    <lb n="9"/>Παπίας, Ἑρμογένης, Ἀπφίας, Ἀσκλᾶς, Μελτίνη, Ἑρμογε-
-                    <lb n="10"/>νής, Νεικόμαχος, Πεία, Μάρκος, Τύχη, Ἀπελλᾶς, Ἀλε-
-                    <lb n="11"/>ξανδρος, Μελτίνη, Σωστράτος, Νεικίας, Ἰουλιανή,
-                    <lb n="12"/>Μητροφάνης, Ἀθηναΐς,
+                    <lb n="1"/>[Ἔτ]ους σμς΄, ἀνέθηκαν οἱ Κα[τ]αλουστικοὶ <persName type="divine" key="Meter"><name nymRef="Μήτηρ">Μητρ[ός</name> 2-3]</persName>
+                    <lb n="2"/>[2-3] καὶ <persName type="divine" key="Men Tiamos"><name nymRef="Μήν">Μηνὸς</name> <rs type="epithet">Τιάμου</rs></persName> καὶ <persName type="divine" key="Men Petraeites"><name nymRef="Μήν">Μηνὸς</name> <rs type="epithet">Πετραείτου</rs></persName> τὸ [ἄγαλ-]
+                    <lb n="3" break="no"/>μα τοῦ Διονύσου.
+                    <lb n="4"/><persName type="attested" key="Ioulianos"><name nymRef="Ἰουλιανός">Ἰουλιανός</name></persName>, <persName type="attested" key="Damas (1)"><name nymRef="Δάμας">Δάμας</name></persName>, <persName type="attested" key="Euschemon"><name nymRef="Εὐσχήμων">Εὐσχήμων</name></persName>, <persName type="attested" key="Apphion"><name nymRef="Ἄπφιον">Ἄπφιον</name></persName>, <persName type="attested" key="Apphys"><name nymRef="Ἄπφυς">Ἄπφυς</name></persName>, <persName type="attested" key="Markos (1)"><name nymRef="Μᾶρκος">Μάρ-
+                    <lb n="5" break="no"/>κος</name></persName>, <persName type="attested" key="Poplios"><name nymRef="Πόπλιος">Πόπλιος</name></persName>, <persName type="attested" key="Sekoundos"><name nymRef="Σεκοῦνδος">Σεκοῦνδος</name></persName>, <persName type="attested" key="Protoktetos"><name nymRef="Πρωτόκτητος">Πρωτόκτητος</name></persName>, <persName type="attested" key="Hermokrates (1)"><name nymRef="Ἑρμοκράτης">Ἑρμοκράτης</name></persName>,
+                    <lb n="6"/><persName type="attested" key="Metrodoros"><name nymRef="Μητρόδωρος">Μητρόδωρος</name></persName>, <persName type="attested" key="Damas (2)"><name nymRef="Δάμας">Δάμας</name></persName>, <persName type="attested" key="Apphias (1)"><name nymRef="Ἀπφίας">Ἀπφίας</name></persName>, <persName type="attested" key="Hermogenes (1)"><name nymRef="Ἑρμογένης">Ἑρμογένης</name></persName>, <persName type="attested" key="Damas (3)"><name nymRef="Δάμας">Δάμας</name></persName>, <persName type="attested" key="Menophilos"><name nymRef="Μηνόφιλος">Μη-
+                    <lb n="7" break="no"/>νόφιλος</name></persName>, <persName type="attested" key="Apollonios (1)"><name nymRef="Ἀπολλώνιος">Ἀπολλώνιος</name></persName>, <persName type="attested" key="Heraïs"><name nymRef="Ἡραΐς">Ἡραΐς</name></persName>, <persName type="attested" key="Hermokrates (2)"><name nymRef="Ἑρμοκράτης">Ἑρμοκράτης</name></persName>, <persName type="attested" key="Apollonios (2)"><name nymRef="Ἀπολλώνιος">Ἀπολλώνιος</name></persName>, <persName type="attested" key="Glykon"><name nymRef="Γλύκων">Γλύ-
+                    <lb n="8" break="no"/>κων</name></persName>, <persName type="attested" key="Apollonios (3)"><name nymRef="Ἀπολλώνιος">Ἀπολλώνιος</name></persName>, <persName type="attested" key="Ammion"><name nymRef="Ἄμμιον">Ἄμμιον</name></persName>, <persName type="attested" key="Tryphon"><name nymRef="Τρύφων">Τρύφων</name></persName>, <persName type="attested" key="Meltine (1)"><name nymRef="Μελτίνη">Μελτίνη</name></persName>, <persName type="attested" key="Hermogenes (2)"><name nymRef="Ἑρμογένης">Ἑρμογένης</name></persName>,
+                    <lb n="9"/><persName type="attested" key="Papias"><name nymRef="Παπίας">Παπίας</name></persName>, <persName type="attested" key="Hermogenes (3)"><name nymRef="Ἑρμογένης">Ἑρμογένης</name></persName>, <persName type="attested" key="Apphias (2)"><name nymRef="Ἀπφίας">Ἀπφίας</name></persName>, <persName type="attested" key="Asklas"><name nymRef="Ἀσκλᾶς">Ἀσκλᾶς</name></persName>, <persName type="attested" key="Meltine (2)"><name nymRef="Μελτίνη">Μελτίνη</name></persName>, <persName type="attested" key="Hermogenes (4)"><name nymRef="Ἑρμογένης">Ἑρμογε-
+                    <lb n="10" break="no"/>νής</name></persName>, <persName type="attested" key="Neikomachos"><name nymRef="Νεικόμαχος">Νεικόμαχος</name></persName>, <persName type="attested" key="Peia"><name nymRef="Πεία">Πεία</name></persName>, <persName type="attested" key="Markos (2)"><name nymRef="Μᾶρκος">Μάρκος</name></persName>, <persName type="attested" key="Tyche"><name nymRef="Τύχη">Τύχη</name></persName>, <persName type="attested" key="Apellas"><name nymRef="Ἀπελλᾶς">Ἀπελλᾶς</name></persName>, <persName type="attested" key="Alexandros"><name nymRef="Ἀλέξανδρος">Ἀλε-
+                    <lb n="11" break="no"/>ξανδρος</name></persName>, <persName type="attested" key="Meltine (3)"><name nymRef="Μελτίνη">Μελτίνη</name></persName>, <persName type="attested" key="Sostratos"><name nymRef="Σώστρατος">Σωστράτος</name></persName>, <persName type="attested" key="Neikias"><name nymRef="Νεικίας">Νεικίας</name></persName>, <persName type="attested" key="Ioulianeē"><name nymRef="Ἰουλιανή">Ἰουλιανή</name></persName>,
+                    <lb n="12"/><persName type="attested" key="Metrophanes"><name nymRef="Μητροφάνης">Μητροφάνης</name></persName>, <persName type="attested" key="Athenaïs"><name nymRef="Ἀθηναΐς">Ἀθηναΐς</name></persName>,
                 </ab>
             </div>
             <div type="apparatus"/>

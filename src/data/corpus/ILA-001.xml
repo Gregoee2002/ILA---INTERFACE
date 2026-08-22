@@ -63,15 +63,40 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Philetos</term>
+                    <term>Charidemos</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Philetos">
+                        <persName type="attested" key="Philetos">
+                            <name nymRef="Φιλήτος">Φιλήτος</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Charidemos">
+                        <persName type="attested" key="Charidemos">
+                            <name nymRef="Χαρίδημος">Χαριδήμου</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Φιλήτος ὁ παρὰ
-                    <lb n="2"/>Χαριδήμου ἀ-
-                    <lb n="3"/>νέθηκεν τῷ Μη-
-                    <lb n="4"/>νί.
+                    <lb n="1"/><persName type="attested" key="Philetos"><name nymRef="Φιλήτος">Φιλήτος</name></persName> ὁ παρὰ
+                    <lb n="2"/><persName type="attested" key="Charidemos"><name nymRef="Χαρίδημος">Χαριδήμου</name></persName> ἀ-
+                    <lb n="3" break="no"/>νέθηκεν τῷ <persName type="divine" key="Men"><name nymRef="Μήν">Μη-
+                    <lb n="4" break="no"/>νί</name></persName>.
                 </ab>
             </div>
             <div type="apparatus"/>

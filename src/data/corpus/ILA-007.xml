@@ -60,16 +60,81 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Tiamos</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Anaeitis</term>
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Tyche</term>
+                    <term>Sokrates</term>
+                    <term>Ammianos figlio di Ammios</term>
+                    <term>Trophimos figlio di Ammios</term>
+                    <term>Ammios</term>
+                    <term>Philete figlia di Ammias</term>
+                    <term>Sokratia figlia di Ammias</term>
+                    <term>Ammias</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Tyche">
+                        <persName type="attested" key="Tyche">
+                            <name nymRef="Τύχη">Τύχη</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Sokrates">
+                        <persName type="attested" key="Sokrates">
+                            <name nymRef="Σωκράτης">Σωκράτης</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Ammianos figlio di Ammios">
+                        <persName type="attested" key="Ammianos figlio di Ammios">
+                            <name nymRef="Ἀμμιανός">Ἀμμιανὸς</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Trophimos figlio di Ammios">
+                        <persName type="attested" key="Trophimos figlio di Ammios">
+                            <name nymRef="Τρόφιμος">Τρόφιμος</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Ammios">
+                        <persName type="attested" key="Ammios">
+                            <name type="patronymic" nymRef="Ἄμμιος">Ἀμμίου</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Philete figlia di Ammias">
+                        <persName type="attested" key="Philete figlia di Ammias">
+                            <name nymRef="Φιλήτη">Φιλήτη</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Sokratia figlia di Ammias">
+                        <persName type="attested" key="Sokratia figlia di Ammias">
+                            <name nymRef="Σωκρατία">Σωκρατία</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Ammias">
+                        <persName type="attested" key="Ammias">
+                            <name type="patronymic" nymRef="Ἀμμιάς">Ἀμμιάδος</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Θεᾷ Ἀνάειτι καὶ Μηνὶ Τιάμου
-                    <lb n="2"/>Τύχη καὶ Σωκράτης καὶ Ἀμ-
-                    <lb n="3"/>μιανὸς καὶ Τρόφιμος οἱ Ἀμ-
-                    <lb n="4"/>μίου καὶ Φιλήτη καὶ Σωκρατία
-                    <lb n="5"/>aι Ἀμμιάδος ποιήσαντες τὸ ἱε-
+                    <lb n="1"/>Θεᾷ <persName type="divine" key="Anaeitis"><name nymRef="Ἀνάειτις">Ἀνάειτι</name></persName> καὶ <persName type="divine" key="Men Tiamos"><name nymRef="Μήν">Μηνὶ</name> <rs type="epithet">Τιάμου</rs></persName>
+                    <lb n="2"/><persName type="attested" key="Tyche"><name nymRef="Τύχη">Τύχη</name></persName> καὶ <persName type="attested" key="Sokrates"><name nymRef="Σωκράτης">Σωκράτης</name></persName> καὶ <persName type="attested" key="Ammianos figlio di Ammios"><name nymRef="Ἀμμιανός">Ἀμ-
+                    <lb n="3" break="no"/>μιανὸς</name></persName> καὶ <persName type="attested" key="Trophimos figlio di Ammios"><name nymRef="Τρόφιμος">Τρόφιμος</name></persName> οἱ <persName type="attested" key="Ammios"><name type="patronymic" nymRef="Ἄμμιος">Ἀμ-
+                    <lb n="4" break="no"/>μίου</name></persName> καὶ <persName type="attested" key="Philete figlia di Ammias"><name nymRef="Φιλήτη">Φιλήτη</name></persName> καὶ <persName type="attested" key="Sokratia figlia di Ammias"><name nymRef="Σωκρατία">Σωκρατία</name>
+                    <lb n="5"/></persName>αι <persName type="attested" key="Ammias"><name type="patronymic" nymRef="Ἀμμιάς">Ἀμμιάδος</name></persName> ποιήσαντες τὸ ἱε-
                     <lb n="6"/>ροποίημα εἰλασάμενυ Μητέ-
                     <lb n="7"/>ραν Ἀνάειτιν ὑπὲρ τέκνων καὶ
                     <lb n="8"/>θρεμμάτων ἔνγραφον ἔστησαν.

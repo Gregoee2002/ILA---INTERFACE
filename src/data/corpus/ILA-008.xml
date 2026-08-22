@@ -60,13 +60,21 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                    <term>Tyrannos</term>
+                </keywords>
+            </textClass>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
                     <lb n="1"/>ρειπαρεν
-                    <lb n="2"/>Μηνεὶ Τυρά[ννῳ]
+                    <lb n="2"/><persName type="divine" key="Men Tyrannos"><name nymRef="Μήν">Μηνεὶ</name> <rs type="epithet">Τυρά[ννῳ]</rs></persName>
                     <lb n="3"/>μουκληρον
                     <lb n="4"/>[...]μοκαιτᾳ
                     <lb n="5"/>ιανεθι

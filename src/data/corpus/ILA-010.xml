@@ -60,12 +60,22 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Axiottenos</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+            </textClass>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Μηνὶ Ἀξιο[ττηνῷ]
+                    <lb n="1"/><persName type="divine" key="Men Axiottenos"><name nymRef="Μήν">Μηνὶ</name> <rs type="epithet">Ἀξιο[ττηνῷ]</rs></persName>
                 </ab>
             </div>
             <div type="apparatus"/>

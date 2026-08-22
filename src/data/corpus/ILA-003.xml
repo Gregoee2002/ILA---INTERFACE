@@ -60,14 +60,42 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Axiettenos</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Hermogenes</term>
+                    <term>Epikrates</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Hermogenes">
+                        <persName type="attested" key="Hermogenes">
+                            <name nymRef="Ἑρμογένης">Ἑρμογένης</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Epikrates">
+                        <persName type="attested" key="Epikrates">
+                            <name nymRef="Ἐπικράτης">Ἐπικράτου</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Μηνὶ Ἀξιεττηνῷ ἐξ Ἐπι-
-                    <lb n="2"/>κράτου Ἑρμογένης ἐπὶ χά-
-                    <lb n="3"/>ριτος εὐχήν.
+                    <lb n="1"/><persName type="divine" key="Men Axiettenos"><name nymRef="Μήν">Μηνὶ</name> <rs type="epithet">Ἀξιεττηνῷ</rs></persName> ἐξ <persName type="attested" key="Epikrates"><name nymRef="Ἐπικράτης">Ἐπι-
+                    <lb n="2" break="no"/>κράτου</name></persName> <persName type="attested" key="Hermogenes"><name nymRef="Ἑρμογένης">Ἑρμογένης</name></persName> ἐπὶ χά-
+                    <lb n="3" break="no"/>ριτος εὐχήν.
                 </ab>
             </div>
             <div type="apparatus"/>

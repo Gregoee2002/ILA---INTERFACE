@@ -60,14 +60,41 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Ouranios</term>
+                    <term>Axiottenos</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>[...]lia figlia di Poplios</term>
+                    <term>Poplios</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="[...]lia figlia di Poplios">
+                        <persName type="attested" key="[...]lia figlia di Poplios">
+                            <name>[...]λία</name>
+                            <persName type="attested" key="Poplios">
+                                <name type="patronymic" nymRef="Πόπλιος">Ποπλίου</name>
+                            </persName>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Μηνὶ Οὐρανίῳ
-                    <lb n="2"/>Μηνὶ Ἀξιοττηνῷ
-                    <lb n="3"/>[...]λία Ποπλίου
+                    <lb n="1"/><persName type="divine" key="Men Ouranios"><name nymRef="Μήν">Μηνὶ</name> <rs type="epithet">Οὐρανίῳ</rs></persName>
+                    <lb n="2"/><persName type="divine" key="Men Axiottenos"><name nymRef="Μήν">Μηνὶ</name> <rs type="epithet">Ἀξιοττηνῷ</rs></persName>
+                    <lb n="3"/><persName type="attested" key="[...]lia figlia di Poplios"><name>[...]λία</name> <persName type="attested" key="Poplios"><name type="patronymic" nymRef="Πόπλιος">Ποπλίου</name></persName></persName>
                 </ab>
             </div>
             <div type="apparatus"/>
