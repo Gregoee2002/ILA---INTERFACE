@@ -60,18 +60,43 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Dionysios</term>
+                    <term>Ismare</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Dionysios">
+                        <persName type="attested" key="Dionysios">
+                            <name nymRef="Διονύσιος">Διονύσιος</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Ismare">
+                        <persName type="attested" key="Ismare">
+                            <name nymRef="Ἰσμάρη">Ἰσμάρη</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/><gap reason="lost" extent="unknown"/>νεος υἱὸς Διονυσίο[υ] Μηνὶ εὐχήν
-                    <lb n="2"/>σὺν θυγατρί μ[ο]υ Ἰσ[μ]άρη.
+                    <lb n="1"/><gap reason="lost" extent="unknown"/>νεος υἱὸς <persName type="attested" key="Dionysios"><name type="patronymic" nymRef="Διονύσιος">Διονυσίο<supplied reason="lost">υ</supplied></name></persName> <persName type="divine" key="Men"><name nymRef="Μήν">Μηνὶ</name></persName> εὐχήν
+                    <lb n="2"/>σὺν θυγατρί μ<supplied reason="lost">ο</supplied>υ <persName type="attested" key="Ismare"><name nymRef="Ἰσμάρη">Ἰσ<supplied reason="lost">μ</supplied>άρη</name></persName>.
                 </ab>
             </div>
             <div type="apparatus"/>
             <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
-            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>Il nome proprio del dedicante (figlio di Dionysios) è perduto: resta solo la desinenza "-νεος" dopo la lacuna iniziale, non sufficiente a identificare o normalizzare il nome. Per questo il patronimico Διονυσίου è stato marcato come persona attestata a sé, senza annidarlo in un persName combinato "figlio di Dionysios" che presupporrebbe di conoscere il nome del figlio.</p></div>
             <div type="bibliography">
                 <listBibl>
                     <bibl>Lane, CMRDM I 229</bibl>

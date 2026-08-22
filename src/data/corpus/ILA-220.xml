@@ -60,14 +60,34 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Koïntos Attios</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Koïntos Attios">
+                        <persName type="attested" key="Koïntos Attios">
+                            <name nymRef="Κόϊντος">Κόϊντος</name>
+                            <name nymRef="Ἄττιος">Ἄττιος</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Κόϊντος
-                    <lb n="2"/>Ἄττιος
-                    <lb n="3"/>Μηνὶ εὐχήν.
+                    <lb n="1"/><persName type="attested" key="Koïntos Attios"><name nymRef="Κόϊντος">Κόϊντος</name>
+                    <lb n="2"/><name nymRef="Ἄττιος">Ἄττιος</name></persName>
+                    <lb n="3"/><persName type="divine" key="Men"><name nymRef="Μήν">Μηνὶ</name></persName> εὐχήν.
                 </ab>
             </div>
             <div type="apparatus"/>

@@ -60,16 +60,38 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Askaenos</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Ph. Kigkios Eilaras</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Ph. Kigkios Eilaras">
+                        <persName type="attested" key="Ph. Kigkios Eilaras">
+                            <name>Φ.</name>
+                            <name>Κί(γκιος)</name>
+                            <name nymRef="Εἰλάρας">Εἰλάρας</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Φ. Κί(γκιος) Εἰλάρας
-                    <lb n="2"/>τεκμορεύ-
-                    <lb n="3"/>σας μετὰ γυ-
-                    <lb n="4"/>ναικὸς καὶ τέκνου
-                    <lb n="5"/>Μηνὶ Ἀσκαηνῷ
+                    <lb n="1"/><persName type="attested" key="Ph. Kigkios Eilaras"><name>Φ.</name> <name>Κί(γκιος)</name> <name nymRef="Εἰλάρας">Εἰλάρας</name></persName>
+                    <lb n="2"/>τεκμορεύ<lb n="3" break="no"/>σας μετὰ γυ<lb n="4" break="no"/>ναικὸς καὶ τέκνου
+                    <lb n="5"/><persName type="divine" key="Men Askaenos"><name nymRef="Μήν">Μηνὶ</name> <rs type="epithet">Ἀσκαηνῷ</rs></persName>
                     <lb n="6"/>εὐχήν.
                 </ab>
             </div>

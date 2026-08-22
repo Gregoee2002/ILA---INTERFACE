@@ -60,14 +60,31 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Sekoundos</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Sekoundos">
+                        <persName type="attested" key="Sekoundos">
+                            <name nymRef="Σεκοῦνδος">Σεκοῦνδος</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Σεκοῦν-
-                    <lb n="2"/>δος Μη-
-                    <lb n="3"/>νὶ εὐχήν.
+                    <lb n="1"/><persName type="attested" key="Sekoundos"><name nymRef="Σεκοῦνδος">Σεκοῦν<lb n="2" break="no"/>δος</name></persName> <persName type="divine" key="Men"><name nymRef="Μήν">Μη<lb n="3" break="no"/>νὶ</name></persName> εὐχήν.
                 </ab>
             </div>
             <div type="apparatus"/>

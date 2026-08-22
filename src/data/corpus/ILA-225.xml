@@ -60,14 +60,38 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Gallikos</term>
+                    <term>Oualerios</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Gallikos">
+                        <persName type="attested" key="Gallikos">
+                            <name nymRef="Γαλλικός">Γαλλικός</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Oualerios">
+                        <persName type="attested" key="Oualerios">
+                            <name nymRef="Οὐαλέριος">Οὐαλέριος</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Γαλλικός
-                    <lb n="2"/>καὶ Οὐαλε-
-                    <lb n="3"/>ριος Μηνὶ
+                    <lb n="1"/><persName type="attested" key="Gallikos"><name nymRef="Γαλλικός">Γαλλικός</name></persName>
+                    <lb n="2"/>καὶ <persName type="attested" key="Oualerios"><name nymRef="Οὐαλέριος">Οὐαλε<lb n="3" break="no"/>ριος</name></persName> <persName type="divine" key="Men"><name nymRef="Μήν">Μηνὶ</name></persName>
                     <lb n="4"/>εὐχήν.
                 </ab>
             </div>

@@ -60,15 +60,38 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Askaenos</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Gaios Kalpournios Oulis</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Gaios Kalpournios Oulis">
+                        <persName type="attested" key="Gaios Kalpournios Oulis">
+                            <name nymRef="Γάιος">Γάιος</name>
+                            <name nymRef="Καλπούρνιος">Καλπούρνιος</name>
+                            <name nymRef="Οὖλις">Οὖλις</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Γ. Καλπούρνιος Οὖλις
-                    <lb n="2"/>σὺν τοῖς ἀδελ-
-                    <lb n="3"/>φοῖς Μηνὶ Ἀ[σκα]ην[ῷ]
-                    <lb n="4"/>ε[ὐ]χήν.
+                    <lb n="1"/><persName type="attested" key="Gaios Kalpournios Oulis"><name>Γ.</name> <name nymRef="Καλπούρνιος">Καλπούρνιος</name> <name nymRef="Οὖλις">Οὖλις</name></persName>
+                    <lb n="2"/>σὺν τοῖς ἀδελ<lb n="3" break="no"/>φοῖς <persName type="divine" key="Men Askaenos"><name nymRef="Μήν">Μηνὶ</name> <rs type="epithet">Ἀ<supplied reason="lost">σκα</supplied>ην<supplied reason="lost">ῷ</supplied></rs></persName>
+                    <lb n="4"/>ε<supplied reason="lost">ὐ</supplied>χήν.
                 </ab>
             </div>
             <div type="apparatus"/>

@@ -60,14 +60,32 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Poublios</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Poublios">
+                        <persName type="attested" key="Poublios">
+                            <name nymRef="Πούβλιος">Πούβλιος</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Πούβλιος
-                    <lb n="2"/>μετὰ γυναι-
-                    <lb n="3"/>κὸς Μηνὶ
+                    <lb n="1"/><persName type="attested" key="Poublios"><name nymRef="Πούβλιος">Πούβλιος</name></persName>
+                    <lb n="2"/>μετὰ γυναι<lb n="3" break="no"/>κὸς <persName type="divine" key="Men"><name nymRef="Μήν">Μηνὶ</name></persName>
                     <lb n="4"/>εὐχήν.
                 </ab>
             </div>

@@ -60,13 +60,30 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="onomastica">
+                    <term>Gaios Valerios</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Gaios Valerios">
+                        <persName type="attested" key="Gaios Valerios">
+                            <name>G.</name>
+                            <name>Valerius</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="la">
                 <ab>
                     <lb n="1"/>Li(bens) M(erito)
-                    <lb n="2"/>G. Valer(ius)
+                    <lb n="2"/><persName type="attested" key="Gaios Valerios"><name>G.</name> <name>Valer(ius)</name></persName>
                     <lb n="3"/>cum s[u-]
                     <lb n="4"/>is fili-
                     <lb n="5"/>is L V

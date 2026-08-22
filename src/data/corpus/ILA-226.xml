@@ -60,13 +60,35 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Askaenos</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Tittianos</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Tittianos">
+                        <persName type="attested" key="Tittianos">
+                            <name nymRef="Τιττιανός">Τιττιανός</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/><gap reason="lost" extent="unknown"/>ος καὶ Τιττιανὸς
-                    <lb n="2"/>[Μηνὶ] Ἀσκαηνῷ εὐχήν.
+                    <lb n="1"/><gap reason="lost" extent="unknown"/>ος καὶ <persName type="attested" key="Tittianos"><name nymRef="Τιττιανός">Τιττιανὸς</name></persName>
+                    <lb n="2"/><persName type="divine" key="Men Askaenos"><name nymRef="Μήν"><supplied reason="lost">Μηνὶ</supplied></name> <rs type="epithet">Ἀσκαηνῷ</rs></persName> εὐχήν.
                 </ab>
             </div>
             <div type="apparatus"/>

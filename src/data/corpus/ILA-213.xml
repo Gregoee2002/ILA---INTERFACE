@@ -60,23 +60,41 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Apouleios Proklos Gaios Trebonios</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Apouleios Proklos Gaios Trebonios">
+                        <persName type="attested" key="Apouleios Proklos Gaios Trebonios">
+                            <name nymRef="Ἀπουλεῖος">Ἀπουλεῖος</name>
+                            <name nymRef="Πρόκλος">Πρόκλος</name>
+                            <name nymRef="Γάιος">Γάιος</name>
+                            <name nymRef="Τρεβώνιος">Τρεβώνιος</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Ἀπου-
-                    <lb n="2"/>λεῖος Πρό-
-                    <lb n="3"/>κλος Γά-
-                    <lb n="4"/>ιος Τρεβ-
-                    <lb n="5"/><supplied reason="lost">ω</supplied>νίου
+                    <lb n="1"/><persName type="attested" key="Apouleios Proklos Gaios Trebonios"><name nymRef="Ἀπουλεῖος">Ἀπου<lb n="2" break="no"/>λεῖος</name> <name nymRef="Πρόκλος">Πρό<lb n="3" break="no"/>κλος</name> <name nymRef="Γάιος">Γά<lb n="4" break="no"/>ιος</name> <name nymRef="Τρεβώνιος">Τρεβ<lb n="5" break="no"/><supplied reason="lost">ω</supplied>νίου</name></persName>
                     <lb n="6"/><gap reason="lost" extent="unknown"/>νιτ
-                    <lb n="7"/><gap reason="lost" extent="unknown"/>Μην<supplied reason="lost">ί</supplied>.
+                    <lb n="7"/><gap reason="lost" extent="unknown"/><persName type="divine" key="Men"><name nymRef="Μήν">Μην<supplied reason="lost">ί</supplied></name></persName>.
                 </ab>
             </div>
             <div type="apparatus"/>
             <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
-            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>Testo fortemente danneggiato: la sequenza di quattro nomi alla r. 1-5 (Apouleios Proklos Gaios Trebonios) è marcata come un'unica persona per mancanza di elementi che ne indichino la scomposizione in più individui o in un nome+patronimico; la riga 6 ("νιτ") resta di senso oscuro e non è stata annotata.</p></div>
             <div type="bibliography">
                 <listBibl>
                     <bibl>Lane, CMRDM I 225</bibl>

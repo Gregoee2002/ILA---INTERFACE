@@ -60,13 +60,42 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Askaenos</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Mantoi Loukios</term>
+                    <term>Markos</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Mantoi Loukios">
+                        <persName type="attested" key="Mantoi Loukios">
+                            <name nymRef="Μάντοι">Μάντοι</name>
+                            <name nymRef="Λούκιος">Λούκιος</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Markos">
+                        <persName type="attested" key="Markos">
+                            <name nymRef="Μᾶρκος">Μᾶρκος</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Μάντοι Λούκιος καὶ Μᾶρκος τεκμορεύσαντες
-                    <lb n="2"/>μετὰ γυναικῶν καὶ τέκνων Μ. Α.
+                    <lb n="1"/><persName type="attested" key="Mantoi Loukios"><name nymRef="Μάντοι">Μάντοι</name> <name nymRef="Λούκιος">Λούκιος</name></persName> καὶ <persName type="attested" key="Markos"><name nymRef="Μᾶρκος">Μᾶρκος</name></persName> τεκμορεύσαντες
+                    <lb n="2"/>μετὰ γυναικῶν καὶ τέκνων <persName type="divine" key="Men Askaenos"><name nymRef="Μήν"><expan><abbr>Μ</abbr><ex>ηνὶ</ex></expan></name>. <rs type="epithet"><expan><abbr>Α</abbr><ex>σκαηνῷ</ex></expan></rs>.</persName>
                 </ab>
             </div>
             <div type="apparatus"/>

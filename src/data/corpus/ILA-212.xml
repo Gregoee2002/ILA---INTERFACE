@@ -60,18 +60,43 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Ioulios</term>
+                    <term>Paulos</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Ioulios">
+                        <persName type="attested" key="Ioulios">
+                            <name nymRef="Ἰούλιος">Ἰούλιος</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Paulos">
+                        <persName type="attested" key="Paulos">
+                            <name nymRef="Παῦλος">Παῦλος</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/><expan><abbr>Μ Ε</abbr><ex>Μηνὶ εὐχήν</ex></expan>
-                    <lb n="2"/><expan><abbr>Ι Κ Π</abbr><ex>Ἰούλιος καὶ Παῦλος</ex></expan>
+                    <lb n="1"/><expan><abbr>Μ Ε</abbr><ex><persName type="divine" key="Men"><name nymRef="Μήν">Μηνὶ</name></persName> εὐχήν</ex></expan>
+                    <lb n="2"/><expan><abbr>Ι Κ Π</abbr><ex><persName type="attested" key="Ioulios"><name nymRef="Ἰούλιος">Ἰούλιος</name></persName> καὶ <persName type="attested" key="Paulos"><name nymRef="Παῦλος">Παῦλος</name></persName></ex></expan>
                 </ab>
             </div>
             <div type="apparatus"/>
             <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
-            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>Lo scioglimento "Ἰούλιος καὶ Παῦλος" per la sigla ΙΚΠ è una proposta congetturale di Lane, non una lettura certa: i due persName marcati in questa riga vanno quindi considerati indicativi, non attestazioni sicure dei due nomi.</p></div>
             <div type="bibliography">
                 <listBibl>
                     <bibl>Lane, CMRDM I 224</bibl>

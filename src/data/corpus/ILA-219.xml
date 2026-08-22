@@ -60,21 +60,50 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="onomastica">
+                    <term>Gaia</term>
+                    <term>Alexander</term>
+                    <term>Iulius Belus</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Gaia">
+                        <persName type="attested" key="Gaia">
+                            <name>Gaia</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Alexander">
+                        <persName type="attested" key="Alexander">
+                            <name>Alexander</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Iulius Belus">
+                        <persName type="attested" key="Iulius Belus">
+                            <name>Iulius</name>
+                            <name>Belus</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="la">
                 <div type="textpart" n="a">
                     <ab>
-                        <lb n="1"/>G(aiae) l(ibertus)
-                        <lb n="2"/>Alexander
+                        <lb n="1"/><persName type="attested" key="Gaia"><name>G(aiae)</name></persName> l(ibertus)
+                        <lb n="2"/><persName type="attested" key="Alexander"><name>Alexander</name></persName>
                         <lb n="3"/>L V S
                     </ab>
                 </div>
                 <div type="textpart" n="b">
                     <ab>
-                        <lb n="1"/>G(aiae) l(ibertus) Iulius
-                        <lb n="2"/>Belus
+                        <lb n="1"/><persName type="attested" key="Gaia"><name>G(aiae)</name></persName> l(ibertus) <persName type="attested" key="Iulius Belus"><name>Iulius</name>
+                        <lb n="2"/><name>Belus</name></persName>
                         <lb n="3"/>L V S
                     </ab>
                 </div>

@@ -60,15 +60,37 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Askaenos</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Ph. Agathion</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Ph. Agathion">
+                        <persName type="attested" key="Ph. Agathion">
+                            <name>Φ.</name>
+                            <name nymRef="Ἀγαθίων">Ἀγαθίων</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Φ. Ἀγαθίων
+                    <lb n="1"/><persName type="attested" key="Ph. Agathion"><name>Φ.</name> <name nymRef="Ἀγαθίων">Ἀγαθίων</name></persName>
                     <lb n="2"/>μετὰ τέκ(νων)
-                    <lb n="3"/>Μηνὶ Ἀσκαη-
-                    <lb n="4"/>νῷ εὐχήν.
+                    <lb n="3"/><persName type="divine" key="Men Askaenos"><name nymRef="Μήν">Μηνὶ</name> <rs type="epithet">Ἀσκαη<lb n="4" break="no"/>νῷ</rs></persName> εὐχήν.
                 </ab>
             </div>
             <div type="apparatus"/>

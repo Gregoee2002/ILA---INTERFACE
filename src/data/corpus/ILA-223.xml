@@ -60,13 +60,36 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Askaenos</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Ouakarnios Gaios</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Ouakarnios Gaios">
+                        <persName type="attested" key="Ouakarnios Gaios">
+                            <name nymRef="Ουακάρνιος">Ουακάρνιος</name>
+                            <name nymRef="Γάιος">Γάιος</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/><supplied reason="lost">Ο</supplied>ὐακάρνιος Γά<supplied reason="lost">ι</supplied>
-                    <lb n="2" break="no"/><supplied reason="lost">ος</supplied> Μηνὶ Ἀσκαηνῷ
+                    <lb n="1"/><persName type="attested" key="Ouakarnios Gaios"><name nymRef="Ουακάρνιος"><supplied reason="lost">Ο</supplied>ὐακάρνιος</name> <name nymRef="Γάιος">Γά<supplied reason="lost">ι</supplied>
+                    <lb n="2" break="no"/><supplied reason="lost">ος</supplied></name></persName> <persName type="divine" key="Men Askaenos"><name nymRef="Μήν">Μηνὶ</name> <rs type="epithet">Ἀσκαηνῷ</rs></persName>
                     <lb n="3"/>εὐχήν.
                 </ab>
             </div>

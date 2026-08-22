@@ -60,12 +60,41 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="onomastica">
+                    <term>Lucius Cathemerus</term>
+                    <term>Titus</term>
+                    <term>Lucius</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Lucius Cathemerus">
+                        <persName type="attested" key="Lucius Cathemerus">
+                            <name>L.</name>
+                            <name>Cathemerus</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Titus">
+                        <persName type="attested" key="Titus">
+                            <name>Titus</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Lucius">
+                        <persName type="attested" key="Lucius">
+                            <name>Lucius</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="la">
                 <ab>
-                    <lb n="1"/>L. Cathemerus et Titus et Lucius L V S.
+                    <lb n="1"/><persName type="attested" key="Lucius Cathemerus"><name>L.</name> <name>Cathemerus</name></persName> et <persName type="attested" key="Titus"><name>Titus</name></persName> et <persName type="attested" key="Lucius"><name>Lucius</name></persName> L V S.
                 </ab>
             </div>
             <div type="apparatus"/>

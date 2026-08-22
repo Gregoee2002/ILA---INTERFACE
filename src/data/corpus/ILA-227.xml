@@ -60,15 +60,36 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Askaenos</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Ph. Neiketes</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Ph. Neiketes">
+                        <persName type="attested" key="Ph. Neiketes">
+                            <name>Φ.</name>
+                            <name nymRef="Νεικήτης">Νεικήτης</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Φ. Νεικήτης Μη-
-                    <lb n="2"/>νὶ Ἀσκαηνῷ
-                    <lb n="3"/>μετὰ τέκνων εὐ-
-                    <lb n="4"/>χήν.
+                    <lb n="1"/><persName type="attested" key="Ph. Neiketes"><name>Φ.</name> <name nymRef="Νεικήτης">Νεικήτης</name></persName> <persName type="divine" key="Men Askaenos"><name nymRef="Μήν">Μη<lb n="2" break="no"/>νὶ</name> <rs type="epithet">Ἀσκαηνῷ</rs></persName>
+                    <lb n="3"/>μετὰ τέκνων εὐ<lb n="4" break="no"/>χήν.
                 </ab>
             </div>
             <div type="apparatus"/>
