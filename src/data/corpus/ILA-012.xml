@@ -60,14 +60,42 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Axiottenos</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Athenion</term>
+                    <term>Onesime</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Athenion">
+                        <persName type="attested" key="Athenion">
+                            <name nymRef="Ἀθηνίων">Ἀθηνίων</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Onesime">
+                        <persName type="attested" key="Onesime">
+                            <name nymRef="Ὀνησίμη">Ὀνησίμης</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Μηνὶ Ἀξιοττήνῳ Ἀθη-
-                    <lb n="2"/>νίων ὑπὲρ Ὀνησίμη-
-                    <lb n="3"/>ς τῆς τεθραμμένης
+                    <lb n="1"/><persName type="divine" key="Men Axiottenos"><name nymRef="Μήν">Μηνὶ</name> <rs type="epithet">Ἀξιοττήνῳ</rs></persName> <persName type="attested" key="Athenion"><name nymRef="Ἀθηνίων">Ἀθη-
+                    <lb n="2" break="no"/>νίων</name></persName> ὑπὲρ <persName type="attested" key="Onesime"><name nymRef="Ὀνησίμη">Ὀνησίμη-
+                    <lb n="3" break="no"/>ς</name></persName> τῆς τεθραμμένης
                     <lb n="4"/>εὐχήν.
                 </ab>
             </div>

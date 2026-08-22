@@ -60,14 +60,36 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Axitenos</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Trophimos</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Trophimos">
+                        <persName type="attested" key="Trophimos">
+                            <name nymRef="Τρόφιμος">[Τ]ρόφιμος</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>[Θεῷ ἐπηκ]όῳ Μηνὶ Ἀξιτη-
-                    <lb n="2"/>[νῷ Τ]ρόφιμος εὐξάμε-
-                    <lb n="3"/>[νος] καὶ ἐπιτυχὼν εὐχα-
+                    <lb n="1"/>[Θεῷ ἐπηκ]όῳ <persName type="divine" key="Men Axitenos"><name nymRef="Μήν">Μηνὶ</name> <rs type="epithet">Ἀξιτη-
+                    <lb n="2" break="no"/>[νῷ]</rs></persName> <persName type="attested" key="Trophimos">[Τ]ρόφιμος</persName> εὐξάμε-
+                    <lb n="3" break="no"/>[νος] καὶ ἐπιτυχὼν εὐχα-
                     <lb n="4"/>[ριστ]ῶν ἀνέθηκα
                     <lb n="5"/>[......] μη(νὸς) Δίου βι΄
                 </ab>

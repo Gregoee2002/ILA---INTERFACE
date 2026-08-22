@@ -60,14 +60,42 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Motelleites</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Trophime</term>
+                    <term>Ioulianos</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Trophime">
+                        <persName type="attested" key="Trophime">
+                            <name nymRef="Τροφίμη">Τροφίμη</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Ioulianos">
+                        <persName type="attested" key="Ioulianos">
+                            <name nymRef="Ἰουλιανός">Ἰουλιανοῦ</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
                     <lb n="1"/>Ἔτους τιγ΄, μη(νὸς) Γορπιαίου
-                    <lb n="2"/>ηι΄. Μηνὶ Μοτελλείτῃ
-                    <lb n="3"/>Τροφίμη ὑπὲρ Ἰουλιανοῦ
+                    <lb n="2"/>ηι΄. <persName type="divine" key="Men Motelleites"><name nymRef="Μήν">Μηνὶ</name> <rs type="epithet">Μοτελλείτῃ</rs></persName>
+                    <lb n="3"/><persName type="attested" key="Trophime"><name nymRef="Τροφίμη">Τροφίμη</name></persName> ὑπὲρ <persName type="attested" key="Ioulianos"><name nymRef="Ἰουλιανός">Ἰουλιανοῦ</name></persName>
                     <lb n="4"/>τοῦ θρεπτοῦ εὐχὴν
                     <lb n="5"/>ἀνέστησεν.
                 </ab>

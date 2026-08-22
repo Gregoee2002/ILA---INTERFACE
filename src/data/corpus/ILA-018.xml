@@ -60,21 +60,52 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Tarsene</term>
+                    <term>Tarsios</term>
+                    <term>Artemidorou Axiottenos</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Meter</term>
+                    <term>Apollon</term>
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Trophime figlia di Artemidoros Kikinnas</term>
+                    <term>Artemidoros Kikinnas</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Trophime figlia di Artemidoros Kikinnas">
+                        <persName type="attested" key="Trophime figlia di Artemidoros Kikinnas">
+                            <name nymRef="Τροφίμη">Τροφίμη</name>
+                            <persName type="attested" key="Artemidoros Kikinnas">
+                                <name type="patronymic" nymRef="Ἀρτεμίδωρος">Ἀρτεμιδώρου</name>
+                                <name type="patronymic" nymRef="Κικιννάς">Κικιννάδος</name>
+                            </persName>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
                     <lb n="1"/>Ἔτους σγ΄, μη(νὸς) Ἀρτεμεισίου ς΄, ἐ-
-                    <lb n="2"/>πὶ Τροφίμη, Ἀρτεμιδώρου Κι-
-                    <lb n="3"/>κιννάδος κληθεῖσα ὑπὸ τοῦ
+                    <lb n="2"/>πὶ <persName type="attested" key="Trophime figlia di Artemidoros Kikinnas"><name nymRef="Τροφίμη">Τροφίμη</name>, <persName type="attested" key="Artemidoros Kikinnas"><name type="patronymic" nymRef="Ἀρτεμίδωρος">Ἀρτεμιδώρου</name> <name type="patronymic" nymRef="Κικιννάς">Κι-
+                    <lb n="3" break="no"/>κιννάδος</name></persName></persName> κληθεῖσα ὑπὸ τοῦ
                     <lb n="4"/>θεοῦ εἰς ὑπηρεσίας χάριν μὴ
                     <lb n="5"/>βουληθοῦσα ταχέως προσελ-
                     <lb n="6"/>θεῖν ἐκολάσετο αὐτὴν καὶ μα-
-                    <lb n="7"/>νῆναι ἐποίησεν. Ἠρώτησε οὖν Μη-
-                    <lb n="8"/>τέρα Ταρσηνὴν καὶ Ἀπόλλωνα Ταρσί-
-                    <lb n="9"/>ον καὶ Μῆνα Ἀρτεμιδώρου Ἀξι-
-                    <lb n="10"/>οττηνὸν Κόρεσα κατέχοντα
+                    <lb n="7"/>νῆναι ἐποίησεν. Ἠρώτησε οὖν <persName type="divine" key="Meter Tarsene"><name nymRef="Μήτηρ">Μη-
+                    <lb n="8" break="no"/>τέρα</name> <rs type="epithet">Ταρσηνὴν</rs></persName> καὶ <persName type="divine" key="Apollon Tarsios"><name nymRef="Ἀπόλλων">Ἀπόλλωνα</name> <rs type="epithet">Ταρσί-
+                    <lb n="9" break="no"/>ον</rs></persName> καὶ <persName type="divine" key="Men Artemidorou Axiottenos"><name nymRef="Μήν">Μῆνα</name> <rs type="epithet">Ἀρτεμιδώρου Ἀξι-
+                    <lb n="10" break="no"/>οττηνὸν</rs></persName> Κόρεσα κατέχοντα
                     <lb n="11"/>καὶ ἐκέλευσεν στηλλογραφ-
                     <lb n="12"/>ηθῆναι νέμεσιν καὶ καταγρά-
                     <lb n="13"/>ψαι ἐμαυτὸν εἰς ὑπηρεσίαν

@@ -60,18 +60,44 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Tazene</term>
+                    <term>Labanas</term>
+                    <term>Artemidorou Dorou</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Megale Meter</term>
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Ioulia Metra</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Ioulia Metra">
+                        <persName type="attested" key="Ioulia Metra">
+                            <name nymRef="Ἰουλία">Ἰουλία</name>
+                            <name nymRef="Μήτρα">Μητρὰ</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>[Με]γάλη Μήτ[ηρ Ταζη-]
-                    <lb n="2"/>νὴ καὶ Μὶς Λαβάνας [καὶ]
-                    <lb n="3"/>Μὶς Ἀρτεμιδώρου Δό-
-                    <lb n="4"/>ρου κώμην βασιλεύον-
-                    <lb n="5"/>τες. Ἔτους σκη΄, μη(νὸς) Δαισί-
-                    <lb n="6"/>ου Σε(βαστῇ), Ἰουλία Μητρὰ ἀνέ-
-                    <lb n="7"/>στησε στήλλην ἐπιζητη-
+                    <lb n="1"/><persName type="divine" key="Megale Meter Tazene"><name nymRef="Μήτηρ">[Με]γάλη Μήτ[ηρ</name> <rs type="epithet">Ταζη-
+                    <lb n="2" break="no"/>νή]</rs></persName> καὶ <persName type="divine" key="Men Labanas"><name nymRef="Μήν">Μὶς</name> <rs type="epithet">Λαβάνας</rs></persName> [καὶ]
+                    <lb n="3"/><persName type="divine" key="Men Artemidorou Dorou"><name nymRef="Μήν">Μὶς</name> <rs type="epithet">Ἀρτεμιδώρου Δό-
+                    <lb n="4" break="no"/>ρου</rs></persName> κώμην βασιλεύον-
+                    <lb n="5" break="no"/>τες. Ἔτους σκη΄, μη(νὸς) Δαισί-
+                    <lb n="6" break="no"/>ου Σε(βαστῇ), <persName type="attested" key="Ioulia Metra"><name nymRef="Ἰουλία">Ἰουλία</name> <name nymRef="Μήτρα">Μητρὰ</name></persName> ἀνέ-
+                    <lb n="7" break="no"/>στησε στήλλην ἐπιζητη-
                     <lb n="8"/>σάντων τῶν θεῶν τὴν γ[ε-]
                     <lb n="9"/>γόνουσαν ἁμαρτίαν ὑ[πὸ]
                     <lb n="10"/>[...]

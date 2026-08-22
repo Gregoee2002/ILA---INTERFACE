@@ -60,15 +60,37 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Axiottenos</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Hermogenes</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Hermogenes">
+                        <persName type="attested" key="Hermogenes">
+                            <name nymRef="Ἑρμογένης">[Ἑ]ρμογένου</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
                     <lb n="1"/>Ἔτους σξβ΄, μη(νὸς) Ξ[ανδικοῦ ..]
-                    <lb n="2"/>Θεῷ Ἀξιοττη[νῷ ................]
+                    <lb n="2"/><persName type="divine" key="Men Axiottenos">Θεῷ Ἀξιοττη[νῷ</persName> ................]
                     <lb n="3"/>βούλων Τατιο[........................]
-                    <lb n="4"/>[... Ἑ]ρμογένου[........................]
+                    <lb n="4"/>[... <persName type="attested" key="Hermogenes"><name nymRef="Ἑρμογένης">Ἑ]ρμογένου</name></persName>[........................]
                 </ab>
             </div>
             <div type="apparatus"/>

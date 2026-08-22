@@ -60,32 +60,84 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Azita</term>
+                    <term>Tiamos</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Megale Meter</term>
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Hermogenes figlio di Apollonios</term>
+                    <term>Apollonios figlio di Apollonios di Midas</term>
+                    <term>Apollonios figlio di Midas</term>
+                    <term>Midas</term>
+                    <term>Demainetos</term>
+                    <term>Papias</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Hermogenes figlio di Apollonios">
+                        <persName type="attested" key="Hermogenes figlio di Apollonios">
+                            <name nymRef="Ἑρμογένης">Ἑρμογένης</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Apollonios figlio di Apollonios di Midas">
+                        <persName type="attested" key="Apollonios figlio di Apollonios di Midas">
+                            <name nymRef="Ἀπολλώνιος">Ἀπολλώνιος</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Apollonios figlio di Midas">
+                        <persName type="attested" key="Apollonios figlio di Midas">
+                            <name type="patronymic" nymRef="Ἀπολλώνιος">Ἀπολλωνίου</name>
+                            <persName type="attested" key="Midas">
+                                <name type="patronymic" nymRef="Μίδας">Μίδου</name>
+                            </persName>
+                        </persName>
+                    </person>
+                    <person xml:id="Demainetos">
+                        <persName type="attested" key="Demainetos">
+                            <name nymRef="Δημαίνετος">Δημαινέτου</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Papias">
+                        <persName type="attested" key="Papias">
+                            <name nymRef="Παπίας">Παπίου</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Μεγάλη Μήτηρ Ἀνάειτις Ἄζι-
-                    <lb n="2"/>τα κατέχουσα καὶ Μεὶς Τιάμου
-                    <lb n="3"/>καὶ αι δυνάμεις αὐτῶν. Ἑρμογε-
-                    <lb n="4"/>νης καὶ Ἀπολλώνιος οἱ Ἀπολλω-
-                    <lb n="5"/>νίου Μίδου ἀπὸ Σύρου μανδρῶν
-                    <lb n="6"/>πλαζομένων χοίρων τρειῶν Δη-
-                    <lb n="7"/>μαινέτου καὶ Παπίου ἐξ Ἀζί-
-                    <lb n="8"/>των καὶ προσμισγόντων αὐτῶν
-                    <lb n="9"/>προβάτοις τοῦ Ἑρμογένου καὶ Ἀ-
-                    <lb n="10"/>πολλωνίου, παιδίου αὐτῶν βόσ-
-                    <lb n="11"/>κοντος πενταετοῦς, καὶ ἀπαγα-
-                    <lb n="12"/>γόντων ἔσω, ζητοῦντος οὖν τοῦ
-                    <lb n="13"/>Δημαινέτου καὶ τοῦ Παπίου οὐ-
-                    <lb n="14"/>κ ὡμολόγησαν διά τινα ἀχαριατί-\ναν. Ἐπεστάθη οὖν τῆς θεοῦ τὸ σκῆ-
+                    <lb n="1"/><persName type="divine" key="Megale Meter Azita"><name nymRef="Μήτηρ">Μεγάλη Μήτηρ</name> <rs type="epithet">Ἀνάειτις</rs> <rs type="epithet">Ἄζι-
+                    <lb n="2" break="no"/>τα</rs></persName> κατέχουσα καὶ <persName type="divine" key="Men Tiamos"><name nymRef="Μήν">Μεὶς</name> <rs type="epithet">Τιάμου</rs></persName>
+                    <lb n="3"/>καὶ αι δυνάμεις αὐτῶν. <persName type="attested" key="Hermogenes figlio di Apollonios"><name nymRef="Ἑρμογένης">Ἑρμογε-
+                    <lb n="4" break="no"/>νης</name></persName> καὶ <persName type="attested" key="Apollonios figlio di Apollonios di Midas"><name nymRef="Ἀπολλώνιος">Ἀπολλώνιος</name></persName> οἱ <persName type="attested" key="Apollonios figlio di Midas"><name type="patronymic" nymRef="Ἀπολλώνιος">Ἀπολλω-
+                    <lb n="5" break="no"/>νίου</name> <persName type="attested" key="Midas"><name type="patronymic" nymRef="Μίδας">Μίδου</name></persName></persName> ἀπὸ Σύρου μανδρῶν
+                    <lb n="6"/>πλαζομένων χοίρων τρειῶν <persName type="attested" key="Demainetos"><name nymRef="Δημαίνετος">Δη-
+                    <lb n="7" break="no"/>μαινέτου</name></persName> καὶ <persName type="attested" key="Papias"><name nymRef="Παπίας">Παπίου</name></persName> ἐξ Ἀζί-
+                    <lb n="8" break="no"/>των καὶ προσμισγόντων αὐτῶν
+                    <lb n="9"/>προβάτοις τοῦ <persName type="attested" key="Hermogenes figlio di Apollonios"><name nymRef="Ἑρμογένης">Ἑρμογένου</name></persName> καὶ Ἀ-
+                    <lb n="10" break="no"/><persName type="attested" key="Apollonios figlio di Apollonios di Midas"><name nymRef="Ἀπολλώνιος">πολλωνίου</name></persName>, παιδίου αὐτῶν βόσ-
+                    <lb n="11" break="no"/>κοντος πενταετοῦς, καὶ ἀπαγα-
+                    <lb n="12" break="no"/>γόντων ἔσω, ζητοῦντος οὖν τοῦ
+                    <lb n="13"/><persName type="attested" key="Demainetos"><name nymRef="Δημαίνετος">Δημαινέτου</name></persName> καὶ τοῦ <persName type="attested" key="Papias"><name nymRef="Παπίας">Παπίου</name></persName> οὐ-
+                    <lb n="14" break="no"/>κ ὡμολόγησαν διά τινα ἀχαριατί-\ναν. Ἐπεστάθη οὖν τῆς θεοῦ τὸ σκῆ-
                     <lb n="15"/>πτρον καὶ τοῦ Κυρίου τοῦ Τιάμου.
                     <lb n="16"/>Καὶ μὴ ὁμολογησάντων αὐτῶν ἡ
                     <lb n="17"/>θεὸς οὖν ἔδειξεν τὰς ἰδίας δυ-
                     <lb n="18"/>νάμις καὶ ἱλάσαντο αὐτὴν τελευ-
-                    <lb n="19"/>τήσαντος τοῦ Ἑρμογένου ἡ γυνὴ
-                    <lb n="20"/>αὐτοῦ καὶ τὸ τέκνον καὶ Ἀπολλώνι-
-                    <lb n="21"/>ος ὁ ἀδελφὸς τοῦ Ἑρμογένου. Καὶ
+                    <lb n="19"/>τήσαντος τοῦ <persName type="attested" key="Hermogenes figlio di Apollonios"><name nymRef="Ἑρμογένης">Ἑρμογένου</name></persName> ἡ γυνὴ
+                    <lb n="20"/>αὐτοῦ καὶ τὸ τέκνον καὶ <persName type="attested" key="Apollonios figlio di Apollonios di Midas"><name nymRef="Ἀπολλώνιος">Ἀπολλώνι-
+                    <lb n="21" break="no"/>ος</name></persName> ὁ ἀδελφὸς τοῦ <persName type="attested" key="Hermogenes figlio di Apollonios"><name nymRef="Ἑρμογένης">Ἑρμογένου</name></persName>. Καὶ
                     <lb n="22"/>νῦν αὐτῇ μαρτυροῦμεν καὶ εὐλο-
                     <lb n="23"/>γοῦμεν μετὰ τῶν τέκνων.
                     <lb n="24"/>Ἔτους ρϙθ΄.

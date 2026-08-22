@@ -60,17 +60,55 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Atimitis</term>
+                    <term>Tiamos</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Meter</term>
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Glykon figlio di Tryphon</term>
+                    <term>Tryphon</term>
+                    <term>Trophimos figlio di Theogenes</term>
+                    <term>Theogenes</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Glykon figlio di Tryphon">
+                        <persName type="attested" key="Glykon figlio di Tryphon">
+                            <name nymRef="Γλύκων">Γλύκων</name>
+                            <persName type="attested" key="Tryphon">
+                                <name type="patronymic" nymRef="Τρύφων">Τρύφωνος</name>
+                            </persName>
+                        </persName>
+                    </person>
+                    <person xml:id="Trophimos figlio di Theogenes">
+                        <persName type="attested" key="Trophimos figlio di Theogenes">
+                            <name nymRef="Τρόφιμος">Τρόφιμος</name>
+                            <persName type="attested" key="Theogenes">
+                                <name type="patronymic" nymRef="Θεογένης">Θεογένου</name>
+                            </persName>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Μητρὶ Ἀτίμιτι
-                    <lb n="2"/>καὶ Μηνὶ Τιάμ-
-                    <lb n="3"/>ου Γλύκων
-                    <lb n="4"/>Τρύφωνος καὶ
-                    <lb n="5"/>Τρόφιμος Θεο-
-                    <lb n="6"/>γένου κατ᾽ ἐπι-
+                    <lb n="1"/><persName type="divine" key="Meter Atimitis"><name nymRef="Μήτηρ">Μητρὶ</name> <rs type="epithet">Ἀτίμιτι</rs></persName>
+                    <lb n="2"/>καὶ <persName type="divine" key="Men Tiamos"><name nymRef="Μήν">Μηνὶ</name> <rs type="epithet">Τιάμ-
+                    <lb n="3" break="no"/>ου</rs></persName> <persName type="attested" key="Glykon figlio di Tryphon"><name nymRef="Γλύκων">Γλύκων</name>
+                    <lb n="4"/><persName type="attested" key="Tryphon"><name type="patronymic" nymRef="Τρύφων">Τρύφωνος</name></persName></persName> καὶ
+                    <lb n="5"/><persName type="attested" key="Trophimos figlio di Theogenes"><name nymRef="Τρόφιμος">Τρόφιμος</name> <persName type="attested" key="Theogenes"><name type="patronymic" nymRef="Θεογένης">Θεο-
+                    <lb n="6" break="no"/>γένου</name></persName></persName> κατ᾽ ἐπι-
                     <lb n="7"/>ταγὴν τὸν βωμ-
                     <lb n="8"/>ὸν ἐκ τῶν ἰδίων
                     <lb n="9"/>ἀνέθηκαν.
