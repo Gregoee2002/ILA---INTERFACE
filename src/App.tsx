@@ -442,8 +442,13 @@ function EpithetStats({ monumenti, onSelectMonumento }: { monumenti: Monumento[]
         if (!regions[d]) regions[d] = new Set();
         if (!coEpiteti[d]) coEpiteti[d] = {};
         if (m.regione) regions[d].add(m.regione);
-        // Epiteti co-occorrenti nella stessa epigrafe, con conteggio per il grafo
-        m.epiteti?.forEach(e => {
+        // Epiteti REALMENTE legati a questa divinità in questo monumento
+        // (non un cross-product con epiteti di altre divinità co-presenti
+        // nella stessa iscrizione). Fallback al vecchio comportamento solo
+        // se il campo relazionale non è disponibile (dato non rigenerato).
+        const rel = m.divinitaEpiteti?.find(de => de.divinita === d);
+        const ownEpiteti = rel ? rel.epiteti : (m.divinitaEpiteti ? [] : (m.epiteti || []));
+        ownEpiteti.forEach(e => {
           coEpiteti[d][e] = (coEpiteti[d][e] || 0) + 1;
         });
       });

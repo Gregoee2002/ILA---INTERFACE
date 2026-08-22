@@ -101,7 +101,7 @@
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/><persName type="divine" key="Megale Meter Atimis"><name nymRef="Μήτηρ">[Μεγάλη Μήτηρ</name> <rs type="epithet">Ἄτιμις]</rs></persName>
+                    <lb n="1"/><persName type="divine" key="Megale Meter Atimis"><name nymRef="Μεγάλη">[Μεγάλη</name> <name nymRef="Μήτηρ">Μήτηρ</name> <rs type="epithet">Ἄτιμις]</rs></persName>
                     <lb n="2"/>[καὶ μέγας <persName type="divine" key="Men Tiamos"><name nymRef="Μήν">Μὴν</name> <rs type="epithet">Τιάμου</rs></persName> τὴν ···]
                     <lb n="3"/>[... κώμην βασιλεύ]ων καὶ ἡ δύ-
                     <lb n="4" break="no"/>[ναμις αὐτῶν μεγάλη.] <persName type="attested" key="Apollonios">Ἀπολλώνιος</persName>
@@ -119,7 +119,7 @@
                     <lb n="16" break="no"/>λευτὴν αὐτοῦ ἐπεζητήθη ὑπὸ τ[ῶν]
                     <lb n="17"/>θεῶν. <persName type="attested" key="Tatias figlia di Skollos">Τατιὰς</persName> οὖν ἡ θυγάτηρ αὐτοῦ
                     <lb n="18"/>ἔλοισε τοὺς ὅρκους καὶ νῦν εἴλα-
-                    <lb n="19" break="no"/>σαμένη εὐλογεῖ <persName type="divine" key="Megale Meter Atimis"><name nymRef="Μήτηρ">Μητρὶ</name> <rs type="epithet">Ἀτίμιτι</rs></persName>
+                    <lb n="19" break="no"/>σαμένη εὐλογεῖ <persName type="divine" key="Meter Atimis"><name nymRef="Μήτηρ">Μητρὶ</name> <rs type="epithet">Ἀτίμιτι</rs></persName>
                     <lb n="20"/>καὶ <persName type="divine" key="Men Tiamos"><name nymRef="Μήν">Μηνὶ</name> <rs type="epithet">Τιάμου</rs></persName>. Ἔτους σγ΄, μη(νὸς)
                     <lb n="21"/>Ξανδικοῦ εἰ΄.
                 </ab>

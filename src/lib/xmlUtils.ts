@@ -1,4 +1,5 @@
 import { Monumento, Traduzione, Bibliografia, OrigDate, IconographyData } from "../types";
+import { canonicalDivinityName } from "./divinityAliases";
 
 // Unica fonte per l'etichetta identificativa del record — sostituisce le
 // vecchie stringhe "corpus numero" (CMRDM I 29) costruite ad hoc in più punti.
@@ -673,6 +674,20 @@ function parseTeiElement(teiString: string): Monumento {
   // inside the persName and use that count to decide how many leading key
   // tokens belong to the divinity name, instead of hard-coding "1".
   const divinita: string[] = [];
+  // Associazione per-persName divinità → SUOI epiteti (non un flat cross-
+  // product): ogni <persName type="divine"> incontrato contribuisce una
+  // entry qui con esattamente gli epiteti che gli appartengono. Vedi
+  // src/types.ts per il perché questo esiste accanto a divinita/epiteti piatti.
+  const divinitaEpiteti: { divinita: string; epiteti: string[] }[] = [];
+  const pushDivinitaEpiteti = (divName: string, eps: string[]) => {
+    if (!divName) return;
+    const existing = divinitaEpiteti.find(d => d.divinita === divName);
+    if (existing) {
+      eps.forEach(e => { if (e && !existing.epiteti.includes(e)) existing.epiteti.push(e); });
+    } else {
+      divinitaEpiteti.push({ divinita: divName, epiteti: [...new Set(eps.filter(Boolean))] });
+    }
+  };
   if (editionBlockForEpiteti) {
     const persNameDivineRegex = /<persName\s+[^>]*type="divine"([^>]*)>([\s\S]*?)<\/persName>/g;
     let pdMatch;
@@ -698,13 +713,26 @@ function parseTeiElement(teiString: string): Monumento {
         // theonyms correctly), otherwise the legacy default of 1 token
         // (covers the "frase intera" pattern, where the persName has no
         // decomposable <name>/<rs> children at all).
+        //
+        // NOTE: this undercounts when a single <name> tag wraps a multi-word
+        // compound ("Μεγάλη Μήτηρ" as ONE element) or when a repeated/
+        // abbreviated later mention spells fewer words than the compound
+        // name it stands for. A tempting fix (derive the count from
+        // tokens.length - epithetChildren.length instead) was tried and
+        // reverted: it breaks whenever an <rs type="epithet"> exists in the
+        // text that ISN'T part of the normalized key (e.g. a secondary
+        // Latin epithet like "Summae Parenti" alongside key="Magna Mater"),
+        // which is common enough in this corpus to cause more regressions
+        // than it fixes. Fix miscounts at the XML source instead (split the
+        // <name> tag into one per word) rather than re-guessing here.
         const nameTokenCount = nameChildren.length > 0 ? nameChildren.length : 1;
-        const divName = tokens.slice(0, nameTokenCount).join(' ');
+        const divName = canonicalDivinityName(tokens.slice(0, nameTokenCount).join(' '));
         const epithetTokens = tokens.slice(nameTokenCount);
         if (divName && !divinita.includes(divName)) divinita.push(divName);
         epithetTokens.forEach(ep => {
           if (ep && !epiteti.includes(ep)) epiteti.push(ep);
         });
+        pushDivinitaEpiteti(divName, epithetTokens);
       } else {
         // No key: build divinita/epiteti from the structured children
         // instead of dumping the whole element text as one blob — that
@@ -715,8 +743,9 @@ function parseTeiElement(teiString: string): Monumento {
         // the project skill (key is mandatory) — this branch is a
         // best-effort fallback for legacy/incomplete files, not the norm.
         if (nameChildren.length > 0) {
-          const divName = nameChildren.join(' ');
+          const divName = canonicalDivinityName(nameChildren.join(' '));
           if (divName && !divinita.includes(divName)) divinita.push(divName);
+          pushDivinitaEpiteti(divName, []);
         } else {
           // Fully unstructured "frase intera" with no @key and no <name>
           // children either: nothing clean to extract. Skip rather than
@@ -749,12 +778,20 @@ function parseTeiElement(teiString: string): Monumento {
     while ((dMatch = termRegex.exec(divKeyBlock[1])) !== null) {
       const val = unescapeXml(dMatch[1].trim());
       if (!val) continue;
+      // Se il termine intero coincide già con una divinità nota (nome
+      // composto già riconosciuto dal persName nello stesso monumento, es.
+      // "Kore Selene", "Agathos Daimon"), non spezzarlo: la prima-parola-
+      // sempre-nome era corretta solo per "Nome Epiteto", non per teonimi
+      // composti curati come termine unico.
+      if (divinita.includes(val)) continue;
       const tokens = val.split(/\s+/);
-      const divName = tokens[0];
+      const divName = canonicalDivinityName(tokens[0]);
       if (divName && !divinita.includes(divName)) divinita.push(divName);
-      tokens.slice(1).forEach(ep => {
+      const kwEpithets = tokens.slice(1);
+      kwEpithets.forEach(ep => {
         if (ep && !epiteti.includes(ep)) epiteti.push(ep);
       });
+      pushDivinitaEpiteti(divName, kwEpithets);
     }
   }
 
@@ -1042,6 +1079,7 @@ function parseTeiElement(teiString: string): Monumento {
     supplied_ranges,
     epiteti,
     divinita,
+    divinitaEpiteti,
     onomastica,
     persone,
     imperatori,

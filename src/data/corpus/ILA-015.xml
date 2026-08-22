@@ -117,7 +117,7 @@
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/><persName type="divine" key="Megale Meter Azita"><name nymRef="Μήτηρ">Μεγάλη Μήτηρ</name> <rs type="epithet">Ἀνάειτις</rs> <rs type="epithet">Ἄζι-
+                    <lb n="1"/><persName type="divine" key="Megale Meter Azita"><name nymRef="Μεγάλη">Μεγάλη</name> <name nymRef="Μήτηρ">Μήτηρ</name> <rs type="epithet">Ἀνάειτις</rs> <rs type="epithet">Ἄζι-
                     <lb n="2" break="no"/>τα</rs></persName> κατέχουσα καὶ <persName type="divine" key="Men Tiamos"><name nymRef="Μήν">Μεὶς</name> <rs type="epithet">Τιάμου</rs></persName>
                     <lb n="3"/>καὶ αι δυνάμεις αὐτῶν. <persName type="attested" key="Hermogenes figlio di Apollonios"><name nymRef="Ἑρμογένης">Ἑρμογε-
                     <lb n="4" break="no"/>νης</name></persName> καὶ <persName type="attested" key="Apollonios figlio di Apollonios di Midas"><name nymRef="Ἀπολλώνιος">Ἀπολλώνιος</name></persName> οἱ <persName type="attested" key="Apollonios figlio di Midas"><name type="patronymic" nymRef="Ἀπολλώνιος">Ἀπολλω-

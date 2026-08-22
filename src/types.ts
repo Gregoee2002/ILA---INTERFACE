@@ -92,6 +92,12 @@ export interface Monumento {
   data_fine?: number;
   epiteti?: string[];
   divinita?: string[];
+  // Associazione per-persName tra ogni divinità nominata nel monumento e i
+  // SUOI epiteti (non quelli di eventuali altre divinità co-presenti nella
+  // stessa iscrizione). `divinita`/`epiteti` restano array piatti per la
+  // ricerca full-text e i filtri generici; questo campo è la fonte corretta
+  // per qualunque statistica "epiteti di questa specifica divinità".
+  divinitaEpiteti?: { divinita: string; epiteti: string[] }[];
   onomastica?: string[];
   persone?: Persona[];
   iconografia?: IconographyData;

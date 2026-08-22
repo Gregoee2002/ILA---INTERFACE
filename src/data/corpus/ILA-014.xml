@@ -91,7 +91,7 @@
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/><persName type="divine" key="Megale Meter Tazene"><name nymRef="Μήτηρ">[Με]γάλη Μήτ[ηρ</name> <rs type="epithet">Ταζη-
+                    <lb n="1"/><persName type="divine" key="Megale Meter Tazene"><name nymRef="Μεγάλη">[Με]γάλη</name> <name nymRef="Μήτηρ">Μήτ[ηρ</name> <rs type="epithet">Ταζη-
                     <lb n="2" break="no"/>νή]</rs></persName> καὶ <persName type="divine" key="Men Labanas"><name nymRef="Μήν">Μὶς</name> <rs type="epithet">Λαβάνας</rs></persName> [καὶ]
                     <lb n="3"/><persName type="divine" key="Men Artemidorou Dorou"><name nymRef="Μήν">Μὶς</name> <rs type="epithet">Ἀρτεμιδώρου Δό-
                     <lb n="4" break="no"/>ρου</rs></persName> κώμην βασιλεύον-

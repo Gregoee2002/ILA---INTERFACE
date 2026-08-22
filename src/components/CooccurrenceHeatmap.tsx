@@ -72,11 +72,21 @@ export const CooccurrenceHeatmap: React.FC<CooccurrenceHeatmapProps> = ({ monume
   const [rowAxis, setRowAxis] = useState<AxisType>('epiteti');
   const [colAxis, setColAxis] = useState<AxisType>('regione');
 
+  // La coppia di assi Divinità×Epiteti non può usare il cross-product piatto
+  // generico: un'iscrizione con due divinità dove solo una ha un epiteto
+  // finirebbe per accreditare quell'epiteto a ENTRAMBE. Per questa coppia
+  // specifica si usa l'associazione per-persName in `m.divinitaEpiteti`
+  // (vedi src/types.ts e src/lib/xmlUtils.ts). Per ogni altra coppia di assi
+  // il cross-product a livello di monumento resta corretto e va lasciato.
+  const isDivinitaEpitetiPair =
+    (rowAxis === 'divinita' && colAxis === 'epiteti') ||
+    (rowAxis === 'epiteti' && colAxis === 'divinita');
+
   const { rowValues, colValues, matrix, rowCounts, colCounts, totalN } = useMemo(() => {
     const rCounts = new Map<string, number>();
     const cCounts = new Map<string, number>();
     const pairCounts = new Map<string, number>();
-    
+
     const total = monumenti.length;
 
     monumenti.forEach(m => {
@@ -94,12 +104,21 @@ export const CooccurrenceHeatmap: React.FC<CooccurrenceHeatmapProps> = ({ monume
         cCounts.set(c, (cCounts.get(c) || 0) + 1);
       });
 
-      uniqueRVals.forEach(r => {
-        uniqueCVals.forEach(c => {
-          const key = `${r}::${c}`;
-          pairCounts.set(key, (pairCounts.get(key) || 0) + 1);
+      if (isDivinitaEpitetiPair && m.divinitaEpiteti) {
+        m.divinitaEpiteti.forEach(({ divinita: d, epiteti: eps }) => {
+          eps.forEach(e => {
+            const key = rowAxis === 'divinita' ? `${d}::${e}` : `${e}::${d}`;
+            pairCounts.set(key, (pairCounts.get(key) || 0) + 1);
+          });
         });
-      });
+      } else {
+        uniqueRVals.forEach(r => {
+          uniqueCVals.forEach(c => {
+            const key = `${r}::${c}`;
+            pairCounts.set(key, (pairCounts.get(key) || 0) + 1);
+          });
+        });
+      }
     });
 
     const sortedRows = Array.from(rCounts.keys()).sort((a, b) => rCounts.get(b)! - rCounts.get(a)!);
