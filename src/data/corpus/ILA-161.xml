@@ -60,20 +60,49 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Gaios Phlaouios Baibianos</term>
+                    <term>Terentios Oulpios Zosimos</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Gaios Phlaouios Baibianos">
+                        <persName type="attested" key="Gaios Phlaouios Baibianos">
+                            <name>Γ.</name>
+                            <name nymRef="Φλάουιος">Φλαίου</name>
+                            <name nymRef="Βαιβιανός">Βαιβιανοῦ</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Terentios Oulpios Zosimos">
+                        <persName type="attested" key="Terentios Oulpios Zosimos">
+                            <name nymRef="Τερέντιος">Τερέντιον</name>
+                            <name nymRef="Ούλπιος">Οὔλπιον</name>
+                            <name nymRef="Ζώσιμος">Ζώσιμον</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
                     <lb n="1"/>Ἀγωνοθετοῦντος διὰ
-                    <lb n="2"/>βίου Γ. Φλαίου Βαιβιανοῦ
+                    <lb n="2"/>βίου <persName type="attested" key="Gaios Phlaouios Baibianos"><name>Γ.</name> <name nymRef="Φλάουιος">Φλαίου</name> <name nymRef="Βαιβιανός">Βαιβιανοῦ</name></persName>
                     <lb n="3"/>ποντίφικος ἱππέως
                     <lb n="4"/>Ῥωμαίων πάτρωνος
                     <lb n="5"/>τῆς κολωνείας ἀρχι-
-                    <lb n="6"/>ερέως διὰ βίου πα-
-                    <lb n="7"/>τρίου θεοῦ Μηνὸς
-                    <lb n="8"/>Τερέντιον Οὔλπιον
-                    <lb n="9"/>Ζώσιμον νεικήσαν-
+                    <lb n="6" break="no"/>ερέως διὰ βίου πα-
+                    <lb n="7" break="no"/>τρίου <persName type="divine" key="Men">θεοῦ Μηνὸς</persName>
+                    <lb n="8"/><persName type="attested" key="Terentios Oulpios Zosimos"><name nymRef="Τερέντιος">Τερέντιον</name> <name nymRef="Ούλπιος">Οὔλπιον</name>
+                    <lb n="9"/><name nymRef="Ζώσιμος">Ζώσιμον</name></persName> νεικήσαν-
                     <lb n="10"/>[τα ..........]
                 </ab>
             </div>

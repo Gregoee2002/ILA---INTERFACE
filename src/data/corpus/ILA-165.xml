@@ -60,19 +60,54 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Patrios</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Marcus Ouirrios Genoökios Antonianos</term>
+                    <term>Markos Ouirrios Genoökios Sanktos Antonianos</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Marcus Ouirrios Genoökios Antonianos">
+                        <persName type="attested" key="Marcus Ouirrios Genoökios Antonianos">
+                            <name>Μ.</name>
+                            <name nymRef="Ουίρριος">Ουίρριος</name>
+                            <name nymRef="Γενοόκιος">Γενοόκιος</name>
+                            <name nymRef="Αντωνιανός">Ἀντωνιανὸς</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Markos Ouirrios Genoökios Sanktos Antonianos">
+                        <persName type="attested" key="Markos Ouirrios Genoökios Sanktos Antonianos">
+                            <name nymRef="Μάρκος">Μάρκος</name>
+                            <name nymRef="Ουίρριος">Ουίρριος</name>
+                            <name nymRef="Γενοόκιος">Γενοόκιος</name>
+                            <name nymRef="Σάνκτος">Σάνκτος</name>
+                            <name nymRef="Αντωνιανός">Ἀντωνιανὸς</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
                     <lb n="1"/>Μ. Ἀγαθῇ Τύχῃ
-                    <lb n="2"/>Μ. Ουίρριος Γενοό-
-                    <lb n="3"/>κιος Ἀντωνιανὸς
-                    <lb n="4"/>καὶ Μάρκος Ουίρ-
-                    <lb n="5"/>ριος Γενοόκιος
-                    <lb n="6"/>Σάνκτος Ἀντω-
-                    <lb n="7"/>νιανὸς τέκμορεύ-
-                    <lb n="8"/>σαντες Μηνὶ Πατρίῳ
+                    <lb n="2"/><persName type="attested" key="Marcus Ouirrios Genoökios Antonianos"><name>Μ.</name> <name nymRef="Ουίρριος">Ουίρριος</name> <name nymRef="Γενοόκιος">Γενοό-
+                    <lb n="3" break="no"/>κιος</name> <name nymRef="Αντωνιανός">Ἀντωνιανὸς</name></persName>
+                    <lb n="4"/>καὶ <persName type="attested" key="Markos Ouirrios Genoökios Sanktos Antonianos"><name nymRef="Μάρκος">Μάρκος</name> <name nymRef="Ουίρριος">Ουίρ-
+                    <lb n="5" break="no"/>ριος</name> <name nymRef="Γενοόκιος">Γενοόκιος</name>
+                    <lb n="6"/><name nymRef="Σάνκτος">Σάνκτος</name> <name nymRef="Αντωνιανός">Ἀντω-
+                    <lb n="7" break="no"/>νιανὸς</name></persName> τέκμορεύ-
+                    <lb n="8" break="no"/>σαντες <persName type="divine" key="Men Patrios"><name nymRef="Μήν">Μηνὶ</name> <rs type="epithet">Πατρίῳ</rs></persName>
                     <lb n="9"/>εὐχήν.
                 </ab>
             </div>

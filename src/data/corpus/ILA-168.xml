@@ -60,19 +60,45 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Kaisennios Onesimos</term>
+                    <term>Kaisennios Philetos</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Kaisennios Onesimos">
+                        <persName type="attested" key="Kaisennios Onesimos">
+                            <name nymRef="Καισέννιος">Καισέννιοι</name>
+                            <name nymRef="Ονήσιμος">Ὀνήσιμος</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Kaisennios Philetos">
+                        <persName type="attested" key="Kaisennios Philetos">
+                            <name nymRef="Φιλήτος">Φιλήτος</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Καισέν-
-                    <lb n="2"/>νιοι Ὀνή-
-                    <lb n="3"/>σιμος
-                    <lb n="4"/>Φιλήτος
+                    <lb n="1"/><persName type="attested" key="Kaisennios Onesimos"><name nymRef="Καισέννιος">Καισέν-
+                    <lb n="2" break="no"/>νιοι</name> <name nymRef="Ονήσιμος">Ὀνή-
+                    <lb n="3" break="no"/>σιμος</name></persName>
+                    <lb n="4"/><persName type="attested" key="Kaisennios Philetos"><name nymRef="Φιλήτος">Φιλήτος</name></persName>
                     <lb n="5"/>τεκμο-
-                    <lb n="6"/>ρεύσαν-
-                    <lb n="7"/>τες τὸ β΄
-                    <lb n="8"/>Μηνὶ εὐχή[ν]
+                    <lb n="6" break="no"/>ρεύσαν-
+                    <lb n="7" break="no"/>τες τὸ β΄
+                    <lb n="8"/><persName type="divine" key="Men"><name nymRef="Μήν">Μηνὶ</name></persName> εὐχή[ν]
                 </ab>
             </div>
             <div type="apparatus"/>

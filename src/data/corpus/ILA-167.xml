@@ -60,22 +60,67 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Aulus Neratios Postoumos</term>
+                    <term>Loukios Sentios Maximos</term>
+                    <term>Gaios Oueibios Oueitales</term>
+                    <term>Aulus Neratios Ar...</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Aulus Neratios Postoumos">
+                        <persName type="attested" key="Aulus Neratios Postoumos">
+                            <name>Α.</name>
+                            <name nymRef="Νεράτιος">Νεράτιος</name>
+                            <name nymRef="Πόστουμος">Πόστουμος</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Loukios Sentios Maximos">
+                        <persName type="attested" key="Loukios Sentios Maximos">
+                            <name>Λ.</name>
+                            <name nymRef="Σέντιος">Σέντιος</name>
+                            <name nymRef="Μάξιμος">Μάξιμος</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Gaios Oueibios Oueitales">
+                        <persName type="attested" key="Gaios Oueibios Oueitales">
+                            <name>Γ.</name>
+                            <name nymRef="Ουείβιος">Οὐείβιος</name>
+                            <name nymRef="Ουειτάλης">Οὐειτάλης</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Aulus Neratios Ar...">
+                        <persName type="attested" key="Aulus Neratios Ar...">
+                            <name>Α.</name>
+                            <name nymRef="Νεράτιος">Νεράτιος</name>
+                            <name>Α[...]ρ[...]</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Μηνὶ εὐχήν.
-                    <lb n="2"/>Α. Νερά-
-                    <lb n="3"/>τιος Πόσ-
-                    <lb n="4"/>τουμος
-                    <lb n="5"/>Λ. Σέντιος
-                    <lb n="6"/>Μάξιμος
-                    <lb n="7"/>Γ. Οὐείβιος
-                    <lb n="8"/>Οὐειτάλης
-                    <lb n="9"/>Α. Νερά-
-                    <lb n="10"/>τιος Α-
-                    <lb n="11"/>ρ[...]
+                    <lb n="1"/><persName type="divine" key="Men"><name nymRef="Μήν">Μηνὶ</name></persName> εὐχήν.
+                    <lb n="2"/><persName type="attested" key="Aulus Neratios Postoumos"><name>Α.</name> <name nymRef="Νεράτιος">Νερά-
+                    <lb n="3" break="no"/>τιος</name> <name nymRef="Πόστουμος">Πόσ-
+                    <lb n="4" break="no"/>τουμος</name></persName>
+                    <lb n="5"/><persName type="attested" key="Loukios Sentios Maximos"><name>Λ.</name> <name nymRef="Σέντιος">Σέντιος</name>
+                    <lb n="6"/><name nymRef="Μάξιμος">Μάξιμος</name></persName>
+                    <lb n="7"/><persName type="attested" key="Gaios Oueibios Oueitales"><name>Γ.</name> <name nymRef="Ουείβιος">Οὐείβιος</name>
+                    <lb n="8"/><name nymRef="Ουειτάλης">Οὐειτάλης</name></persName>
+                    <lb n="9"/><persName type="attested" key="Aulus Neratios Ar..."><name>Α.</name> <name nymRef="Νεράτιος">Νερά-
+                    <lb n="10" break="no"/>τιος</name> <name>Α-
+                    <lb n="11" break="no"/>ρ[...]</name></persName>
                 </ab>
             </div>
             <div type="apparatus"/>

@@ -60,6 +60,35 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Gaios Phlaiouios Baibianos</term>
+                    <term>Kalpournios Magios Eutyches</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Gaios Phlaiouios Baibianos">
+                        <persName type="attested" key="Gaios Phlaiouios Baibianos">
+                            <name>Γ.</name>
+                            <name nymRef="Φλάουιος">Φλαιουίου</name>
+                            <name nymRef="Βαιβιανός">Βαιβιανοῦ</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Kalpournios Magios Eutyches">
+                        <persName type="attested" key="Kalpournios Magios Eutyches">
+                            <name nymRef="Καλπούρνιος">Καλπούρνιον</name>
+                            <name nymRef="Μάγιος">Μάγιον</name>
+                            <name nymRef="Ευτύχης">Εὐτύχην</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
@@ -67,14 +96,14 @@
                 <ab>
                     <lb n="1"/>Ἀγ[αθῇ] Τύ[χῃ]
                     <lb n="2"/>Ἀγωνοθετοῦντος
-                    <lb n="3"/>διὰ βίου Γ. Φλαιουίου
-                    <lb n="4"/>Βαιβιανοῦ ποντίφικος
+                    <lb n="3"/>διὰ βίου <persName type="attested" key="Gaios Phlaiouios Baibianos"><name>Γ.</name> <name nymRef="Φλάουιος">Φλαιουίου</name>
+                    <lb n="4"/><name nymRef="Βαιβιανός">Βαιβιανοῦ</name></persName> ποντίφικος
                     <lb n="5"/>ἱππέως Ῥωμαίων πατρω-
-                    <lb n="6"/>νος τῆς κολωνείας
+                    <lb n="6" break="no"/>νος τῆς κολωνείας
                     <lb n="7"/>ἀρχιερέως διὰ βίου
-                    <lb n="8"/>τοῦ πατρίου θεοῦ Μηνὸς
-                    <lb n="9"/>Καλπούρνιον Μάγιον
-                    <lb n="10"/>Εὐτύχην νεικήσαντα
+                    <lb n="8"/>τοῦ πατρίου <persName type="divine" key="Men">θεοῦ Μηνὸς</persName>
+                    <lb n="9"/><persName type="attested" key="Kalpournios Magios Eutyches"><name nymRef="Καλπούρνιος">Καλπούρνιον</name> <name nymRef="Μάγιος">Μάγιον</name>
+                    <lb n="10"/><name nymRef="Ευτύχης">Εὐτύχην</name></persName> νεικήσαντα
                     <lb n="11"/>νεικήσαντα παίδων
                     <lb n="12"/>πάλην ἀγῶνα Μαξιμιά-
                     <lb n="13"/>νειον ἡ πατρὶς

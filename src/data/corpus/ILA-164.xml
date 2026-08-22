@@ -60,12 +60,30 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="onomastica">
+                    <term>Sextus Flavonius Naevius</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Sextus Flavonius Naevius">
+                        <persName type="attested" key="Sextus Flavonius Naevius">
+                            <name>Sex(tus)</name>
+                            <name>Flavonius</name>
+                            <name>Naevius</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="la">
                 <ab>
-                    <lb n="1"/>Sex(tus) Flavonius Naevius
+                    <lb n="1"/><persName type="attested" key="Sextus Flavonius Naevius"><name>Sex(tus)</name> <name>Flavonius</name> <name>Naevius</name></persName>
                     <lb n="2"/>LVS
                 </ab>
             </div>

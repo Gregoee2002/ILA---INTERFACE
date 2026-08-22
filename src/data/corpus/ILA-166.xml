@@ -60,13 +60,31 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="onomastica">
+                    <term>Caius Albucius Firmus</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Caius Albucius Firmus">
+                        <persName type="attested" key="Caius Albucius Firmus">
+                            <name>C.</name>
+                            <name>Albucio</name>
+                            <name>Firmo</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="la">
                 <ab>
-                    <lb n="1"/>C(aio) Albucio, C(aii) f(ilio)
-                    <lb n="2"/>Ser(gia) Firmo, aed(ili),
+                    <lb n="1"/><persName type="attested" key="Caius Albucius Firmus"><name>C(aio)</name> <name>Albucio</name>, C(aii) f(ilio)
+                    <lb n="2"/>Ser(gia) <name>Firmo</name></persName>, aed(ili),
                     <lb n="3"/>duumvir(o), qui pecuni-
                     <lb n="4"/>am destinavit per
                     <lb n="5"/>testamentum ad

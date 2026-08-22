@@ -60,21 +60,50 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Gaios Phlaouios Baibianos</term>
+                    <term>Markos Oueireios Markianos</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Gaios Phlaouios Baibianos">
+                        <persName type="attested" key="Gaios Phlaouios Baibianos">
+                            <name>Γ.</name>
+                            <name>Φλ.</name>
+                            <name nymRef="Βαιβιανός">Βαιβιανοῦ</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Markos Oueireios Markianos">
+                        <persName type="attested" key="Markos Oueireios Markianos">
+                            <name>Μᾶρ(κον)</name>
+                            <name nymRef="Ουερειος">Οὐείρειον</name>
+                            <name nymRef="Μαρκιανός">Μαρκιανὸν</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
                     <lb n="1"/>Ἐπὶ ἀγωνοθέτου
-                    <lb n="2"/>διὰ βίου Γ. Φλ. Βαιβι-
-                    <lb n="3"/>ανοῦ ποντίφικος
+                    <lb n="2"/>διὰ βίου <persName type="attested" key="Gaios Phlaouios Baibianos"><name>Γ.</name> <name>Φλ.</name> <name nymRef="Βαιβιανός">Βαιβι-
+                    <lb n="3" break="no"/>ανοῦ</name></persName> ποντίφικος
                     <lb n="4"/>ἱππέως Ῥωμαί-
-                    <lb n="5"/>ων πάτρωνος τῆς
+                    <lb n="5" break="no"/>ων πάτρωνος τῆς
                     <lb n="6"/>κολωνείας ἀρχιερέ-
-                    <lb n="7"/>ως διὰ βίου τοῦ πατρί-
-                    <lb n="8"/>ου θεοῦ Μηνὸς
-                    <lb n="9"/>Μᾶρ(κον) Οὐείρειον Μαρ-
-                    <lb n="10"/>κιανὸν νεικήσαντα
+                    <lb n="7" break="no"/>ως διὰ βίου τοῦ πατρί-
+                    <lb n="8" break="no"/>ου <persName type="divine" key="Men">θεοῦ Μηνὸς</persName>
+                    <lb n="9"/><persName type="attested" key="Markos Oueireios Markianos"><name>Μᾶρ(κον)</name> <name nymRef="Ουερειος">Οὐείρειον</name> <name nymRef="Μαρκιανός">Μαρ-
+                    <lb n="10" break="no"/>κιανὸν</name></persName> νεικήσαντα
                     <lb n="11"/>παίδων πάλην
                     <lb n="12"/>ἀγῶνα Μαξιμιά-
                     <lb n="13"/>νειον θέμιδι τὸ

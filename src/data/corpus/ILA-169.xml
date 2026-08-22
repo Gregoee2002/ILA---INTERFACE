@@ -60,14 +60,37 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Askaenos</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Ouios Paulos</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Ouios Paulos">
+                        <persName type="attested" key="Ouios Paulos">
+                            <name nymRef="Ούιος">Οὐίω</name>
+                            <name nymRef="Παύλος">Παῦλος</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Οὐίω Παῦλος
-                    <lb n="2"/>Μηνὶ Ἀσκαηνῷ εὐ-
-                    <lb n="3"/>χὴν μετὰ τῶν ἰδίων.
+                    <lb n="1"/><persName type="attested" key="Ouios Paulos"><name nymRef="Ούιος">Οὐίω</name> <name nymRef="Παύλος">Παῦλος</name></persName>
+                    <lb n="2"/><persName type="divine" key="Men Askaenos"><name nymRef="Μήν">Μηνὶ</name> <rs type="epithet">Ἀσκαηνῷ</rs></persName> εὐ-
+                    <lb n="3" break="no"/>χὴν μετὰ τῶν ἰδίων.
                 </ab>
             </div>
             <div type="apparatus"/>
