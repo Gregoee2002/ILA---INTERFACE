@@ -60,14 +60,38 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="onomastica">
+                    <term>Gallos Aufustios</term>
+                    <term>Markellos Gaios Oueibios</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Gallos Aufustios">
+                        <persName type="attested" key="Gallos Aufustios">
+                            <name nymRef="Γάλλος">Γάλλος</name>
+                            <name nymRef="Αὐφούστιος">Αὐφούστιος</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Markellos Gaios Oueibios">
+                        <persName type="attested" key="Markellos Gaios Oueibios">
+                            <name nymRef="Μάρκελλος">Μάρκελλος</name>
+                            <name nymRef="Γάιος">Γάιος</name>
+                            <name nymRef="Οὐείβιος">Οὐείβιος</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Γάλλος Αὐφούσ-
-                    <lb n="2"/>τιος καὶ Μάρκελλος
-                    <lb n="3"/>Γάιος Οὐείβιος.
+                    <lb n="1"/><persName type="attested" key="Gallos Aufustios"><name nymRef="Γάλλος">Γάλλος</name> <name nymRef="Αὐφούστιος">Αὐφούσ<lb n="2" break="no"/>τιος</name></persName> καὶ <persName type="attested" key="Markellos Gaios Oueibios"><name nymRef="Μάρκελλος">Μάρκελλος</name>
+                    <lb n="3"/><name nymRef="Γάιος">Γάιος</name> <name nymRef="Οὐείβιος">Οὐείβιος</name></persName>.
                 </ab>
             </div>
             <div type="apparatus"/>

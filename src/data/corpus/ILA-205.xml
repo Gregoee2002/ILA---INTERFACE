@@ -60,14 +60,28 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="onomastica">
+                    <term>Alexandros</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Alexandros">
+                        <persName type="attested" key="Alexandros">
+                            <name nymRef="Ἀλέξανδρος">Ἀλέξανδρος</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Ἀλέξαν-
-                    <lb n="2"/>δρος ζω-
-                    <lb n="3"/>γράφ<supplied reason="lost">ος</supplied>.
+                    <lb n="1"/><persName type="attested" key="Alexandros"><name nymRef="Ἀλέξανδρος">Ἀλέξαν<lb n="2" break="no"/>δρος</name></persName> ζω<lb n="3" break="no"/>γράφ<supplied reason="lost">ος</supplied>.
                 </ab>
             </div>
             <div type="apparatus"/>

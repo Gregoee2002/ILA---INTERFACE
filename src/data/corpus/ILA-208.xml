@@ -60,20 +60,69 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Antipatros</term>
+                    <term>Boubalos</term>
+                    <term>Himeros</term>
+                    <term>Asklepiades</term>
+                    <term>Ioulios</term>
+                    <term>Euarestos</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Antipatros">
+                        <persName type="attested" key="Antipatros">
+                            <name nymRef="Ἀντίπατρος">Ἀντίπατρος</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Boubalos">
+                        <persName type="attested" key="Boubalos">
+                            <name nymRef="Βούβαλος">Βούβαλος</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Himeros">
+                        <persName type="attested" key="Himeros">
+                            <name nymRef="Ἵμερως">Ἱμέρως</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Asklepiades">
+                        <persName type="attested" key="Asklepiades">
+                            <name nymRef="Ἀσκληπιάδης">Ἀσκληπιάδης</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Ioulios">
+                        <persName type="attested" key="Ioulios">
+                            <name nymRef="Ἰούλιος">Ἰούλιος</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Euarestos">
+                        <persName type="attested" key="Euarestos">
+                            <name nymRef="Εὐάρεστος">Εὐάρεστος</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Μηνὶ εὐχήν.
-                    <lb n="2"/>Ἀντίπατρος Ἱμέρως Ἰούλιος
-                    <lb n="3"/>Βουβάλου Ἀσκληπιάδου Εὐάρε<supplied reason="lost">σ</supplied>τος
+                    <lb n="1"/><persName type="divine" key="Men"><name nymRef="Μήν">Μηνὶ</name></persName> εὐχήν.
+                    <lb n="2"/><persName type="attested" key="Antipatros"><name nymRef="Ἀντίπατρος">Ἀντίπατρος</name></persName> <persName type="attested" key="Himeros"><name nymRef="Ἵμερως">Ἱμέρως</name></persName> <persName type="attested" key="Ioulios"><name nymRef="Ἰούλιος">Ἰούλιος</name></persName>
+                    <lb n="3"/><persName type="attested" key="Boubalos"><name type="patronymic" nymRef="Βούβαλος">Βουβάλου</name></persName> <persName type="attested" key="Asklepiades"><name type="patronymic" nymRef="Ἀσκληπιάδης">Ἀσκληπιάδου</name></persName> <persName type="attested" key="Euarestos"><name type="patronymic" nymRef="Εὐάρεστος">Εὐάρε<supplied reason="lost">σ</supplied>τος</name></persName>
                     <lb n="4"/>LLL
                 </ab>
             </div>
             <div type="apparatus"/>
             <div type="translation" xml:lang="it"><p>DA_COMPILARE</p></div>
-            <div type="commentary"><p>DA_COMPILARE</p></div>
+            <div type="commentary"><p>La corrispondenza figlio-padre (Antipatros/Boubalos, Himeros/Asklepiades, Ioulios/Euarestos) è desunta dalla disposizione su tre naiskoi paralleli descritta da Lane, non da un rapporto di adiacenza testuale in senso stretto: nomi e patronimici occupano righe separate (r. 2 e r. 3), ciascuno allineato in colonna sotto il proprio naiskos. Per questo motivo non sono stati annidati come nel pattern patronimico standard (persName del figlio contenente quello del padre), ma codificati come sei persone attestate distinte, con la relazione di filiazione affidata a questo commento.</p></div>
             <div type="bibliography">
                 <listBibl>
                     <bibl>Lane, CMRDM I 220</bibl>

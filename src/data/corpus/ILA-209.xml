@@ -60,12 +60,34 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Askaenos</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Lokas</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Lokas">
+                        <persName type="attested" key="Lokas">
+                            <name nymRef="Λοκᾶς">Λοκᾶς</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Λοκᾶς Μ(ηνὶ) Ἀ(σκαηνῷ)
+                    <lb n="1"/><persName type="attested" key="Lokas"><name nymRef="Λοκᾶς">Λοκᾶς</name></persName> <persName type="divine" key="Men Askaenos"><name nymRef="Μήν"><expan><abbr>Μ</abbr><ex>ηνὶ</ex></expan></name> <rs type="epithet"><expan><abbr>Ἀ</abbr><ex>σκαηνῷ</ex></expan></rs></persName>
                     <lb n="2"/>εὐχήν.
                 </ab>
             </div>

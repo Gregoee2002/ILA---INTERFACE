@@ -60,16 +60,40 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="onomastica">
+                    <term>Lucius Sentius Maximus</term>
+                    <term>Sentia Uteilia</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Lucius Sentius Maximus">
+                        <persName type="attested" key="Lucius Sentius Maximus">
+                            <name>L.</name>
+                            <name>Sentius</name>
+                            <name>Maximus</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Sentia Uteilia">
+                        <persName type="attested" key="Sentia Uteilia">
+                            <name>Sentia</name>
+                            <name>Uteilia</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="la">
                 <ab>
-                    <lb n="1"/>L. Sentius
-                    <lb n="2"/>Maximus
+                    <lb n="1"/><persName type="attested" key="Lucius Sentius Maximus"><name>L.</name> <name>Sentius</name>
+                    <lb n="2"/><name>Maximus</name></persName>
                     <lb n="3"/>et
-                    <lb n="4"/>Sentia Utei-
-                    <lb n="5"/>lia L V S
+                    <lb n="4"/><persName type="attested" key="Sentia Uteilia"><name>Sentia</name> <name>Utei<lb n="5" break="no"/>lia</name></persName> L V S
                 </ab>
             </div>
             <div type="apparatus"/>

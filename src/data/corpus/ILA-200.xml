@@ -60,12 +60,34 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="onomastica">
+                    <term>Hyakinthos figlio di Mnesitheos</term>
+                    <term>Mnesitheos</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Hyakinthos figlio di Mnesitheos">
+                        <persName type="attested" key="Hyakinthos figlio di Mnesitheos">
+                            <name nymRef="Ὑάκινθος">Ὑάκινθος</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Mnesitheos">
+                        <persName type="attested" key="Mnesitheos">
+                            <name nymRef="Μνησίθεος">Μνησίθεος</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Ὑάκινθος Μνησιθέ<supplied reason="lost">ου</supplied>
+                    <lb n="1"/><persName type="attested" key="Hyakinthos figlio di Mnesitheos"><name nymRef="Ὑάκινθος">Ὑάκινθος</name> <persName type="attested" key="Mnesitheos"><name type="patronymic" nymRef="Μνησίθεος">Μνησιθέ<supplied reason="lost">ου</supplied></name></persName></persName>
                     <lb n="2"/>τεκμορεύσας.
                 </ab>
             </div>

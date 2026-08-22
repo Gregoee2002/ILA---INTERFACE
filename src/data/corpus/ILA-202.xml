@@ -60,14 +60,39 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Kroumetos</term>
+                    <term>Askanios</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Kroumetos">
+                        <persName type="attested" key="Kroumetos">
+                            <name nymRef="Κρούμητος">Κρούμητος</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Askanios">
+                        <persName type="attested" key="Askanios">
+                            <name nymRef="Ἀσκάνιος">Ἀσκάνιος</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Κρούμητος καὶ
-                    <lb n="2"/>Ἀσκάνιος β΄
-                    <lb n="3"/>Μηνὶ εὐχήν.
+                    <lb n="1"/><persName type="attested" key="Kroumetos"><name nymRef="Κρούμητος">Κρούμητος</name></persName> καὶ
+                    <lb n="2"/><persName type="attested" key="Askanios"><name nymRef="Ἀσκάνιος">Ἀσκάνιος</name></persName> β΄
+                    <lb n="3"/><persName type="divine" key="Men"><name nymRef="Μήν">Μηνὶ</name></persName> εὐχήν.
                 </ab>
             </div>
             <div type="apparatus"/>

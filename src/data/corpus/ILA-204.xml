@@ -60,16 +60,37 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti">
+                    <term>Askaenos</term>
+                </keywords>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Gaios Oultonios Maximos</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Gaios Oultonios Maximos">
+                        <persName type="attested" key="Gaios Oultonios Maximos">
+                            <name nymRef="Γάιος">Γάιος</name>
+                            <name nymRef="Οὐλτώνιος">Οὐλτώνιος</name>
+                            <name nymRef="Μάξιμος">Μάξιμος</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Μηνὶ Ἀσκαην-
-                    <lb n="2"/>ῷ εὐχήν
-                    <lb n="3"/>Γάιος Οὐλτ-
-                    <lb n="4"/>ώνιος Μ-
-                    <lb n="5"/>άξιμος.
+                    <lb n="1"/><persName type="divine" key="Men Askaenos"><name nymRef="Μήν">Μηνὶ</name> <rs type="epithet">Ἀσκαην<lb n="2" break="no"/>ῷ</rs></persName> εὐχήν
+                    <lb n="3"/><persName type="attested" key="Gaios Oultonios Maximos"><name nymRef="Γάιος">Γάιος</name> <name nymRef="Οὐλτώνιος">Οὐλτ<lb n="4" break="no"/>ώνιος</name> <name nymRef="Μάξιμος">Μ<lb n="5" break="no"/>άξιμος</name></persName>.
                 </ab>
             </div>
             <div type="apparatus"/>

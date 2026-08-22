@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Iscrizione greca</rs> Stele con consultazione oracolare e ringraziamento a Men Petraeites Axetenos, provenienza ignota (Museo di Uşak)</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>ILA — Index Lunae Antiquae</authority>
+                <idno type="TM"><!-- inserire TM number --></idno>
+                <idno type="id">294</idno>
+            </publicationStmt>
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>Uşak Museum, Turkey</repository>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Stele con rilievo, materiale e dimensioni non determinabili dalle fonti consultate (PHI/SEG); editio princeps non verificata direttamente.</p>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout>
+                                    <p>Rilievo con due donne in atteggiamento di adorazione: una, inginocchiata, con la mano destra alzata nel gesto di ringraziamento (identificabile con Ammias); dietro di lei una figura più piccola, forse Dionysias. Testo che registra la consultazione degli dèi patrii da parte di Chryseros e Stratonikos, resa nota tramite il messaggero (ἄγγελος) del dio Men Petraeites Axetenos; segue il ringraziamento di Ammias per Dionysias e il versamento di 100 denari come richiesto dagli dèi patrii.</p>
+                                    <rs ref="http://www.eagle-network.eu/voc/writing/lod/1">incisa a scalpello</rs>
+                                </layout>
+                            </layoutDesc>
+                        </objectDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="region">Asia Minor</placeName>
+                            </origPlace>
+                        </origin>
+                        <provenance type="found">Sconosciuta; l'esemplare è conservato al Museo di Uşak, Turchia. Petzl ne ipotizza, per confronto con pezzi affini, una provenienza dalla Lidia nordorientale e una datazione al II-III sec. d.C., senza elementi interni a supporto.</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Chryseros</term>
+                    <term>Stratonikos</term>
+                    <term>Ammias</term>
+                    <term>Dionysias</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Chryseros">
+                        <persName type="attested" key="Chryseros">
+                            <name nymRef="Χρύσερως">Χρύσερως</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Stratonikos">
+                        <persName type="attested" key="Stratonikos">
+                            <name nymRef="Στρατόνικος">Στρατόνεικος</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Ammias">
+                        <persName type="attested" key="Ammias">
+                            <name nymRef="Ἀμμιάς">Ἀμμιας</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Dionysias">
+                        <persName type="attested" key="Dionysias">
+                            <name nymRef="Διονυσιάς">Διονυσιάδος</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+                <ab>
+                    <lb n="1"/>ἠρώτησαν <persName type="attested" key="Chryseros"><name nymRef="Χρύσερως">Χρύσερως</name></persName> κὲ
+                    <lb n="2"/><persName type="attested" key="Stratonikos"><name nymRef="Στρατόνικος">Στρατόνεικος</name></persName> ἐξ εἰδό<lb n="3" break="no"/>των καὶ μὴ εἰδότου<lb n="4" break="no"/>ς πατρίους θεοὺς καθὼς
+                    <lb n="5"/>ἡμῖν ἐδηλώθη ὑπὸ τοῦ ἀν<lb n="6" break="no"/>γέλου τοῦ θεοῦ <persName type="divine" key="Men Petraeites Axetenos"><name nymRef="Μήν">Μηνὸς</name> <rs type="epithet">Πε<lb n="7" break="no"/>τραείτου</rs> <rs type="epithet">Ἀξετηνοῦ</rs></persName>· εὐ<lb n="8" break="no"/>χαριστῶ οὖν <persName type="attested" key="Ammias"><name nymRef="Ἀμμιάς">Ἀμμιας</name></persName> ὑπ<lb n="9" break="no"/>ὲρ <persName type="attested" key="Dionysias"><name nymRef="Διονυσιάς">Διονυσιάδος</name></persName> καὶ ἐθήκομ<lb n="10" break="no"/>εν <expan><abbr>δην</abbr><ex>άρια</ex></expan> ἑκατὸν καθὼς ἐπε<lb n="11" break="no"/>ζήτησαν οἱ πάτριοι θεοί.
+                </ab>
+            </div>
+            <div type="apparatus"/>
+            <div type="translation" xml:lang="it">
+                <p>Chryseros e Stratonikos interrogarono, tra ciò che sanno e ciò che non sanno, gli dèi patrii, come ci fu rivelato dal messaggero del dio Men Petraeites Axetenos. Io, Ammias, ringrazio dunque per Dionysias, e abbiamo versato cento denari, come richiesero gli dèi patrii.</p>
+            </div>
+            <div type="translation" xml:lang="en">
+                <p>Chryseros and Stratonikos made inquiry, among things known and unknown, to the ancestral gods, as was revealed to us by the messenger of the god Men Petraeites Axetenos. I, Ammias, therefore give thanks on behalf of Dionysias, and we deposited one hundred denarii, as the ancestral gods required.</p>
+            </div>
+            <div type="commentary">
+                <p>Corrisponde a Beichtinschr. 38 nel corpus di G. Petzl (Die Beichtinschriften im römischen Kleinasien und der Fromme und Gerechte Gott, Nordrhein-Westfälische Akademie der Wissenschaften, Vorträge G 355, 1998, pp. 11-13, Abb. 4), che la cita come esempio di ἄγγελος divino operante come intermediario tra gli dèi patrii e i fedeli, in un contesto affine ma non identico alle vere e proprie Beichtinschriften (qui si tratta di una consultazione oracolare seguita da ringraziamento, non della confessione di una colpa specifica). Petzl segnala che provenienza e data precisa restano sconosciute, ma ne suppone l'origine nordorientale lidia e una datazione al II-III sec. d.C. per confronto con pezzi affini (Beichtinschr. 3, 11). Identificazione della piccola figura dietro Ammias con Dionysias proposta dallo stesso Petzl, non certa.</p>
+            </div>
+            <div type="bibliography">
+                <listBibl>
+                    <bibl>SEG 41, 1039</bibl>
+                    <bibl>Epigraphica Anatolica 18 (1991), 92, no. 2</bibl>
+                    <bibl>Petzl, Beichtinschr. 38 (in: Die Beichtinschriften im römischen Kleinasien und der Fromme und Gerechte Gott, 1998, 11-13, Abb. 4)</bibl>
+                </listBibl>
+            </div>
+        </body>
+    </text>
+</TEI>

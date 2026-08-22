@@ -60,14 +60,39 @@
                 </msDesc>
             </sourceDesc>
         </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="divinita">
+                    <term>Men</term>
+                </keywords>
+                <keywords scheme="onomastica">
+                    <term>Lykiskos figlio di Athenion</term>
+                    <term>Athenion</term>
+                </keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="Lykiskos figlio di Athenion">
+                        <persName type="attested" key="Lykiskos figlio di Athenion">
+                            <name nymRef="Λυκίσκος">Λυκίσκος</name>
+                        </persName>
+                    </person>
+                    <person xml:id="Athenion">
+                        <persName type="attested" key="Athenion">
+                            <name nymRef="Ἀθηνίων">Ἀθηνίων</name>
+                        </persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
     </teiHeader>
     <text>
         <body>
             <div type="edition" xml:space="preserve" xml:lang="grc">
                 <ab>
-                    <lb n="1"/>Λυκίσκος
-                    <lb n="2"/>Ἀθηνίωνος
-                    <lb n="3"/>Μηνὶ εὐχήν.
+                    <lb n="1"/><persName type="attested" key="Lykiskos figlio di Athenion"><name nymRef="Λυκίσκος">Λυκίσκος</name>
+                    <lb n="2"/><persName type="attested" key="Athenion"><name type="patronymic" nymRef="Ἀθηνίων">Ἀθηνίωνος</name></persName></persName>
+                    <lb n="3"/><persName type="divine" key="Men"><name nymRef="Μήν">Μηνὶ</name></persName> εὐχήν.
                 </ab>
             </div>
             <div type="apparatus"/>
