@@ -210,8 +210,8 @@ const getTintClass = (str: string) => {
 // poster di tour date. Scorrevole, con la voce sotto il marcatore fisso
 // leggermente evidenziata durante lo scroll (stessa meccanica della
 // rubrica onomastica, vedi RUBRICA_MARKER_OFFSET).
-const DIAGONAL_ROW_H = 34;
-const DIAGONAL_STEP_X = 18;
+const DIAGONAL_ROW_H = 42;
+const DIAGONAL_STEP_X = 22;
 const DIAGONAL_BASE_X = 150;
 
 const DivinityDiagonalList = ({ items, onSelect, searchTerm }: {
@@ -283,8 +283,14 @@ const DivinityDiagonalList = ({ items, onSelect, searchTerm }: {
         <div
           ref={containerRef}
           onScroll={onScroll}
-          className="flex-1 overflow-y-auto overflow-x-hidden custom-scrollbar"
-          style={{ paddingTop: RUBRICA_MARKER_OFFSET, paddingBottom: RUBRICA_MARKER_OFFSET }}
+          className="flex-1 self-center w-full overflow-y-auto overflow-x-hidden custom-scrollbar"
+          style={{
+            paddingTop: RUBRICA_MARKER_OFFSET, paddingBottom: RUBRICA_MARKER_OFFSET,
+            // Centra la composizione diagonale nel pannello quando c'è più
+            // spazio del necessario, invece di lasciarla incollata al
+            // bordo sinistro.
+            maxWidth: tickX(sorted.length - 1) + 300,
+          }}
         >
           {/* minWidth garantisce che il contenitore abbia davvero
               altrettanta larghezza scrollabile quanto richiesto dall'ultima
@@ -349,9 +355,9 @@ const DivinityDiagonalList = ({ items, onSelect, searchTerm }: {
                     >
                       <span className={cn(
                         "font-serif transition-all duration-200 truncate group-active:text-accent",
-                        isActive ? "text-xl italic text-accent font-bold"
-                          : match ? "text-base text-accent font-bold"
-                          : "text-sm text-ink/70"
+                        isActive ? "text-2xl italic text-accent font-bold"
+                          : match ? "text-lg text-accent font-bold"
+                          : "text-base text-ink/70"
                       )}>
                         {d.name}
                       </span>
@@ -369,7 +375,7 @@ const DivinityDiagonalList = ({ items, onSelect, searchTerm }: {
                     >
                       <span className={cn(
                         "font-sans font-bold tabular-nums transition-all duration-200 shrink-0 group-active:text-accent",
-                        isActive || match ? "text-sm text-accent" : "text-xs text-muted"
+                        isActive || match ? "text-base text-accent" : "text-sm text-muted"
                       )}>
                         {d.count}×
                       </span>
