@@ -237,43 +237,35 @@ const DivinityDiagonalList = ({ items, onSelect, searchTerm }: {
   const isMatch = (d: { name: string; epiteti: { name: string; count: number }[] }) =>
     searchActive && (d.name.includes(term) || matchedEpiteto(d) !== null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const itemRefs = useRef<Map<string, HTMLDivElement>>(new Map());
-  const [activeName, setActiveName] = useState<string | null>(sorted[0]?.name ?? null);
-  // Distanza (px) di ogni riga dal marcatore, per la dissolvenza/scala
-  // continua qui sotto: senza questo la lista, pur scorrendo davvero,
-  // "sente" poco viva — l'unico elemento sempre uguale (la linea diagonale)
-  // finisce per catturare più attenzione del testo che invece si muove.
-  const [rowDist, setRowDist] = useState<Record<string, number>>({});
+  const [activeIndex, setActiveIndex] = useState(0);
+  // Frazione di scroll (0 a inizio lista, 1 a fondo lista): guida sia quale
+  // riga è "attiva" sia la dissolvenza della linea qui sotto. Sostituisce un
+  // precedente calcolo basato su un offset fisso in px dall'alto del
+  // contenitore — quel calcolo si "incastrava" su schermi molto alti, dove
+  // 96px restano vicini al bordo superiore per tutta la lista e la riga più
+  // vicina a quel punto smette di aggiornarsi. La frazione di scroll invece
+  // raggiunge matematicamente 1 (= ultima voce attiva) a fondo scroll, su
+  // qualunque dimensione di schermo.
+  const [scrollFraction, setScrollFraction] = useState(0);
   const rafPending = useRef(false);
-  const FADE_RANGE = 170;
+  const FADE_RANGE_ROWS = 5;
 
   const updateActive = () => {
     rafPending.current = false;
     const container = containerRef.current;
     if (!container) return;
-    // Tutte le letture di layout (getBoundingClientRect) PRIMA di qualunque
-    // scrittura (scrollLeft più sotto): scriverlo prima forzerebbe un
-    // reflow sincrono a ogni frame di scroll, con conseguenti scatti.
-    const containerRect = container.getBoundingClientRect();
-    const markerY = containerRect.top + RUBRICA_MARKER_OFFSET;
-    let closestName: string | null = null;
-    let closestDist = Infinity;
-    const dist: Record<string, number> = {};
-    itemRefs.current.forEach((el, name) => {
-      const rect = el.getBoundingClientRect();
-      const d = Math.abs(rect.top + rect.height / 2 - markerY);
-      dist[name] = d;
-      if (d < closestDist) { closestDist = d; closestName = name; }
-    });
+    const maxScroll = container.scrollHeight - container.clientHeight;
+    const fraction = maxScroll > 0 ? Math.min(1, Math.max(0, container.scrollTop / maxScroll)) : 1;
+    const idx = Math.round(fraction * (sorted.length - 1));
     // Panoramica orizzontale agganciata 1:1 allo scroll verticale, alla
     // stessa pendenza della diagonale: la voce attiva resta sempre alla
     // stessa X sullo schermo, invece di driftare come con una
     // compensazione parziale — è quello che rende lo scorrimento uniforme
     // (il contenitore resta overflow-x hidden per l'utente — lo scrollLeft
-    // è solo programmatico). Scritto per ultimo, dopo tutte le letture.
+    // è solo programmatico).
     container.scrollLeft = container.scrollTop * (DIAGONAL_STEP_X / DIAGONAL_ROW_H);
-    if (closestName) setActiveName(closestName);
-    setRowDist(dist);
+    setActiveIndex(idx);
+    setScrollFraction(fraction);
   };
   const onScroll = () => {
     if (rafPending.current) return;
@@ -308,22 +300,26 @@ const DivinityDiagonalList = ({ items, onSelect, searchTerm }: {
                 <line
                   x1={tickX(0)} y1={DIAGONAL_ROW_H / 2}
                   x2={tickX(sorted.length - 1)} y2={(sorted.length - 1) * DIAGONAL_ROW_H + DIAGONAL_ROW_H / 2}
-                  stroke="var(--border)" strokeWidth={0.75} strokeOpacity={0.5}
+                  stroke="var(--border)" strokeWidth={0.75}
+                  // Dissolvenza verso la fine dello scroll (ultimo ~25%):
+                  // la linea si "consuma" mentre ci si avvicina all'ultima
+                  // voce, invece di restare identica dall'inizio alla fine.
+                  strokeOpacity={0.5 * Math.max(0, 1 - Math.max(0, scrollFraction - 0.75) / 0.25)}
                 />
               </svg>
             )}
             {sorted.map((d, i) => {
               const x = tickX(i);
-              const isActive = d.name === activeName;
+              const isActive = i === activeIndex;
               const match = isMatch(d);
               const dimmed = searchActive && !match;
               const epitetoHit = matchedEpiteto(d);
-              // Dissolvenza/scala continua in base alla distanza dal
-              // marcatore: fa "sentire" il testo in movimento durante lo
-              // scroll, non solo la linea diagonale (sempre uguale a se
-              // stessa). Disattivata mentre una ricerca è attiva, per non
-              // sommare due sistemi di enfasi diversi.
-              const proximity = Math.max(0, 1 - (rowDist[d.name] ?? FADE_RANGE) / FADE_RANGE);
+              // Dissolvenza/scala continua in base alla distanza (in righe,
+              // non in px) dalla voce attiva: fa "sentire" il testo in
+              // movimento durante lo scroll, non solo la linea diagonale
+              // (sempre uguale a se stessa). Disattivata durante la
+              // ricerca, per non sommare due sistemi di enfasi diversi.
+              const proximity = Math.max(0, 1 - Math.abs(i - activeIndex) / FADE_RANGE_ROWS);
               const rowStyle: React.CSSProperties = {
                 top: i * DIAGONAL_ROW_H, height: DIAGONAL_ROW_H,
                 opacity: searchActive ? undefined : 0.4 + proximity * 0.6,
@@ -332,7 +328,6 @@ const DivinityDiagonalList = ({ items, onSelect, searchTerm }: {
               return (
                 <div
                   key={d.name}
-                  ref={el => { if (el) itemRefs.current.set(d.name, el); else itemRefs.current.delete(d.name); }}
                   className="absolute inset-x-0 transition-[opacity,transform] duration-150 ease-out"
                   style={rowStyle}
                 >
