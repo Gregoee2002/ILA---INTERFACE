@@ -333,13 +333,21 @@ function parseTeiElement(teiString: string): Monumento {
     authority = unescapeXml(authMatch[1].trim());
   }
 
-  // 5b. Parse revisionDesc
+  // 5b. Parse revisionDesc (+ @status, vedi EditorialStatus in types.ts)
   const revisions: { date: string; who: string; note?: string }[] = [];
-  const revisionBlock = teiString.match(/<revisionDesc>([\s\S]*?)<\/revisionDesc>/);
+  let editorialStatus: Monumento["editorialStatus"] = undefined;
+  const revisionBlock = teiString.match(/<revisionDesc([^>]*)>([\s\S]*?)<\/revisionDesc>/);
   if (revisionBlock) {
+    const statusMatch = revisionBlock[1].match(/status="([^"]*)"/);
+    if (statusMatch) {
+      const s = unescapeXml(statusMatch[1]);
+      if (s === "draft" || s === "diplomatic-edition" || s === "published" || s === "under-revision") {
+        editorialStatus = s;
+      }
+    }
     const changeRegex = /<change\s+([^>]*)>([\s\S]*?)<\/change>/g;
     let chMatch;
-    while ((chMatch = changeRegex.exec(revisionBlock[1])) !== null) {
+    while ((chMatch = changeRegex.exec(revisionBlock[2])) !== null) {
       const attrs = chMatch[1];
       const whenMatch = attrs.match(/when="([^"]*)"/);
       const whoMatch = attrs.match(/who="([^"]*)"/);
@@ -1138,6 +1146,7 @@ function parseTeiElement(teiString: string): Monumento {
     persone,
     imperatori,
     revisions,
+    editorialStatus,
     apparatus,
     testo_tradotto: Array.isArray(apparatus) ? apparatus.map(e => `${e.loc}: ${e.note}`).join('\n') : apparatus,
     traduzioni,
@@ -1371,9 +1380,10 @@ export function monumentiToXml(monumenti: Monumento[]): string {
     }
     const iconographyBlock = renderIconography(m.iconografia, '    ');
     if (iconographyBlock) block += iconographyBlock + '\n';
-    if (m.revisions && m.revisions.length > 0) {
-      block += `    <revisionDesc>\n`;
-      for (const r of m.revisions) {
+    if ((m.revisions && m.revisions.length > 0) || m.editorialStatus) {
+      const statusAttr = m.editorialStatus ? ` status="${escapeXml(m.editorialStatus)}"` : '';
+      block += `    <revisionDesc${statusAttr}>\n`;
+      for (const r of m.revisions || []) {
         const whoAttr = r.who ? ` who="${escapeXml(r.who)}"` : '';
         const whenAttr = r.date ? ` when="${escapeXml(r.date)}"` : '';
         block += `        <change${whenAttr}${whoAttr}>${escapeXml(r.note || '')}</change>\n`;

@@ -27,6 +27,19 @@ export interface Revision {
   note?: string;
 }
 
+// Stato editoriale del testo, TEI-conforme: attributo @status su
+// <revisionDesc>, previsto da TEI P5 (non un'invenzione su <change>).
+// Vocabolario controllato ispirato alle diciture del progetto I.Sicily
+// ("diplomatic edition released", "text under revision").
+export type EditorialStatus = "draft" | "diplomatic-edition" | "published" | "under-revision";
+
+export const EDITORIAL_STATUS_LABELS: Record<EditorialStatus, string> = {
+  draft: "Bozza",
+  "diplomatic-edition": "Edizione diplomatica pubblicata",
+  published: "Pubblicata",
+  "under-revision": "In revisione",
+};
+
 export interface Persona {
   xmlId: string;
   key?: string;
@@ -133,6 +146,8 @@ export interface Monumento {
   materialRef?: string;
   textTypes?: string[];
   revisions?: Revision[];
+  // @status di <revisionDesc> — vedi EditorialStatus sopra.
+  editorialStatus?: EditorialStatus;
   imperatori?: string[];
   _corpusFile?: string;
   _fileHash?: string;

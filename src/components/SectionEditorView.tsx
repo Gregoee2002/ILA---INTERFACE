@@ -5,7 +5,7 @@ import {
   ChevronRight, ChevronUp, ChevronDown, FileText, Search, Download, Sparkles, LogIn, ShieldCheck
 } from 'lucide-react';
 import { cn, stripAccents } from '../lib/utils';
-import { Monumento, OrigDate, Traduzione, Bibliografia, Revision, IconographicFigure, IconographicTrait } from '../types';
+import { Monumento, OrigDate, Traduzione, Bibliografia, Revision, IconographicFigure, IconographicTrait, EDITORIAL_STATUS_LABELS } from '../types';
 import { xmlToMonumenti, formatIlaLabel } from '../lib/xmlUtils';
 import { EditionMarkupEditor } from './EditionMarkupEditor';
 import { ICONOGRAPHY_LABELS } from '../lib/iconographyLabels';
@@ -87,7 +87,7 @@ const SECTION_FIELDS: Record<SectionId, (keyof Monumento)[]> = {
   origDate: ['origDates', 'data', 'data_inizio', 'data_fine'],
   provenance: ['luogo_rit', 'conserv'],
   profile: ['epiteti', 'divinita', 'onomastica', 'imperatori', 'persone'],
-  revisions: ['revisions'],
+  revisions: ['revisions', 'editorialStatus'],
   facsimile: ['facsimile_url', 'facsimile_desc'],
   edition: ['testo', 'anepigr', 'iscrizione'],
   apparatus: ['apparatus'],
@@ -982,7 +982,21 @@ function renderSectionForm(
       const revs: Revision[] = m.revisions || [];
       const update = (i: number, patch: Partial<Revision>) => set('revisions', revs.map((r, j) => j === i ? { ...r, ...patch } : r));
       return (
-        <div className="space-y-3 max-w-3xl">
+        <div className="space-y-5 max-w-3xl">
+          <div className="max-w-xs">
+            <label className="field-label block mb-1.5">Stato editoriale (TEI revisionDesc/@status)</label>
+            <select
+              value={m.editorialStatus || ''}
+              onChange={e => set('editorialStatus', (e.target.value || undefined) as Monumento['editorialStatus'])}
+              style={{ colorScheme: 'light dark' }}
+              className="w-full bg-white/60 dark:bg-white/5 border border-border/50 rounded-lg px-3 py-2 text-sm text-ink font-serif focus:outline-none focus:ring-1 focus:ring-accent/40"
+            >
+              <option value="">— Non specificato —</option>
+              {(Object.entries(EDITORIAL_STATUS_LABELS) as [Monumento['editorialStatus'], string][]).map(([k, label]) => (
+                <option key={k} value={k}>{label}</option>
+              ))}
+            </select>
+          </div>
           {revs.map((r, i) => (
             <div key={i} className="flex items-start gap-3">
               <TextInput className="w-36" type="date" value={r.date || ''} onChange={e => update(i, { date: e.target.value })} />

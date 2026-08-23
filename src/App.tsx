@@ -52,7 +52,7 @@ import {
 } from 'lucide-react';
 import { cn, EASE_OUT, EASE_IN, SPRING_SNAPPY, SPRING_SOFT } from './lib/utils';
 import { ICONOGRAPHY_LABELS } from './lib/iconographyLabels';
-import { Monumento, FilterState, SortField, Traduzione, Bibliografia, Appunto, EntryRegistro, BugReport } from './types';
+import { Monumento, FilterState, SortField, Traduzione, Bibliografia, Appunto, EntryRegistro, BugReport, EDITORIAL_STATUS_LABELS } from './types';
 import { RAW_DATA } from './data';
 import { monumentiToXml, xmlToMonumenti, formatIlaLabel } from './lib/xmlUtils';
 import jsPDF from 'jspdf';
@@ -6227,6 +6227,19 @@ export default function App() {
                                     TM {selectedMonumento.tm}
                                   </span>
                                 )
+                              )}
+                              {selectedMonumento.editorialStatus && (
+                                <span
+                                  className={cn(
+                                    "text-[10px] font-bold px-2 py-0.5 rounded-sm uppercase tracking-tighter shadow-sm",
+                                    selectedMonumento.editorialStatus === 'under-revision' && "bg-amber-500/10 text-amber-600 dark:text-amber-400",
+                                    selectedMonumento.editorialStatus === 'draft' && "bg-sidebar text-muted",
+                                    (selectedMonumento.editorialStatus === 'published' || selectedMonumento.editorialStatus === 'diplomatic-edition') && "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
+                                  )}
+                                  title="Stato editoriale (TEI revisionDesc/@status)"
+                                >
+                                  {EDITORIAL_STATUS_LABELS[selectedMonumento.editorialStatus]}
+                                </span>
                               )}
                               {selectedMonumento.textTypes?.map((tt, idx) => (
                                 <span key={idx} className="bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-[10px] font-bold px-2 py-0.5 rounded-sm uppercase tracking-tighter shadow-sm">
