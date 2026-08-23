@@ -74,9 +74,8 @@ interface CooccurrenceHeatmapProps {
 }
 
 export const CooccurrenceHeatmap: React.FC<CooccurrenceHeatmapProps> = ({ monumenti, onSelectCooccurrence }) => {
-  // "Costellazione" (multi-fattore) è la modalità di default: mostra subito
-  // la generalizzazione a N assi invece del semplice confronto a coppia.
-  const [mode, setMode] = useState<Mode>('multi');
+  // "Coppia" è la modalità di default: confronto semplice a due assi.
+  const [mode, setMode] = useState<Mode>('pair');
 
   // Default su assi SEMPRE popolati (estratti dal testo, non dall'iconografia)
   // — così la heatmap mostra subito qualcosa di utile anche su un corpus
