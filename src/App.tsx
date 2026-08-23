@@ -1124,25 +1124,13 @@ function EpithetStats({ monumenti, onSelectMonumento }: { monumenti: Monumento[]
                 </div>
                 <div className="flex-1 flex flex-col overflow-hidden border-l border-border pl-8">
                   <div className="mb-4 flex items-center justify-between gap-4 shrink-0">
-                    <div className="flex items-center gap-3 text-[10px] font-sans font-bold uppercase tracking-widest text-muted min-w-0">
-                      {activeDivinityStats ? (
-                        <>
-                          <span className="whitespace-nowrap">{activeDivinityStats.count} occorrenze</span>
-                          <span className="text-border">·</span>
-                          <span className="whitespace-nowrap">{activeDivinityStats.regions} {activeDivinityStats.regions === 1 ? 'regione' : 'regioni'}</span>
-                          <span className="text-border">·</span>
-                          <span className="whitespace-nowrap">{activeDivinityStats.epiteti.length} {activeDivinityStats.epiteti.length === 1 ? 'epiteto' : 'epiteti'} co-occorrenti</span>
-                        </>
-                      ) : (
-                        <span className="normal-case font-normal italic text-muted/50">Nessuna divinità da mostrare per questo filtro.</span>
-                      )}
-                    </div>
-                    {/* Si rimpicciolisce (non sparisce) mentre si scorre la
-                        rubrica a fianco — resta raggiungibile senza dover
-                        risalire in cima alla lista. */}
+                    {/* Ricerca e filtro regione a sinistra, a fianco delle
+                        statistiche occorrenze/regioni/epiteti che restano a
+                        destra — prima la ricerca era sul lato opposto,
+                        lontano dalla rubrica che filtra. */}
                     <div
                       className="flex items-center gap-3 shrink-0 transition-transform duration-200 ease-out"
-                      style={{ transform: `scale(${1 - listScroll * 0.22})`, transformOrigin: 'right center' }}
+                      style={{ transform: `scale(${1 - listScroll * 0.22})`, transformOrigin: 'left center' }}
                     >
                       <div className="relative w-52">
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted/50 pointer-events-none" />
@@ -1175,6 +1163,19 @@ function EpithetStats({ monumenti, onSelectMonumento }: { monumenti: Monumento[]
                         </select>
                         <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted/50 pointer-events-none" />
                       </div>
+                    </div>
+                    <div className="flex items-center gap-3 text-[10px] font-sans font-bold uppercase tracking-widest text-muted min-w-0 text-right justify-end">
+                      {activeDivinityStats ? (
+                        <>
+                          <span className="whitespace-nowrap">{activeDivinityStats.count} occorrenze</span>
+                          <span className="text-border">·</span>
+                          <span className="whitespace-nowrap">{activeDivinityStats.regions} {activeDivinityStats.regions === 1 ? 'regione' : 'regioni'}</span>
+                          <span className="text-border">·</span>
+                          <span className="whitespace-nowrap">{activeDivinityStats.epiteti.length} {activeDivinityStats.epiteti.length === 1 ? 'epiteto' : 'epiteti'} co-occorrenti</span>
+                        </>
+                      ) : (
+                        <span className="normal-case font-normal italic text-muted/50">Nessuna divinità da mostrare per questo filtro.</span>
+                      )}
                     </div>
                   </div>
                   {activeDivinityStats ? (
