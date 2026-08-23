@@ -940,7 +940,7 @@ function EpithetStats({ monumenti, onSelectMonumento }: { monumenti: Monumento[]
   return (
     <div className="flex-1 flex flex-col overflow-hidden">
       {/* Header */}
-      <motion.div {...scrollReveal} className="mb-8 flex justify-between items-end">
+      <motion.div {...scrollReveal} className="glass-card-tint-1 mb-8 px-6 py-6 md:px-8 md:py-7 flex justify-between items-end">
         <div>
           <div className="text-[10px] font-sans font-bold uppercase tracking-[0.22em] text-accent/70 mb-2">Statistiche del Corpus</div>
           <h2 className="text-3xl md:text-4xl font-bold italic mb-2">
