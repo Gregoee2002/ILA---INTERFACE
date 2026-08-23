@@ -278,7 +278,12 @@ function parseTeiElement(teiString: string): Monumento {
   if (tmMatch) {
     tm = unescapeXml(tmMatch[2].trim());
     const refMatch = tmMatch[1].match(/ref="([^"]*)"/);
-    if (refMatch) tmLink = refMatch[1];
+    if (refMatch) {
+      const rawRef = refMatch[1].trim();
+      tmLink = rawRef && !/^https?:\/\//i.test(rawRef)
+        ? `https://${rawRef.replace(/^\/\//, "")}`
+        : rawRef;
+    }
   }
 
   // 4. Parse PHI list
