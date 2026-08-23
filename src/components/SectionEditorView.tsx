@@ -5,7 +5,7 @@ import {
   ChevronRight, ChevronUp, ChevronDown, FileText, Search, Download, Sparkles, LogIn, ShieldCheck
 } from 'lucide-react';
 import { cn, stripAccents } from '../lib/utils';
-import { Monumento, OrigDate, Traduzione, Bibliografia, Revision, IconographicFigure, IconographicTrait } from '../types';
+import { Monumento, OrigDate, Traduzione, Bibliografia, Revision, IconographicFigure, IconographicTrait, EDITORIAL_STATUS_LABELS } from '../types';
 import { xmlToMonumenti, formatIlaLabel } from '../lib/xmlUtils';
 import { EditionMarkupEditor } from './EditionMarkupEditor';
 import { ICONOGRAPHY_LABELS } from '../lib/iconographyLabels';
@@ -87,7 +87,7 @@ const SECTION_FIELDS: Record<SectionId, (keyof Monumento)[]> = {
   origDate: ['origDates', 'data', 'data_inizio', 'data_fine'],
   provenance: ['luogo_rit', 'conserv'],
   profile: ['epiteti', 'divinita', 'onomastica', 'imperatori', 'persone'],
-  revisions: ['revisions'],
+  revisions: ['revisions', 'editorialStatus'],
   facsimile: ['facsimile_url', 'facsimile_desc'],
   edition: ['testo', 'anepigr', 'iscrizione'],
   apparatus: ['apparatus'],
@@ -409,6 +409,27 @@ export const SectionEditorView: React.FC<Props> = ({ monumenti, effectiveAdmin, 
   const set = <K extends keyof Monumento>(k: K, v: Monumento[K]) =>
     setModel(m => m ? { ...m, [k]: v } : m);
 
+  /** Registra nel vocabolario iconografico standardizzato gli eventuali
+   *  fig.key liberi (VocabCombo, vedi sotto) non ancora in ICONOGRAPHY_LABELS
+   *  — operazione leggera e best-effort: un solo PATCH incrementale, mai
+   *  bloccante per il salvataggio della scheda che la innesca. */
+  const registerNewIconographyTerms = async (figures: IconographicFigure[] | undefined) => {
+    const newTerms = Array.from(new Set((figures || [])
+      .map(f => f.key?.trim())
+      .filter((k): k is string => !!k && !ICONOGRAPHY_LABELS[k])));
+    if (newTerms.length === 0) return;
+    try {
+      await fetch('/api/iconography-vocab', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ terms: Object.fromEntries(newTerms.map(k => [k, k])) }),
+      });
+    } catch {
+      // Best-effort: il termine resta comunque salvato sulla scheda, solo
+      // non entra nel vocabolario condiviso — nessun impatto sul salvataggio.
+    }
+  };
+
   /** Come `set`, ma per il testo dell'edizione: ricalcola SEMPRE gli indici
    *  derivati nello stesso colpo, così restano fedeli al markup ad ogni battuta. */
   const setEditionText = (xml: string) =>
@@ -427,6 +448,7 @@ export const SectionEditorView: React.FC<Props> = ({ monumenti, effectiveAdmin, 
         setBaseModel(created); setModel(created);
         setSource({ kind: 'db', filename: model._corpusFile || formatIlaLabel(model.id) });
         setSaveOk(`Scheda creata nel corpus (entryId: ${assignedId}).`);
+        void registerNewIconographyTerms(created.iconografia?.figures);
       } else {
         // patch: solo i campi effettivamente cambiati, non l'intero oggetto
         const patch: Partial<Monumento> = {};
@@ -434,6 +456,7 @@ export const SectionEditorView: React.FC<Props> = ({ monumenti, effectiveAdmin, 
         await onSave(model.entryId!, patch);
         setBaseModel(JSON.parse(JSON.stringify(model)));
         setSaveOk(`Salvato${changed.length > 0 ? ` — sezioni: ${changed.map(s => SECTION_META.find(x => x.id === s)?.label || s).join(', ')}` : ''}.`);
+        void registerNewIconographyTerms(model.iconografia?.figures);
       }
     } catch (e: any) {
       setSaveWarnings([`Salvataggio non riuscito: ${e.message || e}`]);
@@ -959,7 +982,21 @@ function renderSectionForm(
       const revs: Revision[] = m.revisions || [];
       const update = (i: number, patch: Partial<Revision>) => set('revisions', revs.map((r, j) => j === i ? { ...r, ...patch } : r));
       return (
-        <div className="space-y-3 max-w-3xl">
+        <div className="space-y-5 max-w-3xl">
+          <div className="max-w-xs">
+            <label className="field-label block mb-1.5">Stato editoriale (TEI revisionDesc/@status)</label>
+            <select
+              value={m.editorialStatus || ''}
+              onChange={e => set('editorialStatus', (e.target.value || undefined) as Monumento['editorialStatus'])}
+              style={{ colorScheme: 'light dark' }}
+              className="w-full bg-white/60 dark:bg-white/5 border border-border/50 rounded-lg px-3 py-2 text-sm text-ink font-serif focus:outline-none focus:ring-1 focus:ring-accent/40"
+            >
+              <option value="">— Non specificato —</option>
+              {(Object.entries(EDITORIAL_STATUS_LABELS) as [Monumento['editorialStatus'], string][]).map(([k, label]) => (
+                <option key={k} value={k}>{label}</option>
+              ))}
+            </select>
+          </div>
           {revs.map((r, i) => (
             <div key={i} className="flex items-start gap-3">
               <TextInput className="w-36" type="date" value={r.date || ''} onChange={e => update(i, { date: e.target.value })} />

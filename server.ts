@@ -6,9 +6,10 @@ import crypto from "crypto";
 import { createServer as createViteServer } from "vite";
 import { GoogleGenAI } from "@google/genai";
 import { xmlToMonumenti, monumentiToXml, renderIconography } from "./src/lib/xmlUtils";
-import { pullCorpusFromGitHub, pushFileToGitHub, deleteFileFromGitHub, isGitHubConfigured, testGitHubAccess, pullDraftsFromGitHub, pullFlagsFileFromGitHub, pushFlagsFileToGitHub, pullBugsFileFromGitHub, pushBugsFileToGitHub, scheduleRedeploy } from "./src/lib/githubStorage";
+import { pullCorpusFromGitHub, pushFileToGitHub, deleteFileFromGitHub, isGitHubConfigured, testGitHubAccess, pullDraftsFromGitHub, pullFlagsFileFromGitHub, pushFlagsFileToGitHub, pullBugsFileFromGitHub, pushBugsFileToGitHub, pullIconographyVocabFileFromGitHub, pushIconographyVocabFileToGitHub, scheduleRedeploy } from "./src/lib/githubStorage";
 import { EntryRegistro, BugReport } from "./src/types";
 import { normalizeRegistro } from "./src/lib/registroMigration";
+import { mergeIconographyOverrides } from "./src/lib/iconographyLabels";
 import { buildSearchIndex, searchMonumenti } from "./src/lib/searchIndex";
 import MiniSearch from 'minisearch';
 
@@ -30,6 +31,9 @@ async function startServer() {
   const FLAGS_FILE = path.join(DATA_DIR, "flags.json");
   // Bug segnalati dai collaboratori (vedi bugs.json su GitHub, radice repo).
   const BUGS_FILE = path.join(DATA_DIR, "bugs.json");
+  // Overlay del vocabolario iconografico non ancora curato (vedi
+  // iconography-vocab.json su GitHub, radice repo dati).
+  const ICONOGRAPHY_VOCAB_FILE = path.join(DATA_DIR, "iconography-vocab.json");
 
   const ai = new GoogleGenAI({
     apiKey: process.env.GEMINI_API_KEY,
@@ -95,8 +99,20 @@ async function startServer() {
     } catch (e: any) {
       console.error("[githubStorage] Sync bug iniziale fallita — il server parte comunque con il filesystem locale (probabilmente vuoto o stale):", e.message || e);
     }
+    try {
+      const remoteVocab = await pullIconographyVocabFileFromGitHub();
+      if (remoteVocab !== null) fs.writeFileSync(ICONOGRAPHY_VOCAB_FILE, remoteVocab, "utf-8");
+    } catch (e: any) {
+      console.error("[githubStorage] Sync vocabolario iconografico iniziale fallita — il server parte comunque con il filesystem locale (probabilmente vuoto o stale):", e.message || e);
+    }
   }
   if (!fs.existsSync(FLAGS_FILE)) fs.writeFileSync(FLAGS_FILE, "[]", "utf-8");
+  if (!fs.existsSync(ICONOGRAPHY_VOCAB_FILE)) fs.writeFileSync(ICONOGRAPHY_VOCAB_FILE, "{}", "utf-8");
+  try {
+    mergeIconographyOverrides(JSON.parse(fs.readFileSync(ICONOGRAPHY_VOCAB_FILE, "utf-8")));
+  } catch (e) {
+    console.error("[iconography-vocab] Overlay non valido, ignorato:", e);
+  }
   if (!fs.existsSync(BUGS_FILE)) fs.writeFileSync(BUGS_FILE, "[]", "utf-8");
 
   // Costruisci l'indice di ricerca all'avvio
@@ -265,6 +281,24 @@ async function startServer() {
     const content = JSON.stringify(bugs, null, 2);
     fs.writeFileSync(BUGS_FILE, content, "utf-8");
     await pushBugsFileToGitHub(content, commitMessage);
+  }
+
+  // Stesso pattern di readFlags/writeFlags, per l'overlay del vocabolario
+  // iconografico non ancora curato a mano in iconographyLabels.ts.
+  function readIconographyVocab(): Record<string, string> {
+    try {
+      const raw = fs.readFileSync(ICONOGRAPHY_VOCAB_FILE, "utf-8");
+      const parsed = JSON.parse(raw);
+      return parsed && typeof parsed === "object" ? parsed : {};
+    } catch {
+      return {};
+    }
+  }
+
+  async function writeIconographyVocab(vocab: Record<string, string>, commitMessage: string): Promise<void> {
+    const content = JSON.stringify(vocab, null, 2);
+    fs.writeFileSync(ICONOGRAPHY_VOCAB_FILE, content, "utf-8");
+    await pushIconographyVocabFileToGitHub(content, commitMessage);
   }
 
   // ── Routes ───────────────────────────────────────────────────────────────
@@ -704,6 +738,41 @@ async function startServer() {
     } catch (error: any) {
       console.error("Error updating bug report:", error);
       res.status(500).json({ error: error.message || "Failed to update bug report" });
+    }
+  });
+
+  // ── Vocabolario iconografico: overlay di termini non ancora curati ───────
+  // Operazione volutamente leggera: un PATCH incrementale di uno o due
+  // termini per volta (mai una riscrittura batch), innescato dal salvataggio
+  // di una scheda con un termine iconografico fuori dal vocabolario curato
+  // (vedi SectionEditorView.tsx) o inseribile a mano da qui.
+
+  app.get("/api/iconography-vocab", (req, res) => {
+    res.json(readIconographyVocab());
+  });
+
+  app.post("/api/iconography-vocab", async (req, res) => {
+    try {
+      const { terms } = req.body || {};
+      if (!terms || typeof terms !== "object" || Array.isArray(terms)) {
+        return res.status(400).json({ error: "terms deve essere un oggetto { id: label }" });
+      }
+      const entries = Object.entries(terms).filter(([id, label]) => id.trim() && typeof label === "string");
+      if (entries.length === 0) return res.status(400).json({ error: "Nessun termine valido" });
+
+      const vocab = readIconographyVocab();
+      let changed = false;
+      for (const [id, label] of entries) {
+        if (vocab[id] !== label) { vocab[id] = label as string; changed = true; }
+      }
+      if (changed) {
+        await writeIconographyVocab(vocab, `Vocabolario iconografico: +${entries.map(([id]) => id).join(", ")}`);
+        mergeIconographyOverrides(vocab);
+      }
+      res.json(vocab);
+    } catch (error: any) {
+      console.error("Error updating iconography vocab:", error);
+      res.status(500).json({ error: error.message || "Failed to update iconography vocab" });
     }
   });
 

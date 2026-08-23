@@ -33,9 +33,10 @@
 import { xmlToMonumenti, monumentiToXml, renderIconography } from "./xmlUtils";
 import { buildSearchIndex, searchMonumenti } from "./searchIndex";
 import MiniSearch from "minisearch";
-import { pullAllCorpusFiles, pushCorpusFile, deleteCorpusFile, testGitHubAccess, setStoredToken, clearStoredToken, pullFlagsFile, pushFlagsFile, pullBugsFile, pushBugsFile, scheduleRedeploy } from "./githubStorageBrowser";
+import { pullAllCorpusFiles, pushCorpusFile, deleteCorpusFile, testGitHubAccess, setStoredToken, clearStoredToken, pullFlagsFile, pushFlagsFile, pullBugsFile, pushBugsFile, pullIconographyVocabFile, pushIconographyVocabFile, scheduleRedeploy } from "./githubStorageBrowser";
 import { EntryRegistro, BugReport } from "../types";
 import { normalizeRegistro } from "./registroMigration";
+import { mergeIconographyOverrides } from "./iconographyLabels";
 
 let corpusStore = new Map<string, string>(); // filename -> xml content
 let searchIndex: MiniSearch<any> | null = null;
@@ -45,6 +46,10 @@ let canWrite = false;
 // unlockEditing, stesso gate del corpus in scrittura. Vedi flags.json/bugs.json.
 let flagsStore: EntryRegistro[] = [];
 let bugsStore: BugReport[] = [];
+// Overlay del vocabolario iconografico non ancora curato — stesso gate di
+// flags/bugs: rilevante solo in modalità editor, dove nuovi termini possono
+// essere effettivamente registrati.
+let iconographyVocabStore: Record<string, string> = {};
 
 export function isEditingUnlocked(): boolean {
   return canWrite;
@@ -361,6 +366,9 @@ async function handleRequest(url: URL, init: RequestInit | undefined): Promise<R
         flagsStore = normalizeRegistro(remoteFlags ? JSON.parse(remoteFlags) : []);
         const remoteBugs = await pullBugsFile();
         bugsStore = remoteBugs ? JSON.parse(remoteBugs) : [];
+        const remoteVocab = await pullIconographyVocabFile();
+        iconographyVocabStore = remoteVocab ? JSON.parse(remoteVocab) : {};
+        mergeIconographyOverrides(iconographyVocabStore);
         scheduleRedeploy();
         return json({
           status: "ok",
@@ -469,6 +477,32 @@ async function handleRequest(url: URL, init: RequestInit | undefined): Promise<R
       return json(bug);
     }
 
+    if (path === "/api/iconography-vocab" && method === "GET") {
+      return json(iconographyVocabStore);
+    }
+
+    if (path === "/api/iconography-vocab" && method === "POST") {
+      if (!canWrite) return json({ error: "Modifica non abilitata. Sblocca l'editing con un token GitHub per aggiornare il vocabolario iconografico." }, 403);
+      const { terms } = body || {};
+      if (!terms || typeof terms !== "object" || Array.isArray(terms)) {
+        return json({ error: "terms deve essere un oggetto { id: label }" }, 400);
+      }
+      const entries = Object.entries(terms).filter(([id, label]) => id.trim() && typeof label === "string");
+      if (entries.length === 0) return json({ error: "Nessun termine valido" }, 400);
+
+      let changed = false;
+      const nextVocab = { ...iconographyVocabStore };
+      for (const [id, label] of entries) {
+        if (nextVocab[id] !== label) { nextVocab[id] = label as string; changed = true; }
+      }
+      if (changed) {
+        iconographyVocabStore = nextVocab;
+        await pushIconographyVocabFile(JSON.stringify(iconographyVocabStore, null, 2), `Vocabolario iconografico: +${entries.map(([id]) => id).join(", ")}`);
+        mergeIconographyOverrides(iconographyVocabStore);
+      }
+      return json(iconographyVocabStore);
+    }
+
     if (path === "/api/translate" || path.startsWith("/api/drafts/")) {
       return json({ error: "Non disponibile nella build GitHub Pages (funzionalità AI/draft, solo in locale)" }, 501);
     }
@@ -517,6 +551,9 @@ export async function unlockEditing(token: string): Promise<{ ok: boolean; detai
     flagsStore = normalizeRegistro(remoteFlags ? JSON.parse(remoteFlags) : []);
     const remoteBugs = await pullBugsFile();
     bugsStore = remoteBugs ? JSON.parse(remoteBugs) : [];
+    const remoteVocab = await pullIconographyVocabFile();
+    iconographyVocabStore = remoteVocab ? JSON.parse(remoteVocab) : {};
+    mergeIconographyOverrides(iconographyVocabStore);
     canWrite = true;
     return result;
   } catch (e: any) {
@@ -533,6 +570,7 @@ export async function lockEditing(): Promise<void> {
   corpusStore = await loadSnapshot();
   flagsStore = [];
   bugsStore = [];
+  iconographyVocabStore = {};
   updateSearchIndex();
 }
 

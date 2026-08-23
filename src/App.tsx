@@ -52,7 +52,7 @@ import {
 } from 'lucide-react';
 import { cn, EASE_OUT, EASE_IN, SPRING_SNAPPY, SPRING_SOFT } from './lib/utils';
 import { ICONOGRAPHY_LABELS } from './lib/iconographyLabels';
-import { Monumento, FilterState, SortField, Traduzione, Bibliografia, Appunto, EntryRegistro, BugReport } from './types';
+import { Monumento, FilterState, SortField, Traduzione, Bibliografia, Appunto, EntryRegistro, BugReport, EDITORIAL_STATUS_LABELS } from './types';
 import { RAW_DATA } from './data';
 import { monumentiToXml, xmlToMonumenti, formatIlaLabel } from './lib/xmlUtils';
 import jsPDF from 'jspdf';
@@ -940,7 +940,7 @@ function EpithetStats({ monumenti, onSelectMonumento }: { monumenti: Monumento[]
   return (
     <div className="flex-1 flex flex-col overflow-hidden">
       {/* Header */}
-      <motion.div {...scrollReveal} className="mb-8 flex justify-between items-end">
+      <motion.div {...scrollReveal} className="glass-card-tint-1 mb-8 px-6 py-6 md:px-8 md:py-7 flex justify-between items-end">
         <div>
           <div className="text-[10px] font-sans font-bold uppercase tracking-[0.22em] text-accent/70 mb-2">Statistiche del Corpus</div>
           <h2 className="text-3xl md:text-4xl font-bold italic mb-2">
@@ -3572,7 +3572,7 @@ export default function App() {
 
   const [isImportModalOpen, setIsImportModalOpen] = useState(false);
   // Conferma "Riordina ID" — NON usa window.confirm(): nelle preview embeddate
-  // (es. iframe sandboxato di AI Studio) i dialoghi nativi del browser
+  // (es. iframe sandboxati) i dialoghi nativi del browser
   // (confirm/alert/prompt) vengono spesso bloccati silenziosamente, senza
   // errore visibile — il click sembra "non fare nulla". Un dialogo interno
   // funziona sempre, indipendentemente dal contesto di rendering.
@@ -6189,7 +6189,7 @@ export default function App() {
                    </div>
 
                   {/* Main Content Area */}
-                  <div className="flex-1 bg-parchment p-6 md:p-16 md:overflow-y-auto custom-scrollbar">
+                  <div className="flex-1 min-h-0 bg-parchment p-6 md:p-16 md:overflow-y-auto custom-scrollbar">
                     <div className="flex justify-between items-start mb-4">
                       <div className="flex-1 mr-4">
                         {true && (
@@ -6227,6 +6227,19 @@ export default function App() {
                                     TM {selectedMonumento.tm}
                                   </span>
                                 )
+                              )}
+                              {selectedMonumento.editorialStatus && (
+                                <span
+                                  className={cn(
+                                    "text-[10px] font-bold px-2 py-0.5 rounded-sm uppercase tracking-tighter shadow-sm",
+                                    selectedMonumento.editorialStatus === 'under-revision' && "bg-amber-500/10 text-amber-600 dark:text-amber-400",
+                                    selectedMonumento.editorialStatus === 'draft' && "bg-sidebar text-muted",
+                                    (selectedMonumento.editorialStatus === 'published' || selectedMonumento.editorialStatus === 'diplomatic-edition') && "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
+                                  )}
+                                  title="Stato editoriale (TEI revisionDesc/@status)"
+                                >
+                                  {EDITORIAL_STATUS_LABELS[selectedMonumento.editorialStatus]}
+                                </span>
                               )}
                               {selectedMonumento.textTypes?.map((tt, idx) => (
                                 <span key={idx} className="bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-[10px] font-bold px-2 py-0.5 rounded-sm uppercase tracking-tighter shadow-sm">
@@ -6390,7 +6403,7 @@ export default function App() {
                               
                               {selectedMonumento.origDates && selectedMonumento.origDates.length > 0 ? (
                                 <div className="border-t border-border/20 pt-3">
-                                  <span className="text-muted uppercase font-bold text-[9px] block mb-2">Original dates di pubblicazione (EpiDoc)</span>
+                                  <span className="text-muted uppercase font-bold text-[9px] block mb-2">Datazione del monumento (EpiDoc origDate)</span>
                                   <ul className="space-y-3 font-serif text-[11px] list-disc list-inside text-ink/90 pl-1">
                                     {selectedMonumento.origDates.map((od, i) => (
                                       <li key={i} className="leading-snug">

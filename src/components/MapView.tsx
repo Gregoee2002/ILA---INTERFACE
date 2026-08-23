@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
-import { MapContainer, TileLayer, CircleMarker, Popup, useMap } from 'react-leaflet';
+import { MapContainer, TileLayer, CircleMarker, Popup, Tooltip, useMap } from 'react-leaflet';
 import MarkerClusterGroup from 'react-leaflet-cluster';
 import 'leaflet/dist/leaflet.css';
 // Senza questi due, i "bollini" cluster mostrano solo il numero senza
@@ -45,33 +45,72 @@ function getRegionColor(regione?: string) {
   return '#9ca3af'; // stone gray
 }
 
-// Scala di densità: dal grigio di base (poche iscrizioni) all'accento teal
-// (molte iscrizioni), così le zone "calde" del corpus saltano subito
-// all'occhio mantenendo la palette grigia dell'interfaccia.
-// Il precedente '#c7c2b4' era troppo vicino al colore delle tile di base
-// (quasi bianche): a bassa densità il pallino diventava invisibile
-// ("grigio su grigio"). Questo grigio è deliberatamente più scuro, per
+// Scala di densità sequenziale a più tappe (chiaro → accento teal scuro),
+// interpolata in HSL invece che RGB grezzo: una singola interpolazione a 2
+// colori (come in precedenza) rendeva densità medie e alte quasi
+// indistinguibili fra loro. La prima tappa resta un grigio-verde scuro
+// deliberatamente più marcato delle tile di base (quasi bianche), per
 // restare leggibile anche per i siti con una sola iscrizione.
-const DENSITY_LOW = '#8b9089';
-const DENSITY_HIGH = '#1F8377';
+const DENSITY_SCALE = ['#8b9089', '#a9c2ba', '#6fab99', '#3d9484', '#1F8377', '#0d5147'];
 
-function lerpColor(a: string, b: string, t: number) {
-  const ah = parseInt(a.slice(1), 16);
-  const bh = parseInt(b.slice(1), 16);
-  const ar = (ah >> 16) & 0xff, ag = (ah >> 8) & 0xff, ab = ah & 0xff;
-  const br = (bh >> 16) & 0xff, bg = (bh >> 8) & 0xff, bb = bh & 0xff;
-  const rr = Math.round(ar + (br - ar) * t);
-  const rg = Math.round(ag + (bg - ag) * t);
-  const rb = Math.round(ab + (bb - ab) * t);
-  return `#${((1 << 24) + (rr << 16) + (rg << 8) + rb).toString(16).slice(1)}`;
+function hexToRgb(hex: string): [number, number, number] {
+  const h = parseInt(hex.slice(1), 16);
+  return [(h >> 16) & 0xff, (h >> 8) & 0xff, h & 0xff];
+}
+
+function rgbToHex(r: number, g: number, b: number) {
+  return `#${((1 << 24) + (Math.round(r) << 16) + (Math.round(g) << 8) + Math.round(b)).toString(16).slice(1)}`;
+}
+
+function rgbToHsl(r: number, g: number, b: number): [number, number, number] {
+  r /= 255; g /= 255; b /= 255;
+  const max = Math.max(r, g, b), min = Math.min(r, g, b);
+  let h = 0, s = 0;
+  const l = (max + min) / 2;
+  const d = max - min;
+  if (d !== 0) {
+    s = d / (1 - Math.abs(2 * l - 1));
+    switch (max) {
+      case r: h = 60 * (((g - b) / d) % 6); break;
+      case g: h = 60 * ((b - r) / d + 2); break;
+      default: h = 60 * ((r - g) / d + 4);
+    }
+  }
+  if (h < 0) h += 360;
+  return [h, s, l];
+}
+
+function hslToRgb(h: number, s: number, l: number): [number, number, number] {
+  const c = (1 - Math.abs(2 * l - 1)) * s;
+  const x = c * (1 - Math.abs(((h / 60) % 2) - 1));
+  const m = l - c / 2;
+  let [r, g, b] = [0, 0, 0];
+  if (h < 60) [r, g, b] = [c, x, 0];
+  else if (h < 120) [r, g, b] = [x, c, 0];
+  else if (h < 180) [r, g, b] = [0, c, x];
+  else if (h < 240) [r, g, b] = [0, x, c];
+  else if (h < 300) [r, g, b] = [x, 0, c];
+  else [r, g, b] = [c, 0, x];
+  return [(r + m) * 255, (g + m) * 255, (b + m) * 255];
+}
+
+function lerpColorHsl(a: string, b: string, t: number) {
+  const [ah, as, al] = rgbToHsl(...hexToRgb(a));
+  const [bh, bs, bl] = rgbToHsl(...hexToRgb(b));
+  const h = ah + (bh - ah) * t;
+  const s = as + (bs - as) * t;
+  const l = al + (bl - al) * t;
+  return rgbToHex(...hslToRgb(h, s, l));
 }
 
 function getDensityColor(count: number, maxCount: number) {
-  if (maxCount <= 1) return DENSITY_LOW;
+  if (maxCount <= 1) return DENSITY_SCALE[0];
   // Scala su radice quadrata: i pochi siti molto densi non "schiacciano"
   // la scala, così anche le densità intermedie restano leggibili.
   const t = Math.sqrt(Math.min(1, (count - 1) / (maxCount - 1)));
-  return lerpColor(DENSITY_LOW, DENSITY_HIGH, t);
+  const scaled = t * (DENSITY_SCALE.length - 1);
+  const i = Math.min(DENSITY_SCALE.length - 2, Math.floor(scaled));
+  return lerpColorHsl(DENSITY_SCALE[i], DENSITY_SCALE[i + 1], scaled - i);
 }
 
 const WORLD_BOUNDS = L.latLngBounds([-85, -180], [85, 180]);
@@ -358,6 +397,7 @@ export const MapView: React.FC<MapViewProps> = ({ monumenti, onSelectMonumento }
               const strokeColor = isGrayedOut ? '#9ca3af' : site.color;
               const isHot = !isGrayedOut && site.totalCount >= hotThreshold;
               const radius = Math.min(22, Math.max(7, 7 + (site.totalCount - 1) * 1.5));
+              const siteEpiteti = Array.from(new Set(site.monumenti.flatMap(m => m.epiteti || [])));
 
               return (
                 <CircleMarker
@@ -374,6 +414,19 @@ export const MapView: React.FC<MapViewProps> = ({ monumenti, onSelectMonumento }
                     className: cn('site-marker', isHot && 'site-marker-hot')
                   }}
                 >
+                  {siteEpiteti.length > 0 && (
+                    // Tooltip al passaggio del mouse: prima gli epiteti erano
+                    // visibili solo dentro il Popup (richiede un click) e a
+                    // 9px su sfondo accent/10, poco leggibili. Qui restano a
+                    // colpo d'occhio, con contrasto pieno.
+                    <Tooltip direction="top" offset={[0, -radius]} opacity={0.97} className="site-epiteti-tooltip">
+                      <div className="flex flex-wrap gap-1 max-w-[14rem] font-sans font-semibold uppercase tracking-wide text-[10px]">
+                        {siteEpiteti.map(e => (
+                          <span key={e} className="bg-accent text-white px-1.5 py-0.5 rounded-full">{e}</span>
+                        ))}
+                      </div>
+                    </Tooltip>
+                  )}
                   <Popup className="custom-popup">
                     <div className="max-h-64 overflow-y-auto pr-3 flex flex-col gap-4 w-64 custom-scrollbar">
                       <div className="sticky top-0 bg-[var(--card)] pb-2 border-b border-border/30 z-10">
@@ -401,7 +454,7 @@ export const MapView: React.FC<MapViewProps> = ({ monumenti, onSelectMonumento }
                             {m.epiteti && m.epiteti.length > 0 && (
                               <div className="flex flex-wrap gap-1 mt-1">
                                 {m.epiteti.map(e => (
-                                  <span key={e} className="bg-accent/10 text-accent text-[9px] px-1.5 py-0.5 rounded-full uppercase tracking-wider font-sans font-semibold border border-accent/15">
+                                  <span key={e} className="bg-accent text-white text-[10px] px-1.5 py-0.5 rounded-full uppercase tracking-wider font-sans font-semibold">
                                     {e}
                                   </span>
                                 ))}
@@ -431,7 +484,7 @@ export const MapView: React.FC<MapViewProps> = ({ monumenti, onSelectMonumento }
           <h4 className="field-label mb-3">Densità iscrizioni</h4>
           <div
             className="h-2.5 w-full rounded-full mb-1.5"
-            style={{ background: `linear-gradient(to right, ${DENSITY_LOW}, ${DENSITY_HIGH})` }}
+            style={{ background: `linear-gradient(to right, ${DENSITY_SCALE.join(', ')})` }}
           ></div>
           <div className="flex justify-between text-[9px] text-muted uppercase tracking-wide mb-4">
             <span>Poche</span>

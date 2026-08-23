@@ -242,6 +242,43 @@ function extractIconography(teiString: string): any {
   return { function: iconFunction, figures, note };
 }
 
+function romanToInt(roman: string): number | null {
+  const map: Record<string, number> = { I: 1, V: 5, X: 10, L: 50, C: 100, D: 500, M: 1000 };
+  const s = roman.toUpperCase();
+  let total = 0;
+  for (let i = 0; i < s.length; i++) {
+    const cur = map[s[i]];
+    const next = map[s[i + 1]];
+    if (cur === undefined) return null;
+    total += next !== undefined && cur < next ? -cur : cur;
+  }
+  return total > 0 ? total : null;
+}
+
+function centuryBounds(n: number, era: "a.C." | "d.C."): [number, number] {
+  return era === "d.C." ? [(n - 1) * 100 + 1, n * 100] : [-(n * 100), -(n * 100 - 99)];
+}
+
+// Range di secoli in numeri romani (es. "II-IV sec. d.C.", "III sec. a.C.")
+// che compaiono solo come testo libero (provenienza, note), senza un
+// <origDate> strutturato in XML. Non tocca il dato XML: arricchisce solo
+// data_inizio/data_fine a runtime per far rientrare la scheda in filtri e
+// timeline, che altrimenti la escluderebbero (nessuna data numerica nota).
+export function parseCenturyRange(text: string): { start: number; end: number; match: string } | null {
+  if (!text) return null;
+  const re = /\b([IVXLCDM]{1,6})(?:\s*[-–—]\s*([IVXLCDM]{1,6}))?\s*sec(?:olo)?\.?\s*(a\.\s*C\.|d\.\s*C\.)/i;
+  const m = text.match(re);
+  if (!m) return null;
+  const era: "a.C." | "d.C." = /^a/i.test(m[3].replace(/\s+/g, "")) ? "a.C." : "d.C.";
+  const n1 = romanToInt(m[1]);
+  if (n1 === null) return null;
+  const [start1, end1] = centuryBounds(n1, era);
+  const n2 = m[2] ? romanToInt(m[2]) : null;
+  if (n2 === null) return { start: start1, end: end1, match: m[0] };
+  const [start2, end2] = centuryBounds(n2, era);
+  return { start: Math.min(start1, start2), end: Math.max(end1, end2), match: m[0] };
+}
+
 function parseTeiElement(teiString: string): Monumento {
   const extractAllMatches = (regex: RegExp, text: string): string[] => {
     const results: string[] = [];
@@ -278,7 +315,12 @@ function parseTeiElement(teiString: string): Monumento {
   if (tmMatch) {
     tm = unescapeXml(tmMatch[2].trim());
     const refMatch = tmMatch[1].match(/ref="([^"]*)"/);
-    if (refMatch) tmLink = refMatch[1];
+    if (refMatch) {
+      const rawRef = refMatch[1].trim();
+      tmLink = rawRef && !/^https?:\/\//i.test(rawRef)
+        ? `https://${rawRef.replace(/^\/\//, "")}`
+        : rawRef;
+    }
   }
 
   // 4. Parse PHI list
@@ -291,13 +333,21 @@ function parseTeiElement(teiString: string): Monumento {
     authority = unescapeXml(authMatch[1].trim());
   }
 
-  // 5b. Parse revisionDesc
+  // 5b. Parse revisionDesc (+ @status, vedi EditorialStatus in types.ts)
   const revisions: { date: string; who: string; note?: string }[] = [];
-  const revisionBlock = teiString.match(/<revisionDesc>([\s\S]*?)<\/revisionDesc>/);
+  let editorialStatus: Monumento["editorialStatus"] = undefined;
+  const revisionBlock = teiString.match(/<revisionDesc([^>]*)>([\s\S]*?)<\/revisionDesc>/);
   if (revisionBlock) {
+    const statusMatch = revisionBlock[1].match(/status="([^"]*)"/);
+    if (statusMatch) {
+      const s = unescapeXml(statusMatch[1]);
+      if (s === "draft" || s === "diplomatic-edition" || s === "published" || s === "under-revision") {
+        editorialStatus = s;
+      }
+    }
     const changeRegex = /<change\s+([^>]*)>([\s\S]*?)<\/change>/g;
     let chMatch;
-    while ((chMatch = changeRegex.exec(revisionBlock[1])) !== null) {
+    while ((chMatch = changeRegex.exec(revisionBlock[2])) !== null) {
       const attrs = chMatch[1];
       const whenMatch = attrs.match(/when="([^"]*)"/);
       const whoMatch = attrs.match(/who="([^"]*)"/);
@@ -554,6 +604,18 @@ function parseTeiElement(teiString: string): Monumento {
     const obsContent = obsProvMatch[1].trim();
     const obsP = obsContent.match(/<p>([\s\S]*?)<\/p>/);
     conserv = resolveXmlTextWithPtrs(obsP ? obsP[1].trim() : obsContent).resolvedText;
+  }
+
+  // Nessun <origDate> strutturato ma una datazione a più secoli discussa in
+  // prosa nella provenienza (es. "II-III sec. d.C.") — fallback per non
+  // escludere la scheda da filtri/timeline per data (vedi parseCenturyRange).
+  if (data_inizio === undefined && data_fine === undefined) {
+    const centuryGuess = parseCenturyRange(luogo_rit) || parseCenturyRange(origPlace_nota);
+    if (centuryGuess) {
+      data_inizio = centuryGuess.start;
+      data_fine = centuryGuess.end;
+      if (!data) data = centuryGuess.match;
+    }
   }
 
   // 17. Text type (iscrizione vs anepigr)
@@ -1084,6 +1146,7 @@ function parseTeiElement(teiString: string): Monumento {
     persone,
     imperatori,
     revisions,
+    editorialStatus,
     apparatus,
     testo_tradotto: Array.isArray(apparatus) ? apparatus.map(e => `${e.loc}: ${e.note}`).join('\n') : apparatus,
     traduzioni,
@@ -1317,9 +1380,10 @@ export function monumentiToXml(monumenti: Monumento[]): string {
     }
     const iconographyBlock = renderIconography(m.iconografia, '    ');
     if (iconographyBlock) block += iconographyBlock + '\n';
-    if (m.revisions && m.revisions.length > 0) {
-      block += `    <revisionDesc>\n`;
-      for (const r of m.revisions) {
+    if ((m.revisions && m.revisions.length > 0) || m.editorialStatus) {
+      const statusAttr = m.editorialStatus ? ` status="${escapeXml(m.editorialStatus)}"` : '';
+      block += `    <revisionDesc${statusAttr}>\n`;
+      for (const r of m.revisions || []) {
         const whoAttr = r.who ? ` who="${escapeXml(r.who)}"` : '';
         const whenAttr = r.date ? ` when="${escapeXml(r.date)}"` : '';
         block += `        <change${whenAttr}${whoAttr}>${escapeXml(r.note || '')}</change>\n`;

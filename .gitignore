@@ -17,3 +17,11 @@ src/data/corpus-drafts/
 # (vedi scripts/build-corpus-snapshot.ts) — contiene il corpus vero, mai da
 # committare: viene rigenerato ad ogni deploy dal workflow Actions.
 public/corpus-snapshot.json
+
+# Corpus principale: fonte di verità è Gregoee2002/ILA (repo dati). Questa
+# cartella è solo una cache locale ripopolata al boot dal server dev
+# (pullCorpusFromGitHub, vedi githubStorage.ts) e dalla build GH Pages
+# (build-corpus-snapshot.ts). Non va tracciata qui: ogni modifica arriva già
+# al repo dati via pushFileToGitHub, tenerla anche qui duplica la fonte di
+# verità e genera commit rumorosi.
+src/data/corpus/

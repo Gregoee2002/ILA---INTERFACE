@@ -621,6 +621,66 @@ export async function pushBugsFileToGitHub(content: string, message: string): Pr
   }
 }
 
+// ── Overlay del vocabolario iconografico (iconography-vocab.json) ────
+// Stesso schema minimale di flags.json/bugs.json: un solo file JSON alla
+// radice della repo dati, ma qui un oggetto piatto { id: label } invece di
+// un array — overlay di termini iconografici non ancora curati a mano in
+// iconographyLabels.ts (vedi mergeIconographyOverrides). Scritture attese
+// rarissime (solo quando un editor introduce un termine nuovo), quindi
+// stesso pattern "single retry" degli altri due file di supporto.
+const ICONOGRAPHY_VOCAB_PATH = "iconography-vocab.json";
+let iconographyVocabSha: string | null = null;
+
+/** Legge iconography-vocab.json dalla repo. `null` se non esiste ancora. */
+export async function pullIconographyVocabFileFromGitHub(): Promise<string | null> {
+  if (!isGitHubConfigured()) return null;
+  const cfg = getConfig();
+  const url = `${GITHUB_API}/repos/${cfg.repo}/contents/${ICONOGRAPHY_VOCAB_PATH}?ref=${encodeURIComponent(cfg.branch)}`;
+  const res = await fetch(url, { headers: headers(cfg) });
+  if (res.status === 404) { iconographyVocabSha = null; return null; }
+  if (!res.ok) throw new Error(`GitHub get iconography-vocab.json fallita (${res.status}): ${await res.text()}`);
+  const data = await res.json();
+  iconographyVocabSha = data.sha || null;
+  if (data.encoding !== "base64" || typeof data.content !== "string") {
+    throw new Error("Formato risposta inatteso per iconography-vocab.json");
+  }
+  return Buffer.from(data.content, "base64").toString("utf-8");
+}
+
+export async function pushIconographyVocabFileToGitHub(content: string, message: string): Promise<void> {
+  if (!isGitHubConfigured()) return;
+  const cfg = getConfig();
+  const url = `${GITHUB_API}/repos/${cfg.repo}/contents/${ICONOGRAPHY_VOCAB_PATH}`;
+  let sha = iconographyVocabSha;
+
+  for (let attempt = 1; attempt <= 3; attempt++) {
+    const body: Record<string, unknown> = {
+      message,
+      content: Buffer.from(content, "utf-8").toString("base64"),
+      branch: cfg.branch,
+    };
+    if (sha) body.sha = sha;
+
+    const res = await fetch(url, { method: "PUT", headers: headers(cfg), body: JSON.stringify(body) });
+    if (res.ok) {
+      const data = await res.json();
+      iconographyVocabSha = data.content.sha;
+      return;
+    }
+
+    const detail = await res.text();
+    const isRaceConflict = res.status === 409 || res.status === 422;
+    if (isRaceConflict && attempt < 3) {
+      console.warn(`[githubStorage] Conflitto (${res.status}) su iconography-vocab.json, tentativo ${attempt}/3, ritento...`);
+      await new Promise(r => setTimeout(r, 150 * attempt));
+      const refreshedRes = await fetch(`${url}?ref=${encodeURIComponent(cfg.branch)}`, { headers: headers(cfg), cache: "no-store" });
+      sha = refreshedRes.ok ? (await refreshedRes.json()).sha : null;
+      continue;
+    }
+    throw new Error(`Scrittura GitHub fallita per iconography-vocab.json (${res.status}) dopo ${attempt} tentativi: ${detail}`);
+  }
+}
+
 /**
  * Elimina un file dalla repo GitHub (usata quando una scheda viene
  * rimossa/rinominata localmente). No-op silenziosa se non configurato o

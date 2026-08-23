@@ -90,3 +90,17 @@ export const ICONOGRAPHY_LABELS: Record<string, string> = {
   gesture: "gesto",
   position: "posizione",
 };
+
+/**
+ * Applica un overlay di termini non ancora curati (vedi
+ * iconographyVocabOverrides.ts) sopra il vocabolario base, mutando
+ * l'oggetto esportato: ogni lettura successiva di ICONOGRAPHY_LABELS[key]
+ * (App.tsx, IconographyPanel, searchIndex, ecc.) vede già il termine senza
+ * dover cambiare quei punti di lettura. Non sovrascrive mai una voce già
+ * curata a mano sopra: l'overlay copre solo id assenti dal vocabolario base.
+ */
+export function mergeIconographyOverrides(overrides: Record<string, string>): void {
+  for (const [id, label] of Object.entries(overrides)) {
+    if (!(id in ICONOGRAPHY_LABELS)) ICONOGRAPHY_LABELS[id] = label;
+  }
+}
