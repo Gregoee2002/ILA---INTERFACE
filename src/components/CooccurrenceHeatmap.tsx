@@ -269,8 +269,8 @@ export const CooccurrenceHeatmap: React.FC<CooccurrenceHeatmapProps> = ({ monume
   }
 
   return (
-    <div className="bg-parchment p-5 border border-border/50 rounded-md">
-      <div className="flex justify-between items-start mb-6 flex-wrap gap-4">
+    <div className="bg-parchment p-5 border border-border/50 rounded-md flex flex-col h-full min-h-0">
+      <div className="flex justify-between items-start mb-6 flex-wrap gap-4 shrink-0">
         <div>
           <h2 className="font-serif text-lg font-bold text-ink flex items-center gap-2 mb-1">
             {mode === 'multi' ? <Orbit className="w-4 h-4 text-accent" /> : <Grid3X3 className="w-4 h-4 text-accent" />}
@@ -307,7 +307,7 @@ export const CooccurrenceHeatmap: React.FC<CooccurrenceHeatmapProps> = ({ monume
         </div>
       </div>
 
-      <div className="flex flex-wrap gap-4 items-start mb-4">
+      <div className="flex flex-wrap gap-4 items-start mb-4 shrink-0">
         <div className="flex gap-4 items-end">
           <div className="flex flex-col gap-1">
             <label className="text-[10px] font-bold uppercase tracking-widest text-muted">Asse Righe</label>
@@ -377,7 +377,7 @@ export const CooccurrenceHeatmap: React.FC<CooccurrenceHeatmapProps> = ({ monume
         )}
       </div>
 
-      <div className="flex items-center gap-6 mb-2 text-[10px] text-muted uppercase tracking-wider font-bold flex-wrap">
+      <div className="flex items-center gap-6 mb-2 text-[10px] text-muted uppercase tracking-wider font-bold flex-wrap shrink-0">
         <div className="flex items-center gap-2">
           <span>PMI:</span>
           <div className="flex w-32 h-2.5 rounded bg-gradient-to-r from-blue-500 via-white to-amber-500 border border-border/50"></div>
@@ -392,7 +392,7 @@ export const CooccurrenceHeatmap: React.FC<CooccurrenceHeatmapProps> = ({ monume
         )}
       </div>
 
-      <div className="overflow-auto border border-border/40 bg-white p-4 custom-scrollbar">
+      <div className="overflow-auto border border-border/40 bg-white p-4 custom-scrollbar flex-1 min-h-0">
         <div className="min-w-max pb-8 pr-8">
           <div className="flex">
             <div className="w-48 shrink-0 border-b border-border/40 border-r"></div>
@@ -447,7 +447,7 @@ export const CooccurrenceHeatmap: React.FC<CooccurrenceHeatmapProps> = ({ monume
         </div>
       </div>
 
-      <div className="mt-4 text-[10px] italic text-muted font-serif border-t border-border/40 pt-3 leading-relaxed">
+      <div className="mt-4 text-[10px] italic text-muted font-serif border-t border-border/40 pt-3 leading-relaxed shrink-0">
         La forza dell'associazione (PMI) è indicativa e instabile su piccoli campioni. Il conteggio assoluto è sempre mostrato. Le correlazioni sono ipotesi da verificare sulle fonti, non conclusioni.{' '}
         {mode === 'multi'
           ? "In modalità Costellazione la PMI generalizza il confronto a N fattori: P(riga, colonna₁, …, colonnaₖ) rispetto al prodotto delle probabilità marginali di ciascun fattore preso singolarmente, cioè al valore atteso sotto indipendenza reciproca di tutti."
