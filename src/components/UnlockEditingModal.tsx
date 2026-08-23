@@ -14,7 +14,7 @@ import { KeyRound, X } from 'lucide-react';
 // App.tsx, che lo carica con import() dinamico. Così questo componente
 // resta nel bundle principale (App.tsx lo renderizza sempre, condizionato
 // solo a runtime) senza trascinarci dentro apiShim — che altrimenti
-// finirebbe anche nella build per Google AI Studio, dove non serve.
+// finirebbe anche in eventuali build embeddate/sandboxate dove non serve.
 //
 // A differenza di PasswordGate, qui App è già montata (si apre da un
 // pulsante dentro l'app) quindi la classe "dark" su <html> è già

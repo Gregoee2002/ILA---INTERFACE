@@ -3572,7 +3572,7 @@ export default function App() {
 
   const [isImportModalOpen, setIsImportModalOpen] = useState(false);
   // Conferma "Riordina ID" — NON usa window.confirm(): nelle preview embeddate
-  // (es. iframe sandboxato di AI Studio) i dialoghi nativi del browser
+  // (es. iframe sandboxati) i dialoghi nativi del browser
   // (confirm/alert/prompt) vengono spesso bloccati silenziosamente, senza
   // errore visibile — il click sembra "non fare nulla". Un dialogo interno
   // funziona sempre, indipendentemente dal contesto di rendering.

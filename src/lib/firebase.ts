@@ -63,7 +63,7 @@ export function handleFirestoreError(error: unknown, operationType: OperationTyp
 }
 
 /**
- * Sign in using Google popup as recommended in AI Studio environment
+ * Login con popup Google.
  */
 export async function loginWithGoogle() {
   try {
