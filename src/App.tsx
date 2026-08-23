@@ -1902,12 +1902,7 @@ function HomeView({ monumenti, onNavigate, onSearch, effectiveAdmin }: { monumen
 
             <div className="flex-1 min-w-0 flex flex-col justify-center">
               <div className="text-[9px] md:text-[10px] font-sans font-bold uppercase tracking-[0.25em] text-white/60 mb-2 md:mb-1">Punto di partenza</div>
-              <div className="flex items-center gap-3 flex-wrap mb-2 md:mb-2">
-                <div className="font-serif font-bold text-white text-3xl md:text-4xl leading-tight tracking-tight">{heroSection.label}</div>
-                <span className="text-[10px] md:text-xs font-sans font-bold text-white/80 bg-white/10 border border-white/20 rounded-full px-2.5 py-1 tracking-wide whitespace-nowrap">
-                  {stats.totale} voci totali
-                </span>
-              </div>
+              <div className="font-serif font-bold text-white text-3xl md:text-4xl mb-2 md:mb-2 leading-tight tracking-tight">{heroSection.label}</div>
               <p className="text-sm md:text-base text-white/70 leading-relaxed max-w-lg">{heroSection.desc}</p>
             </div>
           </div>
