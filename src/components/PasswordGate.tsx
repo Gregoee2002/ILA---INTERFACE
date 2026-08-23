@@ -84,7 +84,7 @@ export function PasswordGate() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1, transition: { duration: 1, ease: 'easeInOut' } }}
         exit={{ opacity: 0, transition: { duration: 0.6, ease: 'easeInOut' } }}
-        className="fixed inset-0 z-[200] flex items-center justify-center bg-parchment"
+        className="fixed inset-0 z-[200] flex items-center justify-center overflow-y-auto bg-parchment py-8"
         style={{
           // Sempre in tema chiaro, a prescindere dalla modalità notte:
           // il ritaglio del logo non è pulito sullo sfondo scuro, quindi
@@ -117,7 +117,12 @@ export function PasswordGate() {
             transition={{ duration: 1.1, ease: EASE_OUT }}
             className="mb-12"
           >
-            <img src={ilaLogo} alt="Index Lunae Antiquae" className="h-52 sm:h-64 md:h-72 lg:h-80 w-auto object-contain" />
+            <img
+              src={ilaLogo}
+              alt="Index Lunae Antiquae"
+              className="w-auto object-contain"
+              style={{ height: 'clamp(120px, 32vh, 320px)' }}
+            />
           </motion.div>
 
           {!requiredHash ? (
