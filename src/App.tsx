@@ -6159,7 +6159,7 @@ export default function App() {
                             { label: 'Datazione', value: formatDateRange(selectedMonumento.data_inizio, selectedMonumento.data_fine), type: '' },
                             { label: 'Tipologia', value: selectedMonumento.tipo, type: 'tipo' },
                             { label: 'Materiale', value: selectedMonumento.materiale, type: '' }
-                          ].filter(item => item.value).map(item => (
+                          ].filter(item => item.value && item.value !== '-').map(item => (
                             <div key={item.label}>
                               <dt className="text-[9px] font-sans font-bold uppercase text-muted/80 tracking-tighter">{item.label}</dt>
                               {item.type ? (
