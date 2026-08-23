@@ -47,7 +47,9 @@ import {
   Unlock,
   NotebookPen,
   Bug,
-  ExternalLink
+  ExternalLink,
+  Image,
+  Landmark
 } from 'lucide-react';
 import { cn, EASE_OUT, EASE_IN, SPRING_SNAPPY, SPRING_SOFT } from './lib/utils';
 import { ICONOGRAPHY_LABELS } from './lib/iconographyLabels';
@@ -3519,6 +3521,51 @@ export default function App() {
   const [selectedMonumento, setSelectedMonumento] = useState<Monumento | null>(null);
   const [currentUser, setCurrentUser] = useState<User | null>(null);
 
+  // --- Prova layout scheda: navigazione a sezioni della modale editoriale ---
+  const RECORD_SECTIONS: { id: string; label: string; icon: typeof Hash }[] = [
+    { id: 'scheda', label: 'Scheda', icon: Hash },
+    { id: 'oggetto', label: 'Oggetto', icon: Landmark },
+    { id: 'iscrizione', label: 'Iscrizione', icon: Feather },
+    { id: 'commento', label: 'Commento', icon: NotebookPen },
+    { id: 'iconografia', label: 'Iconografia', icon: Image },
+    { id: 'bibliografia', label: 'Bibliografia', icon: Book },
+  ];
+  const [activeRecordSection, setActiveRecordSection] = useState<string>('scheda');
+  const recordContentRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!selectedMonumento) return;
+    setActiveRecordSection('scheda');
+    const container = recordContentRef.current;
+    if (!container) return;
+
+    const handleScroll = () => {
+      const containerRect = container.getBoundingClientRect();
+      let current = RECORD_SECTIONS[0].id;
+      for (const { id } of RECORD_SECTIONS) {
+        const el = container.querySelector<HTMLElement>(`[data-record-section="${id}"]`);
+        if (!el) continue;
+        const relativeTop = el.getBoundingClientRect().top - containerRect.top + container.scrollTop;
+        if (relativeTop <= container.scrollTop + 80) current = id;
+      }
+      setActiveRecordSection(current);
+    };
+
+    container.addEventListener('scroll', handleScroll);
+    handleScroll();
+    return () => container.removeEventListener('scroll', handleScroll);
+  }, [selectedMonumento?.id]);
+
+  const scrollToRecordSection = (id: string) => {
+    const container = recordContentRef.current;
+    const el = container?.querySelector<HTMLElement>(`[data-record-section="${id}"]`);
+    if (!container || !el) return;
+    const containerRect = container.getBoundingClientRect();
+    const elRect = el.getBoundingClientRect();
+    const relativeTop = elRect.top - containerRect.top + container.scrollTop;
+    container.scrollTo({ top: Math.max(relativeTop - 24, 0), behavior: 'smooth' });
+  };
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setCurrentUser(user);
@@ -6150,6 +6197,28 @@ export default function App() {
                          </span>
                       </div>
 
+                      {/* Prova: navigazione a sezioni della scheda */}
+                      <nav className="space-y-0.5 -mx-1">
+                        {RECORD_SECTIONS.map(({ id, label, icon: Icon }) => {
+                          const active = activeRecordSection === id;
+                          return (
+                            <button
+                              key={id}
+                              onClick={() => scrollToRecordSection(id)}
+                              className={cn(
+                                "w-full flex items-center gap-2.5 px-3 py-2 text-left font-sans text-[11px] font-bold uppercase tracking-wider transition-colors rounded-sm",
+                                active
+                                  ? "bg-accent/10 text-accent border-l-2 border-accent -ml-0.5 pl-[10px]"
+                                  : "text-muted hover:text-ink hover:bg-sidebar/60 border-l-2 border-transparent -ml-0.5 pl-[10px]"
+                              )}
+                            >
+                              <Icon className="h-3.5 w-3.5 shrink-0" />
+                              {label}
+                            </button>
+                          );
+                        })}
+                      </nav>
+
                       <section className="space-y-4">
                         <h4 className="font-sans field-label opacity-85 pb-2 border-b border-border/40">Specifiche Tecniche</h4>
                         <dl className="space-y-3">
@@ -6210,8 +6279,8 @@ export default function App() {
                    </div>
 
                   {/* Main Content Area */}
-                  <div className="flex-1 min-h-0 bg-parchment p-6 md:p-16 md:overflow-y-auto custom-scrollbar">
-                    <div className="flex justify-between items-start mb-4">
+                  <div ref={recordContentRef} className="flex-1 min-h-0 bg-parchment p-6 md:p-16 md:overflow-y-auto custom-scrollbar">
+                    <div data-record-section="scheda" className="flex justify-between items-start mb-4">
                       <div className="flex-1 mr-4">
                         {true && (
                           <div className="flex flex-col gap-1 mb-4">
@@ -6354,7 +6423,7 @@ export default function App() {
                           </div>
                         )}
 
-                        <div className="grid md:grid-cols-2 gap-8 border border-border/40 bg-sidebar/20 p-6 md:p-8 rounded-sm font-serif text-xs leading-relaxed text-ink/80">
+                        <div data-record-section="oggetto" className="grid md:grid-cols-2 gap-8 border border-border/40 bg-sidebar/20 p-6 md:p-8 rounded-sm font-serif text-xs leading-relaxed text-ink/80">
                           <div>
                             <h4 className="text-[10px] font-sans font-bold uppercase tracking-widest text-accent mb-4 pb-1 border-b border-border/30">Layout & Supporto Materiale</h4>
                             {(selectedMonumento.layout_desc || selectedMonumento.supporto) && (
@@ -6477,7 +6546,7 @@ export default function App() {
                     )}
 
                     <div className="space-y-16">
-                      <section>
+                      <section data-record-section="iscrizione">
                          <h3 className="text-2xl font-bold mb-6 italic flex items-center gap-4">
                            <div className="flex items-center gap-4 shrink-0">
                              <div className="h-[1px] w-8 bg-border/40" />
@@ -6521,7 +6590,7 @@ export default function App() {
                            </div>
                       </section>
 
-                      <section className="grid md:grid-cols-2 gap-12">
+                      <section data-record-section="commento" className="grid md:grid-cols-2 gap-12">
                          <div className="space-y-5">
                             {selectedMonumento.divinita && selectedMonumento.divinita.length > 0 && (
                               <div>
@@ -6601,6 +6670,7 @@ export default function App() {
                          )}
                       </section>
 
+                      <div data-record-section="iconografia" className="space-y-16">
                       {selectedMonumento.iconografia?.note && (
                         <section>
                           <h3 className="text-xs font-bold uppercase text-muted tracking-widest mb-3">Nota sulla Funzione Cultuale</h3>
@@ -6611,9 +6681,10 @@ export default function App() {
                       )}
 
                       <IconographyPanel monumento={selectedMonumento} />
+                      </div>
 
                       {selectedMonumento.bibliografia && selectedMonumento.bibliografia.length > 0 && (
-                      <section>
+                      <section data-record-section="bibliografia">
                          <h3 className="text-xl font-bold mb-6 italic flex items-center gap-3">
                            <div className="h-px w-8 bg-border" /> Bibliografia
                          </h3>
