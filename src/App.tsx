@@ -3633,6 +3633,7 @@ export default function App() {
   }, []);
 
   const [translating, setTranslating] = useState(false);
+  const [activeTranslationLang, setActiveTranslationLang] = useState<string | null>(null);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [importStatus, setImportStatus] = useState<{ type: 'idle' | 'loading' | 'success' | 'error', message: string }>({ type: 'idle', message: '' });
 
@@ -3669,6 +3670,11 @@ export default function App() {
       setShowDeleteConfirm(false);
     }
   }, [selectedMonumento]);
+
+  // Riparte dalla lingua di default (IT se presente, altrimenti la prima) ad ogni cambio di record
+  useEffect(() => {
+    setActiveTranslationLang(null);
+  }, [selectedMonumento?.entryId ?? selectedMonumento?.id]);
 
 
 
@@ -6272,9 +6278,6 @@ export default function App() {
                         onReopen={entryId => updateRegistroStatus(entryId, 'open')}
                       />
 
-                       <div className="pt-6">
-                         <p className="text-[10px] font-sans text-muted/40 italic">Rif. Monografia: Lane (1971), Vol I.</p>
-                       </div>
                      </div>
                    </div>
 
@@ -6575,12 +6578,41 @@ export default function App() {
                                   ) : <span className="opacity-40 italic">[Anepigrafe]</span>}
                                 </div>
                              </div>
-                             {selectedMonumento.traduzioni?.find(t => { const l = t.lang?.toLowerCase() || ''; return l === 'it' || l.startsWith('it ('); })?.testo && (
-                               <div className="bg-sidebar/30 border-l-4 border-accent p-8 font-serif text-lg italic leading-relaxed text-ink/80 block mb-6">
-                                 <div className="text-[9px] font-sans font-bold uppercase tracking-widest text-muted mb-2 font-semibold">Traduzione Italiana</div>
-                                 <Highlight text={stripXml(selectedMonumento.traduzioni.find(t => { const l = t.lang?.toLowerCase() || ''; return l === 'it' || l.startsWith('it ('); })?.testo)} query={filters.searchText} />
-                               </div>
-                             )}
+                             {selectedMonumento.traduzioni && selectedMonumento.traduzioni.filter(t => t.testo).length > 0 && (() => {
+                               const isIt = (l: string) => l === 'it' || l.startsWith('it (');
+                               const sorted = [...selectedMonumento.traduzioni!.filter(t => t.testo)].sort((a, b) => {
+                                 const aIt = isIt(a.lang?.toLowerCase() || '') ? 0 : 1;
+                                 const bIt = isIt(b.lang?.toLowerCase() || '') ? 0 : 1;
+                                 return aIt - bIt;
+                               });
+                               const active = sorted.find(t => t.lang === activeTranslationLang) ?? sorted[0];
+                               return (
+                                 <div className="bg-sidebar/30 border-l-4 border-accent p-8 font-serif text-lg italic leading-relaxed text-ink/80 mb-6">
+                                   <div className="flex items-center justify-between gap-4 mb-2 not-italic">
+                                     <span className="text-[9px] font-sans font-bold uppercase tracking-widest text-muted">Traduzione</span>
+                                     {sorted.length > 1 && (
+                                       <div className="flex items-center gap-1">
+                                         {sorted.map((t, i) => (
+                                           <button
+                                             key={`${t.lang}-${i}`}
+                                             onClick={() => setActiveTranslationLang(t.lang ?? null)}
+                                             className={cn(
+                                               "px-1.5 py-0.5 text-[8px] font-sans font-bold uppercase tracking-wider rounded-sm transition-colors",
+                                               t === active ? "bg-accent text-white" : "text-muted/70 hover:text-accent"
+                                             )}
+                                             title={t.lang}
+                                           >
+                                             {(t.lang || '?').slice(0, 2).toUpperCase()}
+                                           </button>
+                                         ))}
+                                       </div>
+                                     )}
+                                   </div>
+                                   <Highlight text={stripXml(active?.testo)} query={filters.searchText} />
+                                   {active?.note && <p className="text-[10px] font-sans not-italic text-muted mt-3">Note: {active.note}</p>}
+                                 </div>
+                               );
+                             })()}
                              {hasApparatusContent(selectedMonumento.apparatus) && (
                                <div className="bg-sidebar/20 border border-border/40 p-6 rounded-sm font-sans text-xs leading-relaxed text-muted block">
                                  <div className="text-[9px] font-sans font-bold uppercase tracking-widest text-muted mb-2 font-semibold">Apparatus Critico</div>
@@ -6707,31 +6739,6 @@ export default function App() {
                             </>
                       </section>
                       )}
-
-                      {selectedMonumento.traduzioni && selectedMonumento.traduzioni.filter(t => {
-                        const l = t.lang?.toLowerCase() || '';
-                        return l !== 'it' && !l.startsWith('it (');
-                      }).length > 0 && (
-                        <section>
-                           <h3 className="text-xl font-bold mb-6 italic flex items-center gap-3">
-                             <div className="h-px w-8 bg-border" /> Altre Traduzioni
-                           </h3>
-                           <div className="grid gap-8">
-                             {selectedMonumento.traduzioni
-                               .filter(t => { const l = t.lang?.toLowerCase() || ''; return l !== 'it' && !l.startsWith('it ('); })
-                               .map((t, i) => (
-                               <div key={i} className="border-l-4 border-border/40 pl-8 pb-4">
-                                 <div className="flex items-center gap-4 mb-3">
-                                   <span className="font-sans text-[9px] font-bold uppercase tracking-widest text-muted">{t.lang}</span>
-                                 </div>
-                                 <p className="text-lg italic text-ink leading-relaxed mb-4">{stripXml(t.testo)}</p>
-                                 {t.note && <p className="text-[10px] font-serif text-muted italic">Note: {t.note}</p>}
-                               </div>
-                             ))}
-                           </div>
-                        </section>
-                      )}
-
 
                     </div>
                   </div>
