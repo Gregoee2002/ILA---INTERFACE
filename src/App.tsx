@@ -6390,7 +6390,7 @@ export default function App() {
                               
                               {selectedMonumento.origDates && selectedMonumento.origDates.length > 0 ? (
                                 <div className="border-t border-border/20 pt-3">
-                                  <span className="text-muted uppercase font-bold text-[9px] block mb-2">Original dates di pubblicazione (EpiDoc)</span>
+                                  <span className="text-muted uppercase font-bold text-[9px] block mb-2">Datazione del monumento (EpiDoc origDate)</span>
                                   <ul className="space-y-3 font-serif text-[11px] list-disc list-inside text-ink/90 pl-1">
                                     {selectedMonumento.origDates.map((od, i) => (
                                       <li key={i} className="leading-snug">
