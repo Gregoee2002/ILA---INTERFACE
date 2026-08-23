@@ -211,7 +211,9 @@ const getTintClass = (str: string) => {
 // leggermente evidenziata durante lo scroll (stessa meccanica della
 // rubrica onomastica, vedi RUBRICA_MARKER_OFFSET).
 const DIAGONAL_ROW_H = 42;
-const DIAGONAL_STEP_X = 22;
+// Passo orizzontale per riga: DIAGONAL_ROW_H / tan(65°) — inclinazione della
+// diagonale a 65° rispetto all'orizzontale.
+const DIAGONAL_STEP_X = 19.6;
 const DIAGONAL_BASE_X = 150;
 
 const DivinityDiagonalList = ({ items, onSelect, searchTerm }: {
