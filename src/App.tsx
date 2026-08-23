@@ -196,15 +196,6 @@ const formatBiblKey = (raw: string): string => {
 };
 
 
-const getTintClass = (str: string) => {
-  let hash = 0;
-  for (let i = 0; i < str.length; i++) {
-    hash = str.charCodeAt(i) + ((hash << 5) - hash);
-  }
-  const rem = Math.abs(hash % 4) + 1;
-  return `glass-card-tint-${rem}`;
-};
-
 // Card "protagonista" per una divinità: nome, occorrenze, regioni, numero di epiteti
 // Elenco divinità in rubrica: ordine alfabetico, tutte le righe allineate su
 // un'unica retta verticale (nome a sinistra del punto, attestazioni a
@@ -671,38 +662,34 @@ const AttestationList = ({
         {variant === 'all' ? <>Tutte le attestazioni di &quot;{label}&quot;</> : <>Attestazioni per: &quot;{label}&quot;</>}
       </h3>
     </div>
+    <div className="text-[10px] font-sans text-muted/60 mb-2 uppercase tracking-widest">
+      {items.length} {items.length === 1 ? 'attestazione' : 'attestazioni'}
+    </div>
     <div className="flex-1 overflow-y-auto pr-4 custom-scrollbar">
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+      <div className="border border-border/60 rounded-sm divide-y divide-border/40 bg-parchment/40 overflow-hidden">
         {items.map((m, i) => (
           <motion.div
             key={m.entryId || `idx-${m.id}`}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.35, delay: Math.min(i, 12) * 0.03, ease: EASE_OUT }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.25, delay: Math.min(i, 20) * 0.015, ease: EASE_OUT }}
             onClick={() => onSelectMonumento(m)}
-            className={cn("p-5 cursor-pointer group", getTintClass(m.titolo || m.citta || String(m.id)))}
+            className="group flex items-center gap-3 px-3 py-2 cursor-pointer hover:bg-accent/5 transition-colors"
           >
-            <div className="flex items-center gap-2 mb-2 flex-wrap">
+            {m.entryId && (
+              <span className="shrink-0 text-[9px] font-mono font-bold text-muted/50 group-hover:text-accent/70 transition-colors w-12 truncate">{m.entryId}</span>
+            )}
+            <span className="shrink-0 text-sm font-bold font-serif text-ink group-hover:text-accent transition-colors truncate max-w-[40%]">{getDisplayTitle(m)}</span>
+            <span className="flex-1 min-w-0 text-xs italic text-muted/70 truncate">"{stripXml(m.testo) || '[Anepigrafe]'}"</span>
+            <div className="shrink-0 flex items-center gap-1.5">
               {m.regione && (
-                <span className="text-[9px] font-sans font-bold bg-accent/10 text-accent px-1.5 rounded-sm uppercase tracking-widest">{m.regione}</span>
+                <span className="text-[9px] font-sans font-bold bg-accent/10 text-accent px-1.5 py-0.5 rounded-sm uppercase tracking-widest">{m.regione}</span>
               )}
               {m.citta && (
-                <span className="text-[9px] font-sans font-bold text-muted uppercase tracking-widest">{m.citta}</span>
+                <span className="text-[9px] font-sans font-bold text-muted/70 uppercase tracking-widest">{m.citta}</span>
               )}
             </div>
-            <div className="text-base font-bold font-serif text-ink group-hover:text-accent transition-colors leading-snug mb-1.5">{getDisplayTitle(m)}</div>
-            <div className="text-xs italic text-muted line-clamp-2 mb-3">"{stripXml(m.testo) || '[Anepigrafe]'}"</div>
-            <div className="flex items-center justify-between gap-2">
-              <div className="flex items-center gap-1.5 flex-wrap min-w-0">
-                {m.divinita && m.divinita.length > 0 && (
-                  <span className="text-[9px] font-serif italic text-accent/70 truncate">{m.divinita.join(', ')}</span>
-                )}
-                {m.epiteti && m.epiteti.length > 0 && (
-                  <span className="text-[9px] font-sans text-muted/70 truncate">[{m.epiteti.join(', ')}]</span>
-                )}
-              </div>
-              <ChevronRight className="h-4 w-4 text-border group-hover:text-accent group-hover:translate-x-0.5 transition-all shrink-0" />
-            </div>
+            <ChevronRight className="h-3.5 w-3.5 text-border group-hover:text-accent group-hover:translate-x-0.5 transition-all shrink-0" />
           </motion.div>
         ))}
       </div>
@@ -2565,15 +2552,24 @@ function Timeline({ monumenti, onSelect }: { monumenti: Monumento[], onSelect: (
             <motion.div
                  initial={{ opacity: 0 }}
                  animate={{ opacity: 1 }}
-                 className="relative h-full flex items-center px-16 md:px-24"
+                 className="relative flex items-center px-16 md:px-24 py-10"
+                 style={{ minHeight: '100%' }}
             >
+              {/* Contenitore "reale": la sua altezza (bandVerticalReach*2) include già lo spazio
+                  occupato dalle diramazioni sopra e sotto l'asse. In precedenza quello spazio era
+                  prodotto solo da figli in position:absolute dentro un asse alto 1px, che non
+                  contribuiva all'altezza scrollabile del contenitore — le diramazioni più lontane
+                  dall'asse restavano quindi "coperte" ai margini, senza possibilità di scorrere per
+                  vederle. Qui l'asse (0,0 logico) è ancorato al centro verticale di questo box, che
+                  ha dimensioni vere e quindi scrolla correttamente in entrambe le direzioni. */}
+              <div className="relative shrink-0" style={{ width: axisWidth, height: bandVerticalReach * 2 }}>
               <div
                 ref={axisRef}
                 onMouseMove={handleAxisMouseMove}
                 onMouseLeave={handleAxisMouseLeave}
                 onClick={handleAxisClick}
-                className="relative shrink-0 cursor-zoom-in"
-                style={{ width: axisWidth, height: 1 }}
+                className="absolute cursor-zoom-in"
+                style={{ left: 0, top: bandVerticalReach, width: axisWidth, height: 1 }}
               >
                 {/* Bande dei secoli: sfondo alternato a tutta altezza + etichetta in numerali romani
                     centrata nella banda (non più un'etichetta puntuale ambigua tipo "2 d.C." che si
@@ -2728,6 +2724,7 @@ function Timeline({ monumenti, onSelect }: { monumenti: Monumento[], onSelect: (
                     </div>
                   );
                 })}
+              </div>
               </div>
             </motion.div>
           </div>
