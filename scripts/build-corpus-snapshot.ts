@@ -25,6 +25,8 @@ function listCorpusFiles(): string[] {
 }
 
 async function main() {
+  fs.mkdirSync(CORPUS_DIR, { recursive: true });
+
   if (isGitHubConfigured()) {
     console.log("GITHUB_TOKEN/GITHUB_REPO impostati: sincronizzo il corpus live prima dello scatto...");
     const { pulled, skipped } = await pullCorpusFromGitHub(
