@@ -6189,7 +6189,7 @@ export default function App() {
                    </div>
 
                   {/* Main Content Area */}
-                  <div className="flex-1 bg-parchment p-6 md:p-16 md:overflow-y-auto custom-scrollbar">
+                  <div className="flex-1 min-h-0 bg-parchment p-6 md:p-16 md:overflow-y-auto custom-scrollbar">
                     <div className="flex justify-between items-start mb-4">
                       <div className="flex-1 mr-4">
                         {true && (
