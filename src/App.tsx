@@ -3608,7 +3608,16 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
 
   useEffect(() => {
     const query = filters.searchText.trim();
-    if (query.length <= 2) {
+    // Le query puramente numeriche sono probabilmente una ricerca per id
+    // (es. "95" per la scheda ILA-095): non applicare la soglia minima di
+    // 3 caratteri pensata per evitare rumore nella ricerca testuale.
+    const isIdQuery = /^\d+$/.test(query);
+    if (query.length <= 2 && !isIdQuery) {
+      setMiniSearchResults([]);
+      setSearchPending(false);
+      return;
+    }
+    if (query.length === 0) {
       setMiniSearchResults([]);
       setSearchPending(false);
       return;
@@ -3636,7 +3645,9 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
   // attiva, quindi il filtro per testo non esclude nulla) e mappa id →
   // "il match cade in una parte ricostruita editorialmente" per il badge.
   const searchResultIds = useMemo(() => {
-    if (filters.searchText.trim().length <= 2) return null;
+    const query = filters.searchText.trim();
+    const isIdQuery = /^\d+$/.test(query);
+    if (query.length === 0 || (query.length <= 2 && !isIdQuery)) return null;
     return new Set(miniSearchResults.map(r => r.id));
   }, [miniSearchResults, filters.searchText]);
 
