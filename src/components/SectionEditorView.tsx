@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo, useRef, useId, ChangeEvent } from 
 import { motion, AnimatePresence } from 'motion/react';
 import {
   Upload, Database, Save, Loader2, AlertTriangle, Check, X, Plus, Trash2,
-  ChevronRight, ChevronUp, ChevronDown, FileText, Search, Download, Sparkles, LogIn, ShieldCheck
+  ChevronRight, ChevronUp, ChevronDown, FileText, Search, Download, Sparkles, LogIn, ShieldCheck, Users
 } from 'lucide-react';
 import { cn, stripAccents } from '../lib/utils';
 import { Monumento, OrigDate, Traduzione, Bibliografia, Revision, IconographicFigure, IconographicTrait, EDITORIAL_STATUS_LABELS } from '../types';
@@ -316,6 +316,59 @@ const ChipListEditor: React.FC<{ values: string[]; onChange: (v: string[]) => vo
             </button>
           ))}
         </div>
+      )}
+    </div>
+  );
+};
+
+/** Tagliandino "chi ha lavorato su questa scheda": scorciatoia sempre visibile in
+ *  fondo alla scheda editoriale per registrare persone + data senza dover aprire
+ *  la sezione Revisioni. Scrive una riga in `revisions` (stesso campo, stessa
+ *  convenzione — vedi guida ai ruoli editoriali): nessun campo nuovo nello schema
+ *  dati, quindi rientra nel salvataggio "Revisioni" già esistente. */
+const RevisionStub: React.FC<{ revisions: Revision[]; onChange: (r: Revision[]) => void }> = ({ revisions, onChange }) => {
+  const [people, setPeople] = useState<string[]>([]);
+  const [date, setDate] = useState(() => new Date().toISOString().slice(0, 10));
+  const [note, setNote] = useState('');
+  const last = revisions[revisions.length - 1];
+
+  const commit = () => {
+    if (people.length === 0) return;
+    onChange([...revisions, { date, who: people.join(', '), note }]);
+    setPeople([]); setNote('');
+  };
+
+  return (
+    <div className="mt-4 shrink-0 glass-panel rounded-2xl px-5 py-4">
+      <div className="flex items-center gap-2 mb-3">
+        <Users className="w-3.5 h-3.5 text-accent/70" />
+        <span className="text-[10px] font-sans font-bold uppercase tracking-[0.2em] text-muted/60">Chi ha lavorato su questa scheda</span>
+      </div>
+      <div className="flex flex-wrap items-end gap-3">
+        <div className="flex-1 min-w-[220px]">
+          <FieldLabel hint="nome e cognome, poi Invio">Persone</FieldLabel>
+          <ChipListEditor values={people} onChange={setPeople} placeholder="Aggiungi e premi Invio…" />
+        </div>
+        <div className="w-40">
+          <FieldLabel>Data</FieldLabel>
+          <TextInput type="date" value={date} onChange={e => setDate(e.target.value)} />
+        </div>
+        <div className="flex-1 min-w-[220px]">
+          <FieldLabel hint="opzionale — es. Encoding: …">Nota</FieldLabel>
+          <TextInput value={note} onChange={e => setNote(e.target.value)} placeholder="Encoding / Editing / Revisione: …" />
+        </div>
+        <button
+          onClick={commit}
+          disabled={people.length === 0}
+          className="inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-xs font-sans font-bold uppercase tracking-[0.12em] bg-accent text-white disabled:opacity-40 transition-all hover:shadow-md"
+        >
+          <Plus className="w-3.5 h-3.5" /> Registra
+        </button>
+      </div>
+      {last && (
+        <p className="text-[11px] text-muted/60 font-serif italic mt-2.5">
+          Ultimo intervento registrato: {last.who || '—'}{last.date ? ` · ${last.date}` : ''}{last.note ? ` — ${last.note}` : ''}
+        </p>
       )}
     </div>
   );
@@ -708,6 +761,8 @@ export const SectionEditorView: React.FC<Props> = ({ monumenti, effectiveAdmin, 
           </AnimatePresence>
         </div>
       </div>
+
+      <RevisionStub revisions={m.revisions || []} onChange={v => set('revisions', v)} />
     </div>
   );
 };

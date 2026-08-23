@@ -4759,7 +4759,8 @@ export default function App() {
         {showLanding && (
           <motion.div
             key="landing"
-            initial={{ opacity: 1 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1, transition: { duration: 1, ease: 'easeInOut' } }}
             exit={{ opacity: 0, transition: { duration: 0.6, ease: 'easeInOut' } }}
             className="fixed inset-0 z-[200] flex items-center justify-center bg-parchment"
             style={{
