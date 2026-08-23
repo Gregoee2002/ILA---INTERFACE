@@ -409,6 +409,27 @@ export const SectionEditorView: React.FC<Props> = ({ monumenti, effectiveAdmin, 
   const set = <K extends keyof Monumento>(k: K, v: Monumento[K]) =>
     setModel(m => m ? { ...m, [k]: v } : m);
 
+  /** Registra nel vocabolario iconografico standardizzato gli eventuali
+   *  fig.key liberi (VocabCombo, vedi sotto) non ancora in ICONOGRAPHY_LABELS
+   *  — operazione leggera e best-effort: un solo PATCH incrementale, mai
+   *  bloccante per il salvataggio della scheda che la innesca. */
+  const registerNewIconographyTerms = async (figures: IconographicFigure[] | undefined) => {
+    const newTerms = Array.from(new Set((figures || [])
+      .map(f => f.key?.trim())
+      .filter((k): k is string => !!k && !ICONOGRAPHY_LABELS[k])));
+    if (newTerms.length === 0) return;
+    try {
+      await fetch('/api/iconography-vocab', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ terms: Object.fromEntries(newTerms.map(k => [k, k])) }),
+      });
+    } catch {
+      // Best-effort: il termine resta comunque salvato sulla scheda, solo
+      // non entra nel vocabolario condiviso — nessun impatto sul salvataggio.
+    }
+  };
+
   /** Come `set`, ma per il testo dell'edizione: ricalcola SEMPRE gli indici
    *  derivati nello stesso colpo, così restano fedeli al markup ad ogni battuta. */
   const setEditionText = (xml: string) =>
@@ -427,6 +448,7 @@ export const SectionEditorView: React.FC<Props> = ({ monumenti, effectiveAdmin, 
         setBaseModel(created); setModel(created);
         setSource({ kind: 'db', filename: model._corpusFile || formatIlaLabel(model.id) });
         setSaveOk(`Scheda creata nel corpus (entryId: ${assignedId}).`);
+        void registerNewIconographyTerms(created.iconografia?.figures);
       } else {
         // patch: solo i campi effettivamente cambiati, non l'intero oggetto
         const patch: Partial<Monumento> = {};
@@ -434,6 +456,7 @@ export const SectionEditorView: React.FC<Props> = ({ monumenti, effectiveAdmin, 
         await onSave(model.entryId!, patch);
         setBaseModel(JSON.parse(JSON.stringify(model)));
         setSaveOk(`Salvato${changed.length > 0 ? ` — sezioni: ${changed.map(s => SECTION_META.find(x => x.id === s)?.label || s).join(', ')}` : ''}.`);
+        void registerNewIconographyTerms(model.iconografia?.figures);
       }
     } catch (e: any) {
       setSaveWarnings([`Salvataggio non riuscito: ${e.message || e}`]);
