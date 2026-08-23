@@ -1902,7 +1902,12 @@ function HomeView({ monumenti, onNavigate, onSearch, effectiveAdmin }: { monumen
 
             <div className="flex-1 min-w-0 flex flex-col justify-center">
               <div className="text-[9px] md:text-[10px] font-sans font-bold uppercase tracking-[0.25em] text-white/60 mb-2 md:mb-1">Punto di partenza</div>
-              <div className="font-serif font-bold text-white text-3xl md:text-4xl mb-2 md:mb-2 leading-tight tracking-tight">{heroSection.label}</div>
+              <div className="flex items-center gap-3 flex-wrap mb-2 md:mb-2">
+                <div className="font-serif font-bold text-white text-3xl md:text-4xl leading-tight tracking-tight">{heroSection.label}</div>
+                <span className="text-[10px] md:text-xs font-sans font-bold text-white/80 bg-white/10 border border-white/20 rounded-full px-2.5 py-1 tracking-wide whitespace-nowrap">
+                  {stats.totale} voci totali
+                </span>
+              </div>
               <p className="text-sm md:text-base text-white/70 leading-relaxed max-w-lg">{heroSection.desc}</p>
             </div>
           </div>
@@ -5241,15 +5246,6 @@ export default function App() {
           )}
           {activeView === 'catalog' && (
             <>
-              {/* Dashboard Stats Row */}
-              <div className="shrink-0 mb-6 md:mb-10 bg-[var(--card)]/80 dark:bg-[var(--card)]/60 backdrop-blur-md border border-[var(--border)]/50 dark:border-[var(--border)]/40 rounded-2xl shadow-lg border-l-[4px] border-l-accent pl-6 md:pl-8 py-5 pr-6 relative overflow-hidden group transition-all duration-300 hover:shadow-xl hover:bg-[var(--card)] dark:hover:bg-[var(--card)]/80">
-                <div className="absolute inset-0 bg-accent/5 -translate-x-full group-hover:translate-x-0 transition-transform duration-700" />
-                <div className="relative z-10 flex flex-col md:flex-row md:items-baseline gap-1 md:gap-3">
-                  <span className="block text-3xl md:text-4xl font-serif font-semibold leading-tight text-ink">{monumenti.length}</span>
-                  <span className="text-sm font-serif italic text-muted">voci totali nel corpus</span>
-                </div>
-              </div>
-
                 {/* Record List */}
                 <div className="flex-1 flex flex-col overflow-hidden min-h-0 glass-panel rounded-2xl shadow-custom">
                   <div className="px-6 pt-6 mb-2 flex items-center justify-between border-b border-border/20 pb-3 font-sans text-[10px] font-bold uppercase tracking-[0.2em] text-muted">
