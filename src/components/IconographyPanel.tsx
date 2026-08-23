@@ -22,13 +22,13 @@ const capitalize = (s: string) => s ? s.charAt(0).toUpperCase() + s.slice(1) : '
 
 export const IconographyPanel: React.FC<IconographyPanelProps> = ({ monumento }) => {
   const ico = monumento.iconografia;
-  if (!ico || (!ico.function && (!ico.figures || ico.figures.length === 0) && !ico.note)) return null;
+  if (!ico || (!ico.function && (!ico.figures || ico.figures.length === 0))) return null;
 
   return (
     <div className="mb-10">
       <h3 className="text-[10px] font-sans font-bold uppercase tracking-[0.2em] text-muted mb-4 flex items-center gap-2">
         <ImageIcon className="w-3.5 h-3.5" />
-        Iconografia
+        Iconografia e funzione cultuale
       </h3>
 
       <div className="space-y-4">
@@ -97,12 +97,6 @@ export const IconographyPanel: React.FC<IconographyPanelProps> = ({ monumento })
             </div>
           );
         })}
-
-        {ico.note && (
-          <div className="mt-4 p-3 bg-white/50 italic text-sm text-ink/80 border-l-2 border-amber-300">
-            {ico.note}
-          </div>
-        )}
       </div>
     </div>
   );

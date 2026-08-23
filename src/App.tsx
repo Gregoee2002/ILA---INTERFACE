@@ -1,10 +1,9 @@
 import React, { useState, useMemo, useEffect, useLayoutEffect, useRef, ChangeEvent } from 'react';
 import { motion, AnimatePresence, MotionConfig } from 'motion/react';
 import { 
-  Search, 
-  MapPin, 
-  Scroll, 
-  ChevronRight, 
+  Search,
+  MapPin,
+  ChevronRight,
   ChevronLeft,
   ChevronDown,
   X,
@@ -941,41 +940,61 @@ function EpithetStats({ monumenti, onSelectMonumento }: { monumenti: Monumento[]
 
   return (
     <div className="flex-1 flex flex-col overflow-hidden">
-      {/* Header */}
-      <motion.div {...scrollReveal} className="glass-card-tint-1 mb-8 px-6 py-6 md:px-8 md:py-7 flex justify-between items-end">
-        <div>
-          <div className="text-[10px] font-sans font-bold uppercase tracking-[0.22em] text-accent/70 mb-2">Statistiche del Corpus</div>
-          <h2 className="text-3xl md:text-4xl font-bold italic mb-2">
-            {activeTab === 'divinita' ? 'Divinità' : 'Onomastica'}
-          </h2>
-          <div className="ornament-rule !my-0 mb-3 max-w-[6rem] mx-0" />
-          <p className="text-sm text-muted font-serif">
-            {activeTab === 'divinita'
-              ? (selectedDivinity
-                  ? 'Epiteti co-occorrenti con questa divinità nel corpus.'
-                  : 'Le divinità attestate nel corpus. Seleziona una divinità per esplorarne gli epiteti.')
-              : 'Indice alfabetico delle persone attestate nel corpus. Ogni nome è pressoché unico: qui non si tratta di statistiche, ma di un elenco da consultare.'}
-          </p>
-        </div>
-        {anySelection && (
-          <div className="flex items-center gap-2">
-            {activeTab === 'divinita' && selectedEpithet && (
-              <button
-                onClick={goToDivinityList}
-                className="text-[10px] font-sans font-bold uppercase tracking-widest text-muted border border-border px-4 py-2 hover:bg-accent hover:text-white hover:border-accent transition-all"
-              >
-                ← Tutte le divinità
-              </button>
-            )}
-            <button
-              onClick={goBack}
-              className="text-[10px] font-sans font-bold uppercase tracking-widest text-accent border border-accent px-4 py-2 hover:bg-accent hover:text-white transition-all"
+      {/* Header: si ritrae elegantemente (altezza + dissolvenza) non appena
+          si entra nel dettaglio di una divinità o di un nome, per lasciare
+          più spazio verticale alla lista/grafo sottostante. La barra con i
+          pulsanti di rientro resta invece sempre visibile mentre si è in
+          drill-down, ma occupa solo lo spazio minimo. */}
+      <div className="overflow-hidden shrink-0">
+        <AnimatePresence initial={false}>
+          {!anySelection && (
+            <motion.div
+              key="stats-header"
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: 'auto', opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.4, ease: EASE_OUT }}
             >
-              ← Indietro
+              <div className="pb-8">
+                <div className="text-[10px] font-sans font-bold uppercase tracking-[0.22em] text-accent/70 mb-2">Statistiche del Corpus</div>
+                <h2 className="text-3xl md:text-4xl font-bold italic mb-2">
+                  {activeTab === 'divinita' ? 'Divinità' : 'Onomastica'}
+                </h2>
+                <div className="ornament-rule !my-0 mb-3 max-w-[6rem] mx-0" />
+                <p className="text-sm text-muted font-serif">
+                  {activeTab === 'divinita'
+                    ? 'Le divinità attestate nel corpus. Seleziona una divinità per esplorarne gli epiteti.'
+                    : 'Indice alfabetico delle persone attestate nel corpus. Ogni nome è pressoché unico: qui non si tratta di statistiche, ma di un elenco da consultare.'}
+                </p>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+
+      {anySelection && (
+        <motion.div
+          initial={{ opacity: 0, y: -8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.35, ease: EASE_OUT }}
+          className="mb-6 flex justify-end items-center gap-2 shrink-0"
+        >
+          {activeTab === 'divinita' && selectedEpithet && (
+            <button
+              onClick={goToDivinityList}
+              className="text-[10px] font-sans font-bold uppercase tracking-widest text-muted border border-border px-4 py-2 hover:bg-accent hover:text-white hover:border-accent transition-all"
+            >
+              ← Tutte le divinità
             </button>
-          </div>
-        )}
-      </motion.div>
+          )}
+          <button
+            onClick={goBack}
+            className="text-[10px] font-sans font-bold uppercase tracking-widest text-accent border border-accent px-4 py-2 hover:bg-accent hover:text-white transition-all"
+          >
+            ← Indietro
+          </button>
+        </motion.div>
+      )}
 
       {/* Tab selector */}
       {!anySelection && (
@@ -6100,7 +6119,7 @@ export default function App() {
              >
                 <div className="flex h-full flex-col md:flex-row overflow-y-auto md:overflow-hidden">
                   {/* Left Metadata Rail */}
-                  <div className="w-full md:w-72 bg-sidebar border-b md:border-b-0 md:border-r border-border p-6 md:p-10 flex flex-col shrink-0 md:overflow-y-auto custom-scrollbar">
+                  <div className="w-full md:w-56 bg-sidebar border-b md:border-b-0 md:border-r border-border p-5 md:p-6 flex flex-col shrink-0 md:overflow-y-auto custom-scrollbar">
                     <div className="mb-10 flex items-center justify-between gap-3">
                       <button 
                         onClick={() => setSelectedMonumento(null)}
@@ -6123,35 +6142,35 @@ export default function App() {
                       )}
                     </div>
 
-                    <div className="space-y-12">
-                      <div className="border-l-2 border-accent pl-5">
-                         <span className="text-4xl font-light italic leading-none">#{ selectedMonumento.id?.toString().padStart(3, '0') }</span>
+                    <div className="space-y-8">
+                      <div className="border-l-2 border-accent pl-4">
+                         <span className="text-3xl font-light italic leading-none">#{ selectedMonumento.id?.toString().padStart(3, '0') }</span>
                          <span className="block mt-2 font-sans field-label">
                            {selectedMonumento.id ? `Record #${selectedMonumento.id}` : 'Nuovo Record'}
                          </span>
                       </div>
 
-                      <section className="space-y-6">
+                      <section className="space-y-4">
                         <h4 className="font-sans field-label opacity-85 pb-2 border-b border-border/40">Specifiche Tecniche</h4>
-                        <dl className="space-y-4">
+                        <dl className="space-y-3">
                           {[
                             { label: 'Regione', value: selectedMonumento.regione, type: 'regione' },
                             { label: 'Città', value: selectedMonumento.citta, type: 'citta' },
                             { label: 'Datazione', value: formatDateRange(selectedMonumento.data_inizio, selectedMonumento.data_fine), type: '' },
                             { label: 'Tipologia', value: selectedMonumento.tipo, type: 'tipo' },
                             { label: 'Materiale', value: selectedMonumento.materiale, type: '' }
-                          ].map(item => (
+                          ].filter(item => item.value).map(item => (
                             <div key={item.label}>
                               <dt className="text-[9px] font-sans font-bold uppercase text-muted/80 tracking-tighter">{item.label}</dt>
-                              {item.type && item.value ? (
-                                <button 
+                              {item.type ? (
+                                <button
                                   onClick={() => { setFilters(f => ({ ...f, [item.type]: item.value })); setSelectedMonumento(null); }}
                                   className="text-xs font-semibold text-ink mt-0.5 font-serif hover:text-accent transition-colors block text-left"
                                 >
                                   {item.value}
                                 </button>
                               ) : (
-                                <dd className="text-xs font-semibold text-ink mt-0.5 font-serif">{item.value || "Non registrato"}</dd>
+                                <dd className="text-xs font-semibold text-ink mt-0.5 font-serif">{item.value}</dd>
                               )}
                             </div>
                           ))}
@@ -6159,7 +6178,7 @@ export default function App() {
                       </section>
 
                       {effectiveAdmin && (
-                        <section className="pt-6 border-t border-border/40 mt-6">
+                        <section className="pt-5 border-t border-border/40 mt-5">
                           <button
                             onClick={() => {
                               setEditorTargetEntryId(selectedMonumento.entryId ?? selectedMonumento.id?.toString() ?? null);
@@ -6308,10 +6327,8 @@ export default function App() {
                       
                     </div>
                     
-                    {/* Advanced EpiDoc / TEI Metadata Summary Card (Visible only when not editing) */}
                     {true && (
                       <div className="space-y-8 animate-in fade-in duration-300 mb-12">
-                        {/* Facsimile Image Block */}
                         {selectedMonumento.facsimile_url && (
                           <div className="bg-sidebar/40 p-6 border border-border/60 rounded-sm">
                             <span className="text-[10px] font-sans font-bold uppercase tracking-[0.2em] text-accent block mb-3">Facsimile / Squeeze Image</span>
@@ -6337,34 +6354,41 @@ export default function App() {
                           </div>
                         )}
 
-                        {/* Layout, Supports, Place references, Handwriting references */}
                         <div className="grid md:grid-cols-2 gap-8 border border-border/40 bg-sidebar/20 p-6 md:p-8 rounded-sm font-serif text-xs leading-relaxed text-ink/80">
                           <div>
                             <h4 className="text-[10px] font-sans font-bold uppercase tracking-widest text-accent mb-4 pb-1 border-b border-border/30">Layout & Supporto Materiale</h4>
-                            <p className="mb-4 text-ink-70 select-text font-serif leading-relaxed">{selectedMonumento.layout_desc || selectedMonumento.supporto || "Nessun dettaglio aggiuntivo sul layout."}</p>
+                            {(selectedMonumento.layout_desc || selectedMonumento.supporto) && (
+                              <p className="mb-4 text-ink-70 select-text font-serif leading-relaxed">{selectedMonumento.layout_desc || selectedMonumento.supporto}</p>
+                            )}
                             <div className="space-y-2 text-[10px] font-sans border-t border-border/20 pt-3">
-                              <div><span className="text-muted uppercase font-bold text-[9px]">Scrittura:</span> <span className="text-ink font-serif italic text-xs">{selectedMonumento.scrittura || "incisa a scalpello"}</span> {selectedMonumento.scrittura_ref && <span className="text-muted/60 font-mono">({selectedMonumento.scrittura_ref})</span>}</div>
+                              {selectedMonumento.scrittura && (
+                                <div><span className="text-muted uppercase font-bold text-[9px]">Scrittura:</span> <span className="text-ink font-serif italic text-xs">{selectedMonumento.scrittura}</span> {selectedMonumento.scrittura_ref && <span className="text-muted/60 font-mono">({selectedMonumento.scrittura_ref})</span>}</div>
+                              )}
                               {selectedMonumento.scrittura_note && <div><span className="text-muted uppercase font-bold text-[9px]">Note paleografiche:</span> <span className="text-ink font-serif text-xs">{selectedMonumento.scrittura_note}</span></div>}
-                              
-                              <div>
-                                <span className="text-muted uppercase font-bold text-[9px]">Tipo oggetto:</span>{' '}
-                                <span className="text-ink font-serif italic text-xs capitalize">{selectedMonumento.tipo || "non specificato"}</span>
-                                {selectedMonumento.tipo_ref && (
-                                  <a href={selectedMonumento.tipo_ref} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-[9px] text-accent hover:underline ml-2 align-middle font-mono">
-                                    EAGLE Object Link ↗
-                                  </a>
-                                )}
-                              </div>
 
-                              <div>
-                                <span className="text-muted uppercase font-bold text-[9px]">Materiale:</span>{' '}
-                                <span className="text-ink font-serif italic text-xs capitalize">{selectedMonumento.materiale || "non specificato"}</span>
-                                {selectedMonumento.materialRef && (
-                                  <a href={selectedMonumento.materialRef} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-[9px] text-accent hover:underline ml-2 align-middle font-mono">
-                                    EAGLE Material Link ↗
-                                  </a>
-                                )}
-                              </div>
+                              {selectedMonumento.tipo && (
+                                <div>
+                                  <span className="text-muted uppercase font-bold text-[9px]">Tipo oggetto:</span>{' '}
+                                  <span className="text-ink font-serif italic text-xs capitalize">{selectedMonumento.tipo}</span>
+                                  {selectedMonumento.tipo_ref && (
+                                    <a href={selectedMonumento.tipo_ref} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-[9px] text-accent hover:underline ml-2 align-middle font-mono">
+                                      EAGLE Object Link ↗
+                                    </a>
+                                  )}
+                                </div>
+                              )}
+
+                              {selectedMonumento.materiale && (
+                                <div>
+                                  <span className="text-muted uppercase font-bold text-[9px]">Materiale:</span>{' '}
+                                  <span className="text-ink font-serif italic text-xs capitalize">{selectedMonumento.materiale}</span>
+                                  {selectedMonumento.materialRef && (
+                                    <a href={selectedMonumento.materialRef} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-[9px] text-accent hover:underline ml-2 align-middle font-mono">
+                                      EAGLE Material Link ↗
+                                    </a>
+                                  )}
+                                </div>
+                              )}
 
                               {(selectedMonumento.dim_altezza || selectedMonumento.dim_larghezza || selectedMonumento.dim_profondita) ? (
                                 <div>
@@ -6381,31 +6405,37 @@ export default function App() {
                           <div>
                             <h4 className="text-[10px] font-sans font-bold uppercase tracking-widest text-accent mb-4 pb-1 border-b border-border/30">Georeferenziazione & Date Storiche</h4>
                             <div className="space-y-4">
-                              <div className="grid grid-cols-2 gap-2">
-                                <div>
-                                  <span className="text-muted uppercase font-bold text-[9px] block">Città Antica (Pleiades)</span>
-                                  <span className="font-serif font-semibold text-ink text-xs block truncate" title={selectedMonumento.citta}>{selectedMonumento.citta || "N/A"}</span>
-                                  {selectedMonumento.place_ref_ancient && (
-                                    <a href={selectedMonumento.place_ref_ancient} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-[9px] text-accent hover:underline font-mono truncate max-w-full mt-1">
-                                      🔎 Pleiades Link
-                                    </a>
+                              {(selectedMonumento.citta || selectedMonumento.luogo_rit) && (
+                                <div className="grid grid-cols-2 gap-2">
+                                  {selectedMonumento.citta && (
+                                    <div>
+                                      <span className="text-muted uppercase font-bold text-[9px] block">Città Antica (Pleiades)</span>
+                                      <span className="font-serif font-semibold text-ink text-xs block truncate" title={selectedMonumento.citta}>{selectedMonumento.citta}</span>
+                                      {selectedMonumento.place_ref_ancient && (
+                                        <a href={selectedMonumento.place_ref_ancient} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-[9px] text-accent hover:underline font-mono truncate max-w-full mt-1">
+                                          🔎 Pleiades Link
+                                        </a>
+                                      )}
+                                    </div>
+                                  )}
+                                  {selectedMonumento.luogo_rit && (
+                                    <div>
+                                      <span className="text-muted uppercase font-bold text-[9px] block">Rinvenimento Moderno</span>
+                                      <span className="font-serif font-semibold text-ink text-xs block truncate" title={selectedMonumento.luogo_rit}>{selectedMonumento.luogo_rit}</span>
+                                      {selectedMonumento.place_ref_modern && (
+                                        <a href={selectedMonumento.place_ref_modern} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-[9px] text-accent hover:underline font-mono truncate max-w-full mt-1">
+                                          🌍 GeoNames Link
+                                        </a>
+                                      )}
+                                    </div>
                                   )}
                                 </div>
-                                <div>
-                                  <span className="text-muted uppercase font-bold text-[9px] block">Rinvenimento Moderno</span>
-                                  <span className="font-serif font-semibold text-ink text-xs block truncate" title={selectedMonumento.luogo_rit}>{selectedMonumento.luogo_rit || "N/A"}</span>
-                                  {selectedMonumento.place_ref_modern && (
-                                    <a href={selectedMonumento.place_ref_modern} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-[9px] text-accent hover:underline font-mono truncate max-w-full mt-1">
-                                      🌍 GeoNames Link
-                                    </a>
-                                  )}
-                                </div>
-                              </div>
+                              )}
                               <PleiadesMap pleiadesUri={selectedMonumento.place_ref_ancient} cityName={selectedMonumento.citta} />
-                              
-                              {selectedMonumento.origDates && selectedMonumento.origDates.length > 0 ? (
+
+                              {selectedMonumento.origDates && selectedMonumento.origDates.length > 0 && (
                                 <div className="border-t border-border/20 pt-3">
-                                  <span className="text-muted uppercase font-bold text-[9px] block mb-2">Datazione del monumento (EpiDoc origDate)</span>
+                                  <span className="text-muted uppercase font-bold text-[9px] block mb-2">Datazione del monumento</span>
                                   <ul className="space-y-3 font-serif text-[11px] list-disc list-inside text-ink/90 pl-1">
                                     {selectedMonumento.origDates.map((od, i) => (
                                       <li key={i} className="leading-snug">
@@ -6432,10 +6462,6 @@ export default function App() {
                                     ))}
                                   </ul>
                                 </div>
-                              ) : (
-                                <div className="border-t border-border/20 pt-3 text-[10px] text-muted italic">
-                                  Nessuna datazione avanzata EpiDoc inserita nel file XML.
-                                </div>
                               )}
 
                               {selectedMonumento.conserv && (
@@ -6451,10 +6477,52 @@ export default function App() {
                     )}
 
                     <div className="space-y-16">
-                      {/* Technical Notes / Epithets */}
+                      <section>
+                         <h3 className="text-2xl font-bold mb-6 italic flex items-center gap-4">
+                           <div className="flex items-center gap-4 shrink-0">
+                             <div className="h-[1px] w-8 bg-border/40" />
+                             <div className="w-1.5 h-1.5 rotate-45 border border-accent/40" />
+                           </div>
+                           Trascrizione Testuale
+                           <div className="flex-1 h-[1px] bg-border/20" />
+                           {!isStaticBuild && effectiveAdmin && selectedMonumento.testo && (
+                             <button
+                               onClick={handleTranslate}
+                               disabled={translating}
+                               className="flex items-center gap-2 font-sans text-[10px] font-bold uppercase tracking-widest text-accent hover:underline disabled:opacity-50"
+                             >
+                               {translating ? <Loader2 className="h-3 w-3 animate-spin" /> : <Sparkles className="h-3 w-3" />}
+                               Traduzione AI (Italiano)
+                             </button>
+                           )}
+                         </h3>
+                           <div className="space-y-8">
+                             <LegendaDropdown />
+                             <div className="bg-sidebar/50 border border-border p-8 md:p-12 text-lg md:text-2xl text-ink/90 shadow-inner relative"
+                     style={{ fontFamily: 'Georgia, "Times New Roman", serif', lineHeight: '2' }}>
+                                <div className="relative z-10 max-w-[62ch] mx-auto pl-10 border-l-2 border-border/40">
+                                  {selectedMonumento.testo ? (
+                                    <EpiDocRenderer xml={selectedMonumento.testo} query={filters.searchText} />
+                                  ) : <span className="opacity-40 italic">[Anepigrafe]</span>}
+                                </div>
+                             </div>
+                             {selectedMonumento.traduzioni?.find(t => { const l = t.lang?.toLowerCase() || ''; return l === 'it' || l.startsWith('it ('); })?.testo && (
+                               <div className="bg-sidebar/30 border-l-4 border-accent p-8 font-serif text-lg italic leading-relaxed text-ink/80 block mb-6">
+                                 <div className="text-[9px] font-sans font-bold uppercase tracking-widest text-muted mb-2 font-semibold">Traduzione Italiana</div>
+                                 <Highlight text={stripXml(selectedMonumento.traduzioni.find(t => { const l = t.lang?.toLowerCase() || ''; return l === 'it' || l.startsWith('it ('); })?.testo)} query={filters.searchText} />
+                               </div>
+                             )}
+                             {hasApparatusContent(selectedMonumento.apparatus) && (
+                               <div className="bg-sidebar/20 border border-border/40 p-6 rounded-sm font-sans text-xs leading-relaxed text-muted block">
+                                 <div className="text-[9px] font-sans font-bold uppercase tracking-widest text-muted mb-2 font-semibold">Apparatus Critico</div>
+                                 <Highlight text={stripXml(selectedMonumento.apparatus)} query={filters.searchText} />
+                               </div>
+                             )}
+                           </div>
+                      </section>
+
                       <section className="grid md:grid-cols-2 gap-12">
                          <div className="space-y-5">
-                            {/* Divinità */}
                             {selectedMonumento.divinita && selectedMonumento.divinita.length > 0 && (
                               <div>
                                 <h3 className="text-xs font-bold uppercase text-muted tracking-widest mb-2">Divinità</h3>
@@ -6471,12 +6539,11 @@ export default function App() {
                                 </div>
                               </div>
                             )}
-                            {/* Epiteti */}
-                            <div>
-                              <h3 className="text-xs font-bold uppercase text-muted tracking-widest mb-2">Epiteti</h3>
-                              <div className="flex flex-wrap gap-2 mb-2">
-                                {selectedMonumento.epiteti && selectedMonumento.epiteti.length > 0 ? (
-                                  selectedMonumento.epiteti.map(e => (
+                            {selectedMonumento.epiteti && selectedMonumento.epiteti.length > 0 && (
+                              <div>
+                                <h3 className="text-xs font-bold uppercase text-muted tracking-widest mb-2">Epiteti</h3>
+                                <div className="flex flex-wrap gap-2 mb-2">
+                                  {selectedMonumento.epiteti.map(e => (
                                     <button
                                       key={e}
                                       onClick={() => { setFilters(f => ({ ...f, searchText: e })); setSelectedMonumento(null); }}
@@ -6484,13 +6551,10 @@ export default function App() {
                                     >
                                       {e}
                                     </button>
-                                  ))
-                                ) : (
-                                  <span className="text-muted text-xs italic font-serif">Nessun epiteto nel file XML</span>
-                                )}
+                                  ))}
+                                </div>
                               </div>
-                            </div>
-                            {/* Onomastica */}
+                            )}
                             {selectedMonumento.onomastica && selectedMonumento.onomastica.length > 0 && (
                               <div>
                                 <h3 className="text-xs font-bold uppercase text-muted tracking-widest mb-2 font-sans">Onomastica</h3>
@@ -6504,41 +6568,6 @@ export default function App() {
                                 </div>
                               </div>
                             )}
-
-                            {/* Prosopografia (Personae) */}
-                            {selectedMonumento.persone && selectedMonumento.persone.length > 0 && (
-                              <div className="mt-4 pt-4 border-t border-border/20">
-                                <h3 className="text-xs font-bold uppercase text-muted tracking-widest mb-2 font-sans">Prosopografia</h3>
-                                <div className="divide-y divide-border/20">
-                                  {selectedMonumento.persone.map((p, idx) => (
-                                    <div key={p.xmlId || idx} className="py-2 first:pt-0 text-sm">
-                                      <div className="flex items-baseline gap-2">
-                                        <span className="font-serif font-semibold text-ink/90">{p.name || p.nymRef || 'Sconosciuto'}</span>
-                                        {(p.key || p.xmlId) && <span className="text-[10px] text-muted/70 font-mono tracking-tight">#{p.key || p.xmlId}</span>}
-                                        {(p.ethnicText || p.ethnicRef) && (
-                                          <span className="text-xs text-muted font-serif">
-                                            {p.ethnicRef ? (
-                                              <a href={p.ethnicRef} target="_blank" rel="noopener noreferrer" className="text-accent/80 hover:underline">
-                                                {p.ethnicText || 'Link'}
-                                              </a>
-                                            ) : (
-                                              p.ethnicText
-                                            )}
-                                          </span>
-                                        )}
-                                      </div>
-
-                                      {p.note && (
-                                        <p className="text-xs text-muted/90 leading-relaxed italic font-serif mt-0.5">
-                                          {p.note}
-                                        </p>
-                                      )}
-                                    </div>
-                                  ))}
-                                </div>
-                              </div>
-                            )}
-                            {/* Imperatori */}
                             {selectedMonumento.imperatori && selectedMonumento.imperatori.length > 0 && (
                               <div>
                                 <h3 className="text-xs font-bold uppercase text-muted tracking-widest mb-2">Imperatori</h3>
@@ -6553,99 +6582,60 @@ export default function App() {
                               </div>
                             )}
                          </div>
-                         <div>
-                            <h3 className="text-xs font-bold uppercase text-muted tracking-widest mb-4">Note Interne</h3>
-                               <p className="text-xs leading-relaxed text-muted/80 font-serif whitespace-pre-wrap">
-                                  {selectedMonumento.note_interne ? (
-                                    <NoteWithTags 
-                                      text={selectedMonumento.note_interne} 
+                         {selectedMonumento.note_interne && (
+                           <div>
+                              <h3 className="text-xs font-bold uppercase text-muted tracking-widest mb-4">Commento</h3>
+                                 <p className="text-xs leading-relaxed text-muted/80 font-serif whitespace-pre-wrap">
+                                    <NoteWithTags
+                                      text={selectedMonumento.note_interne}
                                       query={filters.searchText}
                                       monumenti={monumenti}
                                       onSelectMonumento={(m) => { setSelectedMonumento(m); }}
                                       onTagClick={(tag) => {
                                         setFilters(f => ({ ...f, searchText: tag }));
                                         setSelectedMonumento(null);
-                                      }} 
+                                      }}
                                     />
-                                  ) : "Nessuna nota di ricerca interna."}
-                                </p>
-                         </div>
+                                  </p>
+                           </div>
+                         )}
                       </section>
+
+                      {selectedMonumento.iconografia?.note && (
+                        <section>
+                          <h3 className="text-xs font-bold uppercase text-muted tracking-widest mb-3">Nota sulla Funzione Cultuale</h3>
+                          <p className="text-xs leading-relaxed text-ink/80 italic font-serif whitespace-pre-wrap border-l-2 border-amber-300 pl-4">
+                            {selectedMonumento.iconografia.note}
+                          </p>
+                        </section>
+                      )}
 
                       <IconographyPanel monumento={selectedMonumento} />
 
-                      <section>
-                         <h3 className="text-xl font-bold mb-6 italic flex items-center gap-4">
-                           <div className="flex items-center gap-4 shrink-0">
-                             <div className="h-[1px] w-8 bg-border/40" />
-                             <div className="w-1.5 h-1.5 rotate-45 border border-accent/40" />
-                           </div>
-                           Trascrizione Testuale
-                           <div className="flex-1 h-[1px] bg-border/20" />
-                           {!isStaticBuild && effectiveAdmin && selectedMonumento.testo && (
-                             <button 
-                               onClick={handleTranslate}
-                               disabled={translating}
-                               className="flex items-center gap-2 font-sans text-[10px] font-bold uppercase tracking-widest text-accent hover:underline disabled:opacity-50"
-                             >
-                               {translating ? <Loader2 className="h-3 w-3 animate-spin" /> : <Sparkles className="h-3 w-3" />}
-                               Traduzione AI (Italiano)
-                             </button>
-                           )}
-                         </h3>
-                           <div className="space-y-8">
-                             {/* Legenda markup: menu a tendina discreto */}
-                             <LegendaDropdown />
-                             <div className="bg-sidebar/50 border border-border p-8 md:p-12 text-base md:text-xl text-ink/90 shadow-inner relative"
-                     style={{ fontFamily: 'Georgia, "Times New Roman", serif', lineHeight: '2' }}>
-                                <div className="absolute top-0 left-0 p-4 opacity-5 bg-border pointer-events-none">
-                                  <Scroll className="h-20 w-20" />
-                                </div>
-                                <div className="relative z-10 max-w-[58ch] mx-auto pl-10 border-l-2 border-border/40">
-                                  {selectedMonumento.testo ? (
-                                    <EpiDocRenderer xml={selectedMonumento.testo} query={filters.searchText} />
-                                  ) : <span className="opacity-40 italic">[Anepigrafe]</span>}
-                                </div>
-                             </div>
-                             {selectedMonumento.traduzioni?.find(t => { const l = t.lang?.toLowerCase() || ''; return l === 'it' || l.startsWith('it ('); })?.testo && (
-                               <div className="bg-sidebar/30 border-l-4 border-accent p-8 font-serif text-lg italic leading-relaxed text-ink/80 block mb-6">
-                                 <div className="text-[9px] font-sans font-bold uppercase tracking-widest text-muted mb-2 font-semibold">Traduzione Italiana</div>
-                                 <Highlight text={stripXml(selectedMonumento.traduzioni.find(t => { const l = t.lang?.toLowerCase() || ''; return l === 'it' || l.startsWith('it ('); })?.testo)} query={filters.searchText} />
-                               </div>
-                             )}
-                             {hasApparatusContent(selectedMonumento.apparatus) ? (
-                               <div className="bg-sidebar/20 border border-border/40 p-6 rounded-sm font-sans text-xs leading-relaxed text-muted block">
-                                 <div className="text-[9px] font-sans font-bold uppercase tracking-widest text-muted mb-2 font-semibold">Apparatus Critico</div>
-                                 <Highlight text={stripXml(selectedMonumento.apparatus)} query={filters.searchText} />
-                               </div>
-                             ) : null}
-                           </div>
-                      </section>
-
-                      {/* Bibliography */}
+                      {selectedMonumento.bibliografia && selectedMonumento.bibliografia.length > 0 && (
                       <section>
                          <h3 className="text-xl font-bold mb-6 italic flex items-center gap-3">
                            <div className="h-px w-8 bg-border" /> Bibliografia
                          </h3>
                             <>
-                              {selectedMonumento.bibliografia && selectedMonumento.bibliografia.length === 1 && selectedMonumento.bibliografia[0].titolo.length > 60 ? (
-                                // Voce prosa unica (stile IGCyr) — testo fluente
+                              {selectedMonumento.bibliografia.length === 1 && selectedMonumento.bibliografia[0].titolo.length > 60 ? (
                                 <p className="text-xs font-serif text-ink/80 leading-relaxed">
                                   {selectedMonumento.bibliografia[0].titolo}
                                 </p>
                               ) : (
                                 <ul className="space-y-3">
-                                  {selectedMonumento.bibliografia?.map((b, i) => (
+                                  {selectedMonumento.bibliografia.map((b, i) => (
                                     <li key={i} className="text-xs flex gap-2 font-serif">
                                       <Book className="h-3 w-3 text-muted shrink-0 mt-0.5" />
                                       <span className="font-semibold text-ink">{formatBiblKey(b.titolo)}</span>
                                       {b.punti_rif && <span className="text-muted">({b.punti_rif})</span>}
                                     </li>
-                                  )) || <li className="text-xs italic text-muted font-serif">Nessuna voce bibliografica.</li>}
+                                  ))}
                                 </ul>
                               )}
                             </>
                       </section>
+                      )}
 
                       {selectedMonumento.traduzioni && selectedMonumento.traduzioni.filter(t => {
                         const l = t.lang?.toLowerCase() || '';

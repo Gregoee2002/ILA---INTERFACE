@@ -16,14 +16,33 @@
         "author": "",
         "testo": "In revisione\n\n-Gabriele",
         "createdAt": "2026-08-21T14:41:38.384Z"
+      },
+      {
+        "id": "604d731a-3e4d-418f-9787-f31b0b3948b8",
+        "author": "Gabriele",
+        "testo": "Vedere gestione dei nomi attested in caso di patronimici, se vengono considerati 2 nomi e se è la prassi corretta.",
+        "createdAt": "2026-08-22T21:37:14.368Z"
+      },
+      {
+        "id": "a28a47b5-5c17-4597-801f-87064a5825ec",
+        "author": "Gabriele",
+        "testo": "su ciascun lato è appesa la testa di un capro; lungo i lati esse sono collegate ciascuna da spesse ghirlande, a cui al centro pende un grappolo d'uva legato da una benda avvolgente. Sulla parte anteriore, sopra la ghirlanda, è applicata una maschera; sul lato sinistro vi è corrispondentemente una cista, a destra un kantharos a due anse, sul retro due teste di papavero pendenti (?). L'intera superficie è fortemente abrasa. Sopra la maschera si trova l'iscrizione:\nMηνὶ Τυράννῳ\nἸούλιος Ἀσκληπιακός\n(A Mēn Tyrannos, Iulios Asklēpiakos)\nL'iscrizione dimostra che il Mὴν Τύραννος è naturalmente più antico del «Mēnotyrannos»; cfr. Nomisma IV 51; Gruppe, Gr. Mythol. 1534 nota 2; Heule, Theolog. Quartalsschr. LXX 1888, 590 e segg.; vedi anche ad es. l'iscrizione JHS VIII 1887, 411 n. 5: Mηνὶ Τυράννῳ · Διονύσῳ.\nIl nome Asklepiakos [si veda] ad es. AM XXIV 1904, 169 n. 12. — Un altare del tutto simile, ma in trachite e privo di iscrizione, si trova nel Ginnasio, nella sala delle iscrizioni, all'estremità sinistra nell'angolo. — Si dovrà presumere che entrambi gli altari siano precipitati da un luogo situato sopra il santuario di Era; infatti, si deve ritenere inammissibile qualsiasi ipotesi che immagini gli altari collocati originariamente all'interno di questo santuario. L'Hera Basileia non ha nulla a che fare con la «Basileia» (cfr. Pauly-Wissowa s. v.; I. v. P. 481-484), bensì è Iuno regina; cfr. Diels, Sibyllin. Blätter 52,1.",
+        "createdAt": "2026-08-22T21:53:48.219Z"
+      },
+      {
+        "id": "14aace05-2436-4a09-ae25-7c989f7ac387",
+        "author": "Gabriele",
+        "testo": "Controllare BERYTUS XV pag. 14 per scoprire se presente una foto. Se no fare commento sulla sopravvivenza della descrizione iconografica",
+        "createdAt": "2026-08-22T22:37:18.307Z"
       }
     ]
   },
   {
     "entryId": "gen-1786984905702-7h-2zs9jp",
     "entryLabel": "CMRDM I 9",
-    "status": "open",
+    "status": "resolved",
     "createdAt": "2026-08-18T14:05:16.693Z",
+    "resolvedAt": "2026-08-22T21:55:11.301Z",
     "notes": [
       {
         "id": "c8f2ee46-0578-4c1d-91c6-678a4b75cd2a",
@@ -36,6 +55,20 @@
         "author": "Gabriele",
         "testo": "In revisione",
         "createdAt": "2026-08-21T17:26:49.369Z"
+      }
+    ]
+  },
+  {
+    "entryId": "gen-1786984905702-0-hyawwa",
+    "entryLabel": "ILA 1",
+    "status": "open",
+    "createdAt": "2026-08-22T21:25:05.322Z",
+    "notes": [
+      {
+        "id": "93dda235-1585-47ea-a2e5-a2d1ef33ae1a",
+        "author": "Gabriele",
+        "testo": "Karidemos è un luogo o patronimico? Se è un luogo capire il markup corretto",
+        "createdAt": "2026-08-22T21:25:05.322Z"
       }
     ]
   }
