@@ -323,6 +323,45 @@
   .site-marker-hot {
     filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.9)) drop-shadow(0 0 6px rgba(31, 131, 119, 0.75));
   }
+  /* Impulso temporaneo sul sito raggiunto dal drilldown epiteto/divinità */
+  .site-marker-flash {
+    animation: site-marker-pulse 1.3s ease-out 2;
+  }
+  @keyframes site-marker-pulse {
+    0% { filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.95)) drop-shadow(0 0 0 rgba(176, 35, 63, 0.9)); }
+    50% { filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.95)) drop-shadow(0 0 14px rgba(176, 35, 63, 0.95)); }
+    100% { filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.95)) drop-shadow(0 0 0 rgba(176, 35, 63, 0.9)); }
+  }
+
+  /* Tooltip epiteti al passaggio del mouse sui marker: il chrome bianco di
+     default di Leaflet (bordo nero, sfondo bianco) non si adattava al tema
+     chiaro/scuro e sopra le tile chiare risultava quasi invisibile. Il
+     contenuto (chip accent/testo bianco, definiti in MapView.tsx) porta già
+     il proprio contrasto: la cornice Leaflet diventa quindi trasparente.
+     Non usiamo `visibility:hidden` sulla freccia perché romperebbe il
+     posizionamento del tooltip: nascondiamo bordo/sfondo invece. */
+  .site-epiteti-tooltip.leaflet-tooltip {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    color: inherit;
+  }
+  .site-epiteti-tooltip.leaflet-tooltip::before {
+    border: none !important;
+  }
+
+  /* Cluster con almeno un'iscrizione corrispondente al filtro epiteto/
+     divinità attivo: colore dedicato (rosso terracotta scuro), distinto
+     sia dalla scala di densità teal sia dai colori delle regioni, così resta
+     riconoscibile a qualunque livello di zoom e densità. */
+  .marker-cluster-highlight {
+    background-color: rgba(176, 35, 63, 0.32) !important;
+  }
+  .marker-cluster-highlight div {
+    background-color: #B0233F !important;
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.95), 0 0 10px rgba(176, 35, 63, 0.85) !important;
+  }
 
   /* Mappa: bollini dei cluster — sostituiscono la palette giallo/arancio di
      default di leaflet.markercluster con la scala grigio→teal del progetto,
