@@ -49,11 +49,11 @@ export const ICONOGRAPHY_LABELS: Record<string, string> = {
   sceptre: "scettro",
   wreath: "corona vegetale",
   staff: "bastone",
-  bucranium: "bucranio [da verificare su LIMC/Lane III]",
+  bucranium: "bucranio",
   // mount / animale associato (cavalcatura o accompagnatore — non solo "ridden")
   bull: "toro",
   horse: "cavallo",
-  cock: "gallo [da verificare su LIMC/Lane III]",
+  cock: "gallo",
   // dress
   military: "abbigliamento militare",
   himation: "himation",

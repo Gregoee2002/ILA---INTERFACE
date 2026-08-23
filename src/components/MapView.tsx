@@ -268,6 +268,10 @@ export const MapView: React.FC<MapViewProps> = ({ monumenti, onSelectMonumento }
   const maxSiteCount = useMemo(() => sites.reduce((max, s) => Math.max(max, s.totalCount), 1), [sites]);
   // Soglia oltre la quale un sito è considerato "denso" e riceve il bagliore in legenda/mappa
   const hotThreshold = Math.max(3, Math.ceil(maxSiteCount * 0.6));
+  // Con un filtro attivo la densità totale del sito non conta più: un sito con
+  // una sola attestazione filtrata deve restare visibile quanto uno con molte,
+  // altrimenti finisce col colore più chiaro della scala e sparisce sulle tile.
+  const hasActiveFilter = selectedEpiteti.length > 0 || selectedRegioni.length > 0 || dateRange[0] !== -500 || dateRange[1] !== 500;
 
   return (
     <div className="flex h-full w-full bg-parchment overflow-hidden">
@@ -391,13 +395,23 @@ export const MapView: React.FC<MapViewProps> = ({ monumenti, onSelectMonumento }
           <MarkerClusterGroup chunkedLoading maxClusterRadius={50}>
             {sites.map(site => {
               const isGrayedOut = site.activeCount === 0;
-              // Riempimento = densità (grigio → accento teal), bordo = regione:
-              // così le zone più dense saltano all'occhio anche a colpo d'occhio
-              // mentre l'appartenenza regionale resta leggibile dal contorno.
-              const fillColor = isGrayedOut ? '#c7c2b4' : getDensityColor(site.totalCount, maxSiteCount);
+              // Con filtro attivo: colore di evidenziazione fisso invece della
+              // scala di densità (che con poche/una attestazione filtrata
+              // risulterebbe troppo chiara) e raggio minimo maggiorato, così
+              // ogni corrispondenza resta visibile senza dover zoomare.
+              // Senza filtro: riempimento = densità totale (grigio → accento
+              // teal), bordo = regione.
+              const fillColor = isGrayedOut
+                ? '#c7c2b4'
+                : hasActiveFilter
+                  ? '#0d5147'
+                  : getDensityColor(site.totalCount, maxSiteCount);
               const strokeColor = isGrayedOut ? '#9ca3af' : site.color;
-              const isHot = !isGrayedOut && site.totalCount >= hotThreshold;
-              const radius = Math.min(22, Math.max(7, 7 + (site.totalCount - 1) * 1.5));
+              const isHighlighted = !isGrayedOut && hasActiveFilter;
+              const isHot = !isGrayedOut && !hasActiveFilter && site.totalCount >= hotThreshold;
+              const radius = isHighlighted
+                ? Math.min(22, Math.max(10, 10 + (site.activeCount - 1) * 1.5))
+                : Math.min(22, Math.max(7, 7 + (site.totalCount - 1) * 1.5));
               const siteEpiteti = Array.from(new Set(site.monumenti.flatMap(m => m.epiteti || [])));
 
               return (
@@ -409,10 +423,10 @@ export const MapView: React.FC<MapViewProps> = ({ monumenti, onSelectMonumento }
                     color: strokeColor,
                     fillColor: fillColor,
                     fillOpacity: isGrayedOut ? 0.35 : 0.85,
-                    weight: isHot ? 3 : 2,
+                    weight: (isHot || isHighlighted) ? 3 : 2,
                     // Alone chiaro sempre presente: rende ogni pallino leggibile
                     // qualunque sia il colore sottostante della tile di base.
-                    className: cn('site-marker', isHot && 'site-marker-hot')
+                    className: cn('site-marker', (isHot || isHighlighted) && 'site-marker-hot')
                   }}
                 >
                   {siteEpiteti.length > 0 && (
@@ -486,15 +500,27 @@ export const MapView: React.FC<MapViewProps> = ({ monumenti, onSelectMonumento }
         
         {/* Legend */}
         <div className="absolute bottom-6 right-6 glass-panel p-4 z-[1000] rounded-2xl text-xs pointer-events-none w-48">
-          <h4 className="field-label mb-3">Densità iscrizioni</h4>
-          <div
-            className="h-2.5 w-full rounded-full mb-1.5"
-            style={{ background: `linear-gradient(to right, ${DENSITY_SCALE.join(', ')})` }}
-          ></div>
-          <div className="flex justify-between text-[9px] text-muted uppercase tracking-wide mb-4">
-            <span>Poche</span>
-            <span>Molte</span>
-          </div>
+          {hasActiveFilter ? (
+            <>
+              <h4 className="field-label mb-3">Filtro attivo</h4>
+              <div className="flex items-center gap-3 mb-4">
+                <span className="w-3.5 h-3.5 rounded-full shrink-0 border-2" style={{ backgroundColor: '#0d5147', borderColor: '#0d5147' }}></span>
+                <span className="text-[11px] text-ink/80">Sito con corrispondenze</span>
+              </div>
+            </>
+          ) : (
+            <>
+              <h4 className="field-label mb-3">Densità iscrizioni</h4>
+              <div
+                className="h-2.5 w-full rounded-full mb-1.5"
+                style={{ background: `linear-gradient(to right, ${DENSITY_SCALE.join(', ')})` }}
+              ></div>
+              <div className="flex justify-between text-[9px] text-muted uppercase tracking-wide mb-4">
+                <span>Poche</span>
+                <span>Molte</span>
+              </div>
+            </>
+          )}
 
           <h4 className="field-label mb-3">Regione (bordo)</h4>
           <div className="flex flex-col gap-2 font-serif text-ink/90">
