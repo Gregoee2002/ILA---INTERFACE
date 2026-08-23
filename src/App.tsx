@@ -309,6 +309,35 @@ const DivinityDiagonalList = ({ items, onSelect, onActiveChange, onScrollProgres
     return () => { if (debounceTimer.current) window.clearTimeout(debounceTimer.current); };
   }, [sorted]);
 
+  // Ricerca attiva: la selezione si sposta da sola sulla prima voce
+  // pertinente invece di lasciare l'utente a scorrere manualmente fino al
+  // risultato evidenziato. Se il termine individua una sola divinità (caso
+  // tipico di un epiteto esclusivo), quella resta "fissata" come voce
+  // attiva; con più corrispondenze si porta comunque in vista la prima,
+  // così l'utente parte già dalla zona giusta della lista.
+  useEffect(() => {
+    if (!searchActive) return;
+    const matchIdx = sorted.findIndex(isMatch);
+    if (matchIdx < 0) return;
+    setActiveIndex(matchIdx);
+    const container = containerRef.current;
+    if (container) {
+      // Stesso modello frazionario di updateActive (scrollTop/maxScroll ->
+      // indice riga): uno scroll "a centro riga" indipendente finirebbe
+      // corretto solo finché dura l'animazione, per poi essere riscritto
+      // dall'handler di scroll nativo non appena questo ricalcola l'indice
+      // attivo dalla propria formula — con un target incoerente, l'utente
+      // vedrebbe l'evidenziazione "saltare" su una riga vicina ma sbagliata
+      // a fine scroll.
+      const maxScroll = container.scrollHeight - container.clientHeight;
+      const targetTop = maxScroll * (matchIdx / Math.max(1, sorted.length - 1));
+      container.scrollTo({ top: Math.max(0, targetTop), behavior: 'smooth' });
+    }
+    if (debounceTimer.current) window.clearTimeout(debounceTimer.current);
+    notifyActive(sorted[matchIdx].name);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [term, sorted]);
+
   // Tutte le righe allineate sulla stessa ascissa: retta verticale invece
   // della precedente progressione diagonale (parametro mantenuto solo per
   // compatibilità con le chiamate esistenti più sotto).
