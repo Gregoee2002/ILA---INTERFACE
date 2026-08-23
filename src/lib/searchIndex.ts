@@ -1,5 +1,6 @@
 import MiniSearch from 'minisearch';
 import { ICONOGRAPHY_LABELS } from './iconographyLabels';
+import { italianWordsToDigits } from './italianNumbers';
 
 /**
  * Normalizzazione diacritici greci per la ricerca. Se in futuro serve la
@@ -45,6 +46,7 @@ function iconographyText(ico: any): string {
 // vecchio filtro client-side (normalizedSearchMap in App.tsx) più
 // testo_searchable al posto del testo grezzo con markup EpiDoc.
 const SEARCH_FIELDS = [
+  'id_norm',
   'testo_searchable_norm',
   'epiteti_norm',
   'divinita_norm',
@@ -63,6 +65,7 @@ const SEARCH_FIELDS = [
 ];
 
 const FIELD_BOOST: Record<string, number> = {
+  id_norm: 4,
   testo_searchable_norm: 3,
   epiteti_norm: 2.5,
   divinita_norm: 2.5,
@@ -93,9 +96,11 @@ function toIndexedDoc(m: any): IndexedDoc {
   const traduzioniText = Array.isArray(m.traduzioni)
     ? m.traduzioni.map((t: any) => `${t.testo || ''} ${t.note || ''}`).join(' ')
     : '';
+  const entryIdDigits = (m.entryId || '').match(/\d+/g)?.join(' ') || '';
   return {
     id: m.id,
     entryId: m.entryId,
+    id_norm: normalizeGreek([m.id, m.entryId, entryIdDigits].filter(Boolean).join(' ')),
     testo_searchable_norm: normalizeGreek(m.testo_searchable || ''),
     epiteti_norm: normalizeGreek((m.epiteti || []).join(' ')),
     divinita_norm: normalizeGreek((m.divinita || []).join(' ')),
@@ -183,8 +188,14 @@ export function searchMonumenti(
   query: string,
   opts: SearchOptions = {}
 ): SearchResult[] {
-  const q = normalizeGreek((query || '').trim());
+  let q = normalizeGreek((query || '').trim());
   if (!q) return [];
+
+  // Permette di cercare un ID scrivendolo in lettere ("novantuno" -> "91"),
+  // sia per l'intera query sia parola per parola (es. "epigrafe novantuno").
+  // Sostituisce (non aggiunge) le parole-numero con le cifre corrispondenti,
+  // così il combineWith="AND" continua a funzionare correttamente.
+  q = q.split(/\s+/).map(w => italianWordsToDigits(w) ?? w).join(' ');
 
   const rawResults = index.search(q, {
     boost: FIELD_BOOST,
