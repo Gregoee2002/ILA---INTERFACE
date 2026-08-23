@@ -1,0 +1,666 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[italian]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[margin=3cm]{geometry}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{setspace}
+\usepackage{titlesec}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{listings}
+
+\renewcommand{\lstlistingname}{Codice}
+\lstset{
+  basicstyle=\ttfamily\small,
+  frame=single,
+  breaklines=true,
+  columns=fullflexible,
+  captionpos=b,
+  backgroundcolor=\color{gray!5},
+  numbers=none,
+  showstringspaces=false
+}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=black,
+  urlcolor=blue,
+  citecolor=black
+}
+
+\titleformat{\section}{\normalfont\Large\bfseries}{\thesection}{1em}{}
+\titleformat{\subsection}{\normalfont\large\bfseries}{\thesubsection}{1em}{}
+
+\setstretch{1.15}
+
+\newcommand{\screenshotplaceholder}[2]{%
+  \begin{figure}[h!]
+    \centering
+    \fbox{%
+      \begin{minipage}[c][#1][c]{0.82\textwidth}
+        \centering
+        \color{gray}
+        \textit{[spazio riservato allo screenshot: #2]}
+      \end{minipage}%
+    }
+    \caption{#2}
+  \end{figure}
+}
+
+\title{\textbf{Aspetti funzionali e implementativi dell'indice epigrafico digitale ILA}}
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle
+\vspace{-2.5em}
+
+\begin{center}
+\textit{Bozza di lavoro --- versione interna}
+\end{center}
+
+\vspace{1.5em}
+
+\begin{abstract}
+\noindent
+In questo lavoro vengono descritte le principali attività di sviluppo del
+progetto ILA (\textit{Index Lunae Antiquae}), con particolare riferimento
+agli aspetti realizzativi e funzionali dei risultati conseguiti. ILA si
+propone di raccogliere, codificare e rendere fruibile con un'unica
+interfaccia digitale l'insieme delle attestazioni epigrafiche relative al
+culto del dio lunare frigio Men. Il progetto nasce dall'esigenza di
+superare i limiti di un'edizione a stampa di riferimento --- il
+\textit{Corpus Monumentorum Religionis Dei Menis} di E.\,N.\ Lane
+(1971--1978) --- offrendo una rappresentazione digitale, interrogabile e
+progressivamente rivedibile del medesimo materiale. La prima fase del
+lavoro è stata dedicata al riconoscimento ottico dei testi a partire
+dall'edizione a stampa e alla loro conversione in un formato di codifica
+aperto e standardizzato. Nella fase successiva ci si è concentrati
+sull'adozione e l'adattamento di un sistema di marcatura filologica
+consolidato, sulla realizzazione di un'interfaccia di consultazione
+multicanale e sulla progettazione di una sezione dedicata specificamente
+alla descrizione iconografica dei monumenti, finora trattata in maniera
+non sistematica nella letteratura di riferimento. Si presentano inoltre
+le modalità di organizzazione dell'interfaccia, gli strumenti di ricerca
+disponibili e le prospettive di sviluppo futuro del progetto.
+
+\medskip
+\noindent
+This work describes the main development activities of the ILA
+(\textit{Index Lunae Antiquae}) project, with particular reference to the
+implementation and functional aspects of the results achieved. ILA aims
+to collect, encode and make available within a single digital interface
+the whole set of epigraphic attestations related to the cult of the
+Phrygian lunar god Men. The project addresses the limits of a printed
+reference edition by providing a digital, searchable and progressively
+revisable representation of the same material, combining optical
+character recognition of the source texts, a philological markup system,
+and a dedicated iconographic description module.
+\end{abstract}
+
+\vspace{1em}
+
+\section{Introduzione}
+
+Il progetto ILA (\textit{Index Lunae Antiquae}) nasce con l'obiettivo di
+raccogliere in un unico ambiente digitale l'intero corpus delle
+attestazioni epigrafiche riconducibili al culto del dio lunare frigio
+Men, un culto diffuso in età ellenistica e romana in vaste aree
+dell'Anatolia occidentale e, per attestazioni più sporadiche, in altre
+regioni del Mediterraneo antico. Il punto di partenza del lavoro è
+rappresentato dall'edizione critica a stampa curata da E.\,N.\ Lane, il
+\textit{Corpus Monumentorum Religionis Dei Menis} (CMRDM), pubblicata in
+più volumi tra il 1971 e il 1978, che a tutt'oggi costituisce il
+principale strumento di riferimento per lo studio sistematico delle
+attestazioni relative a questa divinità.
+
+Per quanto fondamentale, un'opera a stampa di questo tipo presenta i
+limiti tipici del proprio formato: l'assenza di un indice interrogabile
+per attributo (materiale, luogo di rinvenimento, tipologia di supporto,
+epiteto divino, iconografia), l'impossibilità di aggiornare le singole
+voci alla luce di revisioni successive senza una nuova edizione a
+stampa, e una fruizione sostanzialmente lineare del contenuto, poco
+adatta alle esigenze di uno studio comparativo su larga scala. Il
+progetto ILA nasce proprio per superare questi limiti, proponendo una
+rappresentazione digitale del medesimo patrimonio epigrafico, codificata
+secondo standard aperti e internazionalmente riconosciuti, interrogabile
+per singolo attributo e progressivamente rivedibile sulla base di un
+confronto sistematico con le fonti primarie.
+
+Il lavoro si è articolato in più fasi, non rigidamente sequenziali ma
+in buona parte sovrapposte e tuttora in corso. Una prima fase è stata
+dedicata al riconoscimento ottico dei testi (\textit{OCR}) a partire
+dall'edizione a stampa di riferimento, propedeutico alla loro conversione
+in formato digitale trattabile. Una seconda fase si è concentrata
+sull'adozione di un sistema di codifica filologica adeguato alla
+complessità del materiale, mutuandolo --- con i necessari adattamenti ---
+da un sistema di marcatura già ampiamente collaudato in ambito
+epigrafico digitale. Una terza fase, tuttora in corso, riguarda la
+revisione sistematica delle singole voci sulla base di un confronto
+diretto con le fonti primarie disponibili, così da ridurre
+progressivamente la dipendenza dall'edizione a stampa originaria. In
+parallelo a queste attività di codifica del testo, si è ritenuto
+opportuno affiancare una sezione dedicata alla descrizione
+dell'iconografia dei monumenti, aspetto che nella letteratura di
+riferimento viene generalmente trattato solo in forma discorsiva,
+all'interno del commento a ciascuna voce, e mai in una forma
+sistematicamente interrogabile.
+
+L'articolo è organizzato come segue. Nella sezione 2 viene illustrata
+la modalità di rappresentazione concettuale e formale delle epigrafi.
+Nella sezione 3 si descrive il sistema di codifica filologica adottato,
+mutuato da un sistema di marcatura consolidato e adattato alle esigenze
+specifiche del corpus, incluso il trattamento dei nomi divini e dei
+rispettivi epiteti. La sezione 4 descrive la procedura di riconoscimento
+ottico e trascrizione dei testi epigrafici. La sezione 5 presenta
+l'organizzazione dell'interfaccia digitale, con particolare attenzione,
+nella sottosezione 5.1, alla sezione dedicata all'iconografia dei
+monumenti, nella sottosezione 5.2 alla navigazione tra divinità, epiteti
+e registro onomastico, e nella sottosezione 5.3 agli strumenti di
+ricerca. Infine, nella sezione 6 si propongono alcune considerazioni
+finali e le prospettive di sviluppo futuro del progetto.
+
+\screenshotplaceholder{7cm}{Pagina iniziale dell'interfaccia digitale di ILA}
+
+\section{Rappresentazione delle epigrafi}
+
+Concettualmente, ogni epigrafe è concepita, in analogia con altri
+progetti di museologia digitale, come una singola entità astratta
+costituita da un insieme di attributi che ne caratterizzano il contenuto
+e la forma materiale: materiale del supporto, tipologia del monumento,
+luogo di rinvenimento e di conservazione, lingua dell'iscrizione, testo
+dell'iscrizione, datazione, epiteto o epiteti del dio Men eventualmente
+menzionati, e --- come si dirà più diffusamente nella sezione 5.1 ---
+un insieme strutturato di descrittori iconografici.
+
+A differenza di soluzioni che adottano un formato intermedio semplificato
+per la gestione quotidiana dei dati, salvo poi generare da questo un
+export in formato di codifica filologica standard, nel caso di ILA si è
+scelto di adottare fin da subito la codifica filologica come formato
+nativo e unico delle epigrafi. Questa scelta, più onerosa nella fase di
+sviluppo iniziale, evita la comparsa di due rappresentazioni parallele
+del medesimo dato --- una \virg{di comodo} per l'applicazione e
+una \virg{scientifica} per la comunità di studiosi --- che nel
+tempo rischierebbero di divergere silenziosamente l'una dall'altra. Ogni
+epigrafe corrisponde così a un unico documento strutturato, che
+costituisce al tempo stesso il dato di lavoro dell'applicazione e
+l'edizione digitale consultabile e scaricabile dall'utente finale.
+
+A partire da questa rappresentazione, un apposito modulo software
+genera automaticamente le schede di consultazione presentate
+nell'interfaccia grafica, così da garantire che la scheda visualizzata
+dall'utente sia sempre generata direttamente dalla codifica filologica
+sottostante, e non da una rappresentazione parallela soggetta a
+disallineamento.
+
+\screenshotplaceholder{8cm}{Esempio di scheda epigrafica nell'interfaccia di consultazione}
+
+\section{Il sistema di marcatura filologica}
+
+Per la codifica delle epigrafi si è scelto di non progettare un sistema
+di marcatura ex novo, bensì di mutuare --- adattandolo alle specifiche
+esigenze del corpus --- un sistema di marcatura filologica già
+largamente adottato e collaudato nell'ambito dell'epigrafia digitale,
+basato sulla notazione convenzionale nota come \textit{sistema di
+Leida}, tradizionalmente impiegata dagli epigrafisti per rappresentare
+in forma sintetica i fenomeni testuali riscontrabili sui supporti
+antichi (lacune, integrazioni, lettere dubbie, cancellature, restauri
+editoriali, e così via).
+
+Questa scelta ha comportato un lavoro di adattamento su due livelli.
+Da un lato, è stato necessario costruire una corrispondenza puntuale e
+sistematica tra ciascuna convenzione della notazione di Leida e il
+corrispondente costrutto di marcatura nel formato di codifica digitale
+adottato per il progetto, in modo che ogni fenomeno testuale --- una
+lacuna, un'integrazione, una lettera di lettura incerta --- trovasse una
+rappresentazione univoca e non ambigua. Dall'altro lato, si è reso
+necessario introdurre uno strumento di supporto alla codifica che
+permettesse di applicare queste convenzioni in maniera assistita,
+riducendo il rischio di errore nella trascrizione dei fenomeni testuali
+più complessi e rendendo il processo di marcatura accessibile anche a chi
+non abbia una lunga esperienza diretta con la sintassi del formato di
+codifica sottostante.
+
+A questo sistema di marcatura mutuato dalla tradizione epigrafica si
+affiancano, in analogia con le proposte già avanzate in altri progetti
+di museologia epigrafica digitale, alcune estensioni pensate per
+esplicitare informazioni che nei corpora epigrafici tradizionali
+restano tipicamente implicite nel commento discorsivo: l'ambito
+religioso dell'iscrizione, la collezione o il contesto di provenienza,
+lo stato di conservazione e --- aspetto su cui si tornerà nella sezione
+5.1 --- la descrizione strutturata dell'iconografia figurata associata
+al monumento.
+
+Un caso che ha richiesto particolare cura è la codifica dei nomi divini
+e dei rispettivi epiteti cultuali. Il dio Men compare nel corpus non di
+rado insieme ad altre divinità, in formule sincretiche o giustapposte
+(un dio solare, una grande madre, una coppia di divinità associate nel
+medesimo santuario), e ciascuna di queste figure può portare i propri
+epiteti distinti. Trattare l'insieme degli epiteti di un'iscrizione come
+una lista piatta, comune a tutte le divinità nominate nel testo,
+produrrebbe un risultato filologicamente scorretto: attribuirebbe a un
+dio un epiteto che il testo riferisce in realtà a un altro, semplicemente
+perché i due nomi compaiono nella stessa iscrizione. Si è scelto
+pertanto di codificare l'associazione tra ciascuna divinità e i propri
+epiteti a livello della singola menzione all'interno del testo, cosa che
+richiede, in fase di marcatura, di riconoscere correttamente dove finisce
+il nome della divinità (che può essere esso stesso composto da più
+parole, come nel caso di formule sincretiche) e dove comincia l'epiteto
+che lo qualifica --- una distinzione non sempre ovvia nella resa a stampa
+dell'edizione di riferimento, e che in una prima stesura della codifica
+non era stata trattata con la necessaria sistematicità.
+
+L'applicazione di questo criterio è stata condotta in maniera sistematica
+su tutte le voci del corpus, verificando e correggendo, epigrafe per
+epigrafe, sia la segmentazione tra nome divino ed epiteto sia i casi in
+cui una classificazione precedente risultava imprecisa. Si tratta di un
+lavoro di revisione capillare, più vicino a un controllo di qualità
+filologico che a uno sviluppo di funzionalità in senso stretto, ma che
+condiziona direttamente l'affidabilità di qualunque strumento --- di
+consultazione, di ricerca o di analisi comparativa --- costruito a valle
+su questa informazione (si veda, in particolare, la sezione 5.2).
+
+\screenshotplaceholder{7.5cm}{Strumento assistito di marcatura filologica in azione su una voce del corpus}
+
+\section{Trascrizione e riconoscimento ottico dei testi}
+
+Particolare attenzione è stata dedicata alla trascrizione dei testi
+epigrafici a partire dall'edizione a stampa di riferimento e alla loro
+successiva codifica filologica. Nella maggior parte dei casi, i testi
+da trascrivere sono stati prelevati dalle voci corrispondenti
+dell'edizione critica a stampa attraverso un processo di estrazione
+semiautomatizzato, basato sul riconoscimento ottico dei caratteri
+(\textit{OCR}), applicato alla versione digitalizzata del volume di
+riferimento.
+
+Questa fase si è rivelata particolarmente delicata a causa della natura
+del materiale: i testi greci ed anatolici presenti nell'edizione,
+spesso corredati di segni diacritici, note editoriali sopralineari o
+sottolineari e simboli non corrispondenti al set di caratteri latino di
+base, non sono sempre stati riconosciuti correttamente dagli strumenti
+di riconoscimento ottico impiegati. In particolare, i caratteri greci
+accentati e le convenzioni tipografiche utilizzate nell'edizione per
+segnalare restauri, lettere ambigue o cancellature testuali si sono
+dimostrati i punti più critici del processo, rendendo necessaria una
+fase sistematica di revisione manuale dell'output prodotto dal
+riconoscimento automatico, prima di procedere alla codifica vera e
+propria del testo secondo il sistema di marcatura descritto nella
+sezione precedente.
+
+Il testo ottenuto dal riconoscimento ottico, una volta corretto, viene
+dunque arricchito manualmente dei fenomeni testuali non direttamente
+desumibili dall'OCR (interruzioni di riga, restauri editoriali,
+caratteri ambigui) e infine convertito nella marcatura filologica
+descritta nella sezione 3. Nei casi in cui il testo non risultasse
+adeguatamente ricostruibile a partire dalla sola edizione a stampa, si è
+proceduto, ove possibile, a un confronto diretto con le fonti primarie
+disponibili, secondo il principio metodologico per cui nessun dato
+mancante viene stimato o integrato arbitrariamente: un'informazione non
+attestata resta dichiaratamente assente, piuttosto che essere colmata
+per congettura non verificabile.
+
+\screenshotplaceholder{6.5cm}{Confronto tra testo a stampa e trascrizione ottenuta tramite riconoscimento ottico}
+
+\section{Organizzazione dell'interfaccia digitale}
+
+Al fine di rendere il patrimonio epigrafico raccolto fruibile sia agli
+specialisti della materia sia a un pubblico più ampio di visitatori non
+specialisti, l'interfaccia digitale è stata progettata secondo criteri
+di \textit{responsive web design}, così da risultare consultabile
+indipendentemente dal dispositivo utilizzato.
+
+L'interfaccia si articola in diverse sezioni tra loro complementari:
+una sezione di consultazione che presenta l'elenco completo delle
+epigrafi con accesso diretto alle singole schede descrittive; una
+sezione bibliografica che raccoglie i repertori e i corpora di
+riferimento; una sezione geografica che consente di visualizzare la
+distribuzione spaziale delle attestazioni su una mappa interattiva; e
+una sezione di ricerca avanzata, descritta più diffusamente nella
+sottosezione 5.3. Ogni scheda descrittiva è corredata, ove disponibile,
+di materiale fotografico del monumento e riporta, oltre al testo
+dell'iscrizione e ai principali attributi epigrafici, un rimando
+puntuale alla codifica filologica sottostante, liberamente
+consultabile e scaricabile.
+
+\screenshotplaceholder{8cm}{Vista d'insieme dell'elenco delle epigrafi con filtri applicati}
+
+\screenshotplaceholder{8cm}{Visualizzazione geografica delle attestazioni su mappa interattiva}
+
+\subsection{La sezione iconografica}
+
+Uno degli aspetti a cui si è ritenuto di dedicare uno sviluppo autonomo
+è la descrizione dell'iconografia figurata associata ai monumenti. Nella
+letteratura di riferimento, l'apparato iconografico delle stele e dei
+rilievi dedicati a Men viene generalmente descritto in forma discorsiva,
+all'interno del commento a ciascuna voce, senza una struttura che ne
+consenta l'interrogazione sistematica e il confronto comparativo tra
+voci diverse. Si è pertanto scelto di introdurre, per ciascuna epigrafe
+dotata di apparato figurato, una sezione dedicata alla descrizione
+strutturata dell'iconografia, articolata secondo un vocabolario
+controllato di categorie ricorrenti: la funzione compositiva della
+scena, la tipologia e l'identificazione delle singole figure
+rappresentate, e un insieme di tratti descrittivi specifici --- copricapo,
+attributi lunari, oggetti tenuti in mano, animali associati, abbigliamento,
+tecnica esecutiva e posizione compositiva della figura all'interno del
+rilievo.
+
+Questa strutturazione consente, da un lato, di visualizzare in maniera
+sintetica e coerente l'apparato iconografico di ciascun monumento
+all'interno della relativa scheda descrittiva, e dall'altro di rendere
+tale informazione interrogabile alla stregua degli altri attributi
+epigrafici, aprendo la possibilità di ricerche trasversali --- ad esempio
+l'insieme di tutte le raffigurazioni in cui il dio è rappresentato a
+cavallo, oppure con un determinato copricapo o oggetto in mano --- che
+sarebbero difficilmente praticabili a partire dalla sola lettura
+discorsiva dell'edizione a stampa.
+
+Dal punto di vista della codifica, la scelta di dove collocare questa
+informazione all'interno del documento filologico non era scontata.
+L'apparato iconografico non corrisponde a nessuno degli elementi
+previsti dallo schema di codifica di base per la descrizione testuale
+dell'epigrafe, e forzarlo dentro elementi pensati per altri scopi
+avrebbe reso la codifica ambigua e difficile da estendere in futuro. Si
+è scelto pertanto di ospitarlo in un blocco di dati extra --- lo spazio
+che lo standard di codifica riserva esplicitamente a informazioni non
+previste dallo schema di base --- così da tenere nettamente separati il
+testo dell'iscrizione, filologicamente vincolante, e la sua descrizione
+iconografica, che resta per sua natura un'interpretazione soggetta a
+revisione. Questa collocazione ha un vantaggio pratico non trascurabile:
+il blocco può essere esteso con nuove categorie descrittive senza dover
+intervenire sullo schema di codifica generale del corpus, ed è del tutto
+opzionale, per cui una scheda priva di apparato figurato resta valida
+senza dover \virg{inventare} una descrizione iconografica assente.
+
+Il Codice~\ref{lst:xenodata} mostra, semplificato ma realistico, il
+blocco corrispondente a un rilievo votivo in cui Men è raffigurato al
+centro della composizione, con berretto frigio, falce lunare sulle
+spalle e una pigna nella mano. Si noti come ogni informazione sia
+espressa come coppia \emph{tipo}/\emph{valore} (l'attributo
+\texttt{type} e l'attributo \texttt{key} di ciascun elemento
+\texttt{trait}), anziché come testo libero: è proprio questa scelta,
+apparentemente minore, a rendere l'informazione machine-readable senza
+sacrificarne la leggibilità per un occhio umano che sappia già leggere
+un documento TEI.
+
+\begin{lstlisting}[language=XML, caption={Blocco \texttt{xenoData} di
+esempio per un rilievo votivo con Men frontale}, label={lst:xenodata}]
+<xenoData>
+    <iconography>
+        <function key="votive"/>
+        <figure n="1" type="deity" key="Men" place="top_centre">
+            <trait type="headgear" key="phrygian_cap"/>
+            <trait type="lunar" key="crescent_shoulders"/>
+            <trait type="held_object" key="pine_cone"/>
+        </figure>
+        <note>Rilievo votivo, Men frontale con falce lunare
+            sulle spalle.</note>
+    </iconography>
+</xenoData>
+\end{lstlisting}
+
+Proprio perché la descrizione dei tratti iconografici è vincolata a un
+vocabolario chiuso e non a testo libero, ogni valore inserito in una
+scheda è per costruzione confrontabile con lo stesso valore inserito in
+qualunque altra scheda del corpus: \virg{copricapo radiato} indica
+sempre lo stesso concetto, indipendentemente da chi abbia compilato la
+scheda o da come il tratto sia descritto nel commento discorsivo
+dell'edizione a stampa. Questa uniformità è ciò che rende possibile un
+secondo strumento di analisi, pensato non per la consultazione della
+singola epigrafe ma per lo studio comparativo dell'intero corpus: una
+heatmap delle co-occorrenze tra coppie di attributi (iconografici, ma
+anche onomastici e geografici), che misura quanto frequentemente due
+valori compaiono insieme nelle stesse schede rispetto a quanto ci si
+attenderebbe se fossero distribuiti in maniera indipendente. Senza un
+vocabolario standardizzato alle spalle, una simile analisi sarebbe
+impraticabile: basterebbe una minima variazione nella formulazione di
+uno stesso tratto --- \virg{in groppa a un cavallo} anziché \virg{a
+cavallo} --- per far apparire come distinti due fenomeni che sono in
+realtà identici, falsando qualunque conteggio di co-occorrenza. La
+coerenza terminologica garantita dal vocabolario controllato è dunque
+condizione necessaria, non solo per la leggibilità della singola scheda,
+ma per l'affidabilità di ogni analisi che aggreghi i dati sull'intero
+corpus.
+
+Un vocabolario chiuso pone però un problema speculare a quello che
+risolve: se le chiavi ammesse sono fissate una volta per tutte, chi
+compila una scheda deve conoscerle a memoria o consultare costantemente
+un riferimento esterno, il che è precisamente l'ostacolo che si voleva
+evitare rendendo l'iconografia accessibile anche a chi non abbia una
+formazione specialistica in epigrafia. La soluzione adottata separa
+nettamente due livelli: da un lato la codifica, che lavora sempre e solo
+con chiavi sintetiche in inglese (\texttt{phrygian\_cap},
+\texttt{crescent\_shoulders}, \texttt{pine\_cone}, come nell'esempio del
+Codice~\ref{lst:xenodata}); dall'altro un vocabolario di traduzione, che
+associa a ciascuna chiave un'etichetta discorsiva in italiano, pensata
+per essere presentata a chi consulta o compila una scheda senza che
+questi debba mai vedere o scrivere direttamente la chiave sottostante.
+Il Codice~\ref{lst:vocab} ne mostra un estratto minimale.
+
+\begin{lstlisting}[caption={Estratto del vocabolario di traduzione
+chiave $\to$ etichetta}, label={lst:vocab}]
+phrygian_cap        ->  "berretto frigio"
+crescent_shoulders  ->  "falce lunare sulle spalle"
+pine_cone           ->  "pigna"
+votive               ->  "votiva"
+top_centre           ->  "al centro in cima"
+\end{lstlisting}
+
+Questa separazione ha una conseguenza pratica diretta sulla facilità
+d'uso: chi compila una scheda sceglie da un elenco di etichette già in
+italiano --- \virg{berretto frigio}, \virg{falce lunare sulle spalle},
+\virg{pigna} --- senza dover conoscere né scrivere la sintassi
+sottostante, che viene generata automaticamente a partire dalla scelta
+fatta. Allo stesso tempo, estendere il vocabolario --- perché
+un'iscrizione presenta un attributo iconografico non ancora catalogato,
+come è di fatto accaduto più volte nel corso della revisione del corpus
+--- si riduce ad aggiungere una singola coppia chiave/etichetta a questa
+tabella, senza dover intervenire né sullo schema di codifica descritto
+poco sopra, né sulla logica applicativa che lo consulta: la tabella è,
+in questo senso, l'unico punto del sistema che deve cambiare quando
+cambia il vocabolario, e i vantaggi di questa scelta valgono
+esattamente lo stesso principio di \virg{unica fonte di verità} già
+discusso a proposito della rappresentazione dei dati (sezione 2).
+
+Vale la pena spiegare, in parole semplici, in che modo la heatmap
+quantifica la forza di un'associazione, perché il numero mostrato in
+ciascuna cella non è un semplice conteggio di co-occorrenze, ma una
+misura che tiene conto anche di quanto ciascun attributo sia, di per sé,
+frequente o raro nel corpus. Due attributi molto comuni --- una regione
+molto rappresentata, un materiale molto diffuso --- compariranno spesso
+insieme semplicemente per effetto della loro frequenza individuale,
+senza che questo indichi un legame significativo tra i due; viceversa,
+due attributi rari che si presentano ripetutamente insieme, anche solo
+poche volte in termini assoluti, segnalano un'associazione che difficilmente
+può essere frutto del caso. La misura impiegata, nota in letteratura come
+\emph{informazione mutua puntuale} (\emph{pointwise mutual information},
+PMI), è pensata esattamente per isolare questo secondo tipo di
+segnale, confrontando la frequenza osservata della coppia con la
+frequenza che ci si aspetterebbe se i due attributi fossero tra loro
+del tutto indipendenti.
+
+Indicando con $P(A)$ e $P(B)$ la proporzione di schede del corpus in cui
+compare, rispettivamente, il valore $A$ e il valore $B$, e con $P(A,B)$
+la proporzione di schede in cui i due valori compaiono insieme, la
+misura è definita come
+
+\[
+  \mathrm{PMI}(A,B) \;=\; \log_2 \left( \frac{P(A,B)}{P(A)\cdot P(B)} \right).
+\]
+
+Il denominatore $P(A) \cdot P(B)$ rappresenta la frequenza di
+co-occorrenza che si osserverebbe se $A$ e $B$ comparissero nelle schede
+in maniera del tutto scorrelata l'uno dall'altro; il numeratore $P(A,B)$
+è invece la frequenza di co-occorrenza effettivamente osservata nel
+corpus. Il logaritmo in base 2 di questo rapporto ha una lettura
+intuitiva: quando le due frequenze coincidono, il rapporto vale $1$ e il
+logaritmo si annulla ($\mathrm{PMI}=0$), a indicare nessuna associazione
+oltre il livello atteso per puro caso; quando i due attributi compaiono
+insieme più spesso di quanto atteso, il rapporto supera $1$ e la PMI
+assume valore positivo, tanto più alto quanto più l'associazione è
+marcata; quando invece compaiono insieme meno spesso del previsto, il
+rapporto scende sotto $1$ e la PMI diventa negativa. La scelta della base
+$2$, anziché del logaritmo naturale, non altera questa lettura --- ne
+cambia solo la scala --- ma ha il vantaggio di rendere il valore
+interpretabile in \virg{raddoppi}: un incremento di un'unità di PMI
+corrisponde a una frequenza di co-occorrenza osservata doppia rispetto a
+quella attesa per indipendenza. Nell'interfaccia, questo valore non viene
+mai presentato da solo, ma sempre accompagnato dal conteggio assoluto
+delle co-occorrenze sottostanti: una PMI elevata calcolata su due o tre
+casi resta un'indicazione da verificare sulle fonti, non una conclusione,
+ed è segnalata come tale.
+
+Il motivo per cui questo intero ragionamento è possibile riporta
+direttamente alla scelta di codifica descritta a inizio sezione: perché
+la heatmap possa calcolare $P(A)$, $P(B)$ e $P(A,B)$ per una coppia di
+tratti iconografici, è necessario poter contare, su tutte le schede del
+corpus, quante volte compare ciascuna chiave e quante volte una coppia
+di chiavi compare insieme --- un'operazione elementare se il dato è
+strutturato come nel Codice~\ref{lst:xenodata}, impraticabile se fosse
+rimasto testo libero. Il Codice~\ref{lst:pmi-pseudo} riassume, in forma
+di pseudocodice, il collegamento tra il blocco \texttt{xenoData} di
+ciascuna scheda e il calcolo della PMI descritto sopra: la struttura
+dati intermedia non è altro che una tabella di conteggi, popolata
+scandendo una sola volta il corpus.
+
+\begin{lstlisting}[caption={Da \texttt{xenoData} alla heatmap: schema
+del calcolo (pseudocodice)}, label={lst:pmi-pseudo}]
+per ogni scheda S del corpus:
+    tratti(S) = { (trait.type, trait.key)
+                  per ogni trait in xenoData(S) }
+    per ogni coppia non ordinata (A, B) in tratti(S):
+        conteggio[A]      += 1
+        conteggio[B]      += 1
+        conteggio[(A, B)] += 1
+
+N = numero totale di schede
+
+per ogni coppia (A, B) con conteggio[(A, B)] > 0:
+    P_A  = conteggio[A]      / N
+    P_B  = conteggio[B]      / N
+    P_AB = conteggio[(A, B)] / N
+    PMI(A, B) = log2( P_AB / (P_A * P_B) )
+\end{lstlisting}
+
+Questo è, in ultima analisi, il senso più concreto della
+\virg{comunicabilità} tra la sezione iconografica e la heatmap: non una
+semplice possibilità in linea di principio, ma una conseguenza diretta e
+quasi automatica dell'aver scelto, fin dall'inizio, chiavi controllate
+al posto di prosa libera. Lo stesso identico meccanismo, con la stessa
+tabella di conteggi, alimenta anche gli assi onomastici e geografici
+della heatmap menzionati più sopra: l'iconografia non è un caso
+particolare gestito a parte, ma un ulteriore asse dello stesso
+strumento di analisi.
+
+\screenshotplaceholder{7cm}{Sezione iconografica di una scheda, con i descrittori strutturati applicati}
+
+\screenshotplaceholder{7.5cm}{Heatmap delle co-occorrenze tra attributi iconografici, onomastici e geografici}
+
+\subsection{Onomastica ed epiteti divini}
+
+Se la scheda descrittiva resta lo strumento naturale per consultare una
+singola epigrafe, un corpus come quello raccolto da ILA pone anche
+un'esigenza diversa: quella di orientarsi nell'insieme delle divinità e
+delle figure onomastiche attestate, prima ancora di sapere quale singola
+epigrafe si vuole consultare. A questo scopo sono state progettate due
+viste di navigazione dedicate, concettualmente distinte pur condividendo
+lo stesso principio ispiratore: restituire, in forma sintetica e
+scorrevole, un indice che nella tradizione a stampa richiederebbe
+sfogliare l'intero repertorio.
+
+La prima vista riguarda le divinità e i rispettivi epiteti cultuali, e ne
+propone una presentazione in forma di elenco alfabetico disposto lungo
+una linea diagonale che attraversa la pagina, con le voci più recenti
+progressivamente sfalsate verso destra --- una soluzione visiva debitrice
+del linguaggio grafico dei manifesti o delle locandine espositive,
+piuttosto che di quello, più severo, dei repertori scientifici
+tradizionali. Ogni voce, selezionata mediante scorrimento continuo della
+pagina, apre l'elenco delle epigrafi in cui quel nome, o quel
+particolare epiteto, è attestato. La seconda vista riguarda invece il
+registro onomastico più ampio (nomi propri, patronimici, cariche),
+organizzato secondo il modello, familiare a chi ha consuetudine con
+repertori e indici editoriali a stampa, della rubrica alfabetica
+verticale, corredata da un indice rapido A--Z a margine della pagina che
+consente di raggiungere direttamente una lettera senza dover scorrere
+l'intero elenco.
+
+Entrambe le viste dispongono di un campo di ricerca libera che filtra
+l'elenco in tempo reale mentre l'utente digita. La ricerca è stata resa
+volutamente sensibile a maiuscole e minuscole: nel dominio onomastico e
+teonimico trattato dal corpus, iniziale maiuscola e minuscola non sono
+equivalenti dal punto di vista filologico allo stesso modo in cui lo
+sono, ad esempio, in una ricerca su prosa corrente, e restituire risultati
+insensibili alla capitalizzazione avrebbe rischiato di confondere, in
+alcuni casi, forme che nel testo originale sono tenute volutamente
+distinte.
+
+\screenshotplaceholder{8cm}{Elenco diagonale delle divinità ed epiteti, in stile locandina}
+
+\screenshotplaceholder{8cm}{Rubrica onomastica alfabetica con indice laterale A--Z}
+
+\subsection{Ricerca}
+
+L'interfaccia digitale dispone di un modulo di ricerca che consente di
+effettuare interrogazioni sulle epigrafi sui diversi attributi che le
+caratterizzano: materiale del supporto, tipologia di monumento, luogo di
+provenienza, lingua dell'iscrizione, datazione e, come illustrato nella
+sottosezione precedente, singoli descrittori iconografici. È inoltre
+disponibile una modalità di ricerca testuale libera sul testo delle
+epigrafi, con normalizzazione dei segni diacritici greci, così da
+restituire risultati coerenti indipendentemente dalla presenza o assenza
+di accenti e spiriti nella stringa di ricerca inserita dall'utente.
+
+I risultati di ciascuna operazione di ricerca vengono presentati in
+forma di elenco, con accesso diretto alla scheda descrittiva completa di
+ciascuna epigrafe individuata, in modo da rendere il passaggio dalla
+ricerca alla consultazione del singolo monumento quanto più diretto e
+intuitivo possibile.
+
+\screenshotplaceholder{7cm}{Interfaccia del modulo di ricerca con filtri combinati}
+
+\section{Considerazioni finali e sviluppi futuri}
+
+Il lavoro descritto in questo articolo rappresenta un primo bilancio
+delle attività di sviluppo del progetto ILA, condotte parallelamente su
+più fronti: il riconoscimento ottico e la trascrizione dei testi a
+partire dall'edizione a stampa di riferimento, l'adozione e
+l'adattamento di un sistema di marcatura filologica consolidato, la
+revisione sistematica della classificazione di divinità ed epiteti
+sull'intero corpus, e la progettazione di un'interfaccia di consultazione
+che affianca, agli strumenti tradizionali di ricerca epigrafica, una
+sezione dedicata alla descrizione strutturata dell'iconografia dei
+monumenti --- aspetto che, come si è detto, risultava finora trattato
+solo in forma discorsiva nella letteratura di riferimento --- e due viste
+di navigazione pensate specificamente per orientarsi nell'insieme delle
+divinità, degli epiteti e delle figure onomastiche attestate nel corpus.
+
+L'approccio complessivamente seguito privilegia la trasparenza e la
+verificabilità del dato rispetto alla comodità di gestione a breve
+termine: si è scelto di non introdurre alcun formato intermedio
+semplificato tra il dato grezzo e la sua codifica filologica, e di non
+integrare mai automaticamente informazioni non direttamente attestate
+dalle fonti. Questa scelta comporta un onere maggiore nelle fasi di
+sviluppo e di revisione, ma garantisce che ogni informazione presentata
+all'utente sia sempre riconducibile, in maniera diretta e verificabile,
+alla fonte da cui deriva.
+
+Per quanto riguarda gli sviluppi futuri, il lavoro prosegue
+principalmente su due fronti. Da un lato si sta portando avanti la
+revisione sistematica, voce per voce, delle trascrizioni derivate
+dall'edizione a stampa originaria, sulla base di un confronto diretto
+con le fonti primarie disponibili, così da ridurre progressivamente la
+dipendenza dal testo di Lane e trasformarlo, per ciascuna voce
+revisionata, da testo sottostante a semplice riferimento bibliografico.
+Dall'altro lato si prevede di ampliare ulteriormente il vocabolario
+controllato utilizzato per la descrizione iconografica, e di
+sviluppare strumenti di confronto comparativo tra le diverse
+attestazioni iconografiche del dio Men, in modo da valorizzare appieno
+il potenziale interrogativo di questa nuova sezione dell'interfaccia
+digitale.
+
+\end{document}

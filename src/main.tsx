@@ -79,7 +79,7 @@ function StaticBoot({ children }: { children: React.ReactNode }) {
 }
 
 const root = (
-  <StrictMode>
+  <>
     {isStaticBuild ? (
       <PasswordGate>
         <StaticBoot>
@@ -89,7 +89,7 @@ const root = (
     ) : (
       <App />
     )}
-  </StrictMode>
+  </>
 );
 
 createRoot(document.getElementById('root')!).render(root);

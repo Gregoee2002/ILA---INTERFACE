@@ -56,6 +56,7 @@ import { ICONOGRAPHY_LABELS } from './lib/iconographyLabels';
 import { Monumento, FilterState, SortField, Traduzione, Bibliografia, Appunto, EntryRegistro, BugReport, EDITORIAL_STATUS_LABELS } from './types';
 import { RAW_DATA } from './data';
 import { monumentiToXml, xmlToMonumenti, formatIlaLabel } from './lib/xmlUtils';
+import { formatSecoliAttestazione } from './lib/chronology';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { PleiadesMap } from './components/PleiadesMap';
@@ -214,12 +215,16 @@ const getTintClass = (str: string) => {
 const DIAGONAL_ROW_H = 42;
 const DIAGONAL_BASE_X = 150;
 
-const DivinityDiagonalList = ({ items, onSelect, onActiveChange, searchTerm }: {
+const DivinityDiagonalList = ({ items, onSelect, onActiveChange, onScrollProgress, searchTerm }: {
   items: { name: string; count: number; epiteti: { name: string; count: number }[] }[];
   onSelect: (name: string) => void;
   // Chiamata a ogni cambio di riga attiva durante lo scroll (non solo al
   // click) — alimenta l'anteprima ad albero in tempo reale accanto alla lista.
   onActiveChange?: (name: string) => void;
+  // Chiamata a ogni frame di scroll con quanto si è scesi nella lista (0 a
+  // inizio, 1 dopo ~140px) — usata dal pannello padre per rimpicciolire
+  // l'header di ricerca/filtro mentre si scorre, senza farlo sparire.
+  onScrollProgress?: (amount: number) => void;
   // Termine di ricerca epiteti/divinità: non filtra la lista, evidenzia le
   // righe che hanno un epiteto (o un nome) corrispondente — vedi
   // EpithetStats per l'input di ricerca.
@@ -285,6 +290,7 @@ const DivinityDiagonalList = ({ items, onSelect, onActiveChange, searchTerm }: {
     const idx = Math.round(fraction * (sorted.length - 1));
     setActiveIndex(idx);
     setScrollFraction(fraction);
+    onScrollProgress?.(Math.min(1, container.scrollTop / 140));
     if (onActiveChange && sorted[idx]) {
       const name = sorted[idx].name;
       if (debounceTimer.current) window.clearTimeout(debounceTimer.current);
@@ -490,14 +496,10 @@ const EpithetTree = ({ divinity, epithets, onSelectEpithet, onSelectAll, preview
 
   return (
     <motion.div {...fadeSwap} className="flex-1 flex flex-col overflow-hidden">
-      <div className="mb-4 flex items-center gap-3 text-[10px] font-sans font-bold uppercase tracking-widest text-muted">
-        <span>{divinity.count} occorrenze</span>
-        <span className="text-border">·</span>
-        <span>{divinity.regions} {divinity.regions === 1 ? 'regione' : 'regioni'}</span>
-        <span className="text-border">·</span>
-        <span>{epithets.length} {epithets.length === 1 ? 'epiteto' : 'epiteti'} co-occorrenti</span>
-      </div>
-
+      {/* L'intestazione (occorrenze/regioni/epiteti) vive nel pannello
+          padre insieme a ricerca e filtro, non qui — vedi EpithetStats,
+          così resta visibile anche quando non c'è ancora una divinità
+          attiva (nessun risultato per il filtro corrente). */}
       <div ref={rowAreaRef} className="flex-1 flex items-center overflow-hidden relative">
         {/* Raccordo radice→rami: un'unica curva per ogni epiteto
             attualmente visibile, ridisegnata a ogni scroll — una vera
@@ -884,6 +886,10 @@ function EpithetStats({ monumenti, onSelectMonumento }: { monumenti: Monumento[]
   // ad albero in tempo reale accanto alla lista, indipendentemente da
   // un'eventuale selezione già aperta sulle attestazioni.
   const [activeDivinityName, setActiveDivinityName] = useState<string | null>(null);
+  // Quanto si è scesi nella rubrica (0-1, satura dopo ~140px): rimpicciolisce
+  // l'header di ricerca/filtro del pannello destro mentre si scorre, senza
+  // farlo sparire — vedi onScrollProgress su DivinityDiagonalList.
+  const [listScroll, setListScroll] = useState(0);
   const [selected, setSelected] = useState<string | null>(null); // solo per l'onomastica
   // Ricerca epiteti (principale) / divinità: non filtra la lista, evidenzia
   // nella vista diagonale tutte le divinità che hanno un epiteto (o un nome)
@@ -1091,41 +1097,6 @@ function EpithetStats({ monumenti, onSelectMonumento }: { monumenti: Monumento[]
       <AnimatePresence mode="wait">
         {activeTab === 'divinita' && !selectedEpithet && (
           <motion.div key="divinita-list" {...fadeSwap} className="flex-1 flex flex-col overflow-hidden">
-            {divstats.length > 0 && (
-              <div className="mb-4 flex items-center justify-end gap-3">
-                <div className="relative flex-1 max-w-xs">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted/50 pointer-events-none" />
-                  <input
-                    type="text"
-                    value={epithetSearch}
-                    onChange={(e) => setEpithetSearch(e.target.value)}
-                    placeholder="Cerca epiteto o divinità…"
-                    className="w-full bg-[var(--card)] dark:bg-black/25 border border-[var(--border)]/50 dark:border-white/5 rounded-xl pl-9 pr-8 py-2 font-sans text-xs outline-none shadow-inner focus:border-accent/50 focus:ring-1 focus:ring-accent/30 hover:bg-[var(--sidebar)] dark:hover:bg-black/40 transition-all duration-300"
-                    style={{ backgroundColor: 'var(--card)', color: 'var(--ink)' }}
-                  />
-                  {epithetSearch && (
-                    <button
-                      onClick={() => setEpithetSearch('')}
-                      className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted/50 hover:text-accent transition-colors"
-                    >
-                      <X className="h-3.5 w-3.5" />
-                    </button>
-                  )}
-                </div>
-                <div className="relative w-56 shrink-0">
-                  <select
-                    className="w-full bg-[var(--card)] dark:bg-black/25 border border-[var(--border)]/50 dark:border-white/5 rounded-xl pl-3 pr-8 py-2 font-sans text-xs outline-none shadow-inner focus:border-accent/50 focus:ring-1 focus:ring-accent/30 hover:bg-[var(--sidebar)] dark:hover:bg-black/40 cursor-pointer appearance-none transition-all duration-300"
-                    style={{ backgroundColor: 'var(--card)', color: 'var(--ink)', WebkitAppearance: 'none' as const, appearance: 'none' as const }}
-                    value={divinitaRegionFilter}
-                    onChange={(e) => setDivinitaRegionFilter(e.target.value)}
-                  >
-                    <option value="" className="bg-parchment dark:bg-sidebar text-ink">Tutte le Regioni</option>
-                    {divinitaRegions.map(r => <option key={r} value={r} className="bg-parchment dark:bg-sidebar text-ink">{r}</option>)}
-                  </select>
-                  <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted/50 pointer-events-none" />
-                </div>
-              </div>
-            )}
             {divstats.length === 0 ? (
               <div className="text-center py-12 text-muted/40 text-sm italic">
                 Nessuna divinità estratta. Verifica che il corpus contenga tag &lt;persName type="divine"&gt;.
@@ -1134,19 +1105,78 @@ function EpithetStats({ monumenti, onSelectMonumento }: { monumenti: Monumento[]
               /* Rubrica verticale delle divinità a sinistra, anteprima ad
                  albero degli epiteti a destra — entrambe scorrevoli in modo
                  indipendente. L'albero segue in tempo reale la divinità
-                 attiva sullo scroll della rubrica (vedi onActiveChange /
+                 attiva sullo scroll/hover della rubrica (vedi onActiveChange /
                  activeDivinityName); un click, sulla rubrica o sull'albero,
-                 è l'unico modo per aprire davvero le attestazioni. */
+                 è l'unico modo per aprire davvero le attestazioni. Ricerca e
+                 filtro regione vivono nell'header del pannello destro, sullo
+                 stesso rigo della statistica occorrenze/regioni/epiteti —
+                 prima stavano su un rigo a sé sopra entrambe le colonne, con
+                 uno spazio vuoto enorme accanto a quella statistica. */
               <div className="flex-1 flex gap-8 overflow-hidden">
                 <div className="w-[380px] shrink-0 flex flex-col overflow-hidden">
                   <DivinityDiagonalList
                     items={filteredDivstats}
                     onSelect={(name) => openAttestations(name, ALL_EPITHETS)}
                     onActiveChange={setActiveDivinityName}
+                    onScrollProgress={setListScroll}
                     searchTerm={epithetSearch}
                   />
                 </div>
                 <div className="flex-1 flex flex-col overflow-hidden border-l border-border pl-8">
+                  <div className="mb-4 flex items-center justify-between gap-4 shrink-0">
+                    <div className="flex items-center gap-3 text-[10px] font-sans font-bold uppercase tracking-widest text-muted min-w-0">
+                      {activeDivinityStats ? (
+                        <>
+                          <span className="whitespace-nowrap">{activeDivinityStats.count} occorrenze</span>
+                          <span className="text-border">·</span>
+                          <span className="whitespace-nowrap">{activeDivinityStats.regions} {activeDivinityStats.regions === 1 ? 'regione' : 'regioni'}</span>
+                          <span className="text-border">·</span>
+                          <span className="whitespace-nowrap">{activeDivinityStats.epiteti.length} {activeDivinityStats.epiteti.length === 1 ? 'epiteto' : 'epiteti'} co-occorrenti</span>
+                        </>
+                      ) : (
+                        <span className="normal-case font-normal italic text-muted/50">Nessuna divinità da mostrare per questo filtro.</span>
+                      )}
+                    </div>
+                    {/* Si rimpicciolisce (non sparisce) mentre si scorre la
+                        rubrica a fianco — resta raggiungibile senza dover
+                        risalire in cima alla lista. */}
+                    <div
+                      className="flex items-center gap-3 shrink-0 transition-transform duration-200 ease-out"
+                      style={{ transform: `scale(${1 - listScroll * 0.22})`, transformOrigin: 'right center' }}
+                    >
+                      <div className="relative w-52">
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted/50 pointer-events-none" />
+                        <input
+                          type="text"
+                          value={epithetSearch}
+                          onChange={(e) => setEpithetSearch(e.target.value)}
+                          placeholder="Cerca epiteto o divinità…"
+                          className="w-full bg-[var(--card)] dark:bg-black/25 border border-[var(--border)]/50 dark:border-white/5 rounded-xl pl-9 pr-8 py-2 font-sans text-xs outline-none shadow-inner focus:border-accent/50 focus:ring-1 focus:ring-accent/30 hover:bg-[var(--sidebar)] dark:hover:bg-black/40 transition-all duration-300"
+                          style={{ backgroundColor: 'var(--card)', color: 'var(--ink)' }}
+                        />
+                        {epithetSearch && (
+                          <button
+                            onClick={() => setEpithetSearch('')}
+                            className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted/50 hover:text-accent transition-colors"
+                          >
+                            <X className="h-3.5 w-3.5" />
+                          </button>
+                        )}
+                      </div>
+                      <div className="relative w-44 shrink-0">
+                        <select
+                          className="w-full bg-[var(--card)] dark:bg-black/25 border border-[var(--border)]/50 dark:border-white/5 rounded-xl pl-3 pr-8 py-2 font-sans text-xs outline-none shadow-inner focus:border-accent/50 focus:ring-1 focus:ring-accent/30 hover:bg-[var(--sidebar)] dark:hover:bg-black/40 cursor-pointer appearance-none transition-all duration-300"
+                          style={{ backgroundColor: 'var(--card)', color: 'var(--ink)', WebkitAppearance: 'none' as const, appearance: 'none' as const }}
+                          value={divinitaRegionFilter}
+                          onChange={(e) => setDivinitaRegionFilter(e.target.value)}
+                        >
+                          <option value="" className="bg-parchment dark:bg-sidebar text-ink">Tutte le Regioni</option>
+                          {divinitaRegions.map(r => <option key={r} value={r} className="bg-parchment dark:bg-sidebar text-ink">{r}</option>)}
+                        </select>
+                        <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted/50 pointer-events-none" />
+                      </div>
+                    </div>
+                  </div>
                   {activeDivinityStats ? (
                     <EpithetTree
                       key="divinita-preview"
@@ -1157,9 +1187,7 @@ function EpithetStats({ monumenti, onSelectMonumento }: { monumenti: Monumento[]
                       preview
                     />
                   ) : (
-                    <div className="flex-1 flex items-center justify-center text-muted/40 text-sm italic">
-                      Nessuna divinità da mostrare per questo filtro.
-                    </div>
+                    <div className="flex-1" />
                   )}
                 </div>
               </div>
@@ -6296,6 +6324,7 @@ export default function App() {
                             { label: 'Regione', value: selectedMonumento.regione, type: 'regione' },
                             { label: 'Città', value: selectedMonumento.citta, type: 'citta' },
                             { label: 'Datazione', value: formatDateRange(selectedMonumento.data_inizio, selectedMonumento.data_fine), type: '' },
+                            { label: 'Secolo di attestazione', value: formatSecoliAttestazione(selectedMonumento.data_inizio, selectedMonumento.data_fine), type: '' },
                             { label: 'Tipologia', value: selectedMonumento.tipo, type: 'tipo' },
                             { label: 'Materiale', value: selectedMonumento.materiale, type: '' }
                           ].filter(item => item.value && item.value !== '-').map(item => (

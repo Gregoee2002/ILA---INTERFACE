@@ -10,6 +10,7 @@ import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
 import { Monumento } from '../types';
 import { cn } from '../lib/utils';
 import { formatIlaLabel } from '../lib/xmlUtils';
+import { formatSecoliAttestazione } from '../lib/chronology';
 import L from 'leaflet';
 
 // Fix for default marker icon in react-leaflet just in case
@@ -463,6 +464,10 @@ export const MapView: React.FC<MapViewProps> = ({ monumenti, onSelectMonumento }
                             <div className="text-xs text-ink/80 mt-1">
                               <span className="font-semibold text-muted text-[10px] uppercase mr-1">Data:</span>
                               {m.data || 'Ignota'}
+                            </div>
+                            <div className="text-xs text-ink/80">
+                              <span className="font-semibold text-muted text-[10px] uppercase mr-1">Secolo:</span>
+                              {formatSecoliAttestazione(m.data_inizio, m.data_fine)}
                             </div>
                             <div className="text-xs text-ink/80 italic">
                               <span className="font-semibold text-muted text-[10px] uppercase mr-1 not-italic">Tipo:</span>

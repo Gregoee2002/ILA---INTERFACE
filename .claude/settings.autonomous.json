@@ -1,0 +1,44 @@
+{
+  "//": "Settings dedicati alle run autonome. Usare con: claude --settings .claude/settings.autonomous.json",
+  "//deny_note": "Queste regole sono un secondo livello di sicurezza INDIPENDENTE dal prompt: valgono anche se il testo del task viene formulato male o l'istruzione viene fraintesa.",
+  "permissions": {
+    "allow": [
+      "Read(**)",
+      "Grep(**)",
+      "Glob(**)",
+      "Edit(src/**)",
+      "Write(src/**)",
+      "Edit(server.ts)",
+      "Write(server.ts)",
+      "Edit(.github/workflows/**)",
+      "Write(.github/workflows/**)",
+      "Bash(git status)",
+      "Bash(git diff*)",
+      "Bash(git add*)",
+      "Bash(git commit*)",
+      "Bash(git checkout -b*)",
+      "Bash(npm run*)",
+      "Bash(npm install*)",
+      "Bash(npx tsc*)"
+    ],
+    "deny": [
+      "Edit(corpus/**)",
+      "Write(corpus/**)",
+      "Edit(**/*.xml)",
+      "Write(**/*.xml)",
+      "Edit(**xenoData**)",
+      "Write(**xenoData**)",
+      "Edit(.env*)",
+      "Write(.env*)",
+      "Edit(src/lib/githubStorage.ts)",
+      "Bash(git push*)",
+      "Bash(git checkout main*)",
+      "Bash(git checkout master*)",
+      "Bash(git merge*)",
+      "Bash(git reset --hard*)",
+      "Bash(rm -rf*)",
+      "Bash(npm publish*)",
+      "Bash(*GITHUB_ALLOW_DELETE*)"
+    ]
+  }
+}
