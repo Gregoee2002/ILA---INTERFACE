@@ -268,6 +268,14 @@ const DivinityDiagonalList = ({ items, onSelect, onActiveChange, searchTerm }: {
     onActiveChange?.(name);
   };
 
+  // Hover su una riga: notifica subito, senza il debounce usato per lo
+  // scroll — al contrario dello scroll (che attraversa righe intermedie
+  // "di passaggio"), l'hover è già un gesto mirato su una voce precisa.
+  const onRowHover = (name: string) => {
+    if (debounceTimer.current) window.clearTimeout(debounceTimer.current);
+    notifyActive(name);
+  };
+
   const updateActive = () => {
     rafPending.current = false;
     const container = containerRef.current;
@@ -363,6 +371,7 @@ const DivinityDiagonalList = ({ items, onSelect, onActiveChange, searchTerm }: {
                 >
                   <button
                     onClick={() => onSelect(d.name)}
+                    onMouseEnter={() => { setActiveIndex(i); onRowHover(d.name); }}
                     className={cn(
                       "group relative w-full h-full text-left hover:bg-accent/[0.04] active:bg-accent/10 transition-all duration-200",
                       dimmed && "opacity-30"
@@ -518,18 +527,25 @@ const EpithetTree = ({ divinity, epithets, onSelectEpithet, onSelectAll, preview
         <div className="shrink-0 w-52 flex flex-col items-end pr-5 relative">
           <button onClick={onSelectAll} className="group text-right">
             {preview ? (
-              <AnimatePresence mode="wait">
-                <motion.span
-                  key={divinity.name}
-                  initial={{ opacity: 0, y: 6 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -6 }}
-                  transition={{ duration: 0.22, ease: EASE_OUT }}
-                  className="block text-2xl italic font-bold text-accent font-serif leading-tight group-hover:opacity-80 transition-opacity"
-                >
-                  {divinity.name}
-                </motion.span>
-              </AnimatePresence>
+              // Nessun mode="wait": il nome uscente e quello entrante si
+              // sovrappongono in dissolvenza (invece di lasciare un vuoto
+              // tra i due) — contenitore relative di altezza fissa perché le
+              // due istanze, sovrapposte in absolute, non si spingano a
+              // vicenda.
+              <div className="relative h-8 min-w-[8ch]">
+                <AnimatePresence initial={false}>
+                  <motion.span
+                    key={divinity.name}
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -8 }}
+                    transition={{ duration: 0.32, ease: EASE_OUT }}
+                    className="absolute inset-0 flex items-center justify-end text-2xl italic font-bold text-accent font-serif leading-tight group-hover:opacity-80 whitespace-nowrap"
+                  >
+                    {divinity.name}
+                  </motion.span>
+                </AnimatePresence>
+              </div>
             ) : (
               <motion.span
                 layoutId={`divname-${divinity.name}`}
