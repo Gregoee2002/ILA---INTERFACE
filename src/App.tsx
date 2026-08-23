@@ -205,21 +205,21 @@ const getTintClass = (str: string) => {
 };
 
 // Card "protagonista" per una divinità: nome, occorrenze, regioni, numero di epiteti
-// Elenco divinità "a locandina": ordine alfabetico, ogni riga scalata verso
-// destra rispetto alla precedente (nome a sinistra del punto, attestazioni a
-// destra), collegate da un'unica linea diagonale — stesso linguaggio di un
-// poster di tour date. Scorrevole, con la voce sotto il marcatore fisso
-// leggermente evidenziata durante lo scroll (stessa meccanica della
-// rubrica onomastica, vedi RUBRICA_MARKER_OFFSET).
+// Elenco divinità in rubrica: ordine alfabetico, tutte le righe allineate su
+// un'unica retta verticale (nome a sinistra del punto, attestazioni a
+// destra). Scorrevole, con la voce sotto il marcatore fisso leggermente
+// evidenziata durante lo scroll (stessa meccanica della rubrica onomastica,
+// vedi RUBRICA_MARKER_OFFSET). La voce attiva pilota anche l'anteprima ad
+// albero degli epiteti mostrata accanto (vedi onActiveChange).
 const DIAGONAL_ROW_H = 42;
-// Passo orizzontale per riga: DIAGONAL_ROW_H / tan(65°) — inclinazione della
-// diagonale a 65° rispetto all'orizzontale.
-const DIAGONAL_STEP_X = 19.6;
 const DIAGONAL_BASE_X = 150;
 
-const DivinityDiagonalList = ({ items, onSelect, searchTerm }: {
+const DivinityDiagonalList = ({ items, onSelect, onActiveChange, searchTerm }: {
   items: { name: string; count: number; epiteti: { name: string; count: number }[] }[];
   onSelect: (name: string) => void;
+  // Chiamata a ogni cambio di riga attiva durante lo scroll (non solo al
+  // click) — alimenta l'anteprima ad albero in tempo reale accanto alla lista.
+  onActiveChange?: (name: string) => void;
   // Termine di ricerca epiteti/divinità: non filtra la lista, evidenzia le
   // righe che hanno un epiteto (o un nome) corrispondente — vedi
   // EpithetStats per l'input di ricerca.
@@ -252,6 +252,21 @@ const DivinityDiagonalList = ({ items, onSelect, searchTerm }: {
   const [scrollFraction, setScrollFraction] = useState(0);
   const rafPending = useRef(false);
   const FADE_RANGE_ROWS = 5;
+  // L'anteprima ad albero accanto è più "pesante" (ricalcola curve SVG,
+  // rianima i rami) della semplice evidenziazione della riga: notificarla a
+  // ogni frame di scroll la farebbe sfarfallare attraverso ogni divinità
+  // intermedia durante uno scroll veloce. Si notifica quindi solo quando la
+  // riga attiva resta ferma per DEBOUNCE_MS — l'evidenziazione della lista
+  // resta invece istantanea, sganciata da questo ritardo.
+  const DEBOUNCE_MS = 140;
+  const lastNotified = useRef<string | null>(null);
+  const debounceTimer = useRef<number | null>(null);
+
+  const notifyActive = (name: string) => {
+    if (lastNotified.current === name) return;
+    lastNotified.current = name;
+    onActiveChange?.(name);
+  };
 
   const updateActive = () => {
     rafPending.current = false;
@@ -260,24 +275,30 @@ const DivinityDiagonalList = ({ items, onSelect, searchTerm }: {
     const maxScroll = container.scrollHeight - container.clientHeight;
     const fraction = maxScroll > 0 ? Math.min(1, Math.max(0, container.scrollTop / maxScroll)) : 1;
     const idx = Math.round(fraction * (sorted.length - 1));
-    // Panoramica orizzontale agganciata 1:1 allo scroll verticale, alla
-    // stessa pendenza della diagonale: la voce attiva resta sempre alla
-    // stessa X sullo schermo, invece di driftare come con una
-    // compensazione parziale — è quello che rende lo scorrimento uniforme
-    // (il contenitore resta overflow-x hidden per l'utente — lo scrollLeft
-    // è solo programmatico).
-    container.scrollLeft = container.scrollTop * (DIAGONAL_STEP_X / DIAGONAL_ROW_H);
     setActiveIndex(idx);
     setScrollFraction(fraction);
+    if (onActiveChange && sorted[idx]) {
+      const name = sorted[idx].name;
+      if (debounceTimer.current) window.clearTimeout(debounceTimer.current);
+      debounceTimer.current = window.setTimeout(() => notifyActive(name), DEBOUNCE_MS);
+    }
   };
   const onScroll = () => {
     if (rafPending.current) return;
     rafPending.current = true;
     requestAnimationFrame(updateActive);
   };
-  useLayoutEffect(() => { updateActive(); }, [sorted]);
+  useLayoutEffect(() => {
+    updateActive();
+    // La prima voce va mostrata subito, senza attendere il debounce.
+    if (sorted[0]) notifyActive(sorted[0].name);
+    return () => { if (debounceTimer.current) window.clearTimeout(debounceTimer.current); };
+  }, [sorted]);
 
-  const tickX = (i: number) => DIAGONAL_BASE_X + i * DIAGONAL_STEP_X;
+  // Tutte le righe allineate sulla stessa ascissa: retta verticale invece
+  // della precedente progressione diagonale (parametro mantenuto solo per
+  // compatibilità con le chiamate esistenti più sotto).
+  const tickX = (_i?: number) => DIAGONAL_BASE_X;
   const totalHeight = sorted.length * DIAGONAL_ROW_H;
 
   return (
@@ -414,11 +435,19 @@ const EPITHET_TREE_ROW_H = 40;
 // verticalmente e indipendente dalla radice (fissa) — necessario per
 // divinità come Men, che ha decine di epiteti: senza scroll indipendente
 // l'albero diventerebbe altissimo o i nodi illeggibili.
-const EpithetTree = ({ divinity, epithets, onSelectEpithet, onSelectAll }: {
+const EpithetTree = ({ divinity, epithets, onSelectEpithet, onSelectAll, preview = false }: {
   divinity: { name: string; count: number; regions: number };
   epithets: { name: string; count: number }[];
   onSelectEpithet: (name: string) => void;
   onSelectAll: () => void;
+  // Modalità anteprima: usata nella rubrica divinità per tenere l'albero
+  // sempre visibile e aggiornato in tempo reale mentre si scorre la lista,
+  // invece che solo dopo un click. Stesso layout e stesso scroll indipendente
+  // dei rami; cambia solo l'animazione di transizione tra una divinità e
+  // l'altra (radice in dissolvenza, rami sostituiti uno a uno invece del
+  // layoutId condiviso, che qui sarebbe attivo su due istanze contemporanee —
+  // una nella rubrica e una qui — e andrebbe in conflitto).
+  preview?: boolean;
   key?: string | number;
 }) => {
   const maxCount = Math.max(1, ...epithets.map(e => e.count));
@@ -480,17 +509,35 @@ const EpithetTree = ({ divinity, epithets, onSelectEpithet, onSelectAll }: {
             })}
           </svg>
         )}
-        {/* Radice: nome della divinità, transizione condivisa con la sua
-            voce sulla diagonale (stesso layoutId) — visivamente "resta" lei
-            mentre il resto della diagonale sfuma via. */}
+        {/* Radice: nome della divinità. Fuori da preview condivide il
+            layoutId con la sua voce sulla rubrica per una transizione
+            fluida da lista a vista dedicata. In preview quel layoutId
+            sarebbe attivo su due istanze contemporanee (la riga in rubrica e
+            questa radice) e andrebbe in conflitto — qui la radice cambia
+            invece con una dissolvenza propria, agganciata al nome. */}
         <div className="shrink-0 w-52 flex flex-col items-end pr-5 relative">
           <button onClick={onSelectAll} className="group text-right">
-            <motion.span
-              layoutId={`divname-${divinity.name}`}
-              className="block text-2xl italic font-bold text-accent font-serif leading-tight group-hover:opacity-80 transition-opacity"
-            >
-              {divinity.name}
-            </motion.span>
+            {preview ? (
+              <AnimatePresence mode="wait">
+                <motion.span
+                  key={divinity.name}
+                  initial={{ opacity: 0, y: 6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -6 }}
+                  transition={{ duration: 0.22, ease: EASE_OUT }}
+                  className="block text-2xl italic font-bold text-accent font-serif leading-tight group-hover:opacity-80 transition-opacity"
+                >
+                  {divinity.name}
+                </motion.span>
+              </AnimatePresence>
+            ) : (
+              <motion.span
+                layoutId={`divname-${divinity.name}`}
+                className="block text-2xl italic font-bold text-accent font-serif leading-tight group-hover:opacity-80 transition-opacity"
+              >
+                {divinity.name}
+              </motion.span>
+            )}
             <span className="block text-xs font-sans font-bold text-muted mt-1">
               {divinity.count}× — vedi tutte
             </span>
@@ -510,29 +557,41 @@ const EpithetTree = ({ divinity, epithets, onSelectEpithet, onSelectAll }: {
             </div>
           ) : (
             <div className="relative" style={{ height: totalHeight }}>
-              {epithets.map((e, i) => (
-                <button
-                  key={e.name}
-                  onClick={() => onSelectEpithet(e.name)}
-                  className="group absolute inset-x-0 flex items-center gap-4 hover:bg-accent/[0.04] transition-colors"
-                  style={{ top: i * EPITHET_TREE_ROW_H, height: EPITHET_TREE_ROW_H, paddingLeft: 24 }}
-                >
-                  <span className="w-40 shrink-0 text-left text-base font-serif italic text-ink group-hover:text-accent transition-colors truncate">
-                    {e.name}
-                  </span>
-                  <div className="flex-1 min-w-0 flex items-center gap-3 pr-4">
-                    <div className="flex-1 max-w-[140px] h-1.5 bg-border/40 rounded-full overflow-hidden">
-                      <div
-                        className="h-full bg-accent/60 rounded-full transition-all"
-                        style={{ width: `${Math.max(4, (e.count / maxCount) * 100)}%` }}
-                      />
-                    </div>
-                    <span className="w-10 shrink-0 text-right text-xs font-sans font-bold text-muted tabular-nums">
-                      {e.count}×
+              {/* In preview i rami si sostituiscono uno a uno (dissolvenza +
+                  lieve scorrimento, con un piccolo sfalsamento in cascata)
+                  invece di cambiare di scatto: è l'"albero che si
+                  rigenera" mentre si scorre la rubrica a fianco. Fuori da
+                  preview restano statici (nessuna voce cambia senza un
+                  click, che rimonta l'intero componente più in alto). */}
+              <AnimatePresence initial={false}>
+                {epithets.map((e, i) => (
+                  <motion.button
+                    key={preview ? `${divinity.name}-${e.name}` : e.name}
+                    onClick={() => onSelectEpithet(e.name)}
+                    initial={preview ? { opacity: 0, x: -14 } : false}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={preview ? { opacity: 0, x: 14 } : undefined}
+                    transition={{ duration: 0.22, delay: preview ? Math.min(i, 12) * 0.018 : 0, ease: EASE_OUT }}
+                    className="group absolute inset-x-0 flex items-center gap-4 hover:bg-accent/[0.04] transition-colors"
+                    style={{ top: i * EPITHET_TREE_ROW_H, height: EPITHET_TREE_ROW_H, paddingLeft: 24 }}
+                  >
+                    <span className="w-40 shrink-0 text-left text-base font-serif italic text-ink group-hover:text-accent transition-colors truncate">
+                      {e.name}
                     </span>
-                  </div>
-                </button>
-              ))}
+                    <div className="flex-1 min-w-0 flex items-center gap-3 pr-4">
+                      <div className="flex-1 max-w-[140px] h-1.5 bg-border/40 rounded-full overflow-hidden">
+                        <div
+                          className="h-full bg-accent/60 rounded-full transition-all"
+                          style={{ width: `${Math.max(4, (e.count / maxCount) * 100)}%` }}
+                        />
+                      </div>
+                      <span className="w-10 shrink-0 text-right text-xs font-sans font-bold text-muted tabular-nums">
+                        {e.count}×
+                      </span>
+                    </div>
+                  </motion.button>
+                ))}
+              </AnimatePresence>
             </div>
           )}
         </div>
@@ -798,8 +857,17 @@ const ALL_EPITHETS = '__all__';
 
 function EpithetStats({ monumenti, onSelectMonumento }: { monumenti: Monumento[], onSelectMonumento: (m: Monumento) => void }) {
   const [activeTab, setActiveTab] = useState<'divinita' | 'onomastica'>('divinita');
+  // selectedDivinity/selectedEpithet: impostati insieme, solo al click (sulla
+  // rubrica o sull'albero) — è l'unico modo per aprire le attestazioni. Fino
+  // a quel momento restano null anche se l'albero a fianco mostra già
+  // un'altra divinità: quello è governato da activeDivinityName, aggiornato
+  // in continuo dallo scroll della rubrica (vedi sotto).
   const [selectedDivinity, setSelectedDivinity] = useState<string | null>(null);
   const [selectedEpithet, setSelectedEpithet] = useState<string | null>(null);
+  // Divinità "attiva" durante lo scroll della rubrica: alimenta l'anteprima
+  // ad albero in tempo reale accanto alla lista, indipendentemente da
+  // un'eventuale selezione già aperta sulle attestazioni.
+  const [activeDivinityName, setActiveDivinityName] = useState<string | null>(null);
   const [selected, setSelected] = useState<string | null>(null); // solo per l'onomastica
   // Ricerca epiteti (principale) / divinità: non filtra la lista, evidenzia
   // nella vista diagonale tutte le divinità che hanno un epiteto (o un nome)
@@ -896,9 +964,13 @@ function EpithetStats({ monumenti, onSelectMonumento }: { monumenti: Monumento[]
     return set.size;
   }, [divstats]);
 
-  const selectedDivinityStats = useMemo(
-    () => divstats.find(d => d.name === selectedDivinity) || null,
-    [divstats, selectedDivinity]
+  // Divinità mostrata nell'anteprima ad albero: quella attiva sullo scroll
+  // se ancora presente nella lista filtrata, altrimenti la prima della
+  // lista filtrata (es. subito dopo aver applicato un filtro regione che
+  // esclude la divinità in anteprima).
+  const activeDivinityStats = useMemo(
+    () => filteredDivstats.find(d => d.name === activeDivinityName) || filteredDivstats[0] || null,
+    [filteredDivstats, activeDivinityName]
   );
 
   // ── Monumenti per l'epiteto selezionato (nel contesto della divinità) ─────
@@ -919,25 +991,29 @@ function EpithetStats({ monumenti, onSelectMonumento }: { monumenti: Monumento[]
     return monumenti.filter(m => m.onomastica?.includes(selected));
   }, [monumenti, selected]);
 
-  const anySelection = activeTab === 'divinita' ? !!selectedDivinity : !!selected;
+  // Per le divinità la selezione vera e propria è solo l'apertura delle
+  // attestazioni (selectedEpithet): la rubrica e l'anteprima ad albero
+  // restano sempre la vista di base, anche mentre activeDivinityName cambia
+  // in continuo con lo scroll.
+  const anySelection = activeTab === 'divinita' ? !!selectedEpithet : !!selected;
 
-  // Risale di un livello: attestazioni → grafo → griglia divinità (o, per
+  // Risale di un livello: attestazioni → rubrica+albero (o, per
   // l'onomastica, direttamente attestazioni → griglia)
   const goBack = () => {
     if (activeTab === 'divinita') {
-      if (selectedEpithet) setSelectedEpithet(null);
-      else setSelectedDivinity(null);
+      setSelectedEpithet(null);
+      setSelectedDivinity(null);
     } else {
       setSelected(null);
     }
   };
 
-  // Torna direttamente alla lista diagonale delle divinità, saltando il
-  // livello intermedio degli epiteti — utile da dentro le attestazioni,
-  // dove "Indietro" da solo richiederebbe due click.
-  const goToDivinityList = () => {
-    setSelectedDivinity(null);
-    setSelectedEpithet(null);
+  // Apre le attestazioni per la divinità/epiteto scelto — unico punto in cui
+  // si "seleziona" davvero qualcosa nella tab divinità, sia dal click su una
+  // riga della rubrica sia dal click su radice/ramo dell'anteprima ad albero.
+  const openAttestations = (divinityName: string, epithet: string) => {
+    setSelectedDivinity(divinityName);
+    setSelectedEpithet(epithet);
   };
 
   return (
@@ -949,14 +1025,6 @@ function EpithetStats({ monumenti, onSelectMonumento }: { monumenti: Monumento[]
           transition={{ duration: 0.35, ease: EASE_OUT }}
           className="mb-6 flex justify-end items-center gap-2 shrink-0"
         >
-          {activeTab === 'divinita' && selectedEpithet && (
-            <button
-              onClick={goToDivinityList}
-              className="text-[10px] font-sans font-bold uppercase tracking-widest text-muted border border-border px-4 py-2 hover:bg-accent hover:text-white hover:border-accent transition-all"
-            >
-              ← Tutte le divinità
-            </button>
-          )}
           <button
             onClick={goBack}
             className="text-[10px] font-sans font-bold uppercase tracking-widest text-accent border border-accent px-4 py-2 hover:bg-accent hover:text-white transition-all"
@@ -1005,10 +1073,10 @@ function EpithetStats({ monumenti, onSelectMonumento }: { monumenti: Monumento[]
 
       {/* Contenuto: dissolvenza tra i livelli di navigazione */}
       <AnimatePresence mode="wait">
-        {activeTab === 'divinita' && !selectedDivinity && (
+        {activeTab === 'divinita' && !selectedEpithet && (
           <motion.div key="divinita-list" {...fadeSwap} className="flex-1 flex flex-col overflow-hidden">
             {divstats.length > 0 && (
-              <div className="mb-2 flex items-center justify-end gap-3">
+              <div className="mb-4 flex items-center justify-end gap-3">
                 <div className="relative flex-1 max-w-xs">
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted/50 pointer-events-none" />
                   <input
@@ -1047,19 +1115,40 @@ function EpithetStats({ monumenti, onSelectMonumento }: { monumenti: Monumento[]
                 Nessuna divinità estratta. Verifica che il corpus contenga tag &lt;persName type="divine"&gt;.
               </div>
             ) : (
-              <DivinityDiagonalList items={filteredDivstats} onSelect={setSelectedDivinity} searchTerm={epithetSearch} />
+              /* Rubrica verticale delle divinità a sinistra, anteprima ad
+                 albero degli epiteti a destra — entrambe scorrevoli in modo
+                 indipendente. L'albero segue in tempo reale la divinità
+                 attiva sullo scroll della rubrica (vedi onActiveChange /
+                 activeDivinityName); un click, sulla rubrica o sull'albero,
+                 è l'unico modo per aprire davvero le attestazioni. */
+              <div className="flex-1 flex gap-8 overflow-hidden">
+                <div className="w-[380px] shrink-0 flex flex-col overflow-hidden">
+                  <DivinityDiagonalList
+                    items={filteredDivstats}
+                    onSelect={(name) => openAttestations(name, ALL_EPITHETS)}
+                    onActiveChange={setActiveDivinityName}
+                    searchTerm={epithetSearch}
+                  />
+                </div>
+                <div className="flex-1 flex flex-col overflow-hidden border-l border-border pl-8">
+                  {activeDivinityStats ? (
+                    <EpithetTree
+                      key="divinita-preview"
+                      divinity={activeDivinityStats}
+                      epithets={activeDivinityStats.epiteti}
+                      onSelectEpithet={(name) => openAttestations(activeDivinityStats.name, name)}
+                      onSelectAll={() => openAttestations(activeDivinityStats.name, ALL_EPITHETS)}
+                      preview
+                    />
+                  ) : (
+                    <div className="flex-1 flex items-center justify-center text-muted/40 text-sm italic">
+                      Nessuna divinità da mostrare per questo filtro.
+                    </div>
+                  )}
+                </div>
+              </div>
             )}
           </motion.div>
-        )}
-
-        {activeTab === 'divinita' && selectedDivinity && !selectedEpithet && selectedDivinityStats && (
-          <EpithetTree
-            key="divinita-epiteti"
-            divinity={selectedDivinityStats}
-            epithets={selectedDivinityStats.epiteti}
-            onSelectEpithet={(name) => setSelectedEpithet(name)}
-            onSelectAll={() => setSelectedEpithet(ALL_EPITHETS)}
-          />
         )}
 
         {activeTab === 'divinita' && selectedDivinity && selectedEpithet && (
