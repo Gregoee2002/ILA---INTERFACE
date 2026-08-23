@@ -942,38 +942,6 @@ function EpithetStats({ monumenti, onSelectMonumento }: { monumenti: Monumento[]
 
   return (
     <div className="flex-1 flex flex-col overflow-hidden">
-      {/* Header: si ritrae elegantemente (altezza + dissolvenza) non appena
-          si entra nel dettaglio di una divinità o di un nome, per lasciare
-          più spazio verticale alla lista/grafo sottostante. La barra con i
-          pulsanti di rientro resta invece sempre visibile mentre si è in
-          drill-down, ma occupa solo lo spazio minimo. */}
-      <div className="overflow-hidden shrink-0">
-        <AnimatePresence initial={false}>
-          {!anySelection && (
-            <motion.div
-              key="stats-header"
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: 'auto', opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.4, ease: EASE_OUT }}
-            >
-              <div className="pb-8">
-                <div className="text-[10px] font-sans font-bold uppercase tracking-[0.22em] text-accent/70 mb-2">Statistiche del Corpus</div>
-                <h2 className="text-3xl md:text-4xl font-bold italic mb-2">
-                  {activeTab === 'divinita' ? 'Divinità' : 'Onomastica'}
-                </h2>
-                <div className="ornament-rule !my-0 mb-3 max-w-[6rem] mx-0" />
-                <p className="text-sm text-muted font-serif">
-                  {activeTab === 'divinita'
-                    ? 'Le divinità attestate nel corpus. Seleziona una divinità per esplorarne gli epiteti.'
-                    : 'Indice alfabetico delle persone attestate nel corpus. Ogni nome è pressoché unico: qui non si tratta di statistiche, ma di un elenco da consultare.'}
-                </p>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
-
       {anySelection && (
         <motion.div
           initial={{ opacity: 0, y: -8 }}
@@ -1000,7 +968,7 @@ function EpithetStats({ monumenti, onSelectMonumento }: { monumenti: Monumento[]
 
       {/* Tab selector */}
       {!anySelection && (
-        <div className="flex gap-0 mb-8 border-b border-border">
+        <div className="flex gap-0 mb-6 border-b border-border">
           <button
             onClick={() => setActiveTab('divinita')}
             className={cn(
