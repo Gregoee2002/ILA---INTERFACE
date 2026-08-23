@@ -3475,7 +3475,7 @@ function sanitizeEntryId(raw: string): string {
   return (cleaned || 'entry').slice(0, 128);
 }
 
-export default function App() {
+export default function App({ skipLanding = false }: { skipLanding?: boolean } = {}) {
   type ThemePreference = 'light' | 'dark' | 'system';
   const [theme, setTheme] = useState<ThemePreference>(() => {
     const saved = safeStorage.getItem('theme-preference') as ThemePreference;
@@ -3517,7 +3517,7 @@ export default function App() {
   const [monumenti, setMonumenti] = useState<Monumento[]>([]);
 
   const [loading, setLoading] = useState(true);
-  const [showLanding, setShowLanding] = useState(true);
+  const [showLanding, setShowLanding] = useState(!skipLanding);
   const [activeView, setActiveView] = useState<AppView>('home');
   const [editorTargetEntryId, setEditorTargetEntryId] = useState<string | null>(null);
   const [hasNavigated, setHasNavigated] = useState(false);
