@@ -5262,7 +5262,7 @@ export default function App() {
                   </div>
   
                   <div className="flex-1 overflow-y-auto custom-scrollbar px-6">
-                    <div className="hidden md:grid md:grid-cols-[1.5rem_1.5fr_4fr_2fr_2fr_1.5rem] lg:grid-cols-[1.5rem_1.5fr_4fr_2fr_2fr_1.5rem] xl:grid-cols-[1.5rem_1fr_3fr_1.5fr_1fr_2.5fr_1.5rem] gap-2 border-b border-border py-4 text-[10px] font-bold uppercase tracking-tighter text-muted/60 sticky top-0 bg-[var(--card)]/95 backdrop-blur-md z-10 px-2 lg:px-0" >
+                    <div className="hidden md:grid md:grid-cols-[1.5rem_1.5fr_4fr_2fr_2fr_1.5rem] lg:grid-cols-[1.5rem_1.5fr_4fr_2fr_2fr_1.5rem] xl:grid-cols-[1.5rem_0.8fr_2.7fr_1.5fr_1fr_3fr_1.5rem] gap-2 border-b border-border py-4 text-[10px] font-bold uppercase tracking-tighter text-muted/60 sticky top-0 bg-[var(--card)]/95 backdrop-blur-md z-10 px-2 lg:px-0" >
                       <div className="flex items-center justify-center">
                         <button
                           onClick={() => selectedIds.size === filteredMonumenti.length ? deselectAll() : selectAll()}
@@ -5317,7 +5317,7 @@ export default function App() {
                             transition={{ backgroundColor: { duration: 0.25, ease: EASE_OUT }, layout: SPRING_SNAPPY }}
                             whileHover={!isSelected ? { backgroundColor: 'rgba(45,45,45,0.03)' } : undefined}
                             className={cn(
-                              "relative block md:grid md:grid-cols-[1.5rem_1.5fr_4fr_2fr_2fr_1.5rem] lg:grid-cols-[1.5rem_1.5fr_4fr_2fr_2fr_1.5rem] xl:grid-cols-[1.5rem_1fr_3fr_1.5fr_1fr_2.5fr_1.5rem] gap-2 border-b py-3 md:py-4 group items-center px-2 lg:px-0 min-h-[76px] md:h-[76px] overflow-hidden [&>div]:min-w-0",
+                              "relative block md:grid md:grid-cols-[1.5rem_1.5fr_4fr_2fr_2fr_1.5rem] lg:grid-cols-[1.5rem_1.5fr_4fr_2fr_2fr_1.5rem] xl:grid-cols-[1.5rem_0.8fr_2.7fr_1.5fr_1fr_3fr_1.5rem] gap-2 border-b py-3 md:py-4 group items-center px-2 lg:px-0 min-h-[76px] md:h-[76px] overflow-hidden [&>div]:min-w-0",
                               isSelected ? "border-accent/20" : "border-border/30 cursor-pointer"
                             )}
                             
@@ -5462,7 +5462,7 @@ export default function App() {
                               </div>
                               <div className="hidden xl:block">
                                 <div
-                                  className="text-[10px] italic text-muted/50 leading-relaxed font-serif overflow-hidden"
+                                  className="text-[11px] italic text-ink/70 leading-relaxed font-serif overflow-hidden"
                                   style={{ display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' as const }}
                                 >
                                   {stripXml(m.testo) || '[Anepigrafe]'}
