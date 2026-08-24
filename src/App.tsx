@@ -2219,27 +2219,31 @@ function Timeline({ monumenti, onSelect }: { monumenti: Monumento[], onSelect: (
   }, [sorted]);
   const yearSpan = yearMax - yearMin;
 
-  // Scala cronologica di base (px/anno). Lo zoom la moltiplica: si può espandere un tratto denso
-  // (es. il II-III sec. d.C.) senza perdere la proporzione reale col resto dell'asse, oppure
-  // comprimerla per avere una vista d'insieme più ampia del solito.
-  const BASE_PX_PER_YEAR = 3.4;
-  const pxPerYear = BASE_PX_PER_YEAR * zoom;
-  const naturalWidth = yearSpan * pxPerYear;
-  const yearToLeft = (year: number) => (year - yearMin) * pxPerYear;
+  // Scala cronologica di base (px/anno) — è anche la scala di LAYOUT, fissa e indipendente
+  // dallo zoom. In precedenza lo zoom ricalcolava l'intero layout (bucket, cluster, posizioni)
+  // a ogni passo: il ricalcolo dei bucket in particolare faceva scattare improvvisamente
+  // interi gruppi di diramazioni ("zoom troppo brusco"). Ora la "linea del tempo" viene
+  // disegnata UNA volta sola a questa scala fissa, come un'immagine; lo zoom (vedi
+  // renderScale più sotto) la ingrandisce o rimpicciolisce con una trasformazione CSS
+  // animata, senza mai alterarne la struttura interna.
+  const LAYOUT_PX_PER_YEAR = 3.4;
+  const BASE_PX_PER_YEAR = LAYOUT_PX_PER_YEAR;
+  // pxPerYear resta la densità "a schermo" (layout × zoom): usata per tutti i calcoli che
+  // convertono una posizione del mouse/scroll in anni, che devono ragionare in pixel visibili.
+  const pxPerYear = LAYOUT_PX_PER_YEAR * zoom;
+  const naturalWidth = yearSpan * LAYOUT_PX_PER_YEAR;
+  const yearToLeft = (year: number) => (year - yearMin) * LAYOUT_PX_PER_YEAR;
 
-  // Ampiezza del bucket temporale: non è più fissa, ma reattiva allo zoom corrente.
-  // A schermata intera (zoom basso) un tratto denso comprimerebbe decine di
-  // diramazioni distinte nello stesso pugno di pixel, costringendole a impilarsi
-  // su corsie profonde ("troppo in alto o in basso"); qui invece i bucket si
-  // allargano finché sono zoomati fuori — assorbendo la densità in gruppi più
-  // grandi invece che in più diramazioni via via più lontane dall'asse — e si
-  // restringono automaticamente man mano che l'utente zooma, rivelando il
-  // dettaglio reale. BUCKET_TARGET_PX è la larghezza-bersaglio in pixel di un
-  // bucket sull'asse, indipendente dal livello di zoom.
+  // Ampiezza del bucket temporale: fissa (calcolata alla scala di layout), non più
+  // reattiva allo zoom — è parte della "linea del tempo" disegnata una sola volta.
+  // A schermata intera un tratto denso comprimerebbe decine di diramazioni distinte
+  // nello stesso pugno di pixel, costringendole a impilarsi su corsie profonde ("troppo
+  // in alto o in basso"); il bucket assorbe quella densità in gruppi. BUCKET_TARGET_PX è
+  // la larghezza-bersaglio in pixel di un bucket alla scala di layout (zoom visivo 1×).
   const BUCKET_TARGET_PX = 90;
   const bucketYears = useMemo(
-    () => Math.max(2, Math.min(60, Math.round(BUCKET_TARGET_PX / pxPerYear))),
-    [pxPerYear]
+    () => Math.max(2, Math.min(60, Math.round(BUCKET_TARGET_PX / LAYOUT_PX_PER_YEAR))),
+    []
   );
 
   // Raggruppa le schede vicine nel tempo in un'unica diramazione (bucket a passo
@@ -2355,7 +2359,7 @@ function Timeline({ monumenti, onSelect }: { monumenti: Monumento[], onSelect: (
       return { cluster, left, side, lane, bow, connectorHeight };
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [clusters, pxPerYear, yearMin]);
+  }, [clusters, yearMin]);
 
   const bandVerticalReach = useMemo(
     () => clusterLayout.reduce((max, c) => Math.max(max, c.connectorHeight + estimateBoxHeight(c.cluster.items)), 0) + 40,
@@ -2365,12 +2369,16 @@ function Timeline({ monumenti, onSelect }: { monumenti: Monumento[], onSelect: (
   const axisWidth = Math.max(600, naturalWidth + 40);
 
   const formatHoverYear = (y: number) => (y < 0 ? `${Math.abs(y)} a.C.` : y === 0 ? '1 d.C.' : `${y} d.C.`);
-  const hoverYear = hoverX !== null ? Math.round(yearMin + hoverX / pxPerYear) : null;
+  // hoverX vive in spazio di LAYOUT (non a schermo): l'asse è disegnato una volta a questa
+  // scala fissa e poi ingrandito/rimpicciolito via CSS, quindi ogni coordinata usata per
+  // posizionare elementi al suo interno (come la linea guida) dev'essere in quello spazio.
+  const hoverYear = hoverX !== null ? Math.round(yearMin + hoverX / LAYOUT_PX_PER_YEAR) : null;
 
   const handleAxisMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!axisRef.current) return;
     const rect = axisRef.current.getBoundingClientRect();
-    setHoverX(Math.max(0, Math.min(axisWidth, e.clientX - rect.left)));
+    const screenX = e.clientX - rect.left;
+    setHoverX(Math.max(0, Math.min(axisWidth, screenX / zoom)));
   };
   const handleAxisMouseLeave = () => setHoverX(null);
 
@@ -2557,17 +2565,36 @@ function Timeline({ monumenti, onSelect }: { monumenti: Monumento[], onSelect: (
             <motion.div
                  initial={{ opacity: 0 }}
                  animate={{ opacity: 1 }}
-                 className="relative flex items-center px-16 md:px-24 py-10"
+                 className="relative flex items-center justify-center px-16 md:px-24 py-10"
                  style={{ minHeight: '100%' }}
             >
-              {/* Contenitore "reale": la sua altezza (bandVerticalReach*2) include già lo spazio
-                  occupato dalle diramazioni sopra e sotto l'asse. In precedenza quello spazio era
-                  prodotto solo da figli in position:absolute dentro un asse alto 1px, che non
-                  contribuiva all'altezza scrollabile del contenitore — le diramazioni più lontane
-                  dall'asse restavano quindi "coperte" ai margini, senza possibilità di scorrere per
-                  vederle. Qui l'asse (0,0 logico) è ancorato al centro verticale di questo box, che
-                  ha dimensioni vere e quindi scrolla correttamente in entrambe le direzioni. */}
-              <div className="relative shrink-0" style={{ width: axisWidth, height: bandVerticalReach * 2 }}>
+              {/* La "linea del tempo" (bande, asse, diramazioni) viene disegnata UNA volta sola a una
+                  scala di layout fissa (vedi LAYOUT_PX_PER_YEAR) — non cambia mai forma, posizione o
+                  raggruppamento in base allo zoom. Lo zoom è invece una trasformazione CSS animata
+                  applicata qui sopra: è così un ingrandimento/rimpicciolimento fluido di un'immagine
+                  fissa, non un ricalcolo del layout — niente più scatti bruschi tra un passo di zoom
+                  e l'altro. Il contenitore esterno riserva lo spazio già scalato (width/height ×
+                  zoom, anch'esse animate) così l'area scrollabile combacia sempre con quanto visibile;
+                  "justify-center" sul contenitore padre centra l'immagine quando, zoomando indietro,
+                  risulta più piccola del viewport — invece di lasciare uno spazio vuoto asimmetrico. */}
+              <div
+                className="relative shrink-0"
+                style={{
+                  width: axisWidth * zoom,
+                  height: bandVerticalReach * 2 * zoom,
+                  transition: 'width 320ms cubic-bezier(0.22, 1, 0.36, 1), height 320ms cubic-bezier(0.22, 1, 0.36, 1)',
+                }}
+              >
+              <div
+                className="absolute left-0 top-0"
+                style={{
+                  width: axisWidth,
+                  height: bandVerticalReach * 2,
+                  transform: `scale(${zoom})`,
+                  transformOrigin: '0 0',
+                  transition: 'transform 320ms cubic-bezier(0.22, 1, 0.36, 1)',
+                }}
+              >
               <div
                 ref={axisRef}
                 onMouseMove={handleAxisMouseMove}
@@ -2729,6 +2756,7 @@ function Timeline({ monumenti, onSelect }: { monumenti: Monumento[], onSelect: (
                     </div>
                   );
                 })}
+              </div>
               </div>
               </div>
             </motion.div>
