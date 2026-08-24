@@ -31,6 +31,13 @@ function isPlaceholder(s: string): boolean {
   return !s || s.trim().toUpperCase() === 'DA_COMPILARE';
 }
 
+// Vero anche quando il segnaposto è annegato in una frase (es. "Height of
+// letters: DA_COMPILARE.", ref="DA_COMPILARE"): l'intero campo va nascosto,
+// non solo il token, perché il resto della frase da solo non ha senso.
+function containsPlaceholder(s: string): boolean {
+  return !!s && s.toUpperCase().includes('DA_COMPILARE');
+}
+
 function resolveXmlTextWithPtrs(xmlBlock: string): { resolvedText: string; citedRanges: string[]; rawXml: string } {
   const rawXml = xmlBlock;
 
@@ -315,7 +322,10 @@ function parseTeiElement(teiString: string): Monumento {
   let tmLink = "";
   const tmMatch = teiString.match(/<idno\s+type="TM"([^>]*)>([\s\S]*?)<\/idno>/);
   if (tmMatch) {
-    tm = unescapeXml(tmMatch[2].trim());
+    // Il contenuto può essere un commento XML segnaposto (es. "<!-- inserire
+    // TM number -->") lasciato dall'estrazione automatica: va trattato come
+    // campo vuoto, non mostrato alla lettera nella scheda.
+    tm = unescapeXml(tmMatch[2].replace(/<!--[\s\S]*?-->/g, '').trim());
     // Legge sia "corresp" (formato corrente, unico attributo ammesso da EpiDoc su idno)
     // sia "ref" (legacy, per compatibilità con schede scritte prima del fix).
     const refMatch = tmMatch[1].match(/corresp="([^"]*)"/) || tmMatch[1].match(/ref="([^"]*)"/);
@@ -423,7 +433,7 @@ function parseTeiElement(teiString: string): Monumento {
   let dim_altezza = "";
   let dim_larghezza = "";
   let dim_profondita = "";
-  let dim_unita = "metre";
+  let dim_unita = "cm";
   const heightMatch = teiString.match(/<height([^>]*)>([\s\S]*?)<\/height>/);
   if (heightMatch) {
     dim_altezza = unescapeXml(heightMatch[2].trim());
@@ -1281,9 +1291,9 @@ export function monumentiToXml(monumenti: Monumento[]): string {
     block += `                                    <objectType${type_ref ? ` ref="${escapeXml(type_ref)}"` : ""}>${escapeXml(m.tipo)}</objectType>\n`;
     
     block += `                                    <dimensions>\n`;
-    block += `                                        <height${m.dim_unita ? ` unit="${escapeXml(m.dim_unita)}"` : ' unit="metre"'}>${escapeXml(m.dim_altezza || '')}</height>\n`;
-    block += `                                        <width${m.dim_unita ? ` unit="${escapeXml(m.dim_unita)}"` : ' unit="metre"'}>${escapeXml(m.dim_larghezza || '')}</width>\n`;
-    block += `                                        <depth${m.dim_unita ? ` unit="${escapeXml(m.dim_unita)}"` : ' unit="metre"'}>${escapeXml(m.dim_profondita || '')}</depth>\n`;
+    block += `                                        <height${m.dim_unita ? ` unit="${escapeXml(m.dim_unita)}"` : ' unit="cm"'}>${escapeXml(m.dim_altezza || '')}</height>\n`;
+    block += `                                        <width${m.dim_unita ? ` unit="${escapeXml(m.dim_unita)}"` : ' unit="cm"'}>${escapeXml(m.dim_larghezza || '')}</width>\n`;
+    block += `                                        <depth${m.dim_unita ? ` unit="${escapeXml(m.dim_unita)}"` : ' unit="cm"'}>${escapeXml(m.dim_profondita || '')}</depth>\n`;
     block += `                                    </dimensions>\n`;
     block += `                                </support>\n`;
     block += `                            </supportDesc>\n`;

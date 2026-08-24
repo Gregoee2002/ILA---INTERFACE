@@ -53,6 +53,7 @@ import {
 } from 'lucide-react';
 import { cn, EASE_OUT, EASE_IN, SPRING_SNAPPY, SPRING_SOFT } from './lib/utils';
 import { ICONOGRAPHY_LABELS } from './lib/iconographyLabels';
+import { labelEvidence, labelUnit, labelType, labelMaterial } from './lib/vocabLabels';
 import { Monumento, FilterState, SortField, Traduzione, Bibliografia, Appunto, EntryRegistro, BugReport, EDITORIAL_STATUS_LABELS } from './types';
 import { RAW_DATA } from './data';
 import { monumentiToXml, xmlToMonumenti, formatIlaLabel } from './lib/xmlUtils';
@@ -180,6 +181,12 @@ const hasApparatusContent = (val?: { loc: string; note: string }[] | string) => 
   if (Array.isArray(val)) return val.length > 0;
   return val.trim().length > 0 && val.trim().toUpperCase() !== 'DA_COMPILARE';
 };
+
+// Segnaposto interno del corpus per i campi non ancora compilati: può
+// comparire da solo (es. ref="DA_COMPILARE") o dentro una frase (es. "Height
+// of letters: DA_COMPILARE.") — in entrambi i casi il campo va nascosto
+// nella scheda invece di mostrare il segnaposto alla lettera.
+const isFilled = (v?: string | null): v is string => !!v && !v.toUpperCase().includes('DA_COMPILARE');
 
 // Format a bibliographic key like "herrmann1965b" → "Herrmann 1965b"
 // All-caps if author part is ≤3 chars (e.g. "cdl" → "CDL")
@@ -4313,7 +4320,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
           dim_altezza: m.dim_altezza || '',
           dim_larghezza: m.dim_larghezza || '',
           dim_profondita: m.dim_profondita || '',
-          dim_unita: m.dim_unita || 'metre',
+          dim_unita: m.dim_unita || 'cm',
           // Location
           luogo_cons: m.luogo_cons || '',
           luogo_rit: m.luogo_rit || '',
@@ -5284,7 +5291,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                     onChange={(e) => setFilters(f => ({ ...f, tipo: e.target.value }))}
                   >
                     <option value="" className="bg-parchment dark:bg-sidebar text-ink">Tutte le Tipologie</option>
-                    {types.map(t => <option key={t} value={t} className="bg-parchment dark:bg-sidebar text-ink">{t}</option>)}
+                    {types.map(t => <option key={t} value={t} className="bg-parchment dark:bg-sidebar text-ink">{labelType(t)}</option>)}
                   </select>
                   <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted/50 pointer-events-none" />
                 </div>
@@ -5300,7 +5307,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                     onChange={(e) => setFilters(f => ({ ...f, materiale: e.target.value }))}
                   >
                     <option value="" className="bg-parchment dark:bg-sidebar text-ink">Tutti i Materiali</option>
-                    {materials.map(m => <option key={m} value={m} className="bg-parchment dark:bg-sidebar text-ink">{m}</option>)}
+                    {materials.map(m => <option key={m} value={m} className="bg-parchment dark:bg-sidebar text-ink">{labelMaterial(m)}</option>)}
                   </select>
                   <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted/50 pointer-events-none" />
                 </div>
@@ -5555,7 +5562,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                                 <div className="text-sm font-bold text-ink leading-tight line-clamp-2">{getDisplayTitle(m)}</div>
                                 
                                 <div className="flex flex-wrap items-center gap-x-2 gap-y-1 mt-0.5">
-                                  <span className="text-[9px] font-bold uppercase text-muted tracking-tighter">{m.tipo}</span>
+                                  <span className="text-[9px] font-bold uppercase text-muted tracking-tighter">{labelType(m.tipo)}</span>
                                   {m.regione && <span className="text-[7px] font-sans text-accent font-bold uppercase tracking-wider bg-accent/5 px-1 rounded-xs border border-accent/10">{m.regione}</span>}
                                   {m.citta && (
                                      <span className="flex items-center gap-0.5 text-[8px] font-sans text-muted uppercase tracking-tighter">
@@ -5639,7 +5646,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                                    onClick={(e) => { e.stopPropagation(); setFilters(f => ({ ...f, tipo: m.tipo })); }}
                                    className="text-[9px] font-bold uppercase text-muted tracking-tighter line-clamp-1 opacity-70 hover:text-accent transition-colors cursor-pointer text-left"
                                  >
-                                   {m.tipo}
+                                   {labelType(m.tipo)}
                                  </button>
                               </div>
                               <div className="hidden xl:block">
@@ -6411,11 +6418,11 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                         <h4 className="font-sans field-label opacity-85 pb-2 border-b border-border/40">Specifiche Tecniche</h4>
                         <dl className="space-y-3">
                           {[
-                            { label: 'Regione', value: selectedMonumento.regione, type: 'regione' },
-                            { label: 'Città', value: selectedMonumento.citta, type: 'citta' },
-                            { label: 'Datazione', value: formatDateRange(selectedMonumento.data_inizio, selectedMonumento.data_fine), type: '' },
-                            { label: 'Tipologia', value: selectedMonumento.tipo, type: 'tipo' },
-                            { label: 'Materiale', value: selectedMonumento.materiale, type: '' }
+                            { label: 'Regione', value: selectedMonumento.regione, display: selectedMonumento.regione, type: 'regione' },
+                            { label: 'Città', value: selectedMonumento.citta, display: selectedMonumento.citta, type: 'citta' },
+                            { label: 'Datazione', value: formatDateRange(selectedMonumento.data_inizio, selectedMonumento.data_fine), display: formatDateRange(selectedMonumento.data_inizio, selectedMonumento.data_fine), type: '' },
+                            { label: 'Tipologia', value: selectedMonumento.tipo, display: labelType(selectedMonumento.tipo || ''), type: 'tipo' },
+                            { label: 'Materiale', value: selectedMonumento.materiale, display: labelMaterial(selectedMonumento.materiale || ''), type: '' }
                           ].filter(item => item.value && item.value !== '-').map(item => (
                             <div key={item.label}>
                               <dt className="text-[9px] font-sans font-bold uppercase text-muted/80 tracking-tighter">{item.label}</dt>
@@ -6424,10 +6431,10 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                                   onClick={() => { setFilters(f => ({ ...f, [item.type]: item.value })); setSelectedMonumento(null); }}
                                   className="text-xs font-semibold text-ink mt-0.5 font-serif hover:text-accent transition-colors block text-left"
                                 >
-                                  {item.value}
+                                  {item.display}
                                 </button>
                               ) : (
-                                <dd className="text-xs font-semibold text-ink mt-0.5 font-serif">{item.value}</dd>
+                                <dd className="text-xs font-semibold text-ink mt-0.5 font-serif">{item.display}</dd>
                               )}
                             </div>
                           ))}
@@ -6616,15 +6623,15 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                             )}
                             <div className="space-y-2 text-[10px] font-sans border-t border-border/20 pt-3">
                               {selectedMonumento.scrittura && (
-                                <div><span className="text-muted uppercase font-bold text-[9px]">Scrittura:</span> <span className="text-ink font-serif italic text-xs">{selectedMonumento.scrittura}</span> {selectedMonumento.scrittura_ref && <span className="text-muted/60 font-mono">({selectedMonumento.scrittura_ref})</span>}</div>
+                                <div><span className="text-muted uppercase font-bold text-[9px]">Scrittura:</span> <span className="text-ink font-serif italic text-xs">{selectedMonumento.scrittura}</span> {isFilled(selectedMonumento.scrittura_ref) && <span className="text-muted/60 font-mono">({selectedMonumento.scrittura_ref})</span>}</div>
                               )}
-                              {selectedMonumento.scrittura_note && <div><span className="text-muted uppercase font-bold text-[9px]">Note paleografiche:</span> <span className="text-ink font-serif text-xs">{selectedMonumento.scrittura_note}</span></div>}
+                              {isFilled(selectedMonumento.scrittura_note) && <div><span className="text-muted uppercase font-bold text-[9px]">Note paleografiche:</span> <span className="text-ink font-serif text-xs">{selectedMonumento.scrittura_note}</span></div>}
 
                               {selectedMonumento.tipo && (
                                 <div>
                                   <span className="text-muted uppercase font-bold text-[9px]">Tipo oggetto:</span>{' '}
-                                  <span className="text-ink font-serif italic text-xs capitalize">{selectedMonumento.tipo}</span>
-                                  {selectedMonumento.tipo_ref && (
+                                  <span className="text-ink font-serif italic text-xs capitalize">{labelType(selectedMonumento.tipo)}</span>
+                                  {isFilled(selectedMonumento.tipo_ref) && (
                                     <a href={selectedMonumento.tipo_ref} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-[9px] text-accent hover:underline ml-2 align-middle font-mono">
                                       EAGLE Object Link ↗
                                     </a>
@@ -6635,8 +6642,8 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                               {selectedMonumento.materiale && (
                                 <div>
                                   <span className="text-muted uppercase font-bold text-[9px]">Materiale:</span>{' '}
-                                  <span className="text-ink font-serif italic text-xs capitalize">{selectedMonumento.materiale}</span>
-                                  {selectedMonumento.materialRef && (
+                                  <span className="text-ink font-serif italic text-xs capitalize">{labelMaterial(selectedMonumento.materiale)}</span>
+                                  {isFilled(selectedMonumento.materialRef) && (
                                     <a href={selectedMonumento.materialRef} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-[9px] text-accent hover:underline ml-2 align-middle font-mono">
                                       EAGLE Material Link ↗
                                     </a>
@@ -6652,7 +6659,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                                       selectedMonumento.dim_altezza && `h ${selectedMonumento.dim_altezza}`,
                                       selectedMonumento.dim_larghezza && `l ${selectedMonumento.dim_larghezza}`,
                                       selectedMonumento.dim_profondita && `p ${selectedMonumento.dim_profondita}`,
-                                    ].filter(Boolean).join(' × ')} {selectedMonumento.dim_unita || 'metre'}
+                                    ].filter(Boolean).join(' × ')} {labelUnit(selectedMonumento.dim_unita || 'cm')}
                                   </span>
                                 </div>
                               ) : (
@@ -6669,7 +6676,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                                     <div>
                                       <span className="text-muted uppercase font-bold text-[9px] block">Città Antica (Pleiades)</span>
                                       <span className="font-serif font-semibold text-ink text-xs block truncate" title={selectedMonumento.citta}>{selectedMonumento.citta}</span>
-                                      {selectedMonumento.place_ref_ancient && (
+                                      {isFilled(selectedMonumento.place_ref_ancient) && (
                                         <a href={selectedMonumento.place_ref_ancient} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-[9px] text-accent hover:underline font-mono truncate max-w-full mt-1">
                                           Pleiades Link
                                         </a>
@@ -6680,7 +6687,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                                     <div>
                                       <span className="text-muted uppercase font-bold text-[9px] block">Rinvenimento Moderno</span>
                                       <span className="font-serif font-semibold text-ink text-xs block truncate" title={selectedMonumento.luogo_rit}>{selectedMonumento.luogo_rit}</span>
-                                      {selectedMonumento.place_ref_modern && (
+                                      {isFilled(selectedMonumento.place_ref_modern) && (
                                         <a href={selectedMonumento.place_ref_modern} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-[9px] text-accent hover:underline font-mono truncate max-w-full mt-1">
                                           GeoNames Link
                                         </a>
@@ -6689,7 +6696,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                                   )}
                                 </div>
                               )}
-                              <PleiadesMap pleiadesUri={selectedMonumento.place_ref_ancient} cityName={selectedMonumento.citta} />
+                              <PleiadesMap pleiadesUri={isFilled(selectedMonumento.place_ref_ancient) ? selectedMonumento.place_ref_ancient : undefined} cityName={selectedMonumento.citta} />
 
                               {selectedMonumento.origDates && selectedMonumento.origDates.length > 0 && (
                                 <div className="border-t border-border/20 pt-3">
@@ -6713,7 +6720,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                                         )}
                                         {od.evidence && (
                                           <span className="text-[8px] font-sans font-bold uppercase tracking-widest text-muted/50 ml-1 border border-border/40 px-1 rounded-sm">
-                                            {od.evidence.replace(/-/g, ' ')}
+                                            {labelEvidence(od.evidence)}
                                           </span>
                                         )}
                                       </li>
@@ -6869,7 +6876,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                               </div>
                             )}
                          </div>
-                         {selectedMonumento.note_interne && (
+                         {isFilled(selectedMonumento.note_interne) && (
                            <div>
                               <h3 className="text-xs font-bold uppercase text-muted tracking-widest mb-4">Commento</h3>
                                  <p className="text-xs leading-relaxed text-muted/80 font-serif whitespace-pre-wrap">
@@ -7012,9 +7019,9 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                     <section>
                       <h5 className="text-[9px] font-bold uppercase text-muted underline underline-offset-4 mb-3 font-sans">Specifiche</h5>
                       <div className="grid grid-cols-2 gap-4 text-[10px] font-sans font-bold uppercase">
-                        <div><span className="text-muted block text-[8px] tracking-widest">Tipologia</span> {m.tipo}</div>
+                        <div><span className="text-muted block text-[8px] tracking-widest">Tipologia</span> {labelType(m.tipo)}</div>
                         <div><span className="text-muted block text-[8px] tracking-widest">Datazione</span> {m.data}</div>
-                        <div><span className="text-muted block text-[8px] tracking-widest">Materiale</span> {m.materiale}</div>
+                        <div><span className="text-muted block text-[8px] tracking-widest">Materiale</span> {labelMaterial(m.materiale)}</div>
                       </div>
                     </section>
                     <section>
