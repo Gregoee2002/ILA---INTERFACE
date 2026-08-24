@@ -175,24 +175,26 @@ function extractIconography(teiString: string): any {
   const xenoMatch = teiString.match(/<xenoData>([\s\S]*?)<\/xenoData>/);
   if (!xenoMatch) return undefined;
 
-  const iconMatch = xenoMatch[1].match(/<iconography[^>]*>([\s\S]*?)<\/iconography>/);
+  // Prefisso opzionale "ica:" (namespace richiesto da xenoData nello schema EpiDoc)
+  // oppure nessun prefisso (schede legacy scritte prima del fix del namespace).
+  const iconMatch = xenoMatch[1].match(/<(?:\w+:)?iconography[^>]*>([\s\S]*?)<\/(?:\w+:)?iconography>/);
   if (!iconMatch) return undefined;
 
   const iconContent = iconMatch[1];
-  
+
   // <function> = funzione cultuale del monumento (votive, lex_sacra, confession…)
   // NON confondere con il tipo fisico del supporto, che sta in <objectDesc>/<objectType>
   let iconFunction: string | undefined = undefined;
-  const functionMatch = iconContent.match(/<function[^>]*key="([^"]*)"/);
+  const functionMatch = iconContent.match(/<(?:\w+:)?function[^>]*key="([^"]*)"/);
   if (functionMatch) iconFunction = functionMatch[1];
   // Legacy: legge anche <support key="..."> per compatibilità con schede pre-aggiornamento
   if (!iconFunction) {
-    const supportMatch = iconContent.match(/<support[^>]*key="([^"]*)"/);
+    const supportMatch = iconContent.match(/<(?:\w+:)?support[^>]*key="([^"]*)"/);
     if (supportMatch) iconFunction = supportMatch[1];
   }
 
   let note: string | undefined = undefined;
-  const noteMatch = iconContent.match(/<note[^>]*>([\s\S]*?)<\/note>/);
+  const noteMatch = iconContent.match(/<(?:\w+:)?note[^>]*>([\s\S]*?)<\/(?:\w+:)?note>/);
   if (noteMatch) note = noteMatch[1].trim();
 
   const figures: any[] = [];
@@ -201,7 +203,7 @@ function extractIconography(teiString: string): any {
   // annidati) — la sola forma con chiusura esplicita perdeva silenziosamente ogni
   // figura senza tratti al giro successivo di lettura (bug scoperto codificando
   // dati reali: un simbolo isolato come una falce incisa senza altri attributi).
-  const figureRegex = /<figure([^>]*?)(?:\/>|>([\s\S]*?)<\/figure>)/g;
+  const figureRegex = /<(?:\w+:)?figure([^>]*?)(?:\/>|>([\s\S]*?)<\/(?:\w+:)?figure>)/g;
   let figMatch;
   while ((figMatch = figureRegex.exec(iconContent)) !== null) {
     const figAttrs = figMatch[1];
@@ -214,7 +216,7 @@ function extractIconography(teiString: string): any {
 
     const figContent = figMatch[2] || '';
     const traits: any[] = [];
-    const traitRegex = /<trait([^>]*)>/g;
+    const traitRegex = /<(?:\w+:)?trait([^>]*)>/g;
     let trMatch;
     while ((trMatch = traitRegex.exec(figContent)) !== null) {
       const trAttrs = trMatch[1];
@@ -314,7 +316,9 @@ function parseTeiElement(teiString: string): Monumento {
   const tmMatch = teiString.match(/<idno\s+type="TM"([^>]*)>([\s\S]*?)<\/idno>/);
   if (tmMatch) {
     tm = unescapeXml(tmMatch[2].trim());
-    const refMatch = tmMatch[1].match(/ref="([^"]*)"/);
+    // Legge sia "corresp" (formato corrente, unico attributo ammesso da EpiDoc su idno)
+    // sia "ref" (legacy, per compatibilità con schede scritte prima del fix).
+    const refMatch = tmMatch[1].match(/corresp="([^"]*)"/) || tmMatch[1].match(/ref="([^"]*)"/);
     if (refMatch) {
       const rawRef = refMatch[1].trim();
       tmLink = rawRef && !/^https?:\/\//i.test(rawRef)
@@ -1174,8 +1178,11 @@ export function renderIconography(ico: IconographyData | undefined, indent: stri
   if (!hasContent) return null;
 
   const i1 = indent + "    ", i2 = i1 + "    ", i3 = i2 + "    ";
-  const lines = [`${indent}<xenoData>`, `${i1}<iconography>`];
-  if (ico.function) lines.push(`${i2}<function key="${escapeXml(ico.function)}"/>`);
+  // <xenoData> nello schema EpiDoc ammette solo elementi FUORI dal namespace TEI
+  // (Jing: "element iconography not allowed anywhere") — perciò questo blocco,
+  // che non è EpiDoc standard, va in un namespace dedicato "ica:".
+  const lines = [`${indent}<xenoData>`, `${i1}<ica:iconography xmlns:ica="https://ila-project.org/ns/iconography">`];
+  if (ico.function) lines.push(`${i2}<ica:function key="${escapeXml(ico.function)}"/>`);
   (ico.figures || []).forEach((f, idx) => {
     // n rispecchia sempre la posizione corrente nell'array (mai un valore
     // storico stantio) — così una figura rimossa non lascia numerazioni
@@ -1186,19 +1193,19 @@ export function renderIconography(ico: IconographyData | undefined, indent: stri
     if (f.place) fAttrs.push(`place="${escapeXml(f.place)}"`);
     const traits = (f.traits || []).filter(t => t.type && t.key);
     if (traits.length === 0) {
-      lines.push(`${i2}<figure ${fAttrs.join(" ")}/>`);
+      lines.push(`${i2}<ica:figure ${fAttrs.join(" ")}/>`);
     } else {
-      lines.push(`${i2}<figure ${fAttrs.join(" ")}>`);
+      lines.push(`${i2}<ica:figure ${fAttrs.join(" ")}>`);
       traits.forEach(t => {
         const tAttrs = [`type="${escapeXml(t.type)}"`, `key="${escapeXml(t.key)}"`];
         if (t.hand) tAttrs.push(`hand="${escapeXml(t.hand)}"`);
-        lines.push(`${i3}<trait ${tAttrs.join(" ")}/>`);
+        lines.push(`${i3}<ica:trait ${tAttrs.join(" ")}/>`);
       });
-      lines.push(`${i2}</figure>`);
+      lines.push(`${i2}</ica:figure>`);
     }
   });
-  if (ico.note) lines.push(`${i2}<note>${escapeXml(ico.note)}</note>`);
-  lines.push(`${i1}</iconography>`, `${indent}</xenoData>`);
+  if (ico.note) lines.push(`${i2}<ica:note>${escapeXml(ico.note)}</ica:note>`);
+  lines.push(`${i1}</ica:iconography>`, `${indent}</xenoData>`);
   return lines.join("\n");
 }
 
@@ -1237,7 +1244,9 @@ export function monumentiToXml(monumenti: Monumento[]): string {
     if (m.id) block += `                <idno type="id">${m.id}</idno>\n`;
     if (m.entryId) block += `                <idno type="entryId">${escapeXml(m.entryId)}</idno>\n`;
     if (m.tm) {
-      const tmRefAttr = m.tmLink ? ` ref="${escapeXml(m.tmLink)}"` : "";
+      // idno non ammette @ref nello schema EpiDoc (Jing: attributo non consentito);
+      // @corresp è l'attributo TEI equivalente per puntare a una risorsa correlata.
+      const tmRefAttr = m.tmLink ? ` corresp="${escapeXml(m.tmLink)}"` : "";
       block += `                <idno type="TM"${tmRefAttr}>${escapeXml(m.tm)}</idno>\n`;
     }
     if (m.phi && m.phi.length > 0) {
