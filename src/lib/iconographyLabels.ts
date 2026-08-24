@@ -75,12 +75,18 @@ export const ICONOGRAPHY_LABELS: Record<string, string> = {
   worshipper: "orante",
   animal: "animale",
   symbol: "simbolo",
+  secondary_decoration: "decorazione secondaria",
   // figure key (simboli e figure nominate)
   Nike: "Nike",
   eagle: "aquila",
   Attis: "Attis",
   Helios: "Helios",
   Men: "Men",
+  // figure key — decorazioni secondarie (motivi ornamentali, non figure)
+  festoon_ram_heads: "festone con criocefali",
+  festoon_bull_heads: "festone con bucefali",
+  garland: "ghirlanda",
+  rosette: "rosetta",
   // trait/field type headers
   headgear: "copricapo",
   lunar: "attributo lunare",

@@ -1293,8 +1293,15 @@ function suggestFunctionFromTextTypes(textTypes: string[] | undefined): string |
   }
   return null;
 }
-const FIGURE_TYPE_KEYS = ['deity', 'secondary', 'worshipper', 'animal', 'symbol'];
+const FIGURE_TYPE_KEYS = ['deity', 'secondary', 'worshipper', 'animal', 'symbol', 'secondary_decoration'];
 const FIGURE_KEY_OPTIONS = ['Men', 'crescent', 'Nike', 'eagle', 'Attis', 'Helios'];
+// Identificativi specifici per tipo 'secondary_decoration' — motivi ornamentali
+// del rilievo (festoni, ghirlande...) distinti dalle figure vere e proprie:
+// vedi FIGURE_KEY_OPTIONS_BY_TYPE sotto per la cascata sul tipo scelto.
+const SECONDARY_DECORATION_KEY_OPTIONS = ['festoon_ram_heads', 'festoon_bull_heads', 'garland', 'rosette'];
+const FIGURE_KEY_OPTIONS_BY_TYPE: Record<string, string[]> = {
+  secondary_decoration: SECONDARY_DECORATION_KEY_OPTIONS,
+};
 // Posizione COMPOSITIVA della figura nel rilievo — proprietà della figura
 // (figure.place), non più un "trait" fisico: vedi nota in types.ts.
 const PLACE_KEYS = ['upper_left', 'upper_right', 'lower_left', 'lower_right', 'top_centre'];
@@ -1415,7 +1422,7 @@ const IconographyEditor: React.FC<{ m: Monumento; set: <K extends keyof Monument
                   </div>
                   <div>
                     <FieldLabel>Identificativo</FieldLabel>
-                    <VocabCombo value={fig.key} onChange={v => updateFigure(fi, { key: v })} options={FIGURE_KEY_OPTIONS} listId={`dl-figkey-${fi}`} placeholder="es. dedicante, Men…" />
+                    <VocabCombo value={fig.key} onChange={v => updateFigure(fi, { key: v })} options={FIGURE_KEY_OPTIONS_BY_TYPE[fig.type] || FIGURE_KEY_OPTIONS} listId={`dl-figkey-${fi}`} placeholder="es. dedicante, Men…" />
                   </div>
                   <div>
                     <FieldLabel>Posizione nella composizione</FieldLabel>
