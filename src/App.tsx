@@ -56,7 +56,6 @@ import { ICONOGRAPHY_LABELS } from './lib/iconographyLabels';
 import { Monumento, FilterState, SortField, Traduzione, Bibliografia, Appunto, EntryRegistro, BugReport, EDITORIAL_STATUS_LABELS } from './types';
 import { RAW_DATA } from './data';
 import { monumentiToXml, xmlToMonumenti, formatIlaLabel } from './lib/xmlUtils';
-import { formatSecoliAttestazione } from './lib/chronology';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { PleiadesMap } from './components/PleiadesMap';
@@ -6415,7 +6414,6 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                             { label: 'Regione', value: selectedMonumento.regione, type: 'regione' },
                             { label: 'Città', value: selectedMonumento.citta, type: 'citta' },
                             { label: 'Datazione', value: formatDateRange(selectedMonumento.data_inizio, selectedMonumento.data_fine), type: '' },
-                            { label: 'Secolo di attestazione', value: formatSecoliAttestazione(selectedMonumento.data_inizio, selectedMonumento.data_fine), type: '' },
                             { label: 'Tipologia', value: selectedMonumento.tipo, type: 'tipo' },
                             { label: 'Materiale', value: selectedMonumento.materiale, type: '' }
                           ].filter(item => item.value && item.value !== '-').map(item => (
