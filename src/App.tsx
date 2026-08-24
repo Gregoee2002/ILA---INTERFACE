@@ -4897,8 +4897,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
           </button>
         )}
         {activeView === 'catalog' && (
-          <button
-            onClick={() => setShowFilterPanel(s => !s)}
+          <div
             className={cn(
               "flex items-center gap-2.5 pl-4 pr-3 py-2 rounded-full border transition-all duration-300 shrink-0 min-w-[180px] lg:min-w-[240px]",
               showFilterPanel
@@ -4907,13 +4906,28 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
             )}
           >
             <Search className="h-3.5 w-3.5 text-muted/50 shrink-0" />
-            <span className={cn("text-xs font-serif italic truncate flex-1 text-left", filters.searchText ? "text-ink not-italic font-sans font-bold" : "text-muted/60")}>
-              {filters.searchText || "Cerca testo, luoghi, tipi…"}
-            </span>
-            <motion.span animate={{ rotate: showFilterPanel ? 180 : 0 }} transition={{ duration: 0.2 }} className="shrink-0">
-              <ChevronDown className="h-3.5 w-3.5 text-muted/50" />
-            </motion.span>
-          </button>
+            <input
+              type="text"
+              value={filters.searchText}
+              onChange={(e) => setFilters(f => ({ ...f, searchText: e.target.value }))}
+              onFocus={() => setShowFilterPanel(true)}
+              placeholder="Cerca testo, luoghi, tipi…"
+              className={cn(
+                "flex-1 min-w-0 bg-transparent outline-none text-xs placeholder:text-muted/60 placeholder:italic placeholder:font-serif",
+                filters.searchText ? "text-ink font-sans font-bold" : "font-serif"
+              )}
+            />
+            <button
+              type="button"
+              onClick={() => setShowFilterPanel(s => !s)}
+              className="shrink-0"
+              title="Filtri avanzati"
+            >
+              <motion.span animate={{ rotate: showFilterPanel ? 180 : 0 }} transition={{ duration: 0.2 }} className="block">
+                <ChevronDown className="h-3.5 w-3.5 text-muted/50" />
+              </motion.span>
+            </button>
+          </div>
         )}
         {effectiveAdmin && (
           <div className="flex flex-wrap items-center gap-x-4 gap-y-2 font-sans text-[11px] font-bold uppercase tracking-[0.15em] text-muted">
