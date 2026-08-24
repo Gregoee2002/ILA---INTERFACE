@@ -2148,34 +2148,34 @@ function TimelineBranchBox({ items, onSelect }: { items: Monumento[]; onSelect: 
     return (
       <button
         onClick={(e) => { e.stopPropagation(); onSelect(m); }}
-        className="flex flex-col items-start gap-0.5 text-[9px] font-sans font-bold bg-parchment pl-1.5 pr-2 py-1 border border-border border-l-2 border-l-accent/60 shadow-sm whitespace-nowrap max-w-[150px] overflow-hidden hover:border-accent hover:bg-accent/5 hover:text-accent transition-colors"
+        className="flex flex-col items-start gap-0.5 text-[11px] font-sans font-bold bg-parchment pl-2 pr-2.5 py-1.5 border border-border border-l-2 border-l-accent/60 shadow-sm whitespace-nowrap max-w-[170px] overflow-hidden hover:border-accent hover:bg-accent/5 hover:text-accent transition-colors"
       >
         <span className="flex items-center gap-1.5 max-w-full">
           <span className="text-accent/80 shrink-0">#{m.id}</span>
           <span className="truncate">{m.citta || m.regione || 'N/A'}</span>
         </span>
-        <span className="text-[8px] font-normal text-muted/70 tabular-nums">{formatDateRange(m.data_inizio, m.data_fine)}</span>
+        <span className="text-[10px] font-normal text-muted/70 tabular-nums">{formatDateRange(m.data_inizio, m.data_fine)}</span>
       </button>
     );
   }
   return (
-    <div className="w-[168px] bg-parchment border border-border border-l-2 border-l-accent/60 shadow-md rounded-sm overflow-hidden" onClick={(e) => e.stopPropagation()}>
-      <div className="flex items-center gap-1.5 px-2.5 py-1.5 bg-accent/10 border-b border-accent/25">
-        <Hash className="h-3 w-3 text-accent shrink-0" />
-        <span className="text-[9px] font-sans font-bold uppercase tracking-wider text-accent">{items.length} schede</span>
+    <div className="w-[188px] bg-parchment border border-border border-l-2 border-l-accent/60 shadow-md rounded-sm overflow-hidden" onClick={(e) => e.stopPropagation()}>
+      <div className="flex items-center gap-1.5 px-2.5 py-2 bg-accent/10 border-b border-accent/25">
+        <Hash className="h-3.5 w-3.5 text-accent shrink-0" />
+        <span className="text-[11px] font-sans font-bold uppercase tracking-wider text-accent">{items.length} schede</span>
       </div>
-      <div className="max-h-[104px] overflow-y-auto custom-scrollbar">
+      <div className="max-h-[130px] overflow-y-auto custom-scrollbar">
         {items.map((m, ri) => (
           <button
             key={m.entryId || `id-${m.id}`}
             onClick={() => onSelect(m)}
-            className={`w-full text-left px-2.5 py-1 text-[9px] font-sans font-bold border-b border-border/30 last:border-b-0 hover:bg-accent/10 hover:text-accent transition-colors ${ri % 2 === 1 ? 'bg-ink/[0.02]' : ''}`}
+            className={`w-full text-left px-2.5 py-1.5 text-[11px] font-sans font-bold border-b border-border/30 last:border-b-0 hover:bg-accent/10 hover:text-accent transition-colors ${ri % 2 === 1 ? 'bg-ink/[0.02]' : ''}`}
           >
             <span className="flex items-center gap-1 max-w-full">
               <span className="text-accent/80 shrink-0">#{m.id}</span>
               <span className="truncate">{m.citta || m.regione || 'N/A'}</span>
             </span>
-            <span className="block text-[8px] font-normal text-muted/70 tabular-nums">{formatDateRange(m.data_inizio, m.data_fine)}</span>
+            <span className="block text-[10px] font-normal text-muted/70 tabular-nums">{formatDateRange(m.data_inizio, m.data_fine)}</span>
           </button>
         ))}
       </div>
@@ -2197,6 +2197,11 @@ function Timeline({ monumenti, onSelect }: { monumenti: Monumento[], onSelect: (
 
   const ZOOM_MIN = 0.2;
   const ZOOM_MAX = 8;
+  // Soglia minima di leggibilità per lo zoom "a schermo intero": con un corpus che copre
+  // molti secoli, adattare tutto alla larghezza disponibile poteva scendere ben sotto
+  // questo valore, rendendo le etichette (già piccole, 8-9px) illeggibili in blocco. Sotto
+  // questa soglia si preferisce scorrere orizzontalmente piuttosto che rimpicciolire oltre.
+  const MIN_FIT_ZOOM = 0.55;
 
   const sorted = useMemo(() => {
     return monumenti
@@ -2279,7 +2284,7 @@ function Timeline({ monumenti, onSelect }: { monumenti: Monumento[], onSelect: (
   // invece risolta in verticale: le diramazioni che si sovrappongono orizzontalmente vengono
   // impilate su "corsie" (lane) via via più lontane dall'asse, ma la loro base resta sempre
   // ancorata all'anno vero.
-  const CLUSTER_HALF_WIDTH = 86;
+  const CLUSTER_HALF_WIDTH = 96;
   const LANE_GAP = 12;
   const GAP_BETWEEN_LANES = 14;
   const BASE_CONNECTOR = 20;
@@ -2298,10 +2303,10 @@ function Timeline({ monumenti, onSelect }: { monumenti: Monumento[], onSelect: (
   // che con un passo identico per tutte — una corsia di box singoli resta compatta,
   // una di gruppi affollati si allarga solo quanto serve.
   const estimateBoxHeight = (items: Monumento[]) => {
-    if (items.length <= 1) return 42;
-    const header = 30;
-    const rowHeight = 40;
-    const contentCap = 108;
+    if (items.length <= 1) return 50;
+    const header = 36;
+    const rowHeight = 44;
+    const contentCap = 130;
     return header + Math.min(items.length * rowHeight, contentCap) + 6;
   };
 
@@ -2429,7 +2434,7 @@ function Timeline({ monumenti, onSelect }: { monumenti: Monumento[], onSelect: (
     const available = Math.max(containerWidth - 200, 120);
     const naturalAtZoom1 = yearSpan * BASE_PX_PER_YEAR;
     if (naturalAtZoom1 <= 0) return null;
-    return Math.min(1, Math.max(ZOOM_MIN, available / naturalAtZoom1));
+    return Math.min(1, Math.max(MIN_FIT_ZOOM, available / naturalAtZoom1));
   };
 
   // All'apertura della sezione, applica subito lo zoom a schermo intero. Da lì l'utente zooma
