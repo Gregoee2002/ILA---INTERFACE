@@ -6669,7 +6669,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                                       <span className="font-serif font-semibold text-ink text-xs block truncate" title={selectedMonumento.citta}>{selectedMonumento.citta}</span>
                                       {selectedMonumento.place_ref_ancient && (
                                         <a href={selectedMonumento.place_ref_ancient} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-[9px] text-accent hover:underline font-mono truncate max-w-full mt-1">
-                                          🔎 Pleiades Link
+                                          Pleiades Link
                                         </a>
                                       )}
                                     </div>
@@ -6680,7 +6680,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                                       <span className="font-serif font-semibold text-ink text-xs block truncate" title={selectedMonumento.luogo_rit}>{selectedMonumento.luogo_rit}</span>
                                       {selectedMonumento.place_ref_modern && (
                                         <a href={selectedMonumento.place_ref_modern} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-[9px] text-accent hover:underline font-mono truncate max-w-full mt-1">
-                                          🌍 GeoNames Link
+                                          GeoNames Link
                                         </a>
                                       )}
                                     </div>
