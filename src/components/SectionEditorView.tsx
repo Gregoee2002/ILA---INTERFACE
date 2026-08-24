@@ -1356,8 +1356,96 @@ const VocabCombo: React.FC<{ value: string; onChange: (v: string) => void; optio
   </div>
 );
 
+/** Registra un termine curato (id inglese + etichetta italiana) nel vocabolario
+ *  iconografico condiviso — stesso endpoint POST di registerNewIconographyTerms
+ *  in SectionEditorView, ma per una coppia scelta esplicitamente dall'utente
+ *  col pulsante "nuovo termine" (vedi AddTermButton), non per un fig.key libero
+ *  non ancora curato. Best-effort: il termine resta comunque visibile in questa
+ *  sessione (ICONOGRAPHY_LABELS mutato subito da chi chiama) anche se il POST fallisce. */
+async function postIconographyVocabTerm(id: string, label: string): Promise<void> {
+  try {
+    await fetch('/api/iconography-vocab', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ terms: { [id]: label } }),
+    });
+  } catch {
+    // best-effort — v. nota sopra
+  }
+}
+
+/** Pulsante "nuovo termine": apre un piccolo form a due campi — id inglese
+ *  (quello che finisce nel markup xenoData) ed etichetta italiana (quella
+ *  mostrata nell'editor e nel pannello pubblico) — perché il vocabolario
+ *  iconografico è bilingue per costruzione: id EAGLE-style in inglese,
+ *  traduzione curata in ICONOGRAPHY_LABELS. Usato per estendere sul posto le
+ *  liste chiuse dei VocabSelect (funzione, posizione, identificativo,
+ *  elemento del tratto) senza dover editare iconographyLabels.ts a mano. */
+const AddTermButton: React.FC<{ onAdd: (id: string, label: string) => void; label?: string }> = ({ onAdd, label }) => {
+  const [open, setOpen] = useState(false);
+  const [id, setId] = useState('');
+  const [itLabel, setItLabel] = useState('');
+
+  if (!open) {
+    return (
+      <button
+        type="button"
+        onClick={() => setOpen(true)}
+        className="inline-flex items-center gap-1 text-[10px] font-sans font-semibold uppercase tracking-[0.1em] text-accent/70 hover:text-accent transition-colors mt-1"
+      >
+        <Plus className="w-3 h-3" /> {label || 'Nuovo termine'}
+      </button>
+    );
+  }
+
+  const submit = () => {
+    const cleanId = id.trim().toLowerCase().replace(/\s+/g, '_');
+    const cleanLabel = itLabel.trim();
+    if (!cleanId || !cleanLabel) return;
+    onAdd(cleanId, cleanLabel);
+    setId(''); setItLabel(''); setOpen(false);
+  };
+
+  return (
+    <div className="mt-1.5 flex items-center gap-1.5 bg-accent/5 border border-accent/20 rounded-lg p-1.5">
+      <input
+        value={id}
+        onChange={e => setId(e.target.value)}
+        placeholder="id inglese (es. lotus_flower)"
+        className="w-32 bg-white/70 dark:bg-white/5 border border-border/40 rounded px-2 py-1 text-[11px] font-mono text-ink focus:outline-none focus:ring-1 focus:ring-accent/40 placeholder:text-muted/40"
+      />
+      <input
+        value={itLabel}
+        onChange={e => setItLabel(e.target.value)}
+        placeholder="etichetta italiana (es. fiore di loto)"
+        onKeyDown={e => { if (e.key === 'Enter') submit(); }}
+        className="flex-1 bg-white/70 dark:bg-white/5 border border-border/40 rounded px-2 py-1 text-[11px] font-serif text-ink focus:outline-none focus:ring-1 focus:ring-accent/40 placeholder:text-muted/40"
+      />
+      <button type="button" onClick={submit} title="Aggiungi termine" className="p-1 text-accent hover:text-accent/70 shrink-0">
+        <Check className="w-3.5 h-3.5" />
+      </button>
+      <button type="button" onClick={() => { setOpen(false); setId(''); setItLabel(''); }} title="Annulla" className="p-1 text-muted/50 hover:text-red-500 shrink-0">
+        <X className="w-3.5 h-3.5" />
+      </button>
+    </div>
+  );
+};
+
 const IconographyEditor: React.FC<{ m: Monumento; set: <K extends keyof Monumento>(k: K, v: Monumento[K]) => void }> = ({ m, set }) => {
   const ico = m.iconografia || { figures: [] };
+  // Termini aggiunti sul posto in questa sessione (via AddTermButton), tenuti a
+  // parte dalle costanti di vocabolario base — chiave per categoria (es.
+  // 'function', 'place', 'figureKey:deity', 'trait:held_object').
+  const [extraVocab, setExtraVocab] = useState<Record<string, string[]>>({});
+  const addTerm = (category: string, id: string, itLabel: string) => {
+    if (!ICONOGRAPHY_LABELS[id]) ICONOGRAPHY_LABELS[id] = itLabel;
+    setExtraVocab(prev => {
+      const existing = prev[category] || [];
+      if (existing.includes(id)) return prev;
+      return { ...prev, [category]: [...existing, id] };
+    });
+    void postIconographyVocabTerm(id, itLabel);
+  };
   const update = (patch: Partial<typeof ico>) => set('iconografia', { ...ico, ...patch });
   const updateFigure = (fi: number, patch: Partial<IconographicFigure>) =>
     update({ figures: ico.figures.map((f, i) => i === fi ? { ...f, ...patch } : f) });
@@ -1376,9 +1464,10 @@ const IconographyEditor: React.FC<{ m: Monumento; set: <K extends keyof Monument
         <VocabSelect
           value={ico.function || ''}
           onChange={v => update({ function: v || undefined })}
-          options={FUNCTION_IDS}
+          options={[...FUNCTION_IDS, ...(extraVocab.function || [])]}
           placeholder="Nessuna funzione selezionata"
         />
+        <AddTermButton onAdd={(id, label) => { addTerm('function', id, label); update({ function: id }); }} />
         {!ico.function && suggestedFunction && (
           <div className="mt-2 flex items-center gap-2.5 text-xs bg-accent/8 border border-accent/20 rounded-lg px-3 py-2">
             <Sparkles className="w-3.5 h-3.5 text-accent shrink-0" />
@@ -1422,11 +1511,13 @@ const IconographyEditor: React.FC<{ m: Monumento; set: <K extends keyof Monument
                   </div>
                   <div>
                     <FieldLabel>Identificativo</FieldLabel>
-                    <VocabCombo value={fig.key} onChange={v => updateFigure(fi, { key: v })} options={FIGURE_KEY_OPTIONS_BY_TYPE[fig.type] || FIGURE_KEY_OPTIONS} listId={`dl-figkey-${fi}`} placeholder="es. dedicante, Men…" />
+                    <VocabCombo value={fig.key} onChange={v => updateFigure(fi, { key: v })} options={[...(FIGURE_KEY_OPTIONS_BY_TYPE[fig.type] || FIGURE_KEY_OPTIONS), ...(extraVocab[`figureKey:${fig.type || 'default'}`] || [])]} listId={`dl-figkey-${fi}`} placeholder="es. dedicante, Men…" />
+                    <AddTermButton onAdd={(id, label) => { addTerm(`figureKey:${fig.type || 'default'}`, id, label); updateFigure(fi, { key: id }); }} />
                   </div>
                   <div>
                     <FieldLabel>Posizione nella composizione</FieldLabel>
-                    <VocabSelect value={fig.place || ''} onChange={v => updateFigure(fi, { place: v || undefined })} options={PLACE_KEYS} placeholder="Non specificata" allowEmpty />
+                    <VocabSelect value={fig.place || ''} onChange={v => updateFigure(fi, { place: v || undefined })} options={[...PLACE_KEYS, ...(extraVocab.place || [])]} placeholder="Non specificata" allowEmpty />
+                    <AddTermButton onAdd={(id, label) => { addTerm('place', id, label); updateFigure(fi, { place: id }); }} />
                   </div>
                 </div>
                 <button onClick={() => update({ figures: ico.figures.filter((_, i) => i !== fi) })}
@@ -1456,9 +1547,12 @@ const IconographyEditor: React.FC<{ m: Monumento; set: <K extends keyof Monument
                         <VocabSelect
                           value={t.key}
                           onChange={v => updateTrait(fi, ti, { key: v })}
-                          options={TRAIT_KEY_OPTIONS[t.type] || []}
+                          options={[...(TRAIT_KEY_OPTIONS[t.type] || []), ...(extraVocab[`trait:${t.type}`] || [])]}
                           placeholder={t.type ? 'Elemento…' : 'Scegli prima la categoria'}
                         />
+                        {t.type && (
+                          <AddTermButton onAdd={(id, label) => { addTerm(`trait:${t.type}`, id, label); updateTrait(fi, ti, { key: id }); }} />
+                        )}
                       </div>
                       <select
                         value={t.hand || ''}
