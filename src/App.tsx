@@ -6648,7 +6648,11 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                                 <div>
                                   <span className="text-muted uppercase font-bold text-[9px]">Dimensioni:</span>{' '}
                                   <span className="text-ink font-serif italic text-xs">
-                                    {`h ${selectedMonumento.dim_altezza || '-'} × l ${selectedMonumento.dim_larghezza || '-'} × p ${selectedMonumento.dim_profondita || '-'} ${selectedMonumento.dim_unita || 'metre'}`}
+                                    {[
+                                      selectedMonumento.dim_altezza && `h ${selectedMonumento.dim_altezza}`,
+                                      selectedMonumento.dim_larghezza && `l ${selectedMonumento.dim_larghezza}`,
+                                      selectedMonumento.dim_profondita && `p ${selectedMonumento.dim_profondita}`,
+                                    ].filter(Boolean).join(' × ')} {selectedMonumento.dim_unita || 'metre'}
                                   </span>
                                 </div>
                               ) : (
