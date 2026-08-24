@@ -666,32 +666,37 @@ const AttestationList = ({
       {items.length} {items.length === 1 ? 'attestazione' : 'attestazioni'}
     </div>
     <div className="flex-1 overflow-y-auto pr-4 custom-scrollbar">
-      <div className="border border-border/60 rounded-sm divide-y divide-border/40 bg-parchment/40 overflow-hidden">
-        {items.map((m, i) => (
-          <motion.div
-            key={m.entryId || `idx-${m.id}`}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.25, delay: Math.min(i, 20) * 0.015, ease: EASE_OUT }}
-            onClick={() => onSelectMonumento(m)}
-            className="group flex items-center gap-3 px-3 py-2 cursor-pointer hover:bg-accent/5 transition-colors"
-          >
-            {m.entryId && (
-              <span className="shrink-0 text-[9px] font-mono font-bold text-muted/50 group-hover:text-accent/70 transition-colors w-12 truncate">{m.entryId}</span>
-            )}
-            <span className="shrink-0 text-sm font-bold font-serif text-ink group-hover:text-accent transition-colors truncate max-w-[40%]">{getDisplayTitle(m)}</span>
-            <span className="flex-1 min-w-0 text-xs italic text-muted/70 truncate">"{stripXml(m.testo) || '[Anepigrafe]'}"</span>
-            <div className="shrink-0 flex items-center gap-1.5">
-              {m.regione && (
-                <span className="text-[9px] font-sans font-bold bg-accent/10 text-accent px-1.5 py-0.5 rounded-sm uppercase tracking-widest">{m.regione}</span>
-              )}
-              {m.citta && (
-                <span className="text-[9px] font-sans font-bold text-muted/70 uppercase tracking-widest">{m.citta}</span>
-              )}
-            </div>
-            <ChevronRight className="h-3.5 w-3.5 text-border group-hover:text-accent group-hover:translate-x-0.5 transition-all shrink-0" />
-          </motion.div>
-        ))}
+      <div className="border border-border/60 rounded-sm bg-parchment/40 overflow-hidden">
+        <div className="hidden md:grid grid-cols-[4.5rem_2fr_6rem_6rem_1.25rem] gap-3 px-3 py-2 border-b border-border/60 text-[9px] font-sans font-bold uppercase tracking-widest text-muted/60">
+          <span>Id</span>
+          <span>Testo</span>
+          <span>Regione</span>
+          <span>Località</span>
+          <span />
+        </div>
+        <div className="divide-y divide-border/40">
+          {items.map((m, i) => (
+            <motion.div
+              key={m.entryId || `idx-${m.id}`}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.25, delay: Math.min(i, 20) * 0.015, ease: EASE_OUT }}
+              onClick={() => onSelectMonumento(m)}
+              className="group grid grid-cols-[4.5rem_2fr_6rem_6rem_1.25rem] items-center gap-3 px-3 py-3.5 cursor-pointer hover:bg-accent/5 transition-colors"
+            >
+              <span className="shrink-0 text-[11px] font-mono font-bold text-accent/80 group-hover:text-accent transition-colors truncate">
+                ILA-{m.id.toString().padStart(3, '0')}
+              </span>
+              <div className="min-w-0 flex flex-col gap-0.5">
+                <span className="text-sm font-bold font-serif text-ink group-hover:text-accent transition-colors truncate">{getDisplayTitle(m)}</span>
+                <span className="text-xs italic text-muted/70 truncate">"{stripXml(m.testo) || '[Anepigrafe]'}"</span>
+              </div>
+              <span className="text-[10px] font-sans font-bold text-accent uppercase tracking-widest truncate">{m.regione || '—'}</span>
+              <span className="text-[10px] font-sans font-bold text-muted/70 uppercase tracking-widest truncate">{m.citta || '—'}</span>
+              <ChevronRight className="h-3.5 w-3.5 text-border group-hover:text-accent group-hover:translate-x-0.5 transition-all shrink-0 justify-self-end" />
+            </motion.div>
+          ))}
+        </div>
       </div>
       {items.length === 0 && (
         <div className="text-center py-12 text-muted/40 text-sm italic">Nessuna attestazione trovata.</div>
