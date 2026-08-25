@@ -914,8 +914,13 @@ function renderSectionForm(
     case 'hand':
       return (
         <div className="max-w-2xl">
-          <FieldLabel>Note paleografiche</FieldLabel>
-          <TextArea rows={3} value={m.scrittura_note || ''} onChange={e => set('scrittura_note', e.target.value)} />
+          <FieldLabel hint="forme delle lettere, legature, abbreviazioni, interpunzione, qualità/regolarità dell'incisione — non la tecnica esecutiva (già in Impaginazione)">Note paleografiche</FieldLabel>
+          <TextArea
+            rows={3}
+            value={m.scrittura_note || ''}
+            onChange={e => set('scrittura_note', e.target.value)}
+            placeholder="es. Lettere capitali regolari, alte ca. 2 cm; omega lunato; interpunzione a punto triangolare tra le parole; nessi nelle ultime righe, mano meno accurata"
+          />
         </div>
       );
 
