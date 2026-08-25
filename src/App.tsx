@@ -2410,21 +2410,24 @@ function Timeline({ monumenti, onSelect }: { monumenti: Monumento[], onSelect: (
                 className="absolute cursor-zoom-in"
                 style={{ left: 0, top: 0, width: axisWidth, height: cascadeHeight }}
               >
-                {/* Intestazioni dei secoli: tacca accento + etichetta in maiuscolo, sempre in
-                    cima — come le colonne di fase di un diagramma di Gantt — con una guida
-                    verticale tratteggiata che scende lungo tutta la cascata sottostante. */}
-                {centuryTicks.slice(0, -1).map(c => {
+                {/* Intestazioni dei secoli, come le colonne di fase di un diagramma di Gantt:
+                    indice numerato in alto, trattino verticale scuro accanto, etichetta del
+                    secolo in maiuscolo sotto — con una guida verticale tratteggiata che scende
+                    lungo tutta la cascata sottostante. */}
+                {centuryTicks.slice(0, -1).map((c, i) => {
                   const bandLeft = yearToLeft(c * 100);
                   const bandRight = yearToLeft((c + 1) * 100);
                   const bandWidth = bandRight - bandLeft;
                   const centuryNum = c < 0 ? -c : c + 1;
                   const label = `${toRoman(centuryNum)} sec. ${c < 0 ? 'a.C.' : 'd.C.'}`;
+                  const idx = String(i + 1).padStart(2, '0');
                   return (
                     <div key={`head-${c}`} className="absolute" style={{ left: bandLeft, width: bandWidth, top: 0, height: cascadeHeight }}>
+                      <div className="absolute w-[2px] bg-ink/70" style={{ left: 0, top: 0, height: RULE_Y - 4 }} />
                       {bandWidth > 30 && (
-                        <div className="absolute flex items-center gap-1.5" style={{ left: 4, top: 0 }}>
-                          <div className="w-[3px] h-3.5 bg-accent rounded-full shrink-0" />
-                          <span className="text-[10px] font-sans font-extrabold uppercase tracking-wider text-ink/75 whitespace-nowrap">{label}</span>
+                        <div className="absolute" style={{ left: 10, top: 0 }}>
+                          <div className="text-[10px] font-sans font-black text-ink/40 leading-none mb-1">{idx}</div>
+                          <div className="text-[10px] font-sans font-extrabold uppercase tracking-wider text-ink/80 whitespace-nowrap leading-none">{label}</div>
                         </div>
                       )}
                       <div className="absolute border-l border-dashed border-border" style={{ left: 0, top: RULE_Y, bottom: 0 }} />
@@ -2460,11 +2463,10 @@ function Timeline({ monumenti, onSelect }: { monumenti: Monumento[], onSelect: (
                     key={m.entryId || `id-${m.id}`}
                     onClick={(e) => { e.stopPropagation(); onSelect(m); }}
                     title={`#${m.id} — ${m.citta || m.regione || 'N/A'} — ${formatDateRange(m.data_inizio, m.data_fine)}`}
-                    className="absolute flex items-center gap-1 px-2 rounded-sm border border-accent/30 bg-accent/10 text-[11px] font-sans font-bold text-ink hover:bg-accent/20 hover:border-accent hover:text-accent transition-colors overflow-hidden whitespace-nowrap"
+                    className="absolute flex items-center justify-center px-2 rounded-md border border-ink/10 bg-ink/[0.06] text-[11px] font-sans font-bold text-ink/85 hover:bg-accent/15 hover:border-accent/40 hover:text-accent transition-colors overflow-hidden whitespace-nowrap"
                     style={{ left, top: CASCADE_TOP + lane * ROW_H, width, height: BAR_H, zIndex: 2 }}
                   >
-                    <span className="text-accent shrink-0">#{m.id}</span>
-                    <span className="truncate min-w-0">{m.citta || m.regione || 'N/A'}</span>
+                    <span className="truncate min-w-0">#{m.id} {m.citta || m.regione || 'N/A'}</span>
                   </button>
                 ))}
               </div>
