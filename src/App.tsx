@@ -39,6 +39,8 @@ import {
   Check,
   AlertTriangle,
   Feather,
+  ZoomIn,
+  ZoomOut,
   RotateCcw,
   GitCompare,
   KeyRound,
@@ -2124,14 +2126,24 @@ function toRoman(num: number): string {
   return out;
 }
 
-// Colonne per secolo in stile fisarmonica: la vista di default mostra solo le
-// intestazioni, tutte affiancate in una vista d'insieme che sta sempre per intero
-// nella finestra (nessuno scroll orizzontale necessario). Cliccando un'intestazione
-// quella colonna si espande verso il basso mostrando l'elenco ordinato delle
-// iscrizioni datate in quel secolo; le altre colonne restano affiancate e più
-// colonne possono restare aperte insieme.
+// Cascata cronologica in stile Gantt: ogni scheda è una barra ancorata alla propria
+// data reale (mai spostata orizzontalmente) e lunga quanto il proprio intervallo di
+// datazione. Le barre che si sovrappongono nel tempo scendono nella prima corsia
+// libera sotto di loro — un impaccamento a intervalli letto dall'alto in basso, non
+// un raggruppamento che nasconde schede né diramazioni curve.
 function Timeline({ monumenti, onSelect }: { monumenti: Monumento[], onSelect: (m: Monumento) => void }) {
-  const [expanded, setExpanded] = useState<Set<number>>(new Set());
+  const [hoverX, setHoverX] = useState<number | null>(null);
+  const [zoom, setZoom] = useState(1);
+  const axisRef = useRef<HTMLDivElement>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const zoomAnchorRef = useRef<{ year: number; clientX: number } | null>(null);
+  const didFitRef = useRef(false);
+
+  const ZOOM_MIN = 0.2;
+  const ZOOM_MAX = 8;
+  // Soglia minima di leggibilità per lo zoom "a schermo intero": sotto questo valore si
+  // preferisce scorrere orizzontalmente piuttosto che rimpicciolire le barre oltre leggibilità.
+  const MIN_FIT_ZOOM = 0.85;
 
   const sorted = useMemo(() => {
     return monumenti
@@ -2139,41 +2151,178 @@ function Timeline({ monumenti, onSelect }: { monumenti: Monumento[], onSelect: (
       .sort((a, b) => (a.data_inizio || 0) - (b.data_inizio || 0));
   }, [monumenti]);
 
-  // Raggruppa le schede per secolo (floor(anno/100)) e riempie i secoli intermedi
-  // senza iscrizioni, per mantenere leggibile la continuità cronologica della sequenza.
-  const centuryBuckets = useMemo<Map<number, Monumento[]>>(() => {
-    const map = new Map<number, Monumento[]>();
-    for (const m of sorted) {
-      const c = Math.floor((m.data_inizio ?? 0) / 100);
-      if (!map.has(c)) map.set(c, []);
-      map.get(c)!.push(m);
-    }
-    return map;
+  // Dominio cronologico dell'asse: derivato dai dati reali (con un secolo di margine per lato).
+  const { yearMin, yearMax } = useMemo(() => {
+    if (sorted.length === 0) return { yearMin: -400, yearMax: 400 };
+    const years = sorted.map(m => m.data_inizio || 0);
+    const dataMin = Math.min(...years);
+    const dataMax = Math.max(...years);
+    return {
+      yearMin: Math.floor(dataMin / 100) * 100 - 100,
+      yearMax: Math.ceil(dataMax / 100) * 100 + 100,
+    };
   }, [sorted]);
+  const yearSpan = yearMax - yearMin;
 
-  const centuries = useMemo(() => {
-    if (centuryBuckets.size === 0) return [];
-    const keys: number[] = Array.from(centuryBuckets.keys());
-    const minC = Math.min(...keys);
-    const maxC = Math.max(...keys);
-    const list: number[] = [];
-    for (let c = minC; c <= maxC; c++) list.push(c);
-    return list;
-  }, [centuryBuckets]);
+  // Scala cronologica di base (px/anno) — è anche la scala di LAYOUT, fissa e indipendente
+  // dallo zoom: la cascata viene disegnata UNA volta a questa scala fissa, come un'immagine;
+  // lo zoom è una trasformazione CSS animata applicata sopra, non un ricalcolo del layout.
+  const LAYOUT_PX_PER_YEAR = 3.4;
+  const BASE_PX_PER_YEAR = LAYOUT_PX_PER_YEAR;
+  const pxPerYear = LAYOUT_PX_PER_YEAR * zoom;
+  const naturalWidth = yearSpan * LAYOUT_PX_PER_YEAR;
+  const yearToLeft = (year: number) => (year - yearMin) * LAYOUT_PX_PER_YEAR;
 
-  const toggleCentury = (c: number) => {
-    setExpanded(prev => {
-      const next = new Set(prev);
-      if (next.has(c)) next.delete(c); else next.add(c);
-      return next;
+  const centuryTicks = useMemo(() => {
+    const startC = Math.floor(yearMin / 100);
+    const endC = Math.ceil(yearMax / 100);
+    const ticks: number[] = [];
+    for (let c = startC; c <= endC; c++) ticks.push(c);
+    return ticks;
+  }, [yearMin, yearMax]);
+
+  // Geometria della cascata: RULE_Y separa le intestazioni dei secoli (sempre in cima,
+  // come le colonne di fase di un diagramma di Gantt) dalle barre; CASCADE_TOP è dove
+  // inizia la prima corsia.
+  const RULE_Y = 30;
+  const CASCADE_TOP = RULE_Y + 12;
+  const ROW_H = 30;
+  const BAR_H = 22;
+  const MIN_BAR_WIDTH = 86;
+  const BAR_GAP = 8;
+
+  // Impaccamento a intervalli (come le "righe" di un Gantt): si scorre l'elenco già
+  // ordinato per data di inizio e ogni barra va nella prima corsia il cui ultimo
+  // occupante finisce prima che questa inizi — mai spostata orizzontalmente, solo
+  // spinta in una corsia più bassa quando si sovrappone nel tempo a chi la precede.
+  const bars = useMemo(() => {
+    const laneEdges: number[] = [];
+    return sorted.map(m => {
+      const start = m.data_inizio ?? 0;
+      const end = m.data_fine ?? start;
+      const left = yearToLeft(start);
+      const rawWidth = yearToLeft(end) - left;
+      const width = Math.max(MIN_BAR_WIDTH, rawWidth);
+      let lane = laneEdges.findIndex(edge => left >= edge);
+      if (lane === -1) lane = laneEdges.length;
+      laneEdges[lane] = left + width + BAR_GAP;
+      return { m, left, width, lane };
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sorted, yearMin]);
+
+  const laneCount = useMemo(() => bars.reduce((max, b) => Math.max(max, b.lane + 1), 0), [bars]);
+  const cascadeHeight = CASCADE_TOP + Math.max(1, laneCount) * ROW_H + 24;
+
+  const axisWidth = Math.max(600, naturalWidth + 40);
+
+  const formatHoverYear = (y: number) => (y < 0 ? `${Math.abs(y)} a.C.` : y === 0 ? '1 d.C.' : `${y} d.C.`);
+  const hoverYear = hoverX !== null ? Math.round(yearMin + hoverX / LAYOUT_PX_PER_YEAR) : null;
+
+  const handleAxisMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!axisRef.current) return;
+    const rect = axisRef.current.getBoundingClientRect();
+    const screenX = e.clientX - rect.left;
+    setHoverX(Math.max(0, Math.min(axisWidth, screenX / zoom)));
+  };
+  const handleAxisMouseLeave = () => setHoverX(null);
+
+  // Ctrl/Cmd + rotellina (o pizzico sul trackpad) zooma l'asse mantenendo fermo sotto
+  // il cursore l'anno su cui si trovava il mouse.
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const onWheel = (e: WheelEvent) => {
+      if (!(e.ctrlKey || e.metaKey)) return;
+      e.preventDefault();
+      if (!axisRef.current) return;
+      const rect = axisRef.current.getBoundingClientRect();
+      const cursorXInAxis = e.clientX - rect.left;
+      const currentYear = yearMin + cursorXInAxis / pxPerYear;
+      zoomAnchorRef.current = { year: currentYear, clientX: e.clientX };
+      const factor = e.deltaY < 0 ? 1.15 : 1 / 1.15;
+      setZoom(z => Math.min(ZOOM_MAX, Math.max(ZOOM_MIN, z * factor)));
+    };
+    el.addEventListener('wheel', onWheel, { passive: false });
+    return () => el.removeEventListener('wheel', onWheel);
+  }, [pxPerYear, yearMin]);
+
+  // Dopo ogni cambio di zoom, riallinea lo scroll così l'anno "ancorato" resta nella
+  // stessa posizione sullo schermo.
+  useLayoutEffect(() => {
+    const anchor = zoomAnchorRef.current;
+    const scrollEl = scrollRef.current;
+    const axisEl = axisRef.current;
+    if (!anchor || !scrollEl || !axisEl) return;
+    scrollEl.scrollLeft = 0;
+    const axisLeftAtZero = axisEl.getBoundingClientRect().left;
+    const pos = (anchor.year - yearMin) * pxPerYear;
+    let target = axisLeftAtZero + pos - anchor.clientX;
+    target = Math.max(0, Math.min(target, scrollEl.scrollWidth - scrollEl.clientWidth));
+    scrollEl.scrollLeft = target;
+    zoomAnchorRef.current = null;
+  }, [zoom]);
+
+  // Calcola lo zoom "a schermo intero": l'intera sequenza visibile in una volta, senza
+  // scorrere, ma mai sotto MIN_FIT_ZOOM (altrimenti si preferisce scorrere).
+  const computeFitZoom = () => {
+    if (!scrollRef.current) return null;
+    const containerWidth = scrollRef.current.clientWidth;
+    if (containerWidth <= 0) return null;
+    const available = Math.max(containerWidth - 200, 120);
+    const naturalAtZoom1 = yearSpan * BASE_PX_PER_YEAR;
+    if (naturalAtZoom1 <= 0) return null;
+    return Math.min(1, Math.max(MIN_FIT_ZOOM, available / naturalAtZoom1));
   };
 
-  const collapseAll = () => setExpanded(new Set());
+  // All'apertura della sezione, applica subito lo zoom a schermo intero.
+  useLayoutEffect(() => {
+    if (didFitRef.current) return;
+    if (sorted.length === 0 || !scrollRef.current) return;
+    didFitRef.current = true;
+    const fit = computeFitZoom();
+    if (fit !== null) setZoom(fit);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sorted.length, yearSpan]);
 
-  const formatCenturyLabel = (c: number) => {
-    const num = c < 0 ? -c : c + 1;
-    return `${toRoman(num)} ${c < 0 ? 'a.C.' : 'd.C.'}`;
+  // Zoom da pulsante: ancora sul centro della vista attualmente visibile.
+  const zoomByFactor = (factor: number) => {
+    if (!axisRef.current || !scrollRef.current) return;
+    const scrollRect = scrollRef.current.getBoundingClientRect();
+    const axisRect = axisRef.current.getBoundingClientRect();
+    const viewportCenterClientX = scrollRect.left + scrollRect.width / 2;
+    const cursorXInAxis = viewportCenterClientX - axisRect.left;
+    const currentYear = yearMin + cursorXInAxis / pxPerYear;
+    zoomAnchorRef.current = { year: currentYear, clientX: viewportCenterClientX };
+    setZoom(z => Math.min(ZOOM_MAX, Math.max(ZOOM_MIN, z * factor)));
+  };
+  const handleZoomIn = () => zoomByFactor(1.4);
+  const handleZoomOut = () => zoomByFactor(1 / 1.4);
+  const handleZoomReset = () => {
+    zoomAnchorRef.current = null;
+    setZoom(computeFitZoom() ?? 1);
+    if (scrollRef.current) scrollRef.current.scrollLeft = 0;
+  };
+
+  // Esc come scorciatoia rapida per tornare alla vista di default.
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') handleZoomReset();
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Click diretto sull'asse (fuori da una barra): zoom interattivo centrato sul punto
+  // cronologico cliccato. Le barre fermano la propagazione del click.
+  const handleAxisClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!axisRef.current) return;
+    const rect = axisRef.current.getBoundingClientRect();
+    const cursorXInAxis = e.clientX - rect.left;
+    const currentYear = yearMin + cursorXInAxis / pxPerYear;
+    zoomAnchorRef.current = { year: currentYear, clientX: e.clientX };
+    setZoom(z => Math.min(ZOOM_MAX, Math.max(ZOOM_MIN, z * 1.7)));
   };
 
   return (
@@ -2183,17 +2332,37 @@ function Timeline({ monumenti, onSelect }: { monumenti: Monumento[], onSelect: (
           <div className="text-[10px] font-sans font-bold uppercase tracking-[0.22em] text-accent/70 mb-2">Sequenza temporale</div>
           <h2 className="text-3xl md:text-4xl font-bold italic mb-2">Cronologia Storica</h2>
           <p className="text-sm text-muted font-serif">Visualizzazione sequenziale dei monumenti datati (a.C. - d.C.).</p>
-          <p className="text-xs text-muted/60 font-sans mt-1">Clicca su un secolo per aprirlo ed esplorare le iscrizioni che contiene: puoi tenerne aperti più di uno insieme.</p>
+          <p className="text-xs text-muted/60 font-sans mt-1">Ogni barra resta ancorata alla propria data reale ed è lunga quanto il suo intervallo di datazione. Clicca sull'asse per zoomare su un punto, oppure Ctrl/Cmd + rotellina (o pizzico).</p>
         </div>
-        {expanded.size > 0 && (
-          <button
-            onClick={collapseAll}
-            className="h-7 pl-2.5 pr-3 rounded-full flex items-center gap-1.5 text-[10px] font-sans font-bold uppercase tracking-wide text-accent bg-accent/10 hover:bg-accent/20 border border-accent/25 transition-colors shrink-0"
-            title="Richiudi tutti i secoli aperti"
-          >
-            <RotateCcw className="h-3 w-3" />
-            Vista d'insieme
-          </button>
+        {sorted.length > 0 && (
+          <div className="flex items-center gap-2 shrink-0">
+            <button
+              onClick={handleZoomReset}
+              className="h-7 pl-2.5 pr-3 rounded-full flex items-center gap-1.5 text-[10px] font-sans font-bold uppercase tracking-wide text-accent bg-accent/10 hover:bg-accent/20 border border-accent/25 transition-colors"
+              title="Vista d'insieme (adatta alla finestra) — anche tasto Esc"
+            >
+              <RotateCcw className="h-3 w-3" />
+              Vista d'insieme
+            </button>
+            <div className="flex items-center gap-0.5 bg-parchment/70 backdrop-blur-sm border border-border/60 rounded-full p-1 shadow-sm">
+              <button
+                onClick={handleZoomOut}
+                disabled={zoom <= ZOOM_MIN + 0.001}
+                className="h-7 w-7 rounded-full flex items-center justify-center text-muted/70 hover:bg-accent/10 hover:text-accent disabled:opacity-25 disabled:hover:bg-transparent transition-colors"
+                title="Riduci zoom"
+              >
+                <ZoomOut className="h-3.5 w-3.5" />
+              </button>
+              <button
+                onClick={handleZoomIn}
+                disabled={zoom >= ZOOM_MAX - 0.001}
+                className="h-7 w-7 rounded-full flex items-center justify-center text-muted/70 hover:bg-accent/10 hover:text-accent disabled:opacity-25 disabled:hover:bg-transparent transition-colors"
+                title="Aumenta zoom"
+              >
+                <ZoomIn className="h-3.5 w-3.5" />
+              </button>
+            </div>
+          </div>
         )}
       </motion.div>
 
@@ -2205,63 +2374,110 @@ function Timeline({ monumenti, onSelect }: { monumenti: Monumento[], onSelect: (
           </div>
         </div>
       ) : (
-        <div className="flex-1 overflow-auto custom-scrollbar min-h-0 bg-card border border-border rounded-lg shadow-sm">
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex items-start gap-10 px-16 md:px-24 py-10 min-h-full">
-            {centuries.map((c, i) => {
-              const entries = centuryBuckets.get(c) || [];
-              const isExpanded = expanded.has(c);
-              const hasEntries = entries.length > 0;
-              return (
-                <div
-                  key={c}
-                  className={`flex flex-col shrink-0 transition-[flex-grow,min-width] duration-300 ease-out ${i > 0 ? 'border-l border-dashed border-border pl-10' : ''}`}
-                  style={{ flexGrow: isExpanded ? 3 : 1, flexBasis: 0, minWidth: isExpanded ? 240 : 110 }}
-                >
-                  <button
-                    onClick={() => hasEntries && toggleCentury(c)}
-                    disabled={!hasEntries}
-                    className="group relative text-left py-1"
-                  >
-                    <div className={`w-8 h-[2px] rounded-full mb-3 transition-colors ${isExpanded ? 'bg-accent' : hasEntries ? 'bg-ink/60 group-hover:bg-accent/60' : 'bg-ink/15'}`} />
-                    <div className={`text-lg font-sans font-black uppercase tracking-tight leading-none whitespace-nowrap transition-colors ${isExpanded ? 'text-accent' : hasEntries ? 'text-ink/85 group-hover:text-accent' : 'text-muted/30'}`}>
-                      {formatCenturyLabel(c)}
+      <div ref={scrollRef} className="flex-1 overflow-x-auto overflow-y-auto relative custom-scrollbar min-h-0 bg-card border border-border rounded-lg shadow-sm" style={{ minHeight: 0, overflowX: 'auto' }}>
+            <motion.div
+                 initial={{ opacity: 0 }}
+                 animate={{ opacity: 1 }}
+                 className="relative px-16 md:px-24 py-8"
+                 style={{ minHeight: '100%' }}
+            >
+              {/* La cascata (intestazioni, riga, barre) viene disegnata UNA volta sola a una
+                  scala di layout fissa — non cambia mai forma in base allo zoom. Lo zoom è
+                  una trasformazione CSS animata applicata qui sopra. */}
+              <div
+                className="relative shrink-0"
+                style={{
+                  width: axisWidth * zoom,
+                  height: cascadeHeight * zoom,
+                  transition: 'width 320ms cubic-bezier(0.22, 1, 0.36, 1), height 320ms cubic-bezier(0.22, 1, 0.36, 1)',
+                }}
+              >
+              <div
+                className="absolute left-0 top-0"
+                style={{
+                  width: axisWidth,
+                  height: cascadeHeight,
+                  transform: `scale(${zoom})`,
+                  transformOrigin: '0 0',
+                  transition: 'transform 320ms cubic-bezier(0.22, 1, 0.36, 1)',
+                }}
+              >
+              <div
+                ref={axisRef}
+                onMouseMove={handleAxisMouseMove}
+                onMouseLeave={handleAxisMouseLeave}
+                onClick={handleAxisClick}
+                className="absolute cursor-zoom-in"
+                style={{ left: 0, top: 0, width: axisWidth, height: cascadeHeight }}
+              >
+                {/* Intestazioni dei secoli, come le colonne di fase di un diagramma di Gantt:
+                    indice numerato in alto, trattino verticale scuro accanto, etichetta del
+                    secolo in maiuscolo sotto — con una guida verticale tratteggiata che scende
+                    lungo tutta la cascata sottostante. */}
+                {centuryTicks.slice(0, -1).map((c, i) => {
+                  const bandLeft = yearToLeft(c * 100);
+                  const bandRight = yearToLeft((c + 1) * 100);
+                  const bandWidth = bandRight - bandLeft;
+                  const centuryNum = c < 0 ? -c : c + 1;
+                  const label = `${toRoman(centuryNum)} sec. ${c < 0 ? 'a.C.' : 'd.C.'}`;
+                  const idx = String(i + 1).padStart(2, '0');
+                  return (
+                    <div key={`head-${c}`} className="absolute" style={{ left: bandLeft, width: bandWidth, top: 0, height: cascadeHeight }}>
+                      <div className="absolute w-[2px] bg-ink/70" style={{ left: 0, top: 0, height: RULE_Y - 4 }} />
+                      {bandWidth > 30 && (
+                        <div className="absolute" style={{ left: 10, top: 0 }}>
+                          <div className="text-[10px] font-sans font-black text-ink/40 leading-none mb-1">{idx}</div>
+                          <div className="text-[10px] font-sans font-extrabold uppercase tracking-wider text-ink/80 whitespace-nowrap leading-none">{label}</div>
+                        </div>
+                      )}
+                      <div className="absolute border-l border-dashed border-border" style={{ left: 0, top: RULE_Y, bottom: 0 }} />
                     </div>
-                    {hasEntries && (
-                      <div className={`text-[10px] font-sans font-semibold mt-1.5 transition-colors ${isExpanded ? 'text-accent/70' : 'text-muted/60'}`}>
-                        {entries.length} {entries.length === 1 ? 'iscrizione' : 'iscrizioni'}
-                      </div>
-                    )}
-                  </button>
+                  );
+                })}
 
-                  {isExpanded && (
-                    <motion.div
-                      initial={{ opacity: 0, y: -6 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.22, ease: EASE_OUT }}
-                      className="flex flex-col divide-y divide-border/40 mt-5"
-                    >
-                      {entries.map(m => (
-                        <button
-                          key={m.entryId || `id-${m.id}`}
-                          onClick={() => onSelect(m)}
-                          title={`#${m.id} — ${m.citta || m.regione || 'N/A'} — ${formatDateRange(m.data_inizio, m.data_fine)}`}
-                          className="text-left flex items-center justify-between gap-4 py-3 hover:text-accent transition-colors"
-                        >
-                          <span className="text-sm font-sans font-semibold text-ink/85 truncate">#{m.id} {m.citta || m.regione || 'N/A'}</span>
-                          <span className="text-[10px] font-sans text-muted/60 tabular-nums shrink-0">{formatDateRange(m.data_inizio, m.data_fine)}</span>
-                        </button>
-                      ))}
-                    </motion.div>
-                  )}
-                </div>
-              );
-            })}
-          </motion.div>
-        </div>
+                {/* Riga orizzontale che separa le intestazioni dalla cascata delle barre —
+                    fa anche da "asse": si accende in teal al passaggio del mouse. */}
+                <div
+                  className={`absolute inset-x-0 rounded-full transition-colors duration-200 pointer-events-none ${hoverX !== null ? 'bg-accent' : 'bg-ink/25'}`}
+                  style={{ top: RULE_Y, height: 2, zIndex: 1 }}
+                />
+
+                <span className="absolute text-muted text-sm font-bold tracking-tighter select-none pointer-events-none" style={{ left: 0, top: RULE_Y, transform: 'translate(-135%, -50%)' }}>···</span>
+                <span className="absolute text-muted text-sm font-bold tracking-tighter select-none pointer-events-none" style={{ left: axisWidth, top: RULE_Y, transform: 'translate(35%, -50%)' }}>···</span>
+
+                {/* Linea guida interattiva: segue il mouse e mostra l'anno sotto il cursore. */}
+                {hoverX !== null && hoverYear !== null && (
+                  <div className="absolute pointer-events-none" style={{ left: hoverX, top: 0, height: cascadeHeight, transform: 'translateX(-50%)' }}>
+                    <div className="w-px h-full bg-accent/40 mx-auto" style={{ backgroundImage: 'linear-gradient(to bottom, transparent, var(--accent) 10%, var(--accent) 90%, transparent)', opacity: 0.3 }} />
+                    <div className="absolute left-1/2 px-2 py-0.5 rounded-full bg-ink text-parchment text-[9px] font-sans font-bold whitespace-nowrap shadow-md" style={{ top: RULE_Y, transform: 'translate(-50%, -50%)' }}>
+                      {formatHoverYear(hoverYear)}
+                    </div>
+                  </div>
+                )}
+
+                {/* Cascata delle barre: ognuna resta ancorata alla propria data reale e lunga
+                    quanto il proprio intervallo di datazione; le sovrapposizioni nel tempo
+                    scendono di corsia invece di spostare la posizione orizzontale. */}
+                {bars.map(({ m, left, width, lane }) => (
+                  <button
+                    key={m.entryId || `id-${m.id}`}
+                    onClick={(e) => { e.stopPropagation(); onSelect(m); }}
+                    title={`#${m.id} — ${m.citta || m.regione || 'N/A'} — ${formatDateRange(m.data_inizio, m.data_fine)}`}
+                    className="absolute flex items-center justify-center px-2 rounded-md border border-ink/10 bg-ink/[0.06] text-[11px] font-sans font-bold text-ink/85 hover:bg-accent/15 hover:border-accent/40 hover:text-accent transition-colors overflow-hidden whitespace-nowrap"
+                    style={{ left, top: CASCADE_TOP + lane * ROW_H, width, height: BAR_H, zIndex: 2 }}
+                  >
+                    <span className="truncate min-w-0">#{m.id} {m.citta || m.regione || 'N/A'}</span>
+                  </button>
+                ))}
+              </div>
+              </div>
+              </div>
+            </motion.div>
+          </div>
       )}
-    </div>
-  );
-}
+        </div>
+      );
+    }
 
 // Azione risultante dal click su un termine cliccabile del testo
 // dell'iscrizione (persName divine/attested, o fallback per ruler/emperor/
