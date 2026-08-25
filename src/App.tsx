@@ -1684,7 +1684,7 @@ function IconRail({
         onMouseEnter={() => setExpanded(true)}
         onMouseLeave={() => setExpanded(false)}
         animate={{ width: expanded ? 216 : 56 }}
-        transition={SPRING_SNAPPY}
+        transition={{ duration: 0.16, ease: EASE_OUT }}
         className="glass-panel fixed inset-y-0 left-0 z-50 flex flex-col items-stretch !rounded-none border-r overflow-hidden"
       >
         <div className={cn("flex items-center h-14 shrink-0 gap-2", expanded ? "px-4 justify-start" : "justify-center")}>
