@@ -2206,32 +2206,28 @@ function Timeline({ monumenti, onSelect }: { monumenti: Monumento[], onSelect: (
         </div>
       ) : (
         <div className="flex-1 overflow-auto custom-scrollbar min-h-0 bg-card border border-border rounded-lg shadow-sm">
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex items-start gap-2 p-6 min-h-full">
-            {centuries.map(c => {
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex items-start gap-10 px-16 md:px-24 py-10 min-h-full">
+            {centuries.map((c, i) => {
               const entries = centuryBuckets.get(c) || [];
               const isExpanded = expanded.has(c);
               const hasEntries = entries.length > 0;
               return (
                 <div
                   key={c}
-                  className="flex flex-col shrink-0 transition-[flex-grow,min-width] duration-300 ease-out"
-                  style={{ flexGrow: isExpanded ? 3 : 1, flexBasis: 0, minWidth: isExpanded ? 220 : 96 }}
+                  className={`flex flex-col shrink-0 transition-[flex-grow,min-width] duration-300 ease-out ${i > 0 ? 'border-l border-dashed border-border pl-10' : ''}`}
+                  style={{ flexGrow: isExpanded ? 3 : 1, flexBasis: 0, minWidth: isExpanded ? 240 : 110 }}
                 >
                   <button
                     onClick={() => hasEntries && toggleCentury(c)}
                     disabled={!hasEntries}
-                    className={`relative text-left rounded-md px-3 py-2.5 transition-colors ${
-                      isExpanded
-                        ? 'bg-ink text-parchment'
-                        : hasEntries
-                          ? 'bg-parchment/70 hover:bg-accent/10 text-ink border border-border/60'
-                          : 'bg-transparent text-muted/40 border border-transparent cursor-default'
-                    }`}
+                    className="group relative text-left py-1"
                   >
-                    <div className={`w-6 h-[3px] rounded-full mb-2 ${isExpanded ? 'bg-parchment/70' : 'bg-ink/70'}`} />
-                    <div className="text-base font-sans font-black uppercase tracking-tight leading-none whitespace-nowrap">{formatCenturyLabel(c)}</div>
+                    <div className={`w-8 h-[2px] rounded-full mb-3 transition-colors ${isExpanded ? 'bg-accent' : hasEntries ? 'bg-ink/60 group-hover:bg-accent/60' : 'bg-ink/15'}`} />
+                    <div className={`text-lg font-sans font-black uppercase tracking-tight leading-none whitespace-nowrap transition-colors ${isExpanded ? 'text-accent' : hasEntries ? 'text-ink/85 group-hover:text-accent' : 'text-muted/30'}`}>
+                      {formatCenturyLabel(c)}
+                    </div>
                     {hasEntries && (
-                      <div className={`text-[10px] font-sans font-bold mt-1 ${isExpanded ? 'text-parchment/70' : 'text-muted/70'}`}>
+                      <div className={`text-[10px] font-sans font-semibold mt-1.5 transition-colors ${isExpanded ? 'text-accent/70' : 'text-muted/60'}`}>
                         {entries.length} {entries.length === 1 ? 'iscrizione' : 'iscrizioni'}
                       </div>
                     )}
@@ -2242,17 +2238,17 @@ function Timeline({ monumenti, onSelect }: { monumenti: Monumento[], onSelect: (
                       initial={{ opacity: 0, y: -6 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.22, ease: EASE_OUT }}
-                      className="flex flex-col gap-1.5 mt-2"
+                      className="flex flex-col divide-y divide-border/40 mt-5"
                     >
                       {entries.map(m => (
                         <button
                           key={m.entryId || `id-${m.id}`}
                           onClick={() => onSelect(m)}
                           title={`#${m.id} — ${m.citta || m.regione || 'N/A'} — ${formatDateRange(m.data_inizio, m.data_fine)}`}
-                          className="text-left flex flex-col gap-0.5 px-2.5 py-2 rounded-md border border-ink/10 bg-ink/[0.06] hover:bg-accent/15 hover:border-accent/40 transition-colors overflow-hidden"
+                          className="text-left flex items-center justify-between gap-4 py-3 hover:text-accent transition-colors"
                         >
-                          <span className="text-[11px] font-sans font-bold text-ink/85 truncate">#{m.id} {m.citta || m.regione || 'N/A'}</span>
-                          <span className="text-[9px] font-sans text-muted/70 tabular-nums">{formatDateRange(m.data_inizio, m.data_fine)}</span>
+                          <span className="text-sm font-sans font-semibold text-ink/85 truncate">#{m.id} {m.citta || m.regione || 'N/A'}</span>
+                          <span className="text-[10px] font-sans text-muted/60 tabular-nums shrink-0">{formatDateRange(m.data_inizio, m.data_fine)}</span>
                         </button>
                       ))}
                     </motion.div>
