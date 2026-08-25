@@ -1678,7 +1678,7 @@ function IconRail({
         onMouseEnter={() => setExpanded(true)}
         onMouseLeave={() => setExpanded(false)}
         animate={{ width: expanded ? 216 : 56 }}
-        transition={SPRING_SOFT}
+        transition={SPRING_SNAPPY}
         className="glass-panel fixed inset-y-0 left-0 z-50 flex flex-col items-stretch !rounded-none border-r overflow-hidden"
       >
         <div className={cn("flex items-center h-14 shrink-0 gap-2", expanded ? "px-4 justify-start" : "justify-center")}>
@@ -5047,8 +5047,10 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
         )}
       </AnimatePresence>
 
-      {/* Editorial Header — superfluo in home, dove restano solo i tre controlli essenziali */}
-      {activeView !== 'home' && (
+      {/* Editorial Header — solo nel catalogo, ridotto a barra di ricerca: negli
+          altri contesti le funzioni (tema/impostazioni/account/navigazione)
+          sono già tutte in barra laterale, quindi qui sarebbe solo vuoto. */}
+      {activeView === 'catalog' && (
       <header className={cn(
         "mx-2.5 md:mx-5 lg:mx-6 mt-4 mb-2 rounded-2xl bg-[var(--card)]/85 dark:bg-[var(--card)]/70 backdrop-blur-xl border border-[var(--border)]/60 dark:border-[var(--border)]/50 shrink-0 gap-4 min-h-fit shadow-[0_12px_40px_-12px_rgba(var(--shadow-color),0.18),_inset_0_1px_2px_rgba(255,255,255,0.5)] dark:shadow-[0_12px_40px_-12px_rgba(0,0,0,0.5),_inset_0_1px_1px_rgba(255,255,255,0.08)] flex flex-col lg:flex-row items-stretch lg:items-center justify-between transition-all duration-500 relative sticky top-2 z-30",
         hasNavigated ? "px-5 py-2.5" : "px-8 md:px-10 py-6"
@@ -5110,72 +5112,6 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
             </button>
           </div>
         )}
-
-          <div className="flex items-center gap-2.5 shrink-0">
-            {/* Authentication Buttons — sulla build statica non c'è login
-                Google, il "chi può modificare" è lo sblocco con token
-                GitHub qui sotto (guardia isStaticBuild). */}
-            {!isStaticBuild && (currentUser ? (
-              <div className="flex items-center gap-2 text-muted text-[10px] bg-sidebar/50 border border-border/40 py-1 px-2.5 rounded-lg">
-                <span className="font-semibold normal-case truncate max-w-[120px] md:max-w-[160px]" title={currentUser.email || ""}>
-                  {currentUser.email === ADMIN_EMAIL ? "Admin" : currentUser.email}
-                </span>
-                <button
-                  onClick={logout}
-                  className="hover:text-accent font-bold transition-all ml-1 cursor-pointer flex items-center gap-1"
-                  title="Disconnetti"
-                >
-                  <LogOut className="h-3 w-3" />
-                </button>
-              </div>
-            ) : (
-              <button
-                onClick={loginWithGoogle}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-accent/10 hover:bg-accent/20 border border-accent/20 text-accent transition-all cursor-pointer font-sans text-[10px] font-bold"
-                title={`Accedi come ${ADMIN_EMAIL} per abilitare le modifiche`}
-              >
-                <LogIn className="h-3 w-3" /> Accedi (Admin)
-              </button>
-            ))}
-
-            {isStaticBuild && (
-              editingUnlocked ? (
-                <div className="flex items-center gap-2 text-accent text-[10px] bg-accent/10 border border-accent/20 py-1 px-2.5 rounded-lg">
-                  <span className="font-semibold normal-case">Modifica sbloccata</span>
-                  <button
-                    onClick={handleLockEditing}
-                    className="hover:text-ink font-bold transition-all ml-1 cursor-pointer flex items-center gap-1"
-                    title="Blocca di nuovo (torna alla sola consultazione)"
-                  >
-                    <Unlock className="h-3 w-3" />
-                  </button>
-                </div>
-              ) : (
-                <button
-                  onClick={() => setShowUnlockModal(true)}
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-accent/10 hover:bg-accent/20 border border-accent/20 text-accent transition-all cursor-pointer font-sans text-[10px] font-bold"
-                  title="Sblocca modifica con un token GitHub personale"
-                >
-                  <KeyRound className="h-3 w-3" /> Sblocca modifica
-                </button>
-              )
-            )}
-
-            <button 
-              onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-              className="flex items-center gap-2 hover:text-accent transition-colors p-2 rounded-full"
-              title={isDarkModeActive ? "Modalità Giorno" : "Modalità Notte"}
-            >
-              {isDarkModeActive ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-            </button>
-
-            <button 
-              onClick={() => setShowSettings(!showSettings)}
-              className={cn("flex items-center gap-2 hover:text-accent transition-colors p-2 rounded-full", showSettings && "bg-sidebar")}
-            >
-              <Settings className="h-4 w-4" />
-            </button>
-          </div>
       </header>
       )}
 
