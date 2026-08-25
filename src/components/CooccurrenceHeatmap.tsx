@@ -231,15 +231,22 @@ export const CooccurrenceHeatmap: React.FC<CooccurrenceHeatmapProps> = ({ monume
     const r = pmi > 0 ? 245 : 59;
     const g = pmi > 0 ? 158 : 130;
     const b = pmi > 0 ? 11 : 246;
-    const baseColor = `rgba(${r}, ${g}, ${b}, ${intensity})`;
+    // Glassmorphism: colore diluito + blur, con un bordo dello stesso hue
+    // più marcato a fare da "vetro smerigliato" (coerente con le altre card
+    // colorate dell'app, es. il pannello conflitti in App.tsx).
+    const baseColor = `rgba(${r}, ${g}, ${b}, ${intensity * 0.65})`;
+    const borderColor = `rgba(${r}, ${g}, ${b}, ${Math.min(intensity + 0.25, 0.9)})`;
 
     if (count < 3) {
       return {
         backgroundColor: baseColor,
+        borderColor,
+        backdropFilter: 'blur(6px)',
+        WebkitBackdropFilter: 'blur(6px)',
         backgroundImage: `repeating-linear-gradient(45deg, transparent, transparent 3px, rgba(0,0,0,0.06) 3px, rgba(0,0,0,0.06) 6px)`
       };
     }
-    return { backgroundColor: baseColor };
+    return { backgroundColor: baseColor, borderColor, backdropFilter: 'blur(6px)', WebkitBackdropFilter: 'blur(6px)' };
   };
 
   const colLabel = (tuple: string[]) =>
@@ -430,6 +437,7 @@ export const CooccurrenceHeatmap: React.FC<CooccurrenceHeatmapProps> = ({ monume
                        className={cn(
                          "w-8 h-8 shrink-0 border-b border-r border-border/30 flex items-center justify-center font-mono text-[10px] transition-colors hover:border-ink/40 cursor-default",
                          count === 0 ? "text-transparent hover:bg-gray-50/50" : (count < 3 ? "text-ink/50" : "text-ink/90 font-bold"),
+                         count > 0 ? "border shadow-[inset_0_1px_1px_rgba(255,255,255,0.4)]" : "",
                          count > 0 && onSelectCooccurrence ? "cursor-pointer" : ""
                        )}
                        style={style}
