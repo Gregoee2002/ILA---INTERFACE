@@ -1528,7 +1528,7 @@ const RAIL_ITEMS: { view: AppView; label: string; icon: React.ReactNode; adminOn
   { view: 'map', label: 'Mappa', icon: <MapPin className="h-4 w-4" /> },
   { view: 'timeline', label: 'Cronologia', icon: <Clock className="h-4 w-4" /> },
   { view: 'stats', label: 'Statistiche Epiteti', icon: <BarChart2 className="h-4 w-4" /> },
-  { view: 'heatmap', label: 'Heatmap Co-occorrenze', icon: <Columns className="h-4 w-4" /> },
+  { view: 'heatmap', label: 'Heatmap', icon: <Columns className="h-4 w-4" /> },
   { view: 'health', label: 'Coerenza', icon: <Check className="h-4 w-4" />, adminOnly: true },
   { view: 'flags', label: 'Registro', icon: <NotebookPen className="h-4 w-4" />, adminOnly: true },
   { view: 'bugs', label: 'Bug', icon: <Bug className="h-4 w-4" />, adminOnly: true },
