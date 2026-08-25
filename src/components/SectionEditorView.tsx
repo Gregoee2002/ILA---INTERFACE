@@ -8,6 +8,7 @@ import { cn, stripAccents } from '../lib/utils';
 import { Monumento, OrigDate, Traduzione, Bibliografia, Revision, IconographicFigure, IconographicTrait, EDITORIAL_STATUS_LABELS } from '../types';
 import { xmlToMonumenti, formatIlaLabel } from '../lib/xmlUtils';
 import { EditionMarkupEditor } from './EditionMarkupEditor';
+import { DivinityEpithetIndex } from './DivinityEpithetIndex';
 import { ICONOGRAPHY_LABELS } from '../lib/iconographyLabels';
 import { INSCRIPTION_TYPES, OBJECT_TYPES, MATERIALS, EXECUTION_TECHNIQUES, VocabTerm } from '../lib/eagleVocab';
 import { extractIndexSuggestions, extractPersonsFromEdition } from '../lib/leidenMarkup';
@@ -999,8 +1000,13 @@ function renderSectionForm(
           <p className="text-[11px] text-muted/60 italic -mt-1">
             Indice a sola lettura, specchio dei <span className="font-mono not-italic text-[10px]">&lt;persName&gt;</span> codificati in Edizione.
           </p>
-          <IndexGroup label="Epiteti" values={m.epiteti || []} empty="Nessun <rs type=“epithet”> ancora codificato nel testo." />
-          <IndexGroup label="Divinità" values={m.divinita || []} empty="Nessun persName type=“divine” ancora codificato nel testo." />
+          <DivinityEpithetIndex
+            divinitaEpiteti={m.divinitaEpiteti || []}
+            divinitaFlat={m.divinita || []}
+            epitetiFlat={m.epiteti || []}
+            emptyDivinita="Nessun persName type=“divine” ancora codificato nel testo."
+            emptyEpiteti="Nessun <rs type=“epithet”> ancora codificato nel testo."
+          />
           <IndexGroup label="Onomastica" values={m.onomastica || []} empty="Nessun persName type=“attested” ancora codificato nel testo." />
           <IndexGroup label="Imperatori" values={m.imperatori || []} empty="Nessun persName type=“ruler/emperor” ancora codificato nel testo." />
           {m.persone && m.persone.length > 0 && (
