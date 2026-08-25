@@ -2,7 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { Monumento } from '../types';
 import { ICONOGRAPHY_LABELS } from '../lib/iconographyLabels';
 import { cn } from '../lib/utils';
-import { getSecoliIndexAttestazione, centuryLabel } from '../lib/chronology';
+import { getSecoliAttestazione } from '../lib/chronology';
 import { Grid3X3, ArrowLeftRight, Orbit } from 'lucide-react';
 
 // "epiteti", "divinita", "onomastica", "imperatori", "materiale", "tipo" e
@@ -13,7 +13,7 @@ import { Grid3X3, ArrowLeftRight, Orbit } from 'lucide-react';
 // reale, ancora poco codificato, questi due assi risultano spesso vuoti.
 // Per questo NON sono più gli assi di default (vedi useState sotto) e sono
 // segnalati nel menu con "(richiede iconografia)".
-type AxisType = 'epiteti' | 'divinita' | 'onomastica' | 'imperatori' | 'materiale' | 'tipo' | 'regione' | 'attributi' | 'funzione';
+type AxisType = 'epiteti' | 'divinita' | 'onomastica' | 'imperatori' | 'materiale' | 'tipo' | 'regione' | 'secolo' | 'attributi' | 'funzione';
 
 type Mode = 'pair' | 'multi';
 
@@ -25,6 +25,7 @@ const AXIS_LABELS: Record<AxisType, string> = {
   materiale: 'Materiale',
   tipo: 'Tipo di oggetto',
   regione: 'Regione',
+  secolo: 'Secolo',
   attributi: 'Attributi Iconografici (richiede iconografia)',
   funzione: 'Funzione Cultuale (richiede iconografia)',
 };
@@ -49,6 +50,7 @@ const getAxisValues = (m: Monumento, axis: AxisType): string[] => {
     case 'materiale': return m.materiale ? [m.materiale] : [];
     case 'tipo': return m.tipo ? [m.tipo] : [];
     case 'regione': return m.regione ? [m.regione] : [];
+    case 'secolo': return getSecoliAttestazione(m.data_inizio, m.data_fine);
     case 'funzione': return m.iconografia?.function ? [m.iconografia.function] : [];
     case 'attributi': {
       if (!m.iconografia || !m.iconografia.figures) return [];
@@ -87,25 +89,6 @@ export const CooccurrenceHeatmap: React.FC<CooccurrenceHeatmapProps> = ({ monume
   // (prodotto cartesiano dei valori -> colonne composite).
   const [extraColAxes, setExtraColAxes] = useState<AxisType[]>(['materiale']);
 
-  // Filtro opzionale per secolo di attestazione (da data_inizio/data_fine).
-  // null = nessun filtro, tutte le schede indipendentemente dalla datazione.
-  const [centuryFilter, setCenturyFilter] = useState<number | null>(null);
-
-  const availableCenturies = useMemo(() => {
-    const set = new Set<number>();
-    monumenti.forEach(m => {
-      getSecoliIndexAttestazione(m.data_inizio, m.data_fine).forEach(i => set.add(i));
-    });
-    return Array.from(set).sort((a, b) => a - b);
-  }, [monumenti]);
-
-  const monumentiFiltrati = useMemo(() => {
-    if (centuryFilter === null) return monumenti;
-    return monumenti.filter(m =>
-      getSecoliIndexAttestazione(m.data_inizio, m.data_fine).includes(centuryFilter)
-    );
-  }, [monumenti, centuryFilter]);
-
   const colAxesList = useMemo<AxisType[]>(() => {
     if (mode === 'pair') return [colAxis];
     const list = [colAxis, ...extraColAxes].filter(a => a !== rowAxis);
@@ -140,9 +123,9 @@ export const CooccurrenceHeatmap: React.FC<CooccurrenceHeatmapProps> = ({ monume
     const pairCounts = new Map<string, number>(); // key: `${r}::${tuple.join('::')}`
     const tupleByKey = new Map<string, string[]>();
 
-    const total = monumentiFiltrati.length;
+    const total = monumenti.length;
 
-    monumentiFiltrati.forEach(m => {
+    monumenti.forEach(m => {
       const rVals = Array.from(new Set(getAxisValues(m, rowAxis)));
       rVals.forEach(r => rCounts.set(r, (rCounts.get(r) || 0) + 1));
 
@@ -207,7 +190,7 @@ export const CooccurrenceHeatmap: React.FC<CooccurrenceHeatmapProps> = ({ monume
       compMarginals,
       totalN: total,
     };
-  }, [monumentiFiltrati, rowAxis, colAxesList, mode, isDivinitaEpitetiPair]);
+  }, [monumenti, rowAxis, colAxesList, mode, isDivinitaEpitetiPair]);
 
   // Generalizzazione della PMI a N fattori: confronta la probabilità
   // congiunta osservata P(riga, colonna_1, ..., colonna_k) con quella attesa
@@ -268,22 +251,6 @@ export const CooccurrenceHeatmap: React.FC<CooccurrenceHeatmapProps> = ({ monume
   const remainingAxesForExtra = (Object.keys(AXIS_LABELS) as AxisType[]).filter(
     a => a !== rowAxis && a !== colAxis
   );
-
-  if (centuryFilter !== null && monumentiFiltrati.length === 0) {
-    return (
-      <div className="p-4 text-sm text-muted max-w-md">
-        <p className="mb-1">
-          Nessuna scheda datata al secolo "<strong>{centuryLabel(centuryFilter)}</strong>".
-        </p>
-        <p className="text-xs text-muted/70">
-          Prova un altro secolo, oppure{' '}
-          <button type="button" onClick={() => setCenturyFilter(null)} className="underline hover:text-accent">
-            rimuovi il filtro
-          </button>.
-        </p>
-      </div>
-    );
-  }
 
   if (rowValues.length === 0 || colTuples.length === 0) {
     const emptyAxis = rowValues.length === 0 ? rowAxis : colAxis;
@@ -373,20 +340,6 @@ export const CooccurrenceHeatmap: React.FC<CooccurrenceHeatmapProps> = ({ monume
             >
               {(Object.entries(AXIS_LABELS) as [AxisType, string][]).map(([k, v]) => (
                 <option key={k} value={k}>{v}</option>
-              ))}
-            </select>
-          </div>
-          <div className="flex flex-col gap-1">
-            <label className="text-[10px] font-bold uppercase tracking-widest text-muted">Secolo</label>
-            <select
-              value={centuryFilter === null ? '' : String(centuryFilter)}
-              onChange={e => setCenturyFilter(e.target.value === '' ? null : Number(e.target.value))}
-              disabled={availableCenturies.length === 0}
-              className="border border-border/50 bg-white text-xs p-1.5 rounded outline-none focus:border-accent disabled:opacity-50"
-            >
-              <option value="">Tutti i secoli</option>
-              {availableCenturies.map(i => (
-                <option key={i} value={i}>{centuryLabel(i)}</option>
               ))}
             </select>
           </div>
