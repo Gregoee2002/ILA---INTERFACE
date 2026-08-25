@@ -27,6 +27,14 @@ export interface Revision {
   note?: string;
 }
 
+// Curatori e collaboratori della scheda: chi ha ricoperto quale ruolo
+// editoriale (editor, revisor, encoder, contributor...), TEI-conforme
+// come <respStmt><resp>/<name> dentro <titleStmt>.
+export interface Responsabile {
+  ruolo: string;
+  nome: string;
+}
+
 // Stato editoriale del testo, TEI-conforme: attributo @status su
 // <revisionDesc>, previsto da TEI P5 (non un'invenzione su <change>).
 // Vocabolario controllato ispirato alle diciture del progetto I.Sicily
@@ -116,6 +124,7 @@ export interface Monumento {
   iconografia?: IconographyData;
   traduzioni?: Traduzione[];
   bibliografia?: Bibliografia[];
+  responsabili?: Responsabile[];
   note_interne?: string;
   note_interne_rawXml?: string;
   apparatus?: { loc: string; note: string }[] | string;

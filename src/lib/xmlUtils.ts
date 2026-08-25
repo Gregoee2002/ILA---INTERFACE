@@ -406,6 +406,22 @@ function parseTeiElement(teiString: string): Monumento {
     titolo = unescapeXml(rawTitle).replace(/<[^>]+>/g, ' ').replace(/^[\s\-—:]+|[\s\-—:]+$/g, '').replace(/\s+/g, ' ').trim();
   }
 
+  // 6b. Parse respStmt (curatori/collaboratori: chi con quale ruolo)
+  const responsabili: { ruolo: string; nome: string }[] = [];
+  const titleStmtBlock = teiString.match(/<titleStmt>([\s\S]*?)<\/titleStmt>/);
+  if (titleStmtBlock) {
+    const respRegex = /<respStmt>([\s\S]*?)<\/respStmt>/g;
+    let respMatch;
+    while ((respMatch = respRegex.exec(titleStmtBlock[1])) !== null) {
+      const respBody = respMatch[1];
+      const respoMatch = respBody.match(/<resp[^>]*>([\s\S]*?)<\/resp>/);
+      const nameMatch = respBody.match(/<(?:persName|name)[^>]*>([\s\S]*?)<\/(?:persName|name)>/);
+      const ruolo = respoMatch ? unescapeXml(respoMatch[1].replace(/<[^>]+>/g, '').trim()) : '';
+      const nome = nameMatch ? unescapeXml(nameMatch[1].replace(/<[^>]+>/g, '').trim()) : '';
+      if (ruolo || nome) responsabili.push({ ruolo, nome });
+    }
+  }
+
   // 7. Parse repository (luogo_cons)
   let luogo_cons = "";
   const repoMatch = teiString.match(/<repository[^>]*>([\s\S]*?)<\/repository>/);
@@ -1181,6 +1197,7 @@ function parseTeiElement(teiString: string): Monumento {
     note_interne,
     note_interne_rawXml,
     bibliografia,
+    responsabili,
     textTypes,
     iscrizione,
     anepigr,
@@ -1262,6 +1279,13 @@ export function monumentiToXml(monumenti: Monumento[]): string {
     block += `        <fileDesc>\n`;
     block += `            <titleStmt>\n`;
     block += `                <title>${titleContent}</title>\n`;
+    for (const r of m.responsabili || []) {
+      if (!r.ruolo && !r.nome) continue;
+      block += `                <respStmt>\n`;
+      block += `                    <resp>${escapeXml(r.ruolo)}</resp>\n`;
+      block += `                    <name>${escapeXml(r.nome)}</name>\n`;
+      block += `                </respStmt>\n`;
+    }
     block += `            </titleStmt>\n`;
     block += `            <publicationStmt>\n`;
     block += `                <authority>${escapeXml(auth)}</authority>\n`;

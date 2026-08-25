@@ -5,7 +5,7 @@ import {
   ChevronRight, ChevronUp, ChevronDown, FileText, Search, Download, Sparkles, LogIn, ShieldCheck, Users
 } from 'lucide-react';
 import { cn, stripAccents } from '../lib/utils';
-import { Monumento, OrigDate, Traduzione, Bibliografia, Revision, IconographicFigure, IconographicTrait, EDITORIAL_STATUS_LABELS } from '../types';
+import { Monumento, OrigDate, Traduzione, Bibliografia, Revision, Responsabile, IconographicFigure, IconographicTrait, EDITORIAL_STATUS_LABELS } from '../types';
 import { xmlToMonumenti, formatIlaLabel } from '../lib/xmlUtils';
 import { EditionMarkupEditor } from './EditionMarkupEditor';
 import { DivinityEpithetIndex } from './DivinityEpithetIndex';
@@ -65,6 +65,20 @@ const GROUPS: SectionMeta['group'][] = ['Intestazione', 'Storia', 'Testo', 'Appa
  *  suggerimento — il campo resta testo libero per qualunque altro valore. */
 const CMRDM_REGIONS = ['Graecia', 'Dacia', 'Italia', 'Asia Minor'];
 
+/** Ruoli editoriali di base per il campo "carica" dei curatori/collaboratori
+ *  (sezione Bibliografia): si aggiungono ai ruoli già usati altrove nel corpus,
+ *  mai in sostituzione — il campo resta testo libero. */
+const DEFAULT_RESPONSABILE_ROLES = ['editor', 'reviewer', 'encoder', 'contributor', 'transcriber', 'translator'];
+
+/** Ruoli già usati nel corpus per i curatori/collaboratori (sezione Bibliografia),
+ *  uniti al vocabolario di base: stesso principio di collectDistinct ma su un
+ *  campo array-di-oggetti. */
+function collectResponsabileRoles(monumenti: Monumento[]): string[] {
+  const seen = new Set(DEFAULT_RESPONSABILE_ROLES);
+  monumenti.forEach(m => (m.responsabili || []).forEach(r => { if (r.ruolo?.trim()) seen.add(r.ruolo.trim()); }));
+  return Array.from(seen).sort((a, b) => a.localeCompare(b, 'it'));
+}
+
 /** Suggerimenti di testo libero raccolti dai valori già distinti nel corpus in memoria:
  *  riduce le varianti di battitura sullo stesso repository o toponimo tra schede diverse. */
 function collectDistinct(monumenti: Monumento[], field: keyof Monumento): string[] {
@@ -94,7 +108,7 @@ const SECTION_FIELDS: Record<SectionId, (keyof Monumento)[]> = {
   apparatus: ['apparatus'],
   translations: ['traduzioni'],
   commentary: ['note_interne', 'note_interne_rawXml'],
-  bibliography: ['bibliografia'],
+  bibliography: ['bibliografia', 'responsabili'],
   iconography: ['iconografia'],
 };
 const SECTION_FIELDS_FLAT: (keyof Monumento)[] = Array.from(new Set(Object.values(SECTION_FIELDS).flat()));
@@ -537,6 +551,7 @@ export const SectionEditorView: React.FC<Props> = ({ monumenti, effectiveAdmin, 
     citta: collectDistinct(monumenti, 'citta'),
     luogo_moderno: collectDistinct(monumenti, 'luogo_moderno'),
     luogo_rit: collectDistinct(monumenti, 'luogo_rit'),
+    responsabileRuolo: collectResponsabileRoles(monumenti),
   }), [monumenti]);
 
   /* ── stato di ogni sezione per il rail ─────────────────────────── */
@@ -777,7 +792,7 @@ function renderSectionForm(
   m: Monumento,
   set: <K extends keyof Monumento>(k: K, v: Monumento[K]) => void,
   setEditionText: (xml: string) => void,
-  suggestions: { luogo_cons: string[]; citta: string[]; luogo_moderno: string[]; luogo_rit: string[] },
+  suggestions: { luogo_cons: string[]; citta: string[]; luogo_moderno: string[]; luogo_rit: string[]; responsabileRuolo: string[] },
 ) {
   switch (id) {
     case 'title':
@@ -1213,6 +1228,11 @@ function renderSectionForm(
       const editions = cfIndex === -1 ? bibl.map((b, i) => ({ b, i })) : bibl.slice(0, cfIndex).map((b, i) => ({ b, i }));
       const comparisons = cfIndex === -1 ? [] : bibl.slice(cfIndex).map((b, i) => ({ b, i: i + cfIndex }));
 
+      const resp: Responsabile[] = m.responsabili || [];
+      const updateResp = (i: number, patch: Partial<Responsabile>) =>
+        set('responsabili', resp.map((r, j) => j === i ? { ...r, ...patch } : r));
+      const removeResp = (i: number) => set('responsabili', resp.filter((_, j) => j !== i));
+
       return (
         <div className="space-y-6 max-w-3xl">
           <div className="space-y-3">
@@ -1236,6 +1256,28 @@ function renderSectionForm(
               className="inline-flex items-center gap-1.5 text-xs font-sans font-semibold uppercase tracking-[0.12em] text-accent hover:text-accent/70 transition-colors"
             >
               <Plus className="w-3.5 h-3.5" /> Aggiungi confronto (cf.)
+            </button>
+          </div>
+          <div className="space-y-3 border-t border-line/40 pt-4">
+            <FieldLabel>Curatori e collaboratori</FieldLabel>
+            <p className="text-[11px] text-muted/60">Chi ha curato questa scheda e con quale ruolo (editor, revisor, encoder, contributor…).</p>
+            {resp.length === 0 && <p className="text-xs text-muted/60 italic">Nessun curatore registrato.</p>}
+            {resp.map((r, i) => (
+              <div key={i} className="flex items-start gap-2">
+                <div className="flex-1">
+                  <TextInput value={r.nome} onChange={e => updateResp(i, { nome: e.target.value })} placeholder="Nome e cognome" />
+                </div>
+                <div className="w-48">
+                  <SuggestInput value={r.ruolo} onChange={v => updateResp(i, { ruolo: v })} options={suggestions.responsabileRuolo} placeholder="editor" />
+                </div>
+                <button onClick={() => removeResp(i)} className="p-2 text-muted/50 hover:text-red-500 transition-colors"><Trash2 className="w-4 h-4" /></button>
+              </div>
+            ))}
+            <button
+              onClick={() => set('responsabili', [...resp, { nome: '', ruolo: '' }])}
+              className="inline-flex items-center gap-1.5 text-xs font-sans font-semibold uppercase tracking-[0.12em] text-accent hover:text-accent/70 transition-colors"
+            >
+              <Plus className="w-3.5 h-3.5" /> Aggiungi curatore
             </button>
           </div>
         </div>
