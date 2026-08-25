@@ -254,6 +254,23 @@
     box-shadow: 0 1px 0 rgba(255, 255, 255, 0.04) inset, 0 8px 20px rgba(0, 0, 0, 0.3);
   }
 
+  /* Popover statistiche contestuale, aperto cliccando una divinità/nome
+     attestato nel testo dell'iscrizione — stessa ricetta glass di
+     .nav-pill-active, ma come card isolata (ombra più marcata, angoli più
+     ampi) invece che incassata in una rail. */
+  .term-stats-popover {
+    background: rgba(247, 247, 241, 0.9);
+    backdrop-filter: blur(16px) saturate(160%);
+    -webkit-backdrop-filter: blur(16px) saturate(160%);
+    border: 1px solid rgba(31, 131, 119, 0.18);
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.6) inset, 0 12px 28px rgba(var(--shadow-color), 0.16);
+  }
+  .dark .term-stats-popover {
+    background: rgba(38, 41, 32, 0.88);
+    border: 1px solid rgba(53, 189, 179, 0.25);
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.04) inset, 0 16px 32px rgba(0, 0, 0, 0.4);
+  }
+
   .field-label {
     display: flex;
     align-items: center;

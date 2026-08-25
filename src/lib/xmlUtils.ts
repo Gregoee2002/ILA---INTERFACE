@@ -27,6 +27,23 @@ function unescapeXml(unsafe: string): string {
     .replace(/&apos;/g, "'");
 }
 
+// Split the `key` attribute of a <persName type="divine" key="..."> into the
+// divinity name and its epithet tokens. Convention: "DivinityName Epithet1
+// Epithet2...", leading token(s) = divine name (canonicalized), rest =
+// epithets. `nameChildCount` is the number of <name> children of the
+// persName (disambiguates compound theonyms like "Helios Apollo
+// Kisaulodenos" from "Name Epithet" pairs) — pass 0/1 when unknown, which
+// falls back to the legacy single-token default. Shared by the corpus parser
+// (parseTeiElement below) and any UI code resolving an inline click on the
+// same kind of element, so the two stay in sync.
+export function splitDivineKey(key: string, nameChildCount: number): { divinity: string; epiteti: string[] } {
+  const tokens = key.split(/\s+/).filter(Boolean);
+  const nameTokenCount = nameChildCount > 0 ? nameChildCount : 1;
+  const divinity = canonicalDivinityName(tokens.slice(0, nameTokenCount).join(' '));
+  const epiteti = tokens.slice(nameTokenCount).filter(Boolean);
+  return { divinity, epiteti };
+}
+
 function isPlaceholder(s: string): boolean {
   return !s || s.trim().toUpperCase() === 'DA_COMPILARE';
 }
@@ -783,7 +800,6 @@ function parseTeiElement(teiString: string): Monumento {
 
       if (keyMatch) {
         const keyVal = unescapeXml(keyMatch[1].trim());
-        const tokens = keyVal.split(/\s+/);
         // Number of leading tokens that make up the divinity name: the count
         // of <name> children if any are present (handles 1+ compound
         // theonyms correctly), otherwise the legacy default of 1 token
@@ -801,9 +817,7 @@ function parseTeiElement(teiString: string): Monumento {
         // which is common enough in this corpus to cause more regressions
         // than it fixes. Fix miscounts at the XML source instead (split the
         // <name> tag into one per word) rather than re-guessing here.
-        const nameTokenCount = nameChildren.length > 0 ? nameChildren.length : 1;
-        const divName = canonicalDivinityName(tokens.slice(0, nameTokenCount).join(' '));
-        const epithetTokens = tokens.slice(nameTokenCount);
+        const { divinity: divName, epiteti: epithetTokens } = splitDivineKey(keyVal, nameChildren.length);
         if (divName && !divinita.includes(divName)) divinita.push(divName);
         epithetTokens.forEach(ep => {
           if (ep && !epiteti.includes(ep)) epiteti.push(ep);

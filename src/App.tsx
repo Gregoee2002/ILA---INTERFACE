@@ -54,7 +54,8 @@ import { ICONOGRAPHY_LABELS } from './lib/iconographyLabels';
 import { labelEvidence, labelUnit, labelType, labelMaterial } from './lib/vocabLabels';
 import { Monumento, FilterState, SortField, Traduzione, Bibliografia, Appunto, EntryRegistro, BugReport, EDITORIAL_STATUS_LABELS } from './types';
 import { RAW_DATA } from './data';
-import { monumentiToXml, xmlToMonumenti, formatIlaLabel } from './lib/xmlUtils';
+import { monumentiToXml, xmlToMonumenti, formatIlaLabel, splitDivineKey } from './lib/xmlUtils';
+import { buildDivinityIndex, buildOnomasticaIndex, DivinityStats, OnomasticaStats } from './lib/epithetIndex';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { PleiadesMap } from './components/PleiadesMap';
@@ -898,64 +899,49 @@ const OnomasticaRubrica = ({ items, onSelect }: {
 // che mostra ogni menzione della divinità, incluse quelle senza epiteto.
 const ALL_EPITHETS = '__all__';
 
-function EpithetStats({ monumenti, onSelectMonumento }: { monumenti: Monumento[], onSelectMonumento: (m: Monumento) => void }) {
-  const [activeTab, setActiveTab] = useState<'divinita' | 'onomastica'>('divinita');
+function EpithetStats({ monumenti, onSelectMonumento, initialTab, initialDivinity, initialOnomastica, initialSearch }: {
+  monumenti: Monumento[],
+  onSelectMonumento: (m: Monumento) => void,
+  // Preset applicato solo al mount (il componente viene smontato/rimontato a
+  // ogni cambio di activeView, vedi il render condizionale in App) — arriva
+  // dal popover contestuale sull'iscrizione o dal suo fallback di redirect.
+  initialTab?: 'divinita' | 'onomastica',
+  initialDivinity?: string,
+  initialOnomastica?: string,
+  initialSearch?: string,
+}) {
+  const [activeTab, setActiveTab] = useState<'divinita' | 'onomastica'>(initialTab || 'divinita');
   // selectedDivinity/selectedEpithet: impostati insieme, solo al click (sulla
   // rubrica o sull'albero) — è l'unico modo per aprire le attestazioni. Fino
   // a quel momento restano null anche se l'albero a fianco mostra già
   // un'altra divinità: quello è governato da activeDivinityName, aggiornato
   // in continuo dallo scroll della rubrica (vedi sotto).
-  const [selectedDivinity, setSelectedDivinity] = useState<string | null>(null);
-  const [selectedEpithet, setSelectedEpithet] = useState<string | null>(null);
+  const [selectedDivinity, setSelectedDivinity] = useState<string | null>(initialDivinity || null);
+  const [selectedEpithet, setSelectedEpithet] = useState<string | null>(initialDivinity ? ALL_EPITHETS : null);
   // Divinità "attiva" durante lo scroll della rubrica: alimenta l'anteprima
   // ad albero in tempo reale accanto alla lista, indipendentemente da
   // un'eventuale selezione già aperta sulle attestazioni.
-  const [activeDivinityName, setActiveDivinityName] = useState<string | null>(null);
+  const [activeDivinityName, setActiveDivinityName] = useState<string | null>(initialDivinity || null);
   // Quanto si è scesi nella rubrica (0-1, satura dopo ~140px): rimpicciolisce
   // l'header di ricerca/filtro del pannello destro mentre si scorre, senza
   // farlo sparire — vedi onScrollProgress su DivinityDiagonalList.
   const [listScroll, setListScroll] = useState(0);
-  const [selected, setSelected] = useState<string | null>(null); // solo per l'onomastica
+  const [selected, setSelected] = useState<string | null>(initialOnomastica || null); // solo per l'onomastica
   // Ricerca epiteti (principale) / divinità: non filtra la lista, evidenzia
   // nella vista diagonale tutte le divinità che hanno un epiteto (o un nome)
   // corrispondente — utile per vedere a colpo d'occhio quante e quali
   // divinità condividono lo stesso epiteto.
-  const [epithetSearch, setEpithetSearch] = useState('');
+  const [epithetSearch, setEpithetSearch] = useState(initialSearch || '');
 
   // ── Statistiche divinità, con epiteti co-occorrenti e relativo conteggio ──
-  const divstats = useMemo(() => {
-    const counts: Record<string, number> = {};
-    const regions: Record<string, Set<string>> = {};
-    const coEpiteti: Record<string, Record<string, number>> = {};
-    monumenti.forEach(m => {
-      m.divinita?.forEach(d => {
-        counts[d] = (counts[d] || 0) + 1;
-        if (!regions[d]) regions[d] = new Set();
-        if (!coEpiteti[d]) coEpiteti[d] = {};
-        if (m.regione) regions[d].add(m.regione);
-        // Epiteti REALMENTE legati a questa divinità in questo monumento
-        // (non un cross-product con epiteti di altre divinità co-presenti
-        // nella stessa iscrizione). Fallback al vecchio comportamento solo
-        // se il campo relazionale non è disponibile (dato non rigenerato).
-        const rel = m.divinitaEpiteti?.find(de => de.divinita === d);
-        const ownEpiteti = rel ? rel.epiteti : (m.divinitaEpiteti ? [] : (m.epiteti || []));
-        ownEpiteti.forEach(e => {
-          coEpiteti[d][e] = (coEpiteti[d][e] || 0) + 1;
-        });
-      });
-    });
-    return Object.entries(counts)
-      .map(([name, count]) => ({
-        name,
-        count,
-        regions: regions[name]?.size || 0,
-        regionsList: Array.from(regions[name] || []),
-        epiteti: Object.entries(coEpiteti[name] || {})
-          .map(([ename, ecount]) => ({ name: ename, count: ecount }))
-          .sort((a, b) => b.count - a.count)
-      }))
-      .sort((a, b) => b.count - a.count);
-  }, [monumenti]);
+  // Aggregazione condivisa con il popover contestuale sull'iscrizione (vedi
+  // src/lib/epithetIndex.ts) — stessa fonte di verità, nessun ricalcolo
+  // divergente.
+  const divstatsIndex: Record<string, DivinityStats> = useMemo(() => buildDivinityIndex(monumenti), [monumenti]);
+  const divstats: DivinityStats[] = useMemo(
+    () => Object.values(divstatsIndex).sort((a, b) => b.count - a.count),
+    [divstatsIndex]
+  );
 
   const [divinitaRegionFilter, setDivinitaRegionFilter] = useState('');
   const divinitaRegions = useMemo(
@@ -976,20 +962,11 @@ function EpithetStats({ monumenti, onSelectMonumento }: { monumenti: Monumento[]
   // alfabetico, con un filtro per regione (l'unico raggruppamento che ha
   // ancora senso qui).
   const [onomasticaRegionFilter, setOnomasticaRegionFilter] = useState('');
-  const onostats = useMemo(() => {
-    const counts: Record<string, number> = {};
-    const regions: Record<string, Set<string>> = {};
-    monumenti.forEach(m => {
-      m.onomastica?.forEach(o => {
-        counts[o] = (counts[o] || 0) + 1;
-        if (!regions[o]) regions[o] = new Set();
-        if (m.regione) regions[o].add(m.regione);
-      });
-    });
-    return Object.entries(counts)
-      .map(([name, count]) => ({ name, count, regions: Array.from(regions[name] || []) }))
-      .sort((a, b) => a.name.localeCompare(b.name));
-  }, [monumenti]);
+  const onostatsIndex: Record<string, OnomasticaStats> = useMemo(() => buildOnomasticaIndex(monumenti), [monumenti]);
+  const onostats: OnomasticaStats[] = useMemo(
+    () => Object.values(onostatsIndex).sort((a, b) => a.name.localeCompare(b.name)),
+    [onostatsIndex]
+  );
 
   const onomasticaRegions = useMemo(
     () => Array.from(new Set(onostats.flatMap(o => o.regions))).sort(),
@@ -2776,7 +2753,23 @@ function Timeline({ monumenti, onSelect }: { monumenti: Monumento[], onSelect: (
     }
 
 
-const EpiDocRenderer = ({ xml, query }: { xml: string; query: string }) => {
+// Azione risultante dal click su un termine cliccabile del testo
+// dell'iscrizione (persName divine/attested, o fallback per ruler/emperor/
+// placeName) — vedi EpiDocRenderer (case 'persname'/'placename') e il suo
+// gestore in App (handleTermClick).
+type TermClickAction =
+  | { kind: 'popover-divinita'; stats: DivinityStats; rect: DOMRect }
+  | { kind: 'popover-onomastica'; stats: OnomasticaStats; rect: DOMRect }
+  | { kind: 'redirect-stats'; tab: 'divinita' | 'onomastica'; search: string }
+  | { kind: 'redirect-catalog'; term: string };
+
+const EpiDocRenderer = ({ xml, query, onTermClick, divinityIndex, onomasticaIndex }: {
+  xml: string;
+  query: string;
+  onTermClick?: (action: TermClickAction) => void;
+  divinityIndex?: Record<string, DivinityStats>;
+  onomasticaIndex?: Record<string, OnomasticaStats>;
+}) => {
   const [hoveredInfo, setHoveredInfo] = useState<{ text: string; x: number; y: number } | null>(null);
 
   const parsedDoc = useMemo(() => {
@@ -3038,11 +3031,51 @@ const EpiDocRenderer = ({ xml, query }: { xml: string; query: string }) => {
             }
           }
 
+          // Markup cliccabile: divinità/nomi attestati aprono un popover di
+          // statistiche (con redirect alla pagina Statistiche Epiteti come
+          // fallback se il termine non è nell'indice); sovrani/imperatori
+          // non hanno ancora una vista statistiche dedicata, quindi vanno
+          // dritti al fallback "filtra il catalogo" (stesso comportamento
+          // delle pill nel pannello Iconografia).
+          let onClick: ((e: React.MouseEvent) => void) | undefined;
+          if (onTermClick && keyAttr) {
+            if (typeAttr === 'divine') {
+              const nameChildCount = Array.from(el.children).filter(
+                c => (c.localName || c.tagName || '').toLowerCase() === 'name'
+              ).length;
+              const { divinity } = splitDivineKey(keyAttr, nameChildCount);
+              onClick = (e) => {
+                e.stopPropagation();
+                const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
+                const stats = divinity ? divinityIndex?.[divinity] : undefined;
+                if (stats) onTermClick({ kind: 'popover-divinita', stats, rect });
+                else onTermClick({ kind: 'redirect-stats', tab: 'divinita', search: divinity || keyAttr });
+              };
+            } else if (typeAttr === 'attested') {
+              onClick = (e) => {
+                e.stopPropagation();
+                const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
+                const stats = onomasticaIndex?.[keyAttr];
+                if (stats) onTermClick({ kind: 'popover-onomastica', stats, rect });
+                else onTermClick({ kind: 'redirect-stats', tab: 'onomastica', search: keyAttr });
+              };
+            } else if (typeAttr === 'ruler' || typeAttr === 'emperor') {
+              onClick = (e) => {
+                e.stopPropagation();
+                onTermClick({ kind: 'redirect-catalog', term: keyAttr });
+              };
+            }
+          }
+          if (onClick) {
+            className += ' cursor-pointer';
+          }
+
           return (
-            <span 
-              key={key} 
+            <span
+              key={key}
               className={className}
               data-epidoc-tooltip={tooltipLabel}
+              onClick={onClick}
             >
               {Array.from(node.childNodes).map((child: any, i) => renderNode(child, key + '-' + i))}
             </span>
@@ -3092,11 +3125,20 @@ const EpiDocRenderer = ({ xml, query }: { xml: string; query: string }) => {
             // placeholder to preserve else-if structure
           }
 
+          // Nessuna vista statistiche dedicata ai luoghi: il click va
+          // dritto al fallback "filtra il catalogo", come per ruler/emperor.
+          const placeTerm = keyAttr || refAttr || (el.textContent || '').trim();
+          const onClick = onTermClick && placeTerm
+            ? (e: React.MouseEvent) => { e.stopPropagation(); onTermClick({ kind: 'redirect-catalog', term: placeTerm }); }
+            : undefined;
+          if (onClick) className += ' cursor-pointer';
+
           return (
-            <span 
-              key={key} 
+            <span
+              key={key}
               className={className}
               data-epidoc-tooltip={tooltipText}
+              onClick={onClick}
             >
               {Array.from(node.childNodes).map((child: any, i) => renderNode(child, key + '-' + i))}
             </span>
@@ -3422,6 +3464,78 @@ const EpiDocRenderer = ({ xml, query }: { xml: string; query: string }) => {
 };
 
 
+// Popover contestuale aperto dal click su una divinità o un nome attestato
+// nel testo dell'iscrizione (EpiDocRenderer) — statistiche rapide con un
+// pulsante per espandere alla pagina Statistiche Epiteti completa. Stile
+// coerente con la pillola di navigazione glass/blur introdotta nel redesign
+// dei pannelli scheda (.nav-pill-active, vedi index.css).
+const TermStatsPopover = ({ action, onExpand, onClose }: {
+  action: Extract<TermClickAction, { kind: 'popover-divinita' | 'popover-onomastica' }>;
+  onExpand: () => void;
+  onClose: () => void;
+}) => {
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handlePointerDown = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) onClose();
+    };
+    const handleKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
+    document.addEventListener('mousedown', handlePointerDown);
+    document.addEventListener('keydown', handleKey);
+    window.addEventListener('scroll', onClose, true);
+    return () => {
+      document.removeEventListener('mousedown', handlePointerDown);
+      document.removeEventListener('keydown', handleKey);
+      window.removeEventListener('scroll', onClose, true);
+    };
+  }, [onClose]);
+
+  const { rect } = action;
+  const width = 280;
+  const left = Math.min(Math.max(8, rect.left + rect.width / 2 - width / 2), window.innerWidth - width - 8);
+  const top = rect.bottom + 8;
+
+  return (
+    <div
+      ref={ref}
+      className="term-stats-popover fixed z-50 rounded-xl p-4 font-sans"
+      style={{ left, top, width }}
+    >
+      {action.kind === 'popover-divinita' ? (
+        <>
+          <div className="text-lg italic font-bold text-accent font-serif leading-tight">{action.stats.name}</div>
+          <div className="text-xs text-muted mt-1">
+            {action.stats.count}× attestata · {action.stats.regions} region{action.stats.regions === 1 ? 'e' : 'i'}
+          </div>
+          {action.stats.epiteti.length > 0 && (
+            <div className="flex flex-wrap gap-1.5 mt-3">
+              {action.stats.epiteti.slice(0, 5).map(e => (
+                <span key={e.name} className="border border-accent/20 bg-accent/5 text-accent px-2 py-0.5 text-[11px] italic rounded-full font-serif">
+                  {e.name} <span className="opacity-60">{e.count}×</span>
+                </span>
+              ))}
+            </div>
+          )}
+          <button onClick={onExpand} className="mt-3 text-xs font-bold text-accent hover:underline">
+            Vedi tutte le statistiche →
+          </button>
+        </>
+      ) : (
+        <>
+          <div className="text-lg font-serif font-semibold text-ink leading-tight">{action.stats.name}</div>
+          <div className="text-xs text-muted mt-1">
+            {action.stats.count}× attestato{action.stats.regions.length > 0 ? ` · ${action.stats.regions.join(', ')}` : ''}
+          </div>
+          <button onClick={onExpand} className="mt-3 text-xs font-bold text-accent hover:underline">
+            Vedi tutte le attestazioni →
+          </button>
+        </>
+      )}
+    </div>
+  );
+};
+
 const Highlight = ({ text, query }: { text: string; query: string; key?: string | number }) => {
   if (!query.trim()) return <>{text}</>;
   const parts = query.trim().split(/\s+/).filter(part => !['and', 'or', 'not'].includes(part.toLowerCase()));
@@ -3583,6 +3697,11 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
 
 
   const [monumenti, setMonumenti] = useState<Monumento[]>([]);
+  // Indici divinità/onomastica calcolati una volta sul corpus intero, riusati
+  // sia dalla pagina Statistiche Epiteti sia dal popover contestuale aperto
+  // cliccando un termine nel testo dell'iscrizione (vedi lib/epithetIndex.ts).
+  const divinityIndex = useMemo(() => buildDivinityIndex(monumenti), [monumenti]);
+  const onomasticaIndex = useMemo(() => buildOnomasticaIndex(monumenti), [monumenti]);
 
   const [loading, setLoading] = useState(true);
   const [showLanding, setShowLanding] = useState(!skipLanding);
@@ -3702,6 +3821,46 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
   const [selectedMonumento, setSelectedMonumento] = useState<Monumento | null>(null);
   const [currentUser, setCurrentUser] = useState<User | null>(null);
 
+  // Markup cliccabile sull'iscrizione: popover di statistiche aperto (solo
+  // per divinità/onomastica) e preset da applicare al mount della prossima
+  // EpithetStats — sia per il redirect di fallback sia per il pulsante
+  // "vedi tutto" dentro il popover stesso.
+  const [activePopover, setActivePopover] = useState<Extract<TermClickAction, { kind: 'popover-divinita' | 'popover-onomastica' }> | null>(null);
+  // `exact: true` → il termine è una voce confermata dell'indice (click su
+  // "vedi tutto" nel popover): preseleziona direttamente la divinità/nome.
+  // `exact: false` → fallback di redirect per un termine non trovato
+  // nell'indice (es. ruler/emperor non tracciati, o voce isolata): precompila
+  // solo il campo di ricerca della pagina, senza forzare una selezione che
+  // punterebbe a una voce inesistente.
+  const [statsPreset, setStatsPreset] = useState<{ tab: 'divinita' | 'onomastica'; term: string; exact: boolean } | null>(null);
+
+  const handleTermClick = (action: TermClickAction) => {
+    if (action.kind === 'redirect-catalog') {
+      setFilters(f => ({ ...f, searchText: action.term }));
+      setSelectedMonumento(null);
+    } else if (action.kind === 'redirect-stats') {
+      setStatsPreset({ tab: action.tab, term: action.search, exact: false });
+      setSelectedMonumento(null);
+      setActiveView('stats');
+    } else {
+      setActivePopover(action);
+    }
+  };
+
+  const handleExpandPopover = () => {
+    if (!activePopover) return;
+    setStatsPreset({
+      tab: activePopover.kind === 'popover-divinita' ? 'divinita' : 'onomastica',
+      term: activePopover.stats.name,
+      exact: true,
+    });
+    setActivePopover(null);
+    // La scheda è una modale sopra activeView: senza chiuderla resterebbe in
+    // primo piano anche dopo aver cambiato vista, nascondendo le statistiche.
+    setSelectedMonumento(null);
+    setActiveView('stats');
+  };
+
   // --- Navigazione a sezioni della modale editoriale: pannelli discreti,
   // non più scroll continuo. "Supporto Epigrafico" fonde scheda+oggetto;
   // "Iscrizione" fonde trascrizione+commento; "Iconografia" raccoglie anche
@@ -3714,6 +3873,13 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
   ];
   const [activeRecordSection, setActiveRecordSection] = useState<string>('supporto');
   const recordContentRef = useRef<HTMLDivElement>(null);
+
+  // Il rect del click da cui il popover è posizionato è valido solo per lo
+  // span cliccato in quel momento: cambiando scheda o sezione va chiuso,
+  // altrimenti resterebbe ancorato a una posizione ormai fuori contesto.
+  useEffect(() => {
+    setActivePopover(null);
+  }, [selectedMonumento, activeRecordSection]);
 
   useEffect(() => {
     if (!selectedMonumento) return;
@@ -5771,7 +5937,21 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
             </>
           )}
 
-          {activeView === 'stats' && <EpithetStats monumenti={monumenti} onSelectMonumento={(m) => { setSelectedMonumento(m); setActiveView('catalog'); }} />}
+          {activeView === 'stats' && (
+            <EpithetStats
+              monumenti={monumenti}
+              onSelectMonumento={(m) => { setSelectedMonumento(m); setActiveView('catalog'); }}
+              initialTab={statsPreset?.tab}
+              initialDivinity={statsPreset?.exact && statsPreset.tab === 'divinita' ? statsPreset.term : undefined}
+              // La tab onomastica non ha un campo di ricerca libera (solo
+              // rubrica alfabetica + filtro regione): anche nel fallback non
+              // esatto, la voce diretta "0 attestazioni per questo nome" è
+              // il miglior atterraggio disponibile — meglio di un termine
+              // silenziosamente ignorato.
+              initialOnomastica={statsPreset?.tab === 'onomastica' ? statsPreset.term : undefined}
+              initialSearch={!statsPreset?.exact && statsPreset?.tab === 'divinita' ? statsPreset.term : undefined}
+            />
+          )}
           {activeView === 'heatmap' && (
             <div className="flex-1 overflow-hidden flex flex-col p-6">
               <CooccurrenceHeatmap 
@@ -6744,7 +6924,13 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                      style={{ fontFamily: 'Georgia, "Times New Roman", serif', lineHeight: '2' }}>
                                 <div className="relative z-10 max-w-[62ch] mx-auto pl-10 border-l-2 border-border/40">
                                   {selectedMonumento.testo ? (
-                                    <EpiDocRenderer xml={selectedMonumento.testo} query={filters.searchText} />
+                                    <EpiDocRenderer
+                                      xml={selectedMonumento.testo}
+                                      query={filters.searchText}
+                                      onTermClick={handleTermClick}
+                                      divinityIndex={divinityIndex}
+                                      onomasticaIndex={onomasticaIndex}
+                                    />
                                   ) : <span className="opacity-40 italic">[Anepigrafe]</span>}
                                 </div>
                              </div>
@@ -7046,6 +7232,14 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
           onClose={() => setShowUnlockModal(false)}
           onSubmit={handleUnlockSubmit}
           onUnlocked={handleUnlocked}
+        />
+      )}
+
+      {activePopover && (
+        <TermStatsPopover
+          action={activePopover}
+          onExpand={handleExpandPopover}
+          onClose={() => setActivePopover(null)}
         />
       )}
     </div>
