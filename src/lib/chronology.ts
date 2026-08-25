@@ -27,13 +27,39 @@ function toRoman(n: number): string {
 }
 
 /** Indice di secolo unificato: negativo = a.C., positivo = d.C., mai 0. */
-function centuryIndex(year: number): number {
+export function centuryIndex(year: number): number {
   const century = Math.ceil(Math.abs(year) / 100);
   return year < 0 ? -century : century;
 }
 
-function centuryLabel(index: number): string {
+export function centuryLabel(index: number): string {
   return index < 0 ? `${toRoman(-index)} a.C.` : `${toRoman(index)} d.C.`;
+}
+
+/**
+ * Restituisce gli indici di secolo (vedi centuryIndex) coperti dall'intervallo
+ * [dataInizio, dataFine] (o dal singolo anno, se solo uno dei due è
+ * definito), in ordine cronologico. Tratta 0 come "non impostato", come
+ * formatDateRange.
+ */
+export function getSecoliIndexAttestazione(dataInizio?: number, dataFine?: number): number[] {
+  const start = dataInizio !== undefined && dataInizio !== 0 ? dataInizio : undefined;
+  const end = dataFine !== undefined && dataFine !== 0 ? dataFine : undefined;
+
+  if (start === undefined && end === undefined) return [];
+  if (start === undefined) return [centuryIndex(end!)];
+  if (end === undefined) return [centuryIndex(start)];
+
+  let from = centuryIndex(start);
+  let to = centuryIndex(end);
+  if (from > to) [from, to] = [to, from];
+
+  const indexes: number[] = [];
+  for (let i = from; i <= to; i++) {
+    if (i === 0) continue; // nessun "secolo zero"
+    indexes.push(i);
+  }
+  return indexes;
 }
 
 /**
@@ -42,23 +68,7 @@ function centuryLabel(index: number): string {
  * Tratta 0 come "non impostato", come formatDateRange.
  */
 export function getSecoliAttestazione(dataInizio?: number, dataFine?: number): string[] {
-  const start = dataInizio !== undefined && dataInizio !== 0 ? dataInizio : undefined;
-  const end = dataFine !== undefined && dataFine !== 0 ? dataFine : undefined;
-
-  if (start === undefined && end === undefined) return [];
-  if (start === undefined) return [centuryLabel(centuryIndex(end!))];
-  if (end === undefined) return [centuryLabel(centuryIndex(start))];
-
-  let from = centuryIndex(start);
-  let to = centuryIndex(end);
-  if (from > to) [from, to] = [to, from];
-
-  const labels: string[] = [];
-  for (let i = from; i <= to; i++) {
-    if (i === 0) continue; // nessun "secolo zero"
-    labels.push(centuryLabel(i));
-  }
-  return labels;
+  return getSecoliIndexAttestazione(dataInizio, dataFine).map(centuryLabel);
 }
 
 export function formatSecoliAttestazione(dataInizio?: number, dataFine?: number): string {
