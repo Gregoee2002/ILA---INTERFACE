@@ -41,6 +41,12 @@ import { mergeIconographyOverrides } from "./iconographyLabels";
 let corpusStore = new Map<string, string>(); // filename -> xml content
 let searchIndex: MiniSearch<any> | null = null;
 let canWrite = false;
+// true quando l'editing è stato sbloccato con il token sentinella MOCK_TOKEN
+// (vedi unlockEditing) invece di un vero PAT GitHub: scritture/sync restano
+// solo in memoria, nessuna chiamata a GitHub — usato per verificare la UI di
+// editing nel browser di anteprima senza aspettare l'idratazione live di
+// ~300 file reali dalla repo dati.
+let mockMode = false;
 // Registro/bug: vuoti in modalità viewer (niente snapshot statico per
 // questi, a differenza del corpus) — popolati da GitHub solo dopo
 // unlockEditing, stesso gate del corpus in scrittura. Vedi flags.json/bugs.json.
@@ -163,6 +169,7 @@ function buildBackup(): string {
 
 async function writeCorpusFile(filename: string, content: string, commitMessage: string): Promise<void> {
   corpusStore.set(filename, content);
+  if (mockMode) return; // niente rete in modalità mock, solo store in memoria
   await pushCorpusFile(filename, content, commitMessage);
   // Fa comparire la modifica sul sito senza un redeploy manuale — vedi
   // scheduleRedeploy in githubStorageBrowser.ts (no-op se il PAT non ha
@@ -172,6 +179,7 @@ async function writeCorpusFile(filename: string, content: string, commitMessage:
 
 async function removeCorpusFile(filename: string, commitMessage: string): Promise<void> {
   corpusStore.delete(filename);
+  if (mockMode) return;
   await deleteCorpusFile(filename, commitMessage);
 }
 
@@ -360,16 +368,22 @@ async function handleRequest(url: URL, init: RequestInit | undefined): Promise<R
       if (!canWrite) return json({ error: "Modifica non abilitata. Sblocca l'editing con un token GitHub per sincronizzare." }, 403);
       try {
         const before = corpusStore.size;
-        corpusStore = await pullAllCorpusFiles();
+        if (mockMode) {
+          corpusStore = buildMockCorpus();
+        } else {
+          corpusStore = await pullAllCorpusFiles();
+        }
         updateSearchIndex();
-        const remoteFlags = await pullFlagsFile();
-        flagsStore = normalizeRegistro(remoteFlags ? JSON.parse(remoteFlags) : []);
-        const remoteBugs = await pullBugsFile();
-        bugsStore = remoteBugs ? JSON.parse(remoteBugs) : [];
-        const remoteVocab = await pullIconographyVocabFile();
-        iconographyVocabStore = remoteVocab ? JSON.parse(remoteVocab) : {};
-        mergeIconographyOverrides(iconographyVocabStore);
-        scheduleRedeploy();
+        if (!mockMode) {
+          const remoteFlags = await pullFlagsFile();
+          flagsStore = normalizeRegistro(remoteFlags ? JSON.parse(remoteFlags) : []);
+          const remoteBugs = await pullBugsFile();
+          bugsStore = remoteBugs ? JSON.parse(remoteBugs) : [];
+          const remoteVocab = await pullIconographyVocabFile();
+          iconographyVocabStore = remoteVocab ? JSON.parse(remoteVocab) : {};
+          mergeIconographyOverrides(iconographyVocabStore);
+          scheduleRedeploy();
+        }
         return json({
           status: "ok",
           pulled: corpusStore.size,
@@ -421,7 +435,7 @@ async function handleRequest(url: URL, init: RequestInit | undefined): Promise<R
         registro = { entryId, entryLabel, status: "open", createdAt: now, notes: [nota] };
         flagsStore = [...flagsStore, registro];
       }
-      await pushFlagsFile(JSON.stringify(flagsStore, null, 2), `Registro: ${entryLabel}`);
+      if (!mockMode) await pushFlagsFile(JSON.stringify(flagsStore, null, 2), `Registro: ${entryLabel}`);
       return json(registro);
     }
 
@@ -435,7 +449,7 @@ async function handleRequest(url: URL, init: RequestInit | undefined): Promise<R
       registro.status = status;
       registro.resolvedAt = status === "resolved" ? new Date().toISOString() : undefined;
       flagsStore = [...flagsStore];
-      await pushFlagsFile(JSON.stringify(flagsStore, null, 2), status === "resolved" ? `Registro risolto: ${registro.entryLabel}` : `Registro riaperto: ${registro.entryLabel}`);
+      if (!mockMode) await pushFlagsFile(JSON.stringify(flagsStore, null, 2), status === "resolved" ? `Registro risolto: ${registro.entryLabel}` : `Registro riaperto: ${registro.entryLabel}`);
       return json(registro);
     }
 
@@ -459,7 +473,7 @@ async function handleRequest(url: URL, init: RequestInit | undefined): Promise<R
         createdAt: new Date().toISOString(),
       };
       bugsStore = [...bugsStore, bug];
-      await pushBugsFile(JSON.stringify(bugsStore, null, 2), `Bug: ${bug.testo.slice(0, 60)}`);
+      if (!mockMode) await pushBugsFile(JSON.stringify(bugsStore, null, 2), `Bug: ${bug.testo.slice(0, 60)}`);
       return json(bug);
     }
 
@@ -473,7 +487,7 @@ async function handleRequest(url: URL, init: RequestInit | undefined): Promise<R
       bug.status = status;
       bug.resolvedAt = status === "resolved" ? new Date().toISOString() : undefined;
       bugsStore = [...bugsStore];
-      await pushBugsFile(JSON.stringify(bugsStore, null, 2), status === "resolved" ? `Bug risolto: ${bug.testo.slice(0, 60)}` : `Bug riaperto: ${bug.testo.slice(0, 60)}`);
+      if (!mockMode) await pushBugsFile(JSON.stringify(bugsStore, null, 2), status === "resolved" ? `Bug risolto: ${bug.testo.slice(0, 60)}` : `Bug riaperto: ${bug.testo.slice(0, 60)}`);
       return json(bug);
     }
 
@@ -497,7 +511,7 @@ async function handleRequest(url: URL, init: RequestInit | undefined): Promise<R
       }
       if (changed) {
         iconographyVocabStore = nextVocab;
-        await pushIconographyVocabFile(JSON.stringify(iconographyVocabStore, null, 2), `Vocabolario iconografico: +${entries.map(([id]) => id).join(", ")}`);
+        if (!mockMode) await pushIconographyVocabFile(JSON.stringify(iconographyVocabStore, null, 2), `Vocabolario iconografico: +${entries.map(([id]) => id).join(", ")}`);
         mergeIconographyOverrides(iconographyVocabStore);
       }
       return json(iconographyVocabStore);
@@ -531,13 +545,144 @@ async function loadSnapshot(): Promise<Map<string, string>> {
   return new Map(Object.entries(files) as [string, string][]);
 }
 
+// ── Modalità mock (verifica UI veloce, niente rete) ──────────────────────
+//
+// Sblocca l'editing con 25 schede fittizie fisse invece di ri-idratare le
+// ~300 reali da GitHub (pullAllCorpusFiles: una richiesta per file, lenta
+// anche a concorrenza limitata). Pensata per verificare nel browser di
+// anteprima le funzionalità che richiedono editingUnlocked (heatmap, liste
+// collegate epiteti/divinità, ecc.) senza aspettare la rete né toccare la
+// repo dati reale. Sempre lo stesso set, deterministico: mai dati veri.
+const MOCK_TOKEN = "MOCK";
+
+const MOCK_COMBOS = [
+  { div: "Men", ep: "Askaenos", place: "Antiocheia Pisidiae", pleiades: "609307", modern: "Yalvaç", century: -2, material: "stone", type: "stele" },
+  { div: "Men", ep: "Axiottenos", place: "Sardis", pleiades: "599613", modern: "Sart", century: -1, material: "marble", type: "altar" },
+  { div: "Men", ep: "Tyrannos", place: "Antiocheia Pisidiae", pleiades: "609307", modern: "Yalvaç", century: 1, material: "stone", type: "stele" },
+  { div: "Men", ep: "Ouranios", place: "Sardis", pleiades: "599613", modern: "Sart", century: 2, material: "marble", type: "relief" },
+  { div: "Men", ep: "Petraeites", place: "Antiocheia Pisidiae", pleiades: "609307", modern: "Yalvaç", century: -1, material: "stone", type: "altar" },
+];
+
+function buildMockCorpus(): Map<string, string> {
+  const store = new Map<string, string>();
+  for (let i = 0; i < 25; i++) {
+    const c = MOCK_COMBOS[i % MOCK_COMBOS.length];
+    const n = i + 1;
+    const filename = `ILA-MOCK-${String(n).padStart(2, "0")}.xml`;
+    const dedicant = `Fittizio${n}`;
+    const patronymic = `Patronimico${n}`;
+    const dateAttr = c.century < 0
+      ? ` notBefore="${c.century * 100 - 99}" notAfter="${c.century * 100}"`
+      : ` notBefore="${(c.century - 1) * 100 + 1}" notAfter="${c.century * 100}"`;
+    const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://epidoc.stoa.org/schema/latest/tei-epidoc.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title><rs type="textType">Iscrizione greca</rs> — scheda fittizia MOCK ${n} (dati di prova, nessun valore scientifico)</title>
+            </titleStmt>
+            <publicationStmt>
+                <authority>ILA — Index Lunae Antiquae (mock)</authority>
+                <idno type="id">${9000 + n}</idno>
+                <idno type="entryId">mock-${n}</idno>
+            </publicationStmt>
+            <sourceDesc>
+                <msDesc>
+                    <msIdentifier>
+                        <repository>Museo fittizio</repository>
+                    </msIdentifier>
+                    <physDesc>
+                        <objectDesc>
+                            <supportDesc>
+                                <support>
+                                    <p>Scheda generata per test locali, nessun oggetto reale.</p>
+                                    <material ref="https://www.eagle-network.eu/voc/material/lod/138.html">${c.material}</material>
+                                    <objectType ref="https://www.eagle-network.eu/voc/objtyp/lod/250.html">${c.type}</objectType>
+                                    <dimensions unit="cm"><height>50</height><width>30</width><depth>10</depth></dimensions>
+                                </support>
+                            </supportDesc>
+                            <layoutDesc>
+                                <layout><p>Layout fittizio.</p></layout>
+                            </layoutDesc>
+                        </objectDesc>
+                        <handDesc><handNote><p>DA_COMPILARE.</p></handNote></handDesc>
+                    </physDesc>
+                    <history>
+                        <origin>
+                            <origPlace>
+                                <placeName type="ancient" ref="https://pleiades.stoa.org/places/${c.pleiades}">${c.place}</placeName>
+                                <placeName type="modern" ref="DA_COMPILARE">${c.modern}, Turkey</placeName>
+                                <placeName type="region">Asia Minor</placeName>
+                            </origPlace>
+                            <origDate datingMethod="#julian" precision="low"${dateAttr}></origDate>
+                        </origin>
+                        <provenance type="found">${c.modern}, Turchia</provenance>
+                        <provenance type="observed" subtype="autopsied">Nessuna.</provenance>
+                    </history>
+                </msDesc>
+            </sourceDesc>
+        </fileDesc>
+        <profileDesc>
+            <textClass>
+                <keywords scheme="epiteti"><term>${c.ep}</term></keywords>
+                <keywords scheme="divinita"><term>${c.div}</term></keywords>
+                <keywords scheme="onomastica"><term>${dedicant} figlio di ${patronymic}</term><term>${patronymic}</term></keywords>
+            </textClass>
+            <particDesc>
+                <listPerson>
+                    <person xml:id="${dedicant} figlio di ${patronymic}">
+                        <persName type="attested" key="${dedicant} figlio di ${patronymic}"><name nymRef="${dedicant}">${dedicant}</name></persName>
+                    </person>
+                    <person xml:id="${patronymic}">
+                        <persName type="attested" key="${patronymic}"><name nymRef="${patronymic}">${patronymic}</name></persName>
+                    </person>
+                </listPerson>
+            </particDesc>
+        </profileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div type="edition" xml:space="preserve" xml:lang="grc">
+                <ab>
+                    <lb n="1"/>${dedicant} ${patronymic}
+                    <lb n="2"/><persName type="divine" key="${c.div} ${c.ep}"><name nymRef="${c.div}">${c.div}</name> <rs type="epithet">${c.ep}</rs></persName> εὐχήν.
+                </ab>
+            </div>
+            <div type="apparatus"/>
+            <div type="translation" xml:lang="it"><p>Traduzione fittizia.</p></div>
+            <div type="commentary"><p>DA_COMPILARE.</p></div>
+        <div type="bibliography"><listBibl><bibl>Scheda di prova, nessuna fonte reale.</bibl></listBibl></div>
+        </body>
+    </text>
+</TEI>`;
+    store.set(filename, xml);
+  }
+  return store;
+}
+
 /**
  * Sblocca la modalità editor: valida il PAT fornito, ri-idrata il corpus
  * live da GitHub (sostituendo lo snapshot statico) e abilita le route di
  * scrittura. In caso di token non valido non tocca lo stato corrente
  * (resta in modalità viewer sullo snapshot).
+ *
+ * Token sentinella "MOCK" (vedi MOCK_TOKEN sopra): salta la rete e sblocca
+ * con 25 schede fittizie fisse, per verifiche rapide della UI.
  */
 export async function unlockEditing(token: string): Promise<{ ok: boolean; detail: string }> {
+  if (token.trim().toUpperCase() === MOCK_TOKEN) {
+    clearStoredToken();
+    mockMode = true;
+    corpusStore = buildMockCorpus();
+    updateSearchIndex();
+    flagsStore = [];
+    bugsStore = [];
+    iconographyVocabStore = {};
+    canWrite = true;
+    return { ok: true, detail: "Modalità mock: 25 schede fittizie, nessuna chiamata a GitHub." };
+  }
+
   setStoredToken(token);
   const result = await testGitHubAccess();
   if (!result.ok) {
@@ -545,6 +690,7 @@ export async function unlockEditing(token: string): Promise<{ ok: boolean; detai
     return result;
   }
   try {
+    mockMode = false;
     corpusStore = await pullAllCorpusFiles();
     updateSearchIndex();
     const remoteFlags = await pullFlagsFile();
@@ -567,6 +713,7 @@ export async function unlockEditing(token: string): Promise<{ ok: boolean; detai
 export async function lockEditing(): Promise<void> {
   clearStoredToken();
   canWrite = false;
+  mockMode = false;
   corpusStore = await loadSnapshot();
   flagsStore = [];
   bugsStore = [];
