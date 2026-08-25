@@ -7,22 +7,11 @@ interface IconographyPanelProps {
   monumento: Monumento;
 }
 
-const TRAIT_COLORS: Record<string, string> = {
-  headgear: 'bg-slate-50 text-slate-700 border-slate-200',
-  lunar: 'bg-indigo-50 text-indigo-700 border-indigo-200',
-  held_object: 'bg-amber-50 text-amber-800 border-amber-200',
-  mount: 'bg-stone-50 text-stone-700 border-stone-200',
-  dress: 'bg-rose-50 text-rose-700 border-rose-200',
-  technique: 'bg-zinc-50 text-zinc-700 border-zinc-200',
-  position: 'bg-teal-50 text-teal-800 border-teal-200',
-  default: 'bg-gray-50 text-gray-700 border-gray-200',
-};
-
 const capitalize = (s: string) => s ? s.charAt(0).toUpperCase() + s.slice(1) : '';
 
 export const IconographyPanel: React.FC<IconographyPanelProps> = ({ monumento }) => {
   const ico = monumento.iconografia;
-  if (!ico || (!ico.function && (!ico.figures || ico.figures.length === 0))) return null;
+  const isEmpty = !ico || (!ico.function && (!ico.figures || ico.figures.length === 0));
 
   return (
     <div className="mb-10">
@@ -31,10 +20,13 @@ export const IconographyPanel: React.FC<IconographyPanelProps> = ({ monumento })
         Iconografia e funzione cultuale
       </h3>
 
+      {isEmpty ? (
+        <p className="text-xs font-serif text-muted italic">Nessun dato iconografico registrato.</p>
+      ) : (
       <div className="space-y-4">
         {ico.function && (
           <div className="flex">
-            <span className="bg-amber-100 text-amber-900 text-xs px-2 py-0.5 rounded-full uppercase tracking-wider font-sans font-semibold border border-amber-200">
+            <span className="border border-accent bg-accent/10 text-accent text-xs px-3 py-1 rounded-full uppercase tracking-wider font-sans font-semibold">
               {ICONOGRAPHY_LABELS[ico.function] || ico.function}
             </span>
           </div>
@@ -54,21 +46,21 @@ export const IconographyPanel: React.FC<IconographyPanelProps> = ({ monumento })
           const translatedType = ICONOGRAPHY_LABELS[fig.type] || fig.type;
 
           return (
-            <div key={idx} className="bg-white border border-border/40 p-4 rounded-md">
-              <div className="mb-3 border-b border-border/30 pb-2 flex justify-between items-baseline flex-wrap gap-2">
+            <div key={idx} className="bg-card border border-border rounded-xl p-5 shadow-sm">
+              <div className="mb-3 border-b border-border/40 pb-3 flex justify-between items-baseline flex-wrap gap-2">
                 <span className="font-serif text-[15px] font-medium text-ink">
                   {displayTitle}
                 </span>
                 <span className="text-xs text-muted font-sans shrink-0 flex items-center gap-2">
                   {translatedType}
                   {fig.place && (
-                    <span className="text-[10px] uppercase tracking-wide text-muted/60 border border-border/30 rounded px-1.5 py-0.5">
+                    <span className="text-[10px] uppercase tracking-wide text-muted/60 border border-border/40 rounded-full px-1.5 py-0.5">
                       {ICONOGRAPHY_LABELS[fig.place] || fig.place}
                     </span>
                   )}
                 </span>
               </div>
-              
+
               <div className="space-y-3">
                 {Object.entries(groupedTraits).map(([type, traits], tIdx) => {
                   const label = ICONOGRAPHY_LABELS[type] || type;
@@ -80,9 +72,8 @@ export const IconographyPanel: React.FC<IconographyPanelProps> = ({ monumento })
                       <div className="flex flex-wrap gap-2">
                         {traits.map((t, trIdx) => {
                           const traitLabel = ICONOGRAPHY_LABELS[t.key] || t.key;
-                          const colorClass = TRAIT_COLORS[type] || TRAIT_COLORS.default;
                           return (
-                            <span key={trIdx} className={`border text-xs px-2 py-0.5 rounded shadow-sm ${colorClass}`}>
+                            <span key={trIdx} className="border border-border bg-sidebar/50 text-ink/80 text-xs px-2 py-0.5 rounded-full font-sans">
                               {traitLabel}
                               {t.hand === 'right' && <span className="opacity-70 font-light ml-1">(d.)</span>}
                               {t.hand === 'left' && <span className="opacity-70 font-light ml-1">(s.)</span>}
@@ -98,6 +89,7 @@ export const IconographyPanel: React.FC<IconographyPanelProps> = ({ monumento })
           );
         })}
       </div>
+      )}
     </div>
   );
 };

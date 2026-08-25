@@ -6702,16 +6702,16 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
 
                   {activeRecordSection === 'iconografia' && (
                     <div className="space-y-14 animate-in fade-in duration-200">
-                      {(selectedMonumento.divinita?.length || selectedMonumento.epiteti?.length || selectedMonumento.onomastica?.length || selectedMonumento.imperatori?.length) ? (
-                        <section>
-                           <h3 className="text-2xl font-bold mb-6 italic flex items-center gap-4">
-                             <div className="flex items-center gap-4 shrink-0">
-                               <div className="h-[1px] w-8 bg-border/40" />
-                               <div className="w-1.5 h-1.5 rotate-45 border border-accent/40" />
-                             </div>
-                             Indici
-                             <div className="flex-1 h-[1px] bg-border/20" />
-                           </h3>
+                      <section>
+                         <h3 className="text-2xl font-bold mb-6 italic flex items-center gap-4">
+                           <div className="flex items-center gap-4 shrink-0">
+                             <div className="h-[1px] w-8 bg-border/40" />
+                             <div className="w-1.5 h-1.5 rotate-45 border border-accent/40" />
+                           </div>
+                           Indici
+                           <div className="flex-1 h-[1px] bg-border/20" />
+                         </h3>
+                         {(selectedMonumento.divinita?.length || selectedMonumento.epiteti?.length || selectedMonumento.onomastica?.length || selectedMonumento.imperatori?.length) ? (
                            <div className="grid sm:grid-cols-2 gap-x-10 gap-y-6">
                             {selectedMonumento.divinita && selectedMonumento.divinita.length > 0 && (
                               <div>
@@ -6772,17 +6772,21 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                               </div>
                             )}
                            </div>
-                        </section>
-                      ) : null}
+                         ) : (
+                           <p className="text-xs font-serif text-muted italic">Nessun indice registrato.</p>
+                         )}
+                      </section>
 
-                      {selectedMonumento.iconografia?.note && (
-                        <section>
-                          <h3 className="text-xs font-bold uppercase text-muted tracking-widest mb-3">Nota sulla Funzione Cultuale</h3>
-                          <p className="text-xs leading-relaxed text-ink/80 italic font-serif whitespace-pre-wrap border-l-2 border-amber-300 pl-4">
+                      <section>
+                        <h3 className="text-xs font-bold uppercase text-muted tracking-widest mb-3">Commento Iconografico</h3>
+                        {selectedMonumento.iconografia?.note ? (
+                          <p className="text-xs leading-relaxed text-ink/80 italic font-serif whitespace-pre-wrap border-l-2 border-accent/40 pl-4">
                             {selectedMonumento.iconografia.note}
                           </p>
-                        </section>
-                      )}
+                        ) : (
+                          <p className="text-xs font-serif text-muted italic">Nessun commento registrato.</p>
+                        )}
+                      </section>
 
                       <IconographyPanel monumento={selectedMonumento} />
                     </div>
