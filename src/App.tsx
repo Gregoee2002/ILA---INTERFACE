@@ -51,7 +51,7 @@ import {
 } from 'lucide-react';
 import { cn, EASE_OUT, EASE_IN, SPRING_SNAPPY, SPRING_SOFT } from './lib/utils';
 import { ICONOGRAPHY_LABELS } from './lib/iconographyLabels';
-import { labelEvidence, labelUnit, labelType, labelMaterial } from './lib/vocabLabels';
+import { labelEvidence, labelUnit, labelType, labelMaterial, labelInscriptionType } from './lib/vocabLabels';
 import { Monumento, FilterState, SortField, Traduzione, Bibliografia, Appunto, EntryRegistro, BugReport, EDITORIAL_STATUS_LABELS } from './types';
 import { RAW_DATA } from './data';
 import { monumentiToXml, xmlToMonumenti, formatIlaLabel, splitDivineKey } from './lib/xmlUtils';
@@ -6267,7 +6267,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                       </nav>
 
                       <section className="space-y-4">
-                        <h4 className="font-sans field-label opacity-85 pb-2 border-b border-border/40">Specifiche Tecniche</h4>
+                        <h4 className="font-sans field-label opacity-85 pb-2 border-b border-border/40">Dettagli</h4>
                         <dl className="space-y-3">
                           {[
                             { label: 'Regione', value: selectedMonumento.regione, display: selectedMonumento.regione, type: 'regione' },
@@ -6281,12 +6281,12 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                               {item.type ? (
                                 <button
                                   onClick={() => { setFilters(f => ({ ...f, [item.type]: item.value })); setSelectedMonumento(null); }}
-                                  className="text-xs font-semibold text-ink mt-0.5 font-serif hover:text-accent transition-colors block text-left"
+                                  className="text-xs font-semibold text-ink mt-0.5 font-serif hover:text-accent transition-colors block text-left capitalize"
                                 >
                                   {item.display}
                                 </button>
                               ) : (
-                                <dd className="text-xs font-semibold text-ink mt-0.5 font-serif">{item.display}</dd>
+                                <dd className="text-xs font-semibold text-ink mt-0.5 font-serif capitalize">{item.display}</dd>
                               )}
                             </div>
                           ))}
@@ -6379,7 +6379,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                               )}
                               {selectedMonumento.textTypes?.map((tt, idx) => (
                                 <span key={idx} className="bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-[10px] font-bold px-2 py-0.5 rounded-sm uppercase tracking-tighter shadow-sm">
-                                  {tt}
+                                  {labelInscriptionType(tt)}
                                 </span>
                               ))}
                               <button

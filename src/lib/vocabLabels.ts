@@ -4,6 +4,9 @@
  * italiano — v. IconographyLabels per il vocabolario iconografico).
  */
 
+import { INSCRIPTION_TYPES } from './eagleVocab';
+import { stripAccents } from './utils';
+
 // <origDate evidence="..."> — tipo di prova su cui si basa la datazione.
 export const EVIDENCE_LABELS: Record<string, string> = {
   "letter-forms": "forme delle lettere",
@@ -84,4 +87,12 @@ export function labelMaterial(material: string): string {
       return MATERIAL_LABELS[trimmed.toLowerCase()] || trimmed;
     })
     .join(", ");
+}
+
+// <rs type="textType"> — tipologia testuale dell'iscrizione (es. "Dedication"),
+// tradotta tramite il vocabolario EAGLE typeins condiviso con SectionEditorView.
+export function labelInscriptionType(textType: string): string {
+  const normalized = stripAccents(textType.trim());
+  const term = INSCRIPTION_TYPES.find(t => stripAccents(t.label) === normalized || stripAccents(t.id) === normalized);
+  return term?.labelIt || textType;
 }
