@@ -1664,7 +1664,7 @@ function IconRail({
       <AnimatePresence>
         {expanded && (
           <motion.div
-            className="fixed inset-0 z-40 bg-ink/20 backdrop-blur-[1px]"
+            className="fixed inset-0 z-40 bg-ink/20 backdrop-blur-sm"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -1679,7 +1679,7 @@ function IconRail({
         onMouseLeave={() => setExpanded(false)}
         animate={{ width: expanded ? 216 : 56 }}
         transition={SPRING_SOFT}
-        className="fixed inset-y-0 left-0 z-50 flex flex-col items-stretch bg-[var(--card)]/95 dark:bg-[var(--card)]/90 backdrop-blur-xl border-r border-border/40 overflow-hidden shadow-[4px_0_24px_-8px_rgba(var(--shadow-color),0.15)]"
+        className="glass-panel fixed inset-y-0 left-0 z-50 flex flex-col items-stretch !rounded-none border-r overflow-hidden"
       >
         <div className={cn("flex items-center h-14 shrink-0 gap-2", expanded ? "px-4 justify-start" : "justify-center")}>
           <img src={ilaLogo} alt="ILA" className="h-8 w-8 shrink-0 object-contain" />
@@ -5110,41 +5110,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
             </button>
           </div>
         )}
-        {effectiveAdmin && (
-          <div className="flex flex-wrap items-center gap-x-4 gap-y-2 font-sans text-[11px] font-bold uppercase tracking-[0.15em] text-muted">
-            <button onClick={() => setIsImportModalOpen(true)} className="text-muted flex items-center gap-1 hover:text-accent transition-colors">
-              <Upload className="h-3 w-3" /> Importa
-            </button>
-            <button onClick={exportFilteredData} className="text-muted flex items-center gap-1 border-l border-border/60 pl-4 hover:text-accent transition-colors">
-              <Download className="h-3 w-3" /> Esporta XML
-            </button>
-            <button onClick={() => setShowReindexConfirm(true)} className="text-muted flex items-center gap-1 border-l border-border/60 pl-4 hover:text-accent transition-colors">
-              <Hash className="h-3 w-3" /> Riordina ID
-            </button>
-            <button
-              onClick={syncFromGitHub}
-              disabled={importStatus.type === 'loading'}
-              className="text-muted flex items-center gap-1 border-l border-border/60 pl-4 hover:text-accent transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-              title={isStaticBuild
-                ? "Ricarica il corpus da GitHub e rilancia la pubblicazione del sito, senza aspettare un nuovo commit di codice"
-                : "Ricarica il corpus dal repository GitHub senza riavviare il server"}
-            >
-              <RotateCcw className="h-3 w-3" /> Sincronizza da GitHub
-            </button>
-            {importStatus.type !== 'idle' && (
-              <div className={cn(
-                "flex items-center gap-2 border-l border-border/60 pl-4 text-[9px] font-bold uppercase tracking-widest",
-                importStatus.type === 'loading' && "text-accent",
-                importStatus.type === 'success' && "text-green-600",
-                importStatus.type === 'error' && "text-red-600"
-              )}>
-                {importStatus.type === 'loading' && <Loader2 className="h-2 w-2 animate-spin" />}
-                {importStatus.message}
-              </div>
-            )}
-          </div>
-        )}
-          
+
           <div className="flex items-center gap-2.5 shrink-0">
             {/* Authentication Buttons — sulla build statica non c'è login
                 Google, il "chi può modificare" è lo sblocco con token
@@ -5291,6 +5257,49 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                     Tutte le modifiche salvate aggiornano automaticamente il file locale sul server.
                   </p>
                 </section>
+
+                {effectiveAdmin && (
+                  <section>
+                    <h4 className="text-[10px] font-bold uppercase text-muted mb-4 tracking-widest">Amministrazione</h4>
+                    <div className="space-y-4">
+                      <button
+                        onClick={() => { setIsImportModalOpen(true); setShowSettings(false); }}
+                        className="w-full text-left py-2 font-sans text-xs hover:text-accent flex items-center gap-2"
+                      >
+                        <Upload className="h-3.5 w-3.5" /> Importa
+                      </button>
+                      <button onClick={exportFilteredData} className="w-full text-left py-2 font-sans text-xs hover:text-accent flex items-center gap-2">
+                        <Download className="h-3.5 w-3.5" /> Esporta XML
+                      </button>
+                      <button
+                        onClick={() => { setShowReindexConfirm(true); setShowSettings(false); }}
+                        className="w-full text-left py-2 font-sans text-xs hover:text-accent flex items-center gap-2"
+                      >
+                        <Hash className="h-3.5 w-3.5" /> Riordina ID
+                      </button>
+                      <button
+                        onClick={syncFromGitHub}
+                        disabled={importStatus.type === 'loading'}
+                        className="w-full text-left py-2 font-sans text-xs hover:text-accent flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                        title={isStaticBuild
+                          ? "Ricarica il corpus da GitHub e rilancia la pubblicazione del sito, senza aspettare un nuovo commit di codice"
+                          : "Ricarica il corpus dal repository GitHub senza riavviare il server"}
+                      >
+                        {importStatus.type === 'loading' ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <RotateCcw className="h-3.5 w-3.5" />} Sincronizza da GitHub
+                      </button>
+                      {importStatus.type !== 'idle' && (
+                        <div className={cn(
+                          "text-[9px] font-bold uppercase tracking-widest pl-0.5",
+                          importStatus.type === 'loading' && "text-accent",
+                          importStatus.type === 'success' && "text-green-600",
+                          importStatus.type === 'error' && "text-red-600"
+                        )}>
+                          {importStatus.message}
+                        </div>
+                      )}
+                    </div>
+                  </section>
+                )}
 
                 <section>
                    <h4 className="text-[10px] font-bold uppercase text-muted mb-4 tracking-widest">Informazioni Sistema</h4>
@@ -5582,7 +5591,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
           {activeView === 'catalog' && (
             <>
                 {/* Record List */}
-                <div className="flex-1 flex flex-col overflow-hidden min-h-0 glass-panel rounded-2xl shadow-custom">
+                <div className="flex-1 flex flex-col overflow-hidden min-h-0 glass-panel glass-panel-elevated rounded-2xl">
                   <div className="px-6 pt-6 mb-2 flex items-center justify-between border-b border-border/20 pb-3 font-sans text-[10px] font-bold uppercase tracking-[0.2em] text-muted">
                     <span>Visualizzazione di {filteredMonumenti.length} schede</span>
                     <div className="flex items-center gap-4">

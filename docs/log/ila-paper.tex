@@ -305,6 +305,21 @@ mancante viene stimato o integrato arbitrariamente: un'informazione non
 attestata resta dichiaratamente assente, piuttosto che essere colmata
 per congettura non verificabile.
 
+Poiché la revisione di una singola voce può coinvolgere più interventi
+distinti nel tempo --- trascrizione iniziale, correzione dell'OCR,
+integrazione filologica, revisione finale --- e non necessariamente ad
+opera della stessa persona, si è ritenuto utile affiancare allo
+strumento di marcatura un piccolo pannello, sempre visibile durante
+l'editing, che permette di annotare rapidamente chi ha svolto un
+determinato intervento e quando, senza dover interrompere il lavoro di
+codifica per raggiungere una sezione separata dedicata alla cronologia
+delle revisioni. Anche in questo caso si tratta di un'informazione che
+viene scritta in un campo già previsto dalla codifica filologica di
+base, e non di un dato collaterale gestito a parte: la tracciabilità
+delle singole mani che hanno contribuito a una voce resta così parte
+integrante della scheda, anziché affidata alla memoria di chi coordina
+il lavoro editoriale.
+
 \screenshotplaceholder{6.5cm}{Confronto tra testo a stampa e trascrizione ottenuta tramite riconoscimento ottico}
 
 \section{Organizzazione dell'interfaccia digitale}
@@ -515,6 +530,38 @@ delle co-occorrenze sottostanti: una PMI elevata calcolata su due o tre
 casi resta un'indicazione da verificare sulle fonti, non una conclusione,
 ed è segnalata come tale.
 
+La PMI a due fattori descritta sopra risponde bene alla domanda
+\virg{questi due attributi si associano più del previsto?}, ma non
+cattura un tipo di segnale altrettanto interessante per uno studio del
+culto: combinazioni di \emph{tre} o più caratteristiche che, prese a
+coppie, non risultano particolarmente marcate, ma che insieme
+individuano un pattern ricorrente --- ad esempio un determinato epiteto
+che, in una specifica regione, compare quasi sempre su un preciso tipo
+di supporto. Per intercettare anche questo tipo di associazione, alla
+modalità a coppie si affianca una modalità alternativa, che combina fino
+a tre fattori in una singola \virg{colonna composita} e ne confronta la
+probabilità congiunta osservata con quella attesa nell'ipotesi che tutti
+i fattori coinvolti siano reciprocamente indipendenti --- una
+generalizzazione diretta della stessa idea a $n$ variabili anziché due:
+
+\[
+  \mathrm{PMI}(A_1, A_2, \ldots, A_n) \;=\; \log_2 \left(
+  \frac{P(A_1, A_2, \ldots, A_n)}{P(A_1)\cdot P(A_2)\cdots P(A_n)}
+  \right).
+\]
+
+La lettura resta la stessa della formula a due fattori --- zero
+per l'indipendenza reciproca, positivo per un'associazione più forte del
+previsto, negativo per una più debole --- semplicemente estesa a un
+denominatore che è ora il prodotto di tutte le frequenze marginali
+coinvolte anziché di due sole. Va da sé che, aumentando il numero di
+fattori combinati, il numero di schede che condividono \emph{tutti} i
+valori scelti si riduce rapidamente, e con esso l'affidabilità
+statistica della stima: la stessa cautela già raccomandata per la PMI a
+due fattori sui campioni piccoli si applica qui con ancora più forza, ed
+è per questo che il conteggio assoluto resta sempre visibile accanto al
+valore, qualunque sia il numero di fattori combinati.
+
 Il motivo per cui questo intero ragionamento è possibile riporta
 direttamente alla scelta di codifica descritta a inizio sezione: perché
 la heatmap possa calcolare $P(A)$, $P(B)$ e $P(A,B)$ per una coppia di
@@ -599,6 +646,19 @@ insensibili alla capitalizzazione avrebbe rischiato di confondere, in
 alcuni casi, forme che nel testo originale sono tenute volutamente
 distinte.
 
+Nella vista diagonale, ogni divinità selezionata --- da ricerca o da
+scorrimento --- apre un'anteprima ad albero dei propri epiteti, così da
+mostrare la struttura interna del culto (quanti e quali epiteti sono
+attestati per quel nome) senza dover aprire singolarmente ciascuna voce.
+Quando il termine cercato individua un solo risultato possibile --- il
+caso tipico è un epiteto che compare, nel corpus, associato a una sola
+divinità --- quella voce viene automaticamente fissata come attiva e la
+relativa anteprima ad albero si aggiorna di conseguenza, invece di
+lasciare che sia l'utente a scorrere manualmente l'elenco per
+raggiungerla: un piccolo accorgimento, ma coerente con l'idea generale
+che guida l'intera sezione, ossia che orientarsi nell'onomastica del
+corpus debba costare all'utente il minor numero di passaggi possibile.
+
 \screenshotplaceholder{8cm}{Elenco diagonale delle divinità ed epiteti, in stile locandina}
 
 \screenshotplaceholder{8cm}{Rubrica onomastica alfabetica con indice laterale A--Z}
@@ -620,6 +680,19 @@ forma di elenco, con accesso diretto alla scheda descrittiva completa di
 ciascuna epigrafe individuata, in modo da rendere il passaggio dalla
 ricerca alla consultazione del singolo monumento quanto più diretto e
 intuitivo possibile.
+
+Un caso d'uso frequente, soprattutto in fase di verifica o di
+riferimento incrociato con altre schede, è la ricerca diretta di
+un'epigrafe a partire dal suo numero identificativo. Poiché nel parlato
+--- e altrettanto spesso nella scrittura corrente, specie quando ci si
+riferisce a una voce a memoria --- il numero viene naturalmente
+espresso in lettere anziché in cifre, il campo di ricerca riconosce
+anche questa forma, convertendo internamente i numerali scritti per
+esteso (\virg{novantuno}) nella corrispondente sequenza numerica
+(\virg{91}) prima di interrogare l'indice: una piccola concessione
+all'uso linguistico ordinario, che evita all'utente il passaggio mentale
+da parola a cifra che il solo campo numerico avrebbe altrimenti
+richiesto.
 
 \screenshotplaceholder{7cm}{Interfaccia del modulo di ricerca con filtri combinati}
 
