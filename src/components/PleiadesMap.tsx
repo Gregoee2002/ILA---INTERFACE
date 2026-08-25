@@ -61,7 +61,7 @@ export const PleiadesMap: React.FC<PleiadesMapProps> = ({ pleiadesUri, cityName 
   if (!pleiadesUri) return null;
 
   return (
-    <div className="w-full flex flex-col gap-2 mt-4">
+    <div className="w-full flex flex-col gap-1.5 mt-2">
       <div className="text-[10px] font-bold uppercase tracking-widest text-muted">
         Mappa (Pleiades)
       </div>
@@ -79,7 +79,7 @@ export const PleiadesMap: React.FC<PleiadesMapProps> = ({ pleiadesUri, cityName 
       )}
 
       {coords && !loading && !error && (
-        <div className="w-full h-64 border border-border bg-parchment relative z-0">
+        <div className="w-full h-40 border border-border bg-parchment relative z-0">
           <MapContainer center={coords} zoom={7} scrollWheelZoom={false} style={{ width: '100%', height: '100%' }}>
             <TileLayer
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

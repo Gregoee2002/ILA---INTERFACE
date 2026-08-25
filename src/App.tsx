@@ -6352,10 +6352,10 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                             setSelectedMonumento(null);
                             setActiveView('editor');
                           }}
-                          className="text-[10px] font-sans font-bold uppercase tracking-[0.2em] text-accent flex items-center gap-2 hover:opacity-70 transition-opacity"
+                          className="text-[9px] font-sans font-semibold uppercase tracking-[0.15em] text-accent/80 flex items-center gap-1.5 hover:text-accent transition-colors"
                           title="Apri questa scheda nell'editor completo"
                         >
-                          <Edit2 className="h-3.5 w-3.5" /> Modifica
+                          <Edit2 className="h-3 w-3" /> Modifica
                         </button>
                       )}
                     </div>
@@ -6448,11 +6448,11 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                   {/* Main Content Area */}
                   <div ref={recordContentRef} className="flex-1 min-h-0 bg-parchment p-6 md:p-16 md:overflow-hidden">
                   {activeRecordSection === 'supporto' && (
-                  <div className="animate-in fade-in duration-200">
-                    <div className="flex justify-between items-start mb-4">
+                  <div className="animate-in fade-in duration-200 md:-mt-8">
+                    <div className="flex justify-between items-start mb-3">
                       <div className="flex-1 mr-4">
                         {true && (
-                          <div className="flex flex-col gap-1 mb-4">
+                          <div className="flex flex-col gap-1 mb-2">
                             {selectedMonumento.regione && (
                               <div className="text-[10px] md:text-xs font-sans font-bold uppercase tracking-[0.3em] text-accent">
                                  {selectedMonumento.regione}
@@ -6515,7 +6515,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                             <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-ink leading-tight font-serif">
                               {getDisplayTitle(selectedMonumento)}
                             </h2>
-                            <div className="ornament-rule !my-0 mt-3 max-w-[6rem] mx-0" />
+                            <div className="ornament-rule !my-0 mt-2 max-w-[6rem] mx-0" />
                           </div>
                       </div>
                       
@@ -6565,7 +6565,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                       
                     </div>
                     
-                      <div className="space-y-8 mt-2">
+                      <div className="space-y-5 mt-1">
                         {selectedMonumento.facsimile_url && (
                           <div className="bg-sidebar/40 p-6 border border-border/60 rounded-sm">
                             <span className="text-[10px] font-sans font-bold uppercase tracking-[0.2em] text-accent block mb-3">Facsimile / Squeeze Image</span>
@@ -6591,13 +6591,13 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                           </div>
                         )}
 
-                        <div className="grid md:grid-cols-2 gap-8 border border-border/40 bg-sidebar/20 p-6 md:p-8 rounded-sm font-serif text-xs leading-relaxed text-ink/80">
+                        <div className="grid md:grid-cols-2 gap-6 border border-border/40 bg-sidebar/20 p-5 md:p-6 rounded-sm font-serif text-xs leading-relaxed text-ink/80">
                           <div>
-                            <h4 className="text-[10px] font-sans font-bold uppercase tracking-widest text-accent mb-4 pb-1 border-b border-border/30">Layout & Supporto Materiale</h4>
+                            <h4 className="text-[10px] font-sans font-bold uppercase tracking-widest text-accent mb-3 pb-1 border-b border-border/30">Layout & Supporto Materiale</h4>
                             {(selectedMonumento.layout_desc || selectedMonumento.supporto) && (
-                              <p className="mb-4 text-ink-70 select-text font-serif leading-relaxed">{selectedMonumento.layout_desc || selectedMonumento.supporto}</p>
+                              <p className="mb-3 text-ink-70 select-text font-serif leading-relaxed">{selectedMonumento.layout_desc || selectedMonumento.supporto}</p>
                             )}
-                            <div className="space-y-2 text-[10px] font-sans border-t border-border/20 pt-3">
+                            <div className="space-y-1.5 text-[10px] font-sans border-t border-border/20 pt-2.5">
                               {selectedMonumento.scrittura && (
                                 <div><span className="text-muted uppercase font-bold text-[9px]">Scrittura:</span> <span className="text-ink font-serif italic text-xs">{selectedMonumento.scrittura}</span> {isFilled(selectedMonumento.scrittura_ref) && <span className="text-muted/60 font-mono">({selectedMonumento.scrittura_ref})</span>}</div>
                               )}
@@ -6644,8 +6644,8 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                             </div>
                           </div>
                           <div>
-                            <h4 className="text-[10px] font-sans font-bold uppercase tracking-widest text-accent mb-4 pb-1 border-b border-border/30">Georeferenziazione & Date Storiche</h4>
-                            <div className="space-y-4">
+                            <h4 className="text-[10px] font-sans font-bold uppercase tracking-widest text-accent mb-3 pb-1 border-b border-border/30">Georeferenziazione & Date Storiche</h4>
+                            <div className="space-y-3">
                               {(selectedMonumento.citta || selectedMonumento.luogo_rit) && (
                                 <div className="grid grid-cols-2 gap-2">
                                   {selectedMonumento.citta && (
