@@ -615,8 +615,8 @@ const EpithetTree = ({ divinity, epithets, onSelectEpithet, onSelectAll, preview
                     animate={{ opacity: 1, x: 0 }}
                     exit={preview ? { opacity: 0, x: 14 } : undefined}
                     transition={{ duration: 0.22, delay: preview ? Math.min(i, 12) * 0.018 : 0, ease: EASE_OUT }}
-                    className="group absolute inset-x-0 flex items-center gap-4 hover:bg-accent/[0.04] transition-colors"
-                    style={{ top: i * EPITHET_TREE_ROW_H, height: EPITHET_TREE_ROW_H, paddingLeft: 24 }}
+                    className="group absolute inset-x-0 mr-4 flex items-center gap-4 rounded-lg border border-border/50 bg-card/40 backdrop-blur-sm hover:bg-accent/[0.06] hover:border-accent/30 transition-colors"
+                    style={{ top: i * EPITHET_TREE_ROW_H + 3, height: EPITHET_TREE_ROW_H - 6, paddingLeft: 16 }}
                   >
                     <span className="w-40 shrink-0 text-left text-base font-serif italic text-ink group-hover:text-accent transition-colors truncate">
                       {e.name}
@@ -1114,8 +1114,37 @@ function EpithetStats({ monumenti, onSelectMonumento, initialTab, initialDivinit
                  stesso rigo della statistica occorrenze/regioni/epiteti —
                  prima stavano su un rigo a sé sopra entrambe le colonne, con
                  uno spazio vuoto enorme accanto a quella statistica. */
-              <div className="flex-1 flex gap-8 overflow-hidden">
+              <div className="flex-1 flex gap-8 overflow-hidden glass-panel !rounded-lg p-5">
                 <div className="w-[380px] shrink-0 flex flex-col overflow-hidden">
+                  {/* Ricerca epiteto/divinità: vive sopra la rubrica che
+                      filtra, invece che nell'header della colonna destra —
+                      stesso rimpicciolimento legato allo scroll di
+                      DivinityDiagonalList (via listScroll), solo spostato di
+                      colonna. */}
+                  <div
+                    className="mb-3 shrink-0 transition-transform duration-200 ease-out"
+                    style={{ transform: `scale(${1 - listScroll * 0.22})`, transformOrigin: 'left center' }}
+                  >
+                    <div className="relative w-full">
+                      <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted/50 pointer-events-none" />
+                      <input
+                        type="text"
+                        value={epithetSearch}
+                        onChange={(e) => setEpithetSearch(e.target.value)}
+                        placeholder="Cerca epiteto o divinità…"
+                        className="w-full bg-[var(--card)] dark:bg-black/25 border border-[var(--border)]/50 dark:border-white/5 rounded-lg pl-9 pr-8 py-2 font-sans text-xs outline-none shadow-inner focus:border-accent/50 focus:ring-1 focus:ring-accent/30 hover:bg-[var(--sidebar)] dark:hover:bg-black/40 transition-all duration-300"
+                        style={{ backgroundColor: 'var(--card)', color: 'var(--ink)' }}
+                      />
+                      {epithetSearch && (
+                        <button
+                          onClick={() => setEpithetSearch('')}
+                          className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted/50 hover:text-accent transition-colors"
+                        >
+                          <X className="h-3.5 w-3.5" />
+                        </button>
+                      )}
+                    </div>
+                  </div>
                   <DivinityDiagonalList
                     items={filteredDivstats}
                     onSelect={(name) => openAttestations(name, ALL_EPITHETS)}
@@ -1126,36 +1155,13 @@ function EpithetStats({ monumenti, onSelectMonumento, initialTab, initialDivinit
                 </div>
                 <div className="flex-1 flex flex-col overflow-hidden border-l border-border pl-8">
                   <div className="mb-4 flex items-center justify-between gap-4 shrink-0">
-                    {/* Ricerca e filtro regione a sinistra, a fianco delle
-                        statistiche occorrenze/regioni/epiteti che restano a
-                        destra — prima la ricerca era sul lato opposto,
-                        lontano dalla rubrica che filtra. */}
                     <div
                       className="flex items-center gap-3 shrink-0 transition-transform duration-200 ease-out"
                       style={{ transform: `scale(${1 - listScroll * 0.22})`, transformOrigin: 'left center' }}
                     >
-                      <div className="relative w-52">
-                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted/50 pointer-events-none" />
-                        <input
-                          type="text"
-                          value={epithetSearch}
-                          onChange={(e) => setEpithetSearch(e.target.value)}
-                          placeholder="Cerca epiteto o divinità…"
-                          className="w-full bg-[var(--card)] dark:bg-black/25 border border-[var(--border)]/50 dark:border-white/5 rounded-xl pl-9 pr-8 py-2 font-sans text-xs outline-none shadow-inner focus:border-accent/50 focus:ring-1 focus:ring-accent/30 hover:bg-[var(--sidebar)] dark:hover:bg-black/40 transition-all duration-300"
-                          style={{ backgroundColor: 'var(--card)', color: 'var(--ink)' }}
-                        />
-                        {epithetSearch && (
-                          <button
-                            onClick={() => setEpithetSearch('')}
-                            className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted/50 hover:text-accent transition-colors"
-                          >
-                            <X className="h-3.5 w-3.5" />
-                          </button>
-                        )}
-                      </div>
                       <div className="relative w-44 shrink-0">
                         <select
-                          className="w-full bg-[var(--card)] dark:bg-black/25 border border-[var(--border)]/50 dark:border-white/5 rounded-xl pl-3 pr-8 py-2 font-sans text-xs outline-none shadow-inner focus:border-accent/50 focus:ring-1 focus:ring-accent/30 hover:bg-[var(--sidebar)] dark:hover:bg-black/40 cursor-pointer appearance-none transition-all duration-300"
+                          className="w-full bg-[var(--card)] dark:bg-black/25 border border-[var(--border)]/50 dark:border-white/5 rounded-lg pl-3 pr-8 py-2 font-sans text-xs outline-none shadow-inner focus:border-accent/50 focus:ring-1 focus:ring-accent/30 hover:bg-[var(--sidebar)] dark:hover:bg-black/40 cursor-pointer appearance-none transition-all duration-300"
                           style={{ backgroundColor: 'var(--card)', color: 'var(--ink)', WebkitAppearance: 'none' as const, appearance: 'none' as const }}
                           value={divinitaRegionFilter}
                           onChange={(e) => setDivinitaRegionFilter(e.target.value)}
