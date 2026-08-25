@@ -4,8 +4,20 @@ import App from './App.tsx';
 import './index.css';
 import { PasswordGate } from './components/PasswordGate';
 import { reloadOnceForStaleChunk } from './lib/staleChunkGuard';
+import ilaLogo from './assets/images/ila-logo.png';
 
 const isStaticBuild = import.meta.env.VITE_STATIC_BUILD === 'true';
+
+// Il logo della hero è pesante (immagine raster ad alta risoluzione): qui
+// forziamo il browser a iniziare a scaricarlo appena il bundle viene
+// eseguito, prima ancora che React monti PasswordGate/App e renderizzi il
+// tag <img>. Senza questo hint, su connessioni lente il logo poteva
+// comparire a metà o in ritardo rispetto alla sua animazione di entrata.
+const logoPreload = document.createElement('link');
+logoPreload.rel = 'preload';
+logoPreload.as = 'image';
+logoPreload.href = ilaLogo;
+document.head.appendChild(logoPreload);
 
 if (isStaticBuild) {
   window.addEventListener('vite:preloadError', (event) => {

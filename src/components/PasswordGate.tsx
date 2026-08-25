@@ -1,4 +1,4 @@
-import React, { useEffect, useState, FormEvent } from 'react';
+import React, { useEffect, useRef, useState, FormEvent } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import App from '../App';
 import { EASE_OUT } from '../lib/utils';
@@ -47,6 +47,16 @@ export function PasswordGate() {
   const [corpusReady, setCorpusReady] = useState(false);
   const [corpusError, setCorpusError] = useState<string | null>(null);
   const [entered, setEntered] = useState(false);
+  const logoImgRef = useRef<HTMLImageElement>(null);
+  // L'animazione di scala/dissolvenza del logo parte solo quando l'immagine
+  // ha davvero finito di caricare (o era già in cache): altrimenti su
+  // connessioni lente si vedeva l'animazione concludersi su un riquadro
+  // vuoto, e il logo "comparire di scatto" in un secondo momento.
+  const [logoLoaded, setLogoLoaded] = useState(false);
+
+  useEffect(() => {
+    if (logoImgRef.current?.complete) setLogoLoaded(true);
+  }, []);
 
   useEffect(() => {
     import('../lib/apiShim')
@@ -89,12 +99,23 @@ export function PasswordGate() {
           // Sempre in tema chiaro, a prescindere dalla modalità notte:
           // il ritaglio del logo non è pulito sullo sfondo scuro, quindi
           // qui le custom property del tema vengono fissate ai valori
-          // light indipendentemente da .dark sull'antenato.
+          // light indipendentemente da .dark sull'antenato (elenco
+          // completo delle var definite in :root/.dark in index.css —
+          // un elenco parziale lasciava trapelare il tema scuro su
+          // elementi come il campo password, che usa --card).
+          colorScheme: 'light',
           ['--parchment' as any]: '#F7F4EC',
           ['--ink' as any]: '#1E2A26',
+          ['--sidebar' as any]: '#F1EDE1',
+          ['--card' as any]: '#FEFDFA',
           ['--accent' as any]: '#1F8377',
           ['--muted' as any]: '#6E6A5E',
           ['--border' as any]: '#E1DBC8',
+          ['--shadow-color' as any]: '61, 53, 38',
+          ['--tint-1' as any]: 'rgba(233, 238, 231, 0.55)',
+          ['--tint-2' as any]: 'rgba(244, 238, 223, 0.55)',
+          ['--tint-3' as any]: 'rgba(232, 238, 238, 0.55)',
+          ['--tint-4' as any]: 'rgba(243, 233, 226, 0.55)',
         }}
       >
         <div
@@ -112,16 +133,20 @@ export function PasswordGate() {
           className="relative z-10 flex flex-col items-center text-center max-w-lg px-8"
         >
           <motion.div
-            initial={{ opacity: 0, scale: 1.7 }}
-            animate={{ opacity: 1, scale: 1 }}
+            initial={false}
+            animate={logoLoaded ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 1.7 }}
             transition={{ duration: 1.1, ease: EASE_OUT }}
             className="mb-12"
+            style={{ height: 'clamp(120px, 32vh, 320px)' }}
           >
             <img
+              ref={logoImgRef}
               src={ilaLogo}
               alt="Index Lunae Antiquae"
-              className="w-auto object-contain"
-              style={{ height: 'clamp(120px, 32vh, 320px)' }}
+              className="w-auto h-full object-contain"
+              fetchPriority="high"
+              decoding="sync"
+              onLoad={() => setLogoLoaded(true)}
             />
           </motion.div>
 

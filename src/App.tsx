@@ -2135,19 +2135,19 @@ function TimelineBranchBox({ items, onSelect }: { items: Monumento[]; onSelect: 
     return (
       <button
         onClick={(e) => { e.stopPropagation(); onSelect(m); }}
-        className="flex flex-col items-start gap-0.5 text-[11px] font-sans font-bold bg-parchment pl-2 pr-2.5 py-1.5 border border-border border-l-2 border-l-accent/60 shadow-sm whitespace-nowrap max-w-[170px] overflow-hidden hover:border-accent hover:bg-accent/5 hover:text-accent transition-colors"
+        className="flex flex-col items-start gap-0.5 text-[12px] font-sans font-bold bg-card pl-2.5 pr-3 py-2 border border-border border-l-[3px] border-l-accent shadow-md whitespace-nowrap max-w-[170px] overflow-hidden hover:border-accent hover:bg-accent/10 hover:text-accent transition-colors"
       >
         <span className="flex items-center gap-1.5 max-w-full">
-          <span className="text-accent/80 shrink-0">#{m.id}</span>
-          <span className="truncate">{m.citta || m.regione || 'N/A'}</span>
+          <span className="text-accent shrink-0">#{m.id}</span>
+          <span className="truncate text-ink">{m.citta || m.regione || 'N/A'}</span>
         </span>
-        <span className="text-[10px] font-normal text-muted/70 tabular-nums">{formatDateRange(m.data_inizio, m.data_fine)}</span>
+        <span className="text-[10.5px] font-normal text-muted tabular-nums">{formatDateRange(m.data_inizio, m.data_fine)}</span>
       </button>
     );
   }
   return (
-    <div className="w-[188px] bg-parchment border border-border border-l-2 border-l-accent/60 shadow-md rounded-sm overflow-hidden" onClick={(e) => e.stopPropagation()}>
-      <div className="flex items-center gap-1.5 px-2.5 py-2 bg-accent/10 border-b border-accent/25">
+    <div className="w-[192px] bg-card border border-border border-l-[3px] border-l-accent shadow-lg rounded-sm overflow-hidden" onClick={(e) => e.stopPropagation()}>
+      <div className="flex items-center gap-1.5 px-2.5 py-2 bg-accent/15 border-b border-accent/30">
         <Hash className="h-3.5 w-3.5 text-accent shrink-0" />
         <span className="text-[11px] font-sans font-bold uppercase tracking-wider text-accent">{items.length} schede</span>
       </div>
@@ -2156,13 +2156,13 @@ function TimelineBranchBox({ items, onSelect }: { items: Monumento[]; onSelect: 
           <button
             key={m.entryId || `id-${m.id}`}
             onClick={() => onSelect(m)}
-            className={`w-full text-left px-2.5 py-1.5 text-[11px] font-sans font-bold border-b border-border/30 last:border-b-0 hover:bg-accent/10 hover:text-accent transition-colors ${ri % 2 === 1 ? 'bg-ink/[0.02]' : ''}`}
+            className={`w-full text-left px-2.5 py-1.5 text-[12px] font-sans font-bold border-b border-border/50 last:border-b-0 hover:bg-accent/10 hover:text-accent transition-colors ${ri % 2 === 1 ? 'bg-ink/[0.035]' : ''}`}
           >
             <span className="flex items-center gap-1 max-w-full">
-              <span className="text-accent/80 shrink-0">#{m.id}</span>
-              <span className="truncate">{m.citta || m.regione || 'N/A'}</span>
+              <span className="text-accent shrink-0">#{m.id}</span>
+              <span className="truncate text-ink">{m.citta || m.regione || 'N/A'}</span>
             </span>
-            <span className="block text-[10px] font-normal text-muted/70 tabular-nums">{formatDateRange(m.data_inizio, m.data_fine)}</span>
+            <span className="block text-[10.5px] font-normal text-muted tabular-nums">{formatDateRange(m.data_inizio, m.data_fine)}</span>
           </button>
         ))}
       </div>
@@ -2188,7 +2188,7 @@ function Timeline({ monumenti, onSelect }: { monumenti: Monumento[], onSelect: (
   // molti secoli, adattare tutto alla larghezza disponibile poteva scendere ben sotto
   // questo valore, rendendo le etichette (già piccole, 8-9px) illeggibili in blocco. Sotto
   // questa soglia si preferisce scorrere orizzontalmente piuttosto che rimpicciolire oltre.
-  const MIN_FIT_ZOOM = 0.55;
+  const MIN_FIT_ZOOM = 0.85;
 
   const sorted = useMemo(() => {
     return monumenti
@@ -2232,7 +2232,7 @@ function Timeline({ monumenti, onSelect }: { monumenti: Monumento[], onSelect: (
   // nello stesso pugno di pixel, costringendole a impilarsi su corsie profonde ("troppo
   // in alto o in basso"); il bucket assorbe quella densità in gruppi. BUCKET_TARGET_PX è
   // la larghezza-bersaglio in pixel di un bucket alla scala di layout (zoom visivo 1×).
-  const BUCKET_TARGET_PX = 90;
+  const BUCKET_TARGET_PX = 140;
   const bucketYears = useMemo(
     () => Math.max(2, Math.min(60, Math.round(BUCKET_TARGET_PX / LAYOUT_PX_PER_YEAR))),
     []
@@ -2271,9 +2271,9 @@ function Timeline({ monumenti, onSelect }: { monumenti: Monumento[], onSelect: (
   // invece risolta in verticale: le diramazioni che si sovrappongono orizzontalmente vengono
   // impilate su "corsie" (lane) via via più lontane dall'asse, ma la loro base resta sempre
   // ancorata all'anno vero.
-  const CLUSTER_HALF_WIDTH = 96;
-  const LANE_GAP = 12;
-  const GAP_BETWEEN_LANES = 14;
+  const CLUSTER_HALF_WIDTH = 110;
+  const LANE_GAP = 24;
+  const GAP_BETWEEN_LANES = 26;
   const BASE_CONNECTOR = 20;
   // Il connettore non è più un segmento dritto ma una curva a "ramo": si scosta di
   // "bow" pixel a metà percorso per poi rientrare esattamente sul punto dell'asse e
@@ -2614,7 +2614,7 @@ function Timeline({ monumenti, onSelect }: { monumenti: Monumento[], onSelect: (
                         transition: 'left 280ms cubic-bezier(0.22, 1, 0.36, 1), width 280ms cubic-bezier(0.22, 1, 0.36, 1), top 280ms cubic-bezier(0.22, 1, 0.36, 1), height 280ms cubic-bezier(0.22, 1, 0.36, 1)',
                       }}
                     >
-                      <div className={`absolute inset-0 ${Math.abs(c) % 2 === 0 ? 'bg-ink/[0.02]' : ''}`} />
+                      <div className={`absolute inset-0 ${Math.abs(c) % 2 === 0 ? 'bg-ink/[0.045]' : ''}`} />
                       {flashCentury && flashCentury.century === c && (
                         <motion.div
                           key={flashCentury.key}
@@ -2625,11 +2625,11 @@ function Timeline({ monumenti, onSelect }: { monumenti: Monumento[], onSelect: (
                           transition={{ duration: 1.3, ease: 'easeOut', times: [0, 0.25, 1] }}
                         />
                       )}
-                      <div className="absolute left-0 top-0 h-2 w-px bg-border/60" style={{ top: bandVerticalReach - 8 }} />
+                      <div className="absolute left-0 top-0 h-2.5 w-px bg-border" style={{ top: bandVerticalReach - 10 }} />
                       {bandWidth > 42 && (
                         <span
-                          className="absolute text-[9px] font-sans font-bold text-muted/40 uppercase tracking-widest whitespace-nowrap"
-                          style={{ left: '50%', top: bandVerticalReach + 6, transform: 'translateX(-50%)' }}
+                          className="absolute text-[10px] font-sans font-bold text-muted uppercase tracking-widest whitespace-nowrap"
+                          style={{ left: '50%', top: bandVerticalReach + 8, transform: 'translateX(-50%)' }}
                         >
                           {label}
                         </span>
@@ -2644,20 +2644,20 @@ function Timeline({ monumenti, onSelect }: { monumenti: Monumento[], onSelect: (
                     al 40% di opacità) così si legge subito come il "tronco" della cronologia,
                     e si accende in teal al passaggio del mouse per segnalare che è interattivo. */}
                 <div
-                  className={`absolute inset-x-0 top-0 rounded-full transition-colors duration-200 pointer-events-none ${hoverX !== null ? 'bg-accent/60' : 'bg-ink/20'}`}
-                  style={{ height: 3, zIndex: 1, boxShadow: 'inset 0 1px 1px rgba(0,0,0,0.1), 0 1px 0 rgba(255,255,255,0.5)' }}
+                  className={`absolute inset-x-0 top-0 rounded-full transition-colors duration-200 pointer-events-none ${hoverX !== null ? 'bg-accent' : 'bg-ink/50'}`}
+                  style={{ height: 3, zIndex: 1, boxShadow: 'inset 0 1px 1px rgba(0,0,0,0.15), 0 1px 0 rgba(255,255,255,0.5)' }}
                 />
 
                 {/* Puntini di sospensione agli estremi: l'asse è ricavato dai dati reali, ma
                     questo ricorda che il tempo continua oltre il margine mostrato. */}
                 <span
-                  className="absolute text-muted/35 text-sm font-bold tracking-tighter select-none pointer-events-none"
+                  className="absolute text-muted text-sm font-bold tracking-tighter select-none pointer-events-none"
                   style={{ left: 0, top: 1, transform: 'translate(-135%, -50%)' }}
                 >
                   ···
                 </span>
                 <span
-                  className="absolute text-muted/35 text-sm font-bold tracking-tighter select-none pointer-events-none"
+                  className="absolute text-muted text-sm font-bold tracking-tighter select-none pointer-events-none"
                   style={{ left: axisWidth, top: 1, transform: 'translate(35%, -50%)' }}
                 >
                   ···
@@ -2701,8 +2701,8 @@ function Timeline({ monumenti, onSelect }: { monumenti: Monumento[], onSelect: (
                         d={connectorPath}
                         fill="none"
                         stroke="var(--accent)"
-                        strokeOpacity={0.4}
-                        strokeWidth={1.4}
+                        strokeOpacity={0.55}
+                        strokeWidth={1.6}
                         strokeLinecap="round"
                       />
                     </svg>
@@ -3711,6 +3711,13 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
 
   const [loading, setLoading] = useState(true);
   const [showLanding, setShowLanding] = useState(!skipLanding);
+  const logoImgRef = useRef<HTMLImageElement>(null);
+  // Vedi PasswordGate.tsx: l'animazione del logo parte solo a caricamento
+  // immagine completato, per evitare il "pop" a scatti su reti lente.
+  const [logoLoaded, setLogoLoaded] = useState(false);
+  useEffect(() => {
+    if (logoImgRef.current?.complete) setLogoLoaded(true);
+  }, []);
   const [activeView, setActiveView] = useState<AppView>('home');
   const [editorTargetEntryId, setEditorTargetEntryId] = useState<string | null>(null);
   const [hasNavigated, setHasNavigated] = useState(false);
@@ -4997,12 +5004,21 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
               // attiva nel resto dell'app: il ritaglio del logo non è pulito
               // sullo sfondo scuro, quindi qui le custom property del tema
               // vengono fissate ai valori light indipendentemente da .dark
-              // sull'antenato (vedi :root in index.css).
+              // sull'antenato (elenco completo delle var di :root/.dark in
+              // index.css, non solo un sottoinsieme).
+              colorScheme: 'light',
               ['--parchment' as any]: '#F7F4EC',
               ['--ink' as any]: '#1E2A26',
+              ['--sidebar' as any]: '#F1EDE1',
+              ['--card' as any]: '#FEFDFA',
               ['--accent' as any]: '#1F8377',
               ['--muted' as any]: '#6E6A5E',
               ['--border' as any]: '#E1DBC8',
+              ['--shadow-color' as any]: '61, 53, 38',
+              ['--tint-1' as any]: 'rgba(233, 238, 231, 0.55)',
+              ['--tint-2' as any]: 'rgba(244, 238, 223, 0.55)',
+              ['--tint-3' as any]: 'rgba(232, 238, 238, 0.55)',
+              ['--tint-4' as any]: 'rgba(243, 233, 226, 0.55)',
             }}
           >
             <div
@@ -5020,12 +5036,20 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
               className="relative z-10 flex flex-col items-center text-center max-w-lg px-8"
             >
               <motion.div
-                initial={{ opacity: 0, scale: 1.7 }}
-                animate={{ opacity: 1, scale: 1 }}
+                initial={false}
+                animate={logoLoaded ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 1.7 }}
                 transition={{ duration: 1.1, ease: EASE_OUT }}
                 className="mb-12"
               >
-                <img src={ilaLogo} alt="Index Lunae Antiquae" className="h-52 sm:h-64 md:h-72 lg:h-80 w-auto object-contain" />
+                <img
+                  ref={logoImgRef}
+                  src={ilaLogo}
+                  alt="Index Lunae Antiquae"
+                  className="h-52 sm:h-64 md:h-72 lg:h-80 w-auto object-contain"
+                  fetchPriority="high"
+                  decoding="sync"
+                  onLoad={() => setLogoLoaded(true)}
+                />
               </motion.div>
 
               <motion.button
