@@ -47,9 +47,7 @@ import {
   Unlock,
   NotebookPen,
   Bug,
-  ExternalLink,
-  Image,
-  Landmark
+  ExternalLink
 } from 'lucide-react';
 import { cn, EASE_OUT, EASE_IN, SPRING_SNAPPY, SPRING_SOFT } from './lib/utils';
 import { ICONOGRAPHY_LABELS } from './lib/iconographyLabels';
@@ -3704,49 +3702,27 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
   const [selectedMonumento, setSelectedMonumento] = useState<Monumento | null>(null);
   const [currentUser, setCurrentUser] = useState<User | null>(null);
 
-  // --- Prova layout scheda: navigazione a sezioni della modale editoriale ---
-  const RECORD_SECTIONS: { id: string; label: string; icon: typeof Hash }[] = [
-    { id: 'scheda', label: 'Scheda', icon: Hash },
-    { id: 'oggetto', label: 'Oggetto', icon: Landmark },
-    { id: 'iscrizione', label: 'Iscrizione', icon: Feather },
-    { id: 'commento', label: 'Commento', icon: NotebookPen },
-    { id: 'iconografia', label: 'Iconografia', icon: Image },
-    { id: 'bibliografia', label: 'Bibliografia', icon: Book },
+  // --- Navigazione a sezioni della modale editoriale: pannelli discreti,
+  // non più scroll continuo. "Supporto Epigrafico" fonde scheda+oggetto;
+  // "Iscrizione" fonde trascrizione+commento; "Iconografia" raccoglie anche
+  // gli indici (divinità/epiteti/onomastica/imperatori); "Bibliografia" a parte. ---
+  const RECORD_SECTIONS: { id: string; label: string }[] = [
+    { id: 'supporto', label: 'Supporto Epigrafico' },
+    { id: 'iscrizione', label: 'Iscrizione' },
+    { id: 'iconografia', label: 'Iconografia' },
+    { id: 'bibliografia', label: 'Bibliografia' },
   ];
-  const [activeRecordSection, setActiveRecordSection] = useState<string>('scheda');
+  const [activeRecordSection, setActiveRecordSection] = useState<string>('supporto');
   const recordContentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!selectedMonumento) return;
-    setActiveRecordSection('scheda');
-    const container = recordContentRef.current;
-    if (!container) return;
-
-    const handleScroll = () => {
-      const containerRect = container.getBoundingClientRect();
-      let current = RECORD_SECTIONS[0].id;
-      for (const { id } of RECORD_SECTIONS) {
-        const el = container.querySelector<HTMLElement>(`[data-record-section="${id}"]`);
-        if (!el) continue;
-        const relativeTop = el.getBoundingClientRect().top - containerRect.top + container.scrollTop;
-        if (relativeTop <= container.scrollTop + 80) current = id;
-      }
-      setActiveRecordSection(current);
-    };
-
-    container.addEventListener('scroll', handleScroll);
-    handleScroll();
-    return () => container.removeEventListener('scroll', handleScroll);
+    setActiveRecordSection('supporto');
   }, [selectedMonumento?.id]);
 
-  const scrollToRecordSection = (id: string) => {
-    const container = recordContentRef.current;
-    const el = container?.querySelector<HTMLElement>(`[data-record-section="${id}"]`);
-    if (!container || !el) return;
-    const containerRect = container.getBoundingClientRect();
-    const elRect = el.getBoundingClientRect();
-    const relativeTop = elRect.top - containerRect.top + container.scrollTop;
-    container.scrollTo({ top: Math.max(relativeTop - 24, 0), behavior: 'smooth' });
+  const goToRecordSection = (id: string) => {
+    setActiveRecordSection(id);
+    recordContentRef.current?.scrollTo({ top: 0 });
   };
 
   useEffect(() => {
@@ -6392,22 +6368,21 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                          </span>
                       </div>
 
-                      {/* Prova: navigazione a sezioni della scheda */}
-                      <nav className="space-y-0.5 -mx-1">
-                        {RECORD_SECTIONS.map(({ id, label, icon: Icon }) => {
+                      {/* Navigazione a sezioni della scheda: pannelli discreti (stile "glass") */}
+                      <nav className="space-y-1.5 -mx-1">
+                        {RECORD_SECTIONS.map(({ id, label }) => {
                           const active = activeRecordSection === id;
                           return (
                             <button
                               key={id}
-                              onClick={() => scrollToRecordSection(id)}
+                              onClick={() => goToRecordSection(id)}
                               className={cn(
-                                "w-full flex items-center gap-2.5 px-3 py-2 text-left font-sans text-[11px] font-bold uppercase tracking-wider transition-colors rounded-sm",
+                                "w-full text-left px-3.5 py-2.5 font-sans text-[11px] font-bold uppercase tracking-wider rounded-xl transition-all duration-200",
                                 active
-                                  ? "bg-accent/10 text-accent border-l-2 border-accent -ml-0.5 pl-[10px]"
-                                  : "text-muted hover:text-ink hover:bg-sidebar/60 border-l-2 border-transparent -ml-0.5 pl-[10px]"
+                                  ? "nav-pill-active text-accent"
+                                  : "text-muted hover:text-ink"
                               )}
                             >
-                              <Icon className="h-3.5 w-3.5 shrink-0" />
                               {label}
                             </button>
                           );
@@ -6419,7 +6394,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                         <dl className="space-y-3">
                           {[
                             { label: 'Regione', value: selectedMonumento.regione, display: selectedMonumento.regione, type: 'regione' },
-                            { label: 'Città', value: selectedMonumento.citta, display: selectedMonumento.citta, type: 'citta' },
+                            { label: 'Località', value: selectedMonumento.citta, display: selectedMonumento.citta, type: 'citta' },
                             { label: 'Datazione', value: formatDateRange(selectedMonumento.data_inizio, selectedMonumento.data_fine), display: formatDateRange(selectedMonumento.data_inizio, selectedMonumento.data_fine), type: '' },
                             { label: 'Tipologia', value: selectedMonumento.tipo, display: labelType(selectedMonumento.tipo || ''), type: 'tipo' },
                             { label: 'Materiale', value: selectedMonumento.materiale, display: labelMaterial(selectedMonumento.materiale || ''), type: '' }
@@ -6472,7 +6447,9 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
 
                   {/* Main Content Area */}
                   <div ref={recordContentRef} className="flex-1 min-h-0 bg-parchment p-6 md:p-16 md:overflow-y-auto custom-scrollbar">
-                    <div data-record-section="scheda" className="flex justify-between items-start mb-4">
+                  {activeRecordSection === 'supporto' && (
+                  <div className="animate-in fade-in duration-200">
+                    <div className="flex justify-between items-start mb-4">
                       <div className="flex-1 mr-4">
                         {true && (
                           <div className="flex flex-col gap-1 mb-4">
@@ -6588,8 +6565,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                       
                     </div>
                     
-                    {true && (
-                      <div className="space-y-8 animate-in fade-in duration-300 mb-12">
+                      <div className="space-y-8 mt-2">
                         {selectedMonumento.facsimile_url && (
                           <div className="bg-sidebar/40 p-6 border border-border/60 rounded-sm">
                             <span className="text-[10px] font-sans font-bold uppercase tracking-[0.2em] text-accent block mb-3">Facsimile / Squeeze Image</span>
@@ -6615,7 +6591,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                           </div>
                         )}
 
-                        <div data-record-section="oggetto" className="grid md:grid-cols-2 gap-8 border border-border/40 bg-sidebar/20 p-6 md:p-8 rounded-sm font-serif text-xs leading-relaxed text-ink/80">
+                        <div className="grid md:grid-cols-2 gap-8 border border-border/40 bg-sidebar/20 p-6 md:p-8 rounded-sm font-serif text-xs leading-relaxed text-ink/80">
                           <div>
                             <h4 className="text-[10px] font-sans font-bold uppercase tracking-widest text-accent mb-4 pb-1 border-b border-border/30">Layout & Supporto Materiale</h4>
                             {(selectedMonumento.layout_desc || selectedMonumento.supporto) && (
@@ -6739,10 +6715,11 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                           </div>
                         </div>
                       </div>
-                    )}
-
-                    <div className="space-y-16">
-                      <section data-record-section="iscrizione">
+                  </div>
+                  )}
+                  {activeRecordSection === 'iscrizione' && (
+                    <div className="space-y-14 animate-in fade-in duration-200 max-w-[70ch] mx-auto">
+                      <section>
                          <h3 className="text-2xl font-bold mb-6 italic flex items-center gap-4">
                            <div className="flex items-center gap-4 shrink-0">
                              <div className="h-[1px] w-8 bg-border/40" />
@@ -6815,11 +6792,49 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                            </div>
                       </section>
 
-                      <section data-record-section="commento" className="grid md:grid-cols-2 gap-12">
-                         <div className="space-y-5">
+                      {isFilled(selectedMonumento.note_interne) && (
+                        <section>
+                           <h3 className="text-2xl font-bold mb-6 italic flex items-center gap-4">
+                             <div className="flex items-center gap-4 shrink-0">
+                               <div className="h-[1px] w-8 bg-border/40" />
+                               <div className="w-1.5 h-1.5 rotate-45 border border-accent/40" />
+                             </div>
+                             Commento
+                             <div className="flex-1 h-[1px] bg-border/20" />
+                           </h3>
+                           <p className="text-sm leading-relaxed text-ink/80 font-serif whitespace-pre-wrap">
+                              <NoteWithTags
+                                text={selectedMonumento.note_interne}
+                                query={filters.searchText}
+                                monumenti={monumenti}
+                                onSelectMonumento={(m) => { setSelectedMonumento(m); }}
+                                onTagClick={(tag) => {
+                                  setFilters(f => ({ ...f, searchText: tag }));
+                                  setSelectedMonumento(null);
+                                }}
+                              />
+                            </p>
+                        </section>
+                      )}
+                    </div>
+                  )}
+
+                  {activeRecordSection === 'iconografia' && (
+                    <div className="space-y-14 animate-in fade-in duration-200">
+                      {(selectedMonumento.divinita?.length || selectedMonumento.epiteti?.length || selectedMonumento.onomastica?.length || selectedMonumento.imperatori?.length) ? (
+                        <section>
+                           <h3 className="text-2xl font-bold mb-6 italic flex items-center gap-4">
+                             <div className="flex items-center gap-4 shrink-0">
+                               <div className="h-[1px] w-8 bg-border/40" />
+                               <div className="w-1.5 h-1.5 rotate-45 border border-accent/40" />
+                             </div>
+                             Indici
+                             <div className="flex-1 h-[1px] bg-border/20" />
+                           </h3>
+                           <div className="grid sm:grid-cols-2 gap-x-10 gap-y-6">
                             {selectedMonumento.divinita && selectedMonumento.divinita.length > 0 && (
                               <div>
-                                <h3 className="text-xs font-bold uppercase text-muted tracking-widest mb-2">Divinità</h3>
+                                <h4 className="text-xs font-bold uppercase text-muted tracking-widest mb-2">Divinità</h4>
                                 <div className="flex flex-wrap gap-2">
                                   {selectedMonumento.divinita.map(d => (
                                     <button
@@ -6835,7 +6850,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                             )}
                             {selectedMonumento.epiteti && selectedMonumento.epiteti.length > 0 && (
                               <div>
-                                <h3 className="text-xs font-bold uppercase text-muted tracking-widest mb-2">Epiteti</h3>
+                                <h4 className="text-xs font-bold uppercase text-muted tracking-widest mb-2">Epiteti</h4>
                                 <div className="flex flex-wrap gap-2 mb-2">
                                   {selectedMonumento.epiteti.map(e => (
                                     <button
@@ -6851,7 +6866,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                             )}
                             {selectedMonumento.onomastica && selectedMonumento.onomastica.length > 0 && (
                               <div>
-                                <h3 className="text-xs font-bold uppercase text-muted tracking-widest mb-2 font-sans">Onomastica</h3>
+                                <h4 className="text-xs font-bold uppercase text-muted tracking-widest mb-2 font-sans">Onomastica</h4>
                                 <div className="flex flex-wrap gap-2">
                                   {selectedMonumento.onomastica.map(o => (
                                     <button key={o}
@@ -6864,7 +6879,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                             )}
                             {selectedMonumento.imperatori && selectedMonumento.imperatori.length > 0 && (
                               <div>
-                                <h3 className="text-xs font-bold uppercase text-muted tracking-widest mb-2">Imperatori</h3>
+                                <h4 className="text-xs font-bold uppercase text-muted tracking-widest mb-2">Imperatori</h4>
                                 <div className="flex flex-wrap gap-2">
                                   {selectedMonumento.imperatori.map((imp: string) => (
                                     <button key={imp}
@@ -6875,27 +6890,10 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                                 </div>
                               </div>
                             )}
-                         </div>
-                         {isFilled(selectedMonumento.note_interne) && (
-                           <div>
-                              <h3 className="text-xs font-bold uppercase text-muted tracking-widest mb-4">Commento</h3>
-                                 <p className="text-xs leading-relaxed text-muted/80 font-serif whitespace-pre-wrap">
-                                    <NoteWithTags
-                                      text={selectedMonumento.note_interne}
-                                      query={filters.searchText}
-                                      monumenti={monumenti}
-                                      onSelectMonumento={(m) => { setSelectedMonumento(m); }}
-                                      onTagClick={(tag) => {
-                                        setFilters(f => ({ ...f, searchText: tag }));
-                                        setSelectedMonumento(null);
-                                      }}
-                                    />
-                                  </p>
                            </div>
-                         )}
-                      </section>
+                        </section>
+                      ) : null}
 
-                      <div data-record-section="iconografia" className="space-y-16">
                       {selectedMonumento.iconografia?.note && (
                         <section>
                           <h3 className="text-xs font-bold uppercase text-muted tracking-widest mb-3">Nota sulla Funzione Cultuale</h3>
@@ -6906,10 +6904,13 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                       )}
 
                       <IconographyPanel monumento={selectedMonumento} />
-                      </div>
+                    </div>
+                  )}
 
-                      {selectedMonumento.bibliografia && selectedMonumento.bibliografia.length > 0 && (
-                      <section data-record-section="bibliografia">
+                  {activeRecordSection === 'bibliografia' && (
+                    <div className="animate-in fade-in duration-200 max-w-[70ch]">
+                      {selectedMonumento.bibliografia && selectedMonumento.bibliografia.length > 0 ? (
+                      <section>
                          <h3 className="text-xl font-bold mb-6 italic flex items-center gap-3">
                            <div className="h-px w-8 bg-border" /> Bibliografia
                          </h3>
@@ -6931,9 +6932,11 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                               )}
                             </>
                       </section>
+                      ) : (
+                        <p className="text-xs font-serif text-muted italic">Nessun riferimento bibliografico registrato.</p>
                       )}
-
                     </div>
+                  )}
                   </div>
                 </div>
              </motion.div>

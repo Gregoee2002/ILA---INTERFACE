@@ -238,6 +238,22 @@
     background: rgba(48, 36, 30, 0.6) !important;
   }
   
+  /* Pillola "glass" per la voce attiva del menu a sezioni della scheda:
+     stessa ricetta cromatica del glass-card (parchment+accent), ma più
+     discreta perché vive dentro la rail laterale, non come card isolata. */
+  .nav-pill-active {
+    background: rgba(247, 247, 241, 0.65);
+    backdrop-filter: blur(12px) saturate(160%);
+    -webkit-backdrop-filter: blur(12px) saturate(160%);
+    border: 1px solid rgba(31, 131, 119, 0.18);
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.6) inset, 0 4px 14px rgba(var(--shadow-color), 0.08);
+  }
+  .dark .nav-pill-active {
+    background: rgba(38, 41, 32, 0.55);
+    border: 1px solid rgba(53, 189, 179, 0.25);
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.04) inset, 0 8px 20px rgba(0, 0, 0, 0.3);
+  }
+
   .field-label {
     display: flex;
     align-items: center;
