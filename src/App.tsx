@@ -2139,8 +2139,12 @@ function Timeline({ monumenti, onSelect }: { monumenti: Monumento[], onSelect: (
   const zoomAnchorRef = useRef<{ year: number; clientX: number } | null>(null);
   const didFitRef = useRef(false);
 
-  const ZOOM_MIN = 0.08;
-  const ZOOM_MAX = 8;
+  // Il floor dello zoom non è più un valore fisso bassissimo: coincide con lo zoom della
+  // vista di default (panoramica, calcolato in computeFitZoom), aggiornato lì sotto — non
+  // ha senso poter rimpicciolire oltre "si vede già tutto". Il tetto è un valore ragionevole
+  // per la lettura ravvicinata, non il limite tecnico della transizione CSS.
+  const minZoomRef = useRef(0.08);
+  const ZOOM_MAX = 3;
   // Sotto questa soglia di zoom la vista è "panoramica" (blocchi compatti per secolo, con
   // solo un conteggio) — sopra è "di dettaglio" (la cascata di barre con testo). Non sono
   // due modalità separate da un pulsante: la soglia divide un unico continuo di zoom, così
@@ -2235,7 +2239,7 @@ function Timeline({ monumenti, onSelect }: { monumenti: Monumento[], onSelect: (
   const laneCount = useMemo(() => bars.reduce((max, b) => Math.max(max, b.lane + 1), 0), [bars]);
   // In vista panoramica basta lo spazio per l'intestazione e il pallino del conteggio —
   // niente corsie di barre, quindi un'altezza fissa e ridotta invece di quella della cascata.
-  const OVERVIEW_HEIGHT = RULE_Y + 100;
+  const OVERVIEW_HEIGHT = RULE_Y + 120;
   const cascadeHeight = isOverview ? OVERVIEW_HEIGHT : CASCADE_TOP + Math.max(1, laneCount) * ROW_H + 24;
 
   const axisWidth = Math.max(600, naturalWidth + 40);
@@ -2269,7 +2273,7 @@ function Timeline({ monumenti, onSelect }: { monumenti: Monumento[], onSelect: (
       // drasticamente: ogni passo cambia lo zoom solo del 3%, quindi serve un gesto più
       // lungo e deliberato per arrivare a un livello di zoom significativo.
       const factor = e.deltaY < 0 ? 1.03 : 1 / 1.03;
-      setZoom(z => Math.min(ZOOM_MAX, Math.max(ZOOM_MIN, z * factor)));
+      setZoom(z => Math.min(ZOOM_MAX, Math.max(minZoomRef.current, z * factor)));
     };
     el.addEventListener('wheel', onWheel, { passive: false });
     return () => el.removeEventListener('wheel', onWheel);
@@ -2299,10 +2303,17 @@ function Timeline({ monumenti, onSelect }: { monumenti: Monumento[], onSelect: (
     if (!scrollRef.current) return null;
     const containerWidth = scrollRef.current.clientWidth;
     if (containerWidth <= 0) return null;
-    const available = Math.max(containerWidth - 80, 120);
+    // Il contenuto vive dentro px-16 (md:px-24): il margine da sottrarre deve rispecchiare
+    // quel padding reale, non una stima fissa — una stima troppo bassa (era 80, il padding
+    // reale è 128-192px) lasciava l'ultimo secolo a ridosso del bordo destro del riquadro
+    // mentre a sinistra il padding si vedeva per intero.
+    const sidePad = (typeof window !== 'undefined' && window.innerWidth >= 768) ? 96 : 64;
+    const available = Math.max(containerWidth - sidePad * 2 - 24, 120);
     const naturalAtZoom1 = yearSpan * BASE_PX_PER_YEAR;
     if (naturalAtZoom1 <= 0) return null;
-    return Math.min(OVERVIEW_ZOOM_CAP, Math.max(ZOOM_MIN, available / naturalAtZoom1));
+    const fit = Math.min(OVERVIEW_ZOOM_CAP, Math.max(0.05, available / naturalAtZoom1));
+    minZoomRef.current = fit;
+    return fit;
   };
 
   // All'apertura della sezione, applica subito lo zoom a schermo intero.
@@ -2324,7 +2335,7 @@ function Timeline({ monumenti, onSelect }: { monumenti: Monumento[], onSelect: (
     const cursorXInAxis = viewportCenterClientX - axisRect.left;
     const currentYear = yearMin + cursorXInAxis / pxPerYear;
     zoomAnchorRef.current = { year: currentYear, clientX: viewportCenterClientX };
-    setZoom(z => Math.min(ZOOM_MAX, Math.max(ZOOM_MIN, z * factor)));
+    setZoom(z => Math.min(ZOOM_MAX, Math.max(minZoomRef.current, z * factor)));
   };
   const handleZoomIn = () => zoomByFactor(1.4);
   const handleZoomOut = () => zoomByFactor(1 / 1.4);
@@ -2352,7 +2363,7 @@ function Timeline({ monumenti, onSelect }: { monumenti: Monumento[], onSelect: (
     const cursorXInAxis = e.clientX - rect.left;
     const currentYear = yearMin + cursorXInAxis / pxPerYear;
     zoomAnchorRef.current = { year: currentYear, clientX: e.clientX };
-    setZoom(z => Math.min(ZOOM_MAX, Math.max(ZOOM_MIN, z * 1.7)));
+    setZoom(z => Math.min(ZOOM_MAX, Math.max(minZoomRef.current, z * 1.7)));
   };
 
   // Click su un blocco-secolo: passa (o resta) alla vista di dettaglio ancorata su quel
@@ -2368,45 +2379,6 @@ function Timeline({ monumenti, onSelect }: { monumenti: Monumento[], onSelect: (
 
   return (
     <div className="flex-1 flex flex-col overflow-hidden">
-      <motion.div {...scrollReveal} className="mb-8 pb-4 border-b border-border/50 flex items-end justify-between gap-4 flex-wrap">
-        <div>
-          <div className="text-[10px] font-sans font-bold uppercase tracking-[0.22em] text-accent/70 mb-2">Sequenza temporale</div>
-          <h2 className="text-3xl md:text-4xl font-bold italic mb-2">Cronologia Storica</h2>
-          <p className="text-sm text-muted font-serif">Visualizzazione sequenziale dei monumenti datati (a.C. - d.C.).</p>
-          <p className="text-xs text-muted/60 font-sans mt-1">Clicca un secolo per aprirlo: ogni scheda diventa una barra ancorata alla propria data reale, lunga quanto il suo intervallo di datazione. Oppure Ctrl/Cmd + rotellina (o pizzico) per zoomare liberamente.</p>
-        </div>
-        {sorted.length > 0 && (
-          <div className="flex items-center gap-2 shrink-0">
-            <button
-              onClick={handleZoomReset}
-              className="h-7 pl-2.5 pr-3 rounded-full flex items-center gap-1.5 text-[10px] font-sans font-bold uppercase tracking-wide text-accent bg-accent/10 hover:bg-accent/20 border border-accent/25 transition-colors"
-              title="Vista d'insieme (adatta alla finestra) — anche tasto Esc"
-            >
-              <RotateCcw className="h-3 w-3" />
-              Vista d'insieme
-            </button>
-            <div className="flex items-center gap-0.5 bg-parchment/70 backdrop-blur-sm border border-border/60 rounded-full p-1 shadow-sm">
-              <button
-                onClick={handleZoomOut}
-                disabled={zoom <= ZOOM_MIN + 0.001}
-                className="h-7 w-7 rounded-full flex items-center justify-center text-muted/70 hover:bg-accent/10 hover:text-accent disabled:opacity-25 disabled:hover:bg-transparent transition-colors"
-                title="Riduci zoom"
-              >
-                <ZoomOut className="h-3.5 w-3.5" />
-              </button>
-              <button
-                onClick={handleZoomIn}
-                disabled={zoom >= ZOOM_MAX - 0.001}
-                className="h-7 w-7 rounded-full flex items-center justify-center text-muted/70 hover:bg-accent/10 hover:text-accent disabled:opacity-25 disabled:hover:bg-transparent transition-colors"
-                title="Aumenta zoom"
-              >
-                <ZoomIn className="h-3.5 w-3.5" />
-              </button>
-            </div>
-          </div>
-        )}
-      </motion.div>
-
       {sorted.length === 0 ? (
         <div className="flex-1 flex items-center justify-center">
           <div className="text-center max-w-sm">
@@ -2415,12 +2387,45 @@ function Timeline({ monumenti, onSelect }: { monumenti: Monumento[], onSelect: (
           </div>
         </div>
       ) : (
-      /* Niente bg-card qui: un riempimento opaco spezzava la texture/venatura di sfondo
-         della pagina proprio nel riquadro più esplorato con zoom e scroll — un rettangolo
-         piatto "staccato" dal resto. Il bordo e l'ombra bastano a delimitarlo, lasciando la
-         texture della pagina continuare sotto (è fissa rispetto al viewport, quindi resta
-         coerente qualunque sia lo zoom o lo scroll del contenuto sopra). */
-      <div ref={scrollRef} className="flex-1 overflow-x-auto overflow-y-auto relative custom-scrollbar min-h-0 border border-border rounded-lg shadow-sm" style={{ minHeight: 0, overflowX: 'auto' }}>
+      /* Header rimosso: niente più titolo/sottotitolo a sé, che rubavano spazio verticale
+         alla cronologia stessa. I comandi (indispensabili: senza "Vista d'insieme" non c'è
+         modo di tornare alla panoramica) restano come una piccola toolbar fluttuante, fuori
+         dall'area di scroll così non scorre via col contenuto. */
+      <div className="relative flex-1 min-h-0">
+        <div className="absolute top-3 right-3 z-20 flex items-center gap-2">
+          <button
+            onClick={handleZoomReset}
+            className="h-8 pl-3 pr-3.5 rounded-full flex items-center gap-1.5 text-[10px] font-sans font-bold uppercase tracking-wide text-accent bg-parchment/90 hover:bg-accent/15 border border-accent/30 shadow-sm backdrop-blur-sm transition-colors"
+            title="Vista d'insieme (adatta alla finestra) — anche tasto Esc"
+          >
+            <RotateCcw className="h-3.5 w-3.5" />
+            Vista d'insieme
+          </button>
+          <div className="flex items-center gap-0.5 bg-parchment/90 backdrop-blur-sm border border-border/60 rounded-full p-1 shadow-sm">
+            <button
+              onClick={handleZoomOut}
+              disabled={zoom <= minZoomRef.current + 0.001}
+              className="h-8 w-8 rounded-full flex items-center justify-center text-muted/70 hover:bg-accent/10 hover:text-accent disabled:opacity-25 disabled:hover:bg-transparent transition-colors"
+              title="Riduci zoom"
+            >
+              <ZoomOut className="h-4 w-4" />
+            </button>
+            <button
+              onClick={handleZoomIn}
+              disabled={zoom >= ZOOM_MAX - 0.001}
+              className="h-8 w-8 rounded-full flex items-center justify-center text-muted/70 hover:bg-accent/10 hover:text-accent disabled:opacity-25 disabled:hover:bg-transparent transition-colors"
+              title="Aumenta zoom"
+            >
+              <ZoomIn className="h-4 w-4" />
+            </button>
+          </div>
+        </div>
+      {/* Niente bg-card qui: un riempimento opaco spezzava la texture/venatura di sfondo
+          della pagina proprio nel riquadro più esplorato con zoom e scroll — un rettangolo
+          piatto "staccato" dal resto. Il bordo e l'ombra bastano a delimitarlo, lasciando la
+          texture della pagina continuare sotto (è fissa rispetto al viewport, quindi resta
+          coerente qualunque sia lo zoom o lo scroll del contenuto sopra). */}
+      <div ref={scrollRef} className="h-full overflow-x-auto overflow-y-auto relative custom-scrollbar min-h-0 border border-border rounded-lg shadow-sm" style={{ minHeight: 0, overflowX: 'auto' }}>
             <motion.div
                  initial={{ opacity: 0 }}
                  animate={{ opacity: 1 }}
@@ -2494,15 +2499,15 @@ function Timeline({ monumenti, onSelect }: { monumenti: Monumento[], onSelect: (
                     >
                       {bandWidth > 30 && (
                         <div className="absolute flex items-center gap-2" style={{ left: 6, top: 2 }}>
-                          <div className="w-1 h-5 bg-accent rounded-full shrink-0" />
-                          <span className={`font-sans font-extrabold uppercase tracking-wider text-ink/75 whitespace-nowrap ${isOverview ? 'text-[15px]' : 'text-[10px]'}`}>{label}</span>
+                          <div className={`bg-accent rounded-full shrink-0 ${isOverview ? 'w-1.5 h-6' : 'w-1 h-5'}`} />
+                          <span className={`font-sans font-extrabold uppercase tracking-wider whitespace-nowrap ${isOverview ? 'text-[17px] text-ink' : 'text-[10px] text-ink/75'}`}>{label}</span>
                         </div>
                       )}
                       <div className="absolute border-l border-dashed border-border" style={{ left: 0, top: RULE_Y, bottom: 0 }} />
                       {isOverview && count > 0 && bandWidth > 20 && (
                         <div
-                          className="absolute rounded-full bg-accent/12 border-2 border-accent/30 text-accent text-base font-sans font-bold flex items-center justify-center"
-                          style={{ left: '50%', top: RULE_Y + 26, minWidth: 38, height: 38, padding: '0 8px', transform: 'translateX(-50%)' }}
+                          className="absolute rounded-full bg-accent/15 border-2 border-accent/50 text-accent text-lg font-sans font-bold flex items-center justify-center"
+                          style={{ left: '50%', top: RULE_Y + 30, minWidth: 44, height: 44, padding: '0 8px', transform: 'translateX(-50%)' }}
                         >
                           {count}
                         </div>
@@ -2552,6 +2557,7 @@ function Timeline({ monumenti, onSelect }: { monumenti: Monumento[], onSelect: (
               </div>
             </motion.div>
           </div>
+      </div>
       )}
         </div>
       );
