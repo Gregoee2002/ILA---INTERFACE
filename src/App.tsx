@@ -2205,7 +2205,7 @@ function Timeline({ monumenti, onSelect }: { monumenti: Monumento[], onSelect: (
   // Geometria della cascata: RULE_Y separa le intestazioni dei secoli (sempre in cima,
   // come le colonne di fase di un diagramma di Gantt) dalle barre; CASCADE_TOP è dove
   // inizia la prima corsia.
-  const RULE_Y = 30;
+  const RULE_Y = 36;
   const CASCADE_TOP = RULE_Y + 12;
   const ROW_H = 30;
   const BAR_H = 22;
@@ -2235,7 +2235,7 @@ function Timeline({ monumenti, onSelect }: { monumenti: Monumento[], onSelect: (
   const laneCount = useMemo(() => bars.reduce((max, b) => Math.max(max, b.lane + 1), 0), [bars]);
   // In vista panoramica basta lo spazio per l'intestazione e il pallino del conteggio —
   // niente corsie di barre, quindi un'altezza fissa e ridotta invece di quella della cascata.
-  const OVERVIEW_HEIGHT = RULE_Y + 60;
+  const OVERVIEW_HEIGHT = RULE_Y + 100;
   const cascadeHeight = isOverview ? OVERVIEW_HEIGHT : CASCADE_TOP + Math.max(1, laneCount) * ROW_H + 24;
 
   const axisWidth = Math.max(600, naturalWidth + 40);
@@ -2476,16 +2476,16 @@ function Timeline({ monumenti, onSelect }: { monumenti: Monumento[], onSelect: (
                       onClick={count > 0 ? (e) => { e.stopPropagation(); handleCenturyClick(c, e.clientX); } : undefined}
                     >
                       {bandWidth > 30 && (
-                        <div className="absolute flex items-center gap-1.5" style={{ left: 4, top: 0 }}>
-                          <div className="w-[3px] h-3.5 bg-accent rounded-full shrink-0" />
-                          <span className="text-[10px] font-sans font-extrabold uppercase tracking-wider text-ink/75 whitespace-nowrap">{label}</span>
+                        <div className="absolute flex items-center gap-2" style={{ left: 6, top: 2 }}>
+                          <div className="w-1 h-5 bg-accent rounded-full shrink-0" />
+                          <span className={`font-sans font-extrabold uppercase tracking-wider text-ink/75 whitespace-nowrap ${isOverview ? 'text-[13px]' : 'text-[10px]'}`}>{label}</span>
                         </div>
                       )}
                       <div className="absolute border-l border-dashed border-border" style={{ left: 0, top: RULE_Y, bottom: 0 }} />
                       {isOverview && count > 0 && bandWidth > 20 && (
                         <div
-                          className="absolute rounded-full bg-accent/12 border border-accent/30 text-accent text-[10px] font-sans font-bold flex items-center justify-center"
-                          style={{ left: '50%', top: RULE_Y + 16, minWidth: 22, height: 22, padding: '0 6px', transform: 'translateX(-50%)' }}
+                          className="absolute rounded-full bg-accent/12 border-2 border-accent/30 text-accent text-base font-sans font-bold flex items-center justify-center"
+                          style={{ left: '50%', top: RULE_Y + 26, minWidth: 38, height: 38, padding: '0 8px', transform: 'translateX(-50%)' }}
                         >
                           {count}
                         </div>
