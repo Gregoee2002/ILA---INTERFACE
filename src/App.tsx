@@ -2139,11 +2139,15 @@ function Timeline({ monumenti, onSelect }: { monumenti: Monumento[], onSelect: (
   const zoomAnchorRef = useRef<{ year: number; clientX: number } | null>(null);
   const didFitRef = useRef(false);
 
-  const ZOOM_MIN = 0.2;
+  const ZOOM_MIN = 0.08;
   const ZOOM_MAX = 8;
-  // Soglia minima di leggibilità per lo zoom "a schermo intero": sotto questo valore si
-  // preferisce scorrere orizzontalmente piuttosto che rimpicciolire le barre oltre leggibilità.
-  const MIN_FIT_ZOOM = 0.85;
+  // Sotto questa soglia di zoom la vista è "panoramica" (blocchi compatti per secolo, con
+  // solo un conteggio) — sopra è "di dettaglio" (la cascata di barre con testo). Non sono
+  // due modalità separate da un pulsante: la soglia divide un unico continuo di zoom, così
+  // zoomare avanti o indietro (rotellina, pulsanti, o click su un secolo) passa dall'una
+  // all'altra senza scatti.
+  const DETAIL_ZOOM = 1.3;
+  const OVERVIEW_ZOOM_CAP = 0.95;
 
   const sorted = useMemo(() => {
     return monumenti
@@ -2181,6 +2185,18 @@ function Timeline({ monumenti, onSelect }: { monumenti: Monumento[], onSelect: (
     return ticks;
   }, [yearMin, yearMax]);
 
+  // In vista panoramica ogni secolo mostra solo un conteggio, non le singole barre.
+  const countByCentury = useMemo(() => {
+    const map = new Map<number, number>();
+    for (const m of sorted) {
+      const c = Math.floor((m.data_inizio ?? 0) / 100);
+      map.set(c, (map.get(c) || 0) + 1);
+    }
+    return map;
+  }, [sorted]);
+
+  const isOverview = zoom < 1;
+
   // Geometria della cascata: RULE_Y separa le intestazioni dei secoli (sempre in cima,
   // come le colonne di fase di un diagramma di Gantt) dalle barre; CASCADE_TOP è dove
   // inizia la prima corsia.
@@ -2212,7 +2228,10 @@ function Timeline({ monumenti, onSelect }: { monumenti: Monumento[], onSelect: (
   }, [sorted, yearMin]);
 
   const laneCount = useMemo(() => bars.reduce((max, b) => Math.max(max, b.lane + 1), 0), [bars]);
-  const cascadeHeight = CASCADE_TOP + Math.max(1, laneCount) * ROW_H + 24;
+  // In vista panoramica basta lo spazio per l'intestazione e il pallino del conteggio —
+  // niente corsie di barre, quindi un'altezza fissa e ridotta invece di quella della cascata.
+  const OVERVIEW_HEIGHT = RULE_Y + 60;
+  const cascadeHeight = isOverview ? OVERVIEW_HEIGHT : CASCADE_TOP + Math.max(1, laneCount) * ROW_H + 24;
 
   const axisWidth = Math.max(600, naturalWidth + 40);
 
@@ -2263,16 +2282,18 @@ function Timeline({ monumenti, onSelect }: { monumenti: Monumento[], onSelect: (
     zoomAnchorRef.current = null;
   }, [zoom]);
 
-  // Calcola lo zoom "a schermo intero": l'intera sequenza visibile in una volta, senza
-  // scorrere, ma mai sotto MIN_FIT_ZOOM (altrimenti si preferisce scorrere).
+  // Calcola lo zoom "panoramico": l'intera sequenza (tutti i secoli) visibile in una volta,
+  // senza mai dover scorrere — è la vista di default e quella a cui torna "Vista d'insieme".
+  // A questo zoom si vedono solo i blocchi compatti per secolo (vedi isOverview), quindi non
+  // serve un pavimento di leggibilità come per le barre: può scendere quanto serve.
   const computeFitZoom = () => {
     if (!scrollRef.current) return null;
     const containerWidth = scrollRef.current.clientWidth;
     if (containerWidth <= 0) return null;
-    const available = Math.max(containerWidth - 200, 120);
+    const available = Math.max(containerWidth - 80, 120);
     const naturalAtZoom1 = yearSpan * BASE_PX_PER_YEAR;
     if (naturalAtZoom1 <= 0) return null;
-    return Math.min(1, Math.max(MIN_FIT_ZOOM, available / naturalAtZoom1));
+    return Math.min(OVERVIEW_ZOOM_CAP, Math.max(ZOOM_MIN, available / naturalAtZoom1));
   };
 
   // All'apertura della sezione, applica subito lo zoom a schermo intero.
@@ -2325,6 +2346,14 @@ function Timeline({ monumenti, onSelect }: { monumenti: Monumento[], onSelect: (
     setZoom(z => Math.min(ZOOM_MAX, Math.max(ZOOM_MIN, z * 1.7)));
   };
 
+  // Click su un blocco-secolo in vista panoramica: passa alla vista di dettaglio
+  // ("distribuzione intelligente delle epigrafi", cioè la cascata a corsie) zoomando
+  // dritto su quel secolo, ancorato al suo punto centrale sotto il cursore.
+  const handleCenturyClick = (century: number, clientX: number) => {
+    zoomAnchorRef.current = { year: century * 100 + 50, clientX };
+    setZoom(z => Math.min(ZOOM_MAX, Math.max(DETAIL_ZOOM, z * 2.2)));
+  };
+
   return (
     <div className="flex-1 flex flex-col overflow-hidden">
       <motion.div {...scrollReveal} className="mb-8 pb-4 border-b border-border/50 flex items-end justify-between gap-4 flex-wrap">
@@ -2332,7 +2361,7 @@ function Timeline({ monumenti, onSelect }: { monumenti: Monumento[], onSelect: (
           <div className="text-[10px] font-sans font-bold uppercase tracking-[0.22em] text-accent/70 mb-2">Sequenza temporale</div>
           <h2 className="text-3xl md:text-4xl font-bold italic mb-2">Cronologia Storica</h2>
           <p className="text-sm text-muted font-serif">Visualizzazione sequenziale dei monumenti datati (a.C. - d.C.).</p>
-          <p className="text-xs text-muted/60 font-sans mt-1">Ogni barra resta ancorata alla propria data reale ed è lunga quanto il suo intervallo di datazione. Clicca sull'asse per zoomare su un punto, oppure Ctrl/Cmd + rotellina (o pizzico).</p>
+          <p className="text-xs text-muted/60 font-sans mt-1">Clicca un secolo per aprirlo: ogni scheda diventa una barra ancorata alla propria data reale, lunga quanto il suo intervallo di datazione. Oppure Ctrl/Cmd + rotellina (o pizzico) per zoomare liberamente.</p>
         </div>
         {sorted.length > 0 && (
           <div className="flex items-center gap-2 shrink-0">
@@ -2384,12 +2413,18 @@ function Timeline({ monumenti, onSelect }: { monumenti: Monumento[], onSelect: (
               {/* La cascata (intestazioni, riga, barre) viene disegnata UNA volta sola a una
                   scala di layout fissa — non cambia mai forma in base allo zoom. Lo zoom è
                   una trasformazione CSS animata applicata qui sopra. */}
+              {/* Questo contenitore riserva lo spazio scrollabile: la sua width/height NON è
+                  animata (a differenza del transform sotto) perché è proprio da qui che si
+                  legge scrollWidth per ricalcolare lo scroll dopo uno zoom (vedi l'effetto su
+                  [zoom]) — se fosse in transizione, nel momento esatto in cui il layout viene
+                  misurato risulterebbe ancora alla larghezza precedente, "ancorando" lo zoom in
+                  un punto sbagliato (visto succedere cliccando un secolo lontano dall'inizio
+                  dell'asse: lo scroll restava vicino a zero invece di seguire il secolo cliccato). */}
               <div
                 className="relative shrink-0"
                 style={{
                   width: axisWidth * zoom,
                   height: cascadeHeight * zoom,
-                  transition: 'width 320ms cubic-bezier(0.22, 1, 0.36, 1), height 320ms cubic-bezier(0.22, 1, 0.36, 1)',
                 }}
               >
               <div
@@ -2412,15 +2447,23 @@ function Timeline({ monumenti, onSelect }: { monumenti: Monumento[], onSelect: (
               >
                 {/* Intestazioni dei secoli: tacca accento + etichetta in maiuscolo, sempre in
                     cima — come le colonne di fase di un diagramma di Gantt — con una guida
-                    verticale tratteggiata che scende lungo tutta la cascata sottostante. */}
+                    verticale tratteggiata che scende lungo tutta la cascata sottostante. In
+                    vista panoramica il blocco è cliccabile per intero e mostra il conteggio
+                    delle schede del secolo al posto delle barre. */}
                 {centuryTicks.slice(0, -1).map(c => {
                   const bandLeft = yearToLeft(c * 100);
                   const bandRight = yearToLeft((c + 1) * 100);
                   const bandWidth = bandRight - bandLeft;
                   const centuryNum = c < 0 ? -c : c + 1;
                   const label = `${toRoman(centuryNum)} sec. ${c < 0 ? 'a.C.' : 'd.C.'}`;
+                  const count = countByCentury.get(c) || 0;
                   return (
-                    <div key={`head-${c}`} className="absolute" style={{ left: bandLeft, width: bandWidth, top: 0, height: cascadeHeight }}>
+                    <div
+                      key={`head-${c}`}
+                      className={`absolute ${isOverview && count > 0 ? 'cursor-zoom-in hover:bg-accent/[0.06]' : ''} transition-colors`}
+                      style={{ left: bandLeft, width: bandWidth, top: 0, height: cascadeHeight }}
+                      onClick={isOverview && count > 0 ? (e) => { e.stopPropagation(); handleCenturyClick(c, e.clientX); } : undefined}
+                    >
                       {bandWidth > 30 && (
                         <div className="absolute flex items-center gap-1.5" style={{ left: 4, top: 0 }}>
                           <div className="w-[3px] h-3.5 bg-accent rounded-full shrink-0" />
@@ -2428,6 +2471,14 @@ function Timeline({ monumenti, onSelect }: { monumenti: Monumento[], onSelect: (
                         </div>
                       )}
                       <div className="absolute border-l border-dashed border-border" style={{ left: 0, top: RULE_Y, bottom: 0 }} />
+                      {isOverview && count > 0 && bandWidth > 20 && (
+                        <div
+                          className="absolute rounded-full bg-accent/12 border border-accent/30 text-accent text-[10px] font-sans font-bold flex items-center justify-center"
+                          style={{ left: '50%', top: RULE_Y + 16, minWidth: 22, height: 22, padding: '0 6px', transform: 'translateX(-50%)' }}
+                        >
+                          {count}
+                        </div>
+                      )}
                     </div>
                   );
                 })}
@@ -2452,10 +2503,11 @@ function Timeline({ monumenti, onSelect }: { monumenti: Monumento[], onSelect: (
                   </div>
                 )}
 
-                {/* Cascata delle barre: ognuna resta ancorata alla propria data reale e lunga
-                    quanto il proprio intervallo di datazione; le sovrapposizioni nel tempo
-                    scendono di corsia invece di spostare la posizione orizzontale. */}
-                {bars.map(({ m, left, width, lane }) => (
+                {/* Cascata delle barre: solo in vista di dettaglio (zoom >= soglia). Ognuna
+                    resta ancorata alla propria data reale e lunga quanto il proprio intervallo
+                    di datazione; le sovrapposizioni nel tempo scendono di corsia invece di
+                    spostare la posizione orizzontale. */}
+                {!isOverview && bars.map(({ m, left, width, lane }) => (
                   <button
                     key={m.entryId || `id-${m.id}`}
                     onClick={(e) => { e.stopPropagation(); onSelect(m); }}
