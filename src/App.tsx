@@ -2264,7 +2264,11 @@ function Timeline({ monumenti, onSelect }: { monumenti: Monumento[], onSelect: (
       const cursorXInAxis = e.clientX - rect.left;
       const currentYear = yearMin + cursorXInAxis / pxPerYear;
       zoomAnchorRef.current = { year: currentYear, clientX: e.clientX };
-      const factor = e.deltaY < 0 ? 1.15 : 1 / 1.15;
+      // Fattore per singolo "tick" di rotellina/pizzico: era 1.15, troppo sensibile — con
+      // un trackpad bastavano un paio di scatti per sballare lo zoom di parecchio. Ridotto
+      // drasticamente: ogni passo cambia lo zoom solo del 3%, quindi serve un gesto più
+      // lungo e deliberato per arrivare a un livello di zoom significativo.
+      const factor = e.deltaY < 0 ? 1.03 : 1 / 1.03;
       setZoom(z => Math.min(ZOOM_MAX, Math.max(ZOOM_MIN, z * factor)));
     };
     el.addEventListener('wheel', onWheel, { passive: false });
@@ -2411,12 +2415,25 @@ function Timeline({ monumenti, onSelect }: { monumenti: Monumento[], onSelect: (
           </div>
         </div>
       ) : (
-      <div ref={scrollRef} className="flex-1 overflow-x-auto overflow-y-auto relative custom-scrollbar min-h-0 bg-card border border-border rounded-lg shadow-sm" style={{ minHeight: 0, overflowX: 'auto' }}>
+      /* Niente bg-card qui: un riempimento opaco spezzava la texture/venatura di sfondo
+         della pagina proprio nel riquadro più esplorato con zoom e scroll — un rettangolo
+         piatto "staccato" dal resto. Il bordo e l'ombra bastano a delimitarlo, lasciando la
+         texture della pagina continuare sotto (è fissa rispetto al viewport, quindi resta
+         coerente qualunque sia lo zoom o lo scroll del contenuto sopra). */
+      <div ref={scrollRef} className="flex-1 overflow-x-auto overflow-y-auto relative custom-scrollbar min-h-0 border border-border rounded-lg shadow-sm" style={{ minHeight: 0, overflowX: 'auto' }}>
             <motion.div
                  initial={{ opacity: 0 }}
                  animate={{ opacity: 1 }}
-                 className="relative px-16 md:px-24 py-8"
-                 style={{ minHeight: '100%' }}
+                 className="relative px-16 md:px-24 pb-8"
+                 style={{
+                   minHeight: '100%',
+                   // In vista panoramica la linea scende un po' verso il centro della pagina
+                   // invece di restare incollata in alto; passando al dettaglio (più
+                   // contenuto, serve tutta l'altezza per la cascata) risale in cima — in
+                   // sincrono con la transizione di zoom, stessa durata/easing.
+                   paddingTop: isOverview ? 'min(20vh, 200px)' : 32,
+                   transition: 'padding-top 320ms cubic-bezier(0.22, 1, 0.36, 1)',
+                 }}
             >
               {/* La cascata (intestazioni, riga, barre) viene disegnata UNA volta sola a una
                   scala di layout fissa — non cambia mai forma in base allo zoom. Lo zoom è
@@ -2478,7 +2495,7 @@ function Timeline({ monumenti, onSelect }: { monumenti: Monumento[], onSelect: (
                       {bandWidth > 30 && (
                         <div className="absolute flex items-center gap-2" style={{ left: 6, top: 2 }}>
                           <div className="w-1 h-5 bg-accent rounded-full shrink-0" />
-                          <span className={`font-sans font-extrabold uppercase tracking-wider text-ink/75 whitespace-nowrap ${isOverview ? 'text-[13px]' : 'text-[10px]'}`}>{label}</span>
+                          <span className={`font-sans font-extrabold uppercase tracking-wider text-ink/75 whitespace-nowrap ${isOverview ? 'text-[15px]' : 'text-[10px]'}`}>{label}</span>
                         </div>
                       )}
                       <div className="absolute border-l border-dashed border-border" style={{ left: 0, top: RULE_Y, bottom: 0 }} />
