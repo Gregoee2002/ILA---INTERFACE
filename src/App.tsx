@@ -2146,7 +2146,12 @@ function Timeline({ monumenti, onSelect }: { monumenti: Monumento[], onSelect: (
   // due modalità separate da un pulsante: la soglia divide un unico continuo di zoom, così
   // zoomare avanti o indietro (rotellina, pulsanti, o click su un secolo) passa dall'una
   // all'altra senza scatti.
-  const DETAIL_ZOOM = 1.3;
+  // Zoom di dettaglio fisso a cui porta il click su un secolo: abbastanza per distinguere
+  // le singole schede, non tanto da farne stare solo un paio a schermo — l'obiettivo è
+  // capire la distribuzione del secolo, non necessariamente leggere ogni nome (per quello
+  // c'è comunque lo zoom manuale). Deve restare >= 1 (soglia di isOverview) o il click
+  // non farebbe uscire dalla vista panoramica.
+  const DETAIL_ZOOM = 1;
   const OVERVIEW_ZOOM_CAP = 0.95;
 
   const sorted = useMemo(() => {
@@ -2346,12 +2351,15 @@ function Timeline({ monumenti, onSelect }: { monumenti: Monumento[], onSelect: (
     setZoom(z => Math.min(ZOOM_MAX, Math.max(ZOOM_MIN, z * 1.7)));
   };
 
-  // Click su un blocco-secolo in vista panoramica: passa alla vista di dettaglio
-  // ("distribuzione intelligente delle epigrafi", cioè la cascata a corsie) zoomando
-  // dritto su quel secolo, ancorato al suo punto centrale sotto il cursore.
+  // Click su un blocco-secolo: passa (o resta) alla vista di dettaglio ancorata su quel
+  // secolo. Lo zoom va SEMPRE a un valore fisso, mai moltiplicato per quello corrente —
+  // cliccare più secoli in sequenza (o lo stesso più volte) portava a uno zoom che si
+  // moltiplicava ad ogni click, fino a "vedere solo un pezzetto di barra" dopo 2-3 click.
+  // Il valore scelto privilegia vedere la distribuzione delle schede del secolo (anche
+  // se il nome non è sempre leggibile) piuttosto che il singolo testo.
   const handleCenturyClick = (century: number, clientX: number) => {
     zoomAnchorRef.current = { year: century * 100 + 50, clientX };
-    setZoom(z => Math.min(ZOOM_MAX, Math.max(DETAIL_ZOOM, z * 2.2)));
+    setZoom(DETAIL_ZOOM);
   };
 
   return (
@@ -2447,9 +2455,12 @@ function Timeline({ monumenti, onSelect }: { monumenti: Monumento[], onSelect: (
               >
                 {/* Intestazioni dei secoli: tacca accento + etichetta in maiuscolo, sempre in
                     cima — come le colonne di fase di un diagramma di Gantt — con una guida
-                    verticale tratteggiata che scende lungo tutta la cascata sottostante. In
-                    vista panoramica il blocco è cliccabile per intero e mostra il conteggio
-                    delle schede del secolo al posto delle barre. */}
+                    verticale tratteggiata che scende lungo tutta la cascata sottostante. Il
+                    blocco è cliccabile per intero (in vista panoramica mostra il conteggio al
+                    posto delle barre) e riporta SEMPRE allo zoom fisso di dettaglio — anche se
+                    già in dettaglio, cliccare qui è il modo per uscire da uno zoom eccessivo
+                    invece di continuare a moltiplicarlo (vedi handleCenturyClick). Le barre,
+                    sopra di esso in z-index, restano cliccabili normalmente. */}
                 {centuryTicks.slice(0, -1).map(c => {
                   const bandLeft = yearToLeft(c * 100);
                   const bandRight = yearToLeft((c + 1) * 100);
@@ -2460,9 +2471,9 @@ function Timeline({ monumenti, onSelect }: { monumenti: Monumento[], onSelect: (
                   return (
                     <div
                       key={`head-${c}`}
-                      className={`absolute ${isOverview && count > 0 ? 'cursor-zoom-in hover:bg-accent/[0.06]' : ''} transition-colors`}
+                      className={`absolute ${count > 0 ? 'cursor-zoom-in hover:bg-accent/[0.06]' : ''} transition-colors`}
                       style={{ left: bandLeft, width: bandWidth, top: 0, height: cascadeHeight }}
-                      onClick={isOverview && count > 0 ? (e) => { e.stopPropagation(); handleCenturyClick(c, e.clientX); } : undefined}
+                      onClick={count > 0 ? (e) => { e.stopPropagation(); handleCenturyClick(c, e.clientX); } : undefined}
                     >
                       {bandWidth > 30 && (
                         <div className="absolute flex items-center gap-1.5" style={{ left: 4, top: 0 }}>
