@@ -333,9 +333,9 @@ const InscriptionDrilldown: React.FC<{
                 ok ? "hover:bg-accent/10 cursor-pointer group" : "opacity-40 cursor-not-allowed"
               )}
             >
-              {m.entryId && (
-                <span className="shrink-0 text-[9px] font-mono font-bold text-muted/60 w-10 truncate">{m.entryId}</span>
-              )}
+              <span className="shrink-0 text-[9px] font-mono font-bold text-muted/60 w-12">
+                ILA-{m.id.toString().padStart(3, '0')}
+              </span>
               <span className="flex-1 min-w-0 text-xs font-serif text-ink group-hover:text-accent truncate">
                 {m.titolo || m.citta || 'Senza titolo'}
               </span>
