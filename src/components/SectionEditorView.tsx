@@ -956,7 +956,6 @@ function renderSectionForm(
         set('origDates', dates.map((d, j) => j === i ? { ...d, ...patch } : d));
       return (
         <div className="space-y-4 max-w-3xl">
-          {dates.length === 0 && <p className="text-sm text-muted italic font-serif">Nessuna datazione. Se Lane non data, il campo si omette — mai stimare.</p>}
           {dates.map((d, i) => (
             <div key={i} className="glass-card p-4 space-y-4">
               <div className="flex items-start justify-between gap-3">

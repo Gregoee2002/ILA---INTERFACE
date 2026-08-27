@@ -6518,9 +6518,6 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                              </div>
                            )}
                           </div>
-                          <span className="text-[9px] text-muted text-right max-w-[240px] font-sans leading-normal block mt-1 animate-in fade-in italic select-text">
-                            Modifica il file in Oxygen XML Editor e reimporta con "Unisci e rimpiazza corrispondenze".
-                          </span>
                         </div>
                       )}
                       
@@ -6560,7 +6557,15 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                             )}
                             <div className="space-y-1.5 text-[10px] font-sans border-t border-border/20 pt-2.5">
                               {selectedMonumento.scrittura && (
-                                <div><span className="text-muted uppercase font-bold text-[9px]">Scrittura:</span> <span className="text-ink font-serif italic text-xs">{selectedMonumento.scrittura}</span> {isFilled(selectedMonumento.scrittura_ref) && <span className="text-muted/60 font-mono">({selectedMonumento.scrittura_ref})</span>}</div>
+                                <div>
+                                  <span className="text-muted uppercase font-bold text-[9px]">Scrittura:</span>{' '}
+                                  <span className="text-ink font-serif italic text-xs">{selectedMonumento.scrittura}</span>
+                                  {isFilled(selectedMonumento.scrittura_ref) && (
+                                    <a href={selectedMonumento.scrittura_ref} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-[9px] text-accent hover:underline ml-2 align-middle font-mono">
+                                      EAGLE Writing Link ↗
+                                    </a>
+                                  )}
+                                </div>
                               )}
                               {isFilled(selectedMonumento.scrittura_note) && <div><span className="text-muted uppercase font-bold text-[9px]">Note paleografiche:</span> <span className="text-ink font-serif text-xs">{selectedMonumento.scrittura_note}</span></div>}
 

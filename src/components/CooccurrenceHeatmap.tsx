@@ -281,10 +281,6 @@ export const CooccurrenceHeatmap: React.FC<CooccurrenceHeatmapProps> = ({ monume
     <div className="bg-parchment p-5 border border-border/50 rounded-md flex flex-col h-full min-h-0">
       <div className="flex justify-between items-start mb-6 flex-wrap gap-4 shrink-0">
         <div>
-          <h2 className="font-serif text-lg font-bold text-ink flex items-center gap-2 mb-1">
-            {mode === 'multi' ? <Orbit className="w-4 h-4 text-accent" /> : <Grid3X3 className="w-4 h-4 text-accent" />}
-            {mode === 'multi' ? 'Costellazione delle Co-occorrenze' : 'Heatmap delle Co-occorrenze (PMI)'}
-          </h2>
           <p className="text-xs text-muted font-sans">
             {mode === 'multi'
               ? `Correlazione tra Riga e ${colAxesList.length} fattori combinati, rispetto all'indipendenza reciproca di tutti.`
@@ -455,13 +451,6 @@ export const CooccurrenceHeatmap: React.FC<CooccurrenceHeatmapProps> = ({ monume
             </div>
           ))}
         </div>
-      </div>
-
-      <div className="mt-4 text-[10px] italic text-muted font-serif border-t border-border/40 pt-3 leading-relaxed shrink-0">
-        La forza dell'associazione (PMI) è indicativa e instabile su piccoli campioni. Il conteggio assoluto è sempre mostrato. Le correlazioni sono ipotesi da verificare sulle fonti, non conclusioni.{' '}
-        {mode === 'multi'
-          ? "In modalità Costellazione la PMI generalizza il confronto a N fattori: P(riga, colonna₁, …, colonnaₖ) rispetto al prodotto delle probabilità marginali di ciascun fattore preso singolarmente, cioè al valore atteso sotto indipendenza reciproca di tutti."
-          : 'PMI calcolato come: log2( P(A,B) / (P(A) * P(B)) ).'}
       </div>
     </div>
   );
