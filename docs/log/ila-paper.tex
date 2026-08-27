@@ -162,8 +162,9 @@ ottico e trascrizione dei testi epigrafici. La sezione 5 presenta
 l'organizzazione dell'interfaccia digitale, con particolare attenzione,
 nella sottosezione 5.1, alla sezione dedicata all'iconografia dei
 monumenti, nella sottosezione 5.2 alla navigazione tra divinità, epiteti
-e registro onomastico, e nella sottosezione 5.3 agli strumenti di
-ricerca. Infine, nella sezione 6 si propongono alcune considerazioni
+e registro onomastico, nella sottosezione 5.3 alla disposizione
+cronologica delle attestazioni, e nella sottosezione 5.4 agli strumenti
+di ricerca. Infine, nella sezione 6 si propongono alcune considerazioni
 finali e le prospettive di sviluppo futuro del progetto.
 
 \screenshotplaceholder{7cm}{Pagina iniziale dell'interfaccia digitale di ILA}
@@ -320,6 +321,25 @@ delle singole mani che hanno contribuito a una voce resta così parte
 integrante della scheda, anziché affidata alla memoria di chi coordina
 il lavoro editoriale.
 
+Distinta da questa tracciabilità puntuale dei singoli interventi, ma ad
+essa complementare, è l'attribuzione di responsabilità intellettuale
+sull'intera scheda: chi ne ha curato l'edizione, chi l'ha rivista, chi
+si è occupato della codifica, e chi vi ha altrimenti contribuito. Anche
+per questo tipo di informazione si è scelto di appoggiarsi a un elemento
+già previsto dallo standard di codifica filologica anziché introdurre
+un campo ad hoc, cosicché l'elenco dei responsabili di ciascuna voce,
+con il rispettivo ruolo, resti espresso nella stessa forma normalizzata
+in cui verrebbe letto da qualunque altro strumento conforme allo stesso
+standard, e non in una convenzione locale al solo progetto ILA. Poiché i
+ruoli editoriali ricorrenti sono in numero limitato, la loro
+compilazione si appoggia a un suggerimento automatico costruito sui
+valori già impiegati altrove nel corpus, secondo lo stesso principio,
+già discusso a proposito del vocabolario iconografico (sottosezione
+5.1), per cui lasciare che un insieme ristretto di valori coerenti
+emerga dall'uso concreto è preferibile a un campo di testo libero, che
+finirebbe inevitabilmente per accumulare varianti equivalenti ma
+formalmente distinte di uno stesso ruolo.
+
 \screenshotplaceholder{6.5cm}{Confronto tra testo a stampa e trascrizione ottenuta tramite riconoscimento ottico}
 
 \section{Organizzazione dell'interfaccia digitale}
@@ -335,9 +355,12 @@ una sezione di consultazione che presenta l'elenco completo delle
 epigrafi con accesso diretto alle singole schede descrittive; una
 sezione bibliografica che raccoglie i repertori e i corpora di
 riferimento; una sezione geografica che consente di visualizzare la
-distribuzione spaziale delle attestazioni su una mappa interattiva; e
-una sezione di ricerca avanzata, descritta più diffusamente nella
-sottosezione 5.3. Ogni scheda descrittiva è corredata, ove disponibile,
+distribuzione spaziale delle attestazioni su una mappa interattiva; una
+sezione cronologica, descritta più diffusamente nella sottosezione 5.3,
+che dispone le medesime attestazioni lungo l'asse del tempo anziché
+dello spazio; e una sezione di ricerca avanzata, descritta più
+diffusamente nella sottosezione 5.4. Ogni scheda descrittiva è
+corredata, ove disponibile,
 di materiale fotografico del monumento e riporta, oltre al testo
 dell'iscrizione e ai principali attributi epigrafici, un rimando
 puntuale alla codifica filologica sottostante, liberamente
@@ -663,13 +686,63 @@ corpus debba costare all'utente il minor numero di passaggi possibile.
 
 \screenshotplaceholder{8cm}{Rubrica onomastica alfabetica con indice laterale A--Z}
 
+\subsection{La cronologia del corpus}
+
+Accanto alla distribuzione spaziale delle attestazioni, resa esplicita
+dalla sezione geografica, e alla loro organizzazione onomastica appena
+descritta, resta una terza dimensione lungo cui un corpus di questo
+tipo chiede di essere osservato: quella temporale, ossia il modo in cui
+le epigrafi si distribuiscono nei secoli attraversati dal culto di Men.
+A questo scopo l'interfaccia dispone di una vista cronologica dedicata,
+che riprende deliberatamente il linguaggio visivo dei diagrammi di
+pianificazione a barre: ogni epigrafe datata è rappresentata da una
+barra ancorata alla propria collocazione temporale reale, mai spostata
+per far posto ad altre voci, e lunga quanto l'intervallo di datazione
+proposto per quella scheda --- cosicché un'attestazione databile con
+precisione a un singolo anno appare visibilmente più stretta di una
+databile solo entro un arco di più decenni, restituendo a colpo d'occhio
+il grado di incertezza cronologica insieme alla collocazione nel tempo.
+Quando due o più epigrafi si sovrappongono nei rispettivi intervalli di
+datazione, le barre corrispondenti non vengono fuse né nascoste l'una
+dietro l'altra, ma impilate ciascuna nella prima fascia libera al di
+sotto delle precedenti, in modo che ogni singola attestazione resti
+individualmente visibile e selezionabile anche nei periodi di maggiore
+densità documentaria.
+
+Poiché l'intera sequenza cronologica del corpus, letta per intero alla
+massima risoluzione, non potrebbe mai essere contenuta in una sola
+schermata, la vista adotta un unico continuo di ingrandimento che
+attraversa senza soluzione di continuità due livelli di lettura. Al
+livello minimo, quello proposto di default all'apertura della sezione,
+i secoli sono resi come blocchi compatti accostati l'uno all'altro, ciascuno
+corredato del solo numero di attestazioni che vi ricadono: l'intero arco
+cronologico del corpus resta così visibile per intero, senza necessità
+di scorrimento, offrendo un primo colpo d'occhio sulla distribuzione
+diacronica del culto. Superata una soglia di ingrandimento, la vista
+transita gradualmente al livello di dettaglio, in cui riappaiono le
+singole barre impilate descritte sopra, ciascuna corredata
+dell'identificativo della scheda corrispondente. Un clic diretto su un
+blocco-secolo porta immediatamente al livello di dettaglio centrato su
+quel secolo, cosicché la lettura d'insieme e l'approfondimento puntuale
+restano due momenti dello stesso gesto di navigazione, anziché due
+strumenti separati tra cui scegliere in anticipo. L'ingrandimento può
+inoltre essere regolato in modo continuo, con la rotellina del mouse o
+il gesto di pizzico sul touchpad tenendo premuto un tasto modificatore,
+mantenendo fermo sotto il cursore l'anno su cui si sta agendo; un
+comando dedicato riporta in ogni momento alla vista d'insieme iniziale,
+che costituisce anche il limite minimo di rimpicciolimento raggiungibile,
+non avendo senso allontanarsi oltre il punto in cui l'intera sequenza è
+già interamente visibile.
+
+\screenshotplaceholder{7cm}{Vista cronologica del corpus, a livello di panoramica per secolo e a livello di dettaglio}
+
 \subsection{Ricerca}
 
 L'interfaccia digitale dispone di un modulo di ricerca che consente di
 effettuare interrogazioni sulle epigrafi sui diversi attributi che le
 caratterizzano: materiale del supporto, tipologia di monumento, luogo di
 provenienza, lingua dell'iscrizione, datazione e, come illustrato nella
-sottosezione precedente, singoli descrittori iconografici. È inoltre
+sottosezione 5.1, singoli descrittori iconografici. È inoltre
 disponibile una modalità di ricerca testuale libera sul testo delle
 epigrafi, con normalizzazione dei segni diacritici greci, così da
 restituire risultati coerenti indipendentemente dalla presenza o assenza
@@ -708,9 +781,12 @@ sull'intero corpus, e la progettazione di un'interfaccia di consultazione
 che affianca, agli strumenti tradizionali di ricerca epigrafica, una
 sezione dedicata alla descrizione strutturata dell'iconografia dei
 monumenti --- aspetto che, come si è detto, risultava finora trattato
-solo in forma discorsiva nella letteratura di riferimento --- e due viste
+solo in forma discorsiva nella letteratura di riferimento --- due viste
 di navigazione pensate specificamente per orientarsi nell'insieme delle
-divinità, degli epiteti e delle figure onomastiche attestate nel corpus.
+divinità, degli epiteti e delle figure onomastiche attestate nel corpus,
+e una vista cronologica che restituisce la medesima distribuzione del
+corpus lungo l'asse del tempo anziché lungo quello, già coperto dalla
+sezione geografica, dello spazio.
 
 L'approccio complessivamente seguito privilegia la trasparenza e la
 verificabilità del dato rispetto alla comodità di gestione a breve
