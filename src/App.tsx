@@ -1110,10 +1110,10 @@ function EpithetStats({ monumenti, onSelectMonumento, initialTab, initialDivinit
                  attiva sullo scroll/hover della rubrica (vedi onActiveChange /
                  activeDivinityName); un click, sulla rubrica o sull'albero,
                  è l'unico modo per aprire davvero le attestazioni. Ricerca e
-                 filtro regione vivono nell'header del pannello destro, sullo
-                 stesso rigo della statistica occorrenze/regioni/epiteti —
-                 prima stavano su un rigo a sé sopra entrambe le colonne, con
-                 uno spazio vuoto enorme accanto a quella statistica. */
+                 filtro regione vivono entrambi nella colonna sinistra, sopra
+                 la rubrica che restringono; l'anteprima a destra è racchiusa
+                 in una finestra con la stessa identità visiva delle schede
+                 del catalogo. */
               <div className="flex-1 flex gap-8 overflow-hidden glass-panel !rounded-lg p-5">
                 <div className="w-[380px] shrink-0 flex flex-col overflow-hidden">
                   {/* Ricerca epiteto/divinità: vive sopra la rubrica che
@@ -1145,6 +1145,27 @@ function EpithetStats({ monumenti, onSelectMonumento, initialTab, initialDivinit
                       )}
                     </div>
                   </div>
+                  {/* Filtro regione: vive sotto la ricerca, nella stessa
+                      colonna che entrambe restringono — prima stava
+                      nell'header del pannello destro. Stesso rimpicciolimento
+                      legato allo scroll della rubrica. */}
+                  <div
+                    className="mb-3 shrink-0 transition-transform duration-200 ease-out"
+                    style={{ transform: `scale(${1 - listScroll * 0.22})`, transformOrigin: 'left center' }}
+                  >
+                    <div className="relative w-full">
+                      <select
+                        className="w-full bg-[var(--card)] dark:bg-black/25 border border-[var(--border)]/50 dark:border-white/5 rounded-lg pl-3 pr-8 py-2 font-sans text-xs outline-none shadow-inner focus:border-accent/50 focus:ring-1 focus:ring-accent/30 hover:bg-[var(--sidebar)] dark:hover:bg-black/40 cursor-pointer appearance-none transition-all duration-300"
+                        style={{ backgroundColor: 'var(--card)', color: 'var(--ink)', WebkitAppearance: 'none' as const, appearance: 'none' as const }}
+                        value={divinitaRegionFilter}
+                        onChange={(e) => setDivinitaRegionFilter(e.target.value)}
+                      >
+                        <option value="" className="bg-parchment dark:bg-sidebar text-ink">Tutte le Regioni</option>
+                        {divinitaRegions.map(r => <option key={r} value={r} className="bg-parchment dark:bg-sidebar text-ink">{r}</option>)}
+                      </select>
+                      <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted/50 pointer-events-none" />
+                    </div>
+                  </div>
                   <DivinityDiagonalList
                     items={filteredDivstats}
                     onSelect={(name) => openAttestations(name, ALL_EPITHETS)}
@@ -1153,51 +1174,48 @@ function EpithetStats({ monumenti, onSelectMonumento, initialTab, initialDivinit
                     searchTerm={epithetSearch}
                   />
                 </div>
-                <div className="flex-1 flex flex-col overflow-hidden border-l border-border pl-8">
-                  <div className="mb-4 flex items-center justify-between gap-4 shrink-0">
-                    <div
-                      className="flex items-center gap-3 shrink-0 transition-transform duration-200 ease-out"
-                      style={{ transform: `scale(${1 - listScroll * 0.22})`, transformOrigin: 'left center' }}
-                    >
-                      <div className="relative w-44 shrink-0">
-                        <select
-                          className="w-full bg-[var(--card)] dark:bg-black/25 border border-[var(--border)]/50 dark:border-white/5 rounded-lg pl-3 pr-8 py-2 font-sans text-xs outline-none shadow-inner focus:border-accent/50 focus:ring-1 focus:ring-accent/30 hover:bg-[var(--sidebar)] dark:hover:bg-black/40 cursor-pointer appearance-none transition-all duration-300"
-                          style={{ backgroundColor: 'var(--card)', color: 'var(--ink)', WebkitAppearance: 'none' as const, appearance: 'none' as const }}
-                          value={divinitaRegionFilter}
-                          onChange={(e) => setDivinitaRegionFilter(e.target.value)}
-                        >
-                          <option value="" className="bg-parchment dark:bg-sidebar text-ink">Tutte le Regioni</option>
-                          {divinitaRegions.map(r => <option key={r} value={r} className="bg-parchment dark:bg-sidebar text-ink">{r}</option>)}
-                        </select>
-                        <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted/50 pointer-events-none" />
+                <div className="flex-1 flex flex-col overflow-hidden pl-8">
+                  {/* Finestra di analisi degli epiteti: stessa identità visiva
+                      delle schede del catalogo — cornice in pergamena, bordo
+                      morbido, intestazione con etichetta accent e metadati a
+                      destra. Il filtro regione è stato spostato nella colonna
+                      sinistra, sotto la ricerca. */}
+                  <div className="flex-1 min-h-0 flex flex-col rounded-2xl border border-border/70 bg-parchment shadow-[0_1px_3px_rgba(0,0,0,0.05)] overflow-hidden">
+                    <div className="shrink-0 flex items-center justify-between gap-4 px-7 py-4 border-b border-border/40 bg-sidebar/30">
+                      <span className="text-[10px] font-sans font-bold uppercase tracking-[0.3em] text-accent whitespace-nowrap">
+                        Epiteti co-occorrenti
+                      </span>
+                      <div className="flex items-center gap-3 text-[10px] font-sans font-bold uppercase tracking-widest text-muted min-w-0 text-right justify-end">
+                        {activeDivinityStats ? (
+                          <>
+                            <span className="whitespace-nowrap">{activeDivinityStats.count} occorrenze</span>
+                            <span className="text-border">·</span>
+                            <span className="whitespace-nowrap">{activeDivinityStats.regions} {activeDivinityStats.regions === 1 ? 'regione' : 'regioni'}</span>
+                            <span className="text-border">·</span>
+                            <span className="whitespace-nowrap">{activeDivinityStats.epiteti.length} {activeDivinityStats.epiteti.length === 1 ? 'epiteto' : 'epiteti'}</span>
+                          </>
+                        ) : (
+                          <span className="normal-case font-normal italic text-muted/50">Nessuna divinità per questo filtro</span>
+                        )}
                       </div>
                     </div>
-                    <div className="flex items-center gap-3 text-[10px] font-sans font-bold uppercase tracking-widest text-muted min-w-0 text-right justify-end">
+                    <div className="flex-1 min-h-0 p-5 flex flex-col">
                       {activeDivinityStats ? (
-                        <>
-                          <span className="whitespace-nowrap">{activeDivinityStats.count} occorrenze</span>
-                          <span className="text-border">·</span>
-                          <span className="whitespace-nowrap">{activeDivinityStats.regions} {activeDivinityStats.regions === 1 ? 'regione' : 'regioni'}</span>
-                          <span className="text-border">·</span>
-                          <span className="whitespace-nowrap">{activeDivinityStats.epiteti.length} {activeDivinityStats.epiteti.length === 1 ? 'epiteto' : 'epiteti'} co-occorrenti</span>
-                        </>
+                        <EpithetTree
+                          key="divinita-preview"
+                          divinity={activeDivinityStats}
+                          epithets={activeDivinityStats.epiteti}
+                          onSelectEpithet={(name) => openAttestations(activeDivinityStats.name, name)}
+                          onSelectAll={() => openAttestations(activeDivinityStats.name, ALL_EPITHETS)}
+                          preview
+                        />
                       ) : (
-                        <span className="normal-case font-normal italic text-muted/50">Nessuna divinità da mostrare per questo filtro.</span>
+                        <div className="flex-1 flex items-center justify-center text-center text-muted/40 text-sm italic px-8">
+                          Passa il mouse su una divinità della rubrica per vederne gli epiteti co-occorrenti.
+                        </div>
                       )}
                     </div>
                   </div>
-                  {activeDivinityStats ? (
-                    <EpithetTree
-                      key="divinita-preview"
-                      divinity={activeDivinityStats}
-                      epithets={activeDivinityStats.epiteti}
-                      onSelectEpithet={(name) => openAttestations(activeDivinityStats.name, name)}
-                      onSelectAll={() => openAttestations(activeDivinityStats.name, ALL_EPITHETS)}
-                      preview
-                    />
-                  ) : (
-                    <div className="flex-1" />
-                  )}
                 </div>
               </div>
             )}
@@ -1863,6 +1881,15 @@ function HomeView({ monumenti, onNavigate, onSearch, effectiveAdmin }: { monumen
   const stats = useMemo(() => {
     const regioni = new Set(monumenti.map(m => m.regione).filter(Boolean));
     const citta = new Set(monumenti.map(m => m.citta).filter(Boolean));
+    // Stesso conteggio di "epiteti non ripetuti" della pagina Statistiche Epiteti:
+    // legge da divinitaEpiteti (per-divinità) con fallback all'array piatto.
+    const epiteti = new Set<string>();
+    monumenti.forEach(m => {
+      const eps = m.divinitaEpiteti
+        ? m.divinitaEpiteti.flatMap(de => de.epiteti)
+        : (m.epiteti ?? []);
+      eps.forEach(e => { if (e) epiteti.add(e); });
+    });
     const dateInizio = monumenti.map(m => m.data_inizio).filter((d): d is number => typeof d === 'number');
     const dateFine = monumenti.map(m => m.data_fine).filter((d): d is number => typeof d === 'number');
     const minData = dateInizio.length ? Math.min(...dateInizio) : null;
@@ -1871,6 +1898,7 @@ function HomeView({ monumenti, onNavigate, onSearch, effectiveAdmin }: { monumen
       totale: monumenti.length,
       regioni: regioni.size,
       citta: citta.size,
+      epiteti: epiteti.size,
       rangeLabel: minData !== null && maxData !== null
         ? `${minData < 0 ? `${Math.abs(minData)} a.C.` : `${minData} d.C.`} – ${maxData < 0 ? `${Math.abs(maxData)} a.C.` : `${maxData} d.C.`}`
         : '—'
@@ -1910,8 +1938,8 @@ function HomeView({ monumenti, onNavigate, onSearch, effectiveAdmin }: { monumen
         <div>
           <div className="text-[10px] font-sans font-bold uppercase tracking-[0.22em] text-accent/70 mb-2">Benvenuto</div>
           <p className="text-base md:text-lg font-serif italic text-ink/85 leading-relaxed max-w-2xl mb-4">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt
-            ut labore et dolore magna aliqua, ut enim ad minim veniam.
+            Il database contiene al momento {stats.totale} iscrizioni. Abbiamo registrato{' '}
+            {stats.epiteti} epiteti distinti di Men, sparsi in {stats.citta} località del mondo antico.
           </p>
 
           <form
@@ -2238,8 +2266,9 @@ function Timeline({ monumenti, onSelect }: { monumenti: Monumento[], onSelect: (
 
   const laneCount = useMemo(() => bars.reduce((max, b) => Math.max(max, b.lane + 1), 0), [bars]);
   // In vista panoramica basta lo spazio per l'intestazione e il pallino del conteggio —
-  // niente corsie di barre, quindi un'altezza fissa e ridotta invece di quella della cascata.
-  const OVERVIEW_HEIGHT = RULE_Y + 120;
+  // niente corsie di barre, quindi un'altezza fissa invece di quella della cascata. È
+  // generosa perché in panoramica etichette e pallini sono ingranditi (vedi sotto).
+  const OVERVIEW_HEIGHT = RULE_Y + 170;
   const cascadeHeight = isOverview ? OVERVIEW_HEIGHT : CASCADE_TOP + Math.max(1, laneCount) * ROW_H + 24;
 
   const axisWidth = Math.max(600, naturalWidth + 40);
@@ -2429,14 +2458,17 @@ function Timeline({ monumenti, onSelect }: { monumenti: Monumento[], onSelect: (
             <motion.div
                  initial={{ opacity: 0 }}
                  animate={{ opacity: 1 }}
-                 className="relative px-16 md:px-24 pb-8"
+                 className="relative px-16 md:px-24 pb-8 flex flex-col"
                  style={{
                    minHeight: '100%',
-                   // In vista panoramica la linea scende un po' verso il centro della pagina
-                   // invece di restare incollata in alto; passando al dettaglio (più
-                   // contenuto, serve tutta l'altezza per la cascata) risale in cima — in
-                   // sincrono con la transizione di zoom, stessa durata/easing.
-                   paddingTop: isOverview ? 'min(20vh, 200px)' : 32,
+                   // In vista panoramica la linea sta al CENTRO verticale della pagina
+                   // (il contenuto panoramico è più basso del riquadro, quindi justify-center
+                   // lo centra davvero); appena si seleziona un secolo si passa al dettaglio
+                   // e la linea risale in cima, dove serve tutta l'altezza per la cascata
+                   // delle barre. "Vista d'insieme" / reset zoom riportano a isOverview e
+                   // quindi di nuovo al centro.
+                   justifyContent: isOverview ? 'center' : 'flex-start',
+                   paddingTop: isOverview ? 0 : 32,
                    transition: 'padding-top 320ms cubic-bezier(0.22, 1, 0.36, 1)',
                  }}
             >
@@ -2499,15 +2531,15 @@ function Timeline({ monumenti, onSelect }: { monumenti: Monumento[], onSelect: (
                     >
                       {bandWidth > 30 && (
                         <div className="absolute flex items-center gap-2" style={{ left: 6, top: 2 }}>
-                          <div className={`bg-accent rounded-full shrink-0 ${isOverview ? 'w-1.5 h-6' : 'w-1 h-5'}`} />
-                          <span className={`font-sans font-extrabold uppercase tracking-wider whitespace-nowrap ${isOverview ? 'text-[17px] text-ink' : 'text-[10px] text-ink/75'}`}>{label}</span>
+                          <div className={`bg-accent rounded-full shrink-0 ${isOverview ? 'w-2 h-9' : 'w-1 h-5'}`} />
+                          <span className={`font-sans font-extrabold uppercase tracking-wider whitespace-nowrap ${isOverview ? 'text-[23px] text-ink' : 'text-[10px] text-ink/75'}`}>{label}</span>
                         </div>
                       )}
                       <div className="absolute border-l border-dashed border-border" style={{ left: 0, top: RULE_Y, bottom: 0 }} />
                       {isOverview && count > 0 && bandWidth > 20 && (
                         <div
-                          className="absolute rounded-full bg-accent/15 border-2 border-accent/50 text-accent text-lg font-sans font-bold flex items-center justify-center"
-                          style={{ left: '50%', top: RULE_Y + 30, minWidth: 44, height: 44, padding: '0 8px', transform: 'translateX(-50%)' }}
+                          className="absolute rounded-full bg-accent/15 border-2 border-accent/50 text-accent text-2xl font-sans font-bold flex items-center justify-center"
+                          style={{ left: '50%', top: RULE_Y + 40, minWidth: 60, height: 60, padding: '0 12px', transform: 'translateX(-50%)' }}
                         >
                           {count}
                         </div>
@@ -2520,7 +2552,7 @@ function Timeline({ monumenti, onSelect }: { monumenti: Monumento[], onSelect: (
                     fa anche da "asse": si accende in teal al passaggio del mouse. */}
                 <div
                   className={`absolute inset-x-0 rounded-full transition-colors duration-200 pointer-events-none ${hoverX !== null ? 'bg-accent' : 'bg-ink/25'}`}
-                  style={{ top: RULE_Y, height: 2, zIndex: 1 }}
+                  style={{ top: RULE_Y, height: isOverview ? 4 : 2, zIndex: 1 }}
                 />
 
                 <span className="absolute text-muted text-sm font-bold tracking-tighter select-none pointer-events-none" style={{ left: 0, top: RULE_Y, transform: 'translate(-135%, -50%)' }}>···</span>
