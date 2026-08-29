@@ -3488,6 +3488,26 @@ function sanitizeEntryId(raw: string): string {
   return (cleaned || 'entry').slice(0, 128);
 }
 
+// Stato iniziale dei filtri del catalogo — riusato sia dall'useState che dai
+// due pulsanti di azzeramento (quello rapido accanto alla barra di ricerca e
+// il "Reset Filtri" in fondo alla tendina), così restano sempre allineati.
+const DEFAULT_FILTERS: FilterState = {
+  searchText: '',
+  regione: '',
+  citta: '',
+  tipo: '',
+  materiale: '',
+  iconAttributo: '',
+  iconFunzione: '',
+  iconPosizione: '',
+  onlyInscr: false,
+  onlyAnep: false,
+  onlyHasTrad: false,
+  onlyNoTrad: false,
+  dateRange: [-500, 500],
+  searchMode: 'AND',
+};
+
 export default function App({ skipLanding = false }: { skipLanding?: boolean } = {}) {
   type ThemePreference = 'light' | 'dark' | 'system';
   const [theme, setTheme] = useState<ThemePreference>(() => {
@@ -3579,22 +3599,27 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
   
   const [selectedNoteId, setSelectedNoteId] = useState<string | null>(null);
   
-  const [filters, setFilters] = useState<FilterState>({
-    searchText: '',
-    regione: '',
-    citta: '',
-    tipo: '',
-    materiale: '',
-    iconAttributo: '',
-    iconFunzione: '',
-    iconPosizione: '',
-    onlyInscr: false,
-    onlyAnep: false,
-    onlyHasTrad: false,
-    onlyNoTrad: false,
-    dateRange: [-500, 500],
-    searchMode: 'AND',
-  });
+  const [filters, setFilters] = useState<FilterState>(DEFAULT_FILTERS);
+
+  // Vero quando almeno un filtro (o la ricerca testuale) è diverso dallo stato
+  // di partenza: pilota la comparsa del pulsante rapido "Azzera filtri" accanto
+  // alla barra di ricerca. searchMode è una modalità, non un filtro, quindi non
+  // conta.
+  const hasActiveFilters =
+    filters.searchText !== '' ||
+    filters.regione !== '' ||
+    filters.citta !== '' ||
+    filters.tipo !== '' ||
+    filters.materiale !== '' ||
+    filters.iconAttributo !== '' ||
+    filters.iconFunzione !== '' ||
+    filters.iconPosizione !== '' ||
+    filters.onlyInscr ||
+    filters.onlyAnep ||
+    filters.onlyHasTrad ||
+    filters.onlyNoTrad ||
+    filters.dateRange[0] !== DEFAULT_FILTERS.dateRange[0] ||
+    filters.dateRange[1] !== DEFAULT_FILTERS.dateRange[1];
   
   // Ricerca full-text (MiniSearch, lato server) — è la ricerca di default,
   // non più un pannello di confronto separato dal filtro vero.
@@ -4935,6 +4960,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
           </button>
         )}
         {activeView === 'catalog' && (
+          <div className="flex items-center gap-2 shrink-0">
           <div
             className={cn(
               "flex items-center gap-2.5 pl-4 pr-3 py-2 rounded-full border transition-all duration-300 shrink-0 min-w-[180px] lg:min-w-[240px]",
@@ -4965,6 +4991,27 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                 <ChevronDown className="h-3.5 w-3.5 text-muted/50" />
               </motion.span>
             </button>
+          </div>
+          {/* Azzeramento rapido: compare accanto alla barra solo quando c'è
+              qualcosa da azzerare, così non serve aprire la tendina e
+              scorrere fino in fondo al "Reset Filtri". */}
+          <AnimatePresence>
+            {hasActiveFilters && (
+              <motion.button
+                type="button"
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.9 }}
+                transition={{ duration: 0.15 }}
+                onClick={() => setFilters(DEFAULT_FILTERS)}
+                title="Rimuovi tutti i filtri"
+                className="flex items-center gap-1.5 pl-3 pr-3.5 py-2 rounded-full border border-accent/40 bg-accent/5 text-accent text-[9px] font-sans font-bold uppercase tracking-widest hover:bg-accent hover:text-white transition-all duration-300 shrink-0"
+              >
+                <X className="h-3 w-3 shrink-0" />
+                <span className="hidden sm:inline">Azzera filtri</span>
+              </motion.button>
+            )}
+          </AnimatePresence>
           </div>
         )}
       </header>
@@ -5338,13 +5385,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
               <div className="pt-6">
                 <button 
                   id="reset-filters-btn"
-                  onClick={() => setFilters({
-                    searchText: '', regione: '', citta: '', tipo: '', materiale: '',
-                    iconAttributo: '', iconFunzione: '', iconPosizione: '',
-                    onlyInscr: false, onlyAnep: false, onlyHasTrad: false, onlyNoTrad: false,
-                    dateRange: [-500, 500],
-                    searchMode: 'AND'
-                  })}
+                  onClick={() => setFilters(DEFAULT_FILTERS)}
                   className="w-full border border-accent py-3 font-sans text-[9px] font-bold uppercase tracking-widest text-accent hover:bg-accent hover:text-white transition-all flex items-center justify-center gap-2"
                 >
                   <Trash2 className="h-3 w-3" /> Reset Filtri
