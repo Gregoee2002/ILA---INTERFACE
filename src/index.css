@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Inter:wght@400;500;600;700&family=Noto+Serif+Display:ital,wght@0,400..900;1,400..900&family=Cinzel:wght@400..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Gentium+Book+Plus:ital,wght@0,400;0,700;1,400;1,700&family=Inter:wght@400;500;600;700&family=Noto+Serif+Display:ital,wght@0,400..900;1,400..900&family=Cinzel:wght@400..900&display=swap');
 @import "tailwindcss";
 
 :root {
@@ -34,6 +34,9 @@
 @theme {
   --font-serif: "EB Garamond", "Noto Serif Display", "Times New Roman", serif;
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  /* prosa delle traduzioni (IT/EN) — prova con Gentium Book Plus, disegnato
+     per prosa lunga e per il greco politonico */
+  --font-translation: "Gentium Book Plus", "EB Garamond", "Times New Roman", serif;
   
   --color-ink: var(--ink);
   --color-parchment: var(--parchment);

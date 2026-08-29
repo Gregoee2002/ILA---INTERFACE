@@ -6761,7 +6761,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                                });
                                const active = sorted.find(t => t.lang === activeTranslationLang) ?? sorted[0];
                                return (
-                                 <div className="bg-sidebar/30 border-l-4 border-accent p-8 font-serif text-lg italic leading-relaxed text-ink/80 mb-6">
+                                 <div className="bg-sidebar/30 border-l-4 border-accent p-8 font-translation text-lg italic leading-relaxed text-ink/80 mb-6">
                                    <div className="flex items-center justify-between gap-4 mb-2 not-italic">
                                      <span className="text-[9px] font-sans font-bold uppercase tracking-widest text-muted">Traduzione</span>
                                      {sorted.length > 1 && (
@@ -6995,7 +6995,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                     </section>
                     <section>
                       <h5 className="text-[9px] font-bold uppercase text-muted underline underline-offset-4 mb-3 font-sans">Traduzione Italiana</h5>
-                      <p className="text-sm leading-relaxed text-ink/70">
+                      <p className="text-sm leading-relaxed text-ink/70 font-translation">
                         {m.traduzioni?.find(t => { const l = t.lang?.toLowerCase() || ''; return l === 'it' || l.startsWith('it ('); })?.testo ? (
                           <Highlight text={stripXml(m.traduzioni.find(t => { const l = t.lang?.toLowerCase() || ''; return l === 'it' || l.startsWith('it ('); })?.testo)} query={filters.searchText} />
                         ) : "-"}
