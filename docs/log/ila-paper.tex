@@ -162,8 +162,9 @@ ottico e trascrizione dei testi epigrafici. La sezione 5 presenta
 l'organizzazione dell'interfaccia digitale, con particolare attenzione,
 nella sottosezione 5.1, alla sezione dedicata all'iconografia dei
 monumenti, nella sottosezione 5.2 alla navigazione tra divinità, epiteti
-e registro onomastico, e nella sottosezione 5.3 agli strumenti di
-ricerca. Infine, nella sezione 6 si propongono alcune considerazioni
+e registro onomastico, nella sottosezione 5.3 agli strumenti di ricerca
+e nella sottosezione 5.4 alla vista di navigazione cronologica del
+corpus. Infine, nella sezione 6 si propongono alcune considerazioni
 finali e le prospettive di sviluppo futuro del progetto.
 
 \screenshotplaceholder{7cm}{Pagina iniziale dell'interfaccia digitale di ILA}
@@ -695,6 +696,56 @@ da parola a cifra che il solo campo numerico avrebbe altrimenti
 richiesto.
 
 \screenshotplaceholder{7cm}{Interfaccia del modulo di ricerca con filtri combinati}
+
+\subsection{Navigazione cronologica}
+
+Accanto alle viste di orientamento onomastico descritte nella
+sottosezione precedente, si è ritenuto utile affiancare al catalogo una
+vista dedicata alla dimensione propriamente temporale del corpus, che
+risponde a un'esigenza affine ma distinta: non \virg{quale nome è
+attestato}, bensì \virg{in quale momento, e con quale densità, il culto
+di Men è documentato lungo l'arco cronologico coperto dalle iscrizioni
+raccolte}. La vista dispone le epigrafi datate lungo un unico asse
+temporale continuo, la cui estensione è derivata automaticamente
+dall'intervallo di date effettivamente presente nel corpus, anziché da
+un periodo storico fissato a priori; i secoli lungo l'asse sono indicati
+secondo la convenzione numerica romana propria della tradizione
+epigrafica (\virg{III sec. a.C.}, \virg{II sec. d.C.}), non con il solo
+anno.
+
+Poiché la datazione di un'epigrafe è spesso essa stessa un intervallo
+più che un anno puntuale --- un margine di incertezza filologicamente
+legittimo, non un'imprecisione da correggere --- ciascuna epigrafe è
+rappresentata non da un punto ma da una barra orizzontale la cui
+lunghezza riproduce visivamente l'ampiezza della forbice cronologica
+attribuita a quella iscrizione. Quando due o più barre si sovrappongono
+nel tempo, l'impaginazione le distribuisce su corsie orizzontali
+distinte, secondo un principio di impaccamento mutuato dai diagrammi di
+Gantt: ogni barra occupa la prima corsia libera al momento in cui
+inizia, evitando qualunque sovrapposizione visiva senza mai alterarne la
+posizione cronologica. La selezione di una barra apre direttamente la
+scheda descrittiva completa dell'epigrafe corrispondente, allo stesso
+modo delle altre viste di navigazione dell'interfaccia.
+
+La vista adotta un unico livello di zoom continuo, anziché due modalità
+distinte selezionabili a pulsante: al livello più ampio --- la vista
+d'insieme predefinita, che mostra sempre l'intero arco cronologico del
+corpus senza necessità di scorrimento --- ciascun secolo è ridotto a un
+blocco compatto con il solo conteggio delle epigrafi che vi ricadono,
+mentre avvicinandosi progressivamente, con la rotellina del mouse, un
+pizzico sul trackpad o un clic diretto sull'asse, i blocchi lasciano
+gradualmente spazio alla cascata di barre individuali propria della
+vista di dettaglio. Un clic su un blocco-secolo porta direttamente a un
+livello di zoom fisso, pensato per mostrare la distribuzione interna di
+quel secolo senza dover regolare manualmente lo zoom; un comando
+dedicato, richiamabile anche con il tasto Esc, riporta in qualunque
+momento alla vista d'insieme di partenza. In ogni fase dello zoom, il
+punto temporale su cui si trovava il cursore resta ancorato alla stessa
+posizione sullo schermo, cosicché lo zoom si comporti come un
+avvicinamento continuo sulla sequenza temporale piuttosto che come una
+ricentratura brusca del contenuto.
+
+\screenshotplaceholder{7.5cm}{Vista cronologica del corpus, in versione d'insieme per secolo e di dettaglio con le singole barre}
 
 \section{Considerazioni finali e sviluppi futuri}
 
