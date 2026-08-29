@@ -56,7 +56,7 @@ import { labelEvidence, labelUnit, labelType, labelMaterial, labelInscriptionTyp
 import { Monumento, FilterState, SortField, Traduzione, Bibliografia, Appunto, EntryRegistro, BugReport, EDITORIAL_STATUS_LABELS } from './types';
 import { RAW_DATA } from './data';
 import { monumentiToXml, xmlToMonumenti, formatIlaLabel, splitDivineKey } from './lib/xmlUtils';
-import { buildDivinityIndex, buildOnomasticaIndex, DivinityStats, OnomasticaStats } from './lib/epithetIndex';
+import { buildDivinityIndex, buildOnomasticaIndex, buildClassificationAudit, DivinityStats, OnomasticaStats } from './lib/epithetIndex';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { PleiadesMap } from './components/PleiadesMap';
@@ -1346,10 +1346,35 @@ function CorpusHealth({ monumenti, onSelectMonumento }: { monumenti: Monumento[]
 
   const totalConflicts = reports.reduce((s, r) => s + r.conflicts.length, 0);
 
+  // Audit di classificazione divinità / epiteti (vedi buildClassificationAudit).
+  const audit = useMemo(() => buildClassificationAudit(monumenti), [monumenti]);
+  const naRelated = audit.neverAlone.filter(d => d.relatedNames.length > 0);
+  const naPlain = audit.neverAlone.filter(d => d.relatedNames.length === 0);
+  // Solo i segnali "stretti" contano nel totale in evidenza: sovrapposizione di
+  // token fra teonimi co-presenti + stessa forma divinità/epiteto. Il "mai da
+  // sola" senza altri indizi resta come nota informativa (in un corpus tutto
+  // incentrato su Men molte divinità reali non compaiono mai da sole).
+  const auditTotal = naRelated.length + audit.divVsEpi.length;
+
   const jumpToFirst = (ids: number[]) => {
     const m = monumenti.find(x => ids.includes(x.id));
     if (m) onSelectMonumento(m);
   };
+
+  const IdChips = ({ ids }: { ids: number[] }) => (
+    <div className="flex flex-wrap gap-1.5">
+      {ids.slice(0, 20).map(id => {
+        const m = monumenti.find(x => x.id === id);
+        return (
+          <button key={id} onClick={() => m && onSelectMonumento(m)}
+            className="text-[10px] font-sans rounded border border-border/60 bg-white/40 dark:bg-black/10 px-1.5 py-0.5 hover:border-accent hover:text-accent transition-colors">
+            {formatIlaLabel(id)}
+          </button>
+        );
+      })}
+      {ids.length > 20 && <span className="text-[10px] text-muted self-center">+{ids.length - 20}</span>}
+    </div>
+  );
 
   return (
     <div className="flex-1 flex flex-col overflow-hidden">
@@ -1364,10 +1389,14 @@ function CorpusHealth({ monumenti, onSelectMonumento }: { monumenti: Monumento[]
 
       <div className="flex-1 overflow-y-auto space-y-8 pr-2">
         {/* Riepilogo */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
           <div className="glass-card p-4">
             <div className="text-3xl font-bold">{totalConflicts}</div>
             <div className="text-[10px] font-sans uppercase tracking-widest text-muted mt-1">Conflitti di grafia</div>
+          </div>
+          <div className="glass-card p-4">
+            <div className="text-3xl font-bold">{auditTotal}</div>
+            <div className="text-[10px] font-sans uppercase tracking-widest text-muted mt-1">Classificazioni sospette</div>
           </div>
           <div className="glass-card p-4">
             <div className="text-3xl font-bold">{missing.escapedMarkup.length}</div>
@@ -1434,6 +1463,98 @@ function CorpusHealth({ monumenti, onSelectMonumento }: { monumenti: Monumento[]
         {totalConflicts === 0 && missing.escapedMarkup.length === 0 && (
           <div className="border border-border/60 p-6 text-center">
             <div className="text-sm font-serif text-muted">Nessun conflitto di grafia rilevato nel corpus.</div>
+          </div>
+        )}
+
+        {/* Audit di classificazione divinità / epiteti */}
+        {(auditTotal > 0 || naPlain.length > 0) && (
+          <div>
+            <h3 className="font-bold text-sm mb-1">
+              Classificazione divinità / epiteti
+              <span className="ml-2 text-[10px] font-sans font-normal text-muted uppercase tracking-widest">
+                da verificare su Lane 1971, poi correggere sullo XML
+              </span>
+            </h3>
+
+            {naRelated.length > 0 && (
+              <div className="space-y-3 mt-3">
+                <div className="text-[10px] font-sans uppercase tracking-widest text-muted/70">
+                  Probabile stessa divinità in forma variante ({naRelated.length}) — mai attestata da sola e con token in comune con un teonimo co-presente
+                </div>
+                {naRelated.map(d => (
+                  <div key={d.name} className="rounded-xl border border-amber-300/60 bg-amber-50/30 dark:bg-amber-950/10 backdrop-blur-md p-4 shadow-sm">
+                    <div className="flex items-baseline gap-2 mb-2">
+                      <span className="font-serif text-sm font-semibold">{d.name}</span>
+                      <span className="text-[10px] text-muted">×{d.count} · confronta con: <span className="text-amber-700/90 font-semibold">{d.relatedNames.join(', ')}</span></span>
+                    </div>
+                    <IdChips ids={d.monumentIds} />
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {naPlain.length > 0 && (
+              <div className="mt-4">
+                <div className="text-[10px] font-sans uppercase tracking-widest text-muted/70 mb-2">
+                  Mai attestate da sole ({naPlain.length}) — informativo: in un corpus incentrato su Men è atteso anche per divinità reali
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {naPlain.map(d => (
+                    <span key={d.name} className="text-xs font-sans rounded border border-border/50 px-2 py-1 text-muted">
+                      {d.name} <span className="text-[10px]">×{d.count}</span>
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {audit.divVsEpi.length > 0 && (
+              <div className="space-y-3 mt-4">
+                <div className="text-[10px] font-sans uppercase tracking-widest text-muted/70">
+                  Stessa forma usata sia come divinità sia come epiteto ({audit.divVsEpi.length})
+                </div>
+                {audit.divVsEpi.map(t => (
+                  <div key={t.key} className="rounded-xl border border-amber-300/60 bg-amber-50/30 dark:bg-amber-950/10 backdrop-blur-md p-4 shadow-sm space-y-2">
+                    <div>
+                      <span className="text-[10px] font-sans uppercase tracking-widest text-amber-700/80">come divinità: </span>
+                      <span className="font-serif text-sm font-semibold">{t.asDivinita.form}</span>
+                      <div className="mt-1"><IdChips ids={t.asDivinita.monumentIds} /></div>
+                    </div>
+                    <div>
+                      <span className="text-[10px] font-sans uppercase tracking-widest text-amber-700/80">come epiteto: </span>
+                      <span className="font-serif text-sm font-semibold">{t.asEpiteto.form}</span>
+                      <div className="mt-1"><IdChips ids={t.asEpiteto.monumentIds} /></div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
+        {audit.sharedEpithets.length > 0 && (
+          <div>
+            <h3 className="font-bold text-sm mb-1">
+              Epiteti condivisi da più divinità
+              <span className="ml-2 text-[10px] font-sans font-normal text-muted uppercase tracking-widest">
+                {audit.sharedEpithets.length} · informativo — genuinamente condivisi o contaminazione da co-occorrenza
+              </span>
+            </h3>
+            <div className="space-y-3 mt-3">
+              {audit.sharedEpithets.map(s => (
+                <div key={s.epiteto} className="rounded-xl border border-border/60 bg-white/30 dark:bg-black/10 p-4">
+                  <div className="font-serif text-sm font-semibold mb-2">{s.epiteto}</div>
+                  <div className="space-y-1.5">
+                    {s.divinita.map(d => (
+                      <div key={d.name} className="flex flex-wrap items-baseline gap-2">
+                        <span className="text-xs font-sans text-muted min-w-[8rem]">{d.name} <span className="text-[10px]">×{d.monumentIds.length}</span></span>
+                        <IdChips ids={d.monumentIds} />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         )}
 
