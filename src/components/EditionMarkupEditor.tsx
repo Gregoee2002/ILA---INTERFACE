@@ -269,7 +269,7 @@ export const EditionMarkupEditor: React.FC<Props> = ({ value, onChange, anepigra
 
       {!isEmpty && (
         <div className="bg-white/50 dark:bg-white/5 border border-border/40 rounded-xl px-5 py-6 backdrop-blur-sm min-h-[280px]" onMouseUp={onMouseUp}>
-          <div className="font-serif text-[21px] md:text-[23px] leading-[2.3] text-ink pl-20 py-2" lang="grc">
+          <div className="font-greek text-[21px] md:text-[23px] leading-[2.3] text-ink pl-20 py-2" lang="grc">
             <TokenFlow
               tokens={tokens} basePath={[]} lbByPath={lbByPath} lbCount={lbs.length}
               onElClick={(path, token, ev) => {
@@ -341,7 +341,7 @@ export const EditionMarkupEditor: React.FC<Props> = ({ value, onChange, anepigra
           </div>
           <div className="p-5">
             {tab === 'anteprima' ? (
-              <div className="font-serif text-[19px] leading-loose text-ink pl-8" lang="grc">
+              <div className="font-greek text-[19px] leading-loose text-ink pl-8" lang="grc">
                 <TokenFlow tokens={tokens} basePath={[]} lbByPath={lbByPath} lbCount={lbs.length} preview />
               </div>
             ) : (
@@ -425,7 +425,7 @@ const InitialPaste: React.FC<{ anepigrafo?: boolean; onCreate: (lines: string[])
       <textarea
         rows={8} value={draft} onChange={e => setDraft(e.target.value)} lang="grc"
         placeholder={'Μέγας Μὲς Ἀξιοττηνὸς Ταρεῖ βα\nσιλεύων. …'}
-        className="w-full bg-white/60 dark:bg-black/20 border border-border/50 rounded-lg px-3 py-2 text-[16px] text-ink font-serif leading-relaxed focus:outline-none focus:ring-1 focus:ring-accent/40 placeholder:text-muted/30 placeholder:italic custom-scrollbar"
+        className="w-full bg-white/60 dark:bg-black/20 border border-border/50 rounded-lg px-3 py-2 text-[16px] text-ink font-greek leading-relaxed focus:outline-none focus:ring-1 focus:ring-accent/40 placeholder:text-muted/30 placeholder:italic custom-scrollbar"
       />
       <button
         onClick={() => draft.trim() && onCreate(draft.split('\n').map(l => l.trim()))}
@@ -626,7 +626,7 @@ const MarkupMenu: React.FC<{
         <>
           {menu.sel && (
             <div className="px-3.5 py-2 text-[10px] font-sans text-white/50 border-b border-white/10 truncate shrink-0">
-              Selezione: <span className="font-serif text-white/90 not-italic text-xs" lang="grc">«{menu.sel.text}»</span>
+              Selezione: <span className="font-greek text-white/90 not-italic text-xs" lang="grc">«{menu.sel.text}»</span>
             </div>
           )}
           <div className="px-3 pt-2.5 pb-2 shrink-0 border-b border-white/10">

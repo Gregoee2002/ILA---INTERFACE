@@ -1881,15 +1881,6 @@ function HomeView({ monumenti, onNavigate, onSearch, effectiveAdmin }: { monumen
   const stats = useMemo(() => {
     const regioni = new Set(monumenti.map(m => m.regione).filter(Boolean));
     const citta = new Set(monumenti.map(m => m.citta).filter(Boolean));
-    // Stesso conteggio di "epiteti non ripetuti" della pagina Statistiche Epiteti:
-    // legge da divinitaEpiteti (per-divinità) con fallback all'array piatto.
-    const epiteti = new Set<string>();
-    monumenti.forEach(m => {
-      const eps = m.divinitaEpiteti
-        ? m.divinitaEpiteti.flatMap(de => de.epiteti)
-        : (m.epiteti ?? []);
-      eps.forEach(e => { if (e) epiteti.add(e); });
-    });
     const dateInizio = monumenti.map(m => m.data_inizio).filter((d): d is number => typeof d === 'number');
     const dateFine = monumenti.map(m => m.data_fine).filter((d): d is number => typeof d === 'number');
     const minData = dateInizio.length ? Math.min(...dateInizio) : null;
@@ -1898,7 +1889,6 @@ function HomeView({ monumenti, onNavigate, onSearch, effectiveAdmin }: { monumen
       totale: monumenti.length,
       regioni: regioni.size,
       citta: citta.size,
-      epiteti: epiteti.size,
       rangeLabel: minData !== null && maxData !== null
         ? `${minData < 0 ? `${Math.abs(minData)} a.C.` : `${minData} d.C.`} – ${maxData < 0 ? `${Math.abs(maxData)} a.C.` : `${maxData} d.C.`}`
         : '—'
@@ -1938,8 +1928,7 @@ function HomeView({ monumenti, onNavigate, onSearch, effectiveAdmin }: { monumen
         <div>
           <div className="text-[10px] font-sans font-bold uppercase tracking-[0.22em] text-accent/70 mb-2">Benvenuto</div>
           <p className="text-base md:text-lg font-serif italic text-ink/85 leading-relaxed max-w-2xl mb-4">
-            Il database contiene al momento {stats.totale} iscrizioni. Abbiamo registrato{' '}
-            {stats.epiteti} epiteti distinti di Men, sparsi in {stats.citta} località del mondo antico.
+            Il database raccoglie al momento {stats.totale} schede in {stats.citta} località del mondo antico.
           </p>
 
           <form
@@ -3280,7 +3269,7 @@ const EpiDocRenderer = ({ xml, query, onTermClick, divinityIndex, onomasticaInde
   return (
     <div 
       className="relative pl-8 epidoc-renderer leading-loose opacity-90 select-text"
-      style={{ fontFamily: 'Georgia, "Times New Roman", serif', fontSize: 'inherit' }}
+      style={{ fontFamily: 'var(--font-greek)', fontSize: 'inherit' }}
       onMouseOver={handleMouseOver}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
@@ -6739,7 +6728,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                            <div className="space-y-8">
                              <LegendaDropdown />
                              <div className="bg-sidebar/50 border border-border p-8 md:p-12 text-lg md:text-2xl text-ink/90 shadow-inner relative"
-                     style={{ fontFamily: 'Georgia, "Times New Roman", serif', lineHeight: '2' }}>
+                     style={{ fontFamily: 'var(--font-greek)', lineHeight: '2' }}>
                                 <div className="relative z-10 max-w-[62ch] mx-auto pl-10 border-l-2 border-border/40">
                                   {selectedMonumento.testo ? (
                                     <EpiDocRenderer
@@ -6989,7 +6978,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                     <section>
                       <h5 className="text-[9px] font-bold uppercase text-muted underline underline-offset-4 mb-3 font-sans">Trascrizione</h5>
                       <div className="text-sm bg-sidebar/50 p-4 border border-border/40"
-                           style={{ fontFamily: 'Georgia, "Times New Roman", serif', lineHeight: '1.9' }}>
+                           style={{ fontFamily: 'var(--font-greek)', lineHeight: '1.9' }}>
                         {m.testo ? <EpiDocRenderer xml={m.testo} query={filters.searchText} /> : <span className="italic opacity-50">[Anepigrafe]</span>}
                       </div>
                     </section>
