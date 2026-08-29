@@ -47,7 +47,8 @@ import {
   Unlock,
   NotebookPen,
   Bug,
-  ExternalLink
+  ExternalLink,
+  BookMarked
 } from 'lucide-react';
 import { cn, EASE_OUT, EASE_IN, SPRING_SNAPPY, SPRING_SOFT } from './lib/utils';
 import { ICONOGRAPHY_LABELS } from './lib/iconographyLabels';
@@ -68,6 +69,7 @@ import { UnlockEditingModal } from './components/UnlockEditingModal';
 import { RegistroPanel } from './components/RegistroPanel';
 import { RegistroForm } from './components/RegistroForm';
 import { BugReportsPanel } from './components/BugReportsPanel';
+import { BibliographyIndex, BiblioReplacement, BiblioApplyResult } from './components/BibliographyIndex';
 import { auth, loginWithGoogle, logout } from './lib/firebase';
 import { onAuthStateChanged, User } from 'firebase/auth';
 import ilaLogo from './assets/images/ila-logo.png';
@@ -84,7 +86,7 @@ interface SearchResult {
   matchInSupplied: boolean;
 }
 
-type AppView = 'home' | 'catalog' | 'stats' | 'timeline' | 'health' | 'map' | 'heatmap' | 'editor' | 'review' | 'flags' | 'bugs';
+type AppView = 'home' | 'catalog' | 'stats' | 'timeline' | 'health' | 'map' | 'heatmap' | 'editor' | 'review' | 'flags' | 'bugs' | 'biblio';
 
 // true sulla build GitHub Pages (vedi vite.config.ts / apiShim.ts): niente
 // server.ts, quindi le funzionalità che dipendevano da Gemini AI o dalla
@@ -1556,6 +1558,7 @@ const RAIL_ITEMS: { view: AppView; label: string; icon: React.ReactNode; adminOn
   { view: 'health', label: 'Coerenza', icon: <Check className="h-4 w-4" />, adminOnly: true },
   { view: 'flags', label: 'Registro', icon: <NotebookPen className="h-4 w-4" />, adminOnly: true },
   { view: 'bugs', label: 'Bug', icon: <Bug className="h-4 w-4" />, adminOnly: true },
+  { view: 'biblio', label: 'Bibliografia', icon: <BookMarked className="h-4 w-4" />, adminOnly: true },
   { view: 'editor', label: 'Editor XML', icon: <Feather className="h-4 w-4" /> },
   // Pannello di revisione draft: dipende dalla cartella drafts/ (solo
   // lettura, popolata dalla pipeline locale) — non disponibile sulla build
@@ -1906,6 +1909,7 @@ function HomeView({ monumenti, onNavigate, onSearch, effectiveAdmin }: { monumen
     { view: 'health', label: 'Coerenza', desc: "Controlli di qualità e coerenza sui dati del corpus.", icon: <Check className="h-5 w-5" />, adminOnly: true },
     { view: 'flags', label: 'Registro', desc: 'Lavorazioni in corso dei collaboratori sulle schede del catalogo.', icon: <NotebookPen className="h-5 w-5" />, adminOnly: true },
     { view: 'bugs', label: 'Bug', desc: 'Problemi di funzionamento segnalati dai collaboratori.', icon: <Bug className="h-5 w-5" />, adminOnly: true },
+    { view: 'biblio', label: 'Bibliografia', desc: 'Censimento delle diciture bibliografiche e modifica in blocco.', icon: <BookMarked className="h-5 w-5" />, adminOnly: true },
     { view: 'editor', label: 'Editor XML', desc: 'Modifica le schede EpiDoc sezione per sezione, con riscrittura chirurgica.', icon: <Feather className="h-5 w-5" /> },
   ];
   const sections = allSections.filter(s => !s.adminOnly || effectiveAdmin);
@@ -4544,6 +4548,97 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
     setSelectedMonumento(prev => (prev && prev.entryId === entryId) ? persisted : prev);
   };
 
+  // --- Modifica in blocco delle diciture bibliografiche (pannello Bibliografia).
+  // Ogni edit è un find/replace esatto sulla stringa <bibl>: si individuano le
+  // schede che contengono almeno una delle diciture "from", si riscrive quella
+  // voce (titolo + rawXml, così monumentiToXml la riserializza) e si salva una
+  // scheda alla volta con lo stesso canale dell'editor (PATCH /api/monumenti/:id
+  // con baseHash), in un pool a concorrenza limitata. Nessuna POST dell'intero
+  // corpus: quella cancellerebbe i file non inviati (vedi apiShim.ts). ---
+  const [biblioProgress, setBiblioProgress] = useState<{ done: number; total: number } | null>(null);
+
+  const handleBiblioApply = async (edits: BiblioReplacement[]): Promise<BiblioApplyResult> => {
+    if (!effectiveAdmin) {
+      return { ok: false, updatedEntries: 0, updatedSchede: 0, failures: [{ entryId: '-', error: 'Editing non sbloccato.' }] };
+    }
+    const replMap = new Map(edits.map(e => [e.from.trim(), e.to.trim()]));
+
+    // Schede da toccare + versione aggiornata della loro bibliografia.
+    const targets: { mon: Monumento; nextBibl: Bibliografia[]; changed: number }[] = [];
+    for (const m of monumenti) {
+      if (!m.bibliografia || m.bibliografia.length === 0) continue;
+      let changed = 0;
+      const nextBibl = m.bibliografia.map(b => {
+        const key = (b.titolo || '').trim();
+        if (replMap.has(key)) {
+          const to = replMap.get(key)!;
+          if (to !== key) { changed++; return { ...b, titolo: to, rawXml: to }; }
+        }
+        return b;
+      });
+      if (changed > 0) targets.push({ mon: m, nextBibl, changed });
+    }
+
+    if (targets.length === 0) {
+      return { ok: true, updatedEntries: 0, updatedSchede: 0, failures: [] };
+    }
+
+    const failures: { entryId: string; error: string }[] = [];
+    let done = 0;
+    let updatedEntries = 0;
+    let updatedSchede = 0;
+    const persistedById = new Map<string, Monumento>();
+    setBiblioProgress({ done: 0, total: targets.length });
+
+    let next = 0;
+    const worker = async () => {
+      while (next < targets.length) {
+        const { mon, nextBibl, changed } = targets[next++];
+        const entryId = mon.entryId!;
+        const updatedMon: Monumento = { ...mon, bibliografia: nextBibl };
+        try {
+          const res = await fetch(`/api/monumenti/${encodeURIComponent(entryId)}`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ monumento: updatedMon, baseHash: mon._fileHash ?? null }),
+          });
+          if (!res.ok) {
+            const errBody = await res.json().catch(() => ({} as any));
+            failures.push({ entryId, error: errBody.error || errBody.message || `HTTP ${res.status}` });
+          } else {
+            const body = await res.json();
+            persistedById.set(entryId, { ...updatedMon, _corpusFile: body._corpusFile, _fileHash: body._fileHash });
+            updatedEntries += changed;
+            updatedSchede++;
+          }
+        } catch (e: any) {
+          failures.push({ entryId, error: e?.message || String(e) });
+        }
+        done++;
+        setBiblioProgress({ done, total: targets.length });
+      }
+    };
+    const CONCURRENCY = 4;
+    await Promise.all(Array.from({ length: Math.min(CONCURRENCY, targets.length) }, () => worker()));
+
+    // Applica in memoria le schede andate a buon fine; per le altre lascia
+    // lo stato precedente. Se ci sono fallimenti si ricarica dal server per
+    // non tenere hash disallineati.
+    if (persistedById.size > 0) {
+      setMonumenti(prev => prev.map(m => (m.entryId && persistedById.has(m.entryId)) ? persistedById.get(m.entryId)! : m));
+      setSelectedMonumento(prev => (prev && prev.entryId && persistedById.has(prev.entryId)) ? persistedById.get(prev.entryId)! : prev);
+    }
+    if (failures.length > 0) {
+      try {
+        const fresh = await fetch('/api/monumenti');
+        if (fresh.ok) setMonumenti(await fresh.json());
+      } catch { /* si tiene lo stato locale già aggiornato */ }
+    }
+
+    setBiblioProgress(null);
+    return { ok: failures.length === 0, updatedEntries, updatedSchede, failures };
+  };
+
   const exportSingleRecord = async (m: Monumento) => {
     try {
       if (m._corpusFile) {
@@ -5827,6 +5922,14 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
               onCreate={createBugReport}
               onResolve={id => updateBugStatus(id, 'resolved')}
               onReopen={id => updateBugStatus(id, 'open')}
+            />
+          )}
+          {activeView === 'biblio' && effectiveAdmin && (
+            <BibliographyIndex
+              monumenti={monumenti}
+              onApply={handleBiblioApply}
+              progress={biblioProgress}
+              onSelectMonumento={(m) => { setSelectedMonumento(m); setActiveView('catalog'); }}
             />
           )}
           {activeView === 'review' && <DraftReviewPanel />}
