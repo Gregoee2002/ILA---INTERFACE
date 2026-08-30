@@ -6801,7 +6801,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                    </div>
 
                   {/* Main Content Area */}
-                  <div ref={recordContentRef} className="flex-1 min-h-0 bg-parchment p-6 md:p-16 md:overflow-hidden">
+                  <div ref={recordContentRef} className="flex-1 min-h-0 bg-parchment p-6 md:p-16 md:overflow-y-auto custom-scrollbar">
                   {activeRecordSection === 'supporto' && (
                   <div className="animate-in fade-in duration-200 md:-mt-8">
                     <div className="flex justify-between items-start mb-3">
