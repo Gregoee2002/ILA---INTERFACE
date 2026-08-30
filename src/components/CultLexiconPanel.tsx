@@ -3,7 +3,7 @@ import { Monumento } from '../types';
 import { cn } from '../lib/utils';
 import { buildCultIndex, CultLemmaStats } from '../lib/cultIndex';
 import { CULT_FAMILIES } from '../lib/cultLexicon';
-import { Tags, ExternalLink, ChevronRight, Search } from 'lucide-react';
+import { Tags, ExternalLink, ChevronRight, ChevronDown, Search } from 'lucide-react';
 
 interface Props {
   monumenti: Monumento[];
@@ -14,6 +14,11 @@ type GroupBy = 'family' | 'lemma';
 
 const foldForSearch = (s: string) =>
   (s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+
+// Stessi stili dei campi di ricerca/tendina usati altrove nell'app (indice epiteti).
+const FIELD_BASE =
+  'bg-[var(--card)] dark:bg-black/25 border border-[var(--border)]/50 dark:border-white/5 rounded-lg font-sans text-xs outline-none shadow-inner focus:border-accent/50 focus:ring-1 focus:ring-accent/30 hover:bg-[var(--sidebar)] dark:hover:bg-black/40 transition-all duration-300';
+const FIELD_STYLE = { backgroundColor: 'var(--card)', color: 'var(--ink)' } as const;
 
 export const CultLexiconPanel: React.FC<Props> = ({ monumenti, onSelectMonumento }) => {
   const [search, setSearch] = useState('');
@@ -44,9 +49,6 @@ export const CultLexiconPanel: React.FC<Props> = ({ monumenti, onSelectMonumento
   };
 
   const filteredLemmata = index.lemmata.filter(matchLemma);
-  const shownAtt = filteredLemmata.reduce((s, l) => s + l.count, 0);
-  const shownSchede = new Set<string>();
-  filteredLemmata.forEach(l => l.refs.forEach(r => shownSchede.add(r.scheda)));
 
   const toggle = (key: string) =>
     setExpanded(prev => {
@@ -62,19 +64,7 @@ export const CultLexiconPanel: React.FC<Props> = ({ monumenti, onSelectMonumento
       return n;
     });
 
-  const runExample = (opts: { search?: string; family?: string; group?: GroupBy }) => {
-    setSearch(opts.search ?? '');
-    setFamilyFilter(opts.family ?? '');
-    setGroupBy(opts.group ?? 'lemma');
-    setExpanded(new Set());
-  };
-
-  const EXAMPLES: { label: string; opts: Parameters<typeof runExample>[0] }[] = [
-    { label: 'θρεπτός per regione', opts: { search: 'θρεπτός', group: 'lemma' } },
-    { label: 'forme in #colpa', opts: { family: 'colpa', group: 'lemma' } },
-    { label: 'εὐλογέω vs ὁμολογέω', opts: { search: 'εὐλογέω ὁμολογέω', group: 'lemma' } },
-    { label: 'atti #agency di castigo', opts: { search: 'castigo', family: 'agency', group: 'lemma' } },
-  ];
+  const schede = (n: number) => `${n} ${n === 1 ? 'scheda' : 'schede'}`;
 
   const renderLemmaRow = (l: CultLemmaStats) => {
     const key = `${l.family}::${l.lemma}`;
@@ -106,10 +96,8 @@ export const CultLexiconPanel: React.FC<Props> = ({ monumenti, onSelectMonumento
             )}
           </div>
 
-          <div className="shrink-0 pt-0.5 text-xs font-sans text-muted tabular-nums text-right leading-tight">
-            <span className="uppercase tracking-wide text-muted/60">{l.family}</span>
-            <br />
-            {l.count}× · {l.schedeCount} {l.schedeCount === 1 ? 'scheda' : 'schede'}
+          <div className="shrink-0 pt-0.5 text-xs font-sans text-muted/70 tabular-nums text-right leading-tight">
+            {schede(l.schedeCount)}
           </div>
 
           <button
@@ -154,9 +142,6 @@ export const CultLexiconPanel: React.FC<Props> = ({ monumenti, onSelectMonumento
     .map(f => ({ ...f, lemmata: f.lemmata.filter(matchLemma) }))
     .filter(f => f.lemmata.length > 0);
 
-  const inputCls =
-    'text-sm font-sans rounded-sm border border-border bg-sidebar px-3 py-2 outline-none focus:border-accent transition-colors';
-
   return (
     <div className="flex-1 overflow-y-auto p-6 md:p-10 max-w-4xl mx-auto w-full">
       <div className="mb-5">
@@ -166,28 +151,46 @@ export const CultLexiconPanel: React.FC<Props> = ({ monumenti, onSelectMonumento
       </div>
 
       {/* Ricerca / filtri */}
-      <div className="flex flex-wrap gap-2 mb-2 items-center">
+      <div className="flex flex-wrap gap-2 mb-5 items-center">
         <div className="relative flex-1 min-w-[14rem]">
-          <Search className="h-4 w-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted/50" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted/50 pointer-events-none" />
           <input
+            type="text"
             value={search}
             onChange={e => setSearch(e.target.value)}
             placeholder="Filtra lemma, forma, sotto-funzione…"
-            className={cn(inputCls, 'w-full pl-9')}
+            className={cn(FIELD_BASE, 'w-full pl-9 pr-3 py-2')}
+            style={FIELD_STYLE}
           />
         </div>
 
-        <select value={regione} onChange={e => setRegione(e.target.value)} className={inputCls}>
-          <option value="">Tutte le regioni</option>
-          {index.regioni.map(r => <option key={r} value={r}>{r}</option>)}
-        </select>
+        <div className="relative">
+          <select
+            value={regione}
+            onChange={e => setRegione(e.target.value)}
+            className={cn(FIELD_BASE, 'pl-3 pr-8 py-2 cursor-pointer appearance-none')}
+            style={{ ...FIELD_STYLE, WebkitAppearance: 'none' as const, appearance: 'none' as const }}
+          >
+            <option value="">Tutte le regioni</option>
+            {index.regioni.map(r => <option key={r} value={r}>{r}</option>)}
+          </select>
+          <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted/50 pointer-events-none" />
+        </div>
 
-        <select value={familyFilter} onChange={e => setFamilyFilter(e.target.value)} className={inputCls}>
-          <option value="">Tutte le famiglie</option>
-          {CULT_FAMILIES.map(f => <option key={f.id} value={f.id}>{f.id}</option>)}
-        </select>
+        <div className="relative">
+          <select
+            value={familyFilter}
+            onChange={e => setFamilyFilter(e.target.value)}
+            className={cn(FIELD_BASE, 'pl-3 pr-8 py-2 cursor-pointer appearance-none')}
+            style={{ ...FIELD_STYLE, WebkitAppearance: 'none' as const, appearance: 'none' as const }}
+          >
+            <option value="">Tutte le famiglie</option>
+            {CULT_FAMILIES.map(f => <option key={f.id} value={f.id}>{f.id}</option>)}
+          </select>
+          <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted/50 pointer-events-none" />
+        </div>
 
-        <div className="inline-flex rounded-sm border border-border overflow-hidden text-[11px] font-sans font-bold uppercase tracking-widest">
+        <div className="inline-flex rounded-lg border border-[var(--border)]/50 dark:border-white/5 overflow-hidden text-[10px] font-sans font-bold uppercase tracking-widest shadow-inner">
           {(['family', 'lemma'] as GroupBy[]).map(g => (
             <button
               key={g}
@@ -201,28 +204,6 @@ export const CultLexiconPanel: React.FC<Props> = ({ monumenti, onSelectMonumento
             </button>
           ))}
         </div>
-      </div>
-
-      <div className="text-xs font-sans text-muted/70 mb-4 flex flex-wrap gap-x-1.5">
-        <span>Query pronte:</span>
-        {EXAMPLES.map((ex, i) => (
-          <React.Fragment key={ex.label}>
-            {i > 0 && <span className="text-muted/30">·</span>}
-            <button
-              onClick={() => runExample(ex.opts)}
-              className="font-greek hover:text-accent transition-colors"
-              lang="grc"
-            >
-              {ex.label}
-            </button>
-          </React.Fragment>
-        ))}
-      </div>
-
-      <div className="text-xs font-sans text-muted/70 mb-3">
-        {shownAtt} attestazioni · {filteredLemmata.length} lemmi · {shownSchede.size} schede
-        {regione && <> · regione <span className="text-ink">{regione}</span></>}
-        <span className="text-muted/40"> — corpus: {index.totalAttestations} attestazioni in {index.totalSchede} schede</span>
       </div>
 
       {filteredLemmata.length === 0 ? (
@@ -241,9 +222,7 @@ export const CultLexiconPanel: React.FC<Props> = ({ monumenti, onSelectMonumento
                 >
                   <ChevronRight className={cn('h-4 w-4 text-muted shrink-0 transition-transform', fOpen && 'rotate-90')} />
                   <span className="text-sm font-sans font-bold uppercase tracking-[0.15em] text-cult">{f.id}</span>
-                  <span className="text-xs font-sans text-muted/70">
-                    {f.lemmata.length} lemmi · {f.lemmata.reduce((s, l) => s + l.count, 0)}× · {f.schedeCount} schede
-                  </span>
+                  <span className="text-xs font-sans text-muted/70">{schede(f.schedeCount)}</span>
                 </button>
                 {fOpen && (
                   <div className="border-t border-border/40 p-2 space-y-1.5">
