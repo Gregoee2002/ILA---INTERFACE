@@ -84,7 +84,23 @@ per il formato HTML esatto (card, tabelle, callout). In sintesi:
 3. Aggiorna eventualmente `docs/guida-editor/README.md` se introduci una
    nuova parte o una convenzione di formato non ancora documentata lì.
 
-## Ricompilare il PDF
+## Il PDF NON si genera di default
+
+Il flusso normale, dopo aver modificato o aggiunto una sezione, è: editare
+i sorgenti in `parts/*.html` (ed eventualmente `manifest.json`), poi
+**commit + push su GitHub** dei soli sorgenti (`parts/`, `README.md`,
+`style.css`, `cover.html`, `build_pdf.py`). **Non lanciare `build_pdf.py`
+e non toccare `guida-editor-ila.html`/`.pdf`** a meno che l'utente non
+chieda esplicitamente il PDF (es. "generami il PDF", "mandami il PDF
+aggiornato", "voglio vederlo"). Aggiornare i due file generati ad ogni
+modifica dei sorgenti li farebbe divergere in continuazione dai sorgenti
+via git senza che nessuno li guardi — è lavoro sprecato: la versione
+pubblica di riferimento è quella su GitHub, i sorgenti.
+
+Se non è chiaro se l'utente vuole anche il PDF in quella richiesta, chiedi
+piuttosto che generarlo "per sicurezza".
+
+## Ricompilare il PDF (solo su richiesta esplicita)
 
 ```bash
 # ambiente: WeasyPrint non è tra le dipendenze npm del progetto, serve un venv
@@ -108,11 +124,12 @@ CSS di stampa abbia fatto la cosa giusta senza guardarla.
 
 ## Consegna
 
-Il PDF va sempre inviato con `SendUserFile` (non solo lasciato nel
-repository) quando l'utente chiede di vederlo o dopo un aggiornamento che
-lui non ha esplicitamente detto di fare "solo per dopo". Se la richiesta
-era solo di aggiornare i sorgenti senza rigenerare, dillo esplicitamente
-invece di generare comunque il PDF.
+- **Default**: aggiorna i sorgenti, `git add`/`commit`/`push` su GitHub
+  (vedi memoria `feedback_push_at_end_of_process`), e basta — riporta
+  all'utente cosa è cambiato e che è stato pushato. Nessun PDF.
+- **Solo se l'utente lo chiede esplicitamente**: rigenera con
+  `build_pdf.py`, verifica visivamente, poi invia il PDF con
+  `SendUserFile` (non lasciarlo solo nel repository).
 
 ## Regole trasversali da non violare mai in questa guida
 

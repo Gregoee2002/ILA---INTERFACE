@@ -48,8 +48,11 @@ di primo livello, uno per voce dell'indice. `build_pdf.py`:
    il suo aspetto coerente.
 3. Se è una parte nuova, crea `part4-nome.html` e aggiungilo a
    `parts/manifest.json` con la sua etichetta ("Parte IV — …").
-4. Rilancia `python3 build_pdf.py` (vedi sotto per l'ambiente). Indice e
-   numerazione si aggiornano da soli.
+4. Fai commit e push dei sorgenti su GitHub. **Non serve rigenerare
+   `guida-editor-ila.html`/`.pdf` ad ogni modifica** — sono output, non
+   sorgenti, e si rigenerano solo su richiesta esplicita (vedi sotto).
+   Indice e numerazione si aggiornano da soli quando (e se) qualcuno
+   rilancia la build.
 
 ### Formato di una sezione
 
@@ -97,7 +100,12 @@ Note sul formato:
 - Ogni `<section>` di primo livello genera **una voce di indice**: non
   annidare due `<h2>` nello stesso `<section>`.
 
-## Rigenerare il PDF
+## Rigenerare il PDF (solo su richiesta esplicita)
+
+Il PDF **non** va rigenerato automaticamente ogni volta che i sorgenti
+cambiano — il flusso normale è aggiornare `parts/*.html` e pushare su
+GitHub, senza toccare i file generati. Rigenera il PDF solo quando
+qualcuno lo chiede esplicitamente.
 
 Serve Python 3 con WeasyPrint (non è nelle dipendenze npm del progetto,
 è usato solo per questo documento):
