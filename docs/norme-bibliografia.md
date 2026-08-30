@@ -69,6 +69,14 @@ per esteso altrove. Scioglimento completo (dal PDF di CMRDM I) in
 [opere-citate-lane.md](opere-citate-lane.md) e
 [opere-citate-lane.csv](opere-citate-lane.csv).
 
+**FATTO 2026-08-30** — 148 di quelle voci (26 famiglie con scioglimento sicuro)
+sciolte in forma estesa direttamente sul repo dati (`Gregoee2002/ILA`, 79 commit
+via API). Coda conservata e normalizzata: `col.`→`c./cc.`, cifre piene nei range,
+`no.`→`n.`, `nos.`→`nn.`. Restano da fare: Anderson, Smirnoff, Roscher, Zingerle,
+Fontrier, `idem`, `Lane, I, loc. cit.` (titolo/pagina da verificare sul cartaceo),
+e il restyling delle varianti **senza** `op. cit.` delle stesse famiglie
+(es. `P. Perdrizet, BCH, XX, 1896, …`, `Drexler, in Roscher, Lexikon…`).
+
 ### Da decidere
 
 - Forma della citazione-catalogo Lane, oggi `Lane, CMRDM I 29` (una per scheda,

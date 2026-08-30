@@ -16,6 +16,21 @@ quella sigla.
 > in `«…»`, `pp.`/`cc.`. Dove Lane premette `*` (opera non vista direttamente da
 > lui) lo si conserva.
 
+> **APPLICATO 2026-08-30** — 148 voci `<bibl>` su 79 schede sostituite direttamente
+> sul repo dati `Gregoee2002/ILA` (`corpus/`, `main`, 79 commit via API). Prefisso
+> `Autore, op. cit.`/`loc. cit.` → opera per esteso, coda conservata e normalizzata
+> (`col.`→`c./cc.`, cifre piene, `no.`→`n.`). Famiglie trattate: Drexler, Perdrizet,
+> Herrmann, Steinleitner, Le Bas-Waddington, Keppel, Leemans, L. Vidman, Duthoy,
+> Hiesinger, Vermaseren, Texier, Heinevetter, Swoboda et al., T. Homolle, Calder,
+> Cronin, Callander, P. Roussel, Foucart, Milchhöfer, Gurlitt, Cordella, J. Marcadé,
+> Daremberg-Saglio, Apollonj-Ghetti et al.
+> **NON ancora trattate** (titolo/scioglimento da verificare sul cartaceo): Anderson
+> (17), Smirnoff (7), Roscher op. cit. (2), Zingerle (2), Fontrier, `idem` (ILA-096),
+> `Lane, I, loc. cit.` (2), e i rinvii `loc. cit.` che appartengono a famiglie grandi
+> (Robert, Ramsay). Restano fuori scope anche le varianti **senza** `op. cit.` delle
+> stesse famiglie (es. `P. Perdrizet, BCH, XX, 1896, …`, `Drexler, in Roscher, Lexikon…`),
+> da riportare allo stile italiano in una passata separata.
+
 | Sigla nel corpus | Opera per esteso (da CMRDM I) | Prima citazione completa in CMRDM I |
 |---|---|---|
 | **Drexler, op. cit.** (51) | W. Drexler, *Mên*, in W.H. Roscher (a cura di), *Ausführliches Lexikon der griechischen und römischen Mythologie*, II.2, Leipzig 1894-1897, cc. 2687-2770. | no. 1: «W. Drexler, article in W. H. Roscher, Lexikon der griechischen und römischen Mythologie, Leipzig 1884-1937, col. 2731». `op. cit.` rinvia sempre a una `col. 26xx-27xx`. |
