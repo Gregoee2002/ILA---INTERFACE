@@ -6801,7 +6801,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                    </div>
 
                   {/* Main Content Area */}
-                  <div ref={recordContentRef} className="flex-1 min-h-0 bg-parchment p-6 md:p-16 md:overflow-y-auto custom-scrollbar">
+                  <div ref={recordContentRef} className="flex-1 min-h-0 bg-parchment p-6 md:p-16 md:overflow-hidden">
                   {activeRecordSection === 'supporto' && (
                   <div className="animate-in fade-in duration-200 md:-mt-8">
                     <div className="flex justify-between items-start mb-3">
@@ -7117,7 +7117,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                                       : <><Type className="h-3 w-3" /> Trascrizione pura</>}
                                   </button>
                                 )}
-                                <div className="relative z-10 max-w-[62ch] mx-auto pl-10 border-l-2 border-border/40">
+                                <div className="relative z-10 max-w-[62ch] mx-auto pl-10 border-l-2 border-border/40 max-h-[52vh] overflow-y-auto custom-scrollbar pr-4">
                                   {selectedMonumento.testo ? (
                                     <EpiDocRenderer
                                       xml={selectedMonumento.testo}
