@@ -65,6 +65,7 @@ import { PleiadesMap } from './components/PleiadesMap';
 import { MapView } from './components/MapView';
 import { IconographyPanel } from './components/IconographyPanel';
 import { CooccurrenceHeatmap } from './components/CooccurrenceHeatmap';
+import { CultLexiconPanel } from './components/CultLexiconPanel';
 import { SectionEditorView } from './components/SectionEditorView';
 import { DraftReviewPanel } from './components/DraftReviewPanel';
 import { UnlockEditingModal } from './components/UnlockEditingModal';
@@ -88,7 +89,7 @@ interface SearchResult {
   matchInSupplied: boolean;
 }
 
-type AppView = 'home' | 'catalog' | 'stats' | 'timeline' | 'health' | 'map' | 'heatmap' | 'editor' | 'review' | 'flags' | 'bugs' | 'biblio';
+type AppView = 'home' | 'catalog' | 'stats' | 'timeline' | 'health' | 'map' | 'heatmap' | 'cult' | 'editor' | 'review' | 'flags' | 'bugs' | 'biblio';
 
 // true sulla build GitHub Pages (vedi vite.config.ts / apiShim.ts): niente
 // server.ts, quindi le funzionalità che dipendevano da Gemini AI o dalla
@@ -1678,6 +1679,7 @@ const RAIL_ITEMS: { view: AppView; label: string; icon: React.ReactNode; adminOn
   { view: 'timeline', label: 'Cronologia', icon: <Clock className="h-4 w-4" /> },
   { view: 'stats', label: 'Statistiche Epiteti', icon: <BarChart2 className="h-4 w-4" /> },
   { view: 'heatmap', label: 'Heatmap', icon: <Columns className="h-4 w-4" /> },
+  { view: 'cult', label: 'Lessico cultuale', icon: <Tags className="h-4 w-4" /> },
   { view: 'health', label: 'Coerenza', icon: <Check className="h-4 w-4" />, adminOnly: true },
   { view: 'flags', label: 'Registro', icon: <NotebookPen className="h-4 w-4" />, adminOnly: true },
   { view: 'bugs', label: 'Bug', icon: <Bug className="h-4 w-4" />, adminOnly: true },
@@ -2029,6 +2031,7 @@ function HomeView({ monumenti, onNavigate, onSearch, effectiveAdmin }: { monumen
     { view: 'timeline', label: 'Cronologia', desc: 'Le iscrizioni disposte lungo la sequenza temporale.', icon: <Clock className="h-5 w-5" /> },
     { view: 'stats', label: 'Statistiche Epiteti', desc: 'Frequenza e distribuzione degli epiteti di Men.', icon: <BarChart2 className="h-5 w-5" /> },
     { view: 'heatmap', label: 'Heatmap Co-occorrenze', desc: 'Quali epiteti e attributi ricorrono insieme.', icon: <Columns className="h-5 w-5" /> },
+    { view: 'cult', label: 'Lessico cultuale', desc: 'Il vocabolario delle funzioni cultuali marcato nelle edizioni, per lemma e famiglia.', icon: <Tags className="h-5 w-5" /> },
     { view: 'health', label: 'Coerenza', desc: "Controlli di qualità e coerenza sui dati del corpus.", icon: <Check className="h-5 w-5" />, adminOnly: true },
     { view: 'flags', label: 'Registro', desc: 'Lavorazioni in corso dei collaboratori sulle schede del catalogo.', icon: <NotebookPen className="h-5 w-5" />, adminOnly: true },
     { view: 'bugs', label: 'Bug', desc: 'Problemi di funzionamento segnalati dai collaboratori.', icon: <Bug className="h-5 w-5" />, adminOnly: true },
@@ -3234,7 +3237,7 @@ const EpiDocRenderer = ({ xml, query, onTermClick, divinityIndex, onomasticaInde
           );
         }
         case 'w': {
-          // Lessico di funzione cultuale (tassonomia cult-functions) — viola.
+          // Lessico di funzione cultuale (tassonomia cult-functions) — malva/lilla.
           // In ILA <w> marca SOLO questo layer, mai la tokenizzazione integrale.
           const fam = anaAttr.replace(/#/g, ' ').trim();
           const tip = `${lemmaAttr ? `Lemma: ${lemmaAttr}` : 'Parola marcata'}${fam ? ` — ${fam}` : ''}`;
@@ -6120,6 +6123,12 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                 }} 
               />
             </div>
+          )}
+          {activeView === 'cult' && (
+            <CultLexiconPanel
+              monumenti={monumenti}
+              onSelectMonumento={(m) => { setSelectedMonumento(m); setActiveView('catalog'); }}
+            />
           )}
           {activeView === 'health' && effectiveAdmin && <CorpusHealth monumenti={monumenti} onSelectMonumento={(m) => { setSelectedMonumento(m); setActiveView('catalog'); }} />}
           {activeView === 'flags' && effectiveAdmin && (

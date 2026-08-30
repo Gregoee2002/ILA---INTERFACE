@@ -84,6 +84,27 @@ export interface IconographyData {
   note?: string;
 }
 
+// Una parola/formula del lessico cultuale marcata nell'edizione (<w ana> o
+// <rs type="cultTerm|cultFormula">). Derivata dal markup, mai scritta a mano.
+// famiglia/sotto-funzione risolte dalla tabella controllata (cultLexicon.ts).
+export interface CultAttestation {
+  lemma: string;
+  family: string;
+  subFunction: string;
+  /** forma attestata: testo del <w>, con i "-" di a-capo rimossi. */
+  form: string;
+  /** n del <lb> che precede la parola nel testo. */
+  line?: string;
+  /** @ana contiene #formula (parola in locuzione fissa). */
+  formula: boolean;
+  /** @cert="low" — forma integrata/dubbia. */
+  cert?: "low";
+  /** id scheda, es. "ILA-107". */
+  scheda: string;
+  /** riferimento Lane/CMRDM, se ricavabile dalla bibliografia. */
+  laneRef?: string;
+}
+
 export interface Monumento {
   entryId?: string;
   id: number;
@@ -158,6 +179,10 @@ export interface Monumento {
   // @status di <revisionDesc> — vedi EditorialStatus sopra.
   editorialStatus?: EditorialStatus;
   imperatori?: string[];
+  // Attestazioni del lessico cultuale marcate nell'edizione (<w ana> / <rs
+  // type="cultTerm|cultFormula">). Derivate dal markup a parsing time, come
+  // epiteti/divinita — nessuna chiamata di rete, entra nello snapshot statico.
+  cultAttestations?: CultAttestation[];
   _corpusFile?: string;
   _fileHash?: string;
 }

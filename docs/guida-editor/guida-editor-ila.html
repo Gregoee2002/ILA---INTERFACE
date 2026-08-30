@@ -303,7 +303,7 @@ ul.tight li { margin-bottom: 1.3mm; font-size: 9.6pt; }
 </div>
 
 
-<div class="toc"><h2>Indice</h2><div class="part">Parte I — La sezione Edizione</div><ol><li><b>1.</b><span>Cos&#x27;è e dove si trova l&#x27;editor</span></li><li><b>2.</b><span>Meccanica generale</span></li><li class="sub">Selezionare il testo greco · Il menu di markup: tre modalità · Modificare o rimuovere un tag già presente · Gestione delle righe (lb) · Scheda XML e diagnosi epiteti sul corpus</li><li><b>3.</b><span>Lacune e integrazioni</span></li><li><b>4.</b><span>Lettere e correzioni</span></li><li><b>5.</b><span>Nomi e luoghi</span></li><li><b>6.</b><span>Numeri e date</span></li><li><b>7.</b><span>Spazi e altro</span></li><li><b>8.</b><span>Tabella riassuntiva — quale funzione per quale caso</span></li><li><b>9.</b><span>Regole di validazione (segnalate in tempo reale)</span></li><li><b>10.</b><span>Convenzioni trasversali: key, nymRef, ref</span></li></ol><div class="part">Parte II — Le altre sezioni</div><ol><li><b>11.</b><span>Tipologie testuali</span></li><li><b>12.</b><span>Vocabolari EAGLE con etichetta italiana</span></li><li><b>13.</b><span>Toponimi e URI Pleiades</span></li><li><b>14.</b><span>Datazione</span></li><li><b>15.</b><span>Indici — Epiteti, Divinità, Onomastica, Imperatori, Persone</span></li><li><b>16.</b><span>Revisioni e stato editoriale</span></li><li><b>17.</b><span>Bibliografia — edizioni vs. confronti</span></li><li><b>18.</b><span>Apparato critico</span></li><li><b>19.</b><span>Traduzioni</span></li><li><b>20.</b><span>Commento — testo semplice vs. markup TEI</span></li><li><b>21.</b><span>Iconografia e funzione cultuale</span></li><li class="sub">Funzione cultuale · Figure · Tratti (a cascata sul tipo) · Nota libera</li></ol><div class="part">Parte III — Chi cura la scheda</div><ol><li><b>22.</b><span>Ruoli editoriali: chi ha codificato, curato, revisionato</span></li></ol></div>
+<div class="toc"><h2>Indice</h2><div class="part">Parte I — La sezione Edizione</div><ol><li><b>1.</b><span>Cos&#x27;è e dove si trova l&#x27;editor</span></li><li><b>2.</b><span>Meccanica generale</span></li><li class="sub">Selezionare il testo greco · Il menu di markup: tre modalità · Modificare o rimuovere un tag già presente · Gestione delle righe (lb) · Scheda XML e diagnosi epiteti sul corpus</li><li><b>3.</b><span>Lacune e integrazioni</span></li><li><b>4.</b><span>Lettere e correzioni</span></li><li><b>5.</b><span>Nomi e luoghi</span></li><li><b>6.</b><span>Numeri e date</span></li><li><b>7.</b><span>Spazi e altro</span></li><li><b>8.</b><span>Lessico cultuale</span></li><li class="sub">La regola unica: chi è il soggetto dell&#x27;azione? · Le azioni</li><li><b>9.</b><span>Tabella riassuntiva — quale funzione per quale caso</span></li><li><b>10.</b><span>Regole di validazione (segnalate in tempo reale)</span></li><li><b>11.</b><span>Convenzioni trasversali: key, nymRef, ref</span></li></ol><div class="part">Parte II — Le altre sezioni</div><ol><li><b>12.</b><span>Tipologie testuali</span></li><li><b>13.</b><span>Vocabolari EAGLE con etichetta italiana</span></li><li><b>14.</b><span>Toponimi e URI Pleiades</span></li><li><b>15.</b><span>Datazione</span></li><li><b>16.</b><span>Indici — Epiteti, Divinità, Onomastica, Imperatori, Persone</span></li><li><b>17.</b><span>Revisioni e stato editoriale</span></li><li><b>18.</b><span>Bibliografia — edizioni vs. confronti</span></li><li><b>19.</b><span>Apparato critico</span></li><li><b>20.</b><span>Traduzioni</span></li><li><b>21.</b><span>Commento — testo semplice vs. markup TEI</span></li><li><b>22.</b><span>Iconografia e funzione cultuale</span></li><li class="sub">Funzione cultuale · Figure · Tratti (a cascata sul tipo) · Nota libera</li></ol><div class="part">Parte III — Chi cura la scheda</div><ol><li><b>23.</b><span>Ruoli editoriali: chi ha codificato, curato, revisionato</span></li></ol></div>
 
 <section>
 <h2><span class="num">1</span>Cos'è e dove si trova l'editor</h2>
@@ -781,7 +781,75 @@ epiteto stanno sempre nello stesso <code>persName</code></b>, mai separati.</p>
 </div>
 </section>
 <section class="section-break">
-<h2><span class="num">8</span>Tabella riassuntiva — quale funzione per quale caso</h2>
+<h2><span class="num">8</span>Lessico cultuale</h2>
+<p class="lead">Marcatura <b>selettiva</b> del vocabolario che esprime una funzione
+cultuale: ogni parola marcata diventa un <code>&lt;w&gt;</code> viola nel testo, con
+il suo lemma di dizionario e la famiglia funzionale. Non è una tokenizzazione
+integrale del testo: si marcano <b>solo</b> i lemmi presenti nella tabella §5 di
+<span class="mono">docs/tassonomia-funzioni-cultuali.md</span>, quando compaiono.</p>
+
+<p class="when"><b>Quando NON si usa:</b> per il lessico generico (qualunque verbo o
+sostantivo non in tabella) e per gli <b>epiteti divini</b> — quelli restano in
+<code>persName</code> / <code>&lt;rs type="epithet"&gt;</code>, <b>mai</b> in
+<code>&lt;w&gt;</code>. Un <code>&lt;w&gt;</code> dentro <code>persName</code>,
+<code>name</code>, <code>rs</code>, <code>supplied</code> o <code>expan</code> è
+segnalato dal validatore ed è quasi sempre un errore.</p>
+
+<h3>8.1 — La regola unica: chi è il soggetto dell'azione?</h3>
+<p>La famiglia (<code>@ana</code>) è l'unica scelta editoriale. Si decide con una
+sola domanda — <b>il soggetto dell'azione è il dio o l'uomo?</b> — e non si
+sceglie mai la sotto-funzione fine: quella è una proprietà del lemma, applicata
+in automatico dall'estrattore (tabella §5).</p>
+<table class="field-table">
+  <tr><th>Famiglia (<code>@ana</code>)</th><th>Quando</th></tr>
+  <tr><td><span class="mono">#agency</span></td><td>soggetto = <b>il dio</b>: titolarità del luogo, potenza (<span class="greek">δύναμις</span>), castigo, ascolto, comando, scelta, disposizione favorevole</td></tr>
+  <tr><td><span class="mono">#atto-cultuale</span></td><td>soggetto = <b>l'uomo</b>, che compie o registra un atto rituale o giuridico-sacro: dedica, voto, confessione, riscatto, propiziazione, norma santuariale (<i>lex sacra</i>), onori decretati</td></tr>
+  <tr><td><span class="mono">#colpa</span></td><td>soggetto = <b>l'uomo</b>, e la parola nomina la sua <b>trasgressione</b> (peccato, spergiuro, empietà) — non il castigo, che è <span class="mono">#agency</span></td></tr>
+  <tr><td><span class="mono">#formula-fissa</span></td><td>parola che esiste <b>solo</b> dentro una formula di genere e fuori da essa non significa nulla di analizzabile: saluto funerario, acclamazione, formula di pioggia, imprecazione a tutela</td></tr>
+  <tr><td><span class="mono">#ruolo-istituzione</span></td><td>la parola nomina un <b>ruolo, un'istituzione o uno status personale</b>: sacerdozio/carica, associazione, comunità, status (<span class="greek">θρεπτός</span>, <span class="greek">παιδίσκη</span>, <span class="greek">φιλόθεος</span>)</td></tr>
+</table>
+<p>Il flag <span class="mono">#formula</span> (parola in locuzione fissa) si
+<b>aggiunge</b> alla famiglia, non la sostituisce:
+<code>ana="#agency #formula"</code>.</p>
+
+<h3>8.2 — Le azioni</h3>
+
+<div class="action">
+  <div class="action-head"><span class="name">Funzione cultuale (parola)</span><span class="glyph">ἀνέθηκεν</span></div>
+  <div class="action-body">
+    <p class="when"><b>Quando:</b> una singola parola del vocabolario controllato. Seleziona la sola parola (anche se spezzata da un <code>&lt;lb/&gt;</code>) e applica.</p>
+    <table class="field-table">
+      <tr><th>Parametro</th><th>Note</th></tr>
+      <tr><td>Famiglia (@ana) <span class="req">*</span></td><td>una delle 5 (§8.1); precompilata quando la forma selezionata è riconducibile a un lemma noto</td></tr>
+      <tr><td>Lemma (@lemma) <span class="req">*</span></td><td>autocompletamento sui 54 lemmi controllati; se manca, va segnalato — non si inventa. Il lemma noto porta con sé <code>@lemmaRef</code> (Logeion) in automatico</td></tr>
+      <tr><td>In locuzione fissa?</td><td>"sì" aggiunge <span class="mono">#formula</span> oltre alla famiglia</td></tr>
+    </table>
+    <pre>&lt;w lemma="<span class="greek">ἀνατίθημι</span>" ana="#atto-cultuale" lemmaRef="https://logeion.uchicago.edu/<span class="greek">ἀνατίθημι</span>"&gt;<span class="greek">ἀνέθηκεν</span>&lt;/w&gt;</pre>
+    <p>Lettura incerta o forma dentro <code>[ ]</code>: aggiungi <code>@cert="low"</code> sul <code>&lt;w&gt;</code> (dal popover dell'elemento).</p>
+  </div>
+</div>
+
+<div class="action">
+  <div class="action-head"><span class="name">Funzione cultuale (formula)</span><span class="glyph">ὗε κύε</span></div>
+  <div class="action-body">
+    <p class="when"><b>Quando:</b> un sintagma o una formula (più parole). Avvolge la selezione in <code>&lt;rs type="cultFormula"&gt;</code>; le parole interne si marcano poi una a una con "Funzione cultuale (parola)".</p>
+    <table class="field-table">
+      <tr><th>Parametro</th><th>Note</th></tr>
+      <tr><td>Key (handle normalizzato) <span class="req">*</span></td><td>es. <span class="mono">hye-kye</span>, <span class="mono">stelographein-dynameis</span></td></tr>
+      <tr><td>Famiglia della testa (@ana) <span class="req">*</span></td><td>la famiglia della testa del sintagma; <span class="mono">#formula</span> è sempre incluso</td></tr>
+    </table>
+    <pre>&lt;rs type="cultFormula" key="hye-kye" ana="#formula-fissa #formula"&gt;<span class="greek">ὗε κύε ὑπέρχυε</span>&lt;/rs&gt;</pre>
+  </div>
+</div>
+
+<div class="callout warn">Un <code>&lt;w&gt;</code> di funzione cultuale annidato dentro
+<code>persName</code>, <code>supplied</code> o un altro tag semantico è quasi
+sempre un errore: gli epiteti non si marcano con <code>&lt;w&gt;</code>, e una
+parola già dentro <code>&lt;supplied&gt;</code> di norma si salta finché non
+serve davvero taggarla a mano.</div>
+</section>
+<section class="section-break">
+<h2><span class="num">9</span>Tabella riassuntiva — quale funzione per quale caso</h2>
 <p class="lead">Consultazione rapida: individua il fenomeno epigrafico nella colonna
 sinistra e trova subito l'azione da usare.</p>
 
@@ -818,10 +886,12 @@ sinistra e trova subito l'azione da usare.</p>
 <tr><td>Nome di mese</td><td>Nome di mese</td><td class="glyph-cell">Πανήμου</td></tr>
 <tr><td>Età negli epitaffi</td><td>Età alla morte</td><td class="glyph-cell">ἐτῶν λʹ</td></tr>
 <tr><td>Spazio lasciato vuoto dal lapicida</td><td>Vacat</td><td class="glyph-cell">vac.</td></tr>
+<tr><td>Parola del vocabolario cultuale controllato</td><td>Funzione cultuale (parola)</td><td class="glyph-cell">ἀνέθηκεν</td></tr>
+<tr><td>Sintagma/formula cultuale</td><td>Funzione cultuale (formula)</td><td class="glyph-cell">ὗε κύε</td></tr>
 </table>
 </section>
 <section class="section-break">
-<h2><span class="num">9</span>Regole di validazione (segnalate in tempo reale)</h2>
+<h2><span class="num">10</span>Regole di validazione (segnalate in tempo reale)</h2>
 <p class="lead">Mentre si lavora, l'editor controlla il markup e mostra sotto l'edizione un
 elenco di segnalazioni. Gli <b>errori</b> indicano markup non valido secondo le
 regole del corpus; i <b>warning</b> segnalano pattern sospetti da verificare
@@ -844,9 +914,14 @@ di chiudere una scheda.</p>
 <div class="rule"><span class="sev warning">Warning</span><span><code>rs type="office"</code> senza <code>key</code>: se la carica non è nel vocabolario, usare <code>type="official"</code>; se lo è, indicare il key traslitterato — segnalare nel report le cariche candidate all'aggiunta al vocabolario.</span></div>
 <div class="rule"><span class="sev error">Errore</span><span><code>&lt;gap&gt;</code> con <code>quantity="0"</code>: per lunghezza ignota si usa <code>extent="unknown"</code>, mai zero.</span></div>
 <div class="rule"><span class="sev error">Errore</span><span><code>&lt;gap&gt;</code> senza <code>quantity</code> né <code>extent="unknown"</code>: uno dei due è sempre obbligatorio.</span></div>
+<div class="rule"><span class="sev error">Errore</span><span><code>&lt;w&gt;</code> (o <code>&lt;rs type="cultTerm"/"cultFormula"&gt;</code>) senza <code>@ana</code>: manca la famiglia cult-functions.</span></div>
+<div class="rule"><span class="sev error">Errore</span><span><code>@ana</code> con un valore non ammesso: solo <span class="mono">#agency</span> / <span class="mono">#atto-cultuale</span> / <span class="mono">#colpa</span> / <span class="mono">#formula-fissa</span> / <span class="mono">#ruolo-istituzione</span> (più <span class="mono">#formula</span>).</span></div>
+<div class="rule"><span class="sev warning">Warning</span><span><code>&lt;w&gt;</code> senza <code>@lemma</code>, oppure con un <code>@lemma</code> fuori dal vocabolario controllato: da verificare o da aggiungere alla tabella.</span></div>
+<div class="rule"><span class="sev warning">Warning</span><span><code>@lemma</code> e <code>@ana</code> incoerenti: il lemma è di norma di un'altra famiglia — confermare se la scelta è voluta.</span></div>
+<div class="rule"><span class="sev warning">Warning</span><span><code>&lt;w&gt;</code> di funzione cultuale annidato dentro <code>persName</code> / <code>name</code> / <code>rs</code> / <code>supplied</code> / <code>expan</code>: quasi sempre un errore.</span></div>
 </section>
 <section class="section-break">
-<h2><span class="num">10</span>Convenzioni trasversali: key, nymRef, ref</h2>
+<h2><span class="num">11</span>Convenzioni trasversali: key, nymRef, ref</h2>
 <p class="lead">Tre attributi ricorrono in quasi tutte le azioni del gruppo "Nomi e luoghi".
 Il loro significato non cambia da un'azione all'altra — vale la pena fissarlo una volta per tutte.</p>
 
@@ -872,7 +947,7 @@ ordine "canonico", si limita a scomporre correttamente quello che c'è scritto.
 </div>
 </section>
 <section class="section-break">
-<h2><span class="num">11</span>Tipologie testuali<span class="grp">Sezione Titolo</span></h2>
+<h2><span class="num">12</span>Tipologie testuali<span class="grp">Sezione Titolo</span></h2>
 <div class="field">
   <div class="field-head"><span class="name">Tipologie testuali (textTypes)</span><span class="where">chip list</span></div>
   <div class="field-body">
@@ -885,7 +960,7 @@ ordine "canonico", si limita a scomporre correttamente quello che c'è scritto.
 </div>
 </section>
 <section class="section-break">
-<h2><span class="num">12</span>Vocabolari EAGLE con etichetta italiana<span class="grp">Supporto · Impaginazione</span></h2>
+<h2><span class="num">13</span>Vocabolari EAGLE con etichetta italiana<span class="grp">Supporto · Impaginazione</span></h2>
 <p class="lead">Tre campi — <b>Materiale</b>, <b>Tipo oggetto</b> (sezione Supporto) e <b>Tecnica di
 scrittura</b> (sezione Impaginazione) — condividono lo stesso meccanismo, sempre in coppia
 con un campo <b>Ref</b> per l'URI del vocabolario EAGLE.</p>
@@ -911,7 +986,7 @@ materialRef = "https://www.eagle-network.eu/voc/material/lod/48"  ← autocompil
 </div>
 </section>
 <section class="section-break">
-<h2><span class="num">13</span>Toponimi e URI Pleiades<span class="grp">Luogo di origine</span></h2>
+<h2><span class="num">14</span>Toponimi e URI Pleiades<span class="grp">Luogo di origine</span></h2>
 <div class="field">
   <div class="field-head"><span class="name">URI Pleiades (antico)</span></div>
   <div class="field-body">
@@ -929,7 +1004,7 @@ materialRef = "https://www.eagle-network.eu/voc/material/lod/48"  ← autocompil
 </div>
 </section>
 <section class="section-break">
-<h2><span class="num">14</span>Datazione<span class="grp">Storia</span></h2>
+<h2><span class="num">15</span>Datazione<span class="grp">Storia</span></h2>
 <div class="field">
   <div class="field-head"><span class="name">Datazione (origDate)</span></div>
   <div class="field-body">
@@ -947,7 +1022,7 @@ materialRef = "https://www.eagle-network.eu/voc/material/lod/48"  ← autocompil
 </div>
 </section>
 <section class="section-break">
-<h2><span class="num">15</span>Indici — Epiteti, Divinità, Onomastica, Imperatori, Persone<span class="grp">Apparato scientifico</span></h2>
+<h2><span class="num">16</span>Indici — Epiteti, Divinità, Onomastica, Imperatori, Persone<span class="grp">Apparato scientifico</span></h2>
 <div class="field">
   <div class="field-head"><span class="name">Indici derivati (profileDesc)</span></div>
   <div class="field-body">
@@ -960,7 +1035,7 @@ materialRef = "https://www.eagle-network.eu/voc/material/lod/48"  ← autocompil
 </div>
 </section>
 <section class="section-break">
-<h2><span class="num">16</span>Revisioni e stato editoriale<span class="grp">Apparato scientifico</span></h2>
+<h2><span class="num">17</span>Revisioni e stato editoriale<span class="grp">Apparato scientifico</span></h2>
 <div class="field">
   <div class="field-head"><span class="name">Stato editoriale (TEI revisionDesc/@status)</span></div>
   <div class="field-body">
@@ -982,7 +1057,7 @@ materialRef = "https://www.eagle-network.eu/voc/material/lod/48"  ← autocompil
 </div>
 </section>
 <section class="section-break">
-<h2><span class="num">17</span>Bibliografia — edizioni vs. confronti<span class="grp">Apparato scientifico</span></h2>
+<h2><span class="num">18</span>Bibliografia — edizioni vs. confronti<span class="grp">Apparato scientifico</span></h2>
 <div class="field">
   <div class="field-head"><span class="name">Convenzione "Cf." di Lane</span></div>
   <div class="field-body">
@@ -998,7 +1073,7 @@ materialRef = "https://www.eagle-network.eu/voc/material/lod/48"  ← autocompil
 </div>
 </section>
 <section class="section-break">
-<h2><span class="num">18</span>Apparato critico<span class="grp">Testo</span></h2>
+<h2><span class="num">19</span>Apparato critico<span class="grp">Testo</span></h2>
 <div class="field">
   <div class="field-head"><span class="name">Doppia modalità: legacy vs. strutturato</span></div>
   <div class="field-body">
@@ -1008,7 +1083,7 @@ materialRef = "https://www.eagle-network.eu/voc/material/lod/48"  ← autocompil
 </div>
 </section>
 <section class="section-break">
-<h2><span class="num">19</span>Traduzioni<span class="grp">Testo</span></h2>
+<h2><span class="num">20</span>Traduzioni<span class="grp">Testo</span></h2>
 <div class="field">
   <div class="field-head"><span class="name">Traduzioni multiple</span></div>
   <div class="field-body">
@@ -1017,7 +1092,7 @@ materialRef = "https://www.eagle-network.eu/voc/material/lod/48"  ← autocompil
 </div>
 </section>
 <section class="section-break">
-<h2><span class="num">20</span>Commento — testo semplice vs. markup TEI<span class="grp">Testo</span></h2>
+<h2><span class="num">21</span>Commento — testo semplice vs. markup TEI<span class="grp">Testo</span></h2>
 <div class="field">
   <div class="field-head"><span class="name">Commento (note_interne)</span></div>
   <div class="field-body">
@@ -1028,7 +1103,7 @@ materialRef = "https://www.eagle-network.eu/voc/material/lod/48"  ← autocompil
 </div>
 </section>
 <section class="section-break">
-<h2><span class="num">21</span>Iconografia e funzione cultuale<span class="grp">Apparato scientifico</span></h2>
+<h2><span class="num">22</span>Iconografia e funzione cultuale<span class="grp">Apparato scientifico</span></h2>
 <p class="lead">La sezione più strutturata dopo l'Edizione: quattro livelli via via più specifici
 — funzione del monumento, figure rappresentate, tratti di ogni figura, nota libera per
 il residuo non catalogabile. Vocabolario sempre <b>chiuso</b> tranne dove indicato.</p>
@@ -1115,7 +1190,7 @@ il residuo non catalogabile. Vocabolario sempre <b>chiuso</b> tranne dove indica
 </div>
 </section>
 <section class="section-break">
-<h2><span class="num">22</span>Ruoli editoriali: chi ha codificato, curato, revisionato<span class="grp">Apparato scientifico</span></h2>
+<h2><span class="num">23</span>Ruoli editoriali: chi ha codificato, curato, revisionato<span class="grp">Apparato scientifico</span></h2>
 <p class="lead">Fino a questa revisione della guida non esisteva un modo uniforme per
 registrare chi ha fatto cosa su una scheda: l'unico spazio pensato per
 questo nell'XML del corpus è <b>Revisioni</b> (sezione "Apparato scientifico"),

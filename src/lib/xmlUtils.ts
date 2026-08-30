@@ -1,5 +1,6 @@
-import { Monumento, Traduzione, Bibliografia, OrigDate, IconographyData } from "../types";
+import { Monumento, Traduzione, Bibliografia, OrigDate, IconographyData, CultAttestation } from "../types";
 import { canonicalDivinityName } from "./divinityAliases";
+import { CULT_FAMILY_IDS, lookupCultLemma } from "./cultLexicon";
 
 // Unica fonte per l'etichetta identificativa del record — sostituisce le
 // vecchie stringhe "corpus numero" (CMRDM I 29) costruite ad hoc in più punti.
@@ -46,6 +47,97 @@ export function splitDivineKey(key: string, nameChildCount: number): { divinity:
 
 function isPlaceholder(s: string): boolean {
   return !s || s.trim().toUpperCase() === 'DA_COMPILARE';
+}
+
+// ── Lessico cultuale (tassonomia cult-functions) ───────────────────────────
+// Estrae da <div type="edition"> le parole/formule marcate per la funzione
+// cultuale: <w ana="#..."> (parola singola) e <rs type="cultTerm"|"cultFormula">
+// (sintagma/formula). Famiglia = primo token di @ana fra i 5 controllati;
+// sotto-funzione risolta dal @lemma via CULT_LEXICON. Stesso stile regex degli
+// altri estrattori di questo file. Non tocca <rs type="epithet"> (epiteti).
+export function extractCultAttestations(
+  teiString: string,
+  scheda: string,
+  laneRef?: string,
+): CultAttestation[] {
+  const out: CultAttestation[] = [];
+  const edMatch = teiString.match(/<div\s+type="edition"[^>]*>([\s\S]*?)(?=<div\s+type="(?:apparatus|translation|commentary|bibliography)"|<\/body>)/);
+  if (!edMatch) return out;
+  const edition = edMatch[1];
+
+  const lineAt = (index: number): string | undefined => {
+    const before = edition.slice(0, index);
+    let last: string | undefined;
+    const re = /<lb\b[^>]*\bn="([^"]*)"[^>]*\/>/g;
+    let m: RegExpExecArray | null;
+    while ((m = re.exec(before)) !== null) last = m[1];
+    return last;
+  };
+
+  // testo della forma attestata: via i "-" di a-capo, via i tag interni,
+  // niente parentesi di <supplied>, whitespace normalizzato.
+  const formText = (inner: string): string =>
+    unescapeXml(
+      inner
+        .replace(/-\s*<lb\b[^>]*\/>/g, '')   // trattino di a-capo (raro; break!="no")
+        .replace(/<lb\b[^>]*\/>/g, '')
+        .replace(/<[^>]+>/g, '')
+    ).replace(/\s+/g, ' ').trim();
+
+  const anaFamily = (ana: string): { family: string; formula: boolean } => {
+    const toks = (ana || '').split(/\s+/).map(x => x.replace(/^#/, '')).filter(Boolean);
+    const family = toks.find(x => (CULT_FAMILY_IDS as readonly string[]).includes(x)) || '';
+    return { family, formula: toks.includes('formula') };
+  };
+
+  // 1) <w ...>...</w>
+  const wRe = /<w\b([^>]*)>([\s\S]*?)<\/w>/g;
+  let wm: RegExpExecArray | null;
+  while ((wm = wRe.exec(edition)) !== null) {
+    const attrs = wm[1];
+    const ana = (attrs.match(/\bana="([^"]*)"/) || [])[1] || '';
+    if (!ana) continue;
+    const lemma = unescapeXml((attrs.match(/\blemma="([^"]*)"/) || [])[1] || '');
+    const cert = (attrs.match(/\bcert="([^"]*)"/) || [])[1];
+    const { family, formula } = anaFamily(ana);
+    const known = lookupCultLemma(lemma);
+    out.push({
+      lemma,
+      family: family || (known?.family ?? ''),
+      subFunction: known?.subFunction ?? '',
+      form: formText(wm[2]),
+      line: lineAt(wm.index),
+      formula,
+      ...(cert === 'low' ? { cert: 'low' as const } : {}),
+      scheda,
+      ...(laneRef ? { laneRef } : {}),
+    });
+  }
+
+  // 2) <rs type="cultTerm"|"cultFormula" ...>...</rs>
+  const rsRe = /<rs\b([^>]*\btype="(cultTerm|cultFormula)"[^>]*)>([\s\S]*?)<\/rs>/g;
+  let rm: RegExpExecArray | null;
+  while ((rm = rsRe.exec(edition)) !== null) {
+    const attrs = rm[1];
+    const ana = (attrs.match(/\bana="([^"]*)"/) || [])[1] || '';
+    const key = unescapeXml((attrs.match(/\bkey="([^"]*)"/) || [])[1] || '');
+    const cert = (attrs.match(/\bcert="([^"]*)"/) || [])[1];
+    const { family, formula } = anaFamily(ana);
+    const known = lookupCultLemma(key);
+    out.push({
+      lemma: key,
+      family: family || (known?.family ?? ''),
+      subFunction: known?.subFunction ?? '',
+      form: formText(rm[3]),
+      line: lineAt(rm.index),
+      formula: formula || rm[2] === 'cultFormula',
+      ...(cert === 'low' ? { cert: 'low' as const } : {}),
+      scheda,
+      ...(laneRef ? { laneRef } : {}),
+    });
+  }
+
+  return out;
 }
 
 // Vero anche quando il segnaposto è annegato in una frase (es. "Height of
@@ -1143,6 +1235,15 @@ function parseTeiElement(teiString: string): Monumento {
     }
   }
 
+  // 25. Lessico cultuale (tassonomia cult-functions) — dal markup dell'edizione.
+  const cultScheda = `ILA-${String(id).padStart(3, '0')}`;
+  // Lane 1971 = CMRDM vol. I: la bibliografia lo cita come "…Leiden 1971, n. NN".
+  // Ricostruisco la forma normalizzata "Lane, CMRDM I NN" usata nello spoglio.
+  const laneNumMatch = teiString.match(/Leiden\s+1971,?\s*n[or]?\.?\s*(\d+)/i)
+    || teiString.match(/CMRDM(?:\)?\.?\s*I\b)?[^<]{0,60}?\bn[or]?\.?\s*(\d+)/i);
+  const cultLaneRef = laneNumMatch ? `Lane, CMRDM I ${laneNumMatch[1]}` : undefined;
+  const cultAttestations = extractCultAttestations(teiString, cultScheda, cultLaneRef);
+
   return {
     id,
     entryId,
@@ -1189,6 +1290,7 @@ function parseTeiElement(teiString: string): Monumento {
     onomastica,
     persone,
     imperatori,
+    cultAttestations,
     revisions,
     editorialStatus,
     apparatus,

@@ -569,7 +569,7 @@ const ElementChrome: React.FC<{
     case 'name':
       return <span onClick={click} className={cn('px-0', base)}>{kids}</span>;
     case 'w': {
-      // lessico di funzione cultuale (tassonomia cult-functions) — reso in viola.
+      // lessico di funzione cultuale (tassonomia cult-functions) — reso in malva/lilla.
       // In ILA <w> è usato SOLO per questo layer, mai per tokenizzazione integrale.
       const fam = (a.ana || '').replace(/#/g, ' ').trim();
       const title = `${a.lemma ? `Lemma: ${a.lemma}` : 'Parola marcata'}${fam ? ` — ${fam}` : ''}`;
@@ -599,7 +599,7 @@ const ElementChrome: React.FC<{
 /* Menu a tendina glass                                              */
 /* ================================================================ */
 
-const GROUP_ORDER = ['Lacune e integrazioni', 'Lettere e correzioni', 'Nomi e luoghi', 'Numeri e date', 'Spazi e altro'];
+const GROUP_ORDER = ['Lacune e integrazioni', 'Lettere e correzioni', 'Nomi e luoghi', 'Numeri e date', 'Spazi e altro', 'Lessico cultuale'];
 
 const MarkupMenu: React.FC<{
   menu: MenuState;

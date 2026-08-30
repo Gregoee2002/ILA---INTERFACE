@@ -120,7 +120,7 @@ function validateMonumentoShape(m: any): string | null {
     strCap("testo", 50000), strCap("note_interne", 10000), strCap("note_interne_rawXml", 10000),
     arrCap("epiteti", 50), arrCap("divinita", 50), arrCap("onomastica", 50), arrCap("textTypes", 50),
     arrCap("imperatori", 50), arrCap("persone", 100), arrCap("traduzioni", 50), arrCap("bibliografia", 50),
-    arrCap("revisions", 100), iconCap(),
+    arrCap("revisions", 100), arrCap("cultAttestations", 500), iconCap(),
   ];
   return checks.find(c => c !== null) ?? null;
 }

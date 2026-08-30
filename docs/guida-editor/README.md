@@ -18,7 +18,7 @@ docs/guida-editor/
 ├── build_pdf.py                 ← assembla tutto e produce l'HTML/PDF finali
 ├── parts/
 │   ├── manifest.json            ← elenco ordinato delle "parti" e le loro etichette
-│   ├── part1-edizione.html      ← Parte I  — sezioni 1-10 (markup Leiden/EpiDoc)
+│   ├── part1-edizione.html      ← Parte I  — sezioni 1-12 (markup Leiden/EpiDoc)
 │   ├── part2-altre-sezioni.html ← Parte II — sezioni 11-21 (le altre 17 sezioni dell'editor)
 │   └── part3-ruoli-editoriali.html ← Parte III — sezione 22 (chi cura la scheda)
 ├── guida-editor-ila.html        ← output generato (non editare a mano, si riscrive col build)
@@ -81,7 +81,7 @@ di primo livello, uno per voce dell'indice. `build_pdf.py`:
 Note sul formato:
 
 - **Ometti `<span class="grp">`** se la sezione appartiene tutta alla stessa
-  sotto-area già chiara dal titolo (come le sezioni 1-10 della Parte I). Usalo
+  sotto-area già chiara dal titolo (come le sezioni 1-12 della Parte I). Usalo
   quando la sezione riguarda un campo specifico dell'editor a sezioni (Parte
   II: `<span class="grp">Nome sezione editor</span>`), per aiutare a
   localizzarlo nel software.

@@ -22,6 +22,13 @@
 /* ================================================================ */
 
 import { OFFICES } from "./eagleVocab";
+import {
+  CULT_FAMILY_IDS,
+  CULT_LEMMATA,
+  lookupCultLemma,
+  lemmaRefFor,
+  matchCultLemma,
+} from "./cultLexicon";
 
 const AB_INDENT = "                ";      // 16 spazi (ab dentro div a 12)
 const LB_INDENT = "                    ";  // 20 spazi
@@ -404,7 +411,7 @@ export interface MarkupAction {
   label: string;
   /** notazione Leiden mostrata come glifo nel menu */
   glyph: string;
-  group: "Lacune e integrazioni" | "Lettere e correzioni" | "Nomi e luoghi" | "Numeri e date" | "Spazi e altro";
+  group: "Lacune e integrazioni" | "Lettere e correzioni" | "Nomi e luoghi" | "Numeri e date" | "Spazi e altro" | "Lessico cultuale";
   /** wrap = avvolge la selezione; replace = la sostituisce; insert = inserisce (anche senza selezione) */
   mode: "wrap" | "replace" | "insert";
   params?: ActionParam[];
@@ -916,7 +923,60 @@ export const MARKUP_ACTIONS: MarkupAction[] = [
       ...(p.quantity ? { quantity: p.quantity } : { extent: "unknown" }),
     }, [], true),
   },
+  /* ── Lessico cultuale (tassonomia cult-functions) ──
+   * Marcatura selettiva del vocabolario in docs/tassonomia-funzioni-cultuali.md §5.
+   * Una sola domanda per l'editor: «chi è il soggetto dell'azione, il dio o l'uomo?».
+   * La sotto-funzione fine NON si sceglie: si ricava dal @lemma (cultLexicon.ts). */
+  {
+    id: "cult_word", label: "Funzione cultuale (parola)", glyph: "ἀνέθηκεν",
+    group: "Lessico cultuale", mode: "wrap",
+    hint: "Una parola del lessico cultuale controllato → <w lemma ana>. Solo i lemmi in tabella §5.",
+    params: [
+      {
+        id: "family", label: "Famiglia (@ana)", type: "select",
+        options: [...CULT_FAMILY_IDS], required: true,
+        hint: "chi è il soggetto: dio → agency; uomo che agisce → atto-cultuale; uomo che trasgredisce → colpa; ruolo/istituzione → ruolo-istituzione; formula di genere senza testa → formula-fissa",
+        prefill: s => matchCultLemma(s)?.family || "",
+      },
+      {
+        id: "lemma", label: "Lemma (@lemma)", type: "datalist",
+        options: [...CULT_LEMMATA], required: true,
+        placeholder: "forma di citazione greca (dizionario)",
+        hint: "54 lemmi controllati; se manca, segnalarlo — non inventare",
+        prefill: s => matchCultLemma(s)?.lemma || "",
+      },
+      { id: "formula", label: "In locuzione fissa?", type: "select", options: ["no", "sì"], hint: "aggiunge #formula oltre alla famiglia" },
+    ],
+    build: (s, p) => el("w", cultWordAttrs(p), [txt(s)]),
+    compose: (slice, p) => el("w", cultWordAttrs(p), slice),
+  },
+  {
+    id: "cult_formula", label: "Funzione cultuale (formula)", glyph: "ὗε κύε",
+    group: "Lessico cultuale", mode: "wrap",
+    hint: "Un sintagma/formula → <rs type=\"cultFormula\">. Le parole interne si marcano poi con «Funzione cultuale (parola)».",
+    params: [
+      { id: "key", label: "Key (handle normalizzato)", type: "text", required: true, placeholder: "hye-kye, stelographein-dynameis…", prefill: s => s.trim().toLowerCase().replace(/[^\p{L}\s-]/gu, "").replace(/\s+/g, "-").slice(0, 40) },
+      {
+        id: "family", label: "Famiglia della testa (@ana)", type: "select",
+        options: [...CULT_FAMILY_IDS], required: true,
+        hint: "la famiglia della testa del sintagma; #formula viene aggiunto sempre",
+      },
+    ],
+    build: (s, p) => el("rs", { type: "cultFormula", key: p.key, ana: `#${p.family} #formula` }, [txt(s)]),
+    compose: (slice, p) => el("rs", { type: "cultFormula", key: p.key, ana: `#${p.family} #formula` }, slice),
+  },
 ];
+
+/** Attributi di un <w> di funzione cultuale. Se il lemma è noto e la famiglia
+ *  non è stata toccata, la famiglia viene dalla tabella; l'editor può sempre
+ *  correggerla scegliendola nel menu. @lemmaRef aggiunto solo se ricavabile. */
+function cultWordAttrs(p: Record<string, string>): Record<string, string> {
+  const known = lookupCultLemma(p.lemma);
+  const family = p.family || known?.family || "atto-cultuale";
+  const ana = p.formula === "sì" ? `#${family} #formula` : `#${family}`;
+  const ref = lemmaRefFor(p.lemma);
+  return { lemma: p.lemma, ana, ...(ref ? { lemmaRef: ref } : {}) };
+}
 
 /* ================================================================ */
 /* Validazione                                                       */
@@ -1032,6 +1092,45 @@ export function validateEditionTokens(tokens: MarkupToken[]): ValidationIssue[] 
           issues.push({ severity: "error", line: lineN || 1, message: 'gap senza quantity né extent="unknown".' });
         }
       }
+
+      // ── lessico cultuale (tassonomia cult-functions) ──
+      if (t.name === "w") {
+        const anaFams = (a.ana || "").split(/\s+/).map(x => x.replace(/^#/, "")).filter(Boolean);
+        const famToken = anaFams.find(x => (CULT_FAMILY_IDS as readonly string[]).includes(x));
+        if (!a.lemma) {
+          issues.push({ severity: "warning", line: lineN || 1, message: "<w> senza @lemma: indicare la forma di citazione controllata (tabella §5)." });
+        }
+        if (!a.ana) {
+          issues.push({ severity: "error", line: lineN || 1, message: "<w> senza @ana: manca la famiglia cult-functions (#agency / #atto-cultuale / #colpa / #formula-fissa / #ruolo-istituzione, + #formula se in locuzione)." });
+        } else {
+          const bad = anaFams.filter(x =>
+            !(CULT_FAMILY_IDS as readonly string[]).includes(x) &&
+            x !== "formula" &&
+            !/^(v|n|adj|ptcp|adv)-/i.test(x) // tratto morfologico compatto facoltativo (doc §4)
+          );
+          if (bad.length > 0) {
+            issues.push({ severity: "error", line: lineN || 1, message: `Valore @ana non valido (${bad.map(x => "#" + x).join(", ")}): usa #agency / #atto-cultuale / #colpa / #formula-fissa / #ruolo-istituzione (+ #formula).` });
+          }
+        }
+        if (a.lemma) {
+          const known = lookupCultLemma(a.lemma);
+          if (!known) {
+            issues.push({ severity: "warning", line: lineN || 1, message: `Lemma «${a.lemma}» fuori dal vocabolario controllato: verificare, o aggiungerlo alla tabella in cultLexicon.ts.` });
+          } else if (famToken && known.family !== famToken) {
+            issues.push({ severity: "warning", line: lineN || 1, message: `Il lemma «${a.lemma}» di solito è #${known.family}, qui è marcato #${famToken}: confermare se è voluto.` });
+          }
+        }
+        const semAncestor = ["persName", "name", "rs", "supplied", "expan"].find(x => ancestors.includes(x));
+        if (semAncestor) {
+          issues.push({ severity: "warning", line: lineN || 1, message: `<w> di funzione cultuale dentro <${semAncestor}>: quasi sempre un errore (gli epiteti restano in persName / rs type="epithet", non in <w>). Valutare se serve davvero.` });
+        }
+      }
+      if (t.name === "rs" && (a.type === "cultTerm" || a.type === "cultFormula")) {
+        if (!a.ana) {
+          issues.push({ severity: "error", line: lineN || 1, message: `<rs type="${a.type}"> senza @ana: manca la famiglia cult-functions.` });
+        }
+      }
+
       walk(t.children, [...ancestors, t.name]);
     });
   };
