@@ -1,0 +1,251 @@
+<section class="section-break">
+<h2><span class="num">11</span>Tipologie testuali<span class="grp">Sezione Titolo</span></h2>
+<div class="field">
+  <div class="field-head"><span class="name">Tipologie testuali (textTypes)</span><span class="where">chip list</span></div>
+  <div class="field-body">
+    <p class="when"><b>Cos'è:</b> l'insieme dei generi testuali dell'iscrizione (dedica, legge sacra, confessione, iscrizione onoraria…), inseriti come "chip" — una parola/frase per volta, confermata con Invio o virgola.</p>
+    <p class="when"><b>Quando usare il vocabolario e quando no:</b> digitando si apre un menu a tendina che pesca dal vocabolario controllato EAGLE (<span class="mono">INSCRIPTION_TYPES</span>), mostrato in italiano ma salvato nella forma inglese canonica agganciata all'URI EAGLE. Se il tipo testuale non è in elenco, resta comunque possibile scrivere un valore libero: il campo non blocca l'inserimento, ma va preferito sempre un termine del vocabolario quando esiste — la ricerca e i filtri del catalogo si basano su quei valori canonici.</p>
+    <div class="callout">
+      <b>Caso locale non-EAGLE:</b> <span class="mono">confession</span> ("iscrizione di confessione") è un'estensione dichiarata del vocabolario ILA, senza URI EAGLE ufficiale — è comunque il termine da usare per le stele di confessione, centrali nel corpus di Men: non va sostituito con un sinonimo libero.
+    </div>
+  </div>
+</div>
+</section>
+
+<section class="section-break">
+<h2><span class="num">12</span>Vocabolari EAGLE con etichetta italiana<span class="grp">Supporto · Impaginazione</span></h2>
+<p class="lead">Tre campi — <b>Materiale</b>, <b>Tipo oggetto</b> (sezione Supporto) e <b>Tecnica di
+scrittura</b> (sezione Impaginazione) — condividono lo stesso meccanismo, sempre in coppia
+con un campo <b>Ref</b> per l'URI del vocabolario EAGLE.</p>
+
+<div class="field">
+  <div class="field-head"><span class="name">Meccanismo del combo tradotto</span></div>
+  <div class="field-body">
+    <ul class="tight">
+      <li>Il menu a tendina mostra l'etichetta in <b>italiano</b> (es. "marmo"), ma il valore digitato/salvato nel campo resta il termine <b>inglese canonico</b> agganciato all'URI EAGLE (es. <span class="mono">marble</span>) — è quello il dato che viaggia nell'XML.</li>
+      <li>Se scegli un termine noto e il campo <b>Ref</b> è ancora vuoto, l'URI EAGLE si <b>compila da solo</b>. Se il campo Ref contiene già qualcosa (inserito a mano), <b>non viene mai sovrascritto</b>: la scelta editoriale manuale ha sempre la precedenza.</li>
+      <li>Un'etichetta <span class="mono">EAGLE</span> compare a destra del campo quando il valore corrisponde esattamente a un termine del vocabolario — conferma visiva che il dato è agganciato, non testo libero.</li>
+      <li>Resta comunque possibile scrivere un valore fuori vocabolario per casi non catalogati: in quel caso il campo Ref va compilato a mano se l'URI è noto, altrimenti lasciato vuoto.</li>
+    </ul>
+    <table class="field-table">
+      <tr><th style="width:30%">Campo</th><th style="width:22%">Vocabolario</th><th>Placeholder tipico</th></tr>
+      <tr><td>Materiale</td><td class="mono">MATERIALS</td><td>marmo, calcare…</td></tr>
+      <tr><td>Tipo oggetto</td><td class="mono">OBJECT_TYPES</td><td>stele, altare…</td></tr>
+      <tr><td>Tecnica di scrittura</td><td class="mono">EXECUTION_TECHNIQUES</td><td>inciso a scalpello…</td></tr>
+    </table>
+    <pre>materiale = "marble"          ← salvato (canonico)
+materialRef = "https://www.eagle-network.eu/voc/material/lod/48"  ← autocompilato se vuoto</pre>
+  </div>
+</div>
+</section>
+
+<section class="section-break">
+<h2><span class="num">13</span>Toponimi e URI Pleiades<span class="grp">Luogo di origine</span></h2>
+<div class="field">
+  <div class="field-head"><span class="name">URI Pleiades (antico)</span></div>
+  <div class="field-body">
+    <p class="when"><b>Quando compilarlo:</b> solo quando l'identificazione del sito antico con un luogo Pleiades è <b>certa</b>. Il campo è testo libero (non un vocabolario a tendina) apposta perché è una decisione editoriale, non un lookup meccanico.</p>
+    <div class="callout warn">
+      <b>Mai dedotto.</b> Stessa regola già vista per l'attributo <code>ref</code> dell'Etnico nell'Edizione: in caso di dubbio sull'identificazione del sito, il campo resta vuoto piuttosto che ospitare un URI plausibile ma non verificato.
+    </div>
+  </div>
+</div>
+<div class="field">
+  <div class="field-head"><span class="name">Toponimo antico / moderno</span></div>
+  <div class="field-body">
+    <p class="when"><b>Quando:</b> campi di testo libero con suggerimenti (<span class="mono">datalist</span>) raccolti dai valori già usati altrove nel corpus in memoria — non un vocabolario controllato, solo un aiuto per evitare varianti di battitura dello stesso toponimo tra schede diverse (es. "Kölekoy, Turkey" scritto sempre allo stesso modo).</p>
+  </div>
+</div>
+</section>
+
+<section class="section-break">
+<h2><span class="num">14</span>Datazione<span class="grp">Storia</span></h2>
+<div class="field">
+  <div class="field-head"><span class="name">Datazione (origDate)</span></div>
+  <div class="field-body">
+    <p class="when"><b>Quando aggiungere una voce:</b> solo se Lane (o la fonte editoriale) propone effettivamente una data o una forbice cronologica per il monumento.</p>
+    <div class="callout warn">
+      <b>Se Lane non data, il campo si omette — mai stimare.</b> Non si inserisce una datazione "di massima" dedotta da criteri paleografici generici o dal contesto se l'editore di riferimento non l'ha proposta esplicitamente: è lo stesso principio della lacuna di lunghezza ignota nell'Edizione, applicato alla cronologia.
+    </div>
+    <table class="field-table">
+      <tr><th style="width:26%">Campo</th><th>Uso</th></tr>
+      <tr><td>Testo della datazione</td><td>la formulazione editoriale così com'è (es. "II sec. d.C.", "età sillana")</td></tr>
+      <tr><td>Da (notBefore) / A (notAfter)</td><td>gli estremi cronologici assoluti corrispondenti, se determinabili</td></tr>
+    </table>
+    <p style="font-size:8.8pt;color:#7a6f5e">Si possono aggiungere più voci di datazione (es. una doppia datazione su formule diverse dello stesso testo): ognuna è indipendente e può essere rimossa singolarmente.</p>
+  </div>
+</div>
+</section>
+
+<section class="section-break">
+<h2><span class="num">15</span>Indici — Epiteti, Divinità, Onomastica, Imperatori, Persone<span class="grp">Apparato scientifico</span></h2>
+<div class="field">
+  <div class="field-head"><span class="name">Indici derivati (profileDesc)</span></div>
+  <div class="field-body">
+    <p class="when"><b>Come funzionano:</b> tutti e quattro gli indici (Epiteti, Divinità, Onomastica, Imperatori) sono <b>a sola lettura</b> nella sezione Indici: sono lo specchio esatto dei <code>&lt;persName&gt;</code> già codificati nella sezione Edizione, ricalcolati automaticamente a ogni modifica del testo.</p>
+    <div class="callout warn">
+      <b>Non si digita nulla qui.</b> Per aggiungere una voce a un indice si codifica il <code>persName</code> corrispondente nell'Edizione (vedi Parte I della guida, sezione 5 "Nomi e luoghi") — mai il contrario. Se una voce manca dall'indice, il problema è nell'Edizione, non in questa sezione.
+    </div>
+    <p class="when"><b>Persone attestate (listPerson):</b> l'unica parte semi-editabile dell'indice. Nome, key e lemma vengono anch'essi dal <code>persName type="attested"</code> nel testo; ma <b>etnico</b> e <b>nota</b> sono cura editoriale che non ha posto nel markup dell'edizione — vengono preservati tra un salvataggio e l'altro finché l'<code>xml:id</code> della persona resta referenziato nel testo, e la voce sparisce dall'indice solo se il <code>persName</code> corrispondente sparisce a sua volta dall'Edizione.</p>
+  </div>
+</div>
+</section>
+
+<section class="section-break">
+<h2><span class="num">16</span>Revisioni e stato editoriale<span class="grp">Apparato scientifico</span></h2>
+<div class="field">
+  <div class="field-head"><span class="name">Stato editoriale (TEI revisionDesc/@status)</span></div>
+  <div class="field-body">
+    <table class="field-table">
+      <tr><th style="width:34%">Valore</th><th>Significato</th></tr>
+      <tr><td class="mono">draft</td><td>Bozza</td></tr>
+      <tr><td class="mono">diplomatic-edition</td><td>Edizione diplomatica pubblicata</td></tr>
+      <tr><td class="mono">published</td><td>Pubblicata</td></tr>
+      <tr><td class="mono">under-revision</td><td>In revisione</td></tr>
+    </table>
+    <p style="font-size:8.8pt;color:#7a6f5e">Campo singolo (non una lista): rappresenta lo stato attuale della scheda, non lo storico — lo storico è la lista di revisioni sotto.</p>
+  </div>
+</div>
+<div class="field">
+  <div class="field-head"><span class="name">Voci di revisione</span></div>
+  <div class="field-body">
+    <p class="when"><b>Formato:</b> ogni riga registra una modifica sostanziale alla scheda: data, autore e una nota descrittiva della modifica. Si aggiungono, non si sovrascrivono: è un log cronologico, non un campo "ultima modifica". Vedi la sezione 22 per la convenzione completa su come compilarle (ruoli, tagliandino).</p>
+  </div>
+</div>
+</section>
+
+<section class="section-break">
+<h2><span class="num">17</span>Bibliografia — edizioni vs. confronti<span class="grp">Apparato scientifico</span></h2>
+<div class="field">
+  <div class="field-head"><span class="name">Convenzione "Cf." di Lane</span></div>
+  <div class="field-body">
+    <p class="when"><b>Come funziona:</b> la lista bibliografica di Lane è concettualmente in due parti, anche se nell'XML resta una lista piatta: prima le <b>edizioni precedenti</b> del testo, poi — a partire dalla prima voce che inizia con "Cf." — i <b>riferimenti di confronto</b> (bibliografia di raffronto, non edizioni dirette). L'editor riconosce questo confine leggendo il prefisso "Cf." e mostra due elenchi separati con due pulsanti distinti: "Aggiungi edizione" inserisce prima del confine, "Aggiungi confronto (cf.)" inserisce dopo (precompilando "Cf. " se è la prima voce di quel tipo).</p>
+    <ul class="tight">
+      <li>Le frecce su/giù riordinano le voci <b>all'interno</b> della lista piatta reale: è così che si sposta una voce da un gruppo all'altro, oltre che a riordinare edizioni tra loro o confronti tra loro.</li>
+      <li>Nessun campo XML nuovo è coinvolto: la distinzione vive solo nella lettura del testo (prefisso "Cf."), quindi il round-trip con l'XML originale resta identico.</li>
+    </ul>
+    <div class="callout warn">
+      <b>Attenzione al markup TEI incorporato.</b> Alcune voci bibliografiche portano un'icona di avviso: contengono markup TEI (es. <code>&lt;ptr&gt;</code>, riferimenti strutturati) oltre al testo semplice. Modificando quella riga a mano, il markup viene <b>convertito in testo semplice</b> e perso — da fare solo se la modifica lo richiede davvero.
+    </div>
+  </div>
+</div>
+</section>
+
+<section class="section-break">
+<h2><span class="num">18</span>Apparato critico<span class="grp">Testo</span></h2>
+<div class="field">
+  <div class="field-head"><span class="name">Doppia modalità: legacy vs. strutturato</span></div>
+  <div class="field-body">
+    <p class="when"><b>Quando vedi un'area di testo unica invece di righe separate:</b> la scheda ha un apparato critico "legacy", salvato come blocco di testo unico anziché come lista di note puntuali — l'editor lo rispetta com'è e lo mostra come area di testo libera, senza forzare una conversione.</p>
+    <p class="when"><b>Modalità strutturata (il caso normale):</b> ogni nota di apparato è una coppia <b>Loc.</b> (localizzazione, tipicamente il numero di riga: "r. 1") + <b>nota</b> (osservazione filologica, es. lezione alternativa di un editore precedente). Si aggiungono e rimuovono singolarmente.</p>
+  </div>
+</div>
+</section>
+
+<section class="section-break">
+<h2><span class="num">19</span>Traduzioni<span class="grp">Testo</span></h2>
+<div class="field">
+  <div class="field-head"><span class="name">Traduzioni multiple</span></div>
+  <div class="field-body">
+    <p class="when"><b>Quando aggiungerne più di una:</b> quando esistono traduzioni in lingue diverse (tipicamente italiano e inglese) o versioni alternative della stessa lingua da fonti diverse — ogni scheda di traduzione è indipendente, con codice lingua (es. <span class="mono">it</span>, <span class="mono">en</span>), testo e una nota facoltativa per precisare la fonte o criteri della traduzione.</p>
+  </div>
+</div>
+</section>
+
+<section class="section-break">
+<h2><span class="num">20</span>Commento — testo semplice vs. markup TEI<span class="grp">Testo</span></h2>
+<div class="field">
+  <div class="field-head"><span class="name">Commento (note_interne)</span></div>
+  <div class="field-body">
+    <div class="callout warn">
+      <b>Se compare l'avviso "il commento contiene markup TEI":</b> il testo del commento nell'XML originale include tag strutturati (<code>&lt;ptr&gt;</code>, <code>&lt;foreign&gt;</code> ecc.), non solo prosa semplice. Modificando il commento in questo campo, quel markup viene <b>riscritto come testo semplice</b> — irreversibile per quella modifica. Va fatto consapevolmente, non per una correzione minima che non richiede di toccare l'intero campo.
+    </div>
+  </div>
+</div>
+</section>
+
+<section class="section-break">
+<h2><span class="num">21</span>Iconografia e funzione cultuale<span class="grp">Apparato scientifico</span></h2>
+<p class="lead">La sezione più strutturata dopo l'Edizione: quattro livelli via via più specifici
+— funzione del monumento, figure rappresentate, tratti di ogni figura, nota libera per
+il residuo non catalogabile. Vocabolario sempre <b>chiuso</b> tranne dove indicato.</p>
+
+<h3>21.1 — Funzione cultuale</h3>
+<div class="field">
+  <div class="field-head"><span class="name">Funzione cultuale</span><span class="where">vocabolario chiuso, 5 valori</span></div>
+  <div class="field-body">
+    <table class="field-table">
+      <tr><th style="width:26%">Valore</th><th>Etichetta</th></tr>
+      <tr><td class="mono">votive</td><td>votiva</td></tr>
+      <tr><td class="mono">lex_sacra</td><td>lex sacra</td></tr>
+      <tr><td class="mono">confession</td><td>iscrizione di confessione</td></tr>
+      <tr><td class="mono">honorific</td><td>onoraria</td></tr>
+      <tr><td class="mono">funerary</td><td>funeraria</td></tr>
+    </table>
+    <p class="when"><b>Suggerimento automatico, mai scrittura automatica:</b> se le Tipologie testuali del Titolo indicano un genere compatibile (es. "dedication" → votiva), l'editor propone il valore corrispondente con un pulsante "Usa" — non lo scrive mai da solo. Se imposti un valore diverso da quello suggerito, compare un avviso di possibile disallineamento: non è un errore bloccante, perché un caso reale può avere testo e immagine di funzione diversa (es. un rilievo votivo che porta un testo onorario) — va solo verificato che sia voluto.</p>
+    <p style="font-size:8.8pt;color:#7a6f5e">Nota tecnica: questo vocabolario (<span class="mono">iconographyLabels.ts</span>) è distinto da quello EAGLE delle Tipologie testuali (<span class="mono">INSCRIPTION_TYPES</span>) — la mappatura tra i due è interna e serve solo al suggerimento.</p>
+  </div>
+</div>
+
+<h3>21.2 — Figure</h3>
+<div class="field">
+  <div class="field-head"><span class="name">Tipo di figura</span><span class="where">vocabolario chiuso</span></div>
+  <div class="field-body">
+    <table class="field-table">
+      <tr><th style="width:26%">Valore</th><th>Etichetta</th></tr>
+      <tr><td class="mono">deity</td><td>divinità</td></tr>
+      <tr><td class="mono">secondary</td><td>figura secondaria</td></tr>
+      <tr><td class="mono">worshipper</td><td>orante</td></tr>
+      <tr><td class="mono">animal</td><td>animale</td></tr>
+      <tr><td class="mono">symbol</td><td>simbolo</td></tr>
+    </table>
+  </div>
+</div>
+<div class="field">
+  <div class="field-head"><span class="name">Identificativo</span><span class="where">combo libero con suggerimenti</span></div>
+  <div class="field-body">
+    <p class="when"><b>Quando usare un valore fuori elenco:</b> l'elenco proposto (Men, falce lunare, Nike, aquila, Attis, Helios…) copre i casi ricorrenti nel corpus, ma il campo resta libero — per un orante non nominato o una figura non ancora catalogata si scrive il proprio identificativo. È l'unico campo iconografico non rigidamente chiuso, perché identifica l'entità specifica raffigurata, non una categoria.</p>
+  </div>
+</div>
+<div class="field">
+  <div class="field-head"><span class="name">Posizione nella composizione</span><span class="where">vocabolario chiuso, opzionale</span></div>
+  <div class="field-body">
+    <p class="when"><b>Quando lasciarlo vuoto:</b> è l'unico campo di questa sezione con un'opzione "Non specificata" selezionabile — per quando la posizione compositiva della figura non è rilevante o non ricostruibile, a differenza degli altri campi a vocabolario chiuso che, una volta scelto un valore, non permettono di tornare al vuoto dalla stessa tendina.</p>
+    <table class="field-table">
+      <tr><th style="width:26%">Valore</th><th>Etichetta</th></tr>
+      <tr><td class="mono">upper_left / upper_right</td><td>in alto a sinistra / destra</td></tr>
+      <tr><td class="mono">lower_left / lower_right</td><td>in basso a sinistra / destra</td></tr>
+      <tr><td class="mono">top_centre</td><td>al centro in cima</td></tr>
+    </table>
+  </div>
+</div>
+
+<h3>21.3 — Tratti (a cascata sul tipo)</h3>
+<div class="field">
+  <div class="field-head"><span class="name">Categoria → Elemento</span><span class="where">select a cascata</span></div>
+  <div class="field-body">
+    <p class="when"><b>Come si usa:</b> ogni tratto ha due select in cascata — prima la <b>categoria</b> (copricapo, attributo lunare, oggetto tenuto, animale associato, abbigliamento, gesto), poi l'<b>elemento</b> specifico di quella categoria. <b>Cambiare la categoria azzera l'elemento scelto</b>: un elemento di "oggetto tenuto" non ha senso sotto "copricapo", quindi l'editor non lascia una combinazione incoerente in piedi.</p>
+    <table class="field-table">
+      <tr><th style="width:24%">Categoria</th><th>Elementi disponibili</th></tr>
+      <tr><td>Copricapo</td><td>berretto frigio, corona radiata, corona a falce</td></tr>
+      <tr><td>Attributo lunare</td><td>falce sulle spalle, falce sul berretto, luna piena, falce (posizione non specificata)</td></tr>
+      <tr><td>Oggetto tenuto</td><td>pigna, torcia, patera, scettro, corona vegetale, bastone, bucranio</td></tr>
+      <tr><td>Animale associato</td><td>toro, cavallo, gallo</td></tr>
+      <tr><td>Abbigliamento</td><td>militare, himation, chitone, tunica cinta</td></tr>
+      <tr><td>Gesto</td><td>mani alzate (gesto di supplica)</td></tr>
+    </table>
+    <p class="when"><b>Campo "mano" (dx/sx):</b> compare accanto a ogni tratto, pensato per gli oggetti tenuti — indica in quale mano la figura tiene l'oggetto, quando rilevante. Resta vuoto ("—") se non applicabile o non determinabile.</p>
+    <div class="callout">
+      L'attributo <b>lunare</b> è il tratto diagnostico principale di Men nell'iconografia del corpus: quando presente su una figura di tipo "divinità", è la prova iconografica più diretta dell'identificazione con Men, e va sempre codificato se visibile, anche quando l'identificazione testuale manca (monumenti anepigrafi o con testo perduto).
+    </div>
+  </div>
+</div>
+
+<h3>21.4 — Nota libera</h3>
+<div class="field">
+  <div class="field-head"><span class="name">Nota iconografica</span></div>
+  <div class="field-body">
+    <p class="when"><b>Quando usarla:</b> solo per elementi della scena che il vocabolario controllato non riesce a coprire — non è un ripiego per evitare di scegliere un tratto quando in realtà un valore del vocabolario esisterebbe. Se un tratto è codificabile con le categorie esistenti, va codificato lì: la nota libera non entra negli indici né nelle statistiche del catalogo, il vocabolario controllato sì.</p>
+  </div>
+</div>
+</section>

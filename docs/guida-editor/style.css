@@ -1,0 +1,276 @@
+@page {
+  size: A4;
+  margin: 22mm 18mm 22mm 18mm;
+  @bottom-center {
+    content: "ILA — guida completa all'editor · pag. " counter(page) " di " counter(pages);
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-size: 8pt;
+    color: #8a8378;
+  }
+}
+@page cover { margin: 0; @bottom-center { content: none; } }
+
+* { box-sizing: border-box; }
+body {
+  font-family: Georgia, "Times New Roman", serif;
+  color: #2a2521;
+  font-size: 10.3pt;
+  line-height: 1.5;
+}
+h1, h2, h3, h4 { font-family: "Helvetica Neue", Arial, sans-serif; color: #6b3f2a; }
+
+/* ---------- copertina ---------- */
+.cover {
+  page: cover;
+  height: 297mm;
+  width: 210mm;
+  background: linear-gradient(160deg, #2f2620 0%, #4a3626 55%, #6b3f2a 100%);
+  color: #f3ead9;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 34mm 26mm;
+  page-break-after: always;
+}
+.cover .eyebrow {
+  font-family: "Helvetica Neue", Arial, sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.28em;
+  font-size: 9.5pt;
+  color: #d9b98a;
+  margin-bottom: 10mm;
+}
+.cover h1 {
+  font-family: Georgia, serif;
+  color: #fdf7ec;
+  font-size: 31pt;
+  line-height: 1.2;
+  margin: 0 0 6mm 0;
+  font-weight: 700;
+}
+.cover .subtitle {
+  font-family: "Helvetica Neue", Arial, sans-serif;
+  font-size: 12.5pt;
+  color: #e6d5b8;
+  line-height: 1.55;
+  max-width: 132mm;
+  margin-bottom: 16mm;
+}
+.cover .greek-sample {
+  font-family: Georgia, serif;
+  font-style: italic;
+  font-size: 15pt;
+  color: #c99a68;
+  border-left: 2px solid #c99a68;
+  padding-left: 6mm;
+  margin-bottom: 16mm;
+}
+.cover .meta {
+  font-family: "Helvetica Neue", Arial, sans-serif;
+  font-size: 9pt;
+  color: #b9a586;
+  letter-spacing: 0.04em;
+}
+.cover .meta div { margin-bottom: 1.5mm; }
+
+/* ---------- indice ---------- */
+.toc { page-break-after: always; }
+.toc h2 { font-size: 15pt; margin-bottom: 6mm; }
+.toc .part {
+  font-family: "Helvetica Neue", Arial, sans-serif;
+  font-size: 8.5pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.16em;
+  color: #a1957e; margin: 5mm 0 1.5mm 0;
+}
+.toc .part:first-of-type { margin-top: 0; }
+.toc ol { list-style: none; padding: 0; margin: 0; counter-reset: toc; }
+.toc li {
+  font-family: "Helvetica Neue", Arial, sans-serif;
+  font-size: 10.2pt;
+  padding: 2.3mm 0;
+  border-bottom: 1px dotted #d8cbb5;
+  display: flex;
+  justify-content: space-between;
+  color: #4a4038;
+}
+.toc li b { color: #6b3f2a; }
+.toc .sub { padding-left: 6mm; font-size: 9.3pt; color: #7a6f5e; border-bottom: none; }
+
+/* ---------- sezioni generali ---------- */
+section { page-break-inside: avoid; }
+.section-break { page-break-before: always; }
+h2 {
+  font-size: 15pt;
+  border-bottom: 2px solid #6b3f2a;
+  padding-bottom: 2mm;
+  margin-top: 0;
+  margin-bottom: 5mm;
+  display: flex;
+  align-items: baseline;
+  gap: 3mm;
+}
+h2 .num {
+  background: #6b3f2a; color: #fdf7ec;
+  font-size: 10pt; padding: 0.5mm 2.5mm; border-radius: 2mm;
+}
+h2 .grp {
+  font-family: "Helvetica Neue", Arial, sans-serif;
+  font-size: 8.5pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em;
+  color: #a1957e; margin-left: auto;
+}
+h3 {
+  font-size: 11.5pt;
+  color: #6b3f2a;
+  margin-top: 7mm;
+  margin-bottom: 2.5mm;
+}
+p { margin: 0 0 3mm 0; text-align: justify; }
+.lead { font-size: 10.8pt; color: #4a4038; }
+
+.callout {
+  background: #f7f1e4;
+  border-left: 3px solid #c99a68;
+  padding: 3mm 4mm;
+  margin: 3mm 0;
+  font-size: 9.5pt;
+  border-radius: 0 2mm 2mm 0;
+}
+.callout.warn {
+  background: #fbeee8;
+  border-left-color: #b5452f;
+}
+.callout b { color: #6b3f2a; }
+.callout.warn b { color: #a13d26; }
+
+code, .mono {
+  font-family: "SF Mono", Menlo, Consolas, monospace;
+  font-size: 8.6pt;
+  background: #f1ece0;
+  padding: 0.3mm 1.2mm;
+  border-radius: 1mm;
+  color: #4a3626;
+}
+pre {
+  font-family: "SF Mono", Menlo, Consolas, monospace;
+  font-size: 8.3pt;
+  background: #2f2620;
+  color: #f0e6d2;
+  padding: 3mm 4mm;
+  border-radius: 2mm;
+  overflow-x: auto;
+  line-height: 1.5;
+  margin: 2mm 0 3.5mm 0;
+}
+pre .tag { color: #d9b98a; }
+pre .attr { color: #9dc9a3; }
+pre .val { color: #e8c07d; }
+pre .txt { color: #f0e6d2; }
+.greek { font-style: italic; }
+
+/* ---------- schede azione / campo ---------- */
+.action, .field {
+  border: 1px solid #e3d8c3;
+  border-radius: 2.5mm;
+  margin-bottom: 4.5mm;
+  overflow: hidden;
+  page-break-inside: avoid;
+}
+.action-head, .field-head {
+  background: #f7f1e4;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2.5mm 4mm;
+  border-bottom: 1px solid #e3d8c3;
+}
+.action-head .name, .field-head .name {
+  font-family: "Helvetica Neue", Arial, sans-serif;
+  font-weight: 700;
+  font-size: 10.3pt;
+  color: #4a3626;
+}
+.action-head .glyph {
+  font-family: Georgia, serif;
+  font-size: 12pt;
+  color: #6b3f2a;
+  background: #fff;
+  border: 1px solid #d8cbb5;
+  padding: 0.5mm 2.5mm;
+  border-radius: 1.5mm;
+}
+.field-head .where {
+  font-family: "Helvetica Neue", Arial, sans-serif;
+  font-size: 8pt;
+  color: #a1957e;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.action-body, .field-body { padding: 3mm 4mm 3.5mm 4mm; }
+.action-body .when, .field-body .when { font-size: 9.6pt; margin-bottom: 2mm; }
+.action-body .when b, .field-body .when b { color: #6b3f2a; }
+.field-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 8.8pt;
+  font-family: "Helvetica Neue", Arial, sans-serif;
+  margin: 2mm 0;
+}
+.field-table th {
+  text-align: left;
+  background: #efe6d3;
+  color: #6b3f2a;
+  padding: 1.3mm 2.2mm;
+  font-size: 8pt;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.field-table td {
+  padding: 1.3mm 2.2mm;
+  border-top: 1px solid #ece3d2;
+  vertical-align: top;
+}
+.req { color: #a13d26; font-weight: 700; }
+
+/* ---------- tabella riassuntiva ---------- */
+.summary-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 8.6pt;
+  font-family: "Helvetica Neue", Arial, sans-serif;
+}
+.summary-table th {
+  background: #6b3f2a; color: #fdf7ec;
+  padding: 2mm; text-align: left; font-size: 8pt;
+  text-transform: uppercase; letter-spacing: 0.04em;
+}
+.summary-table td { padding: 1.8mm 2mm; border-bottom: 1px solid #ece3d2; }
+.summary-table tr:nth-child(even) td { background: #faf6ec; }
+.summary-table .glyph-cell { font-family: Georgia, serif; font-size: 10pt; color: #6b3f2a; white-space: nowrap; }
+
+/* ---------- validazione ---------- */
+.rule {
+  display: flex;
+  gap: 3mm;
+  padding: 2mm 0;
+  border-bottom: 1px dotted #e3d8c3;
+  font-size: 9.3pt;
+  align-items: flex-start;
+}
+.rule .sev {
+  font-family: "Helvetica Neue", Arial, sans-serif;
+  font-size: 7.5pt; font-weight: 700; text-transform: uppercase;
+  padding: 0.3mm 2mm; border-radius: 3mm; white-space: nowrap; margin-top: 0.3mm;
+}
+.sev.error { background: #f6d8cf; color: #a13d26; }
+.sev.warning { background: #f3e3bd; color: #8a6a1f; }
+
+.kicker {
+  font-family: "Helvetica Neue", Arial, sans-serif;
+  font-size: 7.8pt;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: #a1957e;
+  margin-bottom: 1.5mm;
+}
+
+ul.tight { margin: 1.5mm 0 3mm 0; padding-left: 5mm; }
+ul.tight li { margin-bottom: 1.3mm; font-size: 9.6pt; }

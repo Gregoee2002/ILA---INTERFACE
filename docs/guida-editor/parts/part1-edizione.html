@@ -1,0 +1,575 @@
+<section>
+<h2><span class="num">1</span>Cos'è e dove si trova l'editor</h2>
+<p class="lead">
+L'editor di markup si trova nella sezione <b>Edizione</b> della scheda epigrafica ILA.
+Sostituisce la scrittura manuale del Leiden/EpiDoc: si scrive o incolla il testo
+greco riga per riga, poi si seleziona il testo per applicare i fenomeni
+(lacune, correzioni, nomi, numeri…) tramite un menu contestuale — l'XML si
+genera da solo, sempre nella forma canonica del corpus.
+</p>
+<div class="callout">
+<b>Modello a flusso unico.</b> L'edizione non è una lista di righe indipendenti:
+è un unico flusso di token in cui gli <code>&lt;lb/&gt;</code> (line break) sono
+inseriti in linea. Questo permette a un tag — un <code>persName</code>, un
+epiteto, un'integrazione — di <b>attraversare un cambio riga</b> senza che
+l'editor lo spezzi in due tag separati.
+</div>
+<div class="callout warn">
+<b>Quando l'editor si disattiva da solo.</b> Se l'edizione esistente contiene
+strutture che il modello a flusso unico non sa rappresentare (per esempio più
+<code>&lt;div type="textpart"&gt;</code> nella stessa sezione, come nel caso reale
+I.Milet VI 3 1029+1040), l'editor assistito si disabilita e mostra un avviso:
+si interviene allora direttamente sul file XML (Oxygen, o esportazione/reimportazione).
+</div>
+</section>
+
+<section class="section-break">
+<h2><span class="num">2</span>Meccanica generale</h2>
+
+<h3>2.1 — Selezionare il testo greco</h3>
+<p>Si seleziona con il mouse la porzione di testo greco su cui applicare un
+fenomeno. Appena il mouse viene rilasciato, si apre in automatico il <b>menu
+di markup</b> nel punto della selezione.</p>
+<ul class="tight">
+<li>La selezione può <b>attraversare gli accapi</b> (gli <code>&lt;lb/&gt;</code>): utile per parole spezzate a fine riga o per un epiteto che continua sulla riga successiva.</li>
+<li>La selezione <b>non può attraversare tag di livello diverso</b>: inizio e fine devono avere lo stesso genitore. Se il genitore è diverso, l'editor mostra l'avviso "la selezione non può attraversare tag di livello diverso" e non apre il menu.</li>
+<li>Cliccando (senza selezionare) sul pulsante <b>"Inserisci lacuna / vacat"</b> in basso, si apre lo stesso menu ma in modalità inserimento puntuale (nessun testo da avvolgere) — usata per le azioni che non richiedono selezione, come <i>gap</i> e <i>vacat</i>.</li>
+</ul>
+
+<h3>2.2 — Il menu di markup: tre modalità</h3>
+<p>Ogni azione del catalogo funziona in una delle tre modalità seguenti. Non è una scelta dell'utente: è la funzione stessa a determinarlo.</p>
+<table class="field-table">
+<tr><th style="width:18%">Modalità</th><th>Cosa fa</th><th style="width:32%">Esempi di azioni</th></tr>
+<tr><td><b>wrap</b></td><td>Avvolge il testo selezionato in un nuovo tag, conservando il testo com'è.</td><td>Integrazione, correzione editoriale, divinità + epiteto, etnico…</td></tr>
+<tr><td><b>replace</b></td><td>Sostituisce la selezione (o l'assenza di selezione) con un elemento vuoto/auto-chiuso.</td><td>Lacuna di lunghezza ignota, lacuna di N caratteri…</td></tr>
+<tr><td><b>insert</b></td><td>Inserisce un elemento puntuale nel flusso, senza bisogno di selezione.</td><td>Vacat</td></tr>
+</table>
+<p>Nel menu, la ricerca in alto filtra le azioni per nome o per gruppo (accenti
+ignorati: digitando <span class="mono">epiteto</span> si trova anche <span class="greek">epíteto</span>).
+Se non c'è selezione attiva, il menu mostra solo le azioni compatibili con
+l'inserimento puntuale (non quelle in modalità <i>wrap</i>).</p>
+<p>Alcune azioni hanno <b>parametri</b> da compilare in un secondo passo (es. il
+teonimo, la key normalizzata, la quantità di una lacuna). I campi con
+asterisco <span class="req">*</span> sono obbligatori: il pulsante "Applica" resta
+disattivato finché non sono compilati. Alcuni campi si <b>precompilano</b> da
+soli a partire dal testo selezionato (es. il teonimo riconosciuto in automatico
+per "Divinità + epiteto").</p>
+
+<h3>2.3 — Modificare o rimuovere un tag già presente</h3>
+<p>Cliccando su un tag già inserito nel flusso (evidenziato al passaggio del
+mouse) si apre un <b>popover</b> con gli attributi correnti, modificabili in
+linea. Da lì si può:</p>
+<ul class="tight">
+<li><b>Aggiornare</b> gli attributi (es. correggere una key o un nymRef).</li>
+<li><b>Togliere markup</b>: rimuove il tag ma conserva il testo — per <code>expan</code>, <code>choice</code> e <code>subst</code> conserva solo la lettura definitiva (mai la parte cancellata o la forma sic).</li>
+<li><b>Eliminare l'elemento</b> del tutto (icona cestino), testo compreso.</li>
+</ul>
+<div class="callout">
+Alcuni attributi sono <b>bloccati</b> nel popover perché derivano da una convenzione
+strutturale e non vanno editati a mano lì: <code>nymRef</code> su <code>persName</code>
+(va sul <code>name</code> figlio) e <code>nymRef</code>/<code>key</code> su
+<code>rs type="epithet"</code> (il key sta solo sul <code>persName</code> genitore).
+Per le divinità, il campo <code>key</code> propone in autocompletamento le sole
+chiavi già attestate nel corpus (<span class="mono">DIVINE_KEYS</span>: Men Tyrannos,
+Men Askaenos, Men Axiottenos).
+</div>
+
+<h3>2.4 — Gestione delle righe (lb)</h3>
+<p>Nel margine sinistro di ogni riga compaiono, al passaggio del mouse, due controlli:</p>
+<table class="field-table">
+<tr><th style="width:14%">Simbolo</th><th>Funzione</th><th>Quando usarlo</th></tr>
+<tr><td class="mono">⌁</td><td>Attiva/disattiva <code>break="no"</code> sulla riga</td><td>Quando una parola è spezzata dalla riga sopra (continuazione senza spazio). Non disponibile sulla riga 1 (non può ereditare da nulla) — se l'editor lo trova comunque impostato, lo segnala come errore.</td></tr>
+<tr><td class="mono">✕</td><td>Unisce alla riga precedente (elimina l'accapo)</td><td>Per correggere una suddivisione in righe sbagliata. Non disponibile se resta una sola riga nell'edizione.</td></tr>
+</table>
+<p>Il pulsante <b>"Aggiungi riga"</b> in fondo all'edizione inserisce un nuovo
+<code>&lt;lb/&gt;</code> a fine flusso. La numerazione delle righe (<code>n</code>) è
+sempre <b>ricalcolata automaticamente</b> alla serializzazione: non va mai
+gestita a mano.</p>
+<div class="callout warn">
+<b>Trattini di fine parola.</b> Non si scrivono trattini Leiden a fine riga per
+segnalare una parola spezzata: si lascia la riga così com'è e si attiva
+<code>break="no"</code> sulla riga <i>successiva</i> (quella che riceve la
+continuazione). Se un trattino residuo compare comunque nel testo, il validatore
+lo segnala in tempo reale.</p>
+</div>
+
+<h3>2.5 — Scheda XML e diagnosi epiteti sul corpus</h3>
+<p>Il pannello sotto l'anteprima ha due schede:</p>
+<ul class="tight">
+<li><b>Anteprima</b> — resa leggibile del markup (integrazioni tra parentesi quadre, lacune come puntini o trattini, epiteti in colore, ecc.), non editabile direttamente.</li>
+<li><b>XML</b> — il markup grezzo, modificabile a mano in un'area di testo. Utile per correzioni fini o per incollare un frammento già pronto. "Applica XML" valida la sintassi prima di sostituire il flusso; in caso di errore la modifica non viene applicata e l'errore è mostrato sotto l'area di testo.</li>
+</ul>
+<p>Il pulsante <b>"Diagnosi epiteti separati sul corpus"</b> scandisce tutti i
+file del corpus (non solo la scheda aperta) cercando tre pattern problematici:
+epiteti (<code>rs type="epithet"</code>) non annidati in un <code>persName</code>,
+persName divine seguiti da un epiteto separato nelle vicinanze, e trattini
+Leiden residui a fine riga. È <b>solo diagnostica</b>: non modifica alcun file,
+segnala soltanto dove intervenire.</p>
+</section>
+
+<section class="section-break">
+<h2><span class="num">3</span>Lacune e integrazioni</h2>
+<p class="lead">Fenomeni legati a ciò che manca sulla pietra: lettere perdute e integrate
+dall'editore, oppure lacune non colmate.</p>
+
+<div class="action">
+  <div class="action-head"><span class="name">Integrazione (lacuna)</span><span class="glyph">[αβγ]</span></div>
+  <div class="action-body">
+    <p class="when"><b>Quando:</b> lettere perdute sulla pietra ma integrate dall'editore. Seleziona il testo integrato (la tua ricostruzione), non uno spazio vuoto.</p>
+    <table class="field-table">
+      <tr><th>Parametro</th><th>Valori</th><th>Effetto</th></tr>
+      <tr><td>Certezza</td><td>sicura / dubbia</td><td>"dubbia" aggiunge <code>cert="low"</code></td></tr>
+    </table>
+    <pre>&lt;supplied reason="lost"&gt;<span class="greek">αβγ</span>&lt;/supplied&gt;</pre>
+  </div>
+</div>
+
+<div class="action">
+  <div class="action-head"><span class="name">Testo da editori precedenti</span><span class="glyph">[K&amp;P]</span></div>
+  <div class="action-body">
+    <p class="when"><b>Quando:</b> la pietra è oggi danneggiata o perduta in quel punto, ma un editore precedente (es. Keil &amp; Premerstein) l'aveva letta per intero — è una <b>testimonianza</b>, non una congettura tua. Distinguila sempre dall'integrazione ordinaria.</p>
+    <table class="field-table">
+      <tr><th>Parametro</th><th>Valori</th><th>Effetto</th></tr>
+      <tr><td>Fonte</td><td>previouseditor / parallel</td><td><code>previouseditor</code> = letto da editore precedente; <code>parallel</code> = ricostruito da un testo parallelo formulare</td></tr>
+    </table>
+    <pre>&lt;supplied reason="undefined" evidence="previouseditor"&gt;<span class="greek">…</span>&lt;/supplied&gt;</pre>
+  </div>
+</div>
+
+<div class="action">
+  <div class="action-head"><span class="name">Lacuna di lunghezza ignota</span><span class="glyph">[- - -]</span></div>
+  <div class="action-body">
+    <p class="when"><b>Quando:</b> manca del testo e non si sa quantificarne l'estensione. Non richiede selezione: si inserisce nel punto della lacuna.</p>
+    <table class="field-table"><tr><th>Parametro</th><th>Valori</th></tr><tr><td>Unità</td><td>character / line</td></tr></table>
+    <pre>&lt;gap reason="lost" extent="unknown" unit="character"/&gt;</pre>
+  </div>
+</div>
+
+<div class="action">
+  <div class="action-head"><span class="name">Lacuna di N caratteri/righe</span><span class="glyph">[ca. 5]</span></div>
+  <div class="action-body">
+    <p class="when"><b>Quando:</b> si può stimare o contare quanto manca.</p>
+    <table class="field-table">
+      <tr><th>Parametro</th><th>Valori</th></tr>
+      <tr><td>Quantità <span class="req">*</span></td><td>numero</td></tr>
+      <tr><td>Unità</td><td>character / line</td></tr>
+      <tr><td>Precisione</td><td>esatta / stimata (aggiunge <code>precision="low"</code>)</td></tr>
+    </table>
+    <pre>&lt;gap reason="lost" quantity="5" unit="character" precision="low"/&gt;</pre>
+  </div>
+</div>
+
+<div class="action">
+  <div class="action-head"><span class="name">Lacuna di N–M caratteri</span><span class="glyph">[2-4]</span></div>
+  <div class="action-body">
+    <p class="when"><b>Quando:</b> l'estensione è incerta ma compresa tra un minimo e un massimo plausibili.</p>
+    <table class="field-table">
+      <tr><th>Parametro</th><th>Valori</th></tr>
+      <tr><td>Minimo <span class="req">*</span> / Massimo <span class="req">*</span></td><td>numeri</td></tr>
+    </table>
+    <pre>&lt;gap reason="lost" atLeast="2" atMost="4" unit="character"/&gt;</pre>
+  </div>
+</div>
+
+<div class="action">
+  <div class="action-head"><span class="name">Testo illeggibile</span><span class="glyph">·····</span></div>
+  <div class="action-body">
+    <p class="when"><b>Quando:</b> ci sono tracce di lettere visibili sulla pietra ma non identificabili — diverso dalla lacuna, dove non resta traccia fisica.</p>
+    <table class="field-table">
+      <tr><th>Parametro</th><th>Valori</th></tr>
+      <tr><td>Unità <span class="req">*</span></td><td>character / line</td></tr>
+      <tr><td>Quantità</td><td>numero (vuoto = ignota)</td></tr>
+    </table>
+    <pre>&lt;gap reason="illegible" quantity="3" unit="character"/&gt;
+&lt;gap reason="illegible" extent="unknown" unit="character"/&gt;  <span class="txt">(quantità vuota)</span></pre>
+  </div>
+</div>
+</section>
+
+<section class="section-break">
+<h2><span class="num">4</span>Lettere e correzioni</h2>
+<p class="lead">Fenomeni paleografici e interventi editoriali sulla lettura, dalle lettere
+danneggiate ma leggibili fino agli errori del lapicida.</p>
+
+<div class="action">
+  <div class="action-head"><span class="name">Lettere incerte</span><span class="glyph">ạḅ</span></div>
+  <div class="action-body">
+    <p class="when"><b>Quando:</b> lettere danneggiate ma ancora leggibili con un ragionevole grado di certezza (puntini sottoscritti nell'edizione a stampa). Seleziona le lettere in questione.</p>
+    <pre>&lt;unclear&gt;<span class="greek">αβ</span>&lt;/unclear&gt;</pre>
+  </div>
+</div>
+
+<div class="action">
+  <div class="action-head"><span class="name">Abbreviazione sciolta</span><span class="glyph">(αβγ)</span></div>
+  <div class="action-body">
+    <p class="when"><b>Quando:</b> sulla pietra c'è un'abbreviazione e la selezione è la forma <b>abbreviata</b> così com'è incisa; nel parametro si indica lo scioglimento completo.</p>
+    <table class="field-table"><tr><th>Parametro</th><th>Valori</th></tr><tr><td>Scioglimento <span class="req">*</span></td><td>testo libero</td></tr></table>
+    <pre>&lt;expan&gt;&lt;abbr&gt;<span class="greek">στρ</span>&lt;/abbr&gt;&lt;ex&gt;<span class="greek">ατηγός</span>&lt;/ex&gt;&lt;/expan&gt;</pre>
+  </div>
+</div>
+
+<div class="action">
+  <div class="action-head"><span class="name">Omesse dal lapicida</span><span class="glyph">⟨αβγ⟩</span></div>
+  <div class="action-body">
+    <p class="when"><b>Quando:</b> lettere che il lapicida ha saltato per errore e che l'editore integra — diverso dall'integrazione per lacuna: qui la pietra è integra, manca solo l'incisione.</p>
+    <pre>&lt;supplied reason="omitted"&gt;<span class="greek">αβγ</span>&lt;/supplied&gt;</pre>
+  </div>
+</div>
+
+<div class="action">
+  <div class="action-head"><span class="name">Lettere spurie</span><span class="glyph">{αβγ}</span></div>
+  <div class="action-body">
+    <p class="when"><b>Quando:</b> lettere incise per errore e da espungere (il lapicida ha scritto qualcosa di troppo).</p>
+    <pre>&lt;surplus&gt;<span class="greek">αβγ</span>&lt;/surplus&gt;</pre>
+  </div>
+</div>
+
+<div class="action">
+  <div class="action-head"><span class="name">Correzione editoriale</span><span class="glyph">«αβγ»</span></div>
+  <div class="action-body">
+    <p class="when"><b>Quando:</b> il lapicida ha scritto una forma errata e l'editore la corregge. La selezione è la forma <b>corretta</b>; nel parametro si indica cosa c'è realmente scritto sulla pietra (<i>sic</i>).</p>
+    <table class="field-table"><tr><th>Parametro</th><th>Valori</th></tr><tr><td>Sulla pietra (sic) <span class="req">*</span></td><td>forma errata del lapicida</td></tr></table>
+    <pre>&lt;choice&gt;&lt;sic&gt;<span class="greek">ερρι</span>&lt;/sic&gt;&lt;corr&gt;<span class="greek">Ἑρμῇ</span>&lt;/corr&gt;&lt;/choice&gt;</pre>
+  </div>
+</div>
+
+<div class="action">
+  <div class="action-head"><span class="name">Lettere non interpretabili</span><span class="glyph">ΑΒΓ</span></div>
+  <div class="action-body">
+    <p class="when"><b>Quando:</b> la sequenza è leggibile ma non ha senso ricostruibile (non è un errore da correggere, semplicemente non si capisce cosa significhi).</p>
+    <pre>&lt;orig&gt;<span class="greek">ΑΒΓ</span>&lt;/orig&gt;</pre>
+  </div>
+</div>
+
+<div class="action">
+  <div class="action-head"><span class="name">Lettera riscritta dal lapicida</span><span class="glyph">ρ→ἰ</span></div>
+  <div class="action-body">
+    <p class="when"><b>Quando:</b> il lapicida ha inciso una lettera sopra un'altra già scritta (correzione in cantiere, non editoriale). Seleziona la lettera <b>definitiva</b>; nel parametro indica cosa c'era sotto. Distinta dalla "Correzione editoriale": qui a correggere è stato il lapicida stesso, non l'editore moderno.</p>
+    <table class="field-table"><tr><th>Parametro</th><th>Valori</th></tr><tr><td>Lettera sottostante <span class="req">*</span></td><td>es. <span class="greek">ρ</span></td></tr></table>
+    <pre>&lt;subst&gt;&lt;del rend="corrected"&gt;<span class="greek">ρ</span>&lt;/del&gt;&lt;add place="overstrike"&gt;<span class="greek">ι</span>&lt;/add&gt;&lt;/subst&gt;</pre>
+  </div>
+</div>
+
+<div class="action">
+  <div class="action-head"><span class="name">Lettera aggiunta sopra il rigo</span><span class="glyph">τιμ⁺η</span></div>
+  <div class="action-body">
+    <p class="when"><b>Quando:</b> il lapicida ha aggiunto una lettera in un secondo momento, sopra il rigo (non una sostituzione, un'aggiunta pura).</p>
+    <pre>&lt;add place="overstrike"&gt;<span class="greek">η</span>&lt;/add&gt;</pre>
+  </div>
+</div>
+</section>
+
+<section class="section-break">
+<h2><span class="num">5</span>Nomi e luoghi</h2>
+<p class="lead">Il gruppo più esteso e più delicato: qui si decide come codificare teonimi,
+epiteti, persone attestate, sovrani, imperatori, cariche ed etnici. La regola
+cardinale (§7 della skill, richiamata dal validatore) è: <b>teonimo/nome ed
+epiteto stanno sempre nello stesso <code>persName</code></b>, mai separati.</p>
+
+<div class="action">
+  <div class="action-head"><span class="name">Divinità + epiteto</span><span class="glyph">☾</span></div>
+  <div class="action-body">
+    <p class="when"><b>Quando:</b> il teonimo compare insieme a un epiteto — nell'ordine in cui stanno realmente sulla pietra, che l'epiteto preceda o segua il teonimo (es. <span class="greek">Ἀγαθὰ Τύχα</span>: l'epiteto è anteposto). L'editore <b>non</b> impone un ordine: rispetta quello del testo.</p>
+    <table class="field-table">
+      <tr><th>Parametro</th><th>Note</th></tr>
+      <tr><td>Teonimo (nel testo) <span class="req">*</span></td><td>precompilato riconoscendo automaticamente i temi teonimici noti (Μη-, Ζευ-/Δι-, Ἀπολλ-, Ἀρτεμ-, Ἀθην-, Τυχ-, Ἡλι-, Σεληνη-, Μητ-, Κυβελ-, Ἑρμ-, Ἀσκληπ-…)</td></tr>
+      <tr><td>Epiteto (nel testo)</td><td>precompilato dal resto della selezione</td></tr>
+      <tr><td>Lemma (nymRef) <span class="req">*</span></td><td>va sul <code>&lt;name&gt;</code>, mai sul persName; default <span class="greek">Μήν</span></td></tr>
+      <tr><td>Key normalizzato <span class="req">*</span></td><td>autocompletamento sulle sole chiavi attestate: Men Tyrannos / Men Askaenos / Men Axiottenos</td></tr>
+    </table>
+    <pre>&lt;persName type="divine" key="Men Tyrannos"&gt;
+  &lt;name nymRef="Μήν"&gt;<span class="greek">Μὲς</span>&lt;/name&gt; &lt;rs type="epithet"&gt;<span class="greek">Τύραννος</span>&lt;/rs&gt;
+&lt;/persName&gt;</pre>
+  </div>
+</div>
+
+<div class="action">
+  <div class="action-head"><span class="name">Divinità (nome libero)</span><span class="glyph">☾ —</span></div>
+  <div class="action-body">
+    <p class="when"><b>Quando:</b> il teonimo compare da solo, senza epiteto, oppure come frase intera non scomponibile in nome + epiteto. In questo caso il persName contiene solo testo, senza <code>&lt;name&gt;</code> figlio — pattern legittimo, non genera warning.</p>
+    <table class="field-table"><tr><th>Parametro</th><th>Note</th></tr><tr><td>Key normalizzato <span class="req">*</span></td><td>solo teonimo, senza epiteto</td></tr></table>
+    <pre>&lt;persName type="divine" key="Men Axiottenos"&gt;<span class="greek">Μηνί</span>&lt;/persName&gt;</pre>
+  </div>
+</div>
+
+<div class="action">
+  <div class="action-head"><span class="name">Persona attestata</span><span class="glyph">Ξάνθος</span></div>
+  <div class="action-body">
+    <p class="when"><b>Quando:</b> un individuo umano nominato nel testo (dedicante, testimone, funzionario…).</p>
+    <table class="field-table">
+      <tr><th>Parametro</th><th>Note</th></tr>
+      <tr><td>Key (forma normalizzata) <span class="req">*</span></td><td>es. Xanthos</td></tr>
+      <tr><td>Lemma greco (nominativo) <span class="req">*</span></td><td>va sul <code>&lt;name&gt;</code></td></tr>
+    </table>
+    <pre>&lt;persName type="attested" key="Xanthos"&gt;
+  &lt;name nymRef="Ξάνθος"&gt;<span class="greek">Ξάνθῳ</span>&lt;/name&gt;
+&lt;/persName&gt;</pre>
+  </div>
+</div>
+
+<div class="action">
+  <div class="action-head"><span class="name">Nome + patronimico</span><span class="glyph">Ἀπολλόδωρος Μητροφάνου</span></div>
+  <div class="action-body">
+    <p class="when"><b>Quando:</b> nome proprio seguito dal genitivo del padre. Seleziona nome e patronimico insieme: l'editore costruisce un <code>persName</code> annidato dentro l'altro.</p>
+    <table class="field-table">
+      <tr><th>Parametro</th><th>Note</th></tr>
+      <tr><td>Key persona <span class="req">*</span> / Lemma persona <span class="req">*</span></td><td>precompilati dalla prima parola selezionata</td></tr>
+      <tr><td>Key padre <span class="req">*</span> / Lemma padre <span class="req">*</span></td><td>da compilare</td></tr>
+    </table>
+    <pre>&lt;persName type="attested" key="Apollodoros figlio di Metrophanes"&gt;
+  &lt;name nymRef="Apollodoros"&gt;<span class="greek">Ἀπολλόδωρος</span>&lt;/name&gt;
+  &lt;persName type="attested" key="Metrophanes"&gt;
+    &lt;name type="patronymic" nymRef="…"&gt;<span class="greek">Μητροφάνου</span>&lt;/name&gt;
+  &lt;/persName&gt;
+&lt;/persName&gt;</pre>
+  </div>
+</div>
+
+<div class="action">
+  <div class="action-head"><span class="name">Sovrano</span><span class="glyph">Εὐμένους</span></div>
+  <div class="action-body">
+    <p class="when"><b>Quando:</b> re e dinasti ellenistici. L'eventuale epiteto onorifico va annidato come per le divinità — <b>ma la key resta l'identità storica nuda</b> (decisione redazionale 2026-07, provvisoria): <span class="mono">"Eumene II"</span>, non <span class="mono">"Eumene II Theos"</span>.</p>
+    <table class="field-table">
+      <tr><th>Parametro</th><th>Note</th></tr>
+      <tr><td>Key (identità nuda) <span class="req">*</span></td><td>es. Eumene II</td></tr>
+      <tr><td>Lemma greco <span class="req">*</span></td><td>nominativo</td></tr>
+      <tr><td>Epiteto onorifico</td><td>es. <span class="greek">θεοῦ</span>, se presente</td></tr>
+    </table>
+    <pre>&lt;persName type="ruler" key="Eumene II"&gt;
+  &lt;name nymRef="Εὐμένης"&gt;<span class="greek">Εὐμένους</span>&lt;/name&gt; &lt;rs type="epithet"&gt;<span class="greek">θεοῦ</span>&lt;/rs&gt;
+&lt;/persName&gt;</pre>
+  </div>
+</div>
+
+<div class="action">
+  <div class="action-head"><span class="name">Imperatore</span><span class="glyph">Ἁδριανοῦ</span></div>
+  <div class="action-body">
+    <p class="when"><b>Quando:</b> imperatori romani. Stessa logica del Sovrano: epiteto annidato, key nuda.</p>
+    <pre>&lt;persName type="emperor" key="Hadrianus"&gt;
+  &lt;name nymRef="Ἁδριανός"&gt;<span class="greek">Ἁδριανοῦ</span>&lt;/name&gt;
+&lt;/persName&gt;</pre>
+  </div>
+</div>
+
+<div class="action">
+  <div class="action-head"><span class="name">Carica (vocabolario)</span><span class="glyph">στραταγός</span></div>
+  <div class="action-body">
+    <p class="when"><b>Quando:</b> una carica presente nel vocabolario controllato delle cariche (elenco a discesa in autocompletamento). La key è l'id traslitterato del vocabolario, non testo libero.</p>
+    <table class="field-table"><tr><th>Parametro</th><th>Note</th></tr><tr><td>Carica <span class="req">*</span></td><td>se la carica non è in elenco, usare "Carica / titolo (generico)" e segnalarla come candidata all'aggiunta</td></tr></table>
+    <pre>&lt;rs type="office" key="strategos"&gt;<span class="greek">στραταγός</span>&lt;/rs&gt;</pre>
+  </div>
+</div>
+
+<div class="action">
+  <div class="action-head"><span class="name">Carica / titolo (generico)</span><span class="glyph">βασιλέως</span></div>
+  <div class="action-body">
+    <p class="when"><b>Quando:</b> istituzioni e titoli non presenti nel vocabolario controllato (il re, il popolo, l'assemblea…) — senza key.</p>
+    <pre>&lt;rs type="official"&gt;<span class="greek">βασιλέως</span>&lt;/rs&gt;</pre>
+  </div>
+</div>
+
+<div class="action">
+  <div class="action-head"><span class="name">Etnico</span><span class="glyph">Λυκίου</span></div>
+  <div class="action-body">
+    <p class="when"><b>Quando:</b> un aggettivo etnico riferito a una persona o a un luogo di provenienza.</p>
+    <table class="field-table">
+      <tr><th>Parametro</th><th>Note</th></tr>
+      <tr><td>Lemma (nominativo) <span class="req">*</span></td><td>es. Λύκιος</td></tr>
+      <tr><td>URI Pleiades</td><td>solo se certo — <b>mai dedotto</b>, va lasciato vuoto in caso di dubbio</td></tr>
+    </table>
+    <pre>&lt;placeName type="ethnic" nymRef="Λύκιος"&gt;<span class="greek">Λυκίου</span>&lt;/placeName&gt;</pre>
+  </div>
+</div>
+
+<div class="action">
+  <div class="action-head"><span class="name">Nome frammentario</span><span class="glyph">Πολυ[…]</span></div>
+  <div class="action-body">
+    <p class="when"><b>Quando:</b> resta solo l'inizio, la fine o una parte mediana di un nome. Seleziona <b>solo le lettere superstiti</b>: se l'identità non è ricostruibile, non assegnare una key.</p>
+    <table class="field-table">
+      <tr><th>Parametro</th><th>Valori</th></tr>
+      <tr><td>Frammento <span class="req">*</span></td><td>I — iniziale (fine perduta) / F — finale (inizio perduto) / M — mediano</td></tr>
+      <tr><td>nymRef con underscore</td><td>opzionale, per lemma parziale: es. <span class="mono">#Πολυ_</span> o <span class="mono">#_νιος</span></td></tr>
+      <tr><td>È un patronimico?</td><td>sì/no</td></tr>
+    </table>
+    <pre>&lt;name&gt;&lt;seg part="I"&gt;<span class="greek">Πολυ</span>&lt;/seg&gt;&lt;gap reason="lost" extent="unknown" unit="character"/&gt;&lt;/name&gt;</pre>
+    <p style="font-size:8.6pt;color:#7a6f5e;margin-top:1mm">L'ordine di <code>&lt;seg&gt;</code> e <code>&lt;gap&gt;</code> cambia secondo il frammento: iniziale → seg poi gap; finale → gap poi seg; mediano → gap, seg, gap.</p>
+  </div>
+</div>
+</section>
+
+<section class="section-break">
+<h2><span class="num">6</span>Numeri e date</h2>
+
+<div class="action">
+  <div class="action-head"><span class="name">Numerale</span><span class="glyph">ρκγʹ</span></div>
+  <div class="action-body">
+    <p class="when"><b>Quando:</b> numeri scritti a lettere o con segni alfabetici (numerali greci).</p>
+    <table class="field-table">
+      <tr><th>Parametro</th><th>Valori</th></tr>
+      <tr><td>Tipo</td><td>cardinal / ordinal / fraction / total</td></tr>
+      <tr><td>Valore (cifre arabe) <span class="req">*</span></td><td>es. 63, oppure 0.5 per le frazioni</td></tr>
+      <tr><td>Notazione</td><td>a lettere (<span class="greek">ἑκατόν</span>) / segni alfabetici (<span class="greek">γξ</span>) — quest'ultima aggiunge <code>&lt;g type="alphabetic"&gt;</code></td></tr>
+    </table>
+    <pre>&lt;num type="cardinal" value="63"&gt;&lt;g type="alphabetic"&gt;<span class="greek">ξγʹ</span>&lt;/g&gt;&lt;/num&gt;</pre>
+  </div>
+</div>
+
+<div class="action">
+  <div class="action-head"><span class="name">Somma di denaro</span><span class="glyph">𐅵 δρ.</span></div>
+  <div class="action-body">
+    <p class="when"><b>Quando:</b> multe delle stele di confessione, conti di santuario, qualsiasi somma monetaria nel testo.</p>
+    <table class="field-table"><tr><th>Parametro</th><th>Valori</th></tr><tr><td>Unità monetaria <span class="req">*</span></td><td>drachma (default) / denarius / obol / talent / as</td></tr></table>
+    <pre>&lt;measure type="currency" unit="drachma"&gt;<span class="greek">δραχμὰς πεντήκοντα</span>&lt;/measure&gt;</pre>
+  </div>
+</div>
+
+<div class="action">
+  <div class="action-head"><span class="name">Legatura di segni</span><span class="glyph">Ϡ͡α</span></div>
+  <div class="action-body">
+    <p class="when"><b>Quando:</b> due o più segni (numerali o lettere) legati graficamente in un unico tratto.</p>
+    <pre>&lt;hi rend="ligature"&gt;<span class="greek">Ϡα</span>&lt;/hi&gt;</pre>
+  </div>
+</div>
+
+<div class="action">
+  <div class="action-head"><span class="name">Data interna al testo</span><span class="glyph">ἔτους σξγʹ</span></div>
+  <div class="action-body">
+    <p class="when"><b>Quando:</b> una formula di datazione nel corpo del testo. La formula in greco <b>resta nel testo</b>; la conversione in data assoluta va nell'<code>origDate</code> del <i>header</i> della scheda (con <code>evidence="internal-date"</code>), non qui.</p>
+    <table class="field-table">
+      <tr><th>Parametro</th><th>Valori</th></tr>
+      <tr><td>Calendario <span class="req">*</span></td><td>sullan (default) / julian / egyptian / actian</td></tr>
+      <tr><td>xml:id</td><td>opzionale, per una doppia datazione nello stesso testo (es. <span class="mono">d1</span>)</td></tr>
+    </table>
+    <pre>&lt;date calendar="sullan"&gt;<span class="greek">ἔτους σξγʹ</span>&lt;/date&gt;</pre>
+  </div>
+</div>
+
+<div class="action">
+  <div class="action-head"><span class="name">Nome di mese</span><span class="glyph">Πανήμου</span></div>
+  <div class="action-body">
+    <p class="when"><b>Quando:</b> il nome di un mese del calendario locale.</p>
+    <table class="field-table"><tr><th>Parametro</th><th>Note</th></tr><tr><td>Key (traslitterato, nominativo) <span class="req">*</span></td><td>es. Panemos</td></tr></table>
+    <pre>&lt;rs type="months" key="Panemos"&gt;<span class="greek">Πανήμου</span>&lt;/rs&gt;</pre>
+  </div>
+</div>
+
+<div class="action">
+  <div class="action-head"><span class="name">Età alla morte</span><span class="glyph">ἐτῶν λʹ</span></div>
+  <div class="action-body">
+    <p class="when"><b>Quando:</b> l'indicazione dell'età negli epitaffi. La durata è codificata in formato ISO-8601.</p>
+    <table class="field-table"><tr><th>Parametro</th><th>Valori</th></tr><tr><td>Anni <span class="req">*</span></td><td>numero, es. 30</td></tr></table>
+    <pre>&lt;date dur="P30Y"&gt;<span class="greek">ἐτῶν λʹ</span>&lt;/date&gt;</pre>
+  </div>
+</div>
+</section>
+
+<section class="section-break">
+<h2><span class="num">7</span>Spazi e altro</h2>
+
+<div class="action">
+  <div class="action-head"><span class="name">Vacat</span><span class="glyph">vac.</span></div>
+  <div class="action-body">
+    <p class="when"><b>Quando:</b> uno spazio lasciato intenzionalmente vuoto dal lapicida. Non richiede selezione: si inserisce nel punto del vacat tramite il pulsante "Inserisci lacuna / vacat".</p>
+    <table class="field-table">
+      <tr><th>Parametro</th><th>Valori</th></tr>
+      <tr><td>Quantità</td><td>numero (vuoto = ignota → aggiunge <code>extent="unknown"</code>)</td></tr>
+      <tr><td>Unità</td><td>character / line</td></tr>
+    </table>
+    <pre>&lt;space unit="character" quantity="3"/&gt;</pre>
+  </div>
+</div>
+</section>
+
+<section class="section-break">
+<h2><span class="num">8</span>Tabella riassuntiva — quale funzione per quale caso</h2>
+<p class="lead">Consultazione rapida: individua il fenomeno epigrafico nella colonna
+sinistra e trova subito l'azione da usare.</p>
+
+<table class="summary-table">
+<tr><th style="width:38%">Fenomeno</th><th style="width:30%">Azione</th><th>Glifo</th></tr>
+<tr><td>Lettere perdute, integrate dall'editore</td><td>Integrazione (lacuna)</td><td class="glyph-cell">[αβγ]</td></tr>
+<tr><td>Pietra oggi persa, letta da editore precedente</td><td>Testo da editori precedenti</td><td class="glyph-cell">[K&amp;P]</td></tr>
+<tr><td>Lacuna, estensione ignota</td><td>Lacuna di lunghezza ignota</td><td class="glyph-cell">[- - -]</td></tr>
+<tr><td>Lacuna, estensione contabile/stimabile</td><td>Lacuna di N caratteri/righe</td><td class="glyph-cell">[ca. 5]</td></tr>
+<tr><td>Lacuna, estensione tra un minimo e un massimo</td><td>Lacuna di N–M caratteri</td><td class="glyph-cell">[2-4]</td></tr>
+<tr><td>Tracce visibili ma non identificabili</td><td>Testo illeggibile</td><td class="glyph-cell">·····</td></tr>
+<tr><td>Lettere danneggiate ma leggibili</td><td>Lettere incerte</td><td class="glyph-cell">ạḅ</td></tr>
+<tr><td>Abbreviazione incisa sulla pietra</td><td>Abbreviazione sciolta</td><td class="glyph-cell">(αβγ)</td></tr>
+<tr><td>Lettere saltate per errore dal lapicida</td><td>Omesse dal lapicida</td><td class="glyph-cell">⟨αβγ⟩</td></tr>
+<tr><td>Lettere incise per errore, da espungere</td><td>Lettere spurie</td><td class="glyph-cell">{αβγ}</td></tr>
+<tr><td>Errore del lapicida corretto dall'editore</td><td>Correzione editoriale</td><td class="glyph-cell">«αβγ»</td></tr>
+<tr><td>Sequenza leggibile ma senza senso</td><td>Lettere non interpretabili</td><td class="glyph-cell">ΑΒΓ</td></tr>
+<tr><td>Lettera riscritta dal lapicida in cantiere</td><td>Lettera riscritta dal lapicida</td><td class="glyph-cell">ρ→ἰ</td></tr>
+<tr><td>Lettera aggiunta sopra il rigo dal lapicida</td><td>Lettera aggiunta sopra il rigo</td><td class="glyph-cell">τιμ⁺η</td></tr>
+<tr><td>Teonimo con epiteto</td><td>Divinità + epiteto</td><td class="glyph-cell">☾</td></tr>
+<tr><td>Teonimo da solo o frase intera</td><td>Divinità (nome libero)</td><td class="glyph-cell">☾ —</td></tr>
+<tr><td>Persona umana nominata nel testo</td><td>Persona attestata</td><td class="glyph-cell">Ξάνθος</td></tr>
+<tr><td>Nome + genitivo del padre</td><td>Nome + patronimico</td><td class="glyph-cell">Ἀπολλόδωρος Μητροφάνου</td></tr>
+<tr><td>Re/dinasta ellenistico</td><td>Sovrano</td><td class="glyph-cell">Εὐμένους</td></tr>
+<tr><td>Imperatore romano</td><td>Imperatore</td><td class="glyph-cell">Ἁδριανοῦ</td></tr>
+<tr><td>Carica nel vocabolario controllato</td><td>Carica (vocabolario)</td><td class="glyph-cell">στραταγός</td></tr>
+<tr><td>Titolo/istituzione fuori vocabolario</td><td>Carica / titolo (generico)</td><td class="glyph-cell">βασιλέως</td></tr>
+<tr><td>Aggettivo etnico</td><td>Etnico</td><td class="glyph-cell">Λυκίου</td></tr>
+<tr><td>Nome di cui resta solo una parte</td><td>Nome frammentario</td><td class="glyph-cell">Πολυ[…]</td></tr>
+<tr><td>Numerale a lettere o segni alfabetici</td><td>Numerale</td><td class="glyph-cell">ρκγʹ</td></tr>
+<tr><td>Somma di denaro</td><td>Somma di denaro</td><td class="glyph-cell">𐅵 δρ.</td></tr>
+<tr><td>Segni legati graficamente</td><td>Legatura di segni</td><td class="glyph-cell">Ϡ͡α</td></tr>
+<tr><td>Formula di datazione nel testo</td><td>Data interna al testo</td><td class="glyph-cell">ἔτους σξγʹ</td></tr>
+<tr><td>Nome di mese</td><td>Nome di mese</td><td class="glyph-cell">Πανήμου</td></tr>
+<tr><td>Età negli epitaffi</td><td>Età alla morte</td><td class="glyph-cell">ἐτῶν λʹ</td></tr>
+<tr><td>Spazio lasciato vuoto dal lapicida</td><td>Vacat</td><td class="glyph-cell">vac.</td></tr>
+</table>
+</section>
+
+<section class="section-break">
+<h2><span class="num">9</span>Regole di validazione (segnalate in tempo reale)</h2>
+<p class="lead">Mentre si lavora, l'editor controlla il markup e mostra sotto l'edizione un
+elenco di segnalazioni. Gli <b>errori</b> indicano markup non valido secondo le
+regole del corpus; i <b>warning</b> segnalano pattern sospetti da verificare
+manualmente — non bloccano il salvataggio, ma vanno sempre controllati prima
+di chiudere una scheda.</p>
+
+<div class="rule"><span class="sev error">Errore</span><span>Notazione Leiden non convertita nel testo (parentesi quadre <code>[ ]</code>, graffe <code>{ }</code>, trattini <code>- - -</code>): va sempre usata l'azione di markup corrispondente, mai scritta a mano.</span></div>
+<div class="rule"><span class="sev error">Errore</span><span>Attributo scritto fuori dalle parentesi angolari nel testo (es. <code>&lt;lb&gt; n="2"/&gt;</code>): quasi sempre un tag digitato male.</span></div>
+<div class="rule"><span class="sev error">Errore</span><span>Attributo vuoto (es. <code>key=""</code>) su qualunque tag: se il valore è ignoto, l'attributo si <b>omette</b>, non si lascia vuoto.</span></div>
+<div class="rule"><span class="sev error">Errore</span><span><code>unit</code> diverso da <span class="mono">character</span>/<span class="mono">line</span> — attenzione al refuso classico: una <b>rho greca</b> (ρ) al posto della <i>r</i> latina in "character" produce un errore invisibile a occhio.</span></div>
+<div class="rule"><span class="sev error">Errore</span><span><code>break="no"</code> sulla prima riga dell'edizione: non può ereditare da nessuna riga precedente.</span></div>
+<div class="rule"><span class="sev warning">Warning</span><span>Trattino Leiden residuo a fine riga: va rimosso, attivando <code>break="no"</code> sulla riga successiva.</span></div>
+<div class="rule"><span class="sev error">Errore</span><span><code>nymRef</code> su <code>&lt;persName&gt;</code>: va spostato sul <code>&lt;name&gt;</code> figlio.</span></div>
+<div class="rule"><span class="sev error">Errore</span><span><code>nymRef</code> su <code>&lt;rs type="epithet"&gt;</code>: non è mai ammesso su questo tag.</span></div>
+<div class="rule"><span class="sev error">Errore</span><span><code>key</code> su <code>&lt;rs type="epithet"&gt;</code>: il key sta solo sul <code>&lt;persName&gt;</code> genitore (convenzione ILA, diversa da IGCyr — non riportare pattern di altri corpora).</span></div>
+<div class="rule"><span class="sev error">Errore</span><span>Epiteto (<code>rs type="epithet"</code>) fuori da un <code>&lt;persName&gt;</code>: vale per divinità, sovrani e imperatori allo stesso modo. Unica eccezione tollerata: epiteto plurale condiviso dopo due o più divinità coordinate (segnalato come warning, da annotare nel report, mai silenziato).</span></div>
+<div class="rule"><span class="sev warning">Warning</span><span><code>persName type="divine"</code> con figli strutturati ma privo di <code>&lt;name&gt;</code>: o si scompone in name + rs epithet, o si usa il pattern "a frase intera" (solo testo, senza figli).</span></div>
+<div class="rule"><span class="sev warning">Warning</span><span><code>persName type="divine"</code> senza <code>key</code> normalizzato.</span></div>
+<div class="rule"><span class="sev warning">Warning</span><span>Per Sovrano/Imperatore, <code>key</code> che sembra includere l'epiteto (contiene "theos" ecc.): la key deve restare l'identità storica nuda.</span></div>
+<div class="rule"><span class="sev warning">Warning</span><span><code>rs type="office"</code> senza <code>key</code>: se la carica non è nel vocabolario, usare <code>type="official"</code>; se lo è, indicare il key traslitterato — segnalare nel report le cariche candidate all'aggiunta al vocabolario.</span></div>
+<div class="rule"><span class="sev error">Errore</span><span><code>&lt;gap&gt;</code> con <code>quantity="0"</code>: per lunghezza ignota si usa <code>extent="unknown"</code>, mai zero.</span></div>
+<div class="rule"><span class="sev error">Errore</span><span><code>&lt;gap&gt;</code> senza <code>quantity</code> né <code>extent="unknown"</code>: uno dei due è sempre obbligatorio.</span></div>
+</section>
+
+<section class="section-break">
+<h2><span class="num">10</span>Convenzioni trasversali: key, nymRef, ref</h2>
+<p class="lead">Tre attributi ricorrono in quasi tutte le azioni del gruppo "Nomi e luoghi".
+Il loro significato non cambia da un'azione all'altra — vale la pena fissarlo una volta per tutte.</p>
+
+<table class="field-table">
+<tr><th style="width:16%">Attributo</th><th style="width:38%">Cosa identifica</th><th>Dove va</th></tr>
+<tr><td class="mono">key</td><td>Identità normalizzata dell'entità (persona, divinità, sovrano) — usata per collegare tutte le occorrenze della stessa entità nel corpus.</td><td>Solo sul <code>&lt;persName&gt;</code>. Per sovrani/imperatori resta l'identità storica <b>nuda</b>, senza l'epiteto onorifico.</td></tr>
+<tr><td class="mono">nymRef</td><td>Il lemma greco (di norma il nominativo) della forma flessa presente nel testo.</td><td>Sempre sul <code>&lt;name&gt;</code> figlio, <b>mai</b> sul <code>&lt;persName&gt;</code> genitore né su <code>&lt;rs type="epithet"&gt;</code>.</td></tr>
+<tr><td class="mono">ref</td><td>URI esterno (tipicamente Pleiades, per gli etnici/toponimi).</td><td>Solo quando è certo. <b>Mai dedotto</b> per analogia o convenienza: in caso di dubbio si lascia vuoto.</td></tr>
+</table>
+
+<div class="callout">
+<b>Regola cardinale del corpus (richiamata dal validatore su ogni salvataggio):</b>
+teonimo/nome ed epiteto non si separano mai in due tag diversi — vanno sempre
+annidati nello stesso <code>&lt;persName&gt;</code>, indipendentemente dal fatto che
+si tratti di una divinità, di un sovrano o di un imperatore.
+</div>
+
+<div class="callout">
+<b>L'ordine sulla pietra comanda sempre.</b> Diverse azioni (Divinità + epiteto,
+Sovrano, Imperatore) rispettano l'ordine reale delle parole nel testo, anche
+quando l'epiteto precede il nome invece di seguirlo: l'editore non impone un
+ordine "canonico", si limita a scomporre correttamente quello che c'è scritto.
+</div>
+</section>

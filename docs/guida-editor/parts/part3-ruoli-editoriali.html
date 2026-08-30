@@ -1,0 +1,58 @@
+<section class="section-break">
+<h2><span class="num">22</span>Ruoli editoriali: chi ha codificato, curato, revisionato<span class="grp">Apparato scientifico</span></h2>
+<p class="lead">Fino a questa revisione della guida non esisteva un modo uniforme per
+registrare chi ha fatto cosa su una scheda: l'unico spazio pensato per
+questo nell'XML del corpus è <b>Revisioni</b> (sezione "Apparato scientifico"),
+usato in modo non uniforme — in un caso reale del corpus conteneva ancora
+una nota provvisoria del tipo "mettici qui l'encoding e la data". Per questo
+motivo è stato aggiunto un <b>tagliandino</b> sempre visibile in fondo alla
+scheda editoriale, indipendente dalla sezione attiva, per rendere naturale
+compilarlo — senza introdurre nuovi campi nello schema dati: scrive comunque
+nel campo Revisioni già esistente.</p>
+
+<div class="field">
+  <div class="field-head"><span class="name">Il tagliandino "Chi ha lavorato su questa scheda"</span><span class="where">in fondo all'editor a sezioni</span></div>
+  <div class="field-body">
+    <p class="when"><b>Dove si trova:</b> sotto il pannello della sezione attiva, sempre presente qualunque sia la sezione aperta — non serve passare per "Revisioni" per registrare un intervento al volo.</p>
+    <table class="field-table">
+      <tr><th style="width:20%">Campo</th><th>Comportamento</th></tr>
+      <tr><td>Persone</td><td>chip list (come Tipologie testuali o Epiteti): uno o più nomi, uno per Invio — utile quando più persone lavorano insieme alla stessa sessione</td></tr>
+      <tr><td>Data</td><td>precompilata con la data odierna, modificabile</td></tr>
+      <tr><td>Nota</td><td>facoltativa, per il dettaglio dell'intervento</td></tr>
+    </table>
+    <p class="when">Il pulsante <b>"Registra"</b> aggiunge una riga alla lista Revisioni (una sola riga, con i nomi delle persone uniti da virgola in <code>who</code>) e resta disabilitato finché non è stata inserita almeno una persona. Sotto i campi compare un promemoria dell'ultimo intervento registrato. La riga aggiunta rientra nel normale flusso di salvataggio della scheda (pulsante "Salva N sezioni" in alto) — il tagliandino non salva da solo, prepara solo la riga.</p>
+  </div>
+</div>
+
+<div class="field">
+  <div class="field-head"><span class="name">I tre ruoli, nella Nota</span></div>
+  <div class="field-body">
+    <table class="field-table">
+      <tr><th style="width:22%">Ruolo</th><th>Cosa copre</th></tr>
+      <tr><td><b>Encoding</b></td><td>Prima trascrizione del testo di Lane in markup Leiden/EpiDoc nella sezione Edizione, più la compilazione delle altre sezioni della scheda a partire dalla fonte.</td></tr>
+      <tr><td><b>Editing</b></td><td>Correzioni, integrazioni o riorganizzazione di una scheda già codificata — non la prima stesura.</td></tr>
+      <tr><td><b>Revisione</b></td><td>Controllo filologico/tecnico di una scheda già completa: verifica delle regole del corpus (§9 della Parte I), coerenza degli indici, validità del markup — senza necessariamente riscrivere il contenuto.</td></tr>
+    </table>
+    <p class="when">Il campo Nota del tagliandino non impone un vocabolario, ma la convenzione è farla iniziare sempre con uno dei tre ruoli sopra, seguito da due punti:</p>
+    <pre>Persone: Gabriele Gregorio   Data: 2026-08-23
+Nota: Encoding: prima trascrizione da CMRDM I nr. 87, sezioni Edizione e Indici.
+
+Persone: Luca Ceruti   Data: 2026-08-24
+Nota: Revisione: controllate regole di validazione (nessun errore), coerenza persName/epiteti.</pre>
+    <div class="callout">
+      <b>Perché nella Nota e non in un campo ruolo separato:</b> il campo <code>who</code> di <code>&lt;change&gt;</code> nel TEI resta libero per il/i nome/i di chi firma; il <b>ruolo</b> dell'intervento non ha un posto dedicato nello schema attuale del corpus, quindi si veicola nel testo della nota. Un campo Ruolo strutturato (con <code>role="encoder"/"editor"/"reviewer"</code>, lo standard EpiDoc <code>&lt;respStmt&gt;</code>) resta un'estensione possibile in futuro, ma non necessaria oggi: il tagliandino copre il bisogno pratico immediato senza cambiare lo schema dati.
+    </div>
+  </div>
+</div>
+
+<div class="field">
+  <div class="field-head"><span class="name">Autore/Authority della scheda</span></div>
+  <div class="field-body">
+    <p class="when"><b>Cosa resta invece collettivo:</b> il campo <b>Authority</b> (sezione Pubblicazione) continua a rappresentare la responsabilità complessiva del progetto sulla scheda ("ILA — Index Lunae Antiquae"), non la persona che ha codificato quella specifica entry — quel livello di dettaglio è compito esclusivo delle Revisioni, come sopra.</p>
+  </div>
+</div>
+
+<div class="callout warn">
+<b>Placeholder da bonificare.</b> Se apri una scheda e trovi nel campo Revisioni una nota provvisoria non nel formato sopra (com'è oggi per <span class="mono">ILA-091</span>), è un residuo di lavorazione: alla prima modifica sostanziale di quella scheda, la nota va sostituita con una riga nel formato corretto — non lasciata così, anche se la scheda non viene toccata per altri motivi in quel momento.
+</div>
+</section>
