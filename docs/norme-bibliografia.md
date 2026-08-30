@@ -77,10 +77,27 @@ Fontrier, `idem`, `Lane, I, loc. cit.` (titolo/pagina da verificare sul cartaceo
 e il restyling delle varianti **senza** `op. cit.` delle stesse famiglie
 (es. `P. Perdrizet, BCH, XX, 1896, …`, `Drexler, in Roscher, Lexikon…`).
 
-### Da decidere
+### Famiglia Lane — le sigle «Lane I» / «Lane II»
 
-- Forma della citazione-catalogo Lane, oggi `Lane, CMRDM I 29` (una per scheda,
-  uguale al numero di catalogo). Opzioni sul tavolo: invariata / `Lane, CMRDM, I, 29` /
-  `CMRDM I 29`.
-- `Lane, I, loc. cit.` ×2 → espandere a pagina esplicita, caso per caso.
-- `Lydia no. N` vs `Lydia, no. N` (5 vs 2).
+**FATTO 2026-08-31** — 197 voci `<bibl>` (una per scheda) sciolte sul repo dati
+(197 commit via API). Lane, nel CMRDM I, abbrevia i propri due articoli su
+«Berytus» come «Lane I» e «Lane II» (p. [224-225] e [748]: *hereafter Lane I/II*):
+
+- **Lane I** = `E. Lane, A re-study of the god Men. I. The epigraphic and sculptural evidence, «Berytus» 15 (1964), pp. 5-58`
+- **Lane II** = `E. Lane, A re-study of the god Men. II. The numismatic and allied evidence, «Berytus» 17 (1967-1968), pp. 13-47`
+
+(APh 36-05762 / 39-08984, ISSN 0067-6195.) Coda del rimando conservata e
+normalizzata (`no.`→`n.`, cifre piene). Le voci composte (`Lane I … and II …`,
+`… ; Lane II …`) rese come due riferimenti uniti da `;`.
+
+### Da decidere / da fare
+
+- Forma della citazione-catalogo Lane, oggi `Lane, CMRDM I 29` → **FATTO 30/08**
+  (`E. Lane, … CMRDM. I …, Leiden 1971, n. 29`).
+- **Promemoria**: `Lane, I, p. 140` e `Lane, I, p. 141` (voci *Inedita* / *articolo
+  Levick in prep.*) = rimando al **libro CMRDM I**, non all'articolo «Berytus» —
+  da rendere come rimando al volume.
+- `Lane, I, loc. cit.` ×2 (ILA-245, ILA-246) → espandere a pagina esplicita.
+- `Lane, AS, XX, 1970` (ILA-021) → «Anatolian Studies» 20 (1970); confermare
+  attribuzione Lane vs Levick.
+- `Lydia no. N` vs `Lydia, no. N` (grafia disomogenea, ora dentro lo stem Lane I).
