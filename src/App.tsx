@@ -48,7 +48,9 @@ import {
   NotebookPen,
   Bug,
   ExternalLink,
-  BookMarked
+  BookMarked,
+  Type,
+  Tags
 } from 'lucide-react';
 import { cn, EASE_OUT, EASE_IN, SPRING_SNAPPY, SPRING_SOFT } from './lib/utils';
 import { ICONOGRAPHY_LABELS } from './lib/iconographyLabels';
@@ -2719,12 +2721,15 @@ type TermClickAction =
   | { kind: 'redirect-stats'; tab: 'divinita' | 'onomastica'; search: string }
   | { kind: 'redirect-catalog'; term: string };
 
-const EpiDocRenderer = ({ xml, query, onTermClick, divinityIndex, onomasticaIndex }: {
+const EpiDocRenderer = ({ xml, query, onTermClick, divinityIndex, onomasticaIndex, plain = false }: {
   xml: string;
   query: string;
   onTermClick?: (action: TermClickAction) => void;
   divinityIndex?: Record<string, DivinityStats>;
   onomasticaIndex?: Record<string, OnomasticaStats>;
+  /** Modalità "trascrizione pura": nessun markup diacritico, colore o tooltip —
+   *  solo le lettere e l'andamento per righe. Vedi il toggle nella finestra epigrafica. */
+  plain?: boolean;
 }) => {
   const [hoveredInfo, setHoveredInfo] = useState<{ text: string; x: number; y: number } | null>(null);
 
@@ -2811,14 +2816,75 @@ const EpiDocRenderer = ({ xml, query, onTermClick, divinityIndex, onomasticaInde
       // Collapse whitespace-only nodes (indentation/newlines between tags)
       // but preserve single spaces that carry semantic meaning
       const collapsed = text.replace(/[\n\r\t]/g, ' ').replace(/  +/g, ' ');
-      if (!collapsed.trim()) return null;
+      if (!collapsed.trim()) {
+        // In modalità con markup la spaziatura fra parole è resa dal padding
+        // dei vari <span>; in trascrizione pura quei riquadri non ci sono, così
+        // uno spazio fra elementi va reso esplicitamente o le parole si toccano.
+        return plain && collapsed ? ' ' : null;
+      }
       return <Highlight key={key} text={collapsed} query={query} />;
     }
     
     if (node.nodeType === Node.ELEMENT_NODE) {
       const el = node as Element;
       const localName = (el.localName || el.tagName || '').toLowerCase();
-      
+
+      // ── Modalità trascrizione pura ──────────────────────────────────────────
+      // Rende il solo testo di lettura: niente parentesi editoriali, colori,
+      // sottolineature, tooltip o termini cliccabili. Si conserva unicamente
+      // l'andamento per righe (con numeri di riga a margine) e la scansione in
+      // versi/paragrafi, perché sono riferimenti, non markup del testo.
+      if (plain) {
+        const children = () => Array.from(node.childNodes).map((child: any, i) => renderNode(child, key + '-' + i));
+        switch (localName) {
+          case 'lb': {
+            const brk = el.getAttribute('break') || '';
+            const ln = el.getAttribute('n') || '';
+            const lineNumSpan = (
+              <span
+                key={key + '-n'}
+                className="text-muted/40 text-[9px] select-none inline-block w-8 -ml-8 pr-2 text-right leading-none"
+                style={{ fontFamily: 'monospace', fontStyle: 'normal', fontWeight: 'normal' }}
+              >
+                {ln}
+              </span>
+            );
+            if (brk === 'no') return <span key={key}><br />{lineNumSpan}</span>;
+            if (ln === '1') return <span key={key}>{lineNumSpan}</span>;
+            return <span key={key}><br />{lineNumSpan}</span>;
+          }
+          case 'expan': {
+            // <abbr>X</abbr><ex>yz</ex> → forma sciolta senza parentesi: "Xyz"
+            return <span key={key}>{el.textContent || ''}</span>;
+          }
+          case 'choice': {
+            // Testo di lettura: si tiene la forma corretta/normalizzata,
+            // non entrambe le varianti.
+            const pick = ['corr', 'reg', 'sic', 'orig']
+              .map(t => Array.from(el.children).find(c => (c.localName || c.tagName || '').toLowerCase() === t))
+              .find(Boolean) || el.firstElementChild;
+            return <span key={key}>{pick ? (pick.textContent || '') : ''}</span>;
+          }
+          case 'gap':
+            return <span key={key} className="text-muted/50"> — </span>;
+          case 'space':
+            return <span key={key}> </span>;
+          case 'surplus':
+          case 'head':
+            return null;
+          case 'div':
+          case 'p':
+          case 'ab':
+          case 'lg':
+            return <div key={key} className="mb-2">{children()}</div>;
+          case 'l':
+            return <div key={key}>{children()}</div>;
+          default:
+            return <span key={key}>{children()}</span>;
+        }
+      }
+      // ───────────────────────────────────────────────────────────────────────
+
       const nAttr = el.getAttribute('n') || '';
       const typeAttr = el.getAttribute('type') || '';
       const keyAttr = el.getAttribute('key') || '';
@@ -3947,6 +4013,9 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
 
   const [translating, setTranslating] = useState(false);
   const [activeTranslationLang, setActiveTranslationLang] = useState<string | null>(null);
+  // Finestra epigrafica: alterna testo con markup diacritico (default) e
+  // trascrizione pura. Preferenza di lettura, resta impostata fra una scheda e l'altra.
+  const [plainTranscription, setPlainTranscription] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [importStatus, setImportStatus] = useState<{ type: 'idle' | 'loading' | 'success' | 'error', message: string }>({ type: 'idle', message: '' });
 
@@ -6994,6 +7063,21 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                              <LegendaDropdown />
                              <div className="bg-sidebar/50 border border-border p-8 md:p-12 text-lg md:text-2xl text-ink/90 shadow-inner relative"
                      style={{ fontFamily: 'var(--font-greek)', lineHeight: '2' }}>
+                                {selectedMonumento.testo && (
+                                  <button
+                                    type="button"
+                                    onClick={() => setPlainTranscription(v => !v)}
+                                    aria-pressed={plainTranscription}
+                                    title={plainTranscription
+                                      ? 'Mostra il testo con il markup diacritico (parentesi, colori, note)'
+                                      : 'Mostra la trascrizione pura, senza markup'}
+                                    className="absolute top-3 right-3 z-20 flex items-center gap-1.5 rounded-sm border border-border/60 bg-background/80 backdrop-blur px-2 py-1 font-sans text-[9px] font-bold uppercase tracking-widest text-muted transition-colors hover:text-accent hover:border-accent/40"
+                                  >
+                                    {plainTranscription
+                                      ? <><Tags className="h-3 w-3" /> Con markup</>
+                                      : <><Type className="h-3 w-3" /> Trascrizione pura</>}
+                                  </button>
+                                )}
                                 <div className="relative z-10 max-w-[62ch] mx-auto pl-10 border-l-2 border-border/40">
                                   {selectedMonumento.testo ? (
                                     <EpiDocRenderer
@@ -7002,6 +7086,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                                       onTermClick={handleTermClick}
                                       divinityIndex={divinityIndex}
                                       onomasticaIndex={onomasticaIndex}
+                                      plain={plainTranscription}
                                     />
                                   ) : <span className="opacity-40 italic">[Anepigrafe]</span>}
                                 </div>
