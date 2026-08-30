@@ -90,14 +90,43 @@ e il restyling delle varianti **senza** `op. cit.` delle stesse famiglie
 normalizzata (`no.`→`n.`, cifre piene). Le voci composte (`Lane I … and II …`,
 `… ; Lane II …`) rese come due riferimenti uniti da `;`.
 
-### Da decidere / da fare
+### Stato conversione (2026-08-31)
 
-- Forma della citazione-catalogo Lane, oggi `Lane, CMRDM I 29` → **FATTO 30/08**
-  (`E. Lane, … CMRDM. I …, Leiden 1971, n. 29`).
-- **Promemoria**: `Lane, I, p. 140` e `Lane, I, p. 141` (voci *Inedita* / *articolo
-  Levick in prep.*) = rimando al **libro CMRDM I**, non all'articolo «Berytus» —
-  da rendere come rimando al volume.
-- `Lane, I, loc. cit.` ×2 (ILA-245, ILA-246) → espandere a pagina esplicita.
-- `Lane, AS, XX, 1970` (ILA-021) → «Anatolian Studies» 20 (1970); confermare
-  attribuzione Lane vs Levick.
-- `Lydia no. N` vs `Lydia, no. N` (grafia disomogenea, ora dentro lo stem Lane I).
+**1138 / 1142 voci `<bibl>` portate alla forma redazionale italiana**, tutte
+applicate direttamente sul repo dati `Gregoee2002/ILA` (`corpus/`, `main`) via
+GitHub API. Passaggi principali:
+
+| Passaggio | voci |
+|---|---|
+| CMRDM I (n. di catalogo) | 293 |
+| `op. cit.` / `loc. cit.` (26 famiglie) | 148 |
+| varianti senza `op. cit.` delle stesse famiglie | 58 |
+| Lane I/II = articoli «Berytus» | 197 |
+| Anderson («JHS» 1899 / «JRS» 1913) | 18 |
+| Hardie («JHS» 32, 1912) | 69 |
+| corpora epigrafici (sigla normalizzata) | 72 |
+| Keil–Premerstein I/II Reise | 13 |
+| articoli in rivista (pass generico «Sigla» vol (anno)) | 98 |
+| monografie + riviste minori (tabella esplicita) | ~165 |
+| sciolti `loc. cit.` ILA-245/246 dal PDF | 3 |
+
+Script di supporto in `scratchpad/` (`*_map.py` / `*_lib.py` + `_run_generic.py`);
+tabella scioglimenti in `scratchpad/point2_resolutions.md`.
+
+### Restano fuori (4 voci) — decisione del curatore
+
+- `Lane, AS, XX, 1970` (ILA-021): «Anatolian Studies» 20 (1970) — **attribuzione
+  Lane vs Levick** da confermare (nel PDF, riga 5661, compare «Levick, AS, XX, 1970»).
+- `Sarà trattata… (Lane, I, p. 140)` (ILA-243) e `Inedita (Lane, I, p. 141:
+  "Unpublished")` (ILA-247): qui `Lane I` = il **libro CMRDM I**; da rendere come
+  rimando al volume (`E. Lane, … CMRDM. I …, Leiden 1971, p. 140/141`).
+- `Petzl, Beichtinschr. 38 (in: …)` (ILA-294): lasciata invariata su indicazione
+  del curatore.
+
+### Punti minori ancora aperti
+
+- Iniziali di alcuni autori non recuperate (es. Gardner, Flacelière, Frontrier→Fontrier).
+- `K. Buresch, Reisebericht II, Leipzig 1894`: titolo esatto del *Reisebericht* da verificare.
+- Sigla riviste: mantenuta la forma del corpus dove già presente
+  («Revue de Philologie», «Classical Review» non ridotte a RPh/CR).
+- `Lydia no. N` vs `Lydia, no. N`: grafia disomogenea, ora dentro lo stem Lane I.
