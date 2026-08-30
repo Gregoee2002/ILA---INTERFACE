@@ -31,6 +31,14 @@ quella sigla.
 > stesse famiglie (es. `P. Perdrizet, BCH, XX, 1896, …`, `Drexler, in Roscher, Lexikon…`),
 > da riportare allo stile italiano in una passata separata.
 
+> **PUNTO 3 — APPLICATO 2026-08-31** — 58 voci `<bibl>` su 37 schede: le varianti
+> **senza** `op. cit.` delle 26 famiglie sono state uniformate alla forma estesa
+> (mappa esplicita testo→testo in scratchpad `pass3_map.py`, 37 commit via API sul
+> repo dati). Dove l'autore ha **più opere** (Calder: «Klio» 1910/1930, RPh 1912,
+> «JRS» 1912; Foucart: «BCH» 4 (1880) ≠ *Des associations*; Homolle: «BCH» 18 (1894)
+> ≠ «BCH» 23 (1899)) si è fatto solo il restyle anglo→ita. `M.J. Vermaseren,
+> «Vigiliae Christianae» 4 (1950)` resta **senza titolo** dell'articolo (da recuperare).
+
 | Sigla nel corpus | Opera per esteso (da CMRDM I) | Prima citazione completa in CMRDM I |
 |---|---|---|
 | **Drexler, op. cit.** (51) | W. Drexler, *Mên*, in W.H. Roscher (a cura di), *Ausführliches Lexikon der griechischen und römischen Mythologie*, II.2, Leipzig 1894-1897, cc. 2687-2770. | no. 1: «W. Drexler, article in W. H. Roscher, Lexikon der griechischen und römischen Mythologie, Leipzig 1884-1937, col. 2731». `op. cit.` rinvia sempre a una `col. 26xx-27xx`. |
