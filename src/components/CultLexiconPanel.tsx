@@ -3,7 +3,7 @@ import { Monumento } from '../types';
 import { cn } from '../lib/utils';
 import { buildCultIndex, CultLemmaStats } from '../lib/cultIndex';
 import { CULT_FAMILIES } from '../lib/cultLexicon';
-import { Tags, ExternalLink, ChevronRight, Search, X } from 'lucide-react';
+import { Tags, ExternalLink, ChevronRight, Search } from 'lucide-react';
 
 interface Props {
   monumenti: Monumento[];
@@ -66,51 +66,53 @@ export const CultLexiconPanel: React.FC<Props> = ({ monumenti, onSelectMonumento
     { label: 'atti #agency di castigo', opts: { search: 'castigo', family: 'agency', group: 'lemma' } },
   ];
 
-  const renderLemmaCard = (l: CultLemmaStats) => {
+  const renderLemmaRow = (l: CultLemmaStats) => {
     const key = `${l.family}::${l.lemma}`;
     const open = expanded.has(key);
     return (
-      <div key={key} className="bg-card border border-border rounded-xl p-4 shadow-sm">
-        <div className="flex items-baseline justify-between flex-wrap gap-2">
-          <div className="flex items-baseline gap-2.5 min-w-0">
-            <span className="font-greek text-cult text-lg font-semibold" lang="grc">{l.lemma}</span>
-            {l.subFunction && (
-              <span className="text-[11px] text-muted font-sans italic">{l.subFunction}</span>
-            )}
-            {l.lemmaRef && (
-              <a href={l.lemmaRef} target="_blank" rel="noreferrer"
-                className="text-[10px] text-accent hover:underline inline-flex items-center gap-0.5 shrink-0">
-                Logeion <ExternalLink className="h-3 w-3" />
-              </a>
+      <div key={key} className="rounded-sm border border-border/40 hover:border-border transition-colors">
+        <div className="flex items-start gap-2 px-3 py-2">
+          <div className="flex-1 min-w-0">
+            <div className="flex items-baseline gap-2 flex-wrap leading-snug">
+              <span className="font-greek text-cult text-sm" lang="grc">{l.lemma}</span>
+              {l.subFunction && (
+                <span className="text-[10px] font-serif italic text-muted/70">{l.subFunction}</span>
+              )}
+              {l.lemmaRef && (
+                <a
+                  href={l.lemmaRef}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-[9px] font-sans uppercase tracking-wide text-accent hover:opacity-70 inline-flex items-center gap-0.5"
+                >
+                  Logeion <ExternalLink className="h-2.5 w-2.5" />
+                </a>
+              )}
+            </div>
+            {l.forms.length > 0 && (
+              <div className="mt-0.5 font-greek text-[11px] text-muted/70 leading-snug" lang="grc">
+                {l.forms.join('  ·  ')}
+              </div>
             )}
           </div>
-          <div className="flex items-center gap-2 shrink-0 text-[10px] font-sans uppercase tracking-wider text-muted">
-            <span className="border border-border/60 rounded-full px-2 py-0.5">{l.family}</span>
-            <span className="text-accent font-bold">{l.count}×</span>
-            <span>· {l.schedeCount} {l.schedeCount === 1 ? 'scheda' : 'schede'}</span>
+
+          <div className="shrink-0 pt-0.5 text-[10px] font-sans text-muted tabular-nums text-right leading-tight">
+            <span className="uppercase tracking-wide text-muted/60">{l.family}</span>
+            <br />
+            {l.count}× · {l.schedeCount} {l.schedeCount === 1 ? 'scheda' : 'schede'}
           </div>
+
+          <button
+            onClick={() => toggle(key)}
+            className="shrink-0 pt-0.5 text-[10px] font-sans font-bold uppercase tracking-wide text-accent hover:opacity-70 transition-opacity inline-flex items-center gap-1"
+          >
+            {l.refs.length}
+            <ChevronRight className={cn('h-3 w-3 transition-transform', open && 'rotate-90')} />
+          </button>
         </div>
 
-        {l.forms.length > 0 && (
-          <div className="mt-2.5 flex flex-wrap gap-1.5">
-            {l.forms.map(f => (
-              <span key={f} className="font-greek text-xs bg-sidebar/60 border border-border/50 text-ink/80 rounded-full px-2 py-0.5" lang="grc">
-                {f}
-              </span>
-            ))}
-          </div>
-        )}
-
-        <button
-          onClick={() => toggle(key)}
-          className="mt-3 text-[10px] font-sans font-bold uppercase tracking-widest text-muted hover:text-accent transition-colors inline-flex items-center gap-1"
-        >
-          <ChevronRight className={cn('h-3 w-3 transition-transform', open && 'rotate-90')} />
-          {open ? 'Nascondi' : 'Mostra'} le {l.refs.length} attestazioni
-        </button>
-
         {open && (
-          <div className="mt-2 flex flex-wrap gap-1.5">
+          <div className="border-t border-border/40 px-3 py-2 bg-sidebar/40 flex flex-wrap gap-x-3 gap-y-1">
             {l.refs.map((r, i) => {
               const m = byId.get(r.id);
               return (
@@ -120,15 +122,15 @@ export const CultLexiconPanel: React.FC<Props> = ({ monumenti, onSelectMonumento
                   onClick={() => m && onSelectMonumento(m)}
                   title={[r.scheda, r.regione, r.line ? `r. ${r.line}` : '', r.form].filter(Boolean).join(' · ')}
                   className={cn(
-                    'text-[11px] font-sans border rounded-lg px-2 py-1 transition-colors',
-                    m ? 'border-border/60 hover:border-accent hover:text-accent' : 'border-border/30 opacity-50',
+                    'text-[10px] font-sans inline-flex items-baseline gap-1 transition-colors',
+                    m ? 'text-muted/80 hover:text-accent' : 'text-muted/40',
                   )}
                 >
-                  <span className="font-bold">{r.scheda}</span>
-                  {r.form && <span className="font-greek ml-1.5 text-muted" lang="grc">{r.form}</span>}
-                  {r.line && <span className="text-muted/60 ml-1">r.{r.line}</span>}
-                  {r.cert === 'low' && <span className="text-amber-500 ml-1" title="forma integrata">[ ]</span>}
-                  {r.formula && <span className="text-cult ml-1" title="#formula">✦</span>}
+                  <span className="uppercase tracking-wide">{r.scheda}</span>
+                  {r.form && <span className="font-greek text-muted/60" lang="grc">{r.form}</span>}
+                  {r.line && <span className="text-muted/40">r.{r.line}</span>}
+                  {r.cert === 'low' && <span className="text-amber-500" title="forma integrata">[ ]</span>}
+                  {r.formula && <span className="text-cult" title="#formula">✦</span>}
                 </button>
               );
             })}
@@ -142,118 +144,106 @@ export const CultLexiconPanel: React.FC<Props> = ({ monumenti, onSelectMonumento
     .map(f => ({ ...f, lemmata: f.lemmata.filter(matchLemma) }))
     .filter(f => f.lemmata.length > 0);
 
+  const inputCls =
+    'text-xs font-sans rounded-sm border border-border bg-sidebar px-2.5 py-1.5 outline-none focus:border-accent transition-colors';
+
   return (
-    <div className="flex-1 overflow-y-auto p-6 md:p-8">
-      <div className="max-w-5xl mx-auto">
-        <h2 className="text-[11px] font-sans font-bold uppercase tracking-[0.2em] text-muted mb-1 flex items-center gap-2">
-          <Tags className="w-4 h-4" /> Lessico cultuale
-        </h2>
-        <p className="text-sm font-serif text-muted mb-5">
-          Il vocabolario delle funzioni cultuali marcato nelle edizioni (<span className="font-mono text-xs">&lt;w&gt;</span> /{' '}
-          <span className="font-mono text-xs">&lt;rs type="cultTerm"&gt;</span>), reso in{' '}
-          <span className="text-cult font-semibold">viola</span> nel testo. La sotto-funzione fine deriva dal lemma
-          (<span className="font-mono text-xs">docs/tassonomia-funzioni-cultuali.md</span> §5).
+    <div className="flex-1 overflow-y-auto p-6 md:p-10 max-w-4xl mx-auto w-full">
+      <div className="mb-5">
+        <div className="text-[10px] font-sans font-bold uppercase tracking-[0.22em] text-accent/70 mb-2 flex items-center gap-1.5">
+          <Tags className="h-3 w-3" /> Lessico cultuale
+        </div>
+        <p className="text-xs font-serif italic text-muted leading-relaxed">
+          Vocabolario delle funzioni cultuali marcato nelle edizioni
+          (<span className="font-mono not-italic">&lt;w&gt;</span> /{' '}
+          <span className="font-mono not-italic">&lt;rs type="cultTerm"&gt;</span>), reso in{' '}
+          <span className="text-cult">malva</span> nel testo. La sotto-funzione deriva dal lemma
+          (<a href="/docs/tassonomia-funzioni-cultuali.md" target="_blank" rel="noreferrer" className="text-accent hover:opacity-70 not-italic">docs/tassonomia-funzioni-cultuali.md</a> §5).
         </p>
+      </div>
 
-        <div className="flex flex-wrap items-center gap-2.5 mb-4">
-          <div className="relative">
-            <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted/50 pointer-events-none" />
-            <input
-              value={search}
-              onChange={e => setSearch(e.target.value)}
-              placeholder="Cerca lemma, forma, sotto-funzione…"
-              className="bg-card border border-border/60 rounded-lg pl-8 pr-7 py-1.5 font-sans text-xs outline-none focus:border-accent/50 w-72"
-              style={{ backgroundColor: 'var(--card)', color: 'var(--ink)' }}
-            />
-            {search && (
-              <button onClick={() => setSearch('')} className="absolute right-2 top-1/2 -translate-y-1/2 text-muted/50 hover:text-accent">
-                <X className="h-3.5 w-3.5" />
-              </button>
-            )}
-          </div>
-
-          <select
-            value={regione}
-            onChange={e => setRegione(e.target.value)}
-            className="bg-card border border-border/60 rounded-lg px-2.5 py-1.5 font-sans text-xs outline-none focus:border-accent/50"
-            style={{ backgroundColor: 'var(--card)', color: 'var(--ink)' }}
-          >
-            <option value="">Tutte le regioni</option>
-            {index.regioni.map(r => <option key={r} value={r}>{r}</option>)}
-          </select>
-
-          <select
-            value={familyFilter}
-            onChange={e => setFamilyFilter(e.target.value)}
-            className="bg-card border border-border/60 rounded-lg px-2.5 py-1.5 font-sans text-xs outline-none focus:border-accent/50"
-            style={{ backgroundColor: 'var(--card)', color: 'var(--ink)' }}
-          >
-            <option value="">Tutte le famiglie</option>
-            {CULT_FAMILIES.map(f => <option key={f.id} value={f.id}>{f.id}</option>)}
-          </select>
-
-          <div className="inline-flex rounded-lg border border-border/60 overflow-hidden text-[10px] font-sans font-bold uppercase tracking-wider">
-            {(['family', 'lemma'] as GroupBy[]).map(g => (
-              <button
-                key={g}
-                onClick={() => setGroupBy(g)}
-                className={cn('px-3 py-1.5 transition-colors', groupBy === g ? 'bg-accent text-white' : 'text-muted hover:text-ink')}
-              >
-                {g === 'family' ? 'per famiglia' : 'per lemma'}
-              </button>
-            ))}
-          </div>
+      {/* Ricerca / filtri */}
+      <div className="flex flex-wrap gap-2 mb-2 items-center">
+        <div className="relative flex-1 min-w-[14rem]">
+          <Search className="h-3.5 w-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-muted/50" />
+          <input
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            placeholder="Filtra lemma, forma, sotto-funzione…"
+            className={cn(inputCls, 'w-full pl-8')}
+          />
         </div>
 
-        <div className="flex flex-wrap gap-1.5 mb-5">
-          <span className="text-[10px] font-sans uppercase tracking-widest text-muted/60 self-center mr-1">Query pronte:</span>
-          {EXAMPLES.map(ex => (
+        <select value={regione} onChange={e => setRegione(e.target.value)} className={inputCls}>
+          <option value="">Tutte le regioni</option>
+          {index.regioni.map(r => <option key={r} value={r}>{r}</option>)}
+        </select>
+
+        <select value={familyFilter} onChange={e => setFamilyFilter(e.target.value)} className={inputCls}>
+          <option value="">Tutte le famiglie</option>
+          {CULT_FAMILIES.map(f => <option key={f.id} value={f.id}>{f.id}</option>)}
+        </select>
+
+        <div className="inline-flex rounded-sm border border-border overflow-hidden text-[9px] font-sans font-bold uppercase tracking-widest">
+          {(['family', 'lemma'] as GroupBy[]).map(g => (
             <button
-              key={ex.label}
+              key={g}
+              onClick={() => setGroupBy(g)}
+              className={cn(
+                'px-2.5 py-1.5 transition-colors',
+                groupBy === g ? 'bg-accent/10 text-accent' : 'text-muted hover:text-ink',
+              )}
+            >
+              {g === 'family' ? 'per famiglia' : 'per lemma'}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="text-[10px] font-sans text-muted/60 mb-4 flex flex-wrap gap-x-1">
+        <span>Query pronte:</span>
+        {EXAMPLES.map((ex, i) => (
+          <React.Fragment key={ex.label}>
+            {i > 0 && <span className="text-muted/30">·</span>}
+            <button
               onClick={() => runExample(ex.opts)}
-              className="font-greek text-xs border border-border/60 rounded-full px-2.5 py-1 hover:border-accent hover:text-accent transition-colors"
+              className="font-greek hover:text-accent transition-colors"
               lang="grc"
             >
               {ex.label}
             </button>
+          </React.Fragment>
+        ))}
+      </div>
+
+      <div className="text-[10px] font-sans text-muted/60 mb-2">
+        {shownAtt} attestazioni · {filteredLemmata.length} lemmi · {shownSchede.size} schede
+        {regione && <> · regione <span className="text-ink">{regione}</span></>}
+        <span className="text-muted/40"> — corpus: {index.totalAttestations} attestazioni in {index.totalSchede} schede</span>
+      </div>
+
+      {filteredLemmata.length === 0 ? (
+        <div className="text-sm italic text-muted/60 py-12 text-center">Nessuna attestazione per questi filtri.</div>
+      ) : groupBy === 'lemma' ? (
+        <div className="space-y-1">{filteredLemmata.map(renderLemmaRow)}</div>
+      ) : (
+        <div className="space-y-6">
+          {familiesToRender.map(f => (
+            <section key={f.id}>
+              <div className="mb-2 border-b border-border/40 pb-1.5">
+                <h3 className="text-[10px] font-sans font-bold uppercase tracking-[0.15em] flex items-baseline gap-2">
+                  <span className="text-cult">{f.id}</span>
+                  <span className="text-muted/60">
+                    {f.lemmata.reduce((s, l) => s + l.count, 0)}× · {f.schedeCount} schede
+                  </span>
+                </h3>
+                <p className="text-[11px] font-serif italic text-muted mt-1">{f.rule}</p>
+              </div>
+              <div className="space-y-1">{f.lemmata.map(renderLemmaRow)}</div>
+            </section>
           ))}
         </div>
-
-        <div className="text-[11px] font-sans text-muted mb-4">
-          {shownAtt} attestazioni · {filteredLemmata.length} lemmi · {shownSchede.size} schede
-          {regione && <> · regione <span className="text-ink">{regione}</span></>}
-          <span className="text-muted/50"> — corpus: {index.totalAttestations} attestazioni in {index.totalSchede} schede</span>
-        </div>
-
-        {filteredLemmata.length === 0 ? (
-          <p className="text-sm font-serif text-muted italic py-12 text-center">
-            Nessuna attestazione per questi filtri.
-          </p>
-        ) : groupBy === 'lemma' ? (
-          <div className="space-y-2.5">
-            {filteredLemmata.map(renderLemmaCard)}
-          </div>
-        ) : (
-          <div className="space-y-8">
-            {familiesToRender.map(f => (
-              <section key={f.id}>
-                <div className="mb-3 border-b border-border/50 pb-2">
-                  <h3 className="font-serif text-base text-ink flex items-baseline gap-2 flex-wrap">
-                    <span className="text-cult font-semibold">{f.id}</span>
-                    <span className="text-[11px] font-sans uppercase tracking-wider text-muted">
-                      {f.lemmata.reduce((s, l) => s + l.count, 0)}× · {f.schedeCount} schede
-                    </span>
-                  </h3>
-                  <p className="text-xs font-serif text-muted mt-1">{f.rule}</p>
-                </div>
-                <div className="space-y-2.5">
-                  {f.lemmata.map(renderLemmaCard)}
-                </div>
-              </section>
-            ))}
-          </div>
-        )}
-      </div>
+      )}
     </div>
   );
 };
