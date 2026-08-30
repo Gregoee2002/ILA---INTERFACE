@@ -587,7 +587,7 @@ const EpithetTree = ({ divinity, epithets, onSelectEpithet, onSelectAll, preview
               </motion.span>
             )}
             <span className="block text-xs font-sans font-bold text-muted mt-1">
-              {divinity.count}× — vedi tutte
+              {divinity.count} <span className="text-border">·</span> vedi tutte
             </span>
           </button>
         </div>
@@ -634,7 +634,7 @@ const EpithetTree = ({ divinity, epithets, onSelectEpithet, onSelectAll, preview
                         />
                       </div>
                       <span className="w-10 shrink-0 text-right text-xs font-sans font-bold text-muted tabular-nums">
-                        {e.count}×
+                        <span className="text-border mr-0.5">·</span>{e.count}
                       </span>
                     </div>
                   </motion.button>
