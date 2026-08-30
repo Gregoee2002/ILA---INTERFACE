@@ -102,10 +102,10 @@ export const CultLexiconPanel: React.FC<Props> = ({ monumenti, onSelectMonumento
 
           <button
             onClick={() => toggle(key)}
-            className="shrink-0 pt-0.5 text-xs font-sans font-bold uppercase tracking-wide text-accent hover:opacity-70 transition-opacity inline-flex items-center gap-1"
+            aria-label={open ? 'Nascondi attestazioni' : 'Mostra attestazioni'}
+            className="shrink-0 pt-0.5 text-accent hover:opacity-70 transition-opacity"
           >
-            {l.refs.length}
-            <ChevronRight className={cn('h-3.5 w-3.5 transition-transform', open && 'rotate-90')} />
+            <ChevronRight className={cn('h-4 w-4 transition-transform', open && 'rotate-90')} />
           </button>
         </div>
 
