@@ -26,6 +26,7 @@ export const ICONOGRAPHY_LABELS: Record<string, string> = {
   confession: "iscrizione di confessione",
   honorific: "onoraria",
   funerary: "funeraria",
+  oracular: "oracolare",
   // support (legacy — non usare nel xenoData, usare function)
   votive_stele: "stele votiva",
   relief: "rilievo",

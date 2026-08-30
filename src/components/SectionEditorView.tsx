@@ -1308,7 +1308,7 @@ function renderSectionForm(
 // lo stesso namespace già usato dai dati esistenti e dal pannello di
 // visualizzazione pubblica (IconographyPanel), NON gli id EAGLE di
 // INSCRIPTION_TYPES (quelli restano il vocabolario per i textTypes del titolo).
-const FUNCTION_IDS = ['votive', 'lex_sacra', 'confession', 'honorific', 'funerary'];
+const FUNCTION_IDS = ['votive', 'lex_sacra', 'confession', 'honorific', 'funerary', 'oracular'];
 
 // Mappa dagli id EAGLE (INSCRIPTION_TYPES, usati in textTypes) all'id corrispondente
 // di iconographyLabels — serve solo al suggerimento automatico qui sotto.
@@ -1326,6 +1326,7 @@ const FUNCTION_SYNONYMS: Record<string, string[]> = {
   confession: ['confession'],
   honorific: ['honorary', 'honorific', 'onorari', 'honour', 'honor'],
   funerary: ['epitaph', 'funerary', 'funerari', 'sepolcr', 'epitaffio'],
+  oracular: ['oracle', 'oracolo', 'oracolare', 'oracular', 'astragal', 'sortes', 'dice oracle'],
 };
 
 /** Deriva un suggerimento di funzione dai textTypes del titolo (mai una scrittura automatica).

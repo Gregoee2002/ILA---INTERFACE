@@ -2893,6 +2893,9 @@ const EpiDocRenderer = ({ xml, query, onTermClick, divinityIndex, onomasticaInde
       const reasonAttr = el.getAttribute('reason') || '';
       const quantityAttr = el.getAttribute('quantity') || '';
       const breakAttr = el.getAttribute('break') || '';
+      const lemmaAttr = el.getAttribute('lemma') || '';
+      const anaAttr = el.getAttribute('ana') || '';
+      const certAttr = el.getAttribute('cert') || '';
       let langAttr = '';
       for (let i = 0; i < el.attributes.length; i++) {
         const attr = el.attributes[i];
@@ -3230,9 +3233,36 @@ const EpiDocRenderer = ({ xml, query, onTermClick, divinityIndex, onomasticaInde
             </span>
           );
         }
+        case 'w': {
+          // Lessico di funzione cultuale (tassonomia cult-functions) — viola.
+          // In ILA <w> marca SOLO questo layer, mai la tokenizzazione integrale.
+          const fam = anaAttr.replace(/#/g, ' ').trim();
+          const tip = `${lemmaAttr ? `Lemma: ${lemmaAttr}` : 'Parola marcata'}${fam ? ` — ${fam}` : ''}`;
+          return (
+            <span
+              key={key}
+              className={`text-cult hover:bg-black/5 dark:hover:bg-white/5 transition-colors px-0.5 rounded cursor-help inline${certAttr === 'low' ? ' opacity-70' : ''}`}
+              data-epidoc-tooltip={tip}
+            >
+              {Array.from(node.childNodes).map((child: any, i) => renderNode(child, key + '-' + i))}
+            </span>
+          );
+        }
         case 'rs': {
           let className = 'italic hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors px-0.5 rounded cursor-help inline';
           let tooltipText = 'Termine semantico';
+          if (typeAttr === 'cultTerm' || typeAttr === 'cultFormula') {
+            const fam = anaAttr.replace(/#/g, ' ').trim();
+            return (
+              <span
+                key={key}
+                className="text-cult hover:bg-black/5 dark:hover:bg-white/5 transition-colors px-0.5 rounded cursor-help inline"
+                data-epidoc-tooltip={`Funzione cultuale${keyAttr ? `: ${keyAttr}` : ''}${fam ? ` (${fam})` : ''}`}
+              >
+                {Array.from(node.childNodes).map((child: any, i) => renderNode(child, key + '-' + i))}
+              </span>
+            );
+          }
           if (typeAttr === 'epithet') {
             className = 'font-bold italic text-accent hover:bg-accent/10 transition-colors px-0.5 rounded cursor-help inline';
             tooltipText = 'Epiteto divino';

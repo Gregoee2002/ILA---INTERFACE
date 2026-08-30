@@ -568,9 +568,22 @@ const ElementChrome: React.FC<{
     }
     case 'name':
       return <span onClick={click} className={cn('px-0', base)}>{kids}</span>;
-    case 'rs':
+    case 'w': {
+      // lessico di funzione cultuale (tassonomia cult-functions) — reso in viola.
+      // In ILA <w> è usato SOLO per questo layer, mai per tokenizzazione integrale.
+      const fam = (a.ana || '').replace(/#/g, ' ').trim();
+      const title = `${a.lemma ? `Lemma: ${a.lemma}` : 'Parola marcata'}${fam ? ` — ${fam}` : ''}`;
+      return <span onClick={click} title={title} className={cn('text-cult', a.cert === 'low' && 'opacity-70', 'px-0.5', base)}>{kids}</span>;
+    }
+    case 'rs': {
       if (a.type === 'epithet') return <span onClick={click} title="Epiteto" className={cn('text-accent/80 px-0.5', base)}>{kids}</span>;
+      if (a.type === 'cultTerm' || a.type === 'cultFormula') {
+        const fam = (a.ana || '').replace(/#/g, ' ').trim();
+        return <span onClick={click} title={`Funzione cultuale${a.key ? `: ${a.key}` : ''}${fam ? ` (${fam})` : ''}`}
+          className={cn('text-cult px-0.5', base)}>{kids}</span>;
+      }
       return <span onClick={click} className={base}>{kids}</span>;
+    }
     case 'placeName':
       return <span onClick={click} title={a.type === 'ethnic' ? `Etnico${a.ref ? ` (${a.ref})` : ''}` : 'Toponimo'}
         className={cn('underline decoration-dotted underline-offset-2 decoration-muted/60 px-0.5', base)}>{kids}</span>;

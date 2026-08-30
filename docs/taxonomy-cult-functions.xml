@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Tassonomia ILA delle funzioni cultuali (marcatura lessicale <w>/<rs> nell'edizione).
+  Stato: BOZZA v2 (2026-08-30) — non ancora referenziata dalle schede.
+  Quando approvata: spostare in <encodingDesc><classDecl> di un header condiviso
+  del corpus (repo dati Gregoee2002/ILA), e referenziare via @ana="#agency" ecc.
+  Doc: docs/tassonomia-funzioni-cultuali.md
+-->
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title>ILA — Tassonomia delle funzioni cultuali (cult-functions)</title>
+      </titleStmt>
+      <publicationStmt>
+        <authority>ILA — Index Lunae Antiquae</authority>
+      </publicationStmt>
+      <sourceDesc>
+        <p>Derivata dallo spoglio del CMRDM I (Lane 1971) e dal campo Note delle
+        traduzioni brevi. Vedi docs/tassonomia-funzioni-cultuali.md e
+        docs/spoglio-lessico-cultuale.csv.</p>
+      </sourceDesc>
+    </fileDesc>
+    <encodingDesc>
+      <classDecl>
+        <taxonomy xml:id="cult-functions">
+          <desc xml:lang="it">Funzione cultuale della parola/formula marcata nel
+          testo. UNA sola famiglia per token in <att>ana</att>; il flag
+          <ident>#formula</ident> si aggiunge (non sostituisce) quando la parola
+          sta in una locuzione fissa. Le sotto-funzioni fini non si codificano a
+          mano: si ricavano da <att>lemma</att> con la tabella in
+          docs/tassonomia-funzioni-cultuali.md §5.</desc>
+
+          <category xml:id="agency">
+            <catDesc xml:lang="it">Il dio come soggetto agente: titolarità di un
+            luogo (βασιλεύω, κατέχω), potenza manifestata (δύναμις), castigo
+            (κολάζω, νεμεσάω), ascolto (ἐπήκοος), manifestazione (ἐπιφανής),
+            comando (κατ' ἐπιταγήν), scelta (αἱρετίζω), disposizione favorevole
+            (εὐίλατος).</catDesc>
+          </category>
+
+          <category xml:id="atto-cultuale">
+            <catDesc xml:lang="it">L'uomo compie o registra un atto rituale o
+            giuridico-sacro: dedica/erezione, consacrazione, costruzione, voto e
+            adempimento, confessione verbale, registrazione su stele, riscatto,
+            propiziazione/lode, consultazione oracolare, rito dei Xenoi
+            Tekmoreioi, onori decretati, norma santuariale (lex sacra, purità,
+            asylia).</catDesc>
+          </category>
+
+          <category xml:id="colpa">
+            <catDesc xml:lang="it">La trasgressione umana in quanto tale — non il
+            castigo (che è #agency): peccato generico (ἁμαρτάνω), spergiuro
+            (ἐπιορκέω), empietà/danno (ἀσεβέω, λύμη).</catDesc>
+          </category>
+
+          <category xml:id="formula-fissa">
+            <catDesc xml:lang="it">Formula di genere senza testa lessicale
+            autonoma (fuori dalla formula non significa nulla di analizzabile):
+            saluto funerario (χρηστὲ χαῖρε), acclamazione (χαίρετε), formula di
+            pioggia (ὗε κύε), imprecazione a tutela (κεχολωμένος, ἐπεξορκίζω,
+            σκῆπτρον nudo).</catDesc>
+          </category>
+
+          <category xml:id="ruolo-istituzione">
+            <catDesc xml:lang="it">Ruoli, istituzioni, status personale:
+            sacerdozio e cariche (ἱερεύς, ἱερατεύω, στολιστής, ἐπὶ ἱερέως),
+            associazioni (φράτρα, σύνοδος, συνβολαφόροι, -ιασταί), comunità
+            (κατοικία, κώμη), status personale (θρεπτός, παιδίσκη,
+            φιλόθεος).</catDesc>
+          </category>
+
+          <category xml:id="formula">
+            <catDesc xml:lang="it">Flag trasversale (non una famiglia): la parola
+            marcata sta dentro una locuzione fissa. Si aggiunge in <att>ana</att>
+            accanto alla famiglia, es. <val>#agency #formula</val> per δύναμις in
+            «μεγάλη ἡ δύναμις τῶν θεῶν».</catDesc>
+          </category>
+        </taxonomy>
+      </classDecl>
+    </encodingDesc>
+  </teiHeader>
+  <text><body><p/></body></text>
+</TEI>
