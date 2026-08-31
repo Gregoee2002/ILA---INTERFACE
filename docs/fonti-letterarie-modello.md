@@ -11,9 +11,8 @@ Aggiornato al 31 agosto 2026.
 
 ## 1. Che cos'è, e perché
 
-La sezione non è un secondo catalogo. È una **raccolta ragionata di
-testimonianze letterarie** greche e latine sulla divinità lunare, organizzata
-per voce e, dentro la voce, per nuclei tematici.
+Una **raccolta ragionata di testimonianze letterarie** greche e latine sulla
+divinità lunare, organizzata per voce e, dentro la voce, per nuclei tematici.
 
 Il catalogo epigrafico risponde alla domanda «che cosa si scriveva sulla
 pietra»; questa sezione risponde a «che cosa si diceva nei testi». Le due
@@ -22,6 +21,33 @@ originale di ILA, non un effetto collaterale.
 
 Sulla home le due sezioni sono affiancate e di pari rango (*Sulla pietra* /
 *Nei testi*). Non è una scelta grafica: è la tesi della sezione.
+
+## 1.1 Come si naviga
+
+La sezione **ricalca la grammatica del catalogo epigrafico** — elenco
+filtrabile, click su una riga, scheda a tutta pagina — su tre livelli:
+
+| Livello | Che cos'è | Corrispettivo nel catalogo |
+|---|---|---|
+| **1. Indice delle voci** | Selene, Men, Lunus… con i numeri di ciascuna e l'elenco di quelle ancora da redigere | — (il catalogo ha una sola raccolta) |
+| **2. Elenco testimonianze** | la tabella filtrabile di una voce: sigla · fonte · datazione · genere · incipit, ordinabile per nucleo, cronologia o autore | l'elenco delle schede |
+| **3. Scheda** | il singolo passo, modale con rail dei metadati a sinistra e sezioni (Testo · Commento · Analisi · Rimandi) | la scheda del monumento |
+
+Accanto all'elenco, due viste alternative sulla stessa voce:
+
+- **Lettura** — il discorso continuo: cappello, nuclei tematici con i loro
+  cappelli, testimonianze commentate in sequenza, sintesi, bibliografia. È la
+  parte che nessun calcolo può derivare dai dati, ed è il motivo per cui la
+  voce esiste; da qui ogni testimonianza apre la propria scheda.
+- **Indici** — le sette rubriche trasversali del lessico LARES.
+
+Il pulsante **TEI** esporta la voce intera in EpiDoc (§ 5).
+
+Una nota sulla natura dei nuclei tematici, perché è la differenza sostanziale
+con il resto del database: le viste del corpus (mappa, cronologia, epiteti,
+lessico cultuale) sono **calcolate** dal markup XML e si aggiornano da sole; i
+nuclei sono **scritti a mano** da chi redige la voce e restano fermi finché
+qualcuno non li riscrive. Sono una tesi sul materiale, non una sua proiezione.
 
 ## 2. LARES come modello di riferimento
 
@@ -141,8 +167,15 @@ l'indice di ricerca reale del progetto (`buildSearchIndex` +
   parola.**
 
 **Aggiungere una voce.** Redigerla in `src/data/fontiLetterarie.ts` e
-aggiungerla all'array `VOCI`: il selettore in testata compare da solo quando
-le voci sono più di una. Nessun'altra modifica è necessaria.
+aggiungerla all'array `VOCI`; togliere la riga corrispondente da
+`VOCI_IN_PREPARAZIONE`. Compare da sola nell'indice delle voci, con i numeri
+calcolati da `voceStats`. Nessun'altra modifica è necessaria.
+
+**Il greco non va mai messo in maiuscolo dal CSS.** I titoli dei nuclei
+contengono greco (`II. I nomi della luna: σελήνη, μήνη, luna`); `text-transform:
+uppercase` produrrebbe `ΣΕΛΉΝΗ`, con l'accento che il greco maiuscolo non
+porta. Dove si mostra un titolo di nucleo si usa il grassetto spaziato senza
+`uppercase`.
 
 ## 7. Stato
 

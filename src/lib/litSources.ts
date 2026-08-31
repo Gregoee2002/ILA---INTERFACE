@@ -385,6 +385,45 @@ export function buildIndici(testimonia: Testimonium[]): VoceIndici {
   };
 }
 
+/**
+ * Una voce non ancora redatta, elencata accanto a quelle esistenti perché
+ * l'indice dica anche che cosa manca — come il catalogo dichiara le schede
+ * incomplete invece di ometterle.
+ */
+export interface VoceInPreparazione {
+  lemma: string;
+  lemmaGreco?: string;
+  nota: string;
+}
+
+export interface VoceStats {
+  testimonianze: number;
+  fonti: number;
+  nuclei: number;
+  termini: number;
+  daCollazionare: number;
+  /** arco cronologico delle fonti, già formattato */
+  arco: string;
+}
+
+const annoLabel = (a: number) =>
+  a < 0 ? `${Math.abs(a)} a.C.` : `${a} d.C.`;
+
+/** Numeri di riepilogo di una voce, per la riga d'indice e la testata. */
+export function voceStats(v: Voce): VoceStats {
+  const anni = v.testimonia.map(t => t.datazioneSort);
+  const fonti = new Set(v.testimonia.map(t => t.autore));
+  const termini = new Set(v.testimonia.flatMap(t => t.termini.map(w => w.lemma)));
+  return {
+    testimonianze: v.testimonia.length,
+    fonti: fonti.size,
+    nuclei: v.nuclei.length,
+    termini: termini.size,
+    daCollazionare: v.testimonia.filter(t => t.collazione === 'da-collazionare').length,
+    arco: anni.length ? `${annoLabel(Math.min(...anni))} – ${annoLabel(Math.max(...anni))}` : '—',
+  };
+}
+
 /** Citazione breve normalizzata, es. «Hes. Th. 371–374». */
 export const citaBreve = (t: Testimonium) => `${t.autoreAbbr} ${t.operaAbbr} ${t.locus}`.replace(/\s+/g, ' ').trim();
 

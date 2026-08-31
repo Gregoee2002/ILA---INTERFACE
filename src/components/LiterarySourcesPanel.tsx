@@ -1,27 +1,35 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import {
-  ScrollText, Search, ChevronDown, ChevronRight, ExternalLink, FileCode2,
-  BookOpen, Library, AlertTriangle, Quote, ArrowRight, Sparkles, X,
+  ScrollText, Search, ChevronDown, ChevronRight, ChevronLeft, ExternalLink, FileCode2,
+  BookOpen, Library, AlertTriangle, ArrowRight, Sparkles, X, List, Text,
 } from 'lucide-react';
 import { cn } from '../lib/utils';
 import {
   Voce, Testimonium, LaresCampo, Genere,
-  GENERE_LABELS, TIPO_LABELS, AMBITO_LABELS, AMBITO_CAMPO, CAMPO_COLOR, LARES_GRID,
-  buildIndici, citaBreve, foldForSearch, searchableOf, voceToTei, IndexEntry,
+  GENERE_LABELS, TIPO_LABELS, AMBITO_LABELS, CAMPO_COLOR, LARES_GRID,
+  buildIndici, citaBreve, foldForSearch, searchableOf, voceToTei, voceStats, IndexEntry,
 } from '../lib/litSources';
-import { VOCI } from '../data/fontiLetterarie';
+import { VOCI, VOCI_IN_PREPARAZIONE } from '../data/fontiLetterarie';
 
 /**
  * LiterarySourcesPanel — la sezione «Fonti letterarie».
  *
- * Non è un secondo catalogo: è la raccolta ragionata delle testimonianze
- * letterarie sulla divinità lunare, organizzata per voce e per nuclei
- * tematici, con gli indici trasversali del lessico LARES (fonti, ambiti,
- * termini, personaggi, figure, luoghi) e un ponte esplicito verso le schede
- * epigrafiche del catalogo.
+ * Raccolta ragionata delle testimonianze letterarie greche e latine sulla
+ * divinità lunare. La sezione ricalca la grammatica del catalogo epigrafico —
+ * elenco filtrabile, click su una riga, scheda a tutta pagina — su tre livelli:
+ *
+ *   1. INDICE DELLE VOCI     Selene, Men, Lunus… (più quelle in preparazione)
+ *   2. ELENCO TESTIMONIANZE  la tabella filtrabile di una voce
+ *   3. SCHEDA                il singolo passo, modale come la scheda epigrafica
+ *
+ * Accanto all'elenco, due viste alternative sulla stessa voce: LETTURA (il
+ * discorso continuo — cappello, nuclei tematici, sintesi: la parte che nessun
+ * calcolo può derivare dai dati) e INDICI (le rubriche trasversali del lessico
+ * LARES). Il pulsante TEI esporta la voce in EpiDoc.
  *
  * Modello dati e mappatura LARES: src/lib/litSources.ts.
  * Contenuto redazionale: src/data/fontiLetterarie.ts.
+ * Norme: docs/fonti-letterarie-modello.md.
  *
  * Tutto il contenuto è compilato nel bundle: la sezione funziona identica
  * sulla build statica GitHub Pages, senza passare da apiShim.
@@ -38,6 +46,11 @@ const FIELD_BASE =
 const FIELD_STYLE = { backgroundColor: 'var(--card)', color: 'var(--ink)' } as const;
 
 const EYEBROW = 'text-[10px] font-sans font-bold uppercase tracking-[0.22em]';
+// Testata di colonna e riga dell'elenco: stessa griglia del catalogo epigrafico.
+const GRID = 'md:grid md:grid-cols-[2.5rem_2.4fr_1.2fr_1.1fr] xl:grid-cols-[2.5rem_2.4fr_1.2fr_1.1fr_2.6fr] gap-3';
+
+type Vista = 'elenco' | 'lettura' | 'indici';
+type Ordine = 'cronologia' | 'autore' | 'nucleo';
 
 type IndiceKey = 'fonti' | 'termini' | 'divinita' | 'personaggi' | 'figure' | 'luoghi' | 'ambiti';
 
@@ -53,23 +66,18 @@ const INDICE_LABELS: Record<IndiceKey, string> = {
 
 const LINGUA_LABEL: Record<'grc' | 'lat', string> = { grc: 'greco', lat: 'latino' };
 
+/** Prime parole del testo antico, per la colonna di anteprima dell'elenco. */
+const incipit = (t: Testimonium, max = 110) => {
+  const piano = t.testo.replace(/\s+/g, ' ').trim();
+  return piano.length > max ? `${piano.slice(0, max)}…` : piano;
+};
+
 // ─────────────────────────────────────────────────────────────── chip ──────
 
-const Chip: React.FC<{
-  children: React.ReactNode;
-  color?: string;
-  title?: string;
-  onClick?: () => void;
-  active?: boolean;
-}> = ({ children, color, title, onClick, active }) => (
+const Chip: React.FC<{ children: React.ReactNode; color?: string; title?: string }> = ({ children, color, title }) => (
   <span
     title={title}
-    onClick={onClick}
-    className={cn(
-      'inline-flex items-center gap-1 px-1.5 py-0.5 rounded-sm text-[10px] font-sans uppercase tracking-wide whitespace-nowrap',
-      onClick && 'cursor-pointer hover:opacity-80 transition-opacity',
-      active && 'ring-1 ring-accent/50',
-    )}
+    className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-sm text-[10px] font-sans uppercase tracking-wide whitespace-nowrap"
     style={{
       color: color || 'var(--muted)',
       backgroundColor: color ? `color-mix(in srgb, ${color} 14%, transparent)` : 'color-mix(in srgb, var(--muted) 12%, transparent)',
@@ -79,194 +87,360 @@ const Chip: React.FC<{
   </span>
 );
 
-// ──────────────────────────────────────────────────────── testimonium ──────
+// ══════════════════════════════════════════════ 3. SCHEDA DEL TESTIMONIUM ══
+//
+// Modale con la stessa impaginazione della scheda epigrafica: rail sinistra
+// coi metadati e la navigazione a sezioni, corpo a destra su pergamena.
 
-const TestimoniumCard: React.FC<{
+const SCHEDA_SECTIONS = [
+  { id: 'testo', label: 'Testo e traduzione' },
+  { id: 'commento', label: 'Commento' },
+  { id: 'analisi', label: 'Analisi e indici' },
+  { id: 'rimandi', label: 'Rimandi e bibliografia' },
+] as const;
+
+type SchedaSection = typeof SCHEDA_SECTIONS[number]['id'];
+
+const SchedaTestimonium: React.FC<{
   t: Testimonium;
+  voce: Voce;
+  onClose: () => void;
   onCorpusSearch: (q: string) => void;
-  onTerm: (lemma: string) => void;
-  flash?: boolean;
-}> = ({ t, onCorpusSearch, onTerm, flash }) => {
-  const [openDetail, setOpenDetail] = useState(false);
+  onFiltra: (patch: { genere?: Genere; nucleo?: string; search?: string }) => void;
+  nucleoTitolo?: string;
+  nucleoId?: string;
+}> = ({ t, voce, onClose, onCorpusSearch, onFiltra, nucleoTitolo, nucleoId }) => {
+  const [sezione, setSezione] = useState<SchedaSection>('testo');
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') { e.stopImmediatePropagation(); onClose(); }
+    };
+    window.addEventListener('keydown', onKey, true);
+    return () => window.removeEventListener('keydown', onKey, true);
+  }, [onClose]);
+
+  const dettagli: { label: string; value: string; onClick?: () => void }[] = [
+    { label: 'Autore', value: t.autore, onClick: () => { onFiltra({ search: t.autore }); onClose(); } },
+    { label: 'Opera', value: `${t.opera} ${t.locus}` },
+    { label: 'Datazione', value: t.datazione },
+    { label: 'Genere', value: GENERE_LABELS[t.genere], onClick: () => { onFiltra({ genere: t.genere }); onClose(); } },
+    { label: 'Lingua', value: LINGUA_LABEL[t.lingua] },
+    ...(nucleoTitolo && nucleoId
+      ? [{ label: 'Nucleo', value: nucleoTitolo, onClick: () => { onFiltra({ nucleo: nucleoId }); onClose(); } }]
+      : []),
+  ];
 
   return (
-    <article
-      id={t.id}
-      className={cn(
-        'rounded-xl border bg-[var(--card)]/55 dark:bg-black/15 overflow-hidden scroll-mt-6 transition-[border-color,box-shadow] duration-500',
-        flash ? 'border-accent/70 shadow-[0_0_0_3px_color-mix(in_srgb,var(--accent)_18%,transparent)]' : 'border-border/40',
-      )}
-    >
-      {/* Testata: sigla, citazione, datazione */}
-      <header className="flex flex-wrap items-baseline gap-x-3 gap-y-1 px-4 py-2.5 border-b border-border/30 bg-sidebar/40">
-        <span
-          className="shrink-0 text-[10px] font-sans font-bold tracking-widest px-1.5 py-0.5 rounded-sm"
-          style={{ color: 'var(--lit)', backgroundColor: 'color-mix(in srgb, var(--lit) 14%, transparent)' }}
-        >
-          {t.sigla}
-        </span>
-        <h4 className="font-serif font-bold text-ink text-[15px] leading-tight">
-          {t.autore}, <span className="italic">{t.opera}</span> {t.locus}
-        </h4>
-        <span className="text-[11px] font-sans text-muted/70">{t.datazione}</span>
-        <span className="flex-1" />
-        <span className="text-[10px] font-sans uppercase tracking-wide text-muted/50">{citaBreve(t)}</span>
-      </header>
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 md:p-8">
+      <div onClick={onClose} className="absolute inset-0 bg-ink/80 backdrop-blur-sm" />
+      <div className="relative w-full lg:w-[95vw] max-w-[1400px] bg-parchment shadow-2xl overflow-hidden flex flex-col h-full lg:h-[90vh] border border-border lg:rounded-2xl">
+        <div className="flex h-full flex-col md:flex-row overflow-y-auto md:overflow-hidden">
 
-      <div className="px-4 py-3.5 space-y-3">
-        {/* Testo antico */}
-        <blockquote
-          className={cn(
-            'whitespace-pre-wrap leading-[1.75] pl-3 border-l-2',
-            t.lingua === 'grc' ? 'font-greek text-[15px]' : 'font-serif text-[15px]',
-          )}
-          lang={t.lingua}
-          style={{ borderColor: 'color-mix(in srgb, var(--lit) 45%, transparent)' }}
-        >
-          {t.testo}
-        </blockquote>
-
-        {/* Traduzione */}
-        <div className="whitespace-pre-wrap font-serif italic text-[14px] leading-relaxed text-ink/75 pl-3">
-          {t.traduzione}
-        </div>
-
-        {/* Commento ragionato — il cuore della scheda */}
-        <div className="pt-1">
-          <div className={cn(EYEBROW, 'text-accent/70 mb-1.5 flex items-center gap-1.5')}>
-            <Quote className="h-3 w-3" /> Commento
-          </div>
-          <p className="font-serif text-[14px] leading-relaxed text-ink/90 text-justify hyphens-auto">
-            {t.commento}
-          </p>
-        </div>
-
-        {/* Ponti al catalogo epigrafico */}
-        {t.corpus && t.corpus.length > 0 && (
-          <div className="flex flex-wrap gap-2 pt-1">
-            {t.corpus.map(c => (
+          {/* Rail dei metadati */}
+          <div className="w-full md:w-56 bg-sidebar border-b md:border-b-0 md:border-r border-border p-5 md:p-6 flex flex-col shrink-0 md:overflow-y-auto custom-scrollbar">
+            <div className="mb-10">
               <button
-                key={c.q}
-                onClick={() => onCorpusSearch(c.q)}
-                title={`Cerca «${c.q}» nel catalogo`}
-                className="inline-flex items-center gap-1.5 text-[11px] font-sans px-2 py-1 rounded-md border border-accent/30 text-accent hover:bg-accent/10 transition-colors"
+                onClick={onClose}
+                className="text-[10px] font-sans font-bold uppercase tracking-[0.2em] text-muted flex items-center gap-2 hover:text-accent transition-colors"
               >
-                <ArrowRight className="h-3 w-3" /> {c.label}
+                <X className="h-4 w-4" /> Torna all'elenco
               </button>
-            ))}
-          </div>
-        )}
-
-        {/* Riga di classificazione + apri dettaglio */}
-        <div className="flex flex-wrap items-center gap-1.5 pt-1">
-          <Chip color="var(--lit)" title="genere letterario">{GENERE_LABELS[t.genere]}</Chip>
-          <Chip title="lingua">{LINGUA_LABEL[t.lingua]}</Chip>
-          {t.tipo.map(x => <Chip key={x} title="tipo di testimonianza">{TIPO_LABELS[x]}</Chip>)}
-          {/* I marcatori concettuali LARES sono un gruppo a sé: l'etichetta li
-              stacca dai chip di genere e tipologia, che seguono la tassonomia
-              interna di ILA. */}
-          <span className="text-[9px] font-sans font-bold uppercase tracking-[0.18em] text-muted/40 pl-1">LARES</span>
-          {t.lares.map((m, i) => (
-            <Chip key={`${m.ambito}-${i}`} color={CAMPO_COLOR[m.campo]} title={`LARES · ${m.campo} → ${AMBITO_LABELS[m.ambito]}`}>
-              {AMBITO_LABELS[m.ambito]}
-            </Chip>
-          ))}
-          <span className="flex-1" />
-          <button
-            onClick={() => setOpenDetail(o => !o)}
-            className="inline-flex items-center gap-1 text-[10px] font-sans uppercase tracking-widest text-muted/60 hover:text-accent transition-colors"
-          >
-            Scheda <ChevronRight className={cn('h-3 w-3 transition-transform', openDetail && 'rotate-90')} />
-          </button>
-        </div>
-
-        {/* Dettaglio: termini, entità, edizione, link */}
-        {openDetail && (
-          <div className="mt-1 rounded-lg bg-sidebar/50 border border-border/30 px-3.5 py-3 space-y-2.5 text-[12px] font-sans">
-            {t.termini.length > 0 && (
-              <div>
-                <div className={cn(EYEBROW, 'text-muted/50 mb-1')}>Termini notevoli</div>
-                <ul className="space-y-1">
-                  {t.termini.map(w => (
-                    <li key={w.forma} className="flex flex-wrap items-baseline gap-x-2">
-                      <button
-                        onClick={() => onTerm(w.lemma)}
-                        className={cn(t.lingua === 'grc' ? 'font-greek' : 'font-serif', 'text-[14px] text-cult hover:underline')}
-                        lang={t.lingua}
-                        title={`Filtra per ${w.lemma}`}
-                      >
-                        {w.forma}
-                      </button>
-                      {w.lemma !== w.forma && (
-                        <span className={cn(t.lingua === 'grc' ? 'font-greek' : 'font-serif', 'text-muted/60')} lang={t.lingua}>
-                          ({w.lemma})
-                        </span>
-                      )}
-                      {w.nota && <span className="text-muted/70 italic font-serif text-[12.5px]">— {w.nota}</span>}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-
-            {(['divinita', 'personaggi', 'figure', 'luoghi'] as const).some(k => (t[k] || []).length > 0) && (
-              <div className="flex flex-wrap gap-x-5 gap-y-1.5">
-                {([
-                  ['divinita', 'Divinità'],
-                  ['personaggi', 'Personaggi'],
-                  ['figure', 'Figure storiche'],
-                  ['luoghi', 'Luoghi'],
-                ] as const).map(([k, label]) =>
-                  (t[k] || []).length > 0 ? (
-                    <div key={k}>
-                      <span className={cn(EYEBROW, 'text-muted/50 mr-1.5')}>{label}</span>
-                      <span className="text-muted/85">{(t[k] || []).join(' · ')}</span>
-                    </div>
-                  ) : null,
-                )}
-              </div>
-            )}
-
-            <div className="flex flex-wrap items-center gap-x-4 gap-y-1 pt-1 border-t border-border/30 text-[11px] text-muted/70">
-              <span><span className={cn(EYEBROW, 'text-muted/50 mr-1.5')}>Edizione</span>{t.edizione}</span>
-              <span><span className={cn(EYEBROW, 'text-muted/50 mr-1.5')}>Traduzione</span>{t.traduttore}</span>
-              <span><span className={cn(EYEBROW, 'text-muted/50 mr-1.5')}>ID</span><code className="font-mono">{t.id}</code></span>
-              {t.collazione === 'da-collazionare' && (
-                <span className="inline-flex items-center gap-1 text-amber-600 dark:text-amber-400" title="Il testo va riscontrato sull'edizione indicata">
-                  <AlertTriangle className="h-3 w-3" /> da collazionare
-                </span>
-              )}
             </div>
 
-            {/* Il test dev'essere booleano: con entrambi gli array presenti ma
-                vuoti, `[].length || [].length` vale 0 e React stamperebbe uno
-                «0» in fondo alla scheda. */}
-            {((t.links?.length ?? 0) > 0 || (t.bibliografia?.length ?? 0) > 0) && (
-              <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px]">
-                {t.links?.map(l => (
-                  <a
-                    key={l.url}
-                    href={l.url}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="inline-flex items-center gap-1 text-accent hover:opacity-70"
-                  >
-                    <ExternalLink className="h-3 w-3" /> {l.label}
-                  </a>
-                ))}
-                {t.bibliografia?.map(b => (
-                  <span key={b} className="font-serif italic text-muted/70">{b}</span>
-                ))}
+            <div className="space-y-8">
+              <div className="border-l-2 pl-4" style={{ borderColor: 'var(--lit)' }}>
+                <span className="text-3xl font-light italic leading-none">{t.sigla}</span>
+                <span className="block mt-2 font-sans field-label">{voce.lemma}</span>
               </div>
-            )}
+
+              <nav className="space-y-1.5 -mx-1">
+                {SCHEDA_SECTIONS.map(({ id, label }) => (
+                  <button
+                    key={id}
+                    onClick={() => setSezione(id)}
+                    className={cn(
+                      'w-full text-left px-3.5 py-2.5 font-sans text-[11px] font-bold uppercase tracking-wider rounded-xl transition-all duration-200',
+                      sezione === id ? 'nav-pill-active text-accent' : 'text-muted hover:text-ink',
+                    )}
+                  >
+                    {label}
+                  </button>
+                ))}
+              </nav>
+
+              <section className="space-y-4">
+                <h4 className="font-sans field-label opacity-85 pb-2 border-b border-border/40">Dettagli</h4>
+                <dl className="space-y-3">
+                  {dettagli.map(d => (
+                    <div key={d.label}>
+                      <dt className="text-[9px] font-sans font-bold uppercase text-muted/80 tracking-tighter">{d.label}</dt>
+                      {d.onClick ? (
+                        <button
+                          onClick={d.onClick}
+                          className="text-xs font-semibold text-ink mt-0.5 font-serif hover:text-accent transition-colors block text-left"
+                        >
+                          {d.value}
+                        </button>
+                      ) : (
+                        <dd className="text-xs font-semibold text-ink mt-0.5 font-serif">{d.value}</dd>
+                      )}
+                    </div>
+                  ))}
+                </dl>
+              </section>
+
+              <section className="pt-5 border-t border-border/40">
+                <h4 className="font-sans field-label opacity-85 pb-2 mb-3">Edizione</h4>
+                <p className="text-[11px] font-serif text-muted/85 leading-snug">{t.edizione}</p>
+                <p className="text-[11px] font-serif text-muted/70 leading-snug mt-1">Traduzione: {t.traduttore}</p>
+                {t.collazione === 'da-collazionare' && (
+                  <p className="mt-3 inline-flex items-start gap-1.5 text-[10px] font-sans uppercase tracking-wide text-amber-600 dark:text-amber-400">
+                    <AlertTriangle className="h-3 w-3 shrink-0 mt-px" /> da collazionare
+                  </p>
+                )}
+                <p className="mt-3 text-[9px] font-mono text-muted/50 break-all">{t.id}</p>
+              </section>
+            </div>
           </div>
-        )}
+
+          {/* Corpo */}
+          <div className="flex-1 min-h-0 bg-parchment p-6 md:p-12 lg:p-16 md:overflow-y-auto custom-scrollbar">
+            <div className="max-w-3xl">
+              {/* Senza `uppercase`: i titoli dei nuclei contengono greco, e il
+                  maiuscolo automatico del browser produce forme scorrette
+                  (Μήν → ΜΉΝ), perché il greco maiuscolo non porta l'accento. */}
+              <div
+                className="text-[10px] font-sans font-bold tracking-[0.3em] mb-2"
+                style={{ color: 'var(--lit)' }}
+              >
+                {nucleoTitolo || 'Testimonianza'}
+              </div>
+              <h2 className="font-serif font-bold text-ink text-2xl md:text-3xl leading-tight mb-1">
+                {t.autore}, <span className="italic">{t.opera}</span> {t.locus}
+              </h2>
+              <p className="text-xs font-sans text-muted/70 mb-8">
+                {citaBreve(t)} · {t.datazione} · {GENERE_LABELS[t.genere]}
+              </p>
+
+              {sezione === 'testo' && (
+                <div className="animate-in fade-in duration-200 space-y-7">
+                  <div>
+                    <h3 className="field-label mb-3">Testo</h3>
+                    <blockquote
+                      className={cn('whitespace-pre-wrap leading-[1.85] pl-4 border-l-2', t.lingua === 'grc' ? 'font-greek text-[17px]' : 'font-serif text-[17px]')}
+                      lang={t.lingua}
+                      style={{ borderColor: 'color-mix(in srgb, var(--lit) 45%, transparent)' }}
+                    >
+                      {t.testo}
+                    </blockquote>
+                  </div>
+                  <div>
+                    <h3 className="field-label mb-3">Traduzione</h3>
+                    <p className="whitespace-pre-wrap font-serif italic text-[16px] leading-relaxed text-ink/80 pl-4">
+                      {t.traduzione}
+                    </p>
+                  </div>
+                </div>
+              )}
+
+              {sezione === 'commento' && (
+                <div className="animate-in fade-in duration-200">
+                  <p className="font-serif text-[16px] leading-[1.75] text-ink/90 text-justify hyphens-auto">
+                    {t.commento}
+                  </p>
+                </div>
+              )}
+
+              {sezione === 'analisi' && (
+                <div className="animate-in fade-in duration-200 space-y-8">
+                  <div>
+                    <h3 className="field-label mb-3">Tipologia della testimonianza</h3>
+                    <div className="flex flex-wrap gap-1.5">
+                      {t.tipo.map(x => <Chip key={x}>{TIPO_LABELS[x]}</Chip>)}
+                    </div>
+                  </div>
+
+                  <div>
+                    <h3 className="field-label mb-3">Marcatori concettuali LARES</h3>
+                    <div className="flex flex-wrap gap-1.5">
+                      {t.lares.map((m, i) => (
+                        <Chip key={`${m.ambito}-${i}`} color={CAMPO_COLOR[m.campo]} title={`campo: ${m.campo}`}>
+                          {m.campo} → {AMBITO_LABELS[m.ambito]}
+                        </Chip>
+                      ))}
+                    </div>
+                  </div>
+
+                  {t.termini.length > 0 && (
+                    <div>
+                      <h3 className="field-label mb-3">Termini notevoli</h3>
+                      <ul className="space-y-2">
+                        {t.termini.map(w => (
+                          <li key={w.forma} className="flex flex-wrap items-baseline gap-x-2.5">
+                            <span className={cn(t.lingua === 'grc' ? 'font-greek text-[16px]' : 'font-serif text-[15px] italic', 'text-cult')} lang={t.lingua}>
+                              {w.forma}
+                            </span>
+                            {w.lemma !== w.forma && (
+                              <span className={cn(t.lingua === 'grc' ? 'font-greek' : 'font-serif italic', 'text-[14px] text-muted/60')} lang={t.lingua}>
+                                ({w.lemma})
+                              </span>
+                            )}
+                            {w.nota && <span className="text-[13px] font-serif italic text-muted/80">— {w.nota}</span>}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
+                  {(['divinita', 'personaggi', 'figure', 'luoghi'] as const).some(k => (t[k] || []).length > 0) && (
+                    <div>
+                      <h3 className="field-label mb-3">Entità nominate</h3>
+                      <dl className="space-y-2">
+                        {([
+                          ['divinita', 'Divinità'],
+                          ['personaggi', 'Personaggi'],
+                          ['figure', 'Figure storiche'],
+                          ['luoghi', 'Luoghi'],
+                        ] as const).map(([k, label]) =>
+                          (t[k] || []).length > 0 ? (
+                            <div key={k} className="flex flex-wrap items-baseline gap-2">
+                              <dt className="text-[9px] font-sans font-bold uppercase text-muted/70 tracking-tighter w-28 shrink-0">{label}</dt>
+                              <dd className="text-[14px] font-serif text-ink/85">{(t[k] || []).join(' · ')}</dd>
+                            </div>
+                          ) : null,
+                        )}
+                      </dl>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {sezione === 'rimandi' && (
+                <div className="animate-in fade-in duration-200 space-y-8">
+                  <div>
+                    <h3 className="field-label mb-3">Nel catalogo epigrafico</h3>
+                    {t.corpus && t.corpus.length > 0 ? (
+                      <div className="flex flex-col items-start gap-2">
+                        {t.corpus.map(c => (
+                          <button
+                            key={c.q}
+                            onClick={() => { onCorpusSearch(c.q); onClose(); }}
+                            title={`Cerca «${c.q}» nel catalogo`}
+                            className="inline-flex items-center gap-2 text-[13px] font-sans px-3 py-1.5 rounded-md border border-accent/30 text-accent hover:bg-accent/10 transition-colors"
+                          >
+                            <ArrowRight className="h-3.5 w-3.5" /> {c.label}
+                          </button>
+                        ))}
+                      </div>
+                    ) : (
+                      <p className="text-[14px] font-serif italic text-muted/60">
+                        Nessun rimando: questo passo non trova riscontro diretto nel corpus.
+                      </p>
+                    )}
+                  </div>
+
+                  {t.links && t.links.length > 0 && (
+                    <div>
+                      <h3 className="field-label mb-3">Testo online</h3>
+                      <div className="flex flex-col items-start gap-1.5">
+                        {t.links.map(l => (
+                          <a key={l.url} href={l.url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 text-[13px] font-sans text-accent hover:opacity-70">
+                            <ExternalLink className="h-3.5 w-3.5" /> {l.label}
+                          </a>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  <div>
+                    <h3 className="field-label mb-3">Bibliografia</h3>
+                    {t.bibliografia && t.bibliografia.length > 0 ? (
+                      <ul className="space-y-1.5">
+                        {t.bibliografia.map(b => (
+                          <li key={b} className="font-serif text-[14px] leading-snug text-muted/85 pl-4 -indent-4">{b}</li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <p className="text-[14px] font-serif italic text-muted/60">
+                        Solo l'edizione di riferimento, indicata nella colonna a lato.
+                      </p>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
       </div>
-    </article>
+    </div>
   );
 };
 
-// ──────────────────────────────────────────────────────────── indici ───────
+// ══════════════════════════════════════════ card della vista «Lettura» ══════
+
+const TestimoniumCard: React.FC<{
+  t: Testimonium;
+  onOpen: () => void;
+  onCorpusSearch: (q: string) => void;
+}> = ({ t, onOpen, onCorpusSearch }) => (
+  <article className="rounded-xl border border-border/40 bg-[var(--card)]/55 dark:bg-black/15 overflow-hidden">
+    <button
+      onClick={onOpen}
+      className="w-full flex flex-wrap items-baseline gap-x-3 gap-y-1 px-4 py-2.5 border-b border-border/30 bg-sidebar/40 text-left hover:bg-sidebar/70 transition-colors group"
+    >
+      <span
+        className="shrink-0 text-[10px] font-sans font-bold tracking-widest px-1.5 py-0.5 rounded-sm"
+        style={{ color: 'var(--lit)', backgroundColor: 'color-mix(in srgb, var(--lit) 14%, transparent)' }}
+      >
+        {t.sigla}
+      </span>
+      <h4 className="font-serif font-bold text-ink text-[15px] leading-tight group-hover:text-accent transition-colors">
+        {t.autore}, <span className="italic">{t.opera}</span> {t.locus}
+      </h4>
+      <span className="text-[11px] font-sans text-muted/70">{t.datazione}</span>
+      <span className="flex-1" />
+      <span className="text-[10px] font-sans uppercase tracking-wide text-muted/40 group-hover:text-accent transition-colors inline-flex items-center gap-1">
+        Scheda <ChevronRight className="h-3 w-3" />
+      </span>
+    </button>
+
+    <div className="px-4 py-3.5 space-y-3">
+      <blockquote
+        className={cn('whitespace-pre-wrap leading-[1.75] pl-3 border-l-2', t.lingua === 'grc' ? 'font-greek text-[15px]' : 'font-serif text-[15px]')}
+        lang={t.lingua}
+        style={{ borderColor: 'color-mix(in srgb, var(--lit) 45%, transparent)' }}
+      >
+        {t.testo}
+      </blockquote>
+
+      <div className="whitespace-pre-wrap font-serif italic text-[14px] leading-relaxed text-ink/75 pl-3">
+        {t.traduzione}
+      </div>
+
+      <p className="font-serif text-[14px] leading-relaxed text-ink/90 text-justify hyphens-auto pt-1">
+        {t.commento}
+      </p>
+
+      {t.corpus && t.corpus.length > 0 && (
+        <div className="flex flex-wrap gap-2 pt-1">
+          {t.corpus.map(c => (
+            <button
+              key={c.q}
+              onClick={() => onCorpusSearch(c.q)}
+              title={`Cerca «${c.q}» nel catalogo`}
+              className="inline-flex items-center gap-1.5 text-[11px] font-sans px-2 py-1 rounded-md border border-accent/30 text-accent hover:bg-accent/10 transition-colors"
+            >
+              <ArrowRight className="h-3 w-3" /> {c.label}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  </article>
+);
+
+// ═══════════════════════════════════════════════════════════ indici ════════
 
 const IndiceList: React.FC<{
   entries: IndexEntry[];
@@ -281,154 +455,225 @@ const IndiceList: React.FC<{
       // finirebbero marcati come greco per i lettori di schermo.
       const grc = lexical && e.lingua === 'grc';
       return (
-      <div key={e.key} className="flex items-baseline gap-2 py-0.5 border-b border-border/20">
-        <span
-          className={cn(
-            'flex-1 min-w-0 truncate',
-            grc ? 'font-greek text-[14px] text-cult'
-              : lexical ? 'font-serif italic text-[13.5px] text-cult'
-              : 'font-serif text-[13.5px] text-ink/85',
-          )}
-          lang={lexical ? e.lingua : undefined}
-        >
-          {e.label}
-        </span>
-        {e.detail && (
+        <div key={e.key} className="flex items-baseline gap-2 py-0.5 border-b border-border/20">
           <span
-            className={cn('hidden md:block shrink-0 max-w-[10rem] truncate text-[11px] italic text-muted/50', grc ? 'font-greek' : 'font-sans')}
+            className={cn(
+              'flex-1 min-w-0 truncate',
+              grc ? 'font-greek text-[14px] text-cult'
+                : lexical ? 'font-serif italic text-[13.5px] text-cult'
+                : 'font-serif text-[13.5px] text-ink/85',
+            )}
             lang={lexical ? e.lingua : undefined}
-            title={e.detail}
           >
-            {e.detail}
+            {e.label}
           </span>
-        )}
-        <span className="shrink-0 flex gap-1">
-          {e.refs.map(r => (
-            <button
-              key={r.sigla}
-              onClick={() => onGo(r.id)}
-              className="text-[10px] font-sans font-bold tracking-wide text-accent/80 hover:text-accent hover:underline"
+          {e.detail && (
+            <span
+              className={cn('hidden md:block shrink-0 max-w-[10rem] truncate text-[11px] italic text-muted/50', grc ? 'font-greek' : 'font-sans')}
+              lang={lexical ? e.lingua : undefined}
+              title={e.detail}
             >
-              {r.sigla}
-            </button>
-          ))}
-        </span>
-      </div>
+              {e.detail}
+            </span>
+          )}
+          <span className="shrink-0 flex gap-1">
+            {e.refs.map(r => (
+              <button
+                key={r.sigla}
+                onClick={() => onGo(r.id)}
+                className="text-[10px] font-sans font-bold tracking-wide text-accent/80 hover:text-accent hover:underline"
+              >
+                {r.sigla}
+              </button>
+            ))}
+          </span>
+        </div>
       );
     })}
   </div>
 );
 
-// ──────────────────────────────────────────────────────────── pannello ─────
+// ══════════════════════════════════════════════ 1. INDICE DELLE VOCI ═══════
+
+const VociIndex: React.FC<{ onApri: (id: string) => void }> = ({ onApri }) => (
+  <div className="flex-1 overflow-hidden flex flex-col p-6 md:p-12">
+    <div className="mb-5 max-w-5xl mx-auto w-full">
+      <div className={cn(EYEBROW, 'flex items-center gap-1.5 mb-2')} style={{ color: 'var(--lit)' }}>
+        <ScrollText className="h-3.5 w-3.5" /> Fonti letterarie
+      </div>
+      <p className="font-serif italic text-[15px] text-muted/85 max-w-3xl leading-relaxed">
+        Le testimonianze letterarie greche e latine sulla divinità lunare, raccolte per voce e
+        commentate. Dove il catalogo registra ciò che è inciso sulla pietra, questa sezione
+        registra ciò che è scritto nei testi — e lo scarto fra le due è il punto.
+      </p>
+    </div>
+
+    <div className="flex-1 flex flex-col overflow-hidden min-h-0 glass-panel glass-panel-elevated rounded-2xl max-w-5xl mx-auto w-full">
+      <div className="px-6 pt-6 mb-2 flex items-center justify-between border-b border-border/20 pb-3 font-sans text-[10px] font-bold uppercase tracking-[0.2em] text-muted">
+        <span>Visualizzazione di {VOCI.length} {VOCI.length === 1 ? 'voce' : 'voci'}</span>
+        <span className="opacity-40 normal-case font-normal tracking-normal font-serif italic">
+          {VOCI_IN_PREPARAZIONE.length} in preparazione
+        </span>
+      </div>
+
+      <div className="flex-1 overflow-y-auto custom-scrollbar px-6 pb-6">
+        {VOCI.map(v => {
+          const s = voceStats(v);
+          return (
+            <button
+              key={v.id}
+              onClick={() => onApri(v.id)}
+              className="w-full text-left border-b border-border/30 py-5 group hover:bg-sidebar/40 transition-colors px-2 -mx-2 rounded-sm"
+            >
+              <div className="flex items-start gap-4">
+                <div className="flex-1 min-w-0">
+                  <h3 className="font-serif font-bold text-ink text-2xl leading-none group-hover:text-accent transition-colors">
+                    {v.lemma}
+                    {v.lemmaGreco && (
+                      <span className="font-greek text-xl text-cult ml-2.5 font-normal" lang="grc">{v.lemmaGreco}</span>
+                    )}
+                  </h3>
+                  <p className="font-serif italic text-[14px] text-muted/80 mt-1.5">{v.sottotitolo}</p>
+                  <div className="flex flex-wrap gap-x-4 gap-y-1 mt-3 text-[11px] font-sans text-muted/70 tabular-nums">
+                    <span>{s.testimonianze} testimonianze</span>
+                    <span>{s.fonti} fonti</span>
+                    <span>{s.nuclei} nuclei</span>
+                    <span>{s.termini} termini</span>
+                    <span className="text-muted/50">{s.arco}</span>
+                  </div>
+                  {s.daCollazionare > 0 && (
+                    <span className="inline-flex items-center gap-1.5 mt-2 text-[10px] font-sans uppercase tracking-wide text-amber-600 dark:text-amber-400">
+                      <AlertTriangle className="h-3 w-3" /> {s.daCollazionare} testi da collazionare
+                    </span>
+                  )}
+                </div>
+                <ChevronRight className="h-5 w-5 text-muted/30 group-hover:text-accent group-hover:translate-x-1 transition-all shrink-0 mt-1" />
+              </div>
+            </button>
+          );
+        })}
+
+        {/* Ciò che manca fa parte dell'indice quanto ciò che c'è. */}
+        <div className="pt-6">
+          <div className={cn(EYEBROW, 'text-muted/40 mb-3')}>In preparazione</div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-2">
+            {VOCI_IN_PREPARAZIONE.map(v => (
+              <div key={v.lemma} className="border-b border-border/20 py-2">
+                <span className="font-serif text-[15px] text-muted/60">{v.lemma}</span>
+                {v.lemmaGreco && (
+                  <span className="font-greek text-[14px] text-muted/40 ml-2" lang="grc">{v.lemmaGreco}</span>
+                )}
+                <p className="text-[11px] font-sans text-muted/45 leading-snug mt-0.5">{v.nota}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+);
+
+// ══════════════════════════════════════════════════════════ pannello ═══════
 
 export const LiterarySourcesPanel: React.FC<Props> = ({ onCorpusSearch }) => {
-  const [voceId, setVoceId] = useState(VOCI[0].id);
+  const [voceId, setVoceId] = useState<string | null>(null);
+  const [vista, setVista] = useState<Vista>('elenco');
+  const [aperto, setAperto] = useState<string | null>(null);
+
   const [search, setSearch] = useState('');
   const [nucleoFilter, setNucleoFilter] = useState('');
   const [genereFilter, setGenereFilter] = useState<'' | Genere>('');
   const [campoFilter, setCampoFilter] = useState<'' | LaresCampo>('');
-  const [showIndici, setShowIndici] = useState(false);
+  const [ordine, setOrdine] = useState<Ordine>('nucleo');
   const [indiceTab, setIndiceTab] = useState<IndiceKey>('fonti');
 
-  const voce: Voce = useMemo(() => VOCI.find(v => v.id === voceId) || VOCI[0], [voceId]);
-  const indici = useMemo(() => buildIndici(voce.testimonia), [voce]);
-  const bySigla = useMemo(() => new Map(voce.testimonia.map(t => [t.sigla, t])), [voce]);
-
-  const tokens = foldForSearch(search).split(/\s+/).filter(Boolean);
-
-  const matches = (t: Testimonium): boolean => {
-    if (genereFilter && t.genere !== genereFilter) return false;
-    if (campoFilter && !t.lares.some(m => m.campo === campoFilter)) return false;
-    if (tokens.length === 0) return true;
-    const hay = searchableOf(t);
-    return tokens.every(x => hay.includes(x));
-  };
-
-  const visibleNuclei = useMemo(
-    () =>
-      voce.nuclei
-        .filter(n => !nucleoFilter || n.id === nucleoFilter)
-        .map(n => ({
-          ...n,
-          items: n.testimonia
-            .map(s => bySigla.get(s))
-            .filter((t): t is Testimonium => !!t && matches(t)),
-        }))
-        .filter(n => n.items.length > 0),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [voce, nucleoFilter, search, genereFilter, campoFilter],
-  );
-
-  const visibleCount = visibleNuclei.reduce((s, n) => s + n.items.length, 0);
-  const daCollazionare = voce.testimonia.filter(t => t.collazione === 'da-collazionare').length;
-  const filtriAttivi = !!(search || nucleoFilter || genereFilter || campoFilter);
-
-  const generiPresenti = useMemo(
-    () => [...new Set(voce.testimonia.map(t => t.genere))].sort((a, b) => GENERE_LABELS[a].localeCompare(GENERE_LABELS[b], 'it')),
-    [voce],
-  );
-
-  // Il bersaglio di un salto (da un indice o dal sommario) può essere ancora
-  // smontato nel momento del click, perché il salto stesso spegne gli indici e
-  // azzera i filtri che lo tenevano nascosto. Si registra quindi l'id e si
-  // scorre in un effetto, dopo che React ha applicato il nuovo albero — non in
-  // un requestAnimationFrame, che correrebbe contro il render.
-  const [pendingScroll, setPendingScroll] = useState<string | null>(null);
-  // Bersaglio appena raggiunto, evidenziato per un attimo: il salto è
-  // istantaneo, e senza un segnale il lettore non capirebbe dove è atterrato.
-  // Il contatore `n` serve a far ripartire il lampo anche quando si torna
-  // sullo stesso bersaglio: con il solo id, React vedrebbe lo stesso stato,
-  // non rieseguirebbe l'effetto e il lampo morirebbe col timer precedente.
-  const [flash, setFlash] = useState<{ id: string; n: number } | null>(null);
-  const flashId = flash?.id ?? null;
-
-  React.useEffect(() => {
-    if (!pendingScroll) return;
-    const el = document.getElementById(pendingScroll);
-    // `behavior: 'smooth'` è inservibile qui: la voce è alta ~10.000 px e
-    // l'animazione nativa impiegherebbe decine di secondi per arrivare in
-    // fondo. Il salto da un indice deve atterrare, non viaggiare.
-    el?.scrollIntoView({ behavior: 'auto', block: 'start' });
-    setFlash(f => ({ id: pendingScroll, n: (f?.n ?? 0) + 1 }));
-    setPendingScroll(null);
-  }, [pendingScroll]);
-
-  React.useEffect(() => {
-    if (!flash) return;
-    const timer = setTimeout(() => setFlash(null), 1600);
-    return () => clearTimeout(timer);
-  }, [flash]);
-
-  const goTo = (id: string) => {
-    setShowIndici(false);
-    resetFiltri();
-    setPendingScroll(id);
-  };
-
-  const exportTei = () => {
-    const blob = new Blob([voceToTei(voce)], { type: 'application/xml;charset=utf-8' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `${voce.id}.xml`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-  };
+  const voce = useMemo(() => VOCI.find(v => v.id === voceId) || null, [voceId]);
 
   const resetFiltri = () => {
     setSearch(''); setNucleoFilter(''); setGenereFilter(''); setCampoFilter('');
   };
 
+  const chiudiVoce = () => { setVoceId(null); setVista('elenco'); setAperto(null); resetFiltri(); };
+
+  // Esc risale di un livello: dalla voce all'indice. La scheda gestisce il
+  // proprio Esc e, quando è aperta, ferma l'evento prima che arrivi qui.
+  useEffect(() => {
+    if (!voceId) return;
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') chiudiVoce(); };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [voceId]);
+
+  if (!voce) return <VociIndex onApri={id => { setVoceId(id); setVista('elenco'); }} />;
+
+  const stats = voceStats(voce);
+  const indici = buildIndici(voce.testimonia);
+  const bySigla = new Map(voce.testimonia.map(t => [t.sigla, t]));
+  const nucleoDi = (t: Testimonium) => voce.nuclei.find(n => n.testimonia.includes(t.sigla));
+
+  const tokens = foldForSearch(search).split(/\s+/).filter(Boolean);
+  const matches = (t: Testimonium): boolean => {
+    if (genereFilter && t.genere !== genereFilter) return false;
+    if (campoFilter && !t.lares.some(m => m.campo === campoFilter)) return false;
+    if (nucleoFilter && nucleoDi(t)?.id !== nucleoFilter) return false;
+    if (tokens.length === 0) return true;
+    const hay = searchableOf(t);
+    return tokens.every(x => hay.includes(x));
+  };
+
+  const filtrate = voce.testimonia.filter(matches);
+  const filtriAttivi = !!(search || nucleoFilter || genereFilter || campoFilter);
+
+  // L'ordine per nucleo segue la sequenza redazionale dei nuclei, non l'ordine
+  // di dichiarazione delle testimonianze: è la lettura voluta dalla voce.
+  const posizioneNucleo = (t: Testimonium) => {
+    const i = voce.nuclei.findIndex(n => n.testimonia.includes(t.sigla));
+    const j = i >= 0 ? voce.nuclei[i].testimonia.indexOf(t.sigla) : 0;
+    return i * 1000 + j;
+  };
+  const ordinate = [...filtrate].sort((a, b) => {
+    if (ordine === 'cronologia') return a.datazioneSort - b.datazioneSort || a.autore.localeCompare(b.autore, 'it');
+    if (ordine === 'autore') return a.autore.localeCompare(b.autore, 'it') || a.datazioneSort - b.datazioneSort;
+    return posizioneNucleo(a) - posizioneNucleo(b);
+  });
+
+  // `Set<Genere>` esplicito: senza l'annotazione lo spread esce come unknown[]
+  // con la configurazione di target/lib di questo progetto.
+  const generiPresenti = Array.from(new Set<Genere>(voce.testimonia.map(t => t.genere)))
+    .sort((a, b) => GENERE_LABELS[a].localeCompare(GENERE_LABELS[b], 'it'));
+
+  const exportTei = () => {
+    const blob = new Blob([voceToTei(voce)], { type: 'application/xml;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `${voce.id}.xml`;
+    link.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const testimoniumAperto = aperto ? voce.testimonia.find(t => t.id === aperto) || null : null;
+  const nucleoAperto = testimoniumAperto ? nucleoDi(testimoniumAperto) : undefined;
+
+  const VISTE: { id: Vista; label: string; icon: React.ReactNode }[] = [
+    { id: 'elenco', label: 'Elenco', icon: <List className="h-3.5 w-3.5" /> },
+    { id: 'lettura', label: 'Lettura', icon: <Text className="h-3.5 w-3.5" /> },
+    { id: 'indici', label: 'Indici', icon: <Library className="h-3.5 w-3.5" /> },
+  ];
+
   return (
     <div className="flex-1 overflow-hidden flex flex-col">
-      {/* ── Testata della sezione ──────────────────────────────────────── */}
+      {/* ── Testata della voce ─────────────────────────────────────────── */}
       <div className="shrink-0 px-6 md:px-10 pt-4 pb-3 md:pt-6 md:pb-4 border-b border-border/30">
         <div className="max-w-6xl mx-auto w-full">
-          <div className={cn(EYEBROW, 'flex items-center gap-1.5 mb-1.5 md:mb-2')} style={{ color: 'var(--lit)' }}>
-            <ScrollText className="h-3.5 w-3.5" /> Fonti letterarie
-          </div>
+          <button
+            onClick={chiudiVoce}
+            className={cn(EYEBROW, 'flex items-center gap-1.5 mb-1.5 md:mb-2 hover:opacity-70 transition-opacity')}
+            style={{ color: 'var(--lit)' }}
+          >
+            <ChevronLeft className="h-3.5 w-3.5" /> Fonti letterarie
+          </button>
 
           <div className="flex flex-wrap items-end justify-between gap-x-4 gap-y-2">
             <div>
@@ -444,30 +689,20 @@ export const LiterarySourcesPanel: React.FC<Props> = ({ onCorpusSearch }) => {
             </div>
 
             <div className="flex items-center gap-2">
-              {VOCI.length > 1 && (
-                <div className="relative">
-                  <select
-                    value={voceId}
-                    onChange={e => { setVoceId(e.target.value); resetFiltri(); }}
-                    className={cn(FIELD_BASE, 'pl-3 pr-8 py-2 cursor-pointer appearance-none')}
-                    style={{ ...FIELD_STYLE, WebkitAppearance: 'none' as const, appearance: 'none' as const }}
+              <div className="inline-flex rounded-lg border border-[var(--border)]/50 dark:border-white/5 overflow-hidden text-[10px] font-sans font-bold uppercase tracking-widest shadow-inner">
+                {VISTE.map(v => (
+                  <button
+                    key={v.id}
+                    onClick={() => setVista(v.id)}
+                    className={cn(
+                      'px-3 py-2 transition-colors inline-flex items-center gap-1.5',
+                      vista === v.id ? 'bg-accent/10 text-accent' : 'text-muted hover:text-ink',
+                    )}
                   >
-                    {VOCI.map(v => <option key={v.id} value={v.id}>{v.lemma}</option>)}
-                  </select>
-                  <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted/50 pointer-events-none" />
-                </div>
-              )}
-              <button
-                onClick={() => setShowIndici(s => !s)}
-                className={cn(
-                  'inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border text-[11px] font-sans font-bold uppercase tracking-widest transition-colors',
-                  showIndici
-                    ? 'border-accent/50 bg-accent/10 text-accent'
-                    : 'border-border/50 text-muted hover:text-ink hover:bg-sidebar/60',
-                )}
-              >
-                <Library className="h-3.5 w-3.5" /> Indici
-              </button>
+                    {v.icon} <span className="hidden sm:inline">{v.label}</span>
+                  </button>
+                ))}
+              </div>
               <button
                 onClick={exportTei}
                 title="Esporta la voce in TEI EpiDoc (impianto compatibile con il lessico LARES)"
@@ -478,259 +713,314 @@ export const LiterarySourcesPanel: React.FC<Props> = ({ onCorpusSearch }) => {
             </div>
           </div>
 
-          {/* Filtri — su schermo stretto restano su una sola riga scorrevole:
-              impilati verticalmente occupavano quasi tutta l'altezza utile. */}
-          <div className="flex items-center gap-2 mt-3 md:mt-4">
-          <div className="flex-1 min-w-0 flex flex-nowrap md:flex-wrap items-center gap-2 overflow-x-auto md:overflow-visible custom-scrollbar pb-1 md:pb-0">
-            <div className="relative w-52 shrink-0 md:flex-1 md:w-auto md:min-w-[14rem] md:max-w-md">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted/50 pointer-events-none" />
-              <input
-                type="text"
-                value={search}
-                onChange={e => setSearch(e.target.value)}
-                placeholder="Filtra autore, testo, termine, commento…"
-                className={cn(FIELD_BASE, 'w-full pl-9 pr-3 py-2')}
-                style={FIELD_STYLE}
-              />
+          {/* Filtri — solo dove servono, cioè sull'elenco */}
+          {vista === 'elenco' && (
+            <div className="flex items-center gap-2 mt-3 md:mt-4">
+              <div className="flex-1 min-w-0 flex flex-nowrap md:flex-wrap items-center gap-2 overflow-x-auto md:overflow-visible custom-scrollbar pb-1 md:pb-0">
+                <div className="relative w-52 shrink-0 md:flex-1 md:w-auto md:min-w-[14rem] md:max-w-md">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted/50 pointer-events-none" />
+                  <input
+                    type="text"
+                    value={search}
+                    onChange={e => setSearch(e.target.value)}
+                    placeholder="Filtra autore, testo, termine, commento…"
+                    className={cn(FIELD_BASE, 'w-full pl-9 pr-3 py-2')}
+                    style={FIELD_STYLE}
+                  />
+                </div>
+
+                <div className="relative shrink-0">
+                  <select
+                    value={nucleoFilter}
+                    onChange={e => setNucleoFilter(e.target.value)}
+                    className={cn(FIELD_BASE, 'pl-3 pr-8 py-2 cursor-pointer appearance-none max-w-[16rem]')}
+                    style={{ ...FIELD_STYLE, WebkitAppearance: 'none' as const, appearance: 'none' as const }}
+                  >
+                    <option value="">Tutti i nuclei</option>
+                    {voce.nuclei.map(n => <option key={n.id} value={n.id}>{n.titolo}</option>)}
+                  </select>
+                  <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted/50 pointer-events-none" />
+                </div>
+
+                <div className="relative shrink-0">
+                  <select
+                    value={genereFilter}
+                    onChange={e => setGenereFilter(e.target.value as Genere | '')}
+                    className={cn(FIELD_BASE, 'pl-3 pr-8 py-2 cursor-pointer appearance-none')}
+                    style={{ ...FIELD_STYLE, WebkitAppearance: 'none' as const, appearance: 'none' as const }}
+                  >
+                    <option value="">Tutti i generi</option>
+                    {generiPresenti.map(g => <option key={g} value={g}>{GENERE_LABELS[g]}</option>)}
+                  </select>
+                  <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted/50 pointer-events-none" />
+                </div>
+
+                <div className="shrink-0 inline-flex rounded-lg border border-[var(--border)]/50 dark:border-white/5 overflow-hidden text-[10px] font-sans font-bold uppercase tracking-widest shadow-inner">
+                  {LARES_GRID.map(c => (
+                    <button
+                      key={c.campo}
+                      onClick={() => setCampoFilter(f => (f === c.campo ? '' : c.campo))}
+                      title={`LARES · ${c.label} (${c.en})`}
+                      className={cn('px-2.5 py-2 transition-colors', campoFilter === c.campo ? 'text-ink' : 'text-muted hover:text-ink')}
+                      style={campoFilter === c.campo ? { backgroundColor: `color-mix(in srgb, ${CAMPO_COLOR[c.campo]} 20%, transparent)`, color: CAMPO_COLOR[c.campo] } : undefined}
+                    >
+                      {c.label.slice(0, 4)}.
+                    </button>
+                  ))}
+                </div>
+
+                {filtriAttivi && (
+                  <button
+                    onClick={resetFiltri}
+                    className="shrink-0 inline-flex items-center gap-1 text-[10px] font-sans uppercase tracking-widest text-muted/60 hover:text-accent transition-colors px-2 py-2"
+                  >
+                    <X className="h-3 w-3" /> Azzera
+                  </button>
+                )}
+              </div>
             </div>
-
-            <div className="relative shrink-0">
-              <select
-                value={nucleoFilter}
-                onChange={e => setNucleoFilter(e.target.value)}
-                className={cn(FIELD_BASE, 'pl-3 pr-8 py-2 cursor-pointer appearance-none max-w-[16rem]')}
-                style={{ ...FIELD_STYLE, WebkitAppearance: 'none' as const, appearance: 'none' as const }}
-              >
-                <option value="">Tutti i nuclei</option>
-                {voce.nuclei.map(n => <option key={n.id} value={n.id}>{n.titolo}</option>)}
-              </select>
-              <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted/50 pointer-events-none" />
-            </div>
-
-            <div className="relative shrink-0">
-              <select
-                value={genereFilter}
-                onChange={e => setGenereFilter(e.target.value as Genere | '')}
-                className={cn(FIELD_BASE, 'pl-3 pr-8 py-2 cursor-pointer appearance-none')}
-                style={{ ...FIELD_STYLE, WebkitAppearance: 'none' as const, appearance: 'none' as const }}
-              >
-                <option value="">Tutti i generi</option>
-                {generiPresenti.map(g => <option key={g} value={g}>{GENERE_LABELS[g]}</option>)}
-              </select>
-              <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted/50 pointer-events-none" />
-            </div>
-
-            {/* Griglia LARES: filtro per campo concettuale */}
-            <div className="shrink-0 inline-flex rounded-lg border border-[var(--border)]/50 dark:border-white/5 overflow-hidden text-[10px] font-sans font-bold uppercase tracking-widest shadow-inner">
-              {LARES_GRID.map(c => (
-                <button
-                  key={c.campo}
-                  onClick={() => setCampoFilter(f => (f === c.campo ? '' : c.campo))}
-                  title={`LARES · ${c.label} (${c.en})`}
-                  className={cn('px-2.5 py-2 transition-colors', campoFilter === c.campo ? 'text-ink' : 'text-muted hover:text-ink')}
-                  style={campoFilter === c.campo ? { backgroundColor: `color-mix(in srgb, ${CAMPO_COLOR[c.campo]} 20%, transparent)`, color: CAMPO_COLOR[c.campo] } : undefined}
-                >
-                  {c.label.slice(0, 4)}.
-                </button>
-              ))}
-            </div>
-
-            {filtriAttivi && (
-              <button
-                onClick={resetFiltri}
-                className="shrink-0 inline-flex items-center gap-1 text-[10px] font-sans uppercase tracking-widest text-muted/60 hover:text-accent transition-colors px-2 py-2"
-              >
-                <X className="h-3 w-3" /> Azzera
-              </button>
-            )}
-          </div>
-
-          {/* Il conteggio resta fuori dalla riga scorrevole: è il riscontro
-              immediato di ogni filtro e non deve poter uscire dallo schermo. */}
-          <span className="shrink-0 text-[11px] font-sans text-muted/60 tabular-nums whitespace-nowrap">
-            {visibleCount}<span className="hidden sm:inline"> di {voce.testimonia.length} testimonianze</span>
-            <span className="sm:hidden">/{voce.testimonia.length}</span>
-          </span>
-          </div>
+          )}
         </div>
       </div>
 
       {/* ── Corpo ──────────────────────────────────────────────────────── */}
-      <div className="flex-1 overflow-y-auto custom-scrollbar">
-        <div className="max-w-6xl mx-auto w-full px-6 md:px-10 py-6 flex gap-8">
+      <div className={cn('flex-1 min-h-0 flex flex-col', vista === 'elenco' ? 'overflow-hidden p-6 md:p-10' : 'overflow-y-auto custom-scrollbar')}>
 
-          {/* Rail laterale: sommario dei nuclei */}
-          <aside className="hidden lg:block w-56 shrink-0">
-            <div className="sticky top-0 space-y-5">
-              <div>
-                <div className={cn(EYEBROW, 'text-muted/50 mb-2')}>Nuclei tematici</div>
-                <nav className="space-y-0.5">
-                  {voce.nuclei.map(n => (
-                    <button
-                      key={n.id}
-                      // Passa da goTo, che azzera *tutti* i filtri: con una
-                      // ricerca attiva il nucleo può essere del tutto vuoto e
-                      // quindi non montato, e il click non farebbe nulla.
-                      onClick={() => goTo(`nucleo-${n.id}`)}
-                      className="w-full text-left px-2 py-1.5 rounded-sm hover:bg-sidebar/60 transition-colors group"
-                    >
-                      <span className="block font-serif text-[13px] leading-snug text-ink/80 group-hover:text-accent transition-colors">
-                        {n.titolo}
-                      </span>
-                      <span className="text-[10px] font-sans text-muted/50">{n.testimonia.length} testim.</span>
-                    </button>
-                  ))}
-                </nav>
+        {/* ══ 2. ELENCO DELLE TESTIMONIANZE ══ */}
+        {vista === 'elenco' && (
+          <div className="flex-1 flex flex-col overflow-hidden min-h-0 glass-panel glass-panel-elevated rounded-2xl max-w-6xl mx-auto w-full">
+            {/* Su schermo stretto conteggio e ordinamento vanno su due righe:
+                affiancati come sul desktop si sovrapporrebbero. */}
+            <div className="px-6 pt-6 mb-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1.5 border-b border-border/20 pb-3 font-sans text-[10px] font-bold uppercase tracking-[0.2em] text-muted">
+              <span>Visualizzazione di {ordinate.length} testimonianze</span>
+              <div className="flex items-center gap-4 shrink-0">
+                <span className="opacity-30 lowercase">Ordina per:</span>
+                {(['nucleo', 'cronologia', 'autore'] as Ordine[]).map(o => (
+                  <button
+                    key={o}
+                    onClick={() => setOrdine(o)}
+                    className={cn('hover:text-accent transition-colors capitalize', ordine === o && 'text-accent')}
+                  >
+                    {o}
+                  </button>
+                ))}
               </div>
-
-              <div className="pt-4 border-t border-border/30">
-                <div className={cn(EYEBROW, 'text-muted/50 mb-2')}>Modello</div>
-                <p className="text-[11px] font-sans text-muted/70 leading-relaxed">
-                  Struttura e indici sul modello di{' '}
-                  <a href="https://site.unibo.it/lares/en" target="_blank" rel="noreferrer" className="text-accent hover:underline">
-                    LARES
-                  </a>
-                  , lessico dell'acculturazione religiosa antica (Bologna – Helsinki – Kraków – Complutense).
-                </p>
-              </div>
-
-              {voce.vociCollegate && voce.vociCollegate.length > 0 && (
-                <div className="pt-4 border-t border-border/30">
-                  <div className={cn(EYEBROW, 'text-muted/50 mb-2')}>Voci collegate</div>
-                  <p className="text-[11px] font-sans text-muted/50 leading-relaxed italic">
-                    {voce.vociCollegate.join(' · ')} — da redigere.
-                  </p>
-                </div>
-              )}
             </div>
-          </aside>
 
-          {/* Colonna principale */}
-          <div className="flex-1 min-w-0">
-            {showIndici ? (
-              // ── Indici trasversali (modello LARES) ──────────────────────
-              <section>
-                <div className="flex flex-wrap items-center gap-1 mb-5 pb-2 border-b border-border/40">
-                  {(Object.keys(INDICE_LABELS) as IndiceKey[]).map(k => (
-                    <button
-                      key={k}
-                      onClick={() => setIndiceTab(k)}
+            <div className="flex-1 overflow-y-auto custom-scrollbar px-6">
+              <div className={cn('hidden', GRID, 'border-b border-border py-4 text-[10px] font-bold uppercase tracking-tighter text-muted/60 sticky top-0 bg-[var(--card)]/95 backdrop-blur-md z-10')}>
+                <div>Sigla</div>
+                <div>Fonte</div>
+                <div>Datazione</div>
+                <div>Genere</div>
+                <div className="hidden xl:block">Testo</div>
+              </div>
+
+              {ordinate.length === 0 ? (
+                <p className="text-sm italic text-muted/60 py-16 text-center">Nessuna testimonianza per questi filtri.</p>
+              ) : (
+                ordinate.map(t => {
+                  const n = nucleoDi(t);
+                  return (
+                    <div
+                      key={t.id}
+                      onClick={() => setAperto(t.id)}
                       className={cn(
-                        'px-2.5 py-1.5 rounded-md text-[10px] font-sans font-bold uppercase tracking-widest transition-colors',
-                        indiceTab === k ? 'bg-accent/10 text-accent' : 'text-muted hover:text-ink',
+                        'block cursor-pointer border-b border-border/30 py-3 md:py-4 group items-center hover:bg-sidebar/40 transition-colors',
+                        GRID,
                       )}
                     >
-                      {INDICE_LABELS[k]}
-                      <span className="ml-1.5 opacity-50 tabular-nums">{indici[k].length}</span>
-                    </button>
-                  ))}
-                </div>
-                {indici[indiceTab].length === 0 ? (
-                  <p className="text-sm italic text-muted/60 py-10 text-center">Indice vuoto per questa voce.</p>
-                ) : (
-                  <IndiceList entries={indici[indiceTab]} onGo={goTo} lexical={indiceTab === 'termini'} />
-                )}
-              </section>
-            ) : (
-              <>
-                {/* Cappello della voce */}
-                {!filtriAttivi && (
-                  <section className="mb-8">
-                    {voce.cappello.map((p, i) => (
-                      <p
-                        key={i}
-                        className={cn(
-                          'font-serif leading-relaxed text-ink/90 text-justify hyphens-auto mb-3',
-                          i === 0 ? 'text-[17px]' : 'text-[15px]',
-                        )}
-                      >
-                        {p}
-                      </p>
-                    ))}
-
-                    {/* Avvertenza sulla collazione: esplicita, non nascosta */}
-                    {daCollazionare > 0 && (
-                      <div className="mt-4 flex items-start gap-2.5 rounded-lg border border-amber-500/25 bg-amber-500/[0.06] px-3.5 py-2.5">
-                        <AlertTriangle className="h-3.5 w-3.5 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
-                        <p className="text-[12px] font-sans leading-relaxed text-muted/85">
-                          <span className="font-bold">{daCollazionare} testi su {voce.testimonia.length}</span> sono
-                          trascritti in redazione e attendono riscontro sull'edizione indicata in ciascuna scheda.
-                          Le traduzioni sono redazionali. Finché il riscontro non è fatto, i testi antichi di questa
-                          voce non vanno citati come edizione.
-                        </p>
+                      <div className="shrink-0">
+                        <span
+                          className="inline-block text-[10px] font-sans font-bold tracking-widest px-1.5 py-0.5 rounded-sm"
+                          style={{ color: 'var(--lit)', backgroundColor: 'color-mix(in srgb, var(--lit) 14%, transparent)' }}
+                        >
+                          {t.sigla}
+                        </span>
                       </div>
-                    )}
-                  </section>
-                )}
 
-                {/* Nuclei e testimonianze */}
-                {visibleNuclei.length === 0 ? (
-                  <p className="text-sm italic text-muted/60 py-16 text-center">
-                    Nessuna testimonianza per questi filtri.
-                  </p>
-                ) : (
-                  <div className="space-y-10">
-                    {visibleNuclei.map(n => (
-                      <section key={n.id} id={`nucleo-${n.id}`} className="scroll-mt-4">
-                        <header className="mb-3">
-                          <h3 className="font-serif font-bold text-ink text-xl leading-tight mb-1.5">{n.titolo}</h3>
-                          <p className="font-serif italic text-[14px] leading-relaxed text-muted/85 text-justify hyphens-auto">
-                            {n.cappello}
-                          </p>
-                        </header>
-                        <div className="space-y-4">
-                          {n.items.map(t => (
-                            <TestimoniumCard
-                              key={t.id}
-                              t={t}
-                              flash={flashId === t.id}
-                              onCorpusSearch={onCorpusSearch}
-                              onTerm={lemma => { setSearch(lemma); setShowIndici(false); }}
-                            />
-                          ))}
+                      <div className="min-w-0 mt-1.5 md:mt-0">
+                        <div className="font-serif font-bold text-ink text-[15px] leading-tight group-hover:text-accent transition-colors truncate">
+                          {t.autore}, <span className="italic font-normal">{t.opera}</span> {t.locus}
                         </div>
-                      </section>
+                        {n && (
+                          // niente `uppercase`: vedi la nota nella scheda — i
+                          // titoli dei nuclei contengono greco.
+                          <div className="text-[10.5px] font-sans tracking-wide text-muted/50 mt-0.5 truncate">{n.titolo}</div>
+                        )}
+                      </div>
+
+                      <div className="text-[12px] font-sans text-muted/75 mt-1 md:mt-0">{t.datazione}</div>
+
+                      <div className="mt-1.5 md:mt-0">
+                        <Chip color="var(--lit)">{GENERE_LABELS[t.genere]}</Chip>
+                      </div>
+
+                      <div
+                        className={cn('hidden xl:block min-w-0 truncate text-muted/70', t.lingua === 'grc' ? 'font-greek text-[13px]' : 'font-serif text-[13px] italic')}
+                        lang={t.lingua}
+                        title={incipit(t, 400)}
+                      >
+                        {incipit(t)}
+                      </div>
+                    </div>
+                  );
+                })
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* ══ LETTURA: il discorso continuo ══ */}
+        {vista === 'lettura' && (
+          <div className="max-w-6xl mx-auto w-full px-6 md:px-10 py-6 flex gap-8">
+            <aside className="hidden lg:block w-56 shrink-0">
+              <div className="sticky top-0 space-y-5">
+                <div>
+                  <div className={cn(EYEBROW, 'text-muted/50 mb-2')}>Nuclei tematici</div>
+                  <nav className="space-y-0.5">
+                    {voce.nuclei.map(n => (
+                      <button
+                        key={n.id}
+                        onClick={() => document.getElementById(`nucleo-${n.id}`)?.scrollIntoView({ block: 'start' })}
+                        className="w-full text-left px-2 py-1.5 rounded-sm hover:bg-sidebar/60 transition-colors group"
+                      >
+                        <span className="block font-serif text-[13px] leading-snug text-ink/80 group-hover:text-accent transition-colors">
+                          {n.titolo}
+                        </span>
+                        <span className="text-[10px] font-sans text-muted/50">{n.testimonia.length} testim.</span>
+                      </button>
                     ))}
+                  </nav>
+                </div>
+
+                <div className="pt-4 border-t border-border/30">
+                  <div className={cn(EYEBROW, 'text-muted/50 mb-2')}>Modello</div>
+                  <p className="text-[11px] font-sans text-muted/70 leading-relaxed">
+                    Struttura e indici sul modello di{' '}
+                    <a href="https://site.unibo.it/lares/en" target="_blank" rel="noreferrer" className="text-accent hover:underline">
+                      LARES
+                    </a>
+                    , lessico dell'acculturazione religiosa antica (Bologna – Helsinki – Kraków – Complutense).
+                  </p>
+                </div>
+              </div>
+            </aside>
+
+            <div className="flex-1 min-w-0">
+              <section className="mb-8">
+                {voce.cappello.map((p, i) => (
+                  <p key={i} className={cn('font-serif leading-relaxed text-ink/90 text-justify hyphens-auto mb-3', i === 0 ? 'text-[17px]' : 'text-[15px]')}>
+                    {p}
+                  </p>
+                ))}
+
+                {stats.daCollazionare > 0 && (
+                  <div className="mt-4 flex items-start gap-2.5 rounded-lg border border-amber-500/25 bg-amber-500/[0.06] px-3.5 py-2.5">
+                    <AlertTriangle className="h-3.5 w-3.5 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
+                    <p className="text-[12px] font-sans leading-relaxed text-muted/85">
+                      <span className="font-bold">{stats.daCollazionare} testi su {stats.testimonianze}</span> sono
+                      trascritti in redazione e attendono riscontro sull'edizione indicata in ciascuna scheda.
+                      Le traduzioni sono redazionali. Finché il riscontro non è fatto, i testi antichi di questa
+                      voce non vanno citati come edizione.
+                    </p>
                   </div>
                 )}
+              </section>
 
-                {/* Sintesi + bibliografia */}
-                {!filtriAttivi && (
-                  <>
-                    <section className="mt-12 pt-6 border-t border-border/40">
-                      <div className={cn(EYEBROW, 'text-accent/70 mb-3 flex items-center gap-1.5')}>
-                        <Sparkles className="h-3.5 w-3.5" /> Sintesi
-                      </div>
-                      {voce.sintesi.map((p, i) => (
-                        <p key={i} className="font-serif text-[15px] leading-relaxed text-ink/90 text-justify hyphens-auto mb-3">
-                          {p}
-                        </p>
-                      ))}
-                    </section>
-
-                    <section className="mt-8 pt-6 border-t border-border/40">
-                      <div className={cn(EYEBROW, 'text-muted/50 mb-3 flex items-center gap-1.5')}>
-                        <BookOpen className="h-3.5 w-3.5" /> Bibliografia
-                      </div>
-                      <ul className="space-y-1.5">
-                        {voce.bibliografia.map(b => (
-                          <li key={b} className="font-serif text-[13.5px] leading-snug text-muted/85 pl-4 -indent-4">
-                            {b}
-                          </li>
-                        ))}
-                      </ul>
-                      <p className="mt-6 text-[11px] font-sans text-muted/50">
-                        Voce a cura di {voce.redazione} · aggiornata al {voce.aggiornamento} ·{' '}
-                        <code className="font-mono">{voce.id}</code>
+              <div className="space-y-10">
+                {voce.nuclei.map(n => (
+                  <section key={n.id} id={`nucleo-${n.id}`} className="scroll-mt-4">
+                    <header className="mb-3">
+                      <h3 className="font-serif font-bold text-ink text-xl leading-tight mb-1.5">{n.titolo}</h3>
+                      <p className="font-serif italic text-[14px] leading-relaxed text-muted/85 text-justify hyphens-auto">
+                        {n.cappello}
                       </p>
-                    </section>
-                  </>
-                )}
-              </>
+                    </header>
+                    <div className="space-y-4">
+                      {n.testimonia
+                        .map(s => bySigla.get(s))
+                        .filter((t): t is Testimonium => !!t)
+                        .map(t => (
+                          <TestimoniumCard key={t.id} t={t} onOpen={() => setAperto(t.id)} onCorpusSearch={onCorpusSearch} />
+                        ))}
+                    </div>
+                  </section>
+                ))}
+              </div>
+
+              <section className="mt-12 pt-6 border-t border-border/40">
+                <div className={cn(EYEBROW, 'text-accent/70 mb-3 flex items-center gap-1.5')}>
+                  <Sparkles className="h-3.5 w-3.5" /> Sintesi
+                </div>
+                {voce.sintesi.map((p, i) => (
+                  <p key={i} className="font-serif text-[15px] leading-relaxed text-ink/90 text-justify hyphens-auto mb-3">{p}</p>
+                ))}
+              </section>
+
+              <section className="mt-8 pt-6 border-t border-border/40">
+                <div className={cn(EYEBROW, 'text-muted/50 mb-3 flex items-center gap-1.5')}>
+                  <BookOpen className="h-3.5 w-3.5" /> Bibliografia
+                </div>
+                <ul className="space-y-1.5">
+                  {voce.bibliografia.map(b => (
+                    <li key={b} className="font-serif text-[13.5px] leading-snug text-muted/85 pl-4 -indent-4">{b}</li>
+                  ))}
+                </ul>
+                <p className="mt-6 text-[11px] font-sans text-muted/50">
+                  Voce a cura di {voce.redazione} · aggiornata al {voce.aggiornamento} ·{' '}
+                  <code className="font-mono">{voce.id}</code>
+                </p>
+              </section>
+            </div>
+          </div>
+        )}
+
+        {/* ══ INDICI trasversali (modello LARES) ══ */}
+        {vista === 'indici' && (
+          <div className="max-w-6xl mx-auto w-full px-6 md:px-10 py-6">
+            <div className="flex flex-wrap items-center gap-1 mb-5 pb-2 border-b border-border/40">
+              {(Object.keys(INDICE_LABELS) as IndiceKey[]).map(k => (
+                <button
+                  key={k}
+                  onClick={() => setIndiceTab(k)}
+                  className={cn(
+                    'px-2.5 py-1.5 rounded-md text-[10px] font-sans font-bold uppercase tracking-widest transition-colors',
+                    indiceTab === k ? 'bg-accent/10 text-accent' : 'text-muted hover:text-ink',
+                  )}
+                >
+                  {INDICE_LABELS[k]}
+                  <span className="ml-1.5 opacity-50 tabular-nums">{indici[k].length}</span>
+                </button>
+              ))}
+            </div>
+            {indici[indiceTab].length === 0 ? (
+              <p className="text-sm italic text-muted/60 py-10 text-center">Indice vuoto per questa voce.</p>
+            ) : (
+              <IndiceList entries={indici[indiceTab]} onGo={setAperto} lexical={indiceTab === 'termini'} />
             )}
           </div>
-        </div>
+        )}
       </div>
+
+      {/* ══ 3. SCHEDA ══ */}
+      {testimoniumAperto && (
+        <SchedaTestimonium
+          t={testimoniumAperto}
+          voce={voce}
+          nucleoTitolo={nucleoAperto?.titolo}
+          nucleoId={nucleoAperto?.id}
+          onClose={() => setAperto(null)}
+          onCorpusSearch={onCorpusSearch}
+          onFiltra={patch => {
+            setVista('elenco');
+            resetFiltri();
+            if (patch.genere) setGenereFilter(patch.genere);
+            if (patch.nucleo) setNucleoFilter(patch.nucleo);
+            if (patch.search) setSearch(patch.search);
+          }}
+        />
+      )}
     </div>
   );
 };

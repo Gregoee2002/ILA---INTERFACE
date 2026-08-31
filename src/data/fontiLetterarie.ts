@@ -13,7 +13,7 @@
 // Le traduzioni italiane sono redazionali (ILA), non riprese da traduttori
 // esistenti, e possono essere sostituite senza vincoli di diritto.
 
-import { Voce } from '../lib/litSources';
+import { Voce, VoceInPreparazione } from '../lib/litSources';
 
 const ED = 'trad. redazionale ILA';
 
@@ -862,3 +862,16 @@ export const VOCE_SELENE: Voce = {
 };
 
 export const VOCI: Voce[] = [VOCE_SELENE];
+
+/**
+ * Voci previste e non ancora redatte. Compaiono nell'indice, disattivate:
+ * l'elenco deve dire anche che cosa manca, non solo che cosa c'è.
+ */
+export const VOCI_IN_PREPARAZIONE: VoceInPreparazione[] = [
+  { lemma: 'Men', lemmaGreco: 'Μήν', nota: 'il dio lunare anatolico: la voce speculare a Selene, e la più vicina al corpus' },
+  { lemma: 'Lunus', nota: 'il maschile latino della luna, fra Carre e l’erudizione tardoantica' },
+  { lemma: 'Ecate', lemmaGreco: 'Ἑκάτη', nota: 'l’assimilazione lunare nella magia e negli inni' },
+  { lemma: 'Attis', nota: 'Menotyrannus nelle iscrizioni tardo-romane: culto metroaco e luna' },
+  { lemma: 'Sabazio', lemmaGreco: 'Σαβάζιος', nota: 'le associazioni cultuali anatoliche' },
+  { lemma: 'Artemide', lemmaGreco: 'Ἄρτεμις', nota: 'la sovrapposizione lunare classica' },
+];
