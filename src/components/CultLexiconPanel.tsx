@@ -84,7 +84,7 @@ export const CultLexiconPanel: React.FC<Props> = ({ monumenti, onSelectMonumento
           className="w-full flex items-center gap-3 px-2 py-1.5 text-left rounded-sm hover:bg-sidebar/50 transition-colors"
         >
           <span
-            className="font-greek text-cult text-[15px] w-[6.5rem] shrink-0 text-right truncate"
+            className="font-greek text-cult text-base w-[6.5rem] shrink-0 text-right truncate"
             lang="grc"
             title={l.lemma}
           >
@@ -103,7 +103,7 @@ export const CultLexiconPanel: React.FC<Props> = ({ monumenti, onSelectMonumento
           </span>
 
           {l.subFunction && (
-            <span className="shrink-0 hidden sm:block text-[11px] font-serif italic text-muted/70 truncate max-w-[9rem]">
+            <span className="shrink-0 hidden sm:block text-xs font-serif italic text-muted/80 truncate max-w-[9rem]">
               {l.subFunction}
             </span>
           )}
@@ -127,10 +127,12 @@ export const CultLexiconPanel: React.FC<Props> = ({ monumenti, onSelectMonumento
 
         {open && (
           <div className="ml-[6.5rem] mt-0.5 mb-1.5 px-3 py-2 rounded-sm bg-sidebar/40 border border-border/30">
-            <div className="text-[10px] font-sans uppercase tracking-widest text-muted/50 mb-1.5">
-              {schede(l.schedeCount)} · {atts(l.count)}
+            <div className="mb-1.5">
+              <span className="text-[10px] font-sans uppercase tracking-widest text-muted/50">
+                {schede(l.schedeCount)} · {atts(l.count)}
+              </span>
               {l.forms.length > 0 && (
-                <span className="ml-2 font-greek text-muted/70 normal-case tracking-normal" lang="grc">
+                <span className="ml-2 font-greek text-sm text-muted/80" lang="grc">
                   {l.forms.join('  ·  ')}
                 </span>
               )}
