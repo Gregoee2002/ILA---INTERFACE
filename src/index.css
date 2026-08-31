@@ -19,15 +19,15 @@
 }
 
 .dark {
-  --ink: #E4E6DD;
-  --parchment: #171915;
-  --sidebar: #1F221C;
-  --card: #262920;
+  --ink: #E6E4DD;
+  --parchment: #171614; /* bruno-antracite quasi nero — niente più verde spento */
+  --sidebar: #201E1B;
+  --card: #292621;
   --accent: #35BDB3;
   --cult: #C3B0CE; /* malva/lilla smorzato — lessico di funzione cultuale (<w>/<rs> cult*) */
   --lit: #86D8CF;  /* verde-acqua chiaro — «Fonti letterarie» */
-  --muted: #8C9084;
-  --border: #34372C;
+  --muted: #8F8B82;
+  --border: #38352E;
   --shadow-color: 0, 0, 0;
   --tint-1: rgba(30, 48, 41, 0.45);
   --tint-2: rgba(48, 42, 30, 0.45);
