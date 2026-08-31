@@ -426,24 +426,38 @@ export const CooccurrenceHeatmap: React.FC<CooccurrenceHeatmapProps> = ({ monume
                    const reading = getReading(count, pmi);
                    const tupleKey = tuple.join('::');
 
+                   const interactive = count > 0 && !!onSelectCooccurrence;
+                   // Segno del PMI reso anche da un glifo, non solo dal colore:
+                   // ▲ associazione più forte dell'atteso, ▽ più debole.
+                   const pmiGlyph = pmi === null ? '' : pmi > 0.3 ? '▲' : pmi < -0.3 ? '▽' : '';
+                   const label = `${translateValue(r, rowAxis)} × ${colLabel(tuple)} — conteggio ${count}, PMI ${pmi !== null ? pmi.toFixed(2) : 'N/A'} (${reading})`;
+
                    return (
                      <div
                        key={tupleKey}
+                       role={interactive ? 'button' : 'img'}
+                       tabIndex={interactive ? 0 : undefined}
+                       aria-label={label}
                        title={`Riga: ${translateValue(r, rowAxis)}\n${colTooltipLines(tuple)}\nConteggio: ${count}\nPMI: ${pmi !== null ? pmi.toFixed(2) : 'N/A'}\nInterpretazione: ${reading}`}
                        className={cn(
-                         "w-8 h-8 shrink-0 border-b border-r border-border/30 flex items-center justify-center font-mono text-[10px] transition-colors hover:border-ink/40 cursor-default",
+                         "w-8 h-8 shrink-0 border-b border-r border-border/30 flex items-center justify-center gap-0.5 font-mono text-[10px] transition-colors hover:border-ink/40 cursor-default focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50 focus-visible:z-10",
                          count === 0 ? "text-transparent hover:bg-gray-50/50" : (count < 3 ? "text-ink/50" : "text-ink/90 font-bold"),
                          count > 0 ? "border shadow-[inset_0_1px_1px_rgba(255,255,255,0.4)]" : "",
-                         count > 0 && onSelectCooccurrence ? "cursor-pointer" : ""
+                         interactive ? "cursor-pointer" : ""
                        )}
                        style={style}
                        onClick={() => {
-                         if (count > 0 && onSelectCooccurrence) {
-                           onSelectCooccurrence(r, colLabel(tuple));
+                         if (interactive) onSelectCooccurrence!(r, colLabel(tuple));
+                       }}
+                       onKeyDown={(e) => {
+                         if (interactive && (e.key === 'Enter' || e.key === ' ')) {
+                           e.preventDefault();
+                           onSelectCooccurrence!(r, colLabel(tuple));
                          }
                        }}
                      >
                        {count > 0 ? count : ''}
+                       {pmiGlyph && <span className="text-[7px] opacity-70" aria-hidden="true">{pmiGlyph}</span>}
                      </div>
                    );
                 })}

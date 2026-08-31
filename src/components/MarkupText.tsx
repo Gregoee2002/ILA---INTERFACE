@@ -82,14 +82,14 @@ const Flow: React.FC<FlowProps> = ({ tokens, numeri, contatore, basePath, onElCl
             const omessa = a.reason === 'omitted';
             return (
               <span key={i} onClick={click} title={omessa ? 'Omesso dal copista' : 'Integrazione dell\'editore'}
-                className={cn('text-muted/70', hover)}>
+                className={cn('text-muted', hover)}>
                 {omessa ? '⟨' : '['}{kids}{omessa ? '⟩' : ']'}
               </span>
             );
           }
           case 'gap': {
             let g = '[- - -]';
-            if (a.reason === 'illegible') g = a.quantity ? '·'.repeat(Math.min(Number(a.quantity) || 5, 12)) : '·····';
+            if (a.reason === 'illegible') g = a.quantity ? '·'.repeat(Math.min(Math.max(Math.floor(Number(a.quantity)) || 5, 1), 12)) : '·····';
             else if (a.quantity) g = `[- ca. ${a.quantity} -]`;
             else if (a.atLeast) g = `[- ${a.atLeast}-${a.atMost} -]`;
             return <span key={i} onClick={click} title="Lacuna della tradizione"
@@ -107,7 +107,9 @@ const Flow: React.FC<FlowProps> = ({ tokens, numeri, contatore, basePath, onElCl
             const ex = t.children.find(c => c.kind === 'el' && c.name === 'ex');
             return (
               <span key={i} onClick={click} title="Abbreviazione sciolta" className={hover}>
-                {abbr && abbr.kind === 'el' && sub(abbr.children, [...path, abbrIdx])}
+                {abbr && abbr.kind === 'el'
+                  ? sub(abbr.children, [...path, abbrIdx])
+                  : !ex && sub(t.children, path) /* né <abbr> né <ex>: non far sparire il contenuto */}
                 {ex && <span className="text-muted/70 italic">({testoDi(ex)})</span>}
               </span>
             );
@@ -208,7 +210,7 @@ export const MarkupText: React.FC<{
   /** numera i versi/righe nel margine, come nell'anteprima dell'edizione */
   numeri?: boolean;
   className?: string;
-}> = ({ testo, lang, numeri, className }) => {
+}> = React.memo(({ testo, lang, numeri, className }) => {
   const tokens = React.useMemo(() => safeParseLitTesto(testo), [testo]);
 
   if (!tokens) {
@@ -222,7 +224,8 @@ export const MarkupText: React.FC<{
       <Flow tokens={tokens} numeri={numeri} contatore={{ n: 0 }} />
     </span>
   );
-};
+});
+MarkupText.displayName = 'MarkupText';
 
 /** Variante su token già in memoria: anteprima e superficie di lavoro dell'editor. */
 export const MarkupTokenView: React.FC<{

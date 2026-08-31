@@ -4,7 +4,7 @@ import App from './App.tsx';
 import './index.css';
 import { PasswordGate } from './components/PasswordGate';
 import { reloadOnceForStaleChunk } from './lib/staleChunkGuard';
-import ilaLogo from './assets/images/ila-logo.png';
+import ilaLogo from './assets/images/ila-logo.webp';
 
 const isStaticBuild = import.meta.env.VITE_STATIC_BUILD === 'true';
 

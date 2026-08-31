@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect, useLayoutEffect, useRef, ChangeEvent } from 'react';
+import React, { useState, useMemo, useEffect, useLayoutEffect, useRef, lazy, Suspense, ChangeEvent } from 'react';
 import { motion, AnimatePresence, MotionConfig } from 'motion/react';
 import { 
   Search,
@@ -60,16 +60,18 @@ import { Monumento, FilterState, SortField, Traduzione, Bibliografia, Appunto, E
 import { RAW_DATA } from './data';
 import { monumentiToXml, xmlToMonumenti, formatIlaLabel, splitDivineKey } from './lib/xmlUtils';
 import { buildDivinityIndex, buildOnomasticaIndex, buildClassificationAudit, DivinityStats, OnomasticaStats } from './lib/epithetIndex';
-import jsPDF from 'jspdf';
-import autoTable from 'jspdf-autotable';
 import { PleiadesMap } from './components/PleiadesMap';
-import { MapView } from './components/MapView';
+// Leaflet + markercluster sono pesanti e servono solo nella vista Mappa:
+// caricati on-demand per alleggerire il bundle iniziale.
+const MapView = lazy(() => import('./components/MapView').then(m => ({ default: m.MapView })));
 import { IconographyPanel } from './components/IconographyPanel';
+import { ErrorBoundary } from './components/ErrorBoundary';
 import { CooccurrenceHeatmap } from './components/CooccurrenceHeatmap';
 import { CultLexiconPanel } from './components/CultLexiconPanel';
 import { LiterarySourcesPanel } from './components/LiterarySourcesPanel';
 import { LiteraryEchoes } from './components/LiteraryEchoes';
-import { SectionEditorView } from './components/SectionEditorView';
+// Editor a sezioni: pesante e usato solo da chi ha sbloccato la modifica.
+const SectionEditorView = lazy(() => import('./components/SectionEditorView').then(m => ({ default: m.SectionEditorView })));
 import { DraftReviewPanel } from './components/DraftReviewPanel';
 import { UnlockEditingModal } from './components/UnlockEditingModal';
 import { RegistroPanel } from './components/RegistroPanel';
@@ -78,7 +80,7 @@ import { BugReportsPanel } from './components/BugReportsPanel';
 import { BibliographyIndex, BiblioReplacement, BiblioApplyResult } from './components/BibliographyIndex';
 import { auth, loginWithGoogle, logout } from './lib/firebase';
 import { onAuthStateChanged, User } from 'firebase/auth';
-import ilaLogo from './assets/images/ila-logo.png';
+import ilaLogo from './assets/images/ila-logo.webp';
 
 // Forma della risposta di GET /api/search (vedi src/lib/searchIndex.ts).
 // Dichiarato qui invece che importato dal modulo server per non accoppiare
@@ -2874,18 +2876,35 @@ const EpiDocRenderer = ({ xml, query, onTermClick, divinityIndex, onomasticaInde
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     const target = e.target as HTMLElement;
     const tooltipEl = target.closest('[data-epidoc-tooltip]');
-    if (tooltipEl) {
-      const text = tooltipEl.getAttribute('data-epidoc-tooltip') || '';
-      const rect = tooltipEl.getBoundingClientRect();
-      setHoveredInfo({
-        text,
-        x: rect.left + rect.width / 2,
-        y: rect.top - 8
-      });
-    }
+    if (!tooltipEl) return;
+    const text = tooltipEl.getAttribute('data-epidoc-tooltip') || '';
+    // Il tooltip è ancorato all'elemento, non al cursore: se sto ancora
+    // sopra lo stesso elemento non serve rifare setState ad ogni pixel
+    // (evita di ricostruire l'albero del testo epigrafico ad ogni mousemove).
+    setHoveredInfo(prev => (prev && prev.text === text ? prev : {
+      text,
+      x: tooltipEl.getBoundingClientRect().left + tooltipEl.getBoundingClientRect().width / 2,
+      y: tooltipEl.getBoundingClientRect().top - 8,
+    }));
   };
 
   const handleMouseLeave = () => {
+    setHoveredInfo(null);
+  };
+
+  // Equivalenti da tastiera: mostrano lo stesso tooltip quando un elemento
+  // marcato riceve/perde il focus, e lo collegano via aria-describedby.
+  const handleFocusCapture = (e: React.FocusEvent<HTMLDivElement>) => {
+    const tooltipEl = (e.target as HTMLElement).closest('[data-epidoc-tooltip]');
+    if (!tooltipEl) return;
+    const text = tooltipEl.getAttribute('data-epidoc-tooltip') || '';
+    tooltipEl.setAttribute('aria-describedby', 'epidoc-tooltip-live');
+    const rect = tooltipEl.getBoundingClientRect();
+    setHoveredInfo({ text, x: rect.left + rect.width / 2, y: rect.top - 8 });
+  };
+
+  const handleBlurCapture = (e: React.FocusEvent<HTMLDivElement>) => {
+    (e.target as HTMLElement).closest('[data-epidoc-tooltip]')?.removeAttribute('aria-describedby');
     setHoveredInfo(null);
   };
 
@@ -3051,7 +3070,7 @@ const EpiDocRenderer = ({ xml, query, onTermClick, divinityIndex, onomasticaInde
           const evidence = el.getAttribute('evidence') || '';
           let open = '[';
           let close = ']';
-          let cls = 'text-muted/70 hover:bg-black/5 dark:hover:bg-white/5 px-0.5 rounded transition-colors cursor-help inline';
+          let cls = 'text-muted hover:bg-black/5 dark:hover:bg-white/5 px-0.5 rounded transition-colors cursor-help inline';
           let tooltip = 'Testo integrato (lacuna)';
           if (reasonAttr === 'omitted') {
             open = '⟨'; close = '⟩';
@@ -3059,11 +3078,11 @@ const EpiDocRenderer = ({ xml, query, onTermClick, divinityIndex, onomasticaInde
           } else if (reasonAttr === 'undefined' || evidence === 'previouseditor') {
             open = '⟦'; close = '⟧';
             tooltip = 'Testo letto da editore precedente (fonte non reperibile)';
-            cls = 'text-muted/50 hover:bg-black/5 dark:hover:bg-white/5 px-0.5 rounded transition-colors cursor-help inline';
+            cls = 'text-muted/80 hover:bg-black/5 dark:hover:bg-white/5 px-0.5 rounded transition-colors cursor-help inline';
           } else if (reasonAttr === 'subaudible') {
             open = '('; close = ')';
             tooltip = 'Termine sottinteso aggiunto dal traduttore';
-            cls = 'text-muted/60 italic hover:bg-black/5 dark:hover:bg-white/5 px-0.5 rounded transition-colors cursor-help inline';
+            cls = 'text-muted/80 italic hover:bg-black/5 dark:hover:bg-white/5 px-0.5 rounded transition-colors cursor-help inline';
           } else if (reasonAttr === 'lost') {
             tooltip = cert === 'low' ? 'Integrazione incerta (lacuna)' : 'Testo integrato (lacuna)';
           }
@@ -3079,8 +3098,9 @@ const EpiDocRenderer = ({ xml, query, onTermClick, divinityIndex, onomasticaInde
           let tooltipText = 'Lacuna nel testo';
           if (reasonAttr === 'illegible') {
             tooltipText = 'Testo illeggibile';
-            if (quantityAttr && !Number.isNaN(Number(quantityAttr))) {
-              gapText = '·'.repeat(Number(quantityAttr));
+            const qn = Number(quantityAttr);
+            if (quantityAttr && Number.isFinite(qn) && qn > 0) {
+              gapText = '·'.repeat(Math.min(Math.floor(qn), 40));
             } else {
               gapText = '·····';
             }
@@ -3194,6 +3214,13 @@ const EpiDocRenderer = ({ xml, query, onTermClick, divinityIndex, onomasticaInde
               className={className}
               data-epidoc-tooltip={tooltipLabel}
               onClick={onClick}
+              {...(onClick ? {
+                role: 'button',
+                tabIndex: 0,
+                onKeyDown: (e: React.KeyboardEvent) => {
+                  if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onClick(e as any); }
+                },
+              } : {})}
             >
               {Array.from(node.childNodes).map((child: any, i) => renderNode(child, key + '-' + i))}
             </span>
@@ -3257,6 +3284,13 @@ const EpiDocRenderer = ({ xml, query, onTermClick, divinityIndex, onomasticaInde
               className={className}
               data-epidoc-tooltip={tooltipText}
               onClick={onClick}
+              {...(onClick ? {
+                role: 'button',
+                tabIndex: 0,
+                onKeyDown: (e: React.KeyboardEvent) => {
+                  if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onClick(e as any); }
+                },
+              } : {})}
             >
               {Array.from(node.childNodes).map((child: any, i) => renderNode(child, key + '-' + i))}
             </span>
@@ -3285,6 +3319,10 @@ const EpiDocRenderer = ({ xml, query, onTermClick, divinityIndex, onomasticaInde
           const exEl = Array.from(node.childNodes).find((c: any) => c.localName === 'ex');
           const abbrText = abbrEl ? (abbrEl as Element).textContent || '' : '';
           const exText = exEl ? (exEl as Element).textContent || '' : '';
+          // Né <abbr> né <ex>: non far sparire silenziosamente il contenuto.
+          if (!abbrEl && !exEl) {
+            return <span key={key} className="inline">{Array.from(node.childNodes).map((child: any, i) => renderNode(child, key + '-' + i))}</span>;
+          }
           return (
             <span
               key={key}
@@ -3504,17 +3542,6 @@ const EpiDocRenderer = ({ xml, query, onTermClick, divinityIndex, onomasticaInde
             {Array.from(node.childNodes).map((child: any, i) => renderNode(child, key + '-' + i))}
           </span>;
         }
-        case 'w': {
-          // <w lemma="..."> — parola con lemma, mostra contenuto con tooltip opzionale
-          const lemmaAttr = el.getAttribute('lemma') || '';
-          return (
-            <span key={key}
-              className={lemmaAttr ? 'cursor-help inline' : 'inline'}
-              data-epidoc-tooltip={lemmaAttr ? `Lemma: ${lemmaAttr}` : undefined}>
-              {Array.from(node.childNodes).map((child: any, i) => renderNode(child, key + '-' + i))}
-            </span>
-          );
-        }
         case 'seg': {
           // <seg part="I|M|F"> — segmento di parola, passthrough trasparente
           const partAttr = el.getAttribute('part') || '';
@@ -3587,12 +3614,16 @@ const EpiDocRenderer = ({ xml, query, onTermClick, divinityIndex, onomasticaInde
       onMouseOver={handleMouseOver}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
+      onFocusCapture={handleFocusCapture}
+      onBlurCapture={handleBlurCapture}
       onClick={handleClick}
     >
       {Array.from(rootNode.childNodes).map((child: any, i) => renderNode(child, i))}
       
       {hoveredInfo && (
-        <div 
+        <div
+          id="epidoc-tooltip-live"
+          role="tooltip"
           className="fixed z-50 px-2.5 py-1.5 bg-neutral-900 border border-neutral-800 text-white text-[11px] font-medium rounded shadow-xl font-sans transition-all max-w-xs pointer-events-none"
           style={{
             left: `${hoveredInfo.x}px`,
@@ -3822,6 +3853,31 @@ const DEFAULT_FILTERS: FilterState = {
   searchMode: 'AND',
 };
 
+/**
+ * Immagine di facsimile/squeeze con fallback testuale gestito in React
+ * (niente document.createElement/innerHTML fuori dal ciclo di render).
+ */
+const FacsimileImage: React.FC<{ url: string; desc?: string }> = ({ url, desc }) => {
+  const [failed, setFailed] = useState(false);
+  if (failed) {
+    return (
+      <div className="text-center p-6 text-xs text-muted font-sans uppercase tracking-widest">
+        <span className="italic text-accent block mb-2">[Squeeze Grafico: {url}]</span>
+        {desc || ''}
+      </div>
+    );
+  }
+  return (
+    <img
+      src={url}
+      alt={desc || 'Squeeze facsimile'}
+      referrerPolicy="no-referrer"
+      className="max-h-full max-w-full object-contain filter grayscale p-2 select-none hover:scale-105 transition-transform duration-300"
+      onError={() => setFailed(true)}
+    />
+  );
+};
+
 export default function App({ skipLanding = false }: { skipLanding?: boolean } = {}) {
   type ThemePreference = 'light' | 'dark' | 'system';
   const [theme, setTheme] = useState<ThemePreference>(() => {
@@ -3893,6 +3949,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
   const [compareList, setCompareList] = useState<Monumento[]>([]);
   const [selectedIds, setSelectedIds] = useState<Set<string | number>>(new Set());
   const [exportFlash, setExportFlash] = useState<'xml' | 'pdf' | null>(null);
+  const [exportError, setExportError] = useState<string | null>(null);
   const flashExport = (kind: 'xml' | 'pdf') => {
     setExportFlash(kind);
     setTimeout(() => setExportFlash(f => (f === kind ? null : f)), 1400);
@@ -4015,6 +4072,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
     if (action.kind === 'redirect-catalog') {
       setFilters(f => ({ ...f, searchText: action.term }));
       setSelectedMonumento(null);
+      setActiveView('catalog');
     } else if (action.kind === 'redirect-stats') {
       setStatsPreset({ tab: action.tab, term: action.search, exact: false });
       setSelectedMonumento(null);
@@ -4050,6 +4108,33 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
   ];
   const [activeRecordSection, setActiveRecordSection] = useState<string>('supporto');
   const recordContentRef = useRef<HTMLDivElement>(null);
+  const recordDialogRef = useRef<HTMLDivElement>(null);
+
+  // Scheda-dettaglio come vera modale: al montaggio si memorizza l'elemento che
+  // l'ha aperta, si sposta il focus nel dialog e lo si intrappola con Tab;
+  // alla chiusura il focus torna al trigger.
+  useEffect(() => {
+    if (!selectedMonumento) return;
+    const opener = document.activeElement as HTMLElement | null;
+    const node = recordDialogRef.current;
+    node?.focus();
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key !== 'Tab' || !node) return;
+      const focusables = node.querySelectorAll<HTMLElement>(
+        'a[href], button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])'
+      );
+      if (focusables.length === 0) return;
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    };
+    node?.addEventListener('keydown', onKeyDown);
+    return () => {
+      node?.removeEventListener('keydown', onKeyDown);
+      opener?.focus?.();
+    };
+  }, [selectedMonumento?.id]);
 
   // Il rect del click da cui il popover è posizionato è valido solo per lo
   // span cliccato in quel momento: cambiando scheda o sezione va chiuso,
@@ -4079,6 +4164,17 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
     window.addEventListener('keydown', onKey, true);
     return () => window.removeEventListener('keydown', onKey, true);
   }, [selectedMonumento]);
+
+  // Esc chiude la tendina dei filtri del Catalogo, coerentemente con l'overlay
+  // cliccabile che già la chiude al click esterno.
+  useEffect(() => {
+    if (!showFilterPanel) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setShowFilterPanel(false);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [showFilterPanel]);
 
   const goToRecordSection = (id: string) => {
     setActiveRecordSection(id);
@@ -4410,12 +4506,17 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
         const matchesIconFunzione = !filters.iconFunzione || m.iconografia?.function === filters.iconFunzione;
         const matchesIconPosizione = !filters.iconPosizione || (m.iconografia?.figures?.some(f => f.place === filters.iconPosizione) ?? false);
 
-        const matchesInscr = !filters.onlyInscr || m.iscrizione;
-        const matchesAnep = !filters.onlyAnep || m.anepigr;
-        
+        // onlyInscr + onlyAnep insieme sarebbe una combinazione impossibile
+        // (iscritto E anepigrafe): la si tratta come "nessun vincolo" invece di
+        // restituire silenziosamente 0 risultati. Idem per Con/Senza traduzione.
+        const bothInscr = filters.onlyInscr && filters.onlyAnep;
+        const matchesInscr = bothInscr || !filters.onlyInscr || m.iscrizione;
+        const matchesAnep = bothInscr || !filters.onlyAnep || m.anepigr;
+
         const hasTrad = m.traduzioni && m.traduzioni.some(t => t.testo && t.testo.trim().length > 0);
-        const matchesHasTrad = !filters.onlyHasTrad || hasTrad;
-        const matchesNoTrad = !filters.onlyNoTrad || !hasTrad;
+        const bothTrad = filters.onlyHasTrad && filters.onlyNoTrad;
+        const matchesHasTrad = bothTrad || !filters.onlyHasTrad || hasTrad;
+        const matchesNoTrad = bothTrad || !filters.onlyNoTrad || !hasTrad;
 
         const matchesDate = (!m.data_inizio || !m.data_fine) || (m.data_inizio >= filters.dateRange[0] && m.data_fine <= filters.dateRange[1]);
 
@@ -5093,16 +5194,23 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
   };
 
   const exportFilteredData = (forceAll = false) => {
-    const toExport = (!forceAll && selectedIds.size > 0) ? selectedMonumenti : filteredMonumenti;
-    const label = (!forceAll && selectedIds.size > 0) ? `selezione-${selectedIds.size}` : 'catalogo';
-    const xmlStr = monumentiToXml(toExport);
-    const blob = new Blob([xmlStr], { type: 'application/xml' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `cmdm-export-${label}-${new Date().toISOString().split('T')[0]}.xml`;
-    link.click();
-    URL.revokeObjectURL(url);
+    try {
+      const toExport = (!forceAll && selectedIds.size > 0) ? selectedMonumenti : filteredMonumenti;
+      if (toExport.length === 0) { setExportError('Nessuna scheda da esportare.'); return; }
+      const label = (!forceAll && selectedIds.size > 0) ? `selezione-${selectedIds.size}` : 'catalogo';
+      const xmlStr = monumentiToXml(toExport);
+      const blob = new Blob([xmlStr], { type: 'application/xml' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `cmdm-export-${label}-${new Date().toISOString().split('T')[0]}.xml`;
+      link.click();
+      URL.revokeObjectURL(url);
+      setExportError(null);
+    } catch (e) {
+      console.error('Export XML fallito', e);
+      setExportError('Errore durante la generazione del file XML.');
+    }
   };
 
   const downloadBackup = async () => {
@@ -5121,10 +5229,17 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
     }
   };
 
-  const exportToPDF = (forceAll = false) => {
+  const exportToPDF = async (forceAll = false) => {
+   try {
     const toExport = (!forceAll && selectedIds.size > 0) ? selectedMonumenti : filteredMonumenti;
+    if (toExport.length === 0) { setExportError('Nessuna scheda da esportare.'); return; }
+    // jsPDF + autoTable (~250 KB) caricati solo al primo export, non nel bundle iniziale.
+    const [{ default: jsPDF }, { default: autoTable }] = await Promise.all([
+      import('jspdf'),
+      import('jspdf-autotable'),
+    ]);
     const doc = new jsPDF();
-    
+
     doc.setFontSize(18);
     doc.text('ILA - Index lunae antiquae', 14, 22);
     doc.setFontSize(11);
@@ -5148,6 +5263,11 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
     });
     
     doc.save(`star-catalogo-${new Date().toISOString().split('T')[0]}.pdf`);
+    setExportError(null);
+   } catch (e) {
+    console.error('Export PDF fallito', e);
+    setExportError('Errore durante la generazione del PDF.');
+   }
   };
 
   const importXml = async (e: ChangeEvent<HTMLInputElement>) => {
@@ -5397,9 +5517,10 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                 : "border-[var(--border)]/50 bg-[var(--card)]/80 hover:bg-[var(--card)] shadow-inner"
             )}
           >
-            <Search className="h-3.5 w-3.5 text-muted/50 shrink-0" />
+            <Search className="h-3.5 w-3.5 text-muted/50 shrink-0" aria-hidden="true" />
             <input
-              type="text"
+              type="search"
+              aria-label="Cerca nel catalogo"
               value={filters.searchText}
               onChange={(e) => setFilters(f => ({ ...f, searchText: e.target.value }))}
               onFocus={() => setShowFilterPanel(true)}
@@ -5414,9 +5535,12 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
               onClick={() => setShowFilterPanel(s => !s)}
               className="shrink-0"
               title="Filtri avanzati"
+              aria-label="Filtri avanzati"
+              aria-expanded={showFilterPanel}
+              aria-controls="catalog-sidebar"
             >
               <motion.span animate={{ rotate: showFilterPanel ? 180 : 0 }} transition={{ duration: 0.2 }} className="block">
-                <ChevronDown className="h-3.5 w-3.5 text-muted/50" />
+                <ChevronDown className="h-3.5 w-3.5 text-muted/50" aria-hidden="true" />
               </motion.span>
             </button>
           </div>
@@ -5595,6 +5719,9 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
               />
               <motion.aside
                 id="catalog-sidebar"
+                role="dialog"
+                aria-modal="false"
+                aria-labelledby="catalog-sidebar-title"
                 initial={{ opacity: 0, y: -10, scale: 0.98 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: -10, scale: 0.98 }}
@@ -5605,7 +5732,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
             <div className="absolute -bottom-4 inset-x-12 h-8 bg-accent/5 dark:bg-accent/2 blur-2xl rounded-full opacity-40 pointer-events-none -z-10" />
 
             <div className="flex flex-col h-full">
-                <h2 className="mb-2 font-sans text-[11px] font-bold uppercase tracking-[0.25em] text-muted flex items-center gap-2">
+                <h2 id="catalog-sidebar-title" className="mb-2 font-sans text-[11px] font-bold uppercase tracking-[0.25em] text-muted flex items-center gap-2">
                    Ricerca Catalogo
                 </h2>
                 <div className="ornament-rule !my-0 mb-6 max-w-[4rem] mx-0" />
@@ -5633,9 +5760,10 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                 </div>
                 
                 <div className="relative bg-[var(--card)]/80 dark:bg-[var(--card)]/60 backdrop-blur-md border border-[var(--border)]/50 dark:border-[var(--border)]/40 rounded-xl px-3.5 py-2 shadow-inner group-focus-within:border-accent/50 group-focus-within:ring-1 group-focus-within:ring-accent/30 transition-all duration-300 hover:bg-[var(--card)] dark:hover:bg-[var(--card)]/80 flex items-center min-h-[42px]">
-                  <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted/50" />
-                  <input 
-                    type="text" 
+                  <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted/50" aria-hidden="true" />
+                  <input
+                    type="search"
+                    aria-label="Ricerca intelligente nel catalogo"
                     placeholder="Cerca testo, luoghi, tipi..."
                     className="w-full bg-transparent py-1 pl-6 pr-6 font-sans text-xs outline-none transition-colors placeholder:opacity-50"
                     value={filters.searchText}
@@ -5790,31 +5918,32 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                 <label className="block field-label mb-3">Gestione Traduzioni</label>
                 <div className="flex flex-col gap-3">
                   <label className="flex items-center gap-2 cursor-pointer group">
-                    <div 
-                      className={cn("w-3.5 h-3.5 border border-border flex items-center justify-center transition-colors group-hover:border-accent", filters.onlyHasTrad && "bg-accent border-accent")}
-                      onClick={() => setFilters(f => ({ ...f, onlyHasTrad: !f.onlyHasTrad, onlyNoTrad: false }))}
-                    >
-                      {filters.onlyHasTrad && <div className="w-1.5 h-1.5 bg-white rounded-full" />}
-                    </div>
+                    <input
+                      type="checkbox"
+                      className="w-3.5 h-3.5 accent-accent cursor-pointer"
+                      checked={filters.onlyHasTrad}
+                      onChange={() => setFilters(f => ({ ...f, onlyHasTrad: !f.onlyHasTrad, onlyNoTrad: false }))}
+                    />
                     <span className="text-[10px] uppercase font-sans font-bold">Con Traduzione</span>
                   </label>
                   <label className="flex items-center gap-2 cursor-pointer group">
-                    <div 
-                      className={cn("w-3.5 h-3.5 border border-border flex items-center justify-center transition-colors group-hover:border-accent", filters.onlyNoTrad && "bg-accent border-accent")}
-                      onClick={() => setFilters(f => ({ ...f, onlyNoTrad: !f.onlyNoTrad, onlyHasTrad: false }))}
-                    >
-                      {filters.onlyNoTrad && <div className="w-1.5 h-1.5 bg-white rounded-full" />}
-                    </div>
+                    <input
+                      type="checkbox"
+                      className="w-3.5 h-3.5 accent-accent cursor-pointer"
+                      checked={filters.onlyNoTrad}
+                      onChange={() => setFilters(f => ({ ...f, onlyNoTrad: !f.onlyNoTrad, onlyHasTrad: false }))}
+                    />
                     <span className="text-[10px] uppercase font-sans font-bold">Senza Traduzione</span>
                   </label>
                 </div>
               </div>
 
               <div className="pt-6">
-                <button 
+                <button
                   id="reset-filters-btn"
                   onClick={() => setFilters(DEFAULT_FILTERS)}
-                  className="w-full border border-accent py-3 font-sans text-[9px] font-bold uppercase tracking-widest text-accent hover:bg-accent hover:text-white transition-all flex items-center justify-center gap-2"
+                  disabled={!hasActiveFilters}
+                  className="w-full border border-accent py-3 font-sans text-[9px] font-bold uppercase tracking-widest text-accent hover:bg-accent hover:text-white transition-all flex items-center justify-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-accent"
                 >
                   <Trash2 className="h-3 w-3" /> Reset Filtri
                 </button>
@@ -5855,7 +5984,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                 {/* Record List */}
                 <div className="flex-1 flex flex-col overflow-hidden min-h-0 glass-panel glass-panel-elevated rounded-2xl">
                   <div className="px-6 pt-6 mb-2 flex items-center justify-between border-b border-border/20 pb-3 font-sans text-[10px] font-bold uppercase tracking-[0.2em] text-muted">
-                    <span>Visualizzazione di {filteredMonumenti.length} schede</span>
+                    <span role="status" aria-live="polite">Visualizzazione di {filteredMonumenti.length} schede</span>
                     <div className="flex items-center gap-4">
                       <span className="opacity-30 lowercase">Ordina per:</span>
                       <button onClick={() => toggleSort('id')} className={cn("hover:text-accent transition-colors", sortField === 'id' && "text-accent")}>ID</button>
@@ -5869,6 +5998,9 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                         <button
                           onClick={() => selectedIds.size === filteredMonumenti.length ? deselectAll() : selectAll()}
                           className="w-4 h-4 border border-border rounded-sm flex items-center justify-center hover:border-accent transition-colors"
+                          role="checkbox"
+                          aria-checked={filteredMonumenti.length > 0 && selectedIds.size === filteredMonumenti.length ? true : selectedIds.size > 0 ? 'mixed' : false}
+                          aria-label={selectedIds.size === filteredMonumenti.length ? 'Deseleziona tutte le schede' : 'Seleziona tutte le schede'}
                           title={selectedIds.size === filteredMonumenti.length ? 'Deseleziona tutto' : 'Seleziona tutto'}
                         >
                           <AnimatePresence mode="wait" initial={false}>
@@ -5919,11 +6051,16 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                             transition={{ backgroundColor: { duration: 0.25, ease: EASE_OUT }, layout: SPRING_SNAPPY }}
                             whileHover={!isSelected ? { backgroundColor: 'rgba(45,45,45,0.03)' } : undefined}
                             className={cn(
-                              "relative block md:grid md:grid-cols-[1.5rem_1.5fr_4fr_2fr_2fr_1.5rem] lg:grid-cols-[1.5rem_1.5fr_4fr_2fr_2fr_1.5rem] xl:grid-cols-[1.5rem_0.8fr_2.7fr_1.5fr_1fr_3fr_1.5rem] gap-2 border-b py-3 md:py-4 group items-center px-2 lg:px-0 min-h-[76px] md:h-[76px] overflow-hidden [&>div]:min-w-0",
+                              "relative block md:grid md:grid-cols-[1.5rem_1.5fr_4fr_2fr_2fr_1.5rem] lg:grid-cols-[1.5rem_1.5fr_4fr_2fr_2fr_1.5rem] xl:grid-cols-[1.5rem_0.8fr_2.7fr_1.5fr_1fr_3fr_1.5rem] gap-2 border-b py-3 md:py-4 group items-center px-2 lg:px-0 min-h-[76px] md:h-[76px] overflow-hidden [&>div]:min-w-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40 focus-visible:ring-inset",
                               isSelected ? "border-accent/20" : "border-border/30 cursor-pointer"
                             )}
-                            
+                            role="button"
+                            tabIndex={0}
+                            aria-label={`Apri scheda ${m.entryId || m.id} — ${getDisplayTitle(m)}`}
                             onClick={() => setSelectedMonumento(m)}
+                            onKeyDown={(e) => {
+                              if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setSelectedMonumento(m); }
+                            }}
                           >
                             {/* Accent bar indicating selection */}
                             <motion.div
@@ -5976,12 +6113,22 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                                 
                                 <div className="flex flex-wrap items-center gap-x-2 gap-y-1 mt-0.5">
                                   <span className="text-[9px] font-bold uppercase text-muted tracking-tighter">{labelType(m.tipo)}</span>
-                                  {m.regione && <span className="text-[7px] font-sans text-accent font-bold uppercase tracking-wider bg-accent/5 px-1 rounded-xs border border-accent/10">{m.regione}</span>}
+                                  {m.regione && (
+                                    <button
+                                      onClick={(e) => { e.stopPropagation(); setFilters(f => ({ ...f, regione: m.regione })); }}
+                                      className="text-[7px] font-sans text-accent font-bold uppercase tracking-wider bg-accent/5 px-1 rounded-xs border border-accent/10 hover:bg-accent hover:text-white transition-all"
+                                    >
+                                      {m.regione}
+                                    </button>
+                                  )}
                                   {m.citta && (
-                                     <span className="flex items-center gap-0.5 text-[8px] font-sans text-muted uppercase tracking-tighter">
+                                     <button
+                                       onClick={(e) => { e.stopPropagation(); setFilters(f => ({ ...f, citta: m.citta })); }}
+                                       className="flex items-center gap-0.5 text-[8px] font-sans text-muted uppercase tracking-tighter hover:text-accent transition-colors"
+                                     >
                                        <MapPin className="h-1.5 w-1.5 opacity-50" />
                                        {m.citta}
-                                     </span>
+                                     </button>
                                   )}
                                 </div>
                               </div>
@@ -6078,11 +6225,27 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                           );
                         })}
                       </AnimatePresence>
+
+                      {filteredMonumenti.length === 0 && (
+                        <div role="status" aria-live="polite" className="text-center py-16 text-muted/60 font-serif italic text-sm">
+                          Nessuna scheda corrisponde ai filtri attivi.
+                          {hasActiveFilters && (
+                            <div className="mt-3">
+                              <button
+                                onClick={() => setFilters(DEFAULT_FILTERS)}
+                                className="text-[10px] font-sans font-bold uppercase tracking-widest text-accent hover:underline not-italic"
+                              >
+                                Azzera i filtri
+                              </button>
+                            </div>
+                          )}
+                        </div>
+                      )}
                     </div>
 
                     {/* Pagination Controls */}
                     {totalPages > 1 && (
-                      <div className="mt-8 mb-6 flex items-center justify-between border-t border-border/20 pt-6 px-6">
+                      <nav className="mt-8 mb-6 flex items-center justify-between border-t border-border/20 pt-6 px-6" aria-label="Paginazione catalogo">
                         <div className="text-[10px] font-sans font-bold uppercase tracking-widest text-muted">
                           Pagina {currentPage} di {totalPages}
                         </div>
@@ -6090,9 +6253,10 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                           <button
                             disabled={currentPage === 1}
                             onClick={() => setCurrentPage(prev => prev - 1)}
+                            aria-label="Pagina precedente"
                             className="p-2 border border-border/40 rounded-sm hover:bg-accent/10 disabled:opacity-20 transition-colors"
                           >
-                            <ChevronLeft className="h-4 w-4" />
+                            <ChevronLeft className="h-4 w-4" aria-hidden="true" />
                           </button>
                           
                           <div className="flex items-center gap-1 mx-2">
@@ -6107,6 +6271,8 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                                 <button
                                   key={pageNum}
                                   onClick={() => setCurrentPage(pageNum)}
+                                  aria-label={`Pagina ${pageNum}`}
+                                  aria-current={currentPage === pageNum ? 'page' : undefined}
                                   className={cn(
                                     "w-7 h-7 flex items-center justify-center text-[10px] font-bold rounded-sm border transition-all",
                                     currentPage === pageNum
@@ -6123,12 +6289,13 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                           <button
                             disabled={currentPage === totalPages}
                             onClick={() => setCurrentPage(prev => prev + 1)}
+                            aria-label="Pagina successiva"
                             className="p-2 border border-border/40 rounded-sm hover:bg-accent/10 disabled:opacity-20 transition-colors"
                           >
-                            <ChevronRight className="h-4 w-4" />
+                            <ChevronRight className="h-4 w-4" aria-hidden="true" />
                           </button>
                         </div>
-                      </div>
+                      </nav>
                     )}
 
                     {/* Selection Bar */}
@@ -6199,6 +6366,13 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                               </AnimatePresence>
                               {exportFlash === 'pdf' ? 'Esportato' : 'Esporta PDF'}
                             </button>
+                          </div>
+                          <div aria-live="polite" role="status" className="w-full text-right">
+                            {exportError
+                              ? <span className="text-[9px] font-sans font-bold uppercase tracking-widest text-red-500">{exportError}</span>
+                              : exportFlash
+                                ? <span className="sr-only">Esportazione {exportFlash.toUpperCase()} completata</span>
+                                : null}
                           </div>
                         </motion.div>
                       )}
@@ -6285,20 +6459,26 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
           )}
           {activeView === 'review' && <DraftReviewPanel />}
           {activeView === 'editor' && (
-            <SectionEditorView
-              monumenti={monumenti}
-              effectiveAdmin={effectiveAdmin}
-              currentUserEmail={currentUser?.email}
-              onLogin={isStaticBuild ? () => setShowUnlockModal(true) : loginWithGoogle}
-              onSave={handleSaveMetadata}
-              onCreate={createMonumentoFromEditor}
-              onExport={exportSingleRecord}
-              initialEntryId={editorTargetEntryId}
-              onInitialEntryIdConsumed={() => setEditorTargetEntryId(null)}
-            />
+            <Suspense fallback={<div className="flex-1 flex items-center justify-center text-sm text-muted italic">Caricamento editor…</div>}>
+              <SectionEditorView
+                monumenti={monumenti}
+                effectiveAdmin={effectiveAdmin}
+                currentUserEmail={currentUser?.email}
+                onLogin={isStaticBuild ? () => setShowUnlockModal(true) : loginWithGoogle}
+                onSave={handleSaveMetadata}
+                onCreate={createMonumentoFromEditor}
+                onExport={exportSingleRecord}
+                initialEntryId={editorTargetEntryId}
+                onInitialEntryIdConsumed={() => setEditorTargetEntryId(null)}
+              />
+            </Suspense>
           )}
-          {activeView === 'timeline' && <Timeline monumenti={monumenti} onSelect={setSelectedMonumento} paused={!!selectedMonumento} />}
-          {activeView === 'map' && <MapView monumenti={monumenti} onSelectMonumento={(id) => { const m = monumenti.find(x => x.id.toString() === id || x.entryId === id); if (m) { setSelectedMonumento(m); setActiveView('catalog'); } }} />}
+          {activeView === 'timeline' && <Timeline monumenti={monumenti} onSelect={(m) => { setSelectedMonumento(m); setActiveView('catalog'); }} paused={!!selectedMonumento} />}
+          {activeView === 'map' && (
+            <Suspense fallback={<div className="flex-1 flex items-center justify-center text-sm text-muted italic">Caricamento mappa…</div>}>
+              <MapView monumenti={monumenti} onSelectMonumento={(id) => { const m = monumenti.find(x => x.id.toString() === id || x.entryId === id); if (m) { setSelectedMonumento(m); setActiveView('catalog'); } }} />
+            </Suspense>
+          )}
         </motion.div>
         </section>
       </div>
@@ -6406,10 +6586,11 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
         )}
       </AnimatePresence>
 
-      {/* Advanced Import Modal */}
+      {/* Advanced Import Modal — z sopra la scheda-dettaglio (z-50) per uno
+          stacking deterministico se entrambe risultano montate. */}
       <AnimatePresence>
         {isImportModalOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 md:p-8">
+          <div className="fixed inset-0 z-[55] flex items-center justify-center p-4 md:p-8">
              <motion.div 
                initial={{ opacity: 0 }}
                animate={{ opacity: 1 }}
@@ -6807,34 +6988,38 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                className="absolute inset-0 bg-ink/80 backdrop-blur-sm"
              />
              <motion.div
+               ref={recordDialogRef}
+               role="dialog"
+               aria-modal="true"
+               aria-labelledby="record-dialog-title"
+               tabIndex={-1}
                initial={{ scale: 0.98, opacity: 0, y: 10 }}
                animate={{ scale: 1, opacity: 1, y: 0 }}
                exit={{ scale: 0.98, opacity: 0, y: 10 }}
-               className="relative w-full lg:w-[95vw] max-w-[1400px] bg-parchment shadow-2xl overflow-hidden flex flex-col h-full lg:h-[90vh] border border-border lg:rounded-2xl"
+               className="relative w-full lg:w-[95vw] max-w-[1400px] bg-parchment shadow-2xl overflow-hidden flex flex-col h-full lg:h-[90vh] border border-border lg:rounded-2xl focus:outline-none"
              >
                 <div className="flex h-full flex-col md:flex-row overflow-y-auto md:overflow-hidden">
                   {/* Left Metadata Rail */}
                   <div className="w-full md:w-56 bg-sidebar border-b md:border-b-0 md:border-r border-border p-5 md:p-6 flex flex-col shrink-0 md:overflow-y-auto custom-scrollbar">
                     <div className="mb-10 flex items-center justify-between gap-3">
-                      <button 
+                      <button
                         onClick={() => setSelectedMonumento(null)}
                         className="text-[10px] font-sans font-bold uppercase tracking-[0.2em] text-muted flex items-center gap-2 hover:text-accent transition-colors"
                       >
                         <X className="h-4 w-4" /> Torna al Catalogo
                       </button>
-                      {effectiveAdmin && (
-                        <button
-                          onClick={() => {
-                            setEditorTargetEntryId(selectedMonumento.entryId ?? selectedMonumento.id?.toString() ?? null);
-                            setSelectedMonumento(null);
-                            setActiveView('editor');
-                          }}
-                          className="text-[9px] font-sans font-semibold uppercase tracking-[0.15em] text-accent/80 flex items-center gap-1.5 hover:text-accent transition-colors"
-                          title="Apri questa scheda nell'editor completo"
-                        >
-                          <Edit2 className="h-3 w-3" /> Modifica
-                        </button>
-                      )}
+                      <span
+                        className={cn(
+                          "text-[8px] font-sans font-bold uppercase tracking-[0.15em] px-2 py-0.5 rounded-full border shrink-0",
+                          effectiveAdmin
+                            ? "border-accent/50 text-accent bg-accent/10"
+                            : "border-border text-muted"
+                        )}
+                      >
+                        {effectiveAdmin ? 'Modifica sbloccata' : 'Sola lettura'}
+                      </span>
+                      {/* Il comando "Modifica nell'Editor a Sezioni" vive più in basso
+                          nella stessa colonna: qui non serve un secondo pulsante gemello. */}
                     </div>
 
                     <div className="space-y-8">
@@ -6867,7 +7052,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                       </nav>
 
                       <section className="space-y-4">
-                        <h4 className="font-sans field-label opacity-85 pb-2 border-b border-border/40">Dettagli</h4>
+                        <h3 className="font-sans field-label opacity-85 pb-2 border-b border-border/40">Dettagli</h3>
                         <dl className="space-y-3">
                           {[
                             { label: 'Regione', value: selectedMonumento.regione, display: selectedMonumento.regione, type: 'regione' },
@@ -6928,7 +7113,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                   <div className="animate-in fade-in duration-200 md:-mt-8">
                     <div className="flex justify-between items-start mb-3">
                       <div className="flex-1 mr-4">
-                        {true && (
+                        {(selectedMonumento.regione || selectedMonumento.citta) && (
                           <div className="flex flex-col gap-1 mb-2">
                             {selectedMonumento.regione && (
                               <div className="text-[10px] md:text-xs font-sans font-bold uppercase tracking-[0.3em] text-accent">
@@ -6989,7 +7174,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                                 + Confronta
                               </button>
                             </div>
-                            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-ink leading-tight font-serif">
+                            <h2 id="record-dialog-title" className="text-3xl sm:text-4xl md:text-5xl font-bold text-ink leading-tight font-serif">
                               {getDisplayTitle(selectedMonumento)}
                             </h2>
                             <div className="ornament-rule !my-0 mt-2 max-w-[6rem] mx-0" />
@@ -7044,30 +7229,14 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                           <div className="bg-sidebar/40 p-6 border border-border/60 rounded-sm">
                             <span className="text-[10px] font-sans font-bold uppercase tracking-[0.2em] text-accent block mb-3">Facsimile / Squeeze Image</span>
                             <div className="relative aspect-video max-w-full md:max-w-2xl overflow-hidden bg-zinc-950 border border-border flex items-center justify-center rounded-sm shadow-inner group">
-                              <img 
-                                src={selectedMonumento.facsimile_url} 
-                                alt={selectedMonumento.facsimile_desc || "Squeeze facsimile"} 
-                                referrerPolicy="no-referrer"
-                                className="max-h-full max-w-full object-contain filter grayscale text-slate-100 p-2 select-none hover:scale-105 transition-transform duration-300"
-                                onError={(e) => {
-                                  const imgEl = e.target as HTMLElement;
-                                  imgEl.style.display = 'none';
-                                  const parent = imgEl.parentElement;
-                                  if (parent) {
-                                    const textDiv = document.createElement('div');
-                                    textDiv.className = 'text-center p-6 text-xs text-muted font-sans uppercase tracking-widest';
-                                    textDiv.innerHTML = `<span class="italic text-accent block mb-2">[Squeeze Grafico: ${selectedMonumento.facsimile_url}]</span> ${selectedMonumento.facsimile_desc || ''}`;
-                                    parent.appendChild(textDiv);
-                                  }
-                                }}
-                              />
+                              <FacsimileImage url={selectedMonumento.facsimile_url} desc={selectedMonumento.facsimile_desc} />
                             </div>
                           </div>
                         )}
 
                         <div className="grid md:grid-cols-2 gap-6 border border-border/40 bg-sidebar/20 p-5 md:p-6 rounded-sm font-serif text-xs leading-relaxed text-ink/80">
                           <div>
-                            <h4 className="text-[10px] font-sans font-bold uppercase tracking-widest text-accent mb-3 pb-1 border-b border-border/30">Layout & Supporto Materiale</h4>
+                            <h3 className="text-[10px] font-sans font-bold uppercase tracking-widest text-accent mb-3 pb-1 border-b border-border/30">Layout & Supporto Materiale</h3>
                             {selectedMonumento.layout_desc && (
                               <p className="mb-3 text-ink-70 select-text font-serif leading-relaxed">{selectedMonumento.layout_desc}</p>
                             )}
@@ -7126,7 +7295,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                             </div>
                           </div>
                           <div>
-                            <h4 className="text-[10px] font-sans font-bold uppercase tracking-widest text-accent mb-3 pb-1 border-b border-border/30">Georeferenziazione & Date Storiche</h4>
+                            <h3 className="text-[10px] font-sans font-bold uppercase tracking-widest text-accent mb-3 pb-1 border-b border-border/30">Georeferenziazione & Date Storiche</h3>
                             <div className="space-y-3">
                               {(selectedMonumento.citta || selectedMonumento.luogo_rit) && (
                                 <div className="grid grid-cols-2 gap-2">
@@ -7241,14 +7410,22 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                                 )}
                                 <div className="relative z-10 max-w-[62ch] mx-auto pl-10 border-l-2 border-border/40 max-h-[52vh] overflow-y-auto custom-scrollbar pr-4 pt-10">
                                   {selectedMonumento.testo ? (
-                                    <EpiDocRenderer
-                                      xml={selectedMonumento.testo}
-                                      query={filters.searchText}
-                                      onTermClick={handleTermClick}
-                                      divinityIndex={divinityIndex}
-                                      onomasticaIndex={onomasticaIndex}
-                                      plain={plainTranscription}
-                                    />
+                                    <ErrorBoundary
+                                      fallback={
+                                        <pre className="whitespace-pre-wrap font-mono text-sm text-muted/80">
+                                          {selectedMonumento.testo}
+                                        </pre>
+                                      }
+                                    >
+                                      <EpiDocRenderer
+                                        xml={selectedMonumento.testo}
+                                        query={filters.searchText}
+                                        onTermClick={handleTermClick}
+                                        divinityIndex={divinityIndex}
+                                        onomasticaIndex={onomasticaIndex}
+                                        plain={plainTranscription}
+                                      />
+                                    </ErrorBoundary>
                                   ) : <span className="opacity-40 italic">[Anepigrafe]</span>}
                                 </div>
                              </div>
@@ -7490,7 +7667,11 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                       <h5 className="text-[9px] font-bold uppercase text-muted underline underline-offset-4 mb-3 font-sans">Trascrizione</h5>
                       <div className="text-sm bg-sidebar/50 p-4 border border-border/40"
                            style={{ fontFamily: 'var(--font-greek)', lineHeight: '1.9' }}>
-                        {m.testo ? <EpiDocRenderer xml={m.testo} query={filters.searchText} /> : <span className="italic opacity-50">[Anepigrafe]</span>}
+                        {m.testo ? (
+                          <ErrorBoundary fallback={<pre className="whitespace-pre-wrap font-mono text-sm text-muted/80">{m.testo}</pre>}>
+                            <EpiDocRenderer xml={m.testo} query={filters.searchText} />
+                          </ErrorBoundary>
+                        ) : <span className="italic opacity-50">[Anepigrafe]</span>}
                       </div>
                     </section>
                     <section>

@@ -13,6 +13,24 @@ export const IconographyPanel: React.FC<IconographyPanelProps> = ({ monumento })
   const ico = monumento.iconografia;
   const isEmpty = !ico || (!ico.function && (!ico.figures || ico.figures.length === 0));
 
+  // Il raggruppamento dei tratti per tipo è puro rispetto a `monumento`:
+  // lo si calcola una sola volta invece che ad ogni render.
+  const figures = React.useMemo(() => {
+    return (ico?.figures || []).map(fig => {
+      const groupedTraits: Record<string, typeof fig.traits> = {};
+      (fig.traits || []).forEach(t => {
+        if (!groupedTraits[t.type]) groupedTraits[t.type] = [];
+        groupedTraits[t.type].push(t);
+      });
+      return {
+        fig,
+        groupedTraits,
+        displayTitle: capitalize(ICONOGRAPHY_LABELS[fig.key] || fig.key),
+        translatedType: ICONOGRAPHY_LABELS[fig.type] || fig.type,
+      };
+    });
+  }, [monumento]);
+
   return (
     <div className="mb-10">
       <h3 className="text-[10px] font-sans font-bold uppercase tracking-[0.2em] text-muted mb-4 flex items-center gap-2">
@@ -32,19 +50,7 @@ export const IconographyPanel: React.FC<IconographyPanelProps> = ({ monumento })
           </div>
         )}
 
-        {ico.figures && ico.figures.map((fig, idx) => {
-          // Group traits by type
-          const groupedTraits: Record<string, typeof fig.traits> = {};
-          fig.traits.forEach(t => {
-            if (!groupedTraits[t.type]) groupedTraits[t.type] = [];
-            groupedTraits[t.type].push(t);
-          });
-
-          const translatedKey = ICONOGRAPHY_LABELS[fig.key] || fig.key;
-          const displayTitle = capitalize(translatedKey);
-          
-          const translatedType = ICONOGRAPHY_LABELS[fig.type] || fig.type;
-
+        {figures.map(({ fig, groupedTraits, displayTitle, translatedType }, idx) => {
           return (
             <div key={idx} className="bg-card border border-border rounded-xl p-5 shadow-sm">
               <div className="mb-3 border-b border-border/40 pb-3 flex justify-between items-baseline flex-wrap gap-2">

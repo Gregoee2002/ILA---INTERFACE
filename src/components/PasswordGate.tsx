@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import App from '../App';
 import { EASE_OUT } from '../lib/utils';
 import { RELOAD_GUARD_KEY, reloadOnceForStaleChunk } from '../lib/staleChunkGuard';
-import ilaLogo from '../assets/images/ila-logo.png';
+import ilaLogo from '../assets/images/ila-logo.webp';
 
 // Gate a password lato client per la build GitHub Pages. NON è sicurezza
 // vera: l'hash confrontato qui è nel bundle pubblico, chiunque ispezioni

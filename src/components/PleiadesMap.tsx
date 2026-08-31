@@ -67,20 +67,21 @@ export const PleiadesMap: React.FC<PleiadesMapProps> = ({ pleiadesUri, cityName 
       </div>
       
       {loading && (
-        <div className="w-full h-48 bg-border/20 animate-pulse flex items-center justify-center text-xs text-muted">
+        <div role="status" className="w-full h-48 bg-border/20 animate-pulse flex items-center justify-center text-xs text-muted">
           Caricamento mappa in corso...
         </div>
       )}
       
       {error && (
-        <div className="w-full p-4 border border-red-900/30 bg-red-900/10 text-red-700 text-xs text-center">
+        <div role="alert" className="w-full p-4 border border-red-900/30 bg-red-900/10 text-red-700 text-xs text-center">
           {error}
         </div>
       )}
 
       {coords && !loading && !error && (
         <div className="w-full h-40 border border-border bg-parchment relative z-0">
-          <MapContainer center={coords} zoom={7} scrollWheelZoom={false} style={{ width: '100%', height: '100%' }}>
+          <MapContainer center={coords} zoom={7} scrollWheelZoom={false} style={{ width: '100%', height: '100%' }} aria-label="Mappa Pleiades della località">
+
             <TileLayer
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

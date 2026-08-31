@@ -6,6 +6,7 @@ import {
   Loader2, Stethoscope, ChevronLeft, Sparkles, CornerDownLeft, Search
 } from 'lucide-react';
 import { cn, stripAccents, EASE_OUT } from '../lib/utils';
+import { ErrorBoundary } from './ErrorBoundary';
 import {
   MarkupToken, TokenPath, MarkupAction, ValidationIssue, EpithetScanIssue, LbInfo,
   parseEdition, serializeEdition, collectLbs, tokenize, serializeTokens, sliceText,
@@ -342,7 +343,9 @@ export const EditionMarkupEditor: React.FC<Props> = ({ value, onChange, anepigra
           <div className="p-5">
             {tab === 'anteprima' ? (
               <div className="font-greek text-[19px] leading-loose text-ink pl-8" lang="grc">
-                <TokenFlow tokens={tokens} basePath={[]} lbByPath={lbByPath} lbCount={lbs.length} preview />
+                <ErrorBoundary fallback={<pre className="whitespace-pre-wrap font-mono text-sm text-muted/80">{serializeEdition(tokens)}</pre>}>
+                  <TokenFlow tokens={tokens} basePath={[]} lbByPath={lbByPath} lbCount={lbs.length} preview />
+                </ErrorBoundary>
               </div>
             ) : (
               <div>
@@ -521,11 +524,11 @@ const ElementChrome: React.FC<{
     case 'supplied': {
       const open = a.reason === 'omitted' ? '⟨' : '[';
       const close = a.reason === 'omitted' ? '⟩' : ']';
-      return <span onClick={click} title={a.reason === 'omitted' ? 'Omesse dal lapicida' : 'Integrazione (lacuna)'} className={cn('text-muted/70 px-0.5', base)}>{open}{kids}{close}</span>;
+      return <span onClick={click} title={a.reason === 'omitted' ? 'Omesse dal lapicida' : 'Integrazione (lacuna)'} className={cn('text-muted px-0.5', base)}>{open}{kids}{close}</span>;
     }
     case 'gap': {
       let g = '[- - -]';
-      if (a.reason === 'illegible') g = a.quantity ? '·'.repeat(Math.min(Number(a.quantity) || 5, 12)) : '·····';
+      if (a.reason === 'illegible') g = a.quantity ? '·'.repeat(Math.min(Math.max(Math.floor(Number(a.quantity)) || 5, 1), 12)) : '·····';
       else if (a.quantity) g = `[- ca. ${a.quantity} -]`;
       else if (a.atLeast) g = `[- ${a.atLeast}-${a.atMost} -]`;
       return <span onClick={click} title="Lacuna" className={cn('font-mono text-sm tracking-widest text-muted px-0.5', base)}>{g}</span>;

@@ -514,7 +514,7 @@ export const MapView: React.FC<MapViewProps> = ({ monumenti, onSelectMonumento }
   return (
     <div className="flex h-full w-full bg-parchment overflow-hidden">
       {/* Sidebar */}
-      <div className="w-80 shrink-0 m-4 mr-3 p-5 flex flex-col gap-6 overflow-y-auto glass-panel rounded-2xl">
+      <div className="w-full max-w-[20rem] md:w-80 shrink-0 m-2 md:m-4 md:mr-3 p-4 md:p-5 flex flex-col gap-6 overflow-y-auto glass-panel rounded-2xl">
         <div>
           <h2 className="font-serif text-xl text-ink font-bold pb-3 border-b border-border/60">Filtri Mappa</h2>
         </div>
@@ -622,6 +622,7 @@ export const MapView: React.FC<MapViewProps> = ({ monumenti, onSelectMonumento }
           maxBounds={WORLD_BOUNDS}
           maxBoundsViscosity={0.8}
           style={{ width: '100%', height: '100%' }}
+          aria-label={`Mappa delle attestazioni del corpus — ${sites.length} località`}
         >
           <FitToSites sites={sites} ready={pendingFetches === 0} />
           <MapRefSetter mapRef={mapRef} />
@@ -708,11 +709,14 @@ export const MapView: React.FC<MapViewProps> = ({ monumenti, onSelectMonumento }
                         const active = isMonumentoActive(m);
                         return (
                           <div key={m.id} className={cn("flex flex-col gap-1.5", !active && "opacity-40 grayscale")}>
-                            <h4 
-                              className="font-bold text-sm leading-tight text-ink cursor-pointer hover:text-accent font-serif" 
-                              onClick={() => onSelectMonumento?.(m.id.toString())}
-                            >
-                              [{formatIlaLabel(m.id)}] {m.titolo || 'Senza titolo'}
+                            <h4 className="font-bold text-sm leading-tight font-serif">
+                              <button
+                                type="button"
+                                className="text-left text-ink hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40 rounded-sm"
+                                onClick={() => onSelectMonumento?.(m.id.toString())}
+                              >
+                                [{formatIlaLabel(m.id)}] {m.titolo || 'Senza titolo'}
+                              </button>
                             </h4>
                             <div className="text-xs text-muted flex justify-between items-start">
                               <span>{m.citta} {m.luogo_moderno ? `(${m.luogo_moderno})` : ''}</span>

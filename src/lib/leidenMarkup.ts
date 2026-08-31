@@ -142,6 +142,13 @@ function unescapeText(s: string): string {
   return s
     .replace(/&lt;/g, "<").replace(/&gt;/g, ">")
     .replace(/&quot;/g, '"').replace(/&apos;/g, "'")
+    // Entità numeriche (&#956; &#x3BC;) — comuni negli XML del corpus per il greco
+    .replace(/&#x([0-9a-fA-F]+);/g, (_, h) => {
+      try { return String.fromCodePoint(parseInt(h, 16)); } catch { return _; }
+    })
+    .replace(/&#(\d+);/g, (_, d) => {
+      try { return String.fromCodePoint(parseInt(d, 10)); } catch { return _; }
+    })
     .replace(/&amp;/g, "&");
 }
 function escapeAttr(s: string): string {

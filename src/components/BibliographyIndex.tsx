@@ -263,8 +263,10 @@ export function BibliographyIndex({ monumenti, onApply, onSelectMonumento, progr
       {/* Ricerca / filtri */}
       <div className="flex gap-2 mb-3 items-center">
         <div className="relative flex-1">
-          <Search className="h-3.5 w-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-muted/50" />
+          <Search className="h-3.5 w-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-muted/50" aria-hidden="true" />
           <input
+            type="search"
+            aria-label="Filtra le diciture bibliografiche"
             value={query}
             onChange={e => setQuery(e.target.value)}
             placeholder="Filtra le diciture…"
@@ -273,6 +275,7 @@ export function BibliographyIndex({ monumenti, onApply, onSelectMonumento, progr
         </div>
         <button
           onClick={() => setOnlyConflicts(v => !v)}
+          aria-pressed={onlyConflicts}
           className={cn(
             'px-3 py-1.5 font-sans text-[9px] font-bold uppercase tracking-widest transition-colors rounded-sm border flex items-center gap-1.5',
             onlyConflicts
@@ -313,9 +316,10 @@ export function BibliographyIndex({ monumenti, onApply, onSelectMonumento, progr
               <div className="text-[10px] font-sans text-muted tabular-nums shrink-0 pt-0.5">×{row.schede.length}</div>
               <button
                 onClick={() => (editing === row.val ? setEditing(null) : startEdit(row.val))}
+                aria-expanded={editing === row.val}
                 className="text-[10px] font-sans font-bold uppercase tracking-wide text-accent hover:opacity-70 transition-opacity flex items-center gap-1 shrink-0 pt-0.5"
               >
-                Modifica <ChevronRight className={cn('h-3 w-3 transition-transform', editing === row.val && 'rotate-90')} />
+                Modifica <ChevronRight className={cn('h-3 w-3 transition-transform', editing === row.val && 'rotate-90')} aria-hidden="true" />
               </button>
             </div>
 
