@@ -373,6 +373,61 @@ export async function pushIconographyVocabFile(content: string, message: string)
   }
 }
 
+// ── Fonti letterarie (fonti-letterarie.json) ──────────────────────────
+// L'intero contenuto della sezione «Fonti letterarie» — opere, voci,
+// testimonianze — in un solo file JSON alla radice della repo dati. Un file
+// unico e non uno per voce perché le voci condividono l'indice delle opere:
+// salvarle separatamente vorrebbe dire poter salvare una testimonianza la cui
+// opera non è ancora stata scritta. Il seme compilato nel bundle
+// (src/data/fontiLetterarie.ts) resta il fallback quando questo file non
+// esiste ancora.
+const LIT_PATH = "fonti-letterarie.json";
+let litSha: string | null = null;
+
+export async function pullLitSourcesFile(): Promise<string | null> {
+  const url = `${GITHUB_API}/repos/${REPO}/contents/${LIT_PATH}?ref=${encodeURIComponent(BRANCH)}`;
+  const res = await fetch(url, { headers: headers() });
+  if (res.status === 404) { litSha = null; return null; }
+  if (!res.ok) throw new Error(`GitHub get fonti-letterarie.json fallita (${res.status}): ${await res.text()}`);
+  const data = await res.json();
+  litSha = data.sha || null;
+  if (data.encoding !== "base64" || typeof data.content !== "string") {
+    throw new Error("Formato risposta inatteso per fonti-letterarie.json");
+  }
+  return base64ToUtf8(data.content);
+}
+
+export async function pushLitSourcesFile(content: string, message: string): Promise<void> {
+  const url = `${GITHUB_API}/repos/${REPO}/contents/${LIT_PATH}`;
+  let sha = litSha;
+
+  for (let attempt = 1; attempt <= 3; attempt++) {
+    const body: Record<string, unknown> = {
+      message,
+      content: utf8ToBase64(content),
+      branch: BRANCH,
+    };
+    if (sha) body.sha = sha;
+
+    const res = await fetch(url, { method: "PUT", headers: headers(), body: JSON.stringify(body) });
+    if (res.ok) {
+      const data = await res.json();
+      litSha = data.content.sha;
+      return;
+    }
+
+    const detail = await res.text();
+    const isRaceConflict = res.status === 409 || res.status === 422;
+    if (isRaceConflict && attempt < 3) {
+      await new Promise(r => setTimeout(r, 150 * attempt));
+      const refreshedRes = await fetch(`${url}?ref=${encodeURIComponent(BRANCH)}`, { headers: headers(), cache: "no-store" });
+      sha = refreshedRes.ok ? (await refreshedRes.json()).sha : null;
+      continue;
+    }
+    throw new Error(`Scrittura GitHub fallita per fonti-letterarie.json (${res.status}) dopo ${attempt} tentativi: ${detail}`);
+  }
+}
+
 // ── Redeploy automatico del sito statico dopo un salvataggio ──────────
 // Vedi commento gemello in githubStorage.ts: il workflow di deploy vive
 // su un repository di CODICE separato (DEPLOY_REPO) e non parte mai da

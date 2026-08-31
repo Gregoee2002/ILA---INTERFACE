@@ -6,7 +6,7 @@ import crypto from "crypto";
 import { createServer as createViteServer } from "vite";
 import { GoogleGenAI } from "@google/genai";
 import { xmlToMonumenti, monumentiToXml, renderIconography } from "./src/lib/xmlUtils";
-import { pullCorpusFromGitHub, pushFileToGitHub, deleteFileFromGitHub, isGitHubConfigured, testGitHubAccess, pullDraftsFromGitHub, pullFlagsFileFromGitHub, pushFlagsFileToGitHub, pullBugsFileFromGitHub, pushBugsFileToGitHub, pullIconographyVocabFileFromGitHub, pushIconographyVocabFileToGitHub, scheduleRedeploy } from "./src/lib/githubStorage";
+import { pullCorpusFromGitHub, pushFileToGitHub, deleteFileFromGitHub, isGitHubConfigured, testGitHubAccess, pullDraftsFromGitHub, pullFlagsFileFromGitHub, pushFlagsFileToGitHub, pullBugsFileFromGitHub, pushBugsFileToGitHub, pullIconographyVocabFileFromGitHub, pushIconographyVocabFileToGitHub, pullLitSourcesFileFromGitHub, pushLitSourcesFileToGitHub, scheduleRedeploy } from "./src/lib/githubStorage";
 import { EntryRegistro, BugReport } from "./src/types";
 import { normalizeRegistro } from "./src/lib/registroMigration";
 import { mergeIconographyOverrides } from "./src/lib/iconographyLabels";
@@ -34,6 +34,9 @@ async function startServer() {
   // Overlay del vocabolario iconografico non ancora curato (vedi
   // iconography-vocab.json su GitHub, radice repo dati).
   const ICONOGRAPHY_VOCAB_FILE = path.join(DATA_DIR, "iconography-vocab.json");
+  // Fonti letterarie: opere, voci e testimonianze in un file solo (vedi
+  // fonti-letterarie.json su GitHub, radice repo dati).
+  const LIT_SOURCES_FILE = path.join(DATA_DIR, "fonti-letterarie.json");
 
   const ai = new GoogleGenAI({
     apiKey: process.env.GEMINI_API_KEY,
@@ -773,6 +776,37 @@ async function startServer() {
     } catch (error: any) {
       console.error("Error updating iconography vocab:", error);
       res.status(500).json({ error: error.message || "Failed to update iconography vocab" });
+    }
+  });
+
+  // ── Fonti letterarie ─────────────────────────────────────────────────────
+  // Stessa semantica dello shim statico (apiShim.ts): 204 quando l'archivio
+  // non esiste ancora, perché la sezione parte dal seme compilato nel bundle
+  // e non da un file vuoto.
+
+  app.get("/api/fonti-letterarie", (req, res) => {
+    try {
+      if (!fs.existsSync(LIT_SOURCES_FILE)) return res.status(204).end();
+      res.type("application/json").send(fs.readFileSync(LIT_SOURCES_FILE, "utf-8"));
+    } catch (error: any) {
+      console.error("Error reading fonti-letterarie.json:", error);
+      res.status(500).json({ error: error.message || "Lettura fallita" });
+    }
+  });
+
+  app.post("/api/fonti-letterarie", async (req, res) => {
+    try {
+      const { dataset, message } = req.body || {};
+      if (!dataset || typeof dataset !== "object") {
+        return res.status(400).json({ error: "Campo 'dataset' mancante" });
+      }
+      const content = JSON.stringify(dataset, null, 2);
+      fs.writeFileSync(LIT_SOURCES_FILE, content, "utf-8");
+      await pushLitSourcesFileToGitHub(content, message || "Fonti letterarie: aggiornamento redazionale");
+      res.json({ status: "ok", bytes: content.length });
+    } catch (error: any) {
+      console.error("Error writing fonti-letterarie.json:", error);
+      res.status(500).json({ error: error.message || "Scrittura fallita" });
     }
   });
 

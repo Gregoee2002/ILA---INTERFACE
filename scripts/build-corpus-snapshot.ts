@@ -14,7 +14,7 @@
 // checkout — comportamento precedente, invariato.
 import fs from "fs";
 import path from "path";
-import { isGitHubConfigured, pullCorpusFromGitHub } from "../src/lib/githubStorage";
+import { isGitHubConfigured, pullCorpusFromGitHub, pullLitSourcesFileFromGitHub } from "../src/lib/githubStorage";
 
 const CORPUS_DIR = path.join(process.cwd(), "src", "data", "corpus");
 
@@ -58,6 +58,28 @@ async function main() {
     "utf-8"
   );
   console.log(`Snapshot generato: ${Object.keys(files).length} file → ${outPath}`);
+
+  // ── Fonti letterarie ────────────────────────────────────────────────
+  // Stessa logica del corpus: chi visita il sito con la sola password legge
+  // uno scatto statico. Se sulla repo dati non c'è ancora nulla (nessuno ha
+  // mai salvato dall'editor), non si scrive niente e la sezione resta al
+  // seme compilato in src/data/fontiLetterarie.ts — che è il caso normale
+  // al primo deploy, non un errore.
+  const litOut = path.join(outDir, "fonti-letterarie.json");
+  try {
+    const lit = await pullLitSourcesFileFromGitHub();
+    if (lit) {
+      JSON.parse(lit); // uno scatto illeggibile è peggio di nessuno scatto
+      fs.writeFileSync(litOut, lit, "utf-8");
+      console.log(`Fonti letterarie: scatto aggiornato → ${litOut}`);
+    } else {
+      if (fs.existsSync(litOut)) fs.unlinkSync(litOut);
+      console.log("Fonti letterarie: nessun archivio sulla repo dati, si usa il seme compilato.");
+    }
+  } catch (e: any) {
+    if (fs.existsSync(litOut)) fs.unlinkSync(litOut);
+    console.warn(`Fonti letterarie: scatto non generato (${e.message || e}); si usa il seme compilato.`);
+  }
 }
 
 main();

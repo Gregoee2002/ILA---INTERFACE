@@ -68,6 +68,7 @@ import { IconographyPanel } from './components/IconographyPanel';
 import { CooccurrenceHeatmap } from './components/CooccurrenceHeatmap';
 import { CultLexiconPanel } from './components/CultLexiconPanel';
 import { LiterarySourcesPanel } from './components/LiterarySourcesPanel';
+import { LiteraryEchoes } from './components/LiteraryEchoes';
 import { SectionEditorView } from './components/SectionEditorView';
 import { DraftReviewPanel } from './components/DraftReviewPanel';
 import { UnlockEditingModal } from './components/UnlockEditingModal';
@@ -906,9 +907,11 @@ const OnomasticaRubrica = ({ items, onSelect }: {
 // che mostra ogni menzione della divinità, incluse quelle senza epiteto.
 const ALL_EPITHETS = '__all__';
 
-function EpithetStats({ monumenti, onSelectMonumento, initialTab, initialDivinity, initialOnomastica, initialSearch }: {
+function EpithetStats({ monumenti, onSelectMonumento, onVaiAllaFonte, initialTab, initialDivinity, initialOnomastica, initialSearch }: {
   monumenti: Monumento[],
   onSelectMonumento: (m: Monumento) => void,
+  /** porta alla sezione Fonti letterarie, aprendo quella testimonianza */
+  onVaiAllaFonte?: (testimoniumId: string) => void,
   // Preset applicato solo al mount (il componente viene smontato/rimontato a
   // ogni cambio di activeView, vedi il render condizionale in App) — arriva
   // dal popover contestuale sull'iscrizione o dal suo fallback di redirect.
@@ -1208,14 +1211,24 @@ function EpithetStats({ monumenti, onSelectMonumento, initialTab, initialDivinit
                     </div>
                     <div className="flex-1 min-h-0 p-5 flex flex-col">
                       {activeDivinityStats ? (
-                        <EpithetTree
-                          key="divinita-preview"
-                          divinity={activeDivinityStats}
-                          epithets={activeDivinityStats.epiteti}
-                          onSelectEpithet={(name) => openAttestations(activeDivinityStats.name, name)}
-                          onSelectAll={() => openAttestations(activeDivinityStats.name, ALL_EPITHETS)}
-                          preview
-                        />
+                        <>
+                          <EpithetTree
+                            key="divinita-preview"
+                            divinity={activeDivinityStats}
+                            epithets={activeDivinityStats.epiteti}
+                            onSelectEpithet={(name) => openAttestations(activeDivinityStats.name, name)}
+                            onSelectAll={() => openAttestations(activeDivinityStats.name, ALL_EPITHETS)}
+                            preview
+                          />
+                          {/* Le menzioni della stessa divinità nei testi
+                              antichi. Non entrano nei conteggi qui sopra:
+                              «occorrenze» continua a voler dire monumenti. */}
+                          <LiteraryEchoes
+                            divinita={activeDivinityStats.name}
+                            onApri={onVaiAllaFonte}
+                            className="shrink-0 mt-3"
+                          />
+                        </>
                       ) : (
                         <div className="flex-1 flex items-center justify-center text-center text-muted/40 text-sm italic px-8">
                           Passa il mouse su una divinità della rubrica per vederne gli epiteti co-occorrenti.
@@ -1230,15 +1243,25 @@ function EpithetStats({ monumenti, onSelectMonumento, initialTab, initialDivinit
         )}
 
         {activeTab === 'divinita' && selectedDivinity && selectedEpithet && (
-          <AttestationList
-            key="divinita-attestations"
-            label={selectedEpithet === ALL_EPITHETS ? selectedDivinity : selectedEpithet}
-            context={selectedEpithet === ALL_EPITHETS ? undefined : selectedDivinity}
-            variant={selectedEpithet === ALL_EPITHETS ? 'all' : 'epithet'}
-            items={monumentsForEpithet}
-            monumenti={monumenti}
-            onSelectMonumento={onSelectMonumento}
-          />
+          <div key="divinita-attestations" className="flex-1 min-h-0 flex flex-col gap-3">
+            <AttestationList
+              label={selectedEpithet === ALL_EPITHETS ? selectedDivinity : selectedEpithet}
+              context={selectedEpithet === ALL_EPITHETS ? undefined : selectedDivinity}
+              variant={selectedEpithet === ALL_EPITHETS ? 'all' : 'epithet'}
+              items={monumentsForEpithet}
+              monumenti={monumenti}
+              onSelectMonumento={onSelectMonumento}
+            />
+            {/* Sotto le attestazioni epigrafiche, e separate da quelle: le
+                menzioni della stessa divinità (o dello stesso epiteto) nei
+                testi antichi, ricavate dal markup delle testimonianze. */}
+            <LiteraryEchoes
+              divinita={selectedDivinity}
+              epiteto={selectedEpithet === ALL_EPITHETS ? undefined : selectedEpithet}
+              onApri={onVaiAllaFonte}
+              className="shrink-0"
+            />
+          </div>
         )}
 
         {activeTab === 'onomastica' && !selected && (
@@ -4072,6 +4095,9 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
   // da UnlockEditingModal — è quello il vero "sei autorizzato a scrivere"
   // per questa build (vedi effectiveAdmin sotto e apiShim.ts).
   const [editingUnlocked, setEditingUnlocked] = useState(false);
+  // Testimonianza letteraria da aprire entrando nella sezione Fonti: la manda
+  // il blocco «Nelle fonti letterarie» delle pagine Divinità/Epiteti.
+  const [fonteTarget, setFonteTarget] = useState<string | null>(null);
   const [showUnlockModal, setShowUnlockModal] = useState(false);
 
   const handleUnlockSubmit = async (token: string) => {
@@ -6183,6 +6209,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
             <EpithetStats
               monumenti={monumenti}
               onSelectMonumento={(m) => { setSelectedMonumento(m); setActiveView('catalog'); }}
+              onVaiAllaFonte={(id) => { setFonteTarget(id); setActiveView('sources'); setHasNavigated(true); }}
               initialTab={statsPreset?.tab}
               initialDivinity={statsPreset?.exact && statsPreset.tab === 'divinita' ? statsPreset.term : undefined}
               // La tab onomastica non ha un campo di ricerca libera (solo
@@ -6212,15 +6239,13 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
             />
           )}
           {activeView === 'sources' && (
+            // Il legame col corpus non passa più da ricerche precompilate ma
+            // dal markup: una divinità o un epiteto marcati in una
+            // testimonianza finiscono negli stessi indici delle iscrizioni.
             <LiterarySourcesPanel
-              // I ponti dalle testimonianze letterarie al corpus passano dal
-              // campo di ricerca del catalogo, non da id di scheda: restano
-              // validi anche dopo rinumerazioni o aggiunte al corpus.
-              onCorpusSearch={(q) => {
-                setFilters(f => ({ ...f, searchText: q }));
-                setActiveView('catalog');
-                setHasNavigated(true);
-              }}
+              editingUnlocked={editingUnlocked}
+              apriTestimonianza={fonteTarget}
+              onTestimonianzaAperta={() => setFonteTarget(null)}
             />
           )}
           {activeView === 'health' && effectiveAdmin && <CorpusHealth monumenti={monumenti} onSelectMonumento={(m) => { setSelectedMonumento(m); setActiveView('catalog'); }} />}

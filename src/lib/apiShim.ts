@@ -33,7 +33,7 @@
 import { xmlToMonumenti, monumentiToXml, renderIconography } from "./xmlUtils";
 import { buildSearchIndex, searchMonumenti } from "./searchIndex";
 import MiniSearch from "minisearch";
-import { pullAllCorpusFiles, pushCorpusFile, deleteCorpusFile, testGitHubAccess, setStoredToken, clearStoredToken, pullFlagsFile, pushFlagsFile, pullBugsFile, pushBugsFile, pullIconographyVocabFile, pushIconographyVocabFile, scheduleRedeploy } from "./githubStorageBrowser";
+import { pullAllCorpusFiles, pushCorpusFile, deleteCorpusFile, testGitHubAccess, setStoredToken, clearStoredToken, pullFlagsFile, pushFlagsFile, pullBugsFile, pushBugsFile, pullIconographyVocabFile, pushIconographyVocabFile, pullLitSourcesFile, pushLitSourcesFile, scheduleRedeploy } from "./githubStorageBrowser";
 import { EntryRegistro, BugReport } from "../types";
 import { normalizeRegistro } from "./registroMigration";
 import { mergeIconographyOverrides } from "./iconographyLabels";
@@ -56,6 +56,12 @@ let bugsStore: BugReport[] = [];
 // flags/bugs: rilevante solo in modalità editor, dove nuovi termini possono
 // essere effettivamente registrati.
 let iconographyVocabStore: Record<string, string> = {};
+// Fonti letterarie: a differenza di registro/bug, questo ha uno scatto
+// statico (public/fonti-letterarie.json) come il corpus, perché la sezione
+// deve essere leggibile da chiunque apra il sito. `null` significa «nessun
+// archivio»: il client usa allora il seme compilato nel bundle
+// (src/data/fontiLetterarie.ts). Vedi litStore.ts.
+let litStore: string | null = null;
 
 export function isEditingUnlocked(): boolean {
   return canWrite;
@@ -517,6 +523,28 @@ async function handleRequest(url: URL, init: RequestInit | undefined): Promise<R
       return json(iconographyVocabStore);
     }
 
+    // ── Fonti letterarie ──────────────────────────────────────────────
+    // 204 (e non 404) quando non c'è archivio: non è un errore, è lo stato
+    // iniziale — il client sa che deve usare il seme compilato.
+    if (path === "/api/fonti-letterarie" && method === "GET") {
+      if (litStore === null) return new Response(null, { status: 204 });
+      return new Response(litStore, { status: 200, headers: { "Content-Type": "application/json" } });
+    }
+
+    if (path === "/api/fonti-letterarie" && method === "POST") {
+      if (!canWrite) return json({ error: "Modifica non abilitata. Sblocca l'editing con un token GitHub per scrivere le fonti letterarie." }, 403);
+      if (!body || typeof body !== "object") return json({ error: "Payload mancante" }, 400);
+      const { dataset, message } = body as { dataset?: unknown; message?: string };
+      if (!dataset || typeof dataset !== "object") return json({ error: "Campo 'dataset' mancante" }, 400);
+      const content = JSON.stringify(dataset, null, 2);
+      litStore = content;
+      if (!mockMode) {
+        await pushLitSourcesFile(content, message || "Fonti letterarie: aggiornamento redazionale");
+        scheduleRedeploy();
+      }
+      return json({ status: "ok", bytes: content.length, mock: mockMode });
+    }
+
     if (path === "/api/translate" || path.startsWith("/api/drafts/")) {
       return json({ error: "Non disponibile nella build GitHub Pages (funzionalità AI/draft, solo in locale)" }, 501);
     }
@@ -543,6 +571,24 @@ async function loadSnapshot(): Promise<Map<string, string>> {
   const files = data?.files;
   if (!files || typeof files !== "object") throw new Error("Formato snapshot inatteso");
   return new Map(Object.entries(files) as [string, string][]);
+}
+
+/**
+ * Scatto statico delle fonti letterarie, gemello di quello del corpus. A
+ * differenza di quello, la sua assenza non è un errore: finché nessuno ha
+ * salvato dall'editor, il file non esiste e la sezione vive del seme
+ * compilato nel bundle.
+ */
+async function loadLitSnapshot(): Promise<string | null> {
+  try {
+    const res = await fetch(`${import.meta.env.BASE_URL}fonti-letterarie.json`);
+    if (!res.ok) return null;
+    const text = await res.text();
+    JSON.parse(text); // uno scatto illeggibile equivale a nessuno scatto
+    return text;
+  } catch {
+    return null;
+  }
 }
 
 // ── Modalità mock (verifica UI veloce, niente rete) ──────────────────────
@@ -700,6 +746,10 @@ export async function unlockEditing(token: string): Promise<{ ok: boolean; detai
     const remoteVocab = await pullIconographyVocabFile();
     iconographyVocabStore = remoteVocab ? JSON.parse(remoteVocab) : {};
     mergeIconographyOverrides(iconographyVocabStore);
+    // Le fonti letterarie si rileggono live: altrimenti si redigerebbe sopra
+    // uno scatto vecchio quanto l'ultimo deploy e si sovrascriverebbero le
+    // modifiche di un'altra sessione.
+    litStore = await pullLitSourcesFile();
     canWrite = true;
     return result;
   } catch (e: any) {
@@ -718,6 +768,7 @@ export async function lockEditing(): Promise<void> {
   flagsStore = [];
   bugsStore = [];
   iconographyVocabStore = {};
+  litStore = await loadLitSnapshot();
   updateSearchIndex();
 }
 
@@ -730,6 +781,7 @@ export async function installApiShim(): Promise<void> {
   installed = true;
 
   corpusStore = await loadSnapshot();
+  litStore = await loadLitSnapshot();
   updateSearchIndex();
 
   const originalFetch = window.fetch.bind(window);

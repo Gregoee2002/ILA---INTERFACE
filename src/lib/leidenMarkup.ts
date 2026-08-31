@@ -411,7 +411,18 @@ export interface MarkupAction {
   label: string;
   /** notazione Leiden mostrata come glifo nel menu */
   glyph: string;
-  group: "Lacune e integrazioni" | "Lettere e correzioni" | "Nomi e luoghi" | "Numeri e date" | "Spazi e altro" | "Lessico cultuale";
+  /**
+   * Gli ultimi tre gruppi non compaiono mai nell'editor epigrafico: sono di
+   * litMarkup.ts, che riusa questo stesso tipo di azione per i testi
+   * letterari (varianti di tradizione, parole citate, griglia LARES). Stanno
+   * qui, e non in un tipo separato, perché il catalogo è uno solo: è la
+   * ragione per cui una divinità marcata su una stele e una marcata in Esiodo
+   * finiscono nello stesso indice.
+   */
+  group:
+    | "Lacune e integrazioni" | "Lettere e correzioni" | "Nomi e luoghi"
+    | "Numeri e date" | "Spazi e altro" | "Lessico cultuale"
+    | "Tradizione del testo" | "Parole e citazioni" | "Toolbox LARES";
   /** wrap = avvolge la selezione; replace = la sostituisce; insert = inserisce (anche senza selezione) */
   mode: "wrap" | "replace" | "insert";
   params?: ActionParam[];
