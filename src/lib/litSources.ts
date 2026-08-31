@@ -510,6 +510,7 @@ export function buildIndici(testimonia: TestimoniumRisolto[]): Indici {
     for (const e of mk.epiteti) pushRef(epiteti, e, e, t);
     for (const l of mk.luoghi) pushRef(luoghi, l, l, t);
     for (const p of mk.persone) pushRef(figure, p, p, t);
+    for (const p of mk.personaggi) pushRef(personaggi, p, p, t);
     for (const x of mk.toolbox) pushRef(toolbox, x.key, x.label, t, x.testo);
   }
 

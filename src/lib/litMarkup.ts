@@ -247,6 +247,43 @@ function toolboxAttrs(percorso: string): Record<string, string> {
  * più è una decisione che qualcuno dovrà prendere su ogni passo.
  */
 const azioniLetterarie: MarkupAction[] = [
+  /* ── Nomi e luoghi ──
+   * Due categorie che il catalogo epigrafico non copre e il testo letterario
+   * sì. Finché non esistevano, «Carre» ed «Endimione» potevano stare solo nei
+   * campi liberi della scheda: testo nudo, fuori dal markup e quindi fuori da
+   * ogni normalizzazione. Ora hanno un tag, e l'indice li riceve dalla stessa
+   * fonte di tutto il resto. */
+  {
+    id: 'place_name',
+    label: 'Toponimo',
+    glyph: 'Κάρραι',
+    group: 'Nomi e luoghi',
+    mode: 'wrap',
+    hint: 'Città, regione, santuario nominati nel testo. Nell’epigrafia esiste solo l’etnico (Λύκιος): qui serve il nome del luogo',
+    params: [
+      { id: 'nymRef', label: 'Lemma (nominativo)', type: 'text', required: true, placeholder: 'Κάρραι' },
+      { id: 'ref', label: 'URI Pleiades (se certo)', type: 'text', placeholder: 'https://pleiades.stoa.org/places/…', hint: 'mai dedotto' },
+    ],
+    build: (s, p) => el('placeName', { nymRef: p.nymRef, ...(p.ref ? { ref: p.ref } : {}) }, [txt(s)]),
+    compose: (slice, p) => el('placeName', { nymRef: p.nymRef, ...(p.ref ? { ref: p.ref } : {}) }, slice),
+  },
+  {
+    id: 'person_myth',
+    label: 'Personaggio mitico',
+    glyph: 'Ἐνδυμίων',
+    group: 'Nomi e luoghi',
+    mode: 'wrap',
+    hint: 'Figura del mito che non è un dio e non è mai esistita: Endimione, Fetonte. Per gli dèi «Divinità», per gli uomini «Persona attestata»',
+    params: [
+      { id: 'key', label: 'Key (forma normalizzata)', type: 'text', required: true, placeholder: 'Endimione' },
+      { id: 'nymRef', label: 'Lemma greco (nominativo)', type: 'text', placeholder: 'Ἐνδυμίων' },
+    ],
+    build: (s, p) => el('persName', { type: 'mythological', key: p.key },
+      p.nymRef ? [el('name', { nymRef: p.nymRef }, [txt(s)])] : [txt(s)]),
+    compose: (slice, p) => el('persName', { type: 'mythological', key: p.key },
+      p.nymRef ? [el('name', { nymRef: p.nymRef }, slice)] : slice),
+  },
+
   /* ── Tradizione del testo ── */
   {
     id: 'app_variant',
@@ -451,7 +488,10 @@ export interface CultOccorrenza {
 export interface LitMarkupIndex {
   divinita: string[];
   epiteti: string[];
+  /** figure storiche: <persName type="attested|ruler|emperor"> */
   persone: string[];
+  /** personaggi mitici: <persName type="mythological"> */
+  personaggi: string[];
   luoghi: string[];
   /** parole del lessico cultuale marcate con <w lemma ana> */
   cultuale: CultOccorrenza[];
@@ -481,6 +521,7 @@ export function extractLitMarkupIndex(tokens: MarkupToken[]): LitMarkupIndex {
   const divinita = new Set<string>();
   const epiteti = new Set<string>();
   const persone = new Set<string>();
+  const personaggi = new Set<string>();
   const luoghi = new Set<string>();
   const mentioned = new Set<string>();
   const cultuale: CultOccorrenza[] = [];
@@ -514,6 +555,8 @@ export function extractLitMarkupIndex(tokens: MarkupToken[]): LitMarkupIndex {
           } else {
             divinita.add(testoDi(t).trim());
           }
+        } else if (a.type === 'mythological') {
+          personaggi.add(key || testoDi(t).trim());
         } else if (key) {
           persone.add(key);
         }
@@ -572,6 +615,7 @@ export function extractLitMarkupIndex(tokens: MarkupToken[]): LitMarkupIndex {
     divinita: [...divinita],
     epiteti: [...epiteti],
     persone: [...persone],
+    personaggi: [...personaggi],
     luoghi: [...luoghi],
     cultuale,
     mentioned: [...mentioned],

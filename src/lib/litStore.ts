@@ -26,7 +26,7 @@ import {
   LitDataset, Saggio, Opera, Testimonium, Nucleo, SaggioInPreparazione,
   opereById,
 } from './litSources';
-import { safeParseLitTesto, validateLitTokens } from './litMarkup';
+import { safeParseLitTesto, validateLitTokens, extractLitMarkupIndex } from './litMarkup';
 import { OPERE, TESTIMONIA, SAGGI, SAGGI_IN_PREPARAZIONE } from '../data/fontiLetterarie';
 
 export const SEME: LitDataset = {
@@ -100,6 +100,106 @@ export interface ProblemaIntegrita {
   severita: 'errore' | 'avviso';
   dove: string;
   messaggio: string;
+}
+
+/* ================================================================ */
+/* Copertura del markup                                              */
+/* ================================================================ */
+
+/**
+ * Le categorie di una testimonianza (divinità, personaggi, luoghi, termini)
+ * hanno DUE possibili provenienze: il markup del testo, che è normalizzato
+ * sulle chiavi del corpus, e i campi liberi della scheda, che sono testo nudo
+ * scritto a mano. buildIndici oggi li versa entrambi nello stesso indice —
+ * quindi la stessa divinità può entrarci due volte con due grafie, e nessuno
+ * se ne accorge.
+ *
+ * La direzione è una sola: il markup è la fonte, i campi liberi sono un
+ * residuo da riassorbire. Ma non si possono togliere prima di aver marcato,
+ * perché oggi sono quasi tutto l'indice. Questa funzione misura la distanza
+ * fra le due fonti, scheda per scheda, così che il lavoro di marcatura abbia
+ * un traguardo visibile invece di procedere a memoria.
+ *
+ * Il confronto è insensibile a maiuscole, accenti e punteggiatura: «Selene» e
+ * «Σελήνη» restano distinti (giustamente, sono chiavi diverse), ma «Carre» e
+ * «carre» no.
+ */
+export type StatoCopertura = 'vuota' | 'assente' | 'parziale' | 'completa';
+
+export interface CoperturaTestimonium {
+  id: string;
+  stato: StatoCopertura;
+  /** quante marcature ha il testo */
+  marcature: number;
+  /** valori dei campi liberi che il markup non ha ancora ripreso */
+  scoperti: { rubrica: string; valori: string[] }[];
+  /** totale dei valori nei campi liberi */
+  liberi: number;
+}
+
+/** Normalizza per il confronto: minuscole, senza diacritici né punteggiatura. */
+function chiaveConfronto(s: string): string {
+  return s.normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^\p{L}\p{N}]+/gu, '');
+}
+
+export function coperturaMarkup(testimonia: Testimonium[]): CoperturaTestimonium[] {
+  return testimonia.map(t => {
+    const mk = t.testo.includes('<')
+      ? (() => { const tok = safeParseLitTesto(t.testo); return tok ? extractLitMarkupIndex(tok) : null; })()
+      : null;
+
+    // Rubrica per rubrica: valori scritti a mano contro valori già nel markup.
+    // Le divinità si confrontano anche con gli epiteti, perché la redazione
+    // scrive spesso «Men Askaenos» in un campo solo.
+    const rubriche: { rubrica: string; liberi: string[]; marcati: string[] }[] = [
+      {
+        rubrica: 'Divinità',
+        liberi: t.divinita || [],
+        // Il markup tiene teonimo ed epiteto separati (key="Men Pharnakou" →
+        // divinità «Men», epiteto «Pharnakou»), la redazione scrive «Men
+        // Pharnakou» in un campo solo. Sono la stessa cosa detta a due
+        // granularità: si accettano anche le coppie ricomposte, altrimenti il
+        // controllo segnalerebbe come scoperto proprio ciò che è marcato.
+        marcati: mk
+          ? [...mk.divinita, ...mk.epiteti,
+            ...mk.divinita.flatMap(d => mk.epiteti.map(e => `${d} ${e}`))]
+          : [],
+      },
+      { rubrica: 'Personaggi mitici', liberi: t.personaggi || [], marcati: mk ? mk.personaggi : [] },
+      { rubrica: 'Figure storiche', liberi: t.figure || [], marcati: mk ? mk.persone : [] },
+      { rubrica: 'Luoghi', liberi: t.luoghi || [], marcati: mk ? mk.luoghi : [] },
+      {
+        rubrica: 'Termini',
+        liberi: t.termini.map(w => w.lemma),
+        marcati: mk ? [...mk.cultuale.flatMap(c => [c.lemma, c.forma]), ...mk.mentioned] : [],
+      },
+    ];
+
+    const scoperti: CoperturaTestimonium['scoperti'] = [];
+    let liberi = 0;
+    for (const r of rubriche) {
+      liberi += r.liberi.length;
+      if (r.liberi.length === 0) continue;
+      const noti = new Set(r.marcati.map(chiaveConfronto).filter(Boolean));
+      const mancanti = r.liberi.filter(v => {
+        const k = chiaveConfronto(v);
+        return k && !noti.has(k);
+      });
+      if (mancanti.length > 0) scoperti.push({ rubrica: r.rubrica, valori: mancanti });
+    }
+
+    const mancanti = scoperti.reduce((n, s) => n + s.valori.length, 0);
+    const stato: StatoCopertura =
+      liberi === 0 ? 'vuota'
+        : mancanti === 0 ? 'completa'
+          : mancanti === liberi ? 'assente'
+            : 'parziale';
+
+    return { id: t.id, stato, marcature: mk?.marcature ?? 0, scoperti, liberi };
+  });
 }
 
 /**
@@ -185,6 +285,19 @@ export function verificaIntegrita(d: LitDataset): ProblemaIntegrita[] {
     if (!usate.has(o.id)) {
       out.push({ severita: 'avviso', dove: o.id, messaggio: 'Opera nell\'indice ma senza testimonianze.' });
     }
+  }
+
+  // Un avviso solo, aggregato: il dettaglio scheda per scheda sta nella
+  // tabella di copertura, che si legge meglio di venti righe uguali.
+  const daMigrare = coperturaMarkup(d.testimonia)
+    .filter(c => c.stato === 'assente' || c.stato === 'parziale');
+  if (daMigrare.length > 0) {
+    out.push({
+      severita: 'avviso',
+      dove: 'copertura del markup',
+      messaggio: `${daMigrare.length} testimonianz${daMigrare.length === 1 ? 'a ha' : 'e hanno'} categorie ancora `
+        + `come testo libero: l'indice le riceve senza normalizzazione, e il ponte verso le pagine del corpus non le vede.`,
+    });
   }
 
   return out;

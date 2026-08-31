@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   X, Plus, Trash2, Save, ChevronRight, ChevronUp, ChevronDown, AlertTriangle,
   BookMarked, Library, ShieldCheck, Loader2, Check, ScrollText, Link2, List,
@@ -11,7 +11,8 @@ import {
   RefType, REFTYPE_LABELS, opereById, risolviTutte, citaBreve, sigleDelSaggio,
 } from '../lib/litSources';
 import {
-  FonteDati, verificaIntegrita, nuovaOpera, nuovoSaggio, nuovoNucleo,
+  FonteDati, verificaIntegrita, coperturaMarkup, CoperturaTestimonium,
+  nuovaOpera, nuovoSaggio, nuovoNucleo,
   nuovoTestimonium, nuovoTestimoniumId, nuovoOperaId,
 } from '../lib/litStore';
 import { LiteraryMarkupEditor } from './LiteraryMarkupEditor';
@@ -455,9 +456,23 @@ const TestimoniumEditor: React.FC<{
 
 /* ═══════════════════════════════════════ elenco delle testimonianze ════ */
 
-const TestimonianzeEditor: React.FC<{ dataset: LitDataset; onChange: (d: LitDataset) => void }> = ({ dataset, onChange }) => {
+const TestimonianzeEditor: React.FC<{
+  dataset: LitDataset;
+  onChange: (d: LitDataset) => void;
+  /** scheda da aprire arrivando da un'altra sezione (es. la copertura) */
+  apri?: string | null;
+  onApertaConsumata?: () => void;
+}> = ({ dataset, onChange, apri, onApertaConsumata }) => {
   const [apertoId, setApertoId] = useState<string | null>(null);
   const [filtroOpera, setFiltroOpera] = useState('');
+
+  useEffect(() => {
+    if (!apri) return;
+    setApertoId(apri);
+    setFiltroOpera('');
+    onApertaConsumata?.();
+  }, [apri, onApertaConsumata]);
+
   const risolte = useMemo(() => risolviTutte(dataset.testimonia, dataset.opere), [dataset]);
 
   const aggiungi = () => {
@@ -702,8 +717,12 @@ export const LiterarySourcesEditor: React.FC<Props> = ({
   const [saggioId, setSaggioId] = useState<string | null>(dataset.saggi[0]?.id || null);
   const [messaggio, setMessaggio] = useState('');
   const [nuovoLemma, setNuovoLemma] = useState('');
+  // Scheda da aprire quando si arriva dalla tabella di copertura.
+  const [daAprire, setDaAprire] = useState<string | null>(null);
+  const consumaApertura = useCallback(() => setDaAprire(null), []);
 
   const problemi = useMemo(() => verificaIntegrita(dataset), [dataset]);
+  const copertura = useMemo(() => coperturaMarkup(dataset.testimonia), [dataset.testimonia]);
   const errori = problemi.filter(p => p.severita === 'errore');
   const saggio = dataset.saggi.find(s => s.id === saggioId) || null;
 
@@ -805,7 +824,14 @@ export const LiterarySourcesEditor: React.FC<Props> = ({
 
           <div className="flex-1 min-h-0 overflow-y-auto custom-scrollbar p-5 md:p-8">
             {sezione === 'opere' && <OpereEditor dataset={dataset} onChange={onChange} />}
-            {sezione === 'testimonianze' && <TestimonianzeEditor dataset={dataset} onChange={onChange} />}
+            {sezione === 'testimonianze' && (
+              <TestimonianzeEditor
+                dataset={dataset}
+                onChange={onChange}
+                apri={daAprire}
+                onApertaConsumata={consumaApertura}
+              />
+            )}
 
             {sezione === 'saggi' && (saggio ? (
               <SaggioEditor
@@ -846,11 +872,93 @@ export const LiterarySourcesEditor: React.FC<Props> = ({
                     </div>
                   ))
                 )}
+
+                <TabellaCopertura copertura={copertura} onApri={id => { setDaAprire(id); setSezione('testimonianze'); }} />
               </div>
             )}
           </div>
         </div>
       </div>
+    </div>
+  );
+};
+
+/* ─────────────────────────────────────────── copertura del markup ───── */
+
+const STATO_LABEL: Record<CoperturaTestimonium['stato'], string> = {
+  vuota: 'senza categorie',
+  assente: 'solo testo libero',
+  parziale: 'in parte marcata',
+  completa: 'tutto nel markup',
+};
+
+/**
+ * Quanto delle categorie di ogni scheda è già passato dal campo libero al
+ * markup. Serve a dare un traguardo al lavoro di marcatura: finché una riga è
+ * rossa, quella scheda entra negli indici con stringhe scritte a mano, che il
+ * ponte verso le pagine di divinità ed epiteti non può riconoscere.
+ */
+const TabellaCopertura: React.FC<{
+  copertura: CoperturaTestimonium[];
+  onApri: (id: string) => void;
+}> = ({ copertura, onApri }) => {
+  const aperte = copertura.filter(c => c.stato === 'assente' || c.stato === 'parziale');
+  const fatte = copertura.filter(c => c.stato === 'completa').length;
+  const conCategorie = copertura.filter(c => c.stato !== 'vuota').length;
+
+  return (
+    <div className="mt-8 pt-6 border-t border-border/40">
+      <div className="flex items-baseline gap-2 mb-1.5">
+        <h3 className="text-[11px] font-sans font-bold uppercase tracking-[0.16em] text-ink/70">
+          Copertura del markup
+        </h3>
+        <span className="text-[11px] font-sans text-muted/60 tabular-nums">
+          {fatte}/{conCategorie}
+        </span>
+      </div>
+      <p className="text-[13px] font-serif italic text-muted/80 leading-relaxed mb-4">
+        Le categorie di una scheda dovrebbero venire dal markup del testo, non da campi compilati a mano:
+        solo il markup è normalizzato sulle chiavi del corpus, e solo quello arriva alle pagine di divinità
+        ed epiteti. Qui sotto ciò che è ancora scritto a mano e non ancora marcato.
+      </p>
+
+      {aperte.length === 0 ? (
+        <p className="text-sm font-serif italic text-accent flex items-center gap-2 py-4">
+          <Check className="h-4 w-4" /> Ogni categoria compilata a mano trova riscontro nel markup del testo.
+        </p>
+      ) : (
+        <ul className="space-y-1.5">
+          {aperte.map(c => (
+            <li key={c.id}>
+              <button
+                type="button"
+                onClick={() => onApri(c.id)}
+                className="w-full text-left rounded-lg border border-border/50 hover:border-accent/40 hover:bg-accent/[0.03] px-3.5 py-2.5 transition-colors group"
+              >
+                <div className="flex items-baseline gap-2 mb-1">
+                  <span className="font-mono text-[10px] text-muted/60 group-hover:text-accent transition-colors truncate">
+                    {c.id}
+                  </span>
+                  <span className={cn(
+                    'text-[10px] font-sans uppercase tracking-wider shrink-0 ml-auto',
+                    c.stato === 'assente' ? 'text-red-600/70 dark:text-red-400/70' : 'text-amber-700/70 dark:text-amber-400/70',
+                  )}>
+                    {STATO_LABEL[c.stato]}
+                  </span>
+                </div>
+                <div className="flex flex-wrap gap-x-3 gap-y-1">
+                  {c.scoperti.map(s => (
+                    <span key={s.rubrica} className="text-[12px] font-serif text-ink/75">
+                      <span className="text-muted/60">{s.rubrica}:</span>{' '}
+                      {s.valori.join(', ')}
+                    </span>
+                  ))}
+                </div>
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 };

@@ -169,10 +169,41 @@ di Men vuol dire duecentotrentasette monumenti, e deve continuare a volerlo
 dire. Un passo di Strabone non è un'attestazione di culto: è un'altra cosa, e
 si mostra come un'altra cosa, sotto, con la sua etichetta.
 
-Il markup **non sostituisce** i campi compilati a mano (`divinita`,
-`personaggi`, `figure`, `luoghi`): li affianca. I primi sono normalizzati sui
-`key` del corpus, i secondi usano i nomi italiani della redazione, e chi cerca
-trova con la chiave che ha.
+### 5.2 Una fonte sola: il markup, non i campi liberi
+
+Le categorie di una testimonianza hanno oggi **due** provenienze: il markup del
+testo e i campi compilati a mano (`divinita`, `personaggi`, `figure`, `luoghi`,
+`termini`). Non è un equilibrio da mantenere, è un **residuo da riassorbire**.
+
+La ragione è che solo il markup è normalizzato sui `key` del corpus, e quindi
+solo il markup arriva alle pagine di divinità ed epiteti. Un campo libero è
+testo nudo: entra nell'indice senza normalizzazione, e `buildIndici` lo versa
+nella stessa rubrica del valore marcato — così la stessa divinità può comparire
+due volte con due grafie senza che nulla lo segnali.
+
+**Direzione: il markup è la fonte, i campi liberi spariranno.** Ma non prima di
+aver marcato, perché oggi i campi liberi sono quasi tutto l'indice (19
+testimonianze su 19 hanno `divinita` e `termini` scritti a mano, 5 hanno
+markup). Cancellarli adesso svuoterebbe la sezione.
+
+L'ordine è quindi:
+
+1. **Le azioni mancanti** — fatte: `place_name` (toponimo: `<placeName nymRef>`,
+   perché in epigrafia esisteva solo l'etnico) e `person_myth` (personaggio
+   mitico: `<persName type="mythological" key>`). Senza di esse «Carre» ed
+   «Endimione» non avevano dove andare.
+2. **La marcatura dei 19 passi** — lavoro editoriale.
+3. **La copertura** — `coperturaMarkup()` in `litStore.ts` confronta, scheda per
+   scheda e rubrica per rubrica, i valori scritti a mano con quelli che il
+   markup già produce, e mostra i **valori scoperti** nel pannello Controlli.
+   Il confronto ignora maiuscole, accenti e punteggiatura, e riconosce che
+   `key="Men Pharnakou"` (divinità «Men» + epiteto «Pharnakou») copre il campo
+   libero «Men Pharnakou»: è la stessa cosa detta a due granularità.
+4. **La rimozione dei campi** — solo quando la copertura è completa. Resterà una
+   sede esplicita e stretta per il caso legittimo: ciò che il *commento*
+   stabilisce e il testo non dice (il dio di Carre in un frammento che non lo
+   nomina). Il markup può marcare solo ciò che è scritto — quel residuo va
+   dichiarato come inferenza redazionale, non mescolato ai valori marcati.
 
 ## 6. Dove vivono i dati
 
@@ -207,6 +238,11 @@ duplicati, saggi che richiamano passi inesistenti, markup malformato, opere
 senza testimonianze, testimonianze non richiamate da nessun saggio. **Con
 errori aperti il salvataggio è bloccato**; gli avvisi no — quelli sono lavoro
 dichiarato, non guasti.
+
+Sotto i controlli sta la **copertura del markup** (§5.2): l'elenco delle schede
+le cui categorie sono ancora, in tutto o in parte, testo libero, con i valori
+precisi non ancora marcati. Ogni riga porta alla scheda. Serve a dare un
+traguardo visibile al lavoro di marcatura invece di procedere a memoria.
 
 ## 8. Norme redazionali
 
@@ -265,9 +301,15 @@ Lavoro aperto:
 
 1. **Collazione di tutti i 19 testi** sulle edizioni dichiarate. È la
    precondizione per poter citare la sezione.
-2. **Marcatura del testo**: 5 testimonianze su 19 sono marcate. Finché le
-   altre non lo sono, le rubriche calcolate (divinità, epiteti, lessico
-   cultuale, toolbox) restano parziali.
+2. **Marcatura del testo**: 5 testimonianze su 19 sono marcate, nessuna in modo
+   completo. Finché le altre non lo sono, le rubriche calcolate (divinità,
+   epiteti, lessico cultuale, toolbox) restano parziali e i campi liberi non si
+   possono togliere (§5.2). Lo stato scheda per scheda è nella **copertura del
+   markup**, in fondo ai Controlli.
+   Un caso emerso dalla copertura e da decidere: in *Th.* 371–374 Iperione è
+   marcato come **divinità** (`type="divine"`) ma il campo libero lo elenca fra
+   i **personaggi mitici**. Le due letture sono entrambe difendibili; va scelta
+   una e applicata a tutti i Titani.
 3. **Rilettura dei marcatori concettuali** (`lares`): sono di prima
    assegnazione, fatta prima che arrivassero i documenti di progetto LARES.
 4. Da confermare con la redazione LARES: la collocazione delle tre voci
