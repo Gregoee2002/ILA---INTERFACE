@@ -4,6 +4,8 @@ Elenco delle questioni di classificazione emerse dall'audit automatico
 (pannello **Coerenza** → «Classificazione divinità / epiteti»,
 `buildClassificationAudit()` in `src/lib/epithetIndex.ts`).
 
+> Verifiche aperte sulla **bibliografia**: [verifiche-bibliografia.md](verifiche-bibliografia.md).
+
 Sono **segnalazioni da verificare a mano su Lane 1971 (CMRDM I)** e poi da
 correggere sullo XML. Nessuna è stata risolta: si torna qui quando c'è tempo
 per il riscontro bibliografico.
