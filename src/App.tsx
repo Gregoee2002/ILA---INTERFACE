@@ -2394,7 +2394,7 @@ function Timeline({ monumenti, onSelect, paused = false }: { monumenti: Monument
   // In vista panoramica basta lo spazio per l'intestazione e il pallino del conteggio —
   // niente corsie di barre, quindi un'altezza fissa invece di quella della cascata. È
   // generosa perché in panoramica etichette e pallini sono ingranditi (vedi sotto).
-  const OVERVIEW_HEIGHT = RULE_Y + 170;
+  const OVERVIEW_HEIGHT = RULE_Y + 128;
   const cascadeHeight = isOverview ? OVERVIEW_HEIGHT : CASCADE_TOP + Math.max(1, laneCount) * ROW_H + 24;
 
   const axisWidth = Math.max(600, naturalWidth + 40);
@@ -2660,7 +2660,11 @@ function Timeline({ monumenti, onSelect, paused = false }: { monumenti: Monument
                   const bandRight = yearToLeft((c + 1) * 100);
                   const bandWidth = bandRight - bandLeft;
                   const centuryNum = c < 0 ? -c : c + 1;
-                  const label = `${toRoman(centuryNum)} sec. ${c < 0 ? 'a.C.' : 'd.C.'}`;
+                  const era = c < 0 ? 'a.C.' : 'd.C.';
+                  // In panoramica le colonne sono strette e le etichette, contro-scalate a
+                  // dimensione fissa, si accavallavano: qui la forma compatta ("V a.C.")
+                  // senza "sec.". In dettaglio le colonne sono larghe → forma estesa.
+                  const label = isOverview ? `${toRoman(centuryNum)} ${era}` : `${toRoman(centuryNum)} sec. ${era}`;
                   const count = countByCentury.get(c) || 0;
                   return (
                     <div
@@ -2673,21 +2677,21 @@ function Timeline({ monumenti, onSelect, paused = false }: { monumenti: Monument
                           layout, va moltiplicata per lo zoom): sotto ~64px di colonna
                           l'etichetta si sovrapporrebbe a quella accanto. In dettaglio
                           (zoom >= 1) la colonna è sempre larga, quindi resta sempre visibile. */}
-                      {bandWidth * zoom > 64 && (
+                      {bandWidth * zoom > (isOverview ? 58 : 64) && (
                         <div
-                          className="absolute flex items-center gap-2"
-                          style={{ left: 6, top: 2, transform: isOverview ? `scale(${overviewScale})` : undefined, transformOrigin: 'left top' }}
+                          className="absolute flex items-center gap-1.5"
+                          style={{ left: 6, top: 3, transform: isOverview ? `scale(${overviewScale})` : undefined, transformOrigin: 'left top' }}
                         >
-                          <div className={`bg-accent rounded-full shrink-0 ${isOverview ? 'w-1.5 h-5' : 'w-1 h-5'}`} />
-                          <span className={`font-sans font-extrabold uppercase tracking-wider whitespace-nowrap ${isOverview ? 'text-[13px] text-ink' : 'text-[10px] text-ink/75'}`}>{label}</span>
+                          <div className={`bg-accent rounded-full shrink-0 ${isOverview ? 'w-1 h-4' : 'w-1 h-5'}`} />
+                          <span className={`font-sans font-extrabold uppercase tracking-wide whitespace-nowrap ${isOverview ? 'text-[11px] text-ink/85' : 'text-[10px] text-ink/75'}`}>{label}</span>
                         </div>
                       )}
                       <div className="absolute border-l border-dashed border-border" style={{ left: 0, top: RULE_Y, bottom: 0 }} />
-                      {isOverview && count > 0 && bandWidth * zoom > 44 && (
-                        <div className="absolute" style={{ left: '50%', top: RULE_Y + 40, transform: 'translateX(-50%)' }}>
+                      {isOverview && count > 0 && bandWidth * zoom > 40 && (
+                        <div className="absolute" style={{ left: '50%', top: RULE_Y + 32, transform: 'translateX(-50%)' }}>
                           <div
-                            className="rounded-full bg-accent/15 border-2 border-accent/50 text-accent text-base font-sans font-bold flex items-center justify-center"
-                            style={{ minWidth: 40, height: 40, padding: '0 10px', transform: `scale(${overviewScale})`, transformOrigin: 'top center' }}
+                            className="rounded-full bg-accent/15 border border-accent/50 text-accent text-[13px] font-sans font-bold flex items-center justify-center"
+                            style={{ minWidth: 32, height: 32, padding: '0 8px', transform: `scale(${overviewScale})`, transformOrigin: 'top center' }}
                           >
                             {count}
                           </div>
@@ -2701,7 +2705,7 @@ function Timeline({ monumenti, onSelect, paused = false }: { monumenti: Monument
                     fa anche da "asse": si accende in teal al passaggio del mouse. */}
                 <div
                   className={`absolute inset-x-0 rounded-full transition-colors duration-200 pointer-events-none ${hoverX !== null ? 'bg-accent' : 'bg-ink/25'}`}
-                  style={{ top: RULE_Y, height: isOverview ? 4 : 2, zIndex: 1 }}
+                  style={{ top: RULE_Y, height: isOverview ? 3 : 2, zIndex: 1 }}
                 />
 
                 <span className="absolute text-muted text-sm font-bold tracking-tighter select-none pointer-events-none" style={{ left: 0, top: RULE_Y, transform: 'translate(-135%, -50%)' }}>···</span>
