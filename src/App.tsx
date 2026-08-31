@@ -2391,6 +2391,15 @@ function Timeline({ monumenti, onSelect, paused = false }: { monumenti: Monument
   const MIN_BAR_WIDTH = 86;
   const BAR_GAP = 8;
 
+  // Ritmo verticale della panoramica. Gli offset di layout (top) vengono moltiplicati
+  // per `zoom` (~0.3) dal transform del contenitore, quindi 36px di layout diventano
+  // ~10px a schermo: etichetta, asse e pallino finivano schiacciati uno sull'altro.
+  // Contro-scalando gli offset (× overviewScale) le distanze tornano quelle reali a
+  // schermo — coerenti con etichette e pallini, che sono già resi a dimensione fissa.
+  const labelTopPx = isOverview ? Math.round(4 * overviewScale) : 2;
+  const ruleTopPx = isOverview ? Math.round(30 * overviewScale) : RULE_Y;
+  const countTopPx = isOverview ? Math.round(46 * overviewScale) : RULE_Y;
+
   // Impaccamento a intervalli (come le "righe" di un Gantt): si scorre l'elenco già
   // ordinato per data di inizio e ogni barra va nella prima corsia il cui ultimo
   // occupante finisce prima che questa inizi — mai spostata orizzontalmente, solo
@@ -2415,7 +2424,7 @@ function Timeline({ monumenti, onSelect, paused = false }: { monumenti: Monument
   // In vista panoramica basta lo spazio per l'intestazione e il pallino del conteggio —
   // niente corsie di barre, quindi un'altezza fissa invece di quella della cascata. È
   // generosa perché in panoramica etichette e pallini sono ingranditi (vedi sotto).
-  const OVERVIEW_HEIGHT = RULE_Y + 128;
+  const OVERVIEW_HEIGHT = isOverview ? Math.round(96 * overviewScale) : RULE_Y + 128;
   const cascadeHeight = isOverview ? OVERVIEW_HEIGHT : CASCADE_TOP + Math.max(1, laneCount) * ROW_H + 24;
 
   const axisWidth = Math.max(600, naturalWidth + 40);
@@ -2701,18 +2710,18 @@ function Timeline({ monumenti, onSelect, paused = false }: { monumenti: Monument
                       {bandWidth * zoom > (isOverview ? 58 : 64) && (
                         <div
                           className="absolute flex items-center gap-1.5"
-                          style={{ left: 6, top: 3, transform: isOverview ? `scale(${overviewScale})` : undefined, transformOrigin: 'left top' }}
+                          style={{ left: 6, top: labelTopPx, transform: isOverview ? `scale(${overviewScale})` : undefined, transformOrigin: 'left top' }}
                         >
-                          <div className={`bg-accent rounded-full shrink-0 ${isOverview ? 'w-1 h-4' : 'w-1 h-5'}`} />
-                          <span className={`font-sans font-extrabold uppercase tracking-wide whitespace-nowrap ${isOverview ? 'text-[11px] text-ink/85' : 'text-[10px] text-ink/75'}`}>{label}</span>
+                          <div className={`bg-accent rounded-full shrink-0 ${isOverview ? 'w-1 h-3' : 'w-1 h-5'}`} />
+                          <span className={`font-sans font-extrabold uppercase tracking-wide leading-none whitespace-nowrap ${isOverview ? 'text-[10px] text-ink/65' : 'text-[10px] text-ink/75'}`}>{label}</span>
                         </div>
                       )}
-                      <div className="absolute border-l border-dashed border-border" style={{ left: 0, top: RULE_Y, bottom: 0 }} />
+                      <div className="absolute border-l border-dashed border-border" style={{ left: 0, top: ruleTopPx, bottom: 0 }} />
                       {isOverview && count > 0 && bandWidth * zoom > 40 && (
-                        <div className="absolute" style={{ left: '50%', top: RULE_Y + 32, transform: 'translateX(-50%)' }}>
+                        <div className="absolute" style={{ left: '50%', top: countTopPx, transform: 'translateX(-50%)' }}>
                           <div
-                            className="rounded-full bg-accent/15 border border-accent/50 text-accent text-[13px] font-sans font-bold flex items-center justify-center"
-                            style={{ minWidth: 32, height: 32, padding: '0 8px', transform: `scale(${overviewScale})`, transformOrigin: 'top center' }}
+                            className="rounded-full bg-accent/12 border border-accent/40 text-accent text-[11px] font-sans font-bold flex items-center justify-center"
+                            style={{ minWidth: 22, height: 22, padding: '0 6px', transform: `scale(${overviewScale})`, transformOrigin: 'top center' }}
                           >
                             {count}
                           </div>
@@ -2726,17 +2735,17 @@ function Timeline({ monumenti, onSelect, paused = false }: { monumenti: Monument
                     fa anche da "asse": si accende in teal al passaggio del mouse. */}
                 <div
                   className={`absolute inset-x-0 rounded-full transition-colors duration-200 pointer-events-none ${hoverX !== null ? 'bg-accent' : 'bg-ink/25'}`}
-                  style={{ top: RULE_Y, height: isOverview ? 3 : 2, zIndex: 1 }}
+                  style={{ top: ruleTopPx, height: 2, zIndex: 1 }}
                 />
 
-                <span className="absolute text-muted text-sm font-bold tracking-tighter select-none pointer-events-none" style={{ left: 0, top: RULE_Y, transform: 'translate(-135%, -50%)' }}>···</span>
-                <span className="absolute text-muted text-sm font-bold tracking-tighter select-none pointer-events-none" style={{ left: axisWidth, top: RULE_Y, transform: 'translate(35%, -50%)' }}>···</span>
+                <span className="absolute text-muted text-sm font-bold tracking-tighter select-none pointer-events-none" style={{ left: 0, top: ruleTopPx, transform: 'translate(-135%, -50%)' }}>···</span>
+                <span className="absolute text-muted text-sm font-bold tracking-tighter select-none pointer-events-none" style={{ left: axisWidth, top: ruleTopPx, transform: 'translate(35%, -50%)' }}>···</span>
 
                 {/* Linea guida interattiva: segue il mouse e mostra l'anno sotto il cursore. */}
                 {hoverX !== null && hoverYear !== null && (
                   <div className="absolute pointer-events-none" style={{ left: hoverX, top: 0, height: cascadeHeight, transform: 'translateX(-50%)' }}>
                     <div className="w-px h-full bg-accent/40 mx-auto" style={{ backgroundImage: 'linear-gradient(to bottom, transparent, var(--accent) 10%, var(--accent) 90%, transparent)', opacity: 0.3 }} />
-                    <div className="absolute left-1/2 px-2 py-0.5 rounded-full bg-ink text-parchment text-[9px] font-sans font-bold whitespace-nowrap shadow-md" style={{ top: RULE_Y, transform: 'translate(-50%, -50%)' }}>
+                    <div className="absolute left-1/2 px-2 py-0.5 rounded-full bg-ink text-parchment text-[9px] font-sans font-bold whitespace-nowrap shadow-md" style={{ top: ruleTopPx, transform: 'translate(-50%, -50%)' }}>
                       {formatHoverYear(hoverYear)}
                     </div>
                   </div>
