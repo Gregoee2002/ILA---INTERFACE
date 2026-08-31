@@ -14,16 +14,9 @@ import {
 } from '../lib/litMarkup';
 import { MarkupTokenView } from './MarkupText';
 
-/* ================================================================
- * LiteraryMarkupEditor — marcatura assistita del testo letterario.
- *
- * Stessa grammatica dell'editor epigrafico (EditionMarkupEditor):
- * si seleziona il testo, si sceglie l'azione, si clicca un tag per
- * modificarlo. Cambia il catalogo delle azioni — vedi litMarkup.ts —
- * e cambia il significato di <lb/>, che qui è il verso e non la riga
- * incisa. Il resto è deliberatamente identico: chi ha imparato a
- * marcare una stele non deve reimparare nulla per marcare Esiodo.
- * ================================================================ */
+// Stessa grammatica dell'editor epigrafico: chi ha imparato a marcare una
+// stele non deve reimparare nulla per marcare Esiodo. Cambia solo il catalogo
+// delle azioni (litMarkup.ts) e il senso di <lb/>, qui verso e non riga incisa.
 
 interface Props {
   value: string;
@@ -351,7 +344,6 @@ export const LiteraryMarkupEditor: React.FC<Props> = ({ value, lingua, onChange 
   );
 };
 
-/* ================================================================ */
 
 const InitialPaste: React.FC<{ lingua: 'grc' | 'lat'; onCreate: (righe: string[]) => void }> = ({ lingua, onCreate }) => {
   const [draft, setDraft] = useState('');
@@ -381,7 +373,6 @@ const InitialPaste: React.FC<{ lingua: 'grc' | 'lat'; onCreate: (righe: string[]
   );
 };
 
-/* ================================================================ */
 
 const LitMenu: React.FC<{
   menu: MenuState;
@@ -515,7 +506,6 @@ const LitMenu: React.FC<{
   );
 };
 
-/* ================================================================ */
 
 const LitPopover: React.FC<{
   pop: ElPopover;

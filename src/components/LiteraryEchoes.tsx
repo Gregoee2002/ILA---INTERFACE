@@ -4,25 +4,19 @@ import { cn } from '../lib/utils';
 import {
   TestimoniumRisolto, PonteLetterario, costruisciPonte, risolviTutte,
 } from '../lib/litSources';
+import { AMBITO_CAMPO, AMBITO_LABELS, CAMPO_COLOR } from '../lib/laresToolbox';
 import { caricaLitDataset } from '../lib/litStore';
 
-/**
- * LiteraryEchoes — «Nelle fonti letterarie», dentro le pagine del corpus.
- *
- * Mostra le testimonianze letterarie che nominano una data divinità o un dato
- * epiteto. Le chiavi sono le stesse del corpus perché il testo letterario è
- * marcato con lo stesso markup delle iscrizioni (<persName type="divine"
- * key="…">, <rs type="epithet">): non c'è nessuna corrispondenza da mantenere
- * a mano, e se domani si marca un passo in più, questo blocco lo sa.
- *
- * I CONTEGGI RESTANO SEPARATI da quelli epigrafici, di proposito: «12
- * attestazioni» in queste pagine vuol dire dodici monumenti, e deve continuare
- * a volerlo dire. Un passo di Esiodo non è un'attestazione di culto — è
- * un'altra cosa, e si mostra come un'altra cosa.
- */
+// «Nelle fonti letterarie»: i passi che nominano una divinità o un epiteto,
+// dentro le pagine del corpus. Le chiavi sono le stesse perché il markup è lo
+// stesso, quindi non c'è nessuna corrispondenza da mantenere a mano.
+//
+// I conteggi restano separati da quelli epigrafici, di proposito: «12
+// attestazioni» qui vuol dire dodici monumenti e deve continuare a volerlo
+// dire. E ogni passo mostra il proprio marcatore di rappresentazione, perché
+// «pratica» e «finzione» non possono comparire con lo stesso peso: Strabone
+// sugli ἱερόδουλοι e Esiodo che genera Selene da Tia non provano la stessa cosa.
 
-// Il dataset si carica una volta per sessione: il blocco compare in più
-// punti del corpus e non deve rifare la richiesta a ogni divinità sfiorata.
 let pontePromise: Promise<PonteLetterario> | null = null;
 
 function caricaPonte(): Promise<PonteLetterario> {
@@ -32,6 +26,25 @@ function caricaPonte(): Promise<PonteLetterario> {
   }
   return pontePromise;
 }
+
+// pratica · credenza · finzione — il primo campo della griglia LARES, che dice
+// che rapporto ha il passo con il fatto. Viaggia con la testimonianza ovunque
+// essa compaia fuori dalla propria sezione.
+const Rappresentazione: React.FC<{ t: TestimoniumRisolto }> = ({ t }) => {
+  const ambiti = [...new Set(
+    t.lares.filter(m => AMBITO_CAMPO[m.ambito] === 'rappresentazione').map(m => m.ambito),
+  )];
+  if (ambiti.length === 0) return null;
+  return (
+    <span
+      className="text-[10px] font-sans uppercase tracking-[0.1em] shrink-0 opacity-75"
+      style={{ color: CAMPO_COLOR.rappresentazione }}
+      title="Rapporto del passo con il fatto (griglia LARES)"
+    >
+      {ambiti.map(a => AMBITO_LABELS[a]).join(' · ')}
+    </span>
+  );
+};
 
 interface Props {
   /** chiave della divinità, es. «Men» */
@@ -86,6 +99,7 @@ export const LiteraryEchoes: React.FC<Props> = ({ divinita, epiteto, onApri, cla
               <span className="font-serif text-[13px] text-ink/85 group-hover:text-accent transition-colors truncate">
                 {t.autore}, <span className="italic">{t.opera}</span> {t.locus}
               </span>
+              <Rappresentazione t={t} />
               <span className="text-[10px] font-sans text-muted/50 shrink-0 hidden sm:inline">{t.datazione}</span>
               {onApri && <ChevronRight className="h-3 w-3 text-muted/25 group-hover:text-accent shrink-0 ml-auto" />}
             </button>

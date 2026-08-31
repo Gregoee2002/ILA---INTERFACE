@@ -169,6 +169,40 @@ di Men vuol dire duecentotrentasette monumenti, e deve continuare a volerlo
 dire. Un passo di Strabone non è un'attestazione di culto: è un'altra cosa, e
 si mostra come un'altra cosa, sotto, con la sua etichetta.
 
+Nel blocco, ogni passo porta il proprio **marcatore di rappresentazione**
+(*pratica · credenza · finzione*, il primo campo della griglia LARES). Strabone
+sugli ἱερόδουλοι di Antiochia e Esiodo che genera Selene da Tia non provano la
+stessa cosa, e non possono comparire con lo stesso peso: il marcatore viaggia
+con la testimonianza ovunque essa esca dalla propria sezione.
+
+### 5.1.1 Non confondere le nature delle fonti
+
+Le confusioni possibili sono quattro, e solo la prima è disinnescata:
+
+1. **Menzione contro attestazione** — risolta: conteggi separati, blocco a
+   parte, marcatore di rappresentazione in vista.
+2. **Data del testo contro data del fatto** — aperta. Strabone scrive verso il
+   7 a.C. e parla di Farnace I, del II secolo a.C.: `datazioneSort` registra la
+   prima, e nessun campo registra la seconda. **Finché manca, le testimonianze
+   restano fuori dalla Cronologia**: meglio assenti che datate male.
+3. **Luogo nominato contro luogo di provenienza** — aperta. L'iscrizione *viene*
+   da Axiotta, Strabone *nomina* Cabira. Se un giorno le fonti compariranno
+   sulla mappa dovranno avere simbolo, livello e legenda propri.
+4. **Stesso tag, valore probatorio diverso** — strutturale, e per questo il
+   markup registra solo che il nome c'è; che cosa provi lo dice il marcatore
+   concettuale, non il tag.
+
+Regole che ne discendono, e che valgono anche dove costano:
+
+- **la natura è una posizione, non un'etichetta**: mai una collezione unica con
+  un campo `tipo` da filtrare, ma due collezioni che una vista accosta — un
+  `.filter()` si dimentica, un array separato no;
+- **mai una somma**: «237 epigrafiche · 2 letterarie», mai «239»;
+- **il lessico si affianca, non si fonde**: quando le occorrenze letterarie
+  entreranno nel Lessico cultuale, stessa tabella e due colonne, mai un totale;
+- **«attestazione» resta riservata alla pietra**: per i testi si dice menzione,
+  testimonianza, occorrenza.
+
 ### 5.2 Una fonte sola: il markup, non i campi liberi
 
 Le categorie di una testimonianza hanno oggi **due** provenienze: il markup del
@@ -189,9 +223,20 @@ markup). Cancellarli adesso svuoterebbe la sezione.
 L'ordine è quindi:
 
 1. **Le azioni mancanti** — fatte: `place_name` (toponimo: `<placeName nymRef>`,
-   perché in epigrafia esisteva solo l'etnico) e `person_myth` (personaggio
-   mitico: `<persName type="mythological" key>`). Senza di esse «Carre» ed
-   «Endimione» non avevano dove andare.
+   perché in epigrafia esisteva solo l'etnico), `person_myth` (personaggio
+   mitico: `<persName type="mythological" key>`) e `word_indexed` (parola
+   notevole: `<w lemma>` senza `@ana`). Senza di esse «Carre», «Endimione» e
+   «σελήνη» non avevano dove andare.
+
+   Sui **termini** la scelta è di metodo: niente lista compilata accanto al
+   testo. La parola si marca **dove sta**, e *perché* sia notevole si dice in
+   prosa nel **commento** — come in un commento a stampa, non in un campo
+   `nota`. La distinzione che regge l'indice è `@ana`: con la famiglia
+   cultuale la parola entra nel **Lessico cultuale**, senza famiglia entra nei
+   **Termini**. Così un dialettismo non finisce mai nel lessico di culto.
+   Il vecchio campo `termini` resta visibile in redazione solo come elenco
+   **da riassorbire**, in sola lettura: marcata la parola e travasata la nota,
+   la riga si toglie.
 2. **La marcatura dei 19 passi** — lavoro editoriale.
 3. **La copertura** — `coperturaMarkup()` in `litStore.ts` confronta, scheda per
    scheda e rubrica per rubrica, i valori scritti a mano con quelli che il

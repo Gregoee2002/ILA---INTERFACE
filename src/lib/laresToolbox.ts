@@ -1,6 +1,4 @@
-// ═══════════════════════════════════════════════════════════════════════
 // laresToolbox.ts — i due vocabolari concettuali di LARES.
-// ═══════════════════════════════════════════════════════════════════════
 //
 // Fonte: documenti del progetto LARES forniti dalla redazione —
 //  · «LARES_Analytical Toolbox for Conceptual Markers (enlarged)»

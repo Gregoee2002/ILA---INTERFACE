@@ -48,7 +48,6 @@ interface Props {
 
 type Sezione = 'opere' | 'testimonianze' | 'saggi' | 'controlli';
 
-/* ───────────────────────────────────────────────────────── campi base ───── */
 
 const LABEL = 'block text-[10px] font-sans font-bold uppercase tracking-[0.14em] text-muted/70 mb-1';
 const INPUT =
@@ -152,7 +151,6 @@ const Sezioncina: React.FC<{ titolo: string; children: React.ReactNode; nota?: s
   </section>
 );
 
-/* ═══════════════════════════════════════════════════ editor delle opere ══ */
 
 const OpereEditor: React.FC<{ dataset: LitDataset; onChange: (d: LitDataset) => void }> = ({ dataset, onChange }) => {
   const [apertaId, setApertaId] = useState<string | null>(null);
@@ -270,7 +268,6 @@ const OpereEditor: React.FC<{ dataset: LitDataset; onChange: (d: LitDataset) => 
   );
 };
 
-/* ═════════════════════════════════════════ editor della testimonianza ══ */
 
 const TestimoniumEditor: React.FC<{
   t: Testimonium; dataset: LitDataset;
@@ -395,29 +392,27 @@ const TestimoniumEditor: React.FC<{
           hint="che cosa il passo fa alla costruzione della divinità, non che cosa dice" />
       </Sezioncina>
 
-      <Sezioncina titolo="Termini notevoli">
-        <div className="space-y-2">
-          {t.termini.map((w, i) => (
-            <div key={i} className="flex gap-2 items-start">
-              <input value={w.forma} lang={lingua} placeholder="forma attestata"
-                onChange={e => setTermine(i, { ...w, forma: e.target.value })}
-                className={cn(INPUT, 'w-40 shrink-0', lingua === 'grc' && 'font-greek')} />
-              <input value={w.lemma} lang={lingua} placeholder="lemma"
-                onChange={e => setTermine(i, { ...w, lemma: e.target.value })}
-                className={cn(INPUT, 'w-40 shrink-0', lingua === 'grc' && 'font-greek')} />
-              <input value={w.nota || ''} placeholder="perché è notevole"
-                onChange={e => setTermine(i, { ...w, nota: e.target.value || undefined })}
-                className={cn(INPUT, 'flex-1')} />
-              <button type="button" onClick={() => onChange({ ...t, termini: t.termini.filter((_, j) => j !== i) })}
-                className="p-2 text-muted/40 hover:text-red-500 transition-colors shrink-0"><Trash2 className="h-3.5 w-3.5" /></button>
-            </div>
-          ))}
-          <button type="button" onClick={() => onChange({ ...t, termini: [...t.termini, { forma: '', lemma: '' }] })}
-            className="inline-flex items-center gap-1.5 text-[10px] font-sans font-bold uppercase tracking-[0.12em] text-accent hover:opacity-70 transition-opacity">
-            <Plus className="h-3 w-3" /> Aggiungi termine
-          </button>
-        </div>
-      </Sezioncina>
+      {t.termini.length > 0 && (
+        <Sezioncina titolo="Termini da riassorbire"
+          nota="La parola si marca dove sta, nel testo, e perché sia notevole si dice nel commento. Questi restano da una vecchia lista: marcato il termine e travasata la nota, si toglie la riga.">
+          <div className="space-y-1.5">
+            {t.termini.map((w, i) => (
+              <div key={i} className="flex gap-3 items-baseline rounded-lg border border-border/40 px-3 py-2">
+                <span className={cn('text-sm text-ink/80 shrink-0', lingua === 'grc' && 'font-greek')}>{w.forma}</span>
+                {w.lemma !== w.forma && (
+                  <span className={cn('text-[12px] text-muted/60 shrink-0', lingua === 'grc' && 'font-greek')}>{w.lemma}</span>
+                )}
+                {w.nota && <span className="text-[12px] font-serif italic text-muted/75 flex-1">{w.nota}</span>}
+                <button type="button" title="Riassorbito: togli la riga"
+                  onClick={() => onChange({ ...t, termini: t.termini.filter((_, j) => j !== i) })}
+                  className="p-1.5 ml-auto text-muted/40 hover:text-red-500 transition-colors shrink-0">
+                  <Trash2 className="h-3.5 w-3.5" />
+                </button>
+              </div>
+            ))}
+          </div>
+        </Sezioncina>
+      )}
 
       <Sezioncina titolo="Entità nominate" nota="Ciò che è già marcato nel testo entra negli indici da sé: qui si registra solo quello che il markup non copre.">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -454,7 +449,6 @@ const TestimoniumEditor: React.FC<{
   );
 };
 
-/* ═══════════════════════════════════════ elenco delle testimonianze ════ */
 
 const TestimonianzeEditor: React.FC<{
   dataset: LitDataset;
@@ -549,7 +543,6 @@ const TestimonianzeEditor: React.FC<{
   );
 };
 
-/* ═══════════════════════════════════════════════ editor del saggio ══════ */
 
 const SaggioEditor: React.FC<{
   saggio: Saggio; dataset: LitDataset; onChange: (s: Saggio) => void; onElimina: () => void;
@@ -708,7 +701,6 @@ const SaggioEditor: React.FC<{
   );
 };
 
-/* ═══════════════════════════════════════════════════════ il pannello ════ */
 
 export const LiterarySourcesEditor: React.FC<Props> = ({
   dataset, onChange, onSalva, onChiudi, fonte, sporco, salvando, errore,
@@ -883,7 +875,6 @@ export const LiterarySourcesEditor: React.FC<Props> = ({
   );
 };
 
-/* ─────────────────────────────────────────── copertura del markup ───── */
 
 const STATO_LABEL: Record<CoperturaTestimonium['stato'], string> = {
   vuota: 'senza categorie',

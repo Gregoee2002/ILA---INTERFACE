@@ -78,7 +78,6 @@ const Chip: React.FC<{ children: React.ReactNode; color?: string; title?: string
   </span>
 );
 
-// ══════════════════════════════════════════════════ SCHEDA DEL PASSO ═══════
 
 const SCHEDA_SECTIONS = [
   { id: 'testo', label: 'Testo e traduzione' },
@@ -371,7 +370,6 @@ const SchedaTestimonium: React.FC<{
   );
 };
 
-// ═══════════════════════════════════════════════════════════ indici ════════
 
 const IndiceList: React.FC<{
   entries: IndexEntry[];
@@ -421,7 +419,6 @@ const IndiceList: React.FC<{
   </div>
 );
 
-// ══════════════════════════════════════════════════════ vista del saggio ═══
 
 const SaggioView: React.FC<{
   saggio: Saggio;
@@ -762,7 +759,6 @@ const RubricheIndici: React.FC<{
   </>
 );
 
-// ══════════════════════════════════════════════════════════ il pannello ════
 
 export const LiterarySourcesPanel: React.FC<Props> = ({ editingUnlocked, apriTestimonianza, onTestimonianzaAperta }) => {
   const [dataset, setDataset] = useState<LitDataset>(SEME);

@@ -1,6 +1,4 @@
-// ═══════════════════════════════════════════════════════════════════════
 // litSources.ts — modello dati delle FONTI LETTERARIE di ILA.
-// ═══════════════════════════════════════════════════════════════════════
 //
 // La sezione «Fonti letterarie» non è un secondo catalogo epigrafico: è lo
 // spoglio ragionato delle fonti antiche sulla divinità lunare. Il corpus
@@ -58,9 +56,7 @@ import {
 export * from './laresToolbox';
 import { LaresMarker, LARES_GRID, AMBITO_LABELS, AMBITO_CAMPO } from './laresToolbox';
 
-// ───────────────────────────────────────────────────────────── vocabolari ──
 
-/** @type di <ref> in LARES: la natura del supporto della testimonianza. */
 export type RefType = 'lit' | 'ins' | 'pap';
 
 export const REFTYPE_LABELS: Record<RefType, string> = {
@@ -69,14 +65,12 @@ export const REFTYPE_LABELS: Record<RefType, string> = {
   pap: 'papiracea',
 };
 
-/** Come LARES intitola le tre sezioni di testimonianze in ogni scheda. */
 export const REFTYPE_SEZIONI: Record<RefType, string> = {
   lit: 'Fonti letterarie',
   ins: 'Iscrizioni',
   pap: 'Papiri',
 };
 
-/** Genere letterario della fonte. Vocabolario chiuso, ampliabile. */
 export type Genere =
   | 'epica' | 'inno' | 'lirica' | 'tragedia' | 'commedia' | 'filosofia'
   | 'storiografia' | 'geografia' | 'mitografia' | 'lessicografia'
@@ -104,11 +98,6 @@ export const GENERE_LABELS: Record<Genere, string> = {
 
 export const GENERI = Object.keys(GENERE_LABELS) as Genere[];
 
-/**
- * Che cosa fa il passo rispetto alla divinità lunare. È la tassonomia propria
- * di ILA — più fine del semplice «attestazione» — e distingue una genealogia
- * da una notizia di culto o da un'etimologia.
- */
 export type TipoTestimonianza =
   | 'genealogia' | 'menzione-diretta' | 'etimologia' | 'epiclesi'
   | 'notizia-cultuale' | 'descrizione-rituale' | 'descrizione-iconografica'
@@ -132,7 +121,6 @@ export const TIPO_LABELS: Record<TipoTestimonianza, string> = {
 
 export const TIPI = Object.keys(TIPO_LABELS) as TipoTestimonianza[];
 
-// ─────────────────────────────────────────────────────────────── entità ────
 
 /**
  * Stato di collazione del testo antico. Nessuna trascrizione è «vera» finché
@@ -141,7 +129,6 @@ export const TIPI = Object.keys(TIPO_LABELS) as TipoTestimonianza[];
  */
 export type Collazione = 'verificato' | 'da-collazionare';
 
-/** Un termine notevole del passo: la forma attestata e il lemma di indicizzazione. */
 export interface TerminNotevole {
   forma: string;
   lemma: string;
@@ -154,7 +141,6 @@ export interface LinkEsterno {
   url: string;
 }
 
-/** L'OPERA spogliata — l'unità bibliografica dell'indice delle opere. */
 export interface Opera {
   /** handle stabile, es. «hes-th» */
   id: string;
@@ -181,7 +167,6 @@ export interface Opera {
   nota?: string;
 }
 
-/** La TESTIMONIANZA: un passo dentro un'opera. Unità catalogabile della sezione. */
 export interface Testimonium {
   /** identificatore stabile e citabile, es. «ILA-LIT-hes-th-371» */
   id: string;
@@ -294,7 +279,6 @@ export interface LitDataset {
   inPreparazione: SaggioInPreparazione[];
 }
 
-// ───────────────────────────────────────────────────────── risoluzione ─────
 
 /**
  * Opera segnaposto per un `operaId` che non risolve. Non è un caso teorico:
@@ -365,7 +349,6 @@ export const risolviTutte = (testimonia: Testimonium[], opere: Opera[]): Testimo
 export const perCronologia = (a: TestimoniumRisolto, b: TestimoniumRisolto) =>
   a.datazioneSort - b.datazioneSort || a.autore.localeCompare(b.autore, 'it') || a.locus.localeCompare(b.locus, 'it');
 
-// ─────────────────────────────────────────────── sigle dentro un saggio ────
 
 /**
  * Le sigle T1, T2… NON sono un campo della testimonianza: sono la sua
@@ -398,7 +381,6 @@ export function testimoniaDelSaggio(s: Saggio, tutte: TestimoniumRisolto[]): Tes
   return out;
 }
 
-// ────────────────────────────────────────────────────────────── indici ─────
 
 export interface TestimoniumRef {
   id: string;
@@ -496,6 +478,9 @@ export function buildIndici(testimonia: TestimoniumRisolto[]): Indici {
   for (const t of testimonia) {
     pushRef(opere, t.operaId || t.opera, `${t.autore}, ${t.opera}`, t, t.locus);
     pushRef(autori, t.autore, t.autore, t, `${t.operaAbbr} ${t.locus}`);
+    // I termini vengono dal markup: la parola si marca dove sta, e perché sia
+    // notevole si dice nel commento. `t.termini` è il residuo delle schede non
+    // ancora marcate, e si spegne da sé man mano che la marcatura avanza.
     for (const w of t.termini) pushRef(termini, w.lemma, w.lemma, t, w.forma !== w.lemma ? w.forma : undefined, t.lingua);
     for (const d of t.divinita || []) pushRef(divinita, d, d, t);
     for (const p of t.personaggi || []) pushRef(personaggi, p, p, t);
@@ -506,6 +491,11 @@ export function buildIndici(testimonia: TestimoniumRisolto[]): Indici {
     // Dal markup, non da un campo compilato a mano.
     const mk = markupIndexOf(t);
     for (const c of mk.cultuale) pushRef(cultuale, c.lemma, c.lemma, t, `${c.forma}${c.family ? ` · ${c.family}` : ''}`, t.lingua);
+    for (const w of mk.parole) {
+      const lang = w.lang === 'grc' || w.lang === 'lat' ? w.lang : t.lingua;
+      pushRef(termini, w.lemma, w.lemma, t, w.forma !== w.lemma ? w.forma : undefined, lang);
+    }
+    for (const m of mk.mentioned) pushRef(termini, m, m, t, undefined, t.lingua);
     for (const d of mk.divinita) pushRef(divinita, d, d, t);
     for (const e of mk.epiteti) pushRef(epiteti, e, e, t);
     for (const l of mk.luoghi) pushRef(luoghi, l, l, t);
@@ -529,7 +519,6 @@ export function buildIndici(testimonia: TestimoniumRisolto[]): Indici {
   };
 }
 
-// ───────────────────────────────── ponte verso le pagine del corpus ────────
 
 /**
  * Le testimonianze letterarie raggruppate per divinità e per epiteto, con le
@@ -571,7 +560,6 @@ export function costruisciPonte(testimonia: TestimoniumRisolto[]): PonteLetterar
   return { perDivinita, perEpiteto };
 }
 
-// ───────────────────────────────────────────────── cache degli spogli ──────
 
 /** Il parse del markup è puro e il testo cambia solo in redazione. */
 const markupCache = new Map<string, LitMarkupIndex>();
@@ -595,7 +583,6 @@ export function testoPiano(testo: string): string {
   return out;
 }
 
-// ─────────────────────────────────────────────────────────── statistiche ───
 
 const annoLabel = (a: number) => (a < 0 ? `${Math.abs(a)} a.C.` : `${a} d.C.`);
 
@@ -650,7 +637,6 @@ export function opereSpogliate(testimonia: TestimoniumRisolto[], opere: Opera[])
     .sort((a, b) => a.opera.datazioneSort - b.opera.datazioneSort || a.opera.autore.localeCompare(b.opera.autore, 'it'));
 }
 
-// ─────────────────────────────────────────────────────────── citazioni ─────
 
 /** Citazione breve normalizzata, es. «Hes. Th. 371–374». */
 export const citaBreve = (t: TestimoniumRisolto) =>
@@ -687,7 +673,6 @@ export function catalogoOccorrenze(testimonia: TestimoniumRisolto[]): { refType:
     }));
 }
 
-// ─────────────────────────────────────────────────────── ricerca interna ───
 
 export const foldForSearch = (s: string) =>
   (s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
@@ -703,7 +688,6 @@ export const searchableOf = (t: TestimoniumRisolto) =>
     ...t.lares.map(m => `${m.campo} ${AMBITO_LABELS[m.ambito]}`),
   ].join(' '));
 
-// ──────────────────────────────────────────────────────── export TEI ───────
 
 const xmlEsc = (s: string) =>
   (s || '')

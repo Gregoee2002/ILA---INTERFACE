@@ -1,6 +1,4 @@
-// ═══════════════════════════════════════════════════════════════════════
 // litMarkup.ts — markup dei testi letterari, sopra al motore epigrafico.
-// ═══════════════════════════════════════════════════════════════════════
 //
 // PERCHÉ LO STESSO MARKUP DELL'EPIGRAFIA.
 // Il lessico LARES marca i termini greci e latini con `<w lemma="…">`, le
@@ -43,9 +41,6 @@ const el = (name: string, attrs: Record<string, string>, children: MarkupToken[]
   ({ kind: 'el', name, attrs, children, selfClosing });
 const txt = (value: string): MarkupToken => ({ kind: 'text', value });
 
-/* ================================================================ */
-/* Parse / serialize del testo di una testimonianza                  */
-/* ================================================================ */
 
 /**
  * Dal campo `testo` al flusso di token.
@@ -85,7 +80,6 @@ export function safeParseLitTesto(testo: string): MarkupToken[] | null {
   try { return parseLitTesto(testo); } catch { return null; }
 }
 
-/** Toglie il whitespace di impaginazione attorno agli <lb>, a ogni profondità. */
 function normalizeWhitespace(tokens: MarkupToken[]): void {
   for (let i = tokens.length - 1; i >= 0; i--) {
     const tok = tokens[i];
@@ -144,11 +138,6 @@ function escapeText(s: string): string {
   return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
-/**
- * Testo piano di un flusso: per l'anteprima nell'elenco, la ricerca interna e
- * il conteggio dei caratteri. Gli `<lb>` tornano accapo, così la resa in
- * `white-space: pre-wrap` conserva i versi.
- */
 export function plainTextOf(tokens: MarkupToken[]): string {
   const out: string[] = [];
   const walk = (toks: MarkupToken[]) => {
@@ -172,9 +161,6 @@ export function plainTextOf(tokens: MarkupToken[]): string {
   return out.join('').replace(/^\n+/, '').replace(/[ \t]+\n/g, '\n').trim();
 }
 
-/* ================================================================ */
-/* Catalogo delle azioni                                             */
-/* ================================================================ */
 
 /**
  * Le azioni prese di peso dal catalogo epigrafico. Sono quelle che marcano
@@ -215,7 +201,6 @@ function hintTradizione(id: string): string | undefined {
   }
 }
 
-/** Vocabolario dei testimoni: si scrive a mano, dipende dall'edizione. */
 const WIT_HINT = 'sigla dei testimoni, es. «M», «codd.», «Wilamowitz»';
 
 /**
@@ -282,6 +267,27 @@ const azioniLetterarie: MarkupAction[] = [
       p.nymRef ? [el('name', { nymRef: p.nymRef }, [txt(s)])] : [txt(s)]),
     compose: (slice, p) => el('persName', { type: 'mythological', key: p.key },
       p.nymRef ? [el('name', { nymRef: p.nymRef }, slice)] : slice),
+  },
+
+  /* ── Parole ──
+   * «Funzione cultuale (parola)» vincola il lemma ai 54 del vocabolario
+   * controllato, ed è giusto che lo faccia. Ma una parola può meritare l'indice
+   * senza appartenere al lessico cultuale — un dialettismo, un hapax, un
+   * tecnicismo. Questa azione le dà il tag senza pretendere una famiglia: se
+   * @ana manca, la parola entra nell'indice dei termini e non nel lessico. */
+  {
+    id: 'word_indexed',
+    label: 'Parola notevole',
+    glyph: 'σελήνη',
+    group: 'Parole e citazioni',
+    mode: 'wrap',
+    hint: 'Parola degna dell\'indice ma fuori dal lessico cultuale. Perché sia notevole si dice nel commento, non qui',
+    params: [
+      { id: 'lemma', label: 'Lemma (forma di citazione)', type: 'text', required: true, placeholder: 'σελήνη' },
+      { id: 'lang', label: 'Lingua', type: 'select', options: ['grc', 'lat'] },
+    ],
+    build: (s, p) => el('w', { lemma: p.lemma, ...(p.lang ? { 'xml:lang': p.lang } : {}) }, [txt(s)]),
+    compose: (slice, p) => el('w', { lemma: p.lemma, ...(p.lang ? { 'xml:lang': p.lang } : {}) }, slice),
   },
 
   /* ── Tradizione del testo ── */
@@ -409,9 +415,6 @@ export const LIT_GROUP_ORDER = [
   'Lacune e integrazioni',
 ];
 
-/* ================================================================ */
-/* Validazione                                                       */
-/* ================================================================ */
 
 
 /**
@@ -474,9 +477,12 @@ export function validateLitTokens(tokens: MarkupToken[]): ValidationIssue[] {
   return issues;
 }
 
-/* ================================================================ */
-/* Spoglio del markup → indici                                       */
-/* ================================================================ */
+
+export interface ParolaIndicizzata {
+  forma: string;
+  lemma: string;
+  lang?: string;
+}
 
 export interface CultOccorrenza {
   forma: string;
@@ -495,6 +501,8 @@ export interface LitMarkupIndex {
   luoghi: string[];
   /** parole del lessico cultuale marcate con <w lemma ana> */
   cultuale: CultOccorrenza[];
+  /** parole notevoli fuori dal lessico cultuale: <w lemma> senza @ana */
+  parole: ParolaIndicizzata[];
   /** parole citate in quanto parole (<mentioned>) */
   mentioned: string[];
   /** categorie dell'Analytical Toolbox applicate a segmenti del testo */
@@ -525,6 +533,7 @@ export function extractLitMarkupIndex(tokens: MarkupToken[]): LitMarkupIndex {
   const luoghi = new Set<string>();
   const mentioned = new Set<string>();
   const cultuale: CultOccorrenza[] = [];
+  const parole: ParolaIndicizzata[] = [];
   const toolbox: LitMarkupIndex['toolbox'] = [];
   const rimandi: LitMarkupIndex['rimandi'] = [];
   let marcature = 0;
@@ -572,12 +581,18 @@ export function extractLitMarkupIndex(tokens: MarkupToken[]): LitMarkupIndex {
         const known = lookupCultLemma(a.lemma);
         const family = (a.ana || '').split(/\s+/).map(x => x.replace(/^#/, ''))
           .find(x => (CULT_FAMILY_IDS as readonly string[]).includes(x)) || known?.family || '';
-        cultuale.push({
-          forma: testoDi(t).trim(),
-          lemma: a.lemma,
-          family,
-          subFunction: known?.subFunction,
-        });
+        // Senza famiglia la parola è notevole ma non cultuale: va nell'indice
+        // dei termini, non nel lessico. Confonderle falserebbe il lessico.
+        if (family) {
+          cultuale.push({
+            forma: testoDi(t).trim(),
+            lemma: a.lemma,
+            family,
+            subFunction: known?.subFunction,
+          });
+        } else {
+          parole.push({ forma: testoDi(t).trim(), lemma: a.lemma, lang: a['xml:lang'] });
+        }
       }
 
       if (t.name === 'rs' && a.type === 'cultFormula') {
@@ -618,6 +633,7 @@ export function extractLitMarkupIndex(tokens: MarkupToken[]): LitMarkupIndex {
     personaggi: [...personaggi],
     luoghi: [...luoghi],
     cultuale,
+    parole,
     mentioned: [...mentioned],
     toolbox,
     rimandi,

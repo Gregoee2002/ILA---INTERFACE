@@ -2053,7 +2053,7 @@ function HomeView({ monumenti, onNavigate, onSearch, effectiveAdmin }: { monumen
   // Il Catalogo raccoglie ciò che è inciso, le Fonti letterarie ciò che è
   // scritto sulla stessa divinità — sono due sezioni pari, non una principale
   // e una accessoria, e la home lo dice mettendole sulla stessa riga.
-  const heroSections: { view: AppView; eyebrow: string; label: string; desc: string; icon: React.ReactNode; tint: string }[] = [
+  const heroSections: { view: AppView; eyebrow: string; label: string; desc: string; icon: React.ReactNode; tint: string; luce: number }[] = [
     {
       view: 'catalog',
       eyebrow: 'Sulla pietra',
@@ -2061,6 +2061,7 @@ function HomeView({ monumenti, onNavigate, onSearch, effectiveAdmin }: { monumen
       desc: 'Sfoglia e filtra tutte le schede epigrafiche del corpus.',
       icon: <Book className="h-6 w-6 md:h-7 md:w-7" />,
       tint: 'var(--accent)',
+      luce: 62,
     },
     {
       view: 'sources',
@@ -2069,6 +2070,8 @@ function HomeView({ monumenti, onNavigate, onSearch, effectiveAdmin }: { monumen
       desc: 'La raccolta ragionata delle testimonianze greche e latine sulla divinità lunare.',
       icon: <ScrollText className="h-6 w-6 md:h-7 md:w-7" />,
       tint: 'var(--lit)',
+      // stessa tinta del Catalogo, tenuta più in luce
+      luce: 88,
     },
   ];
 
@@ -2141,9 +2144,9 @@ function HomeView({ monumenti, onNavigate, onSearch, effectiveAdmin }: { monumen
         </div>
       </div>
 
-      {/* Le due sezioni portanti, affiancate e di pari rango: card scure a
-          contrasto forte, distinte dalla griglia degli strumenti qui sotto.
-          Si distinguono solo per tinta — teal il corpus, ocra i testi. */}
+      {/* Le due sezioni portanti, affiancate e di pari rango. Stessa tinta —
+          il verde del database — ma i testi in una gradazione più chiara:
+          sono lo stesso archivio guardato da due lati, non due archivi. */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
         {heroSections.map((hero, hi) => (
         <motion.button
@@ -2167,7 +2170,7 @@ function HomeView({ monumenti, onNavigate, onSearch, effectiveAdmin }: { monumen
           onClick={() => launchCard(hero.view)}
           className="relative w-full text-left group overflow-hidden rounded-2xl"
           style={{
-            background: `linear-gradient(135deg, color-mix(in srgb, ${hero.tint} 62%, black), color-mix(in srgb, ${hero.tint} 42%, black))`,
+            background: `linear-gradient(135deg, color-mix(in srgb, ${hero.tint} ${hero.luce}%, black), color-mix(in srgb, ${hero.tint} ${hero.luce - 20}%, black))`,
             boxShadow: `
               inset 0 3px 8px rgba(0,0,0,0.45),
               inset 0 -2px 4px rgba(255,255,255,0.06),

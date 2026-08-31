@@ -1,6 +1,4 @@
-// ═══════════════════════════════════════════════════════════════════════
 // litStore.ts — dove vivono, e come si salvano, le fonti letterarie.
-// ═══════════════════════════════════════════════════════════════════════
 //
 // TRE STATI DELLO STESSO CONTENUTO, in ordine di precedenza:
 //
@@ -47,7 +45,6 @@ export interface CaricamentoLit {
 
 const clona = <T,>(x: T): T => JSON.parse(JSON.stringify(x)) as T;
 
-/** Copia profonda: l'editor lavora su una copia, mai sul seme. */
 export const clonaDataset = (d: LitDataset): LitDataset => clona(d);
 
 function normalizza(raw: any): LitDataset | null {
@@ -94,7 +91,6 @@ export async function salvaLitDataset(dataset: LitDataset, message: string): Pro
   }
 }
 
-// ─────────────────────────────────────────────────────────── integrità ─────
 
 export interface ProblemaIntegrita {
   severita: 'errore' | 'avviso';
@@ -102,9 +98,6 @@ export interface ProblemaIntegrita {
   messaggio: string;
 }
 
-/* ================================================================ */
-/* Copertura del markup                                              */
-/* ================================================================ */
 
 /**
  * Le categorie di una testimonianza (divinità, personaggi, luoghi, termini)
@@ -174,7 +167,11 @@ export function coperturaMarkup(testimonia: Testimonium[]): CoperturaTestimonium
       {
         rubrica: 'Termini',
         liberi: t.termini.map(w => w.lemma),
-        marcati: mk ? [...mk.cultuale.flatMap(c => [c.lemma, c.forma]), ...mk.mentioned] : [],
+        marcati: mk
+          ? [...mk.cultuale.flatMap(c => [c.lemma, c.forma]),
+            ...mk.parole.flatMap(w => [w.lemma, w.forma]),
+            ...mk.mentioned]
+          : [],
       },
     ];
 
@@ -303,7 +300,6 @@ export function verificaIntegrita(d: LitDataset): ProblemaIntegrita[] {
   return out;
 }
 
-// ────────────────────────────────────────────────────────── costruttori ────
 
 export const slugify = (s: string) =>
   (s || '').normalize('NFD').replace(/[̀-ͯ]/g, '')
