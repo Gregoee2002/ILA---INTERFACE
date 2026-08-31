@@ -50,7 +50,8 @@ import {
   ExternalLink,
   BookMarked,
   Type,
-  Tags
+  Tags,
+  ScrollText
 } from 'lucide-react';
 import { cn, EASE_OUT, EASE_IN, SPRING_SNAPPY, SPRING_SOFT } from './lib/utils';
 import { ICONOGRAPHY_LABELS } from './lib/iconographyLabels';
@@ -66,6 +67,7 @@ import { MapView } from './components/MapView';
 import { IconographyPanel } from './components/IconographyPanel';
 import { CooccurrenceHeatmap } from './components/CooccurrenceHeatmap';
 import { CultLexiconPanel } from './components/CultLexiconPanel';
+import { LiterarySourcesPanel } from './components/LiterarySourcesPanel';
 import { SectionEditorView } from './components/SectionEditorView';
 import { DraftReviewPanel } from './components/DraftReviewPanel';
 import { UnlockEditingModal } from './components/UnlockEditingModal';
@@ -89,7 +91,7 @@ interface SearchResult {
   matchInSupplied: boolean;
 }
 
-type AppView = 'home' | 'catalog' | 'stats' | 'timeline' | 'health' | 'map' | 'heatmap' | 'cult' | 'editor' | 'review' | 'flags' | 'bugs' | 'biblio';
+type AppView = 'home' | 'catalog' | 'sources' | 'stats' | 'timeline' | 'health' | 'map' | 'heatmap' | 'cult' | 'editor' | 'review' | 'flags' | 'bugs' | 'biblio';
 
 // true sulla build GitHub Pages (vedi vite.config.ts / apiShim.ts): niente
 // server.ts, quindi le funzionalità che dipendevano da Gemini AI o dalla
@@ -1675,6 +1677,7 @@ const RAIL_HOME_MOON = getMoonPhase();
 const RAIL_ITEMS: { view: AppView; label: string; icon: React.ReactNode; adminOnly?: boolean }[] = [
   { view: 'home', label: 'Home', icon: <MoonDisc illum={RAIL_HOME_MOON.illum} waxing={RAIL_HOME_MOON.waxing} size={16} opacity={0.7} /> },
   { view: 'catalog', label: 'Catalogo', icon: <Book className="h-4 w-4" /> },
+  { view: 'sources', label: 'Fonti letterarie', icon: <ScrollText className="h-4 w-4" /> },
   { view: 'map', label: 'Mappa', icon: <MapPin className="h-4 w-4" /> },
   { view: 'timeline', label: 'Cronologia', icon: <Clock className="h-4 w-4" /> },
   { view: 'stats', label: 'Statistiche Epiteti', icon: <BarChart2 className="h-4 w-4" /> },
@@ -2023,8 +2026,28 @@ function HomeView({ monumenti, onNavigate, onSearch, effectiveAdmin }: { monumen
     };
   }, [monumenti]);
 
-  const heroSection: { view: AppView; label: string; desc: string; icon: React.ReactNode } =
-    { view: 'catalog', label: 'Catalogo', desc: 'Sfoglia e filtra tutte le schede epigrafiche del corpus.', icon: <Book className="h-6 w-6 md:h-7 md:w-7" /> };
+  // Le due porte d'ingresso al progetto, affiancate: la pietra e il libro.
+  // Il Catalogo raccoglie ciò che è inciso, le Fonti letterarie ciò che è
+  // scritto sulla stessa divinità — sono due sezioni pari, non una principale
+  // e una accessoria, e la home lo dice mettendole sulla stessa riga.
+  const heroSections: { view: AppView; eyebrow: string; label: string; desc: string; icon: React.ReactNode; tint: string }[] = [
+    {
+      view: 'catalog',
+      eyebrow: 'Sulla pietra',
+      label: 'Catalogo',
+      desc: 'Sfoglia e filtra tutte le schede epigrafiche del corpus.',
+      icon: <Book className="h-6 w-6 md:h-7 md:w-7" />,
+      tint: 'var(--accent)',
+    },
+    {
+      view: 'sources',
+      eyebrow: 'Nei testi',
+      label: 'Fonti letterarie',
+      desc: 'La raccolta ragionata delle testimonianze greche e latine sulla divinità lunare.',
+      icon: <ScrollText className="h-6 w-6 md:h-7 md:w-7" />,
+      tint: 'var(--lit)',
+    },
+  ];
 
   const allSections: { view: AppView; label: string; desc: string; icon: React.ReactNode; adminOnly?: boolean }[] = [
     { view: 'map', label: 'Mappa', desc: 'I siti di ritrovamento, geolocalizzati sul territorio antico.', icon: <MapPin className="h-5 w-5" /> },
@@ -2095,89 +2118,87 @@ function HomeView({ monumenti, onNavigate, onSearch, effectiveAdmin }: { monumen
         </div>
       </div>
 
-      {/* Catalogo in risalto: card scura, contrasto forte, identità distinta dalla griglia sottostante */}
-      <motion.button
-        initial={{ opacity: 0, y: 24, scale: 0.97 }}
-        animate={{
-          opacity: launching && launching !== 'catalog' ? 0 : (launchStage === 'zoom' && launching === 'catalog' ? 0 : 1),
-          y: 0,
-          scale: launching === 'catalog' ? 1.015 : 1,
-        }}
-        transition={{
-          opacity: launchStage === 'zoom' && launching === 'catalog'
-            ? { duration: 0.35, ease: EASE_IN }
-            : { duration: 0.6, delay: 0.1 },
-          scale: { duration: 0.45, ease: EASE_OUT },
-          y: { duration: 0.6, delay: 0.1, ease: EASE_OUT },
-        }}
-        whileHover={!launching ? { y: -4 } : undefined}
-        whileTap={{ scale: 0.99 }}
-        disabled={!!launching}
-        onClick={() => launchCard(heroSection.view)}
-        className="relative w-full mb-8 text-left group overflow-hidden rounded-2xl"
-        style={{
-          background: 'linear-gradient(135deg, color-mix(in srgb, var(--accent) 62%, black), color-mix(in srgb, var(--accent) 42%, black))',
-          boxShadow: `
-            inset 0 3px 8px rgba(0,0,0,0.45),
-            inset 0 -2px 4px rgba(255,255,255,0.06),
-            inset 0 1px 0 rgba(0,0,0,0.3),
-            0 10px 30px -8px rgba(0,0,0,0.35)
-          `,
-        }}
-      >
-        {/* Doppio bordo — bacino lustrale: anello esterno a filo, anello interno arretrato */}
-        <div className="absolute inset-0 rounded-2xl border border-white/30 pointer-events-none" />
-        <div className="absolute inset-[7px] rounded-xl border border-white/[0.06] pointer-events-none" style={{ boxShadow: 'inset 0 1px 4px rgba(0,0,0,0.45)' }} />
-        {/* Motivo brand in filigrana, più leggibile sullo sfondo scuro */}
-        <span
-          className="absolute -right-4 -top-8 text-[9rem] leading-none text-white/[0.07] select-none pointer-events-none"
-          style={{ fontFamily: '"Cinzel", serif' }}
-        >
-          {'\u263E'}
-        </span>
-        <motion.div
-          className="absolute inset-0 pointer-events-none"
-          style={{ background: 'radial-gradient(circle at 18% 25%, rgba(255,255,255,0.16), transparent 60%)' }}
-          initial={{ opacity: 0, scale: 0.6 }}
+      {/* Le due sezioni portanti, affiancate e di pari rango: card scure a
+          contrasto forte, distinte dalla griglia degli strumenti qui sotto.
+          Si distinguono solo per tinta — teal il corpus, ocra i testi. */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+        {heroSections.map((hero, hi) => (
+        <motion.button
+          key={hero.view}
+          initial={{ opacity: 0, y: 24, scale: 0.97 }}
           animate={{
-            opacity: launching === 'catalog' && launchStage !== 'zoom' ? 1 : 0,
-            scale: launching === 'catalog' ? 1.4 : 0.6,
+            opacity: launching && launching !== hero.view ? 0 : (launchStage === 'zoom' && launching === hero.view ? 0 : 1),
+            y: 0,
+            scale: launching === hero.view ? 1.015 : 1,
           }}
-          transition={{ duration: 0.6, ease: EASE_OUT }}
-        />
-        <div className="relative flex flex-col md:flex-row md:items-center justify-between gap-6 md:gap-10 px-7 py-8 md:px-12 md:py-10 text-left">
-          <div className="flex flex-col md:flex-row md:items-center gap-6 md:gap-10 flex-1">
+          transition={{
+            opacity: launchStage === 'zoom' && launching === hero.view
+              ? { duration: 0.35, ease: EASE_IN }
+              : { duration: 0.6, delay: 0.1 + hi * 0.08 },
+            scale: { duration: 0.45, ease: EASE_OUT },
+            y: { duration: 0.6, delay: 0.1 + hi * 0.08, ease: EASE_OUT },
+          }}
+          whileHover={!launching ? { y: -4 } : undefined}
+          whileTap={{ scale: 0.99 }}
+          disabled={!!launching}
+          onClick={() => launchCard(hero.view)}
+          className="relative w-full text-left group overflow-hidden rounded-2xl"
+          style={{
+            background: `linear-gradient(135deg, color-mix(in srgb, ${hero.tint} 62%, black), color-mix(in srgb, ${hero.tint} 42%, black))`,
+            boxShadow: `
+              inset 0 3px 8px rgba(0,0,0,0.45),
+              inset 0 -2px 4px rgba(255,255,255,0.06),
+              inset 0 1px 0 rgba(0,0,0,0.3),
+              0 10px 30px -8px rgba(0,0,0,0.35)
+            `,
+          }}
+        >
+          {/* Doppio bordo — bacino lustrale: anello esterno a filo, anello interno arretrato */}
+          <div className="absolute inset-0 rounded-2xl border border-white/30 pointer-events-none" />
+          <div className="absolute inset-[7px] rounded-xl border border-white/[0.06] pointer-events-none" style={{ boxShadow: 'inset 0 1px 4px rgba(0,0,0,0.45)' }} />
+          {/* Filigrana: la falce per il corpus, il mu di Men/Mene per i testi */}
+          <span
+            className="absolute -right-4 -top-8 text-[9rem] leading-none text-white/[0.07] select-none pointer-events-none"
+            style={{ fontFamily: '"Cinzel", serif' }}
+          >
+            {hero.view === 'catalog' ? '☾' : 'Μ'}
+          </span>
+          <motion.div
+            className="absolute inset-0 pointer-events-none"
+            style={{ background: 'radial-gradient(circle at 18% 25%, rgba(255,255,255,0.16), transparent 60%)' }}
+            initial={{ opacity: 0, scale: 0.6 }}
+            animate={{
+              opacity: launching === hero.view && launchStage !== 'zoom' ? 1 : 0,
+              scale: launching === hero.view ? 1.4 : 0.6,
+            }}
+            transition={{ duration: 0.6, ease: EASE_OUT }}
+          />
+          <div className="relative flex items-start gap-5 md:gap-6 px-6 py-7 md:px-8 md:py-9 text-left">
             <motion.div
-              className="relative w-16 h-16 md:w-20 md:h-20 shrink-0 rounded-full bg-white/10 text-white flex items-center justify-center ring-1 ring-white/25 group-hover:bg-white/20 group-hover:ring-white/40 transition-all self-start md:self-auto shadow-inner"
-              animate={launching === 'catalog' && launchStage === 'lit' ? { scale: [1, 1.15, 1] } : {}}
+              className="relative w-14 h-14 md:w-16 md:h-16 shrink-0 rounded-full bg-white/10 text-white flex items-center justify-center ring-1 ring-white/25 group-hover:bg-white/20 group-hover:ring-white/40 transition-all shadow-inner"
+              animate={launching === hero.view && launchStage === 'lit' ? { scale: [1, 1.15, 1] } : {}}
               transition={{ duration: 0.6, ease: EASE_OUT }}
             >
-              {React.cloneElement(heroSection.icon as React.ReactElement, { className: 'h-7 w-7 md:h-8 md:w-8 text-white/90' })}
+              {React.cloneElement(hero.icon as React.ReactElement, { className: 'h-6 w-6 md:h-7 md:w-7 text-white/90' })}
             </motion.div>
 
-            <div className="w-px h-16 bg-gradient-to-b from-transparent via-white/25 to-transparent hidden md:block shrink-0" />
-
-            <div className="flex-1 min-w-0 flex flex-col justify-center">
-              <div className="text-[9px] md:text-[10px] font-sans font-bold uppercase tracking-[0.25em] text-white/60 mb-2 md:mb-1">Punto di partenza</div>
-              <div className="font-serif font-bold text-white text-3xl md:text-4xl mb-2 md:mb-2 leading-tight tracking-tight">{heroSection.label}</div>
-              <p className="text-sm md:text-base text-white/70 leading-relaxed max-w-lg">{heroSection.desc}</p>
+            <div className="flex-1 min-w-0 flex flex-col justify-center pr-6">
+              <div className="text-[9px] md:text-[10px] font-sans font-bold uppercase tracking-[0.25em] text-white/60 mb-1.5">{hero.eyebrow}</div>
+              <div className="font-serif font-bold text-white text-2xl md:text-3xl mb-2 leading-tight tracking-tight">{hero.label}</div>
+              <p className="text-[13px] md:text-sm text-white/70 leading-relaxed">{hero.desc}</p>
             </div>
-          </div>
 
-          <div className="hidden md:flex flex-col items-center justify-center shrink-0 pl-4">
-            <div className="w-14 h-14 md:w-16 md:h-16 rounded-full border border-white/20 flex items-center justify-center group-hover:bg-white/15 group-hover:border-white/50 transition-all">
-              <ChevronRight className="h-5 w-5 md:h-6 md:w-6 text-white/70 group-hover:text-white group-hover:translate-x-1 transition-all" />
-            </div>
+            <ChevronRight className="absolute right-6 top-9 h-5 w-5 text-white/30 group-hover:text-white group-hover:translate-x-1 transition-all shrink-0" />
           </div>
-          <ChevronRight className="md:hidden absolute right-6 top-10 h-6 w-6 text-white/30 group-hover:text-white group-hover:translate-x-1 transition-all shrink-0" />
-        </div>
-        <motion.div
-          className="absolute inset-0 rounded-[inherit] border border-white/50 pointer-events-none"
-          initial={false}
-          animate={{ opacity: launching === 'catalog' && launchStage !== 'zoom' ? 1 : 0 }}
-          transition={{ duration: 0.4, ease: EASE_OUT }}
-        />
-      </motion.button>
+          <motion.div
+            className="absolute inset-0 rounded-[inherit] border border-white/50 pointer-events-none"
+            initial={false}
+            animate={{ opacity: launching === hero.view && launchStage !== 'zoom' ? 1 : 0 }}
+            transition={{ duration: 0.4, ease: EASE_OUT }}
+          />
+        </motion.button>
+        ))}
+      </div>
 
 
       {/* Accessi rapidi */}
@@ -6179,6 +6200,18 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
             <CultLexiconPanel
               monumenti={monumenti}
               onSelectMonumento={(m) => { setSelectedMonumento(m); setActiveView('catalog'); }}
+            />
+          )}
+          {activeView === 'sources' && (
+            <LiterarySourcesPanel
+              // I ponti dalle testimonianze letterarie al corpus passano dal
+              // campo di ricerca del catalogo, non da id di scheda: restano
+              // validi anche dopo rinumerazioni o aggiunte al corpus.
+              onCorpusSearch={(q) => {
+                setFilters(f => ({ ...f, searchText: q }));
+                setActiveView('catalog');
+                setHasNavigated(true);
+              }}
             />
           )}
           {activeView === 'health' && effectiveAdmin && <CorpusHealth monumenti={monumenti} onSelectMonumento={(m) => { setSelectedMonumento(m); setActiveView('catalog'); }} />}

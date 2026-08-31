@@ -8,6 +8,7 @@
   --card: #FEFEFC;
   --accent: #1F8377;
   --cult: #8B6F9C; /* malva/lilla smorzato — lessico di funzione cultuale (<w>/<rs> cult*) */
+  --lit: #9A6B33;  /* ocra bruciata — sezione «Fonti letterarie» (testimonianze letterarie) */
   --muted: #6E6E66;
   --border: #E1E0D8;
   --shadow-color: 61, 53, 38;
@@ -24,6 +25,7 @@
   --card: #262920;
   --accent: #35BDB3;
   --cult: #C3B0CE; /* malva/lilla smorzato — lessico di funzione cultuale (<w>/<rs> cult*) */
+  --lit: #D9A96B;  /* ocra chiara — sezione «Fonti letterarie» */
   --muted: #8C9084;
   --border: #34372C;
   --shadow-color: 0, 0, 0;
@@ -46,6 +48,7 @@
   --color-card: var(--card);
   --color-accent: var(--accent);
   --color-cult: var(--cult);
+  --color-lit: var(--lit);
   --color-muted: var(--muted);
   --color-border: var(--border);
   
@@ -311,6 +314,10 @@
 
   .custom-scrollbar::-webkit-scrollbar {
     width: 4px;
+    /* Senza `height` la barra orizzontale resta alla misura di default (~15px)
+       e si legge come una fascia scura sotto le righe scorrevoli — la rail
+       inferiore su mobile, la riga dei filtri delle Fonti letterarie. */
+    height: 4px;
   }
   .custom-scrollbar::-webkit-scrollbar-track {
     background: transparent;
