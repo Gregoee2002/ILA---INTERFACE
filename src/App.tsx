@@ -2179,7 +2179,7 @@ function HomeView({ monumenti, onNavigate, onSearch, effectiveAdmin }: { monumen
               animate={launching === hero.view && launchStage === 'lit' ? { scale: [1, 1.15, 1] } : {}}
               transition={{ duration: 0.6, ease: EASE_OUT }}
             >
-              {React.cloneElement(hero.icon as React.ReactElement, { className: 'h-6 w-6 md:h-7 md:w-7 text-white/90' })}
+              {React.cloneElement(hero.icon as React.ReactElement<{ className?: string }>, { className: 'h-6 w-6 md:h-7 md:w-7 text-white/90' })}
             </motion.div>
 
             <div className="flex-1 min-w-0 flex flex-col justify-center pr-6">
@@ -5472,13 +5472,13 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                       >
                         <Upload className="h-3.5 w-3.5" /> Pannello di Importazione Avanzato
                       </button>
-                      <button onClick={exportFilteredData} className="w-full text-left py-2 font-sans text-xs hover:text-accent flex items-center gap-2">
+                      <button onClick={() => exportFilteredData(true)} className="w-full text-left py-2 font-sans text-xs hover:text-accent flex items-center gap-2">
                         <FileJson className="h-3.5 w-3.5" /> Esporta Catalogo Corrente (XML)
                       </button>
                       <button onClick={downloadBackup} className="w-full text-left py-2 font-sans text-xs hover:text-accent flex items-center gap-2">
                         <Download className="h-3.5 w-3.5" /> Scarica Backup teiCorpus
                       </button>
-                      <button onClick={exportToPDF} className="w-full text-left py-2 font-sans text-xs hover:text-accent flex items-center gap-2">
+                      <button onClick={() => exportToPDF(true)} className="w-full text-left py-2 font-sans text-xs hover:text-accent flex items-center gap-2">
                         <FileText className="h-3.5 w-3.5" /> Esporta Catalogo Corrente (PDF)
                       </button>
                     </div>
@@ -5498,7 +5498,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                       >
                         <Upload className="h-3.5 w-3.5" /> Importa
                       </button>
-                      <button onClick={exportFilteredData} className="w-full text-left py-2 font-sans text-xs hover:text-accent flex items-center gap-2">
+                      <button onClick={() => exportFilteredData(true)} className="w-full text-left py-2 font-sans text-xs hover:text-accent flex items-center gap-2">
                         <Download className="h-3.5 w-3.5" /> Esporta XML
                       </button>
                       <button
@@ -7030,8 +7030,8 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                         <div className="grid md:grid-cols-2 gap-6 border border-border/40 bg-sidebar/20 p-5 md:p-6 rounded-sm font-serif text-xs leading-relaxed text-ink/80">
                           <div>
                             <h4 className="text-[10px] font-sans font-bold uppercase tracking-widest text-accent mb-3 pb-1 border-b border-border/30">Layout & Supporto Materiale</h4>
-                            {(selectedMonumento.layout_desc || selectedMonumento.supporto) && (
-                              <p className="mb-3 text-ink-70 select-text font-serif leading-relaxed">{selectedMonumento.layout_desc || selectedMonumento.supporto}</p>
+                            {selectedMonumento.layout_desc && (
+                              <p className="mb-3 text-ink-70 select-text font-serif leading-relaxed">{selectedMonumento.layout_desc}</p>
                             )}
                             <div className="space-y-1.5 text-[10px] font-sans border-t border-border/20 pt-2.5">
                               {selectedMonumento.scrittura && (
