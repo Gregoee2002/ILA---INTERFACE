@@ -162,10 +162,12 @@ ottico e trascrizione dei testi epigrafici. La sezione 5 presenta
 l'organizzazione dell'interfaccia digitale, con particolare attenzione,
 nella sottosezione 5.1, alla sezione dedicata all'iconografia dei
 monumenti, nella sottosezione 5.2 alla navigazione tra divinità, epiteti
-e registro onomastico, nella sottosezione 5.3 agli strumenti di ricerca
-e nella sottosezione 5.4 alla vista di navigazione cronologica del
-corpus. Infine, nella sezione 6 si propongono alcune considerazioni
-finali e le prospettive di sviluppo futuro del progetto.
+e registro onomastico, nella sottosezione 5.3 al lessico delle funzioni
+cultuali marcato all'interno del testo epigrafico, nella sottosezione
+5.4 agli strumenti di ricerca e nella sottosezione 5.5 alla vista di
+navigazione cronologica del corpus. Infine, nella sezione 6 si
+propongono alcune considerazioni finali e le prospettive di sviluppo
+futuro del progetto.
 
 \screenshotplaceholder{7cm}{Pagina iniziale dell'interfaccia digitale di ILA}
 
@@ -199,6 +201,27 @@ nell'interfaccia grafica, così da garantire che la scheda visualizzata
 dall'utente sia sempre generata direttamente dalla codifica filologica
 sottostante, e non da una rappresentazione parallela soggetta a
 disallineamento.
+
+Sulla stessa scheda, il testo dell'iscrizione può essere consultato
+secondo due modalità di resa alternative, selezionabili con un unico
+comando e mantenute come preferenza dell'utente per l'intera sessione
+di consultazione. La modalità predefinita corrisponde a quanto appena
+descritto, arricchita dal markup diacritico che segnala visivamente ---
+attraverso colore, sottolineatura o notazione tra parentesi --- i
+singoli fenomeni testuali previsti dal sistema di marcatura filologica
+illustrato nella sezione 3: integrazioni editoriali, lettere di lettura
+incerta, lacune, e così via. Accanto a questa è disponibile una resa
+alternativa, pensata per chi desidera leggere il solo testo continuo
+dell'iscrizione senza l'apparato di segnalazione editoriale
+sovrapposto: le integrazioni vengono sciolte silenziosamente nel testo,
+le lettere incerte e le lacune restituite senza parentesi né
+sottolineature, ed è soppressa ogni notazione cromatica o interattiva,
+lasciando sulla pagina la sola sequenza delle lettere, disposta secondo
+l'andamento delle righe e dei versi originali. Le due rese restano
+generate, l'una come l'altra, dalla medesima codifica filologica
+sottostante: la scelta riguarda unicamente il modo in cui quella
+codifica viene presentata all'occhio del lettore, non un diverso dato
+di partenza.
 
 \screenshotplaceholder{8cm}{Esempio di scheda epigrafica nell'interfaccia di consultazione}
 
@@ -266,6 +289,33 @@ filologico che a uno sviluppo di funzionalità in senso stretto, ma che
 condiziona direttamente l'affidabilità di qualunque strumento --- di
 consultazione, di ricerca o di analisi comparativa --- costruito a valle
 su questa informazione (si veda, in particolare, la sezione 5.2).
+
+A supporto di questo lavoro di revisione, per sua natura mai
+definitivamente concluso su un corpus in continua verifica, è stato
+affiancato uno strumento diagnostico che segnala, senza mai correggere
+automaticamente il dato, alcune configurazioni di classificazione
+potenzialmente problematiche riscontrabili sull'intero corpus. Lo
+strumento porta all'attenzione di chi cura l'edizione tre situazioni
+distinte: divinità attestate in più schede che non compaiono però mai
+come unica divinità nominata nell'iscrizione, condizione che, quando la
+forma condivide elementi testuali con un teonimo co-presente nella
+stessa epigrafe, può segnalare una variante grafica di una divinità già
+censita sotto un'altra forma, ma che altrimenti resta una semplice nota
+informativa, non necessariamente anomala, in un corpus in cui numerose
+divinità minori non compaiono mai isolate; forme attestate nel corpus
+in alcuni casi come nome di una divinità e in altri come epiteto di
+un'altra, un'ambivalenza che una lettura rapida della singola scheda
+difficilmente farebbe emergere; ed epiteti attribuiti dalla
+classificazione corrente a più divinità distinte, situazione che può
+riflettere una condivisione cultuale storicamente genuina --- non
+infrequente nel politeismo antico, dove più figure divine possono
+condividere lo stesso appellativo --- oppure derivare da una
+contaminazione dovuta alla semplice co-presenza dei due nomi in una
+stessa iscrizione. In tutti e tre i casi lo strumento resta puramente
+segnaletico: la decisione se una configurazione individuata rappresenti
+un'anomalia da correggere o un fenomeno storicamente genuino da
+conservare resta affidata, come per il resto del lavoro di revisione,
+alla verifica diretta sulle fonti primarie.
 
 \screenshotplaceholder{7.5cm}{Strumento assistito di marcatura filologica in azione su una voce del corpus}
 
@@ -338,7 +388,7 @@ sezione bibliografica che raccoglie i repertori e i corpora di
 riferimento; una sezione geografica che consente di visualizzare la
 distribuzione spaziale delle attestazioni su una mappa interattiva; e
 una sezione di ricerca avanzata, descritta più diffusamente nella
-sottosezione 5.3. Ogni scheda descrittiva è corredata, ove disponibile,
+sottosezione 5.4. Ogni scheda descrittiva è corredata, ove disponibile,
 di materiale fotografico del monumento e riporta, oltre al testo
 dell'iscrizione e ai principali attributi epigrafici, un rimando
 puntuale alla codifica filologica sottostante, liberamente
@@ -663,6 +713,203 @@ corpus debba costare all'utente il minor numero di passaggi possibile.
 \screenshotplaceholder{8cm}{Elenco diagonale delle divinità ed epiteti, in stile locandina}
 
 \screenshotplaceholder{8cm}{Rubrica onomastica alfabetica con indice laterale A--Z}
+
+\subsection{Il lessico delle funzioni cultuali}
+
+Il sistema di marcatura filologica descritto nella sezione 3 permette
+di riconoscere, all'interno del testo di ciascuna iscrizione, i nomi
+delle divinità e i rispettivi epiteti; il vocabolario controllato
+discusso nella sezione 5.1 permette di descrivere, in forma
+strutturata, l'apparato figurato che accompagna il monumento. Resta
+tuttavia scoperto un terzo livello di informazione, distinto da
+entrambi: quello delle singole parole e locuzioni del testo epigrafico
+che, senza essere né un nome divino né un epiteto, veicolano un preciso
+significato religioso o rituale --- un verbo che descrive un atto di
+dedica, un termine che designa una carica sacerdotale, una formula
+fissa di saluto funerario o di invocazione. Si è scelto di introdurre,
+accanto ai due livelli già descritti, un terzo strato di marcatura,
+applicato direttamente al testo dell'edizione, che rende esplicita e
+interrogabile la funzione cultuale delle singole parole o formule
+rilevanti.
+
+Non si tratta di una lemmatizzazione integrale del testo epigrafico,
+operazione deliberatamente scartata perché avrebbe richiesto di
+annotare ogni singola parola del corpus indipendentemente dalla sua
+rilevanza per lo studio del culto, con un costo di marcatura
+sproporzionato rispetto al beneficio interpretativo. Il nuovo strato di
+marcatura resta invece, come il vocabolario iconografico,
+\emph{selettivo}: si applica soltanto a un insieme delimitato di
+termini --- alcune decine di lemmi, individuati attraverso uno spoglio
+sistematico dell'intero corpus --- il cui significato religioso o
+rituale è considerato meritevole di essere reso interrogabile a sé
+stante.
+
+A ciascuna parola o formula marcata l'editor associa un'unica scelta,
+guidata da una domanda deliberatamente semplice: chi è il soggetto
+dell'azione denotata dalla parola, il dio o l'uomo? Se il soggetto è il
+dio, la parola appartiene alla famiglia che raccoglie tutto ciò in cui
+la divinità agisce in prima persona --- la sua signoria su un luogo, la
+manifestazione della propria potenza, il castigo inflitto a un
+colpevole, l'ascolto di una richiesta, una disposizione favorevole
+verso il fedele. Se il soggetto è l'uomo, si distinguono tre casi
+ulteriori: la parola può descrivere un atto rituale o giuridico-sacro
+che il fedele compie o registra --- una dedica, un voto, una
+consacrazione, una confessione di colpa, una norma che regola l'accesso
+al santuario ---, oppure può nominare la trasgressione dell'uomo,
+distintamente dal castigo che ne consegue e che appartiene invece alla
+prima famiglia, oppure, ancora, può designare un ruolo, un'istituzione
+o uno status personale --- un sacerdozio, un'associazione cultuale, una
+comunità, la condizione di chi è stato allevato nel santuario. Una
+quinta famiglia, residuale rispetto alle prime quattro, raccoglie
+infine le locuzioni fisse che, isolate dalla formula in cui compaiono,
+non veicolerebbero alcun significato autonomo --- un saluto funerario,
+un'acclamazione, un'invocazione di pioggia, un'imprecazione a tutela
+del monumento.
+
+Questa scelta a cinque vie, per quanto essenziale, non esaurisce da
+sola la varietà semantica delle parole marcate: un termine che indica
+il castigo divino e uno che indica l'ascolto di una richiesta
+appartengono entrambi alla stessa famiglia --- il dio come soggetto
+agente --- pur denotando azioni ben distinte. Anziché chiedere
+all'editor di scegliere, per ciascuna occorrenza, tra una ventina di
+sfumature funzionali fini, si è preferito separare nettamente le due
+decisioni: in fase di marcatura l'editor assegna solo la famiglia, una
+scelta rapida e difficilmente equivoca; la sfumatura più fine --- il
+\virg{castigo} distinto dall'\virg{ascolto}, la \virg{dedica} distinta
+dal \virg{voto} --- non è una decisione editoriale, ma una proprietà
+del lemma stesso, ricavata automaticamente da una tabella di
+corrispondenza compilata una volta per tutte sullo spoglio del corpus.
+È lo stesso principio già discusso a proposito del vocabolario
+iconografico (sezione 5.1): tenere separato un livello sintetico,
+scelto a mano e poco soggetto a errore, da un livello più fine derivato
+meccanicamente da un'unica tabella di riferimento, evitando così che la
+responsabilità di un'analisi semantica fine ricada, occorrenza per
+occorrenza, su chi cura la marcatura del testo.
+
+Sul piano della marcatura vera e propria, si distinguono due casi.
+Quando il significato cultuale risiede in una singola parola, questa
+viene marcata individualmente, insieme alla propria forma di citazione
+normalizzata --- utile per raggruppare, nella vista d'indice descritta
+più sotto, occorrenze morfologicamente diverse della stessa voce di
+vocabolario --- e, ove disponibile, un rimando a un lessico greco di
+riferimento esterno. Quando invece il significato cultuale risiede in
+una locuzione fissa che, smembrata nelle sue parole costitutive,
+perderebbe di senso --- il caso tipico è una formula funeraria o
+un'invocazione rituale in versi ---, è la locuzione intera a essere
+marcata come unità, e non le singole parole che la compongono; se al
+suo interno compare comunque un termine dotato di significato autonomo
+appartenente a una delle altre quattro famiglie, questo mantiene la
+propria marcatura puntuale, annidata all'interno della formula. Il
+Codice~\ref{lst:cultlex} illustra, in forma semplificata, entrambi i
+casi: una parola singola che descrive un atto di dedica e una locuzione
+fissa priva di testa lessicale autonoma.
+
+\begin{lstlisting}[language=XML, caption={Markup di esempio per una
+parola del lessico cultuale (atto di dedica) e per una locuzione fissa
+priva di significato autonomo al di fuori della formula},
+label={lst:cultlex}]
+<w lemma="[forma normalizzata del verbo]" ana="#atto-cultuale">[forma
+attestata nel testo]</w>
+
+<rs type="cultFormula" ana="#formula-fissa">[locuzione fissa, es. un
+saluto funerario]</rs>
+\end{lstlisting}
+
+Questo nuovo strato di marcatura resta deliberatamente estraneo ai nomi
+divini e ai rispettivi epiteti, il cui trattamento --- descritto nella
+sezione 3 --- non viene in alcun modo duplicato o sovrapposto: un
+epiteto divino continua a essere gestito esclusivamente dal meccanismo
+già descritto, e non viene mai marcato una seconda volta come termine
+del lessico cultuale. Lo strumento assistito di marcatura effettua
+inoltre, in questo caso come in quello già descritto per la
+classificazione di divinità ed epiteti (sezione 3), un controllo di
+coerenza puramente diagnostico: verifica che la famiglia scelta per
+un'occorrenza corrisponda a quella registrata per il lemma nella
+tabella di riferimento, segnala i casi in cui una parola del
+vocabolario compare senza famiglia associata, e individua le
+sovrapposizioni indebite tra questo strato e quello già dedicato ai
+nomi divini. Anche qui nessuna correzione avviene in modo automatico:
+lo strumento segnala, la decisione resta alla verifica filologica
+diretta sul testo.
+
+Questo terzo livello di marcatura non sostituisce, ma completa, la
+classificazione del monumento nel suo complesso già descritta nella
+sezione 5.1 attraverso il vocabolario iconografico: quest'ultima
+assegna a ciascuna scheda un'unica etichetta di tipo generale ---
+votiva, norma santuariale, confessione, onoraria, funeraria --- mentre
+il lessico cultuale marca, all'interno del medesimo testo, tutte le
+singole parole o formule che ne costituiscono la prova testuale
+puntuale. Le due classificazioni restano due assi distinti e non
+ridondanti dello stesso impianto di dati: un'iscrizione classificata
+come confessione, ad esempio, conterrà tipicamente termini delle
+famiglie della trasgressione umana e del castigo divino, insieme a
+termini che ne registrano la confessione verbale o il riscatto, ma è
+proprio la presenza di questi ultimi nel testo, e non un'assunzione a
+priori, a motivare l'etichetta assegnata all'intera scheda. Un caso
+particolare ha inoltre richiesto l'aggiunta di un nuovo valore al
+vocabolario iconografico di livello monumento: un piccolo gruppo di
+iscrizioni legate a una pratica oracolare basata sul lancio di
+astragali (ossicini), la cui natura oracolare --- un responso in versi,
+una combinazione di lanci --- è una proprietà dell'intero testo e non
+di una singola parola isolabile, e per questo trova posto più
+correttamente accanto alle altre etichette di tipo monumento che nel
+lessico di parola qui descritto.
+
+A questo strato di marcatura è associata, come per l'onomastica
+descritta nella sottosezione precedente, una vista di navigazione
+dedicata, pensata per lo studio comparativo del lessico religioso
+sull'intero corpus piuttosto che per la consultazione della singola
+epigrafe. La vista raccoglie tutte le occorrenze rilevate, e le
+presenta secondo due modalità di raggruppamento alternative: per
+famiglia funzionale, con le voci suddivise in cinque sezioni corredate
+da un conteggio complessivo, oppure come elenco unico ordinato per
+frequenza discendente attraverso l'intero vocabolario, indipendentemente
+dalla famiglia di appartenenza. Ogni voce di vocabolario può essere
+aperta per rivelarne le singole attestazioni testuali, con accesso
+diretto alla scheda descrittiva dell'iscrizione corrispondente, secondo
+lo stesso principio di immediatezza già adottato per le altre viste di
+navigazione dell'interfaccia; la vista dispone inoltre di un filtro per
+regione geografica, di un filtro per famiglia funzionale e di un campo
+di ricerca libera esteso al lemma, alle forme testuali effettivamente
+attestate e alla sfumatura funzionale fine.
+
+Per rendere immediatamente confrontabile, a colpo d'occhio, la
+frequenza relativa delle diverse voci di vocabolario, ciascuna è
+affiancata da una barra la cui lunghezza è proporzionale non al numero
+di attestazioni in sé, ma alla sua radice quadrata. La scelta non è
+arbitraria: nel corpus alcuni termini --- un voto, una dedica ---
+ricorrono con una frequenza molto più alta di altri, che pur restando
+significativi per la ricostruzione della prassi cultuale compaiono solo
+in una manciata di schede; se la lunghezza della barra fosse
+proporzionale al conteggio assoluto, i termini più frequenti
+finirebbero per occupare per intero lo spazio disponibile, schiacciando
+visivamente ogni confronto tra i termini di frequenza intermedia, che
+sono spesso quelli analiticamente più interessanti. Indicando con
+$n(l)$ il numero di attestazioni del lemma $l$ e con $n_{\max}$ il
+numero di attestazioni del lemma più frequente fra quelli attualmente
+visualizzati (tenendo conto degli eventuali filtri applicati), la
+lunghezza della barra associata a $l$ è calcolata come
+
+\[
+  \ell(l) \;=\; \frac{\sqrt{n(l)}}{\sqrt{n_{\max}}} \times 100\%.
+\]
+
+La radice quadrata comprime il campo di variazione senza alterarne
+l'ordinamento --- un lemma più frequente di un altro produce sempre una
+barra più lunga --- ma attenua la sproporzione visiva tra i valori
+estremi rispetto a una scala lineare, con un effetto di compressione
+più contenuto rispetto a quello di una scala logaritmica e il
+vantaggio, per un pubblico non necessariamente avvezzo alla lettura di
+grafici tecnici, di restare ancorata a zero: un lemma non attestato ha
+sempre barra di lunghezza nulla, senza le discontinuità che una scala
+logaritmica introdurrebbe in prossimità dello zero. Accanto alla barra
+resta comunque sempre visibile il conteggio assoluto delle
+attestazioni, cosicché la rappresentazione grafica orienti la lettura
+senza mai sostituirsi al dato numerico sottostante --- lo stesso
+principio di trasparenza già osservato a proposito della heatmap delle
+co-occorrenze (sezione 5.1).
+
+\screenshotplaceholder{7.5cm}{Vista del lessico cultuale, con raggruppamento per famiglia funzionale e barre proporzionali alla radice delle attestazioni}
 
 \subsection{Ricerca}
 
