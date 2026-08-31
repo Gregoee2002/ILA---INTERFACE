@@ -2278,7 +2278,7 @@ function toRoman(num: number): string {
 // datazione. Le barre che si sovrappongono nel tempo scendono nella prima corsia
 // libera sotto di loro — un impaccamento a intervalli letto dall'alto in basso, non
 // un raggruppamento che nasconde schede né diramazioni curve.
-function Timeline({ monumenti, onSelect }: { monumenti: Monumento[], onSelect: (m: Monumento) => void }) {
+function Timeline({ monumenti, onSelect, paused = false }: { monumenti: Monumento[], onSelect: (m: Monumento) => void, paused?: boolean }) {
   const [hoverX, setHoverX] = useState<number | null>(null);
   const [zoom, setZoom] = useState(1);
   const axisRef = useRef<HTMLDivElement>(null);
@@ -2352,6 +2352,13 @@ function Timeline({ monumenti, onSelect }: { monumenti: Monumento[], onSelect: (
   }, [sorted]);
 
   const isOverview = zoom < 1;
+
+  // In panoramica la cascata è disegnata a scala di layout fissa e poi rimpicciolita
+  // da `transform: scale(zoom)` (zoom di fit ~0.3 per un corpus di ~10 secoli). Le
+  // etichette dei secoli e i pallini del conteggio sono pensati "grandi", ma quel
+  // transform li schiacciava a ~7px, illeggibili. Qui li contro-scaliamo di 1/zoom
+  // così tornano alla dimensione dichiarata a schermo, indipendente dallo zoom.
+  const overviewScale = isOverview && zoom > 0 ? 1 / zoom : 1;
 
   // Geometria della cascata: RULE_Y separa le intestazioni dei secoli (sempre in cima,
   // come le colonne di fase di un diagramma di Gantt) dalle barre; CASCADE_TOP è dove
@@ -2493,15 +2500,19 @@ function Timeline({ monumenti, onSelect }: { monumenti: Monumento[], onSelect: (
     if (scrollRef.current) scrollRef.current.scrollLeft = 0;
   };
 
-  // Esc come scorciatoia rapida per tornare alla vista di default.
+  // Esc come scorciatoia rapida per tornare alla vista di default — ma non
+  // quando la timeline è "in pausa" (una scheda aperta sopra di lei la copre):
+  // in quel caso Esc deve chiudere la scheda, non reimpostare di nascosto lo
+  // zoom di una vista che l'utente non sta nemmeno guardando.
   useEffect(() => {
+    if (paused) return;
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') handleZoomReset();
     };
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [paused]);
 
   // Click diretto sull'asse (fuori da una barra): zoom interattivo centrato sul punto
   // cronologico cliccato. Le barre fermano la propagazione del click.
@@ -2540,6 +2551,16 @@ function Timeline({ monumenti, onSelect }: { monumenti: Monumento[], onSelect: (
          modo di tornare alla panoramica) restano come una piccola toolbar fluttuante, fuori
          dall'area di scroll così non scorre via col contenuto. */
       <div className="relative flex-1 min-h-0">
+        {sorted.length < monumenti.length && (
+          <div
+            className="absolute top-3 left-3 z-20 h-8 px-3 rounded-full flex items-center gap-1.5 text-[10px] font-sans font-bold text-muted bg-parchment/90 border border-border/60 shadow-sm backdrop-blur-sm"
+            title={`Solo le schede con una datazione numerica (notBefore/notAfter) compaiono nella cronologia. Le altre ${monumenti.length - sorted.length} non hanno estremi cronologici sfruttabili.`}
+          >
+            <Clock className="h-3.5 w-3.5 text-muted/70" />
+            <span className="tabular-nums text-ink">{sorted.length}</span>
+            <span className="uppercase tracking-wide">di {monumenti.length} schede datate</span>
+          </div>
+        )}
         <div className="absolute top-3 right-3 z-20 flex items-center gap-2">
           <button
             onClick={handleZoomReset}
@@ -2648,19 +2669,28 @@ function Timeline({ monumenti, onSelect }: { monumenti: Monumento[], onSelect: (
                       style={{ left: bandLeft, width: bandWidth, top: 0, height: cascadeHeight }}
                       onClick={count > 0 ? (e) => { e.stopPropagation(); handleCenturyClick(c, e.clientX); } : undefined}
                     >
-                      {bandWidth > 30 && (
-                        <div className="absolute flex items-center gap-2" style={{ left: 6, top: 2 }}>
-                          <div className={`bg-accent rounded-full shrink-0 ${isOverview ? 'w-2 h-9' : 'w-1 h-5'}`} />
-                          <span className={`font-sans font-extrabold uppercase tracking-wider whitespace-nowrap ${isOverview ? 'text-[23px] text-ink' : 'text-[10px] text-ink/75'}`}>{label}</span>
+                      {/* La soglia è sulla larghezza REALE a schermo (bandWidth è in px di
+                          layout, va moltiplicata per lo zoom): sotto ~64px di colonna
+                          l'etichetta si sovrapporrebbe a quella accanto. In dettaglio
+                          (zoom >= 1) la colonna è sempre larga, quindi resta sempre visibile. */}
+                      {bandWidth * zoom > 64 && (
+                        <div
+                          className="absolute flex items-center gap-2"
+                          style={{ left: 6, top: 2, transform: isOverview ? `scale(${overviewScale})` : undefined, transformOrigin: 'left top' }}
+                        >
+                          <div className={`bg-accent rounded-full shrink-0 ${isOverview ? 'w-1.5 h-5' : 'w-1 h-5'}`} />
+                          <span className={`font-sans font-extrabold uppercase tracking-wider whitespace-nowrap ${isOverview ? 'text-[13px] text-ink' : 'text-[10px] text-ink/75'}`}>{label}</span>
                         </div>
                       )}
                       <div className="absolute border-l border-dashed border-border" style={{ left: 0, top: RULE_Y, bottom: 0 }} />
-                      {isOverview && count > 0 && bandWidth > 20 && (
-                        <div
-                          className="absolute rounded-full bg-accent/15 border-2 border-accent/50 text-accent text-2xl font-sans font-bold flex items-center justify-center"
-                          style={{ left: '50%', top: RULE_Y + 40, minWidth: 60, height: 60, padding: '0 12px', transform: 'translateX(-50%)' }}
-                        >
-                          {count}
+                      {isOverview && count > 0 && bandWidth * zoom > 44 && (
+                        <div className="absolute" style={{ left: '50%', top: RULE_Y + 40, transform: 'translateX(-50%)' }}>
+                          <div
+                            className="rounded-full bg-accent/15 border-2 border-accent/50 text-accent text-base font-sans font-bold flex items-center justify-center"
+                            style={{ minWidth: 40, height: 40, padding: '0 10px', transform: `scale(${overviewScale})`, transformOrigin: 'top center' }}
+                          >
+                            {count}
+                          </div>
                         </div>
                       )}
                     </div>
@@ -3972,6 +4002,23 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
     if (!selectedMonumento) return;
     setActiveRecordSection('supporto');
   }, [selectedMonumento?.id]);
+
+  // Esc chiude la scheda aperta. Registrato in "capture" così ha la precedenza
+  // sugli altri handler di Esc montati più in basso (es. il reset zoom della
+  // Cronologia, che resta montata sotto il modal): senza questo, con una scheda
+  // aperta dalla Cronologia premere Esc non chiudeva la scheda e reimpostava
+  // di nascosto lo zoom della timeline sottostante.
+  useEffect(() => {
+    if (!selectedMonumento) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        e.stopImmediatePropagation();
+        setSelectedMonumento(null);
+      }
+    };
+    window.addEventListener('keydown', onKey, true);
+    return () => window.removeEventListener('keydown', onKey, true);
+  }, [selectedMonumento]);
 
   const goToRecordSection = (id: string) => {
     setActiveRecordSection(id);
@@ -6175,7 +6222,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
               onInitialEntryIdConsumed={() => setEditorTargetEntryId(null)}
             />
           )}
-          {activeView === 'timeline' && <Timeline monumenti={monumenti} onSelect={setSelectedMonumento} />}
+          {activeView === 'timeline' && <Timeline monumenti={monumenti} onSelect={setSelectedMonumento} paused={!!selectedMonumento} />}
           {activeView === 'map' && <MapView monumenti={monumenti} onSelectMonumento={(id) => { const m = monumenti.find(x => x.id.toString() === id || x.entryId === id); if (m) { setSelectedMonumento(m); setActiveView('catalog'); } }} />}
         </motion.div>
         </section>
@@ -7117,7 +7164,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                                       : <><Type className="h-3 w-3" /> Trascrizione pura</>}
                                   </button>
                                 )}
-                                <div className="relative z-10 max-w-[62ch] mx-auto pl-10 border-l-2 border-border/40 max-h-[52vh] overflow-y-auto custom-scrollbar pr-4">
+                                <div className="relative z-10 max-w-[62ch] mx-auto pl-10 border-l-2 border-border/40 max-h-[52vh] overflow-y-auto custom-scrollbar pr-4 pt-10">
                                   {selectedMonumento.testo ? (
                                     <EpiDocRenderer
                                       xml={selectedMonumento.testo}
