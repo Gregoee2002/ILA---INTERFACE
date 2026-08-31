@@ -536,6 +536,53 @@ export interface PonteLetterario {
   perEpiteto: Map<string, TestimoniumRisolto[]>;
 }
 
+export interface OccorrenzaLetteraria {
+  testimoniumId: string;
+  /** «Str. Geogr. 12.8.14» */
+  cita: string;
+  forma: string;
+  lingua: 'grc' | 'lat';
+}
+
+export interface LemmaLetterario {
+  lemma: string;
+  family: string;
+  subFunction?: string;
+  /** forme attestate, per frequenza */
+  forme: string[];
+  occorrenze: OccorrenzaLetteraria[];
+}
+
+// Il lessico cultuale visto dai testi. Sta a parte dall'indice epigrafico e non
+// vi confluisce: sono due bacini che si accostano, e sommarli vorrebbe dire
+// contare ἀνέθηκεν inciso su una stele e ἀνέθηκεν letto in un poeta come se
+// fossero la stessa cosa. Il primo è un atto di dedica, il secondo l'uso di una
+// parola.
+//
+// Solo le parole con famiglia cultuale (`<w lemma ana>`): quelle senza @ana
+// sono notevoli ma non cultuali, e appartengono all'indice dei Termini.
+export function lessicoLetterario(testimonia: TestimoniumRisolto[]): Map<string, LemmaLetterario> {
+  const out = new Map<string, LemmaLetterario>();
+  for (const t of testimonia) {
+    for (const c of markupIndexOf(t).cultuale) {
+      if (!c.lemma || !c.family) continue;
+      let e = out.get(c.lemma);
+      if (!e) {
+        e = { lemma: c.lemma, family: c.family, subFunction: c.subFunction, forme: [], occorrenze: [] };
+        out.set(c.lemma, e);
+      }
+      if (c.forma && !e.forme.includes(c.forma)) e.forme.push(c.forma);
+      e.occorrenze.push({
+        testimoniumId: t.id,
+        cita: citaBreve(t),
+        forma: c.forma,
+        lingua: t.lingua,
+      });
+    }
+  }
+  return out;
+}
+
 export function costruisciPonte(testimonia: TestimoniumRisolto[]): PonteLetterario {
   const perDivinita = new Map<string, TestimoniumRisolto[]>();
   const perEpiteto = new Map<string, TestimoniumRisolto[]>();

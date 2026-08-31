@@ -6239,6 +6239,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
             <CultLexiconPanel
               monumenti={monumenti}
               onSelectMonumento={(m) => { setSelectedMonumento(m); setActiveView('catalog'); }}
+              onVaiAllaFonte={(id) => { setFonteTarget(id); setActiveView('sources'); setHasNavigated(true); }}
             />
           )}
           {activeView === 'sources' && (

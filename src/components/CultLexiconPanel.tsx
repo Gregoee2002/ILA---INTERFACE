@@ -1,13 +1,17 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Monumento } from '../types';
 import { cn } from '../lib/utils';
 import { buildCultIndex, CultLemmaStats } from '../lib/cultIndex';
 import { CULT_FAMILIES } from '../lib/cultLexicon';
-import { Tags, ExternalLink, ChevronRight, ChevronDown, Search } from 'lucide-react';
+import { LemmaLetterario, lessicoLetterario, risolviTutte } from '../lib/litSources';
+import { caricaLitDatasetCondiviso } from '../lib/litStore';
+import { Tags, ExternalLink, ChevronRight, ChevronDown, Search, ScrollText } from 'lucide-react';
 
 interface Props {
   monumenti: Monumento[];
   onSelectMonumento: (m: Monumento) => void;
+  /** apre una testimonianza nella sezione Fonti letterarie */
+  onVaiAllaFonte?: (testimoniumId: string) => void;
 }
 
 type GroupBy = 'family' | 'lemma';
@@ -32,7 +36,7 @@ const FIELD_BASE =
   'bg-[var(--card)] dark:bg-black/25 border border-[var(--border)]/50 dark:border-white/5 rounded-lg font-sans text-xs outline-none shadow-inner focus:border-accent/50 focus:ring-1 focus:ring-accent/30 hover:bg-[var(--sidebar)] dark:hover:bg-black/40 transition-all duration-300';
 const FIELD_STYLE = { backgroundColor: 'var(--card)', color: 'var(--ink)' } as const;
 
-export const CultLexiconPanel: React.FC<Props> = ({ monumenti, onSelectMonumento }) => {
+export const CultLexiconPanel: React.FC<Props> = ({ monumenti, onSelectMonumento, onVaiAllaFonte }) => {
   const [search, setSearch] = useState('');
   const [regione, setRegione] = useState('');
   const [familyFilter, setFamilyFilter] = useState('');
@@ -48,6 +52,20 @@ export const CultLexiconPanel: React.FC<Props> = ({ monumenti, onSelectMonumento
     monumenti.forEach(x => m.set(x.id, x));
     return m;
   }, [monumenti]);
+
+  // Il bacino letterario resta un oggetto suo: si accosta all'indice
+  // epigrafico riga per riga, non vi confluisce. Il filtro per regione non lo
+  // tocca — un passo di Strabone non ha una regione di ritrovamento.
+  const [letterario, setLetterario] = useState<Map<string, LemmaLetterario>>(new Map());
+  useEffect(() => {
+    let vivo = true;
+    caricaLitDatasetCondiviso().then(({ dataset }) => {
+      if (vivo) setLetterario(lessicoLetterario(risolviTutte(dataset.testimonia, dataset.opere)));
+    });
+    return () => { vivo = false; };
+  }, []);
+
+  const occorrenzeLetterarie = [...letterario.values()].reduce((n, l) => n + l.occorrenze.length, 0);
 
   const tokens = foldForSearch(search).split(/\s+/).filter(Boolean);
 
@@ -76,6 +94,7 @@ export const CultLexiconPanel: React.FC<Props> = ({ monumenti, onSelectMonumento
     const key = `${l.family}::${l.lemma}`;
     const open = expanded.has(key);
     const color = famColor(l.family);
+    const lett = letterario.get(l.lemma);
     const barPct = Math.max(2, (Math.sqrt(l.count) / Math.sqrt(maxCount)) * 100);
     return (
       <div key={key} className="rounded-sm">
@@ -100,6 +119,14 @@ export const CultLexiconPanel: React.FC<Props> = ({ monumenti, onSelectMonumento
 
           <span className="shrink-0 w-8 text-right text-xs font-sans text-muted/80 tabular-nums">
             {l.count}
+          </span>
+
+          {/* Due numeri accanto, mai un totale: la pietra e i testi si contano
+              separatamente perché non provano la stessa cosa. */}
+          <span className="shrink-0 w-10 text-right text-xs font-sans tabular-nums"
+            style={{ color: 'var(--lit)' }}
+            title={lett ? `${lett.occorrenze.length} nei testi letterari` : undefined}>
+            {lett ? `+${lett.occorrenze.length}` : ''}
           </span>
 
           {l.subFunction && (
@@ -160,15 +187,113 @@ export const CultLexiconPanel: React.FC<Props> = ({ monumenti, onSelectMonumento
                 );
               })}
             </div>
+
+            {lett && (
+              <div className="mt-2.5 pt-2 border-t border-border/30">
+                <div className="flex items-baseline gap-1.5 mb-1">
+                  <ScrollText className="h-3 w-3 shrink-0 self-center" style={{ color: 'var(--lit)' }} />
+                  <span className="text-[10px] font-sans uppercase tracking-widest" style={{ color: 'var(--lit)' }}>
+                    Nei testi
+                  </span>
+                  <span className="text-[10px] font-sans text-muted/50 tabular-nums">
+                    {lett.occorrenze.length}
+                  </span>
+                  {lett.forme.length > 0 && (
+                    <span className="ml-1.5 font-greek text-sm text-muted/70" lang={lett.occorrenze[0]?.lingua}>
+                      {lett.forme.join('  ·  ')}
+                    </span>
+                  )}
+                </div>
+                <div className="flex flex-wrap gap-x-4 gap-y-1.5">
+                  {lett.occorrenze.map((o, i) => (
+                    <button
+                      key={`${o.testimoniumId}-${i}`}
+                      disabled={!onVaiAllaFonte}
+                      onClick={() => onVaiAllaFonte?.(o.testimoniumId)}
+                      title={[o.cita, o.forma].filter(Boolean).join(' · ')}
+                      className={cn(
+                        'text-xs font-sans inline-flex items-baseline gap-1 transition-colors',
+                        onVaiAllaFonte ? 'text-muted/80 hover:text-accent' : 'text-muted/40',
+                      )}
+                    >
+                      <span className="font-serif italic">{o.cita}</span>
+                      {o.forma && <span className="font-greek text-muted/60" lang={o.lingua}>{o.forma}</span>}
+                    </button>
+                  ))}
+                </div>
+                <p className="text-[10px] font-serif italic text-muted/50 mt-1.5 leading-snug">
+                  Usi della parola in un testo, non atti di culto: restano fuori dal conteggio delle attestazioni.
+                </p>
+              </div>
+            )}
           </div>
         )}
       </div>
     );
   };
 
+  // Lemmi cultuali che nel corpus epigrafico non compaiono affatto. Vanno
+  // mostrati — altrimenti il ponte nasconde metà di ciò che serve a vedere —
+  // ma in un blocco proprio, senza barra e senza fingere un'attestazione.
+  const notiSullaPietra = new Set(index.lemmata.map(l => l.lemma));
+  const soloNeiTesti = [...letterario.values()]
+    .filter(l => !notiSullaPietra.has(l.lemma))
+    .filter(l => {
+      if (familyFilter && l.family !== familyFilter) return false;
+      if (tokens.length === 0) return true;
+      const hay = foldForSearch([l.lemma, l.subFunction || '', l.family, ...l.forme].join(' '));
+      return tokens.some(t => hay.includes(t));
+    })
+    .sort((a, b) => b.occorrenze.length - a.occorrenze.length || a.lemma.localeCompare(b.lemma));
+
+  const renderSoloNeiTesti = (lemmi: LemmaLetterario[]) => {
+    if (lemmi.length === 0) return null;
+    return (
+      <div className="mt-3 pt-2.5 border-t border-dashed border-border/50">
+        <div className="flex items-baseline gap-1.5 mb-1.5 pl-2">
+          <ScrollText className="h-3 w-3 shrink-0 self-center" style={{ color: 'var(--lit)' }} />
+          <span className="text-[10px] font-sans font-bold uppercase tracking-widest" style={{ color: 'var(--lit)' }}>
+            Solo nei testi
+          </span>
+          <span className="text-[10px] font-sans text-muted/50 tabular-nums">{lemmi.length}</span>
+          <span className="text-[11px] font-serif italic text-muted/60 ml-1">
+            mai sulla pietra, nel corpus finora spogliato
+          </span>
+        </div>
+        <div className="space-y-0.5">
+          {lemmi.map(l => (
+            <div key={`lit::${l.lemma}`} className="flex items-center gap-3 px-2 py-1">
+              <span className="font-greek text-base w-[6.5rem] shrink-0 text-right truncate"
+                style={{ color: 'var(--lit)' }} lang={l.occorrenze[0]?.lingua} title={l.lemma}>
+                {l.lemma}
+              </span>
+              <div className="flex flex-wrap gap-x-4 gap-y-1 flex-1">
+                {l.occorrenze.map((o, i) => (
+                  <button
+                    key={`${o.testimoniumId}-${i}`}
+                    disabled={!onVaiAllaFonte}
+                    onClick={() => onVaiAllaFonte?.(o.testimoniumId)}
+                    title={[o.cita, o.forma].filter(Boolean).join(' · ')}
+                    className={cn(
+                      'text-xs font-sans inline-flex items-baseline gap-1 transition-colors',
+                      onVaiAllaFonte ? 'text-muted/80 hover:text-accent' : 'text-muted/40',
+                    )}
+                  >
+                    <span className="font-serif italic">{o.cita}</span>
+                    {o.forma && <span className="font-greek text-muted/60" lang={o.lingua}>{o.forma}</span>}
+                  </button>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  };
+
   const familiesToRender = index.families
     .map(f => ({ ...f, lemmata: f.lemmata.filter(matchLemma) }))
-    .filter(f => f.lemmata.length > 0);
+    .filter(f => f.lemmata.length > 0 || soloNeiTesti.some(l => l.family === f.id));
 
   return (
     <div className="flex-1 overflow-y-auto p-6 md:p-10 max-w-4xl mx-auto w-full">
@@ -176,6 +301,18 @@ export const CultLexiconPanel: React.FC<Props> = ({ monumenti, onSelectMonumento
         <div className="text-xs font-sans font-bold uppercase tracking-[0.22em] text-accent/70 flex items-center gap-1.5">
           <Tags className="h-3.5 w-3.5" /> Lessico cultuale
         </div>
+        <p className="text-[13px] font-serif italic text-muted/75 mt-1.5 leading-relaxed">
+          {index.totalAttestations} attestazioni epigrafiche su {index.totalSchede} schede
+          {occorrenzeLetterarie > 0 && (
+            <>
+              {' · '}
+              <span style={{ color: 'var(--lit)' }}>
+                {occorrenzeLetterarie} {occorrenzeLetterarie === 1 ? 'occorrenza' : 'occorrenze'} nei testi
+              </span>
+              {' — contate a parte: sulla pietra la parola è un atto, in un libro è una parola.'}
+            </>
+          )}
+        </p>
       </div>
 
       {/* Ricerca / filtri */}
@@ -234,11 +371,12 @@ export const CultLexiconPanel: React.FC<Props> = ({ monumenti, onSelectMonumento
         </div>
       </div>
 
-      {filteredLemmata.length === 0 ? (
+      {filteredLemmata.length === 0 && soloNeiTesti.length === 0 ? (
         <div className="text-sm italic text-muted/60 py-12 text-center">Nessuna attestazione per questi filtri.</div>
       ) : groupBy === 'lemma' ? (
         <div className="space-y-0.5">
           {[...filteredLemmata].sort((a, b) => b.count - a.count || a.lemma.localeCompare(b.lemma)).map(renderLemmaRow)}
+          {renderSoloNeiTesti(soloNeiTesti)}
         </div>
       ) : (
         <div className="space-y-7">
@@ -260,6 +398,7 @@ export const CultLexiconPanel: React.FC<Props> = ({ monumenti, onSelectMonumento
                     .sort((a, b) => b.count - a.count || a.lemma.localeCompare(b.lemma))
                     .map(renderLemmaRow)}
                 </div>
+                {renderSoloNeiTesti(soloNeiTesti.filter(l => l.family === f.id))}
               </section>
             );
           })}

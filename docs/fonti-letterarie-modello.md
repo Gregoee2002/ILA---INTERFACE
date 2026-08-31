@@ -162,7 +162,16 @@ luoghi, lessico cultuale, parole citate e categorie del toolbox. Da lì:
   Toolbox): calcolati, non compilati;
 - il blocco **«Nelle fonti letterarie»** nelle pagine Divinità ed Epiteti del
   corpus (`LiteraryEchoes`), che elenca i passi che nominano quella divinità o
-  quell'epiteto e ci porta dentro con un click.
+  quell'epiteto e ci porta dentro con un click;
+- il **ponte del Lessico cultuale** (`lessicoLetterario`, reso in
+  `CultLexiconPanel`): le parole marcate `<w lemma ana>` in un testo si
+  accostano, lemma per lemma, alle stesse parole marcate sulla pietra.
+  L'indice epigrafico e quello letterario restano **due oggetti distinti** —
+  il secondo non confluisce nel primo — e la riga del lemma porta **due
+  numeri**, mai la somma. I lemmi cultuali che nel corpus non compaiono
+  affatto stanno in un blocco proprio, *Solo nei testi*, senza barra e senza
+  fingere un'attestazione. Il filtro per regione non tocca il bacino
+  letterario: un passo di Strabone non ha una regione di ritrovamento.
 
 **I conteggi restano separati, di proposito.** «237 occorrenze» nella pagina
 di Men vuol dire duecentotrentasette monumenti, e deve continuare a volerlo
@@ -366,5 +375,13 @@ Lavoro aperto:
    lettura.
 5. Saggi da redigere: **Men (Μήν)**, **Lunus**, Ecate, Attis, Sabazio,
    Artemide.
+5-bis. **Il ponte del lessico cultuale è costruito ma vuoto**: nessuna delle 5
+   testimonianze marcate usa ancora `<w lemma ana>`. `suggerisciLessico`
+   individua cinque candidati nel vocabolario controllato — στεφάνου
+   (*Hymn. Hom.* 32.1–9), χαῖρε (*Hymn. Hom.* 32.15–18 e Teocr. *Id.* 2),
+   βασίλεια (*Orph. H.* 9), βασιλέως (Strabone 12.3.31). Marcarli è una
+   decisione editoriale, non meccanica: dire che il χαῖρε di un inno è la
+   stessa formula del χρηστὸς χαῖρε delle stele è una tesi, e il ponte serve
+   proprio a poterla vedere prima di sostenerla.
 6. Da valutare: `refType: 'pap'` per la documentazione magica (PGM), oggi
    richiamata nel commento ma non schedata.

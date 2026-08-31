@@ -77,6 +77,21 @@ export async function caricaLitDataset(): Promise<CaricamentoLit> {
   }
 }
 
+// Le fonti servono in più punti del corpus (il blocco nelle pagine di divinità
+// ed epiteti, il ponte del lessico cultuale) e la richiesta non va rifatta a
+// ogni pagina sfiorata: una sola promessa per sessione, condivisa.
+let condivisa: Promise<CaricamentoLit> | null = null;
+
+export function caricaLitDatasetCondiviso(): Promise<CaricamentoLit> {
+  if (!condivisa) condivisa = caricaLitDataset();
+  return condivisa;
+}
+
+/** Dopo un salvataggio la copia in sessione è vecchia. */
+export function invalidaLitCache(): void {
+  condivisa = null;
+}
+
 /** Scrive il dataset sulla repo dati. Lancia con il messaggio del server. */
 export async function salvaLitDataset(dataset: LitDataset, message: string): Promise<void> {
   const res = await fetch('/api/fonti-letterarie', {
@@ -89,6 +104,7 @@ export async function salvaLitDataset(dataset: LitDataset, message: string): Pro
     try { detail = (await res.json()).error || detail; } catch { /* corpo non JSON */ }
     throw new Error(detail);
   }
+  invalidaLitCache();
 }
 
 

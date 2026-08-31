@@ -5,7 +5,7 @@ import {
   TestimoniumRisolto, PonteLetterario, costruisciPonte, risolviTutte,
 } from '../lib/litSources';
 import { AMBITO_CAMPO, AMBITO_LABELS, CAMPO_COLOR } from '../lib/laresToolbox';
-import { caricaLitDataset } from '../lib/litStore';
+import { caricaLitDatasetCondiviso } from '../lib/litStore';
 
 // «Nelle fonti letterarie»: i passi che nominano una divinità o un epiteto,
 // dentro le pagine del corpus. Le chiavi sono le stesse perché il markup è lo
@@ -17,14 +17,9 @@ import { caricaLitDataset } from '../lib/litStore';
 // «pratica» e «finzione» non possono comparire con lo stesso peso: Strabone
 // sugli ἱερόδουλοι e Esiodo che genera Selene da Tia non provano la stessa cosa.
 
-let pontePromise: Promise<PonteLetterario> | null = null;
-
 function caricaPonte(): Promise<PonteLetterario> {
-  if (!pontePromise) {
-    pontePromise = caricaLitDataset().then(({ dataset }) =>
-      costruisciPonte(risolviTutte(dataset.testimonia, dataset.opere)));
-  }
-  return pontePromise;
+  return caricaLitDatasetCondiviso().then(({ dataset }) =>
+    costruisciPonte(risolviTutte(dataset.testimonia, dataset.opere)));
 }
 
 // pratica · credenza · finzione — il primo campo della griglia LARES, che dice
