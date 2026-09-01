@@ -2946,9 +2946,12 @@ const EpiDocRenderer = ({ xml, query, onTermClick, divinityIndex, onomasticaInde
                 {ln}
               </span>
             );
-            if (brk === 'no') return <span key={key}><br />{lineNumSpan}</span>;
-            if (ln === '1') return <span key={key}>{lineNumSpan}</span>;
-            return <span key={key}><br />{lineNumSpan}</span>;
+            const ind = (el.getAttribute('rend') || '') === 'indent'
+              ? <span key={key + '-i'} className="inline-block w-8 select-none" />
+              : null;
+            if (brk === 'no') return <span key={key}><br />{lineNumSpan}{ind}</span>;
+            if (ln === '1') return <span key={key}>{lineNumSpan}{ind}</span>;
+            return <span key={key}><br />{lineNumSpan}{ind}</span>;
           }
           case 'expan': {
             // <abbr>X</abbr><ex>yz</ex> → forma sciolta senza parentesi: "Xyz"
@@ -3024,26 +3027,35 @@ const EpiDocRenderer = ({ xml, query, onTermClick, divinityIndex, onomasticaInde
               </span>
             );
           }
+          // <lb rend="indent"/>: riga rientrata sulla pietra (EpiDoc @rend)
+          const indentSpan = (el.getAttribute('rend') || '') === 'indent'
+            ? <span key={key + '-i'} className="inline-block w-8 select-none" />
+            : null;
           if (nAttr === '1') {
             // First line: no preceding newline, just show number
-            return <span key={key}>{lineNumSpan}</span>;
+            return <span key={key}>{lineNumSpan}{indentSpan}</span>;
           }
           // Subsequent lines: newline then number
           return (
             <span key={key}>
               <br />
               {lineNumSpan}
+              {indentSpan}
             </span>
           );
         }
         case 'div': {
           if (typeAttr === 'textpart') {
+            // Le colonne (subtype="column") sono affiancate dal contenitore in
+            // fondo a EpiDocRenderer: qui va tolto il margine verticale che
+            // serve invece alle partizioni impilate (subtype="section" ecc.).
+            const isColumn = (el.getAttribute('subtype') || '') === 'column';
             return (
-              <div key={key} className="mb-8">
+              <div key={key} className={isColumn ? '' : 'mb-8'}>
                 <div
                   className="text-[9px] font-bold uppercase tracking-widest text-accent mb-3"
                   style={{ fontFamily: 'monospace', fontStyle: 'normal' }}
-                >{nAttr}</div>
+                >{isColumn ? `col. ${nAttr}` : nAttr}</div>
                 {Array.from(node.childNodes).map((child: any, i) => renderNode(child, key + '-' + i))}
               </div>
             );
@@ -3621,7 +3633,22 @@ const EpiDocRenderer = ({ xml, query, onTermClick, divinityIndex, onomasticaInde
   if (!parsedDoc) return <Highlight text={xml} query={query} />;
   
   const rootNode = parsedDoc.type === 'html' ? parsedDoc.doc.body : parsedDoc.doc.documentElement;
-  
+
+  // Testo disposto su più colonne (EpiDoc: <div type="textpart" subtype="column">).
+  // Le colonne vanno affiancate, non impilate: le larghezze sono `auto` così che
+  // ciascuna resti larga quanto la sua riga più lunga, come nell'edizione a stampa.
+  const columnParts = Array.from(rootNode.children).filter(
+    (c: any) => (c.getAttribute?.('type') || '') === 'textpart'
+      && (c.getAttribute?.('subtype') || '') === 'column'
+  );
+  const asColumns = columnParts.length >= 2;
+  // In modalità colonne si renderizzano i soli elementi: i nodi di testo fra un
+  // <div> e l'altro sono indentazione, e come figli della griglia diventerebbero
+  // celle vuote che sfasano le colonne.
+  const body = asColumns
+    ? columnParts.map((child: any, i) => renderNode(child, i))
+    : Array.from(rootNode.childNodes).map((child: any, i) => renderNode(child, i));
+
   return (
     <div 
       className="relative pl-8 epidoc-renderer leading-loose opacity-90 select-text"
@@ -3633,7 +3660,19 @@ const EpiDocRenderer = ({ xml, query, onTermClick, divinityIndex, onomasticaInde
       onBlurCapture={handleBlurCapture}
       onClick={handleClick}
     >
-      {Array.from(rootNode.childNodes).map((child: any, i) => renderNode(child, i))}
+      {asColumns
+        ? <div
+            className="grid justify-start gap-x-8 overflow-x-auto"
+            // La misura di lettura della scheda è stretta (max-w-[62ch]): se le
+            // colonne non ci stanno, a cedere è la prima, che si manda a capo,
+            // mentre le altre restano intere — di norma sono la colonna dei nomi.
+            style={{
+              gridTemplateColumns: ['minmax(0, max-content)']
+                .concat(Array(columnParts.length - 1).fill('max-content'))
+                .join(' '),
+            }}
+          >{body}</div>
+        : body}
       
       {hoveredInfo && (
         <div

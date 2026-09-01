@@ -90,6 +90,17 @@ def check(name, src, errors, warnings, counters):
     if puntini:
         errors.append((name, 'F1 regredita: %d sequenze di puntini nel testo dell\'edizione'
                              ' (vanno in <gap>)' % puntini))
+    # Impaginazione simulata con spazi: dentro <div type="edition"> gli spazi
+    # multipli non sono markup e in HTML collassano, quindi l'allineamento che
+    # si vede nell'editor sparisce nella scheda. Un testo su colonne va reso con
+    # <div type="textpart" subtype="column">, un vacat sulla pietra con <space/>.
+    spazi = len(re.findall(r'\S {3,}\S', txt))
+    if spazi:
+        warnings.append((name, '%d punt%s di impaginazione a spazi nel testo dell\'edizione: se sono'
+                               ' colonne servono <div type="textpart" subtype="column">,'
+                               ' se è un vacat serve <space/>' % (spazi, 'o' if spazi == 1 else 'i')))
+    counters['impaginazioni a spazi'] += spazi
+
     counters['[ ] non convertite'] += quadre
     counters['( ) non convertite'] += tonde
     counters['lacune non uniformate'] += puntini
