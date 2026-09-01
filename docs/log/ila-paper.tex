@@ -162,7 +162,9 @@ ottico e trascrizione dei testi epigrafici. La sezione 5 presenta
 l'organizzazione dell'interfaccia digitale, con particolare attenzione,
 nella sottosezione 5.1, alla sezione dedicata all'iconografia dei
 monumenti, nella sottosezione 5.2 alla navigazione tra divinità, epiteti
-e registro onomastico, e nella sottosezione 5.3 agli strumenti di
+e registro onomastico, nella sottosezione 5.3 alla raccolta delle fonti
+letterarie relative alla divinità e al lessico cultuale che le accomuna
+al materiale epigrafico, e nella sottosezione 5.4 agli strumenti di
 ricerca. Infine, nella sezione 6 si propongono alcune considerazioni
 finali e le prospettive di sviluppo futuro del progetto.
 
@@ -266,6 +268,63 @@ condiziona direttamente l'affidabilità di qualunque strumento --- di
 consultazione, di ricerca o di analisi comparativa --- costruito a valle
 su questa informazione (si veda, in particolare, la sezione 5.2).
 
+Una parte non trascurabile di questo lavoro di adattamento ha riguardato
+la conversione, su scala dell'intero corpus, delle convenzioni di Leida
+ancora presenti come semplice punteggiatura all'interno del testo
+trascritto --- parentesi quadre, parentesi tonde, sequenze di puntini ---
+nei corrispondenti elementi di marcatura strutturata (integrazioni
+editoriali, lacune, letture incerte, scioglimenti di abbreviazione). Fino
+a quel momento, infatti, buona parte delle epigrafi del corpus recava sì
+la notazione convenzionale corretta, ma non ancora tradotta nel formato
+di codifica: una situazione che, pur non compromettendo la leggibilità
+per un occhio esperto, rendeva quell'informazione invisibile a qualunque
+strumento automatico costruito sulla marcatura strutturata, dagli stessi
+meccanismi di ricerca alla generazione delle schede di consultazione. Si
+sono pertanto realizzati due strumenti dedicati a questa conversione,
+applicati sistematicamente a tutte le voci del corpus: il primo distingue,
+all'interno delle parentesi quadre, il testo materialmente perduto dal
+supporto dai puntini che segnalano invece lettere semplicemente non più
+leggibili su un supporto altrimenti integro --- una distinzione consolidata
+nella pratica epigrafica ma facile da perdere quando resta affidata alla
+sola punteggiatura; il secondo distingue, all'interno delle parentesi
+tonde, lo scioglimento di un'abbreviazione dalle lettere omesse per
+errore dal lapicida, verificando caso per caso, sull'edizione a stampa di
+riferimento, i casi in cui questa distinzione non fosse ricavabile dal
+solo contesto immediato. In entrambi i casi si è seguito lo stesso
+principio metodologico già enunciato nella sezione 4: la quantità di
+testo mancante non viene mai dedotta dal numero di puntini presenti nella
+trascrizione, poiché tale conteggio non è di per sé affidabile, ma viene
+conservata separatamente per un'eventuale verifica successiva
+sull'edizione a stampa.
+
+Ad affiancare questi strumenti di conversione è stato introdotto anche un
+dispositivo di controllo automatico che verifica, sull'intero corpus e
+non voce per voce, la coerenza interna della marcatura: il bilanciamento
+delle parentesi, la corrispondenza tra un valore numerico marcato
+esplicitamente e il numerale greco effettivamente trascritto, e la
+presenza di un elemento di datazione strutturata laddove il testo
+dell'iscrizione riporta esplicitamente una formula d'anno. Un simile
+controllo, eseguito sistematicamente anziché a campione, ha permesso di
+individuare e correggere alcuni casi in cui l'origine dell'incoerenza non
+era la marcatura in sé ma un errore di trascrizione a monte, confermando
+quanto già osservato a proposito della revisione capillare descritta più
+sopra: il controllo automatico della coerenza strutturale non sostituisce
+la verifica filologica sulle fonti primarie, ma la orienta, segnalando
+sistematicamente dove condurla in via prioritaria.
+
+Lo stesso lavoro di affinamento ha infine riguardato lo strumento
+assistito di marcatura in sé: in una prima versione, le azioni per
+inserire una lacuna o uno spazio vacante nel testo potevano operare
+soltanto in coda al testo esistente oppure in sostituzione di una
+porzione di testo già selezionata, rendendo ad esempio impossibile
+segnalare una lacuna a inizio riga senza cancellare i caratteri che
+seguivano. Lo strumento consente ora di fissare un punto di inserimento
+con un semplice clic all'interno del testo, e di inserire lì la lacuna o
+lo spazio vacante senza alterare il contenuto circostante --- un
+accorgimento minore nella sua descrizione, ma che rimuove un vincolo che
+nella pratica quotidiana della marcatura si era rivelato più limitante
+del previsto.
+
 \screenshotplaceholder{7.5cm}{Strumento assistito di marcatura filologica in azione su una voce del corpus}
 
 \section{Trascrizione e riconoscimento ottico dei testi}
@@ -335,17 +394,35 @@ una sezione di consultazione che presenta l'elenco completo delle
 epigrafi con accesso diretto alle singole schede descrittive; una
 sezione bibliografica che raccoglie i repertori e i corpora di
 riferimento; una sezione geografica che consente di visualizzare la
-distribuzione spaziale delle attestazioni su una mappa interattiva; e
+distribuzione spaziale delle attestazioni su una mappa interattiva,
+affiancata da una sezione cronologica che ne restituisce invece la
+distribuzione lungo l'asse del tempo, disposta come una linea temporale
+navigabile e progressivamente ingrandibile; una sezione dedicata alle
+fonti letterarie sulla divinità, descritta nella sottosezione 5.3; e
 una sezione di ricerca avanzata, descritta più diffusamente nella
-sottosezione 5.3. Ogni scheda descrittiva è corredata, ove disponibile,
+sottosezione 5.4. Ogni scheda descrittiva è corredata, ove disponibile,
 di materiale fotografico del monumento e riporta, oltre al testo
 dell'iscrizione e ai principali attributi epigrafici, un rimando
 puntuale alla codifica filologica sottostante, liberamente
 consultabile e scaricabile.
 
+La visualizzazione cronologica applica alla dimensione temporale lo
+stesso principio di trasparenza già adottato altrove nel progetto (si
+veda la sezione 4): poiché non tutte le epigrafi del corpus recano
+estremi cronologici numericamente determinabili, la linea del tempo
+colloca soltanto le voci per cui questa informazione è disponibile, ma
+dichiara sempre, accanto al conteggio delle voci effettivamente
+collocate, quante schede ne restano escluse per assenza di datazione,
+con la possibilità di consultarne l'elenco completo con un solo
+passaggio: l'assenza di una scheda dalla linea del tempo deve poter
+essere sempre distinta da un errore, e non lasciata all'interpretazione
+di chi consulta.
+
 \screenshotplaceholder{8cm}{Vista d'insieme dell'elenco delle epigrafi con filtri applicati}
 
 \screenshotplaceholder{8cm}{Visualizzazione geografica delle attestazioni su mappa interattiva}
+
+\screenshotplaceholder{7.5cm}{Visualizzazione cronologica delle attestazioni, con panoramica per secolo e conteggio delle schede prive di datazione}
 
 \subsection{La sezione iconografica}
 
@@ -663,6 +740,138 @@ corpus debba costare all'utente il minor numero di passaggi possibile.
 
 \screenshotplaceholder{8cm}{Rubrica onomastica alfabetica con indice laterale A--Z}
 
+\subsection{Le fonti letterarie e il lessico cultuale}
+
+Il catalogo epigrafico racconta che cosa veniva inciso sulla pietra, ma
+il culto di Men è documentato anche indirettamente, attraverso quanto ne
+scrivevano gli autori greci e latini --- geografi, poeti, storici,
+lessicografi. Per raccogliere anche questo secondo tipo di testimonianza
+si è affiancata al catalogo una sezione di pari rango, dedicata alla
+raccolta ragionata delle fonti letterarie relative alla divinità,
+concepita fin dall'inizio non come una semplice appendice bibliografica
+ma come una seconda collezione strutturata, interrogabile con gli stessi
+criteri già impiegati per il materiale epigrafico.
+
+L'impianto di questa sezione riprende, adattandolo, il modello di un
+progetto di riferimento nello studio del rapporto tra lingua e religione
+nell'antichità, dal quale si sono mutuate tre scelte di fondo: trattare
+ogni citazione --- letteraria, epigrafica o papirologica --- come
+un'unità autonoma e marcata in quanto tale; organizzare il materiale
+attraverso un insieme di indici trasversali (le fonti, gli ambiti
+tematici, i termini significativi, le divinità, i personaggi, le figure e
+i luoghi menzionati); e classificare ciascuna testimonianza secondo una
+griglia concettuale che incrocia alcuni campi d'analisi con altrettanti
+ambiti d'uso del testo. A questo impianto si è aggiunto un elemento che
+il progetto di riferimento non prevede: un collegamento diretto con il
+catalogo epigrafico, per cui ogni testimonianza letteraria porta con sé
+ricerche già pronte sul corpus delle epigrafi, espresse come
+interrogazioni e non come riferimenti fissi a singole schede, in modo che
+restino valide anche quando il catalogo continua a crescere.
+
+La sezione è stata popolata a partire da una voce pilota dedicata a una
+divinità lunare strettamente connessa a Men nella tradizione classica,
+che raccoglie un consistente numero di testimonianze suddivise in nuclei
+tematici disposti in ordine cronologico, dalla poesia arcaica greca fino
+alla storiografia tardoantica, ciascuna corredata di testo originale,
+traduzione redazionale e commento. L'ultimo di questi nuclei tematici è
+dedicato specificamente al punto di contatto tra questa figura divina e
+Men, e costituisce il ponte esplicito verso il corpus epigrafico.
+Coerentemente con il principio, già più volte richiamato in questo
+lavoro, per cui nessuna informazione viene presentata come acquisita
+prima di essere stata verificata, ogni testo antico importato in questa
+sezione è dichiaratamente segnalato come da collazionare sulle edizioni
+di riferimento indicate, e l'interfaccia lo dichiara esplicitamente prima
+ancora di mostrarne il contenuto.
+
+Dal punto di vista della navigazione, questa sezione è stata inizialmente
+concepita come un saggio continuo, da leggere dall'inizio alla fine;
+questa forma, pur avendo il pregio della leggibilità, seguiva una logica
+difforme da quella di tutto il resto della base dati, e non offriva un
+livello di indice sopra la singola voce. È stata pertanto riorganizzata
+su tre livelli, speculari a quelli già impiegati per il catalogo
+epigrafico: un indice delle voci disponibili, che dichiara anche quelle
+ancora da redigere; un elenco filtrabile delle singole testimonianze, con
+la stessa impaginazione tabellare già impiegata per l'elenco delle
+epigrafi, ordinabile per nucleo tematico, per cronologia o per autore; e
+una scheda di dettaglio per la singola testimonianza, articolata in
+sezioni per il testo, il commento, l'analisi e gli indici, i rimandi e la
+bibliografia, sullo stesso modello della scheda epigrafica. La forma
+discorsiva originaria non è stata eliminata, ma è diventata una modalità
+di lettura ulteriore, accessibile in alternativa all'elenco e all'indice.
+
+Un aspetto rilevante di questa sezione è che il testo letterario viene
+marcato con lo stesso motore di codifica impiegato per l'edizione
+epigrafica (si veda la sezione 3), del quale riusa le operazioni
+concettualmente comuni ai due domini --- divinità, personaggi, luoghi,
+lessico cultuale --- aggiungendo soltanto ciò che un testo letterario
+richiede e una pietra incisa no (l'apparato critico, le parole citate in
+quanto tali, i titoli d'opera, la distinzione tra tradizione letteraria,
+epigrafica e papirologica), ed escludendo per contro ciò che appartiene
+specificamente al supporto materiale dell'iscrizione. È proprio questa
+base condivisa a rendere possibile il collegamento con il resto del
+progetto: una divinità o un epiteto individuati all'interno di una
+testimonianza letteraria confluiscono automaticamente negli indici di
+questa sezione e compaiono, con rimando diretto, nelle pagine di
+navigazione onomastica e divina già descritte nella sottosezione 5.2,
+così che chi consulta la pagina di un epiteto possa raggiungere in un
+clic le fonti letterarie che lo menzionano --- mentre il conteggio delle
+attestazioni epigrafiche resta rigorosamente distinto, poiché risponde a
+una domanda diversa (quanti monumenti, non quanti passi testuali).
+
+Ogni testimonianza porta inoltre due indicazioni interpretative distinte,
+anch'esse mutuate dal progetto di riferimento: una qualificazione
+sintetica della natura della fonte --- se descrive una pratica cultuale
+realmente osservata, una credenza, oppure un trattamento puramente
+letterario o mitografico della divinità, dato che l'osservazione di un
+geografo e una cosmogonia poetica non hanno lo stesso peso probatorio ---
+e un'analisi più granulare applicata a singoli segmenti del testo.
+Proprio perché lo scarto cronologico tra il momento di composizione di un
+testo e l'epoca dei fatti o delle realtà che esso descrive resta, in
+generale, un problema aperto e non sempre risolvibile in maniera
+univoca, le fonti letterarie sono per il momento tenute fuori dalla
+visualizzazione cronologica descritta in apertura di questa sezione, in
+attesa di una regola esplicita e documentata per collocarle correttamente
+lungo l'asse del tempo.
+
+A questa sezione se ne affianca una seconda, più circoscritta ma
+concettualmente contigua, dedicata al lessico cultuale: un insieme chiuso
+di termini --- non nomi propri o epiteti, ma parole comuni legate a uno
+specifico atto di culto, come un voto, una dedica, una colpa e la sua
+espiazione, o una formula fissa ricorrente --- marcato con lo stesso
+meccanismo sia nel testo delle epigrafi sia in quello delle fonti
+letterarie. Poiché i due tipi di fonte condividono lo stesso vocabolario
+controllato e la stessa marcatura, il medesimo lemma può essere osservato
+attraverso entrambe, senza tuttavia confonderle in un unico totale che ne
+offuscherebbe la diversa natura probatoria: ogni voce del lessico riporta
+due conteggi distinti, uno per le epigrafi e uno per le fonti letterarie,
+mai sommati fra loro, e i lemmi attestati soltanto nei testi letterari,
+senza alcun riscontro epigrafico, sono segnalati come tali anziché essere
+presentati con un'attestazione fittizia pari a zero. La visualizzazione
+dispone i lemmi come una serie di barre, raggruppabili per famiglia
+tematica o elencabili singolarmente per frequenza complessiva, la cui
+lunghezza non è proporzionale al numero di attestazioni ma alla sua
+radice quadrata:
+
+\[
+  \ell(A) \;\propto\; \sqrt{n(A)}
+\]
+
+dove $n(A)$ indica il numero di attestazioni del lemma $A$. Questa scelta
+ha una motivazione puramente percettiva: alcune famiglie lessicali sono,
+per la natura stessa del materiale, molto più frequenti di altre, e una
+scala lineare le renderebbe leggibili a scapito delle famiglie più rare,
+che si ridurrebbero a barre praticamente invisibili; comprimendo la scala
+secondo la radice quadrata, le famiglie rare restano percepibili senza
+che quelle dominanti perdano la propria posizione relativa. Ogni voce
+della lista rimanda inoltre a uno strumento lessicografico greco esterno
+per la consultazione del lemma, e consente di raggiungere direttamente le
+singole attestazioni, epigrafiche o letterarie, da cui il conteggio
+deriva.
+
+\screenshotplaceholder{8cm}{Indice delle voci della sezione dedicata alle fonti letterarie}
+
+\screenshotplaceholder{7.5cm}{Vista a barre del lessico cultuale, con attestazioni epigrafiche e letterarie a confronto}
+
 \subsection{Ricerca}
 
 L'interfaccia digitale dispone di un modulo di ricerca che consente di
@@ -710,7 +919,11 @@ sezione dedicata alla descrizione strutturata dell'iconografia dei
 monumenti --- aspetto che, come si è detto, risultava finora trattato
 solo in forma discorsiva nella letteratura di riferimento --- e due viste
 di navigazione pensate specificamente per orientarsi nell'insieme delle
-divinità, degli epiteti e delle figure onomastiche attestate nel corpus.
+divinità, degli epiteti e delle figure onomastiche attestate nel corpus,
+affiancate da una visualizzazione cronologica delle attestazioni e da una
+sezione, di pari rango rispetto al catalogo epigrafico, dedicata alla
+raccolta delle fonti letterarie relative alla divinità e al lessico
+cultuale che le accomuna al materiale inciso sulla pietra.
 
 L'approccio complessivamente seguito privilegia la trasparenza e la
 verificabilità del dato rispetto alla comodità di gestione a breve
@@ -734,6 +947,14 @@ controllato utilizzato per la descrizione iconografica, e di
 sviluppare strumenti di confronto comparativo tra le diverse
 attestazioni iconografiche del dio Men, in modo da valorizzare appieno
 il potenziale interrogativo di questa nuova sezione dell'interfaccia
-digitale.
+digitale. Si prevede infine di estendere la sezione dedicata alle fonti
+letterarie oltre la voce pilota già redatta, applicando lo stesso
+modello alle altre figure divine e alle altre tradizioni testuali
+rilevanti per il culto di Men, e di stabilire una regola esplicita e
+documentata per la collocazione delle testimonianze letterarie
+all'interno della visualizzazione cronologica, dalla quale restano per
+ora escluse in ragione dello scarto, difficilmente risolvibile in via
+generale, tra il momento di composizione di un testo e l'epoca dei fatti
+che esso racconta.
 
 \end{document}
