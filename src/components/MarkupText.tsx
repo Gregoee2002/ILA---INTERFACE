@@ -140,6 +140,16 @@ const Flow: React.FC<FlowProps> = ({ tokens, numeri, contatore, basePath, onElCl
               </span>
             );
           }
+          case 'hi':
+            return a.rend === 'superscript'
+              ? <sup key={i} onClick={click} className={hover}>{kids}</sup>
+              : <span key={i} onClick={click} className={cn('italic', hover)}>{kids}</span>;
+          case 'g':
+            // Segno inciso senza equivalente Unicode (Lane lo disegna e lo
+            // scioglie in calce): si mostra il posto che occupa, non un
+            // carattere inventato.
+            return <span key={i} onClick={click} title={`Segno inciso${a.type ? `: ${a.type}` : ''}`}
+              className={cn('font-mono text-sm text-muted/70', hover)}>⟨segno⟩</span>;
           case 'lem':
           case 'rdg':
           case 'name':

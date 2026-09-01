@@ -443,6 +443,54 @@ const el = (name: string, attrs: Record<string, string>, children: MarkupToken[]
   ({ kind: "el", name, attrs, children, selfClosing });
 const txt = (value: string): MarkupToken => ({ kind: "text", value });
 
+/* ── Delimitatori Leiden scritti come CARATTERI ──────────────────────────────
+ * Il testo arriva quasi sempre incollato dallo stampato, dove le convenzioni
+ * sono segni di interpunzione: `μη(νὸς)`, `[Ἔτ]ους`, `{αβγ}`, `λ̣ά̣`. Chi marca
+ * seleziona quello che vede — parentesi comprese. Se l'azione non le consuma,
+ * accanto al tag appena creato resta il doppione (`<expan>…</expan>(νὸς)`), e
+ * l'editor non se ne accorge: è il modo classico di fare danno marcando a mano.
+ * Perciò ogni azione che ha un equivalente Leiden mangia i propri delimitatori.
+ * ────────────────────────────────────────────────────────────────────────── */
+
+/** Toglie i delimitatori ai due estremi della selezione (se ci sono). */
+function stripWrapping(slice: MarkupToken[], pairs: [string, string][]): MarkupToken[] {
+  const out = cloneTokens(slice);
+  const first = out[0], last = out[out.length - 1];
+  for (const [open, close] of pairs) {
+    const hasOpen = first?.kind === "text" && first.value.startsWith(open);
+    const hasClose = last?.kind === "text" && last.value.endsWith(close);
+    if (!hasOpen && !hasClose) continue;
+    if (hasOpen && first.kind === "text") first.value = first.value.slice(open.length);
+    if (hasClose && last.kind === "text") last.value = last.value.slice(0, -close.length);
+    break;
+  }
+  return out.filter(t => !(t.kind === "text" && t.value === ""));
+}
+
+/** Separa `abbr(ex)` scritto come testo: lo slice dell'abbreviazione e lo
+ *  scioglimento letto dentro le tonde (stringa vuota se non ce ne sono). */
+function splitAbbrev(slice: MarkupToken[]): { abbr: MarkupToken[]; ex: string } {
+  const out = cloneTokens(slice);
+  const last = out[out.length - 1];
+  if (last?.kind === "text") {
+    const m = last.value.match(/^([\s\S]*)\(([^()]*)\)\s*$/);
+    if (m) {
+      last.value = m[1];
+      const kept = out.filter(t => !(t.kind === "text" && t.value === ""));
+      return { abbr: kept.length ? kept : [txt("")], ex: m[2] };
+    }
+  }
+  return { abbr: out, ex: "" };
+}
+
+/** Scioglimento da usare: quello digitato dall'editore vince sempre su quello
+ *  letto fra le tonde, che è solo un precompilato. */
+const exOf = (typed: string | undefined, fromText: string) =>
+  typed && typed.trim() ? typed : fromText;
+
+const DOT_BELOW = /\u0323/g;
+
+
 /** Nome frammentario (casi-complessi §1.2): <seg part> + <gap> nell'ordine giusto. */
 function buildFragmentName(p: Record<string, string>, inner: MarkupToken[]): MarkupToken {
   const part = (p.part || "I").charAt(0); // "I" | "F" | "M"
@@ -539,8 +587,8 @@ export const MARKUP_ACTIONS: MarkupAction[] = [
     params: [
       { id: "cert", label: "Certezza", type: "select", options: ["sicura", "dubbia [αβγ?]"] },
     ],
-    build: (s, p) => el("supplied", { reason: "lost", ...(p.cert?.startsWith("dubbia") ? { cert: "low" } : {}) }, [txt(s)]),
-    compose: (slice, p) => el("supplied", { reason: "lost", ...(p.cert?.startsWith("dubbia") ? { cert: "low" } : {}) }, slice),
+    build: (s, p) => el("supplied", { reason: "lost", ...(p.cert?.startsWith("dubbia") ? { cert: "low" } : {}) }, [txt(s.replace(/^\[/, "").replace(/\]$/, ""))]),
+    compose: (slice, p) => el("supplied", { reason: "lost", ...(p.cert?.startsWith("dubbia") ? { cert: "low" } : {}) }, stripWrapping(slice, [["[", "]"]])),
   },
   {
     id: "supplied_previous", label: "Testo da editori precedenti", glyph: "[K&P]",
@@ -599,30 +647,43 @@ export const MARKUP_ACTIONS: MarkupAction[] = [
   {
     id: "unclear", label: "Lettere incerte", glyph: "ạḅ",
     group: "Lettere e correzioni", mode: "wrap",
-    hint: "Danneggiate ma leggibili (puntini sottoscritti)",
-    build: (s) => el("unclear", {}, [txt(s)]),
-    compose: (slice) => el("unclear", {}, slice),
+    hint: "Danneggiate ma leggibili: i puntini sottoscritti della trascrizione (λ̣ά̣) vengono tolti, la marca la porta il tag",
+    build: (s) => el("unclear", {}, [txt(s.replace(DOT_BELOW, ""))]),
+    compose: (slice) => el("unclear", {}, cloneTokens(slice).map(t => t.kind === "text" ? { ...t, value: t.value.replace(DOT_BELOW, "") } : t)),
   },
   {
     id: "expan", label: "Abbreviazione sciolta", glyph: "(αβγ)",
     group: "Lettere e correzioni", mode: "wrap",
-    hint: "La selezione è la forma sulla pietra; indica lo scioglimento",
-    params: [{ id: "ex", label: "Scioglimento", type: "text", required: true, placeholder: "lettere integrate" }],
-    build: (s, p) => el("expan", {}, [el("abbr", {}, [txt(s)]), el("ex", {}, [txt(p.ex)])]),
-    compose: (slice, p) => el("expan", {}, [el("abbr", {}, slice), el("ex", {}, [txt(p.ex)])]),
+    hint: "Seleziona l\u2019abbreviazione come sta sulla pietra: se porta con sé le tonde della trascrizione (μη(νὸς)) vengono consumate e lo scioglimento è già compilato",
+    params: [{
+      id: "ex", label: "Scioglimento", type: "text", required: true, placeholder: "lettere integrate",
+      prefill: s => s.match(/\(([^()]*)\)\s*$/)?.[1] ?? "",
+    }],
+    build: (s, p) => {
+      const m = s.match(/^([\s\S]*)\(([^()]*)\)\s*$/);
+      return el("expan", {}, [
+        el("abbr", {}, [txt(m ? m[1] : s)]),
+        el("ex", {}, [txt(exOf(p.ex, m ? m[2] : ""))]),
+      ]);
+    },
+    compose: (slice, p) => {
+      const { abbr, ex } = splitAbbrev(slice);
+      return el("expan", {}, [el("abbr", {}, abbr), el("ex", {}, [txt(exOf(p.ex, ex))])]);
+    },
   },
   {
     id: "supplied_omitted", label: "Omesse dal lapicida", glyph: "⟨αβγ⟩",
     group: "Lettere e correzioni", mode: "wrap",
-    build: (s) => el("supplied", { reason: "omitted" }, [txt(s)]),
-    compose: (slice) => el("supplied", { reason: "omitted" }, slice),
+    hint: "Lettere che il lapicida ha saltato e l\u2019editore ripristina: nella trascrizione stanno fra tonde in mezzo alla parola (α(ὐ)τούς) o da sole (Παπᾶς (ὑπὲρ) τέκνων)",
+    build: (s) => el("supplied", { reason: "omitted" }, [txt(s.replace(/^[⟨<(]/, "").replace(/[⟩>)]$/, ""))]),
+    compose: (slice) => el("supplied", { reason: "omitted" }, stripWrapping(slice, [["⟨", "⟩"], ["<", ">"], ["(", ")"]])),
   },
   {
     id: "surplus", label: "Lettere spurie", glyph: "{αβγ}",
     group: "Lettere e correzioni", mode: "wrap",
     hint: "Da espungere",
-    build: (s) => el("surplus", {}, [txt(s)]),
-    compose: (slice) => el("surplus", {}, slice),
+    build: (s) => el("surplus", {}, [txt(s.replace(/^\{/, "").replace(/\}$/, ""))]),
+    compose: (slice) => el("surplus", {}, stripWrapping(slice, [["{", "}"]])),
   },
   {
     id: "corr", label: "Correzione editoriale", glyph: "«αβγ»",
@@ -930,6 +991,13 @@ export const MARKUP_ACTIONS: MarkupAction[] = [
   },
   /* ── Spazi e altro ── */
   {
+    id: "delete_text", label: "Elimina caratteri", glyph: "⌫",
+    group: "Spazi e altro", mode: "replace",
+    hint: "Toglie dal testo i caratteri selezionati senza lasciare alcun tag: serve per i residui della trascrizione (una parentesi rimasta sola, un puntino, un trattino di fine riga)",
+    build: () => txt(""),
+    compose: () => txt(""),
+  },
+  {
     id: "space", label: "Vacat", glyph: "vac.",
     group: "Spazi e altro", mode: "insert",
     params: [
@@ -1006,7 +1074,7 @@ export interface ValidationIssue {
   message: string;
 }
 
-const LEIDEN_RESIDUE = /[\[\]]|(- - -)|\{|\}/;
+const LEIDEN_RESIDUE = /[\[\]{}()]|(- - -)/;
 
 /** Valida il flusso di token dell'edizione (gli lb possono stare a qualunque profondità). */
 export function validateEditionTokens(tokens: MarkupToken[]): ValidationIssue[] {
@@ -1023,7 +1091,7 @@ export function validateEditionTokens(tokens: MarkupToken[]): ValidationIssue[] 
     toks.forEach((t, i) => {
       if (t.kind === "text") {
         if (LEIDEN_RESIDUE.test(t.value)) {
-          issues.push({ severity: "warning", line: lineN || 1, message: "Notazione Leiden non convertita nel testo ([ ], { }, - - -): usare le azioni di markup." });
+          issues.push({ severity: "warning", line: lineN || 1, message: "Notazione Leiden non convertita nel testo ([ ], ( ), { }, - - -): usare le azioni di markup." });
         }
         if (ATTR_IN_TEXT.test(t.value)) {
           issues.push({ severity: "error", line: lineN || 1, message: `Attributo fuori dalle parentesi angolari nel testo («${t.value.trim().slice(0, 30)}…»): probabilmente un tag scritto male, es. <lb> n="2"/>.` });

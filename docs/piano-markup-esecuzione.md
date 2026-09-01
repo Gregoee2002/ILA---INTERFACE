@@ -12,11 +12,20 @@ Ricognizione di partenza: [`piano-markup-integrazioni-toponimi-date.md`](piano-m
 | 12 schede con parentesi sbilanciate | **fatto** | tutte collazionate su Lane e corrette; 0 sbilanciate su 295 |
 | F5 — marcatura formula-fissa | **fatto** | ILA-136, ILA-139, ILA-144 |
 | F5 — `<origDate>` mancanti | **fatto** | ILA-038, ILA-055, ILA-115 |
-| F0, F1, F2, F3, F4 | da fare | |
+| F0 + F1 — `<supplied>`/`<gap>`/`<unclear>` | **fatto** | `scripts/leiden2epidoc.py`; 607 `[ ]` e 224 puntini → 0; 635 `<supplied>`, 172 `<gap>`, 1 `<unclear>`. D1 e D3 applicate (fuori parentesi = `illegible`; quantità mai dedotta dai puntini, conteggi salvati in `f1-lacune-quantita.csv`). F0 non è servita come fase a sé: le sei forme di lacuna sono state riconosciute e normalizzate dalla conversione stessa. |
+| F2 — `<expan>` / `<supplied reason="omitted">` | **fatto** | `scripts/parentesi2epidoc.py`; 180 `( )` → 0; 155 scioglimenti, 15 integrazioni di lettere omesse, 8 casi decisi sullo stampato (ILA-049, 059, 101, 039, 180, 201, 291) |
+| Editor assistito — annidamento epiteto + markup editoriale | **fatto** | l'annidamento funzionava; mancava il consumo dei delimitatori, che lasciava un doppione muto. Corretto in `src/lib/leidenMarkup.ts`, più l'azione «Elimina caratteri» |
+| F3, F4 | da fare | |
 
-Il linter passa senza errori. Contatori di avanzamento correnti: `[ ]` non convertite
-607, `( )` 180, lacune non uniformate 146, `<supplied>` 77, `<gap>` 16, `<unclear>` 0,
-`<expan>` 9, `<num>` 0, `<date>` 1, `<placeName>` 2.
+Il linter passa senza errori. Contatori correnti: `[ ]` 0, `( )` 0, puntini 0,
+`<supplied>` 635, `<gap>` 172, `<unclear>` 1, `<expan>` 172, `<num>` 0, `<date>` 1,
+`<placeName>` 2. Dettaglio di F1 e F2 nel [log del 2026-09-01](log/markup-f1-f2-2026-09-01.md).
+
+> **Il linter ora fa fallire la regressione, non solo la misura.** `[ ]`, `( )` e i
+> puntini che ricompaiano nell'edizione sono un errore, non un contatore: durante la
+> lavorazione l'avvio del server di sviluppo ha sovrascritto il corpus locale con la
+> versione remota, ed è così che ce ne siamo accorti subito. **Prima il push sulla
+> repo dati, poi qualunque avvio del server.**
 
 > **Emerso durante la collazione**: il problema non è solo di markup. In 8 delle 12
 > schede controllate la trascrizione divergeva da Lane — parentesi spostate,

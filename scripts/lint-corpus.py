@@ -74,10 +74,25 @@ def check(name, src, errors, warnings, counters):
         if calcolato is not None and calcolato != atteso:
             errors.append((name, '<num value="%d"> ma «%s» vale %d' % (atteso, greco.strip(), calcolato)))
 
-    # --- AVANZAMENTO (F1/F2) ------------------------------------------
-    counters['[ ] non convertite'] += txt.count('[')
-    counters['( ) non convertite'] += len(re.findall(r'\([^)]{1,20}\)', txt))
-    counters['lacune non uniformate'] += len(re.findall(r'\.{3,}|·[·\s]{2,}', txt))
+    # --- F1/F2 chiuse: il ritorno delle convenzioni-carattere è un ERRORE ---
+    # Non è pedanteria: una modifica applicata solo in locale e poi
+    # sovrascritta dal sync torna esattamente così, e senza questo controllo
+    # non se ne accorge nessuno finché non lo si rilegge a mano.
+    quadre = txt.count('[')
+    tonde = len(re.findall(r'\([^)]{1,25}\)', txt))
+    puntini = len(re.findall(r'\.{3,}|·\s*·', txt))
+    if quadre:
+        errors.append((name, 'F1 regredita: %d parentesi quadre nel testo dell\'edizione'
+                             ' (vanno in <supplied>/<gap>)' % quadre))
+    if tonde:
+        errors.append((name, 'F2 regredita: %d parentesi tonde nel testo dell\'edizione'
+                             ' (vanno in <expan>/<supplied reason="omitted">)' % tonde))
+    if puntini:
+        errors.append((name, 'F1 regredita: %d sequenze di puntini nel testo dell\'edizione'
+                             ' (vanno in <gap>)' % puntini))
+    counters['[ ] non convertite'] += quadre
+    counters['( ) non convertite'] += tonde
+    counters['lacune non uniformate'] += puntini
     for tag in ('supplied', 'gap', 'unclear', 'expan', 'num', 'date', 'placeName'):
         counters['<%s>' % tag] += ed.count('<' + tag)
 
