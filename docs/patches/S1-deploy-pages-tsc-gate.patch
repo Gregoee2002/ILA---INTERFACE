@@ -1,0 +1,17 @@
+diff --git a/.github/workflows/deploy-pages.yml b/.github/workflows/deploy-pages.yml
+index b1a061b..cb7fac2 100644
+--- a/.github/workflows/deploy-pages.yml
++++ b/.github/workflows/deploy-pages.yml
+@@ -34,6 +34,12 @@ jobs:
+             exit 1
+           fi
+ 
++      # Gate di tipo: `npm run build` in locale lo esegue via `prebuild`, ma il
++      # deploy chiama direttamente `npx vite build` (che NON lancia tsc). Senza
++      # questo step un errore di tipo verrebbe deployato — vedi BUG-03 dell'audit.
++      - name: Controllo dei tipi (tsc --noEmit)
++        run: npx tsc --noEmit
++
+       # Scatto statico del corpus per chi visita con la sola password (senza
+       # token personale) — vedi scripts/build-corpus-snapshot.ts. Se i secret
+       # DATA_REPO_TOKEN/DATA_REPO sono impostati, sincronizza prima il corpus
