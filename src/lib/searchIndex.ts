@@ -1,20 +1,8 @@
 import MiniSearch from 'minisearch';
 import { ICONOGRAPHY_LABELS } from './iconographyLabels';
 import { italianWordsToDigits } from './italianNumbers';
+import { normalizeGreek } from './textNorm';
 
-/**
- * Normalizzazione diacritici greci per la ricerca. Se in futuro serve la
- * stessa logica anche lato client, va estratta in un modulo condiviso
- * (es. src/lib/greekUtils.ts) per evitare che due copie divergano nel tempo.
- */
-function normalizeGreek(text: string): string {
-  if (!text) return '';
-  return text
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '') // rimuove accenti/spiriti
-    .replace(/ς/g, 'σ')              // sigma finale → sigma normale
-    .toLowerCase();
-}
 
 // Strip minimale di markup XML residuo (es. dentro apparatus/traduzioni),
 // solo per l'indicizzazione — non tocca i dati originali.

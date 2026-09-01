@@ -1,4 +1,5 @@
 import { Monumento } from "../types";
+import { normalizeGreek } from "./textNorm";
 
 export interface DivinityStats {
   name: string;
@@ -86,9 +87,9 @@ export interface ClassificationAudit {
   }[];
 }
 
-const auditNorm = (s: string) =>
-  s.normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/ς/g, 'σ')
-    .replace(/\s+/g, ' ').trim().toLowerCase();
+// Unico normalizzatore del progetto (BUG-13 / DATA-06): stessa logica di
+// searchIndex, così una faccetta e una ricerca si riconciliano sempre.
+const auditNorm = normalizeGreek;
 
 export function buildClassificationAudit(monumenti: Monumento[]): ClassificationAudit {
   // -- neverAlone --

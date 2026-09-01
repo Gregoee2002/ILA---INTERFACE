@@ -1,5 +1,6 @@
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
+import { foldAscii } from './textNorm';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -28,7 +29,9 @@ export function gapDotCount(quantity: unknown): number {
   return Math.min(n, GAP_DOTS_MAX);
 }
 
-/** Normalizza per confronto case/accent-insensitive (usato per autocomplete e matching di vocabolari). */
-export function stripAccents(s: string): string {
-  return s.normalize('NFKD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
-}
+/**
+ * Normalizza per confronto case/accent-insensitive (autocomplete, matching di
+ * vocabolari). Alias storico di foldAscii da src/lib/textNorm.ts \u2014 unico
+ * normalizzatore del progetto (BUG-13). Nuovi call site importino da textNorm.
+ */
+export const stripAccents = foldAscii;

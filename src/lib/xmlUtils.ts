@@ -1,5 +1,6 @@
 import { Monumento, Traduzione, Bibliografia, OrigDate, IconographyData, CultAttestation } from "../types";
 import { canonicalDivinityName } from "./divinityAliases";
+import { canonicalEpithet } from "./epithetAliases";
 import { CULT_FAMILY_IDS, lookupCultLemma } from "./cultLexicon";
 
 // Unica fonte per l'etichetta identificativa del record — sostituisce le
@@ -1240,6 +1241,27 @@ function parseTeiElement(teiString: string): Monumento {
   const cultLaneRef = laneNumMatch ? `Lane, CMRDM I ${laneNumMatch[1]}` : undefined;
   const cultAttestations = extractCultAttestations(teiString, cultScheda, cultLaneRef);
 
+  // Canonicalizzazione delle varianti grafiche/flessive degli epiteti (DATA-01):
+  // stessa strategia dei teonimi (canonicalDivinityName), applicata qui a valle
+  // di tutte le Source così un solo punto tocca sia la lista piatta sia quella
+  // per-divinità. Riscrive solo le forme mappate in epithetAliases.ts, dedup
+  // preservando l'ordine.
+  const dedupeInOrder = (xs: string[]): string[] => {
+    const seen = new Set<string>();
+    const out: string[] = [];
+    for (const x of xs) {
+      if (!x || seen.has(x)) continue;
+      seen.add(x);
+      out.push(x);
+    }
+    return out;
+  };
+  const epitetiCanon = dedupeInOrder(epiteti.map(canonicalEpithet));
+  const divinitaEpitetiCanon = divinitaEpiteti.map(de => ({
+    divinita: de.divinita,
+    epiteti: dedupeInOrder(de.epiteti.map(canonicalEpithet)),
+  }));
+
   return {
     id,
     entryId,
@@ -1280,9 +1302,9 @@ function parseTeiElement(teiString: string): Monumento {
     testo,
     testo_searchable,
     supplied_ranges,
-    epiteti,
+    epiteti: epitetiCanon,
     divinita,
-    divinitaEpiteti,
+    divinitaEpiteti: divinitaEpitetiCanon,
     onomastica,
     persone,
     imperatori,
