@@ -1,0 +1,1946 @@
+[
+ {
+  "id": "ILA-091",
+  "lane": "Lane, CMRDM I 2",
+  "righe": 2,
+  "grc": "· · ·ΕΛ | · ·Θ· · ·Ι· · ·",
+  "it": "—",
+  "en": "—",
+  "note": "Non tradotta: righe illeggibili."
+ },
+ {
+  "id": "ILA-094",
+  "lane": "Lane, CMRDM I 5",
+  "righe": 1,
+  "grc": "ὁ Πάν, ὁ Μήν, χαίρετε νύνφαι καλαί, ὕε κύε ὑπέρχυε.",
+  "it": "O Pan, o Men, χαίρετε, ninfe belle; ὗε κύε ὑπέρχυε.",
+  "en": "O Pan, O Men, χαίρετε, fair nymphs; ὗε κύε ὑπέρχυε.",
+  "note": ""
+ },
+ {
+  "id": "ILA-096",
+  "lane": "Lane, CMRDM I 7",
+  "righe": 4,
+  "grc": "Ἱερεὺς στολιστὴς Ἴσιδος | καὶ Σεράπιδος Αὐρ. Ἐπαφρόδει- | τος τῷ Οὐρανίῳ Μηνὶ εὐχα- | [ρ]ιστήριον ἀνέθηκα.",
+  "it": "Sacerdote stolista di Isis e Sarapis, Aur(elios) Epaphrodeitos, dedicai a Men Ouranios un'offerta di ringraziamento.",
+  "en": "Stolist priest of Isis and Sarapis, Aur(elios) Epaphrodeitos, I dedicated a thank-offering to Men Ouranios.",
+  "note": ""
+ },
+ {
+  "id": "ILA-097",
+  "lane": "Lane, CMRDM I 8",
+  "righe": 5,
+  "grc": "Δημήτριος | καὶ ἡ γυνὴ | Ἐρώτιον Μηνὶ | ἐπὶ ἱερέας | Γλαύκου.",
+  "it": "Demetrios e la moglie Erotion, a Men, sotto il sacerdote Glaukos.",
+  "en": "Demetrios and his wife Erotion, to Men, under the priest Glaukos.",
+  "note": ""
+ },
+ {
+  "id": "ILA-099",
+  "lane": "Lane, CMRDM I 10",
+  "righe": 1,
+  "grc": "Μιτραδάτης καὶ ἡ γυνὴ Μηνὶ [ἀνέθηκαν].",
+  "it": "Mitradates e la moglie, a Men, [dedicarono].",
+  "en": "Mitradates and his wife [dedicated this] to Men.",
+  "note": ""
+ },
+ {
+  "id": "ILA-100",
+  "lane": "Lane, CMRDM I 11",
+  "righe": 1,
+  "grc": "Ξά[ν]θος Μηνὶ Τυράννῳ.",
+  "it": "Xanthos, a Men Tyrannos.",
+  "en": "Xanthos, to Men Tyrannos.",
+  "note": ""
+ },
+ {
+  "id": "ILA-284",
+  "lane": "Lane, CMRDM I 15",
+  "righe": 8,
+  "grc": "[illegible line] | ἀνέθη- | κεν θεῷ | Μηνὶ Τυράν- | νῳ Διονύσῳ | Λαέου χάριν [ποι-] | ου]σα ... | [illegible line]",
+  "it": "[- - -] dedicò al dio Men Tyrannos Dionysos, a favore di Laeos, [facend]o [- - -].",
+  "en": "[- - -] dedicated (this) to the god Men Tyrannos Dionysos, for the sake of Laeos, [mak]ing [- - -].",
+  "note": ""
+ },
+ {
+  "id": "ILA-285",
+  "lane": "Lane, CMRDM I 16",
+  "righe": 8,
+  "grc": "τ[ι]μαθ[έ]ντος ὑπὸ Ἁλιαστᾶν Ἀθαναϊαστᾶν Ἑρμαϊαστᾶν Ἀ[ρ]ίστιδειων | κοινοῦ χρυσέῳ στεφάνῳ, καὶ ὑπὸ Δίος Σωτηριαστᾶν | Σαραπιαστᾶν κοινοῦ θαλλίνῳ στεφάνῳ, | καὶ ὑπὸ Σαραπιαστᾶν χρυσέῳ στεφάνῳ· καὶ ὑπὸ Μηνιαστᾶν | Ἀφροδισιαστᾶν κοινοῦ χρυσέῳ στεφάνῳ, καὶ ὑπὸ Σωτηριαστᾶν | Ἀσκλαπιαστᾶν Ποσειδανιαστᾶν Ἀθαναϊαστᾶν Ἀφροδισιαστᾶν | Ἑρμίαστᾶν Ματρὸς θεῶν κοινοῦ χρυσέῳ στεφάνῳ [κα]ὶ ὑπὸ | Ἑστιαστᾶν κοινοῦ θαλλίνῳ στεφάνῳ.",
+  "it": "essendo stato onorato dal koinon degli Haliastai Athanaiastai Hermaiastai Aristeideioi con una corona d'oro, e dal koinon dei Dios Soteriastai Sarapiastai con una corona di fronde, e dai Sarapiastai con una corona d'oro; e dal koinon dei Meniastai Aphrodisiastai con una corona d'oro, e dal koinon dei Soteriastai Asklapiastai Poseidaniastai Athanaiastai Aphrodisiastai Hermiastai (e) di Meter theon con una corona d'oro, [e] dal koinon degli Hestiastai con una corona di fronde.",
+  "en": "having been honoured by the koinon of the Haliastai Athanaiastai Hermaiastai Aristeideioi with a golden crown, and by the koinon of the Dios Soteriastai Sarapiastai with a crown of foliage, and by the Sarapiastai with a golden crown; and by the koinon of the Meniastai Aphrodisiastai with a golden crown, and by the koinon of the Soteriastai Asklapiastai Poseidaniastai Athanaiastai Aphrodisiastai Hermiastai (and) of Meter theon with a golden crown, [and] by the koinon of the Hestiastai with a crown of foliage.",
+  "note": ""
+ },
+ {
+  "id": "ILA-286",
+  "lane": "Lane, CMRDM I 17",
+  "righe": 6,
+  "grc": "Τὸ κοινὸν Διόδοτος | τὸ Μηνιαστᾶν Ἐγγενής | ἐτίμασε υἱός | Ἡφαιστίωνα Ἡφαιστίωνος | Ἀντιοχεῖ θαλίνῳ στεφάνῳ | Χρηστοὶ χαίρετε.",
+  "it": "Il koinon dei Meniastai onorò Hephaistion figlio di Hephaistion, antiocheno, con una corona di fronde. Diodotos Engenes, il figlio. Χρηστοὶ χαίρετε.",
+  "en": "The koinon of the Meniastai honoured Hephaistion son of Hephaistion, of Antioch, with a crown of foliage. Diodotos Engenes, his son. Χρηστοὶ χαίρετε.",
+  "note": "Il testo corre su due colonne alternate: la traduzione ricompone l'ordine sintattico."
+ },
+ {
+  "id": "ILA-287",
+  "lane": "Lane, CMRDM I 18",
+  "righe": 1,
+  "grc": "Τάοσα Μηνί",
+  "it": "Taosa a Men.",
+  "en": "Taosa to Men.",
+  "note": ""
+ },
+ {
+  "id": "ILA-288",
+  "lane": "Lane, CMRDM I 19",
+  "righe": 1,
+  "grc": "Ἀριστοκύδης Μηνί",
+  "it": "Aristokydes a Men.",
+  "en": "Aristokydes to Men.",
+  "note": ""
+ },
+ {
+  "id": "ILA-106",
+  "lane": "Lane, CMRDM I 21",
+  "righe": 6,
+  "grc": "Μηνὶ Αὐγε- | λ̣ά̣[σ]τῳ Αυρ. | Marcianus | [s]ignifer | l[e]g(ionis) voto | posuit.",
+  "it": "A Men Augelastos, Aur(elius) Marcianus, signifer della legione, pose per voto.",
+  "en": "To Men Augelastos, Aur(elius) Marcianus, signifer of the legion, set (this) up in accordance with his vow.",
+  "note": ""
+ },
+ {
+  "id": "ILA-282",
+  "lane": "Lane, CMRDM I 20",
+  "righe": 5,
+  "grc": "Meni | Ci[l]vastion(o) | G(aius) Petr(onius) Iustus | corn(icularius) proc(uratoris) | ex voto",
+  "it": "A Men Cilvastionus, G(aius) Petr(onius) Iustus, corn(icularius) del proc(uratore), per voto.",
+  "en": "To Men Cilvastionus, G(aius) Petr(onius) Iustus, corn(icularius) of the proc(urator), in accordance with his vow.",
+  "note": ""
+ },
+ {
+  "id": "ILA-289",
+  "lane": "Lane, CMRDM I 22",
+  "righe": 5,
+  "grc": "ἐξεμ- | τονυμιν θ[εοῖσι] | ἀθανάτοις Ῥείη τε καὶ Ἄττει | Μηνοτύραννω· .....] | ... ια ...",
+  "it": "[- - -] agli dèi [immortali], a Rhea e ad Attis Menotyrannos [- - -].",
+  "en": "[- - -] to the [immortal] gods, to Rhea and to Attis Menotyrannos [- - -].",
+  "note": ""
+ },
+ {
+  "id": "ILA-292",
+  "lane": "Lane, CMRDM I 26",
+  "righe": 6,
+  "grc": "Diis [Magnis] | M(atri) D(eum) M(agnae) I(daeae) et Attidi Meno- | tyranno Sextius Rus- | ticus V(ir) C(onsularis) [et inlust-] | ris Pater Pat[rum Dei In-] | victi Mithr[ae ......]",
+  "it": "Agli dèi [Magni], alla Madre degli dèi Magna Idaea e ad Attis Menotyrannus, Sextius Rusticus, vir consularis [et illust]ris, pater pat[rum del dio in]victo Mithr[a - - -].",
+  "en": "To the [Great] Gods, to the Great Idaean Mother of the Gods and to Attis Menotyrannus, Sextius Rusticus, vir consularis [et illust]ris, pater pat[rum of the un]conquered god Mithr[as - - -].",
+  "note": ""
+ },
+ {
+  "id": "ILA-003",
+  "lane": "Lane, CMRDM I 31",
+  "righe": 3,
+  "grc": "Μηνὶ Ἀξιεττηνῷ ἐξ Ἐπι- | κράτου Ἑρμογένης ἐπὶ χά- | ριτος εὐχήν.",
+  "it": "A Men Axiettenos da Epikrates, Hermogenes, in ringraziamento, in voto.",
+  "en": "To Men Axiettenos from Epikrates, Hermogenes, in gratitude, in fulfilment of a vow.",
+  "note": ""
+ },
+ {
+  "id": "ILA-004",
+  "lane": "Lane, CMRDM I 32",
+  "righe": 3,
+  "grc": "Μηνὶ Οὐρανίῳ | Μηνὶ Ἀξιοττηνῷ | [...]λία Ποπλίου",
+  "it": "A Men Ouranios, a Men Axiottenos, [- - -]lia figlia di Poplios.",
+  "en": "To Men Ouranios, to Men Axiottenos, [- - -]lia daughter of Poplios.",
+  "note": ""
+ },
+ {
+  "id": "ILA-005",
+  "lane": "Lane, CMRDM I 33",
+  "righe": 4,
+  "grc": "Ἔτους σζ΄, μη(νὸς) Ξανδικοῦ βι΄, κατὰ ἐπιταγὴν | Μηνὸς Ἀρτεμιδώρου | Ἀξιοττηνοῦ, Ἥπιος Τ[ι]βερίου Φιλοκάλου δοῦλος ὑπὲρ ἑαυτοῦ καὶ | τῶν τέκνων ἀνέθηκεν.",
+  "it": "Nell'anno 207, il 12 del mese Xandikos, per comando di Men Artemidorou Axiottenos, Hepios schiavo di T[i]berios Philokalos, per sé e per i figli dedicò.",
+  "en": "In the year 207, on the 12th of the month Xandikos, at the command of Men Artemidorou Axiottenos, Hepios, slave of T[i]berios Philokalos, dedicated (this) on behalf of himself and his children.",
+  "note": ""
+ },
+ {
+  "id": "ILA-007",
+  "lane": "Lane, CMRDM I 35",
+  "righe": 9,
+  "grc": "Θεᾷ Ἀνάειτι καὶ Μηνὶ Τιάμου | Τύχη καὶ Σωκράτης καὶ Ἀμ- | μιανὸς καὶ Τρόφιμος οἱ Ἀμ- | μίου καὶ Φιλήτη καὶ Σωκρατία | αι Ἀμμιάδος ποιήσαντες τὸ ἱε- | ροποίημα εἰλασάμενυ Μητέ- | ραν Ἀνάειτιν ὑπὲρ τέκνων καὶ | θρεμμάτων ἔνγραφον ἔστησαν. | Ἔτους τκα΄, μη(νὸς) Ξανδικοῦ.",
+  "it": "Alla dea Anaitis e a Men Tiamou. Tyche e Sokrates e Ammianos e Trophimos, figli di Ammios, e Philete e Sokratia, figlie di Ammias, avendo compiuto l'offerta sacra, avendo propiziato Meter Anaitis, per i figli e per gli allevati in casa eressero l'iscrizione. Nell'anno 321, nel mese Xandikos.",
+  "en": "To the goddess Anaitis and to Men Tiamou. Tyche and Sokrates and Ammianos and Trophimos, the children of Ammios, and Philete and Sokratia, the daughters of Ammias, having performed the sacred offering, having propitiated Meter Anaitis, set up the inscription on behalf of their children and their foster-children. In the year 321, in the month Xandikos.",
+  "note": ""
+ },
+ {
+  "id": "ILA-008",
+  "lane": "Lane, CMRDM I 36",
+  "righe": 5,
+  "grc": "ρειπαρεν | Μηνεὶ Τυρά[ννῳ] | μουκληρον | [...]μοκαιτᾳ | ιανεθι",
+  "it": "—",
+  "en": "—",
+  "note": "Non tradotta: testo in gran parte non leggibile; solo «Μηνεὶ Τυρά[ννῳ]» sicuro."
+ },
+ {
+  "id": "ILA-009",
+  "lane": "Lane, CMRDM I 37",
+  "righe": 4,
+  "grc": "[Ἀξι]ο[τη]ν[ῷ] ἐ[ξ] Ἐπικρ[ά-] | [το]υ Ἐλπὶς Ἀνδρονίκο[υ] | εὐξαμένη ὑπὲρ τοῦ ἡμι- | όνου εὐχήν.",
+  "it": "[Ad Axi]o[tte]n[os] da Epikr[at]es, Elpis figlia di Andronikos, avendo pregato per il mulo, in voto.",
+  "en": "[To Axi]o[tte]n[os] from Epikr[at]es, Elpis daughter of Andronikos, having prayed on behalf of the mule, in fulfilment of a vow.",
+  "note": ""
+ },
+ {
+  "id": "ILA-010",
+  "lane": "Lane, CMRDM I 38",
+  "righe": 1,
+  "grc": "Μηνὶ Ἀξιο[ττηνῷ]",
+  "it": "A Men Axio[ttenos].",
+  "en": "To Men Axio[ttenos].",
+  "note": ""
+ },
+ {
+  "id": "ILA-011",
+  "lane": "Lane, CMRDM I 39",
+  "righe": 5,
+  "grc": "Ἔτους τιγ΄, μη(νὸς) Γορπιαίου | ηι΄. Μηνὶ Μοτελλείτῃ | Τροφίμη ὑπὲρ Ἰουλιανοῦ | τοῦ θρεπτοῦ εὐχὴν | ἀνέστησεν.",
+  "it": "Nell'anno 313, il 18 del mese Gorpiaios. A Men Motelleites, Trophime, per Ioulianos l'allevato in casa, eresse in voto.",
+  "en": "In the year 313, on the 18th of the month Gorpiaios. To Men Motelleites, Trophime set (this) up on behalf of Ioulianos, her foster-son, in fulfilment of a vow.",
+  "note": ""
+ },
+ {
+  "id": "ILA-012",
+  "lane": "Lane, CMRDM I 40",
+  "righe": 4,
+  "grc": "Μηνὶ Ἀξιοττήνῳ Ἀθη- | νίων ὑπὲρ Ὀνησίμη- | ς τῆς τεθραμμένης | εὐχήν.",
+  "it": "A Men Axiottenos, Athenion, per Onesime l'allevata in casa, in voto.",
+  "en": "To Men Axiottenos, Athenion, on behalf of Onesime, the foster-daughter, in fulfilment of a vow.",
+  "note": ""
+ },
+ {
+  "id": "ILA-013",
+  "lane": "Lane, CMRDM I 41",
+  "righe": 5,
+  "grc": "[Τα]τιανὸς Γλαῦκος καὶ Ἀμμιανὴ φι- | [λ]όθεοι Μηνὶ Μοτυλεῖτῃ εὐχαριστ- | [ία]αν ἔθοντο εὐχόμενοι ἀεὶ ὑπὲρ | [θ]ρεπτῆς γένει πρώτης Σαβειν- | ῆς [......] ἥνπερ σώσειες σὺ [...]",
+  "it": "[Ta]tianos Glaukos e Ammiane, devoti al dio, resero grazie a Men Motyleites, pregando sempre per [l']allevata in casa, prima per nascita, Sabeine [- - -], che tu possa salvare [- - -].",
+  "en": "[Ta]tianos Glaukos and Ammiane, devoted to the god, rendered thanks to Men Motyleites, praying continually on behalf of [their] foster-daughter, first by birth, Sabeine [- - -], whom may you preserve [- - -].",
+  "note": ""
+ },
+ {
+  "id": "ILA-016",
+  "lane": "Lane, CMRDM I 45",
+  "righe": 9,
+  "grc": "Θεᾷ Ἀνάειτι καὶ | Μηνὶ Τιάμου. Σωκρά- | τεια κ(αὶ) Βασσίλλα | κ(αὶ) Ἀπολλωνὶς κ(αὶ) Πρό- | κλος κ(αὶ) Τρόφιμος | ἀπέδωκαν τὸ ἱ[ε-] | ροποίημα εὐχαρισ- | τοῦντες. Ἔτους σϙε΄, | μη(νὸς) Λώου β΄.",
+  "it": "Alla dea Anaitis e a Men Tiamou. Sokrateia e Bassilla e Apollonis e Proklos e Trophimos resero l'offerta sacra, rendendo grazie. Nell'anno 295, il 2 del mese Loos.",
+  "en": "To the goddess Anaitis and to Men Tiamou. Sokrateia and Bassilla and Apollonis and Proklos and Trophimos rendered the sacred offering, giving thanks. In the year 295, on the 2nd of the month Loos.",
+  "note": ""
+ },
+ {
+  "id": "ILA-017",
+  "lane": "Lane, CMRDM I 46",
+  "righe": 5,
+  "grc": "[Θεῷ ἐπηκ]όῳ Μηνὶ Ἀξιτη- | [νῷ] [Τ]ρόφιμος εὐξάμε- | [νος] καὶ ἐπιτυχὼν εὐχα- | [ριστ]ῶν ἀνέθηκα | [......] μη(νὸς) Δίου βι΄",
+  "it": "[Al dio che ascolta], a Men Axite[nos], [T]rophimos, avendo fatto voto e avendo ottenuto, in ringraziamento dedicai. [- - -] il 12 del mese Dios.",
+  "en": "[To the god who hearkens], to Men Axite[nos], [T]rophimos, having made a vow and having obtained (it), in thanksgiving I dedicated. [- - -] on the 12th of the month Dios.",
+  "note": ""
+ },
+ {
+  "id": "ILA-019",
+  "lane": "Lane, CMRDM I 48",
+  "righe": 4,
+  "grc": "Ἔτους σξβ΄, μη(νὸς) Ξ[ανδικοῦ ..] | Θεῷ Ἀξιοττη[νῷ ................] | βούλων Τατιο[........................] | [... Ἑ]ρμογένου[........................]",
+  "it": "Nell'anno 262, nel mese X[andikos - - -]. Al dio Axiotte[nos - - -]boulon Tatio[- - -] [- - - H]ermogenou [- - -].",
+  "en": "In the year 262, in the month X[andikos - - -]. To the god Axiotte[nos - - -]boulon Tatio[- - -] [- - - H]ermogenou [- - -].",
+  "note": "Traduzione parziale: il testo è mutilo a destra a partire dalla r. 2."
+ },
+ {
+  "id": "ILA-020",
+  "lane": "Lane, CMRDM I 49",
+  "righe": 9,
+  "grc": "Μητρὶ Ἀτίμιτι | καὶ Μηνὶ Τιάμ- | ου Γλύκων | Τρύφωνος καὶ | Τρόφιμος Θεο- | γένου κατ᾽ ἐπι- | ταγὴν τὸν βωμ- | ὸν ἐκ τῶν ἰδίων | ἀνέθηκαν.",
+  "it": "A Meter Atimitis e a Men Tiamou, Glykon figlio di Tryphon e Trophimos figlio di Theogenes, per comando, dedicarono l'altare a proprie spese.",
+  "en": "To Meter Atimitis and to Men Tiamou, Glykon son of Tryphon and Trophimos son of Theogenes, in accordance with a command, dedicated the altar at their own expense.",
+  "note": ""
+ },
+ {
+  "id": "ILA-021",
+  "lane": "Lane, CMRDM I 50",
+  "righe": 8,
+  "grc": "Μηνὶ Ἀξιοττηνῷ. Τατιανὴ Ἑρ- | που εὐξαμένη ταῦρον ὑ- | πὲρ ἀδελφῶν καὶ ἀκουσ- | θεῖσα, μὴ δυνασθεῖσα δὲ | ἀποδοῦναι ταῦρον, ἠρώτη- | σε τὸν θεὸν καὶ συνεχώρησε | ἀπολαβεῖν στήλλην. Ἔτους τκ΄, | μη(νὸς) Πανήμου ι΄.",
+  "it": "A Men Axiottenos. Tatiane figlia di Herpes, avendo votato un toro per i fratelli ed essendo stata ascoltata, non potendo però consegnare il toro, interrogò il dio ed egli concesse che riscattasse con una stele. Nell'anno 320, il 10 del mese Panemos.",
+  "en": "To Men Axiottenos. Tatiane daughter of Herpes, having vowed a bull on behalf of her brothers and having been heard, but being unable to deliver the bull, asked the god, and he granted that she redeem it with a stele. In the year 320, on the 10th of the month Panemos.",
+  "note": ""
+ },
+ {
+  "id": "ILA-023",
+  "lane": "Lane, CMRDM I 52",
+  "righe": 3,
+  "grc": "Μ[ηνὶ] Ὁσήῳ Μάνης καὶ Βάνας ὁ | Μ[......]λλιωλιας ἡ μήτηρ αὐτῶν | τὸ πρόπυλον ει ον",
+  "it": "A M[en] Hoseos, Manes e Banas, figlio di M[- - -], (e) [- - -]lliolias loro madre, il propileo [- - -].",
+  "en": "To M[en] Hoseos, Manes and Banas, son of M[- - -], (and) [- - -]lliolias their mother, the propylon [- - -].",
+  "note": ""
+ },
+ {
+  "id": "ILA-026",
+  "lane": "Lane, CMRDM I 55",
+  "righe": 8,
+  "grc": "[Ἔτου]ς σγζ΄, μη(νὸς) Πανήμ[ου· Ἐπεὶ] | Ἕρμιππος Ἑρμίππο[υ] ................] | σετο τὸν θεὸν Μῆνα ΚΓ[................] | μετὰ τῶν ἰδίων ἀδελφῶν Διονυσίου, Ἀ- | πολλωνίου, Ὀρφέος ἀ[πέκτεινε ........] | τὸν ἐπιζητηθέντ[α ...... μετὰ] | Διονυσίου τοῦ ἀδελ[φοῦ· ...... μετὰ] | τὸ τετελευτηκένα[ι αὐτοὺς ...........]",
+  "it": "Nell'[an]no 297, nel mese Panem[os. Poiché] Hermippos figlio di Hermippo[s - - -] il dio Men [- - -] insieme ai propri fratelli Dionysios, Apollonios, Orpheus u[ccise - - -] colui che era ricercat[o - - - insieme a] Dionysios il frat[ello - - - dopo] che [essi] furono morti [- - -].",
+  "en": "In the [ye]ar 297, in the month Panem[os. Since] Hermippos son of Hermippo[s - - -] the god Men [- - -] together with his own brothers Dionysios, Apollonios, Orpheus k[illed - - -] the man who was sought [- - - together with] Dionysios his broth[er - - - after] they had died [- - -].",
+  "note": "Il numerale dell'anno (σγζ΄) è irregolare: cifra incerta."
+ },
+ {
+  "id": "ILA-027",
+  "lane": "Lane, CMRDM I 56",
+  "righe": 7,
+  "grc": "[Μηνὶ Καμα- | ρείτῃ] ε[ὐχὴν] | Ἡρακλείδης Με- | νεκράτους, | ἔτους ρνα΄, μη- | νὸς Γορπιαίου | ἀνέθηκεν.",
+  "it": "[A Men Kama]rei[tes], in [voto], Herakleides figlio di Menekrates, nell'anno 151, nel mese Gorpiaios, dedicò.",
+  "en": "[To Men Kama]rei[tes], in [fulfilment of a vow], Herakleides son of Menekrates, in the year 151, in the month Gorpiaios, dedicated (this).",
+  "note": ""
+ },
+ {
+  "id": "ILA-028",
+  "lane": "Lane, CMRDM I 57",
+  "righe": 8,
+  "grc": "Ἀρτέμιδι Ἀνάειτι | καὶ Μηνὶ Τιάμου Ἀ- | λέξανδρος Τειμό- | θεος Γλύκων τῶν | Βολλάδος καὶ οἱ συν- | βολαφόροι ἐγλυτρω- | [σάμεν]οι ἀνέστη- | [σαν · · · · · · · · · ·]",
+  "it": "Ad Artemis Anaitis e a Men Tiamou, Alexandros, Teimotheos, Glykon, figli di Bollas, e i portatori del contrassegno, avendo [riscatta]to, eres[sero - - -].",
+  "en": "To Artemis Anaitis and to Men Tiamou, Alexandros, Teimotheos, Glykon, sons of Bollas, and the token-bearers, having [redeem]ed, set [up - - -].",
+  "note": ""
+ },
+ {
+  "id": "ILA-030",
+  "lane": "Lane, CMRDM I 59",
+  "righe": 5,
+  "grc": "Ἀρτέμιδι Ἀνάειτι καὶ | Μηνὶ Τιάμου Μελτίνη | [ὑ]πὲρ τῆς ὁλοκληρίας | [τῶν] ποδῶν εὐχὴν | [ἀνέσ]τησεν.",
+  "it": "Ad Artemis Anaitis e a Men Tiamou, Meltine, [p]er l'integrità [dei] piedi, [eres]se in voto.",
+  "en": "To Artemis Anaitis and to Men Tiamou, Meltine, [f]or the soundness [of her] feet, [set] (this) up in fulfilment of a vow.",
+  "note": ""
+ },
+ {
+  "id": "ILA-031",
+  "lane": "Lane, CMRDM I 60",
+  "righe": 4,
+  "grc": "Θεᾷ Ἀνάειτι καὶ Μηνὶ Τιάμου | Μελτίνη καὶ Γλύκων ἀπέδω- | καν τὸ ἱεροποίημα εὐχαρισ- | τοῦντες. Ἔτους τ΄, μη(νὸς) Ξανδικοῦ.",
+  "it": "Alla dea Anaitis e a Men Tiamou, Meltine e Glykon resero l'offerta sacra, rendendo grazie. Nell'anno 300, nel mese Xandikos.",
+  "en": "To the goddess Anaitis and to Men Tiamou, Meltine and Glykon rendered the sacred offering, giving thanks. In the year 300, in the month Xandikos.",
+  "note": ""
+ },
+ {
+  "id": "ILA-032",
+  "lane": "Lane, CMRDM I 61",
+  "righe": 7,
+  "grc": "[Ἔτ]ους σκζ΄, Ἀρτεμίδω[ρο-] | ς Διοδότου καὶ Ἀμιὰς | μετὰ τῶν συγγενῶν ἐξ ἰδό- | των καὶ μὴ ἰδότων λύτρ- | ον κατ᾽ ἐπιταγὴν Μηνὶ | Τυράννῳ καὶ Διὶ Ὀγμην- | ῷ καὶ τοῖς σὺν αὐτῷ θεοῖς.",
+  "it": "Nell'[an]no 227. Artemidoro[s] figlio di Diodotos e Amias, insieme ai parenti, il riscatto per (le colpe) note e non note, per comando, a Men Tyrannos e a Zeus Ogmenos e agli dèi che sono con lui.",
+  "en": "In the [ye]ar 227. Artemidoro[s] son of Diodotos and Amias, together with their kinsfolk, the ransom for things known and not known, in accordance with a command, to Men Tyrannos and to Zeus Ogmenos and to the gods who are with him.",
+  "note": ""
+ },
+ {
+  "id": "ILA-034",
+  "lane": "Lane, CMRDM I 63",
+  "righe": 8,
+  "grc": "Ἀρτέμιδι Ἀνάειτι κ[αὶ Μη- | νὶ Τιάμου Μουσαῖς β΄ [καὶ] | Καλλιγένεια ἡ σύμβι[ος αὐ-] | τοῦ ὑπὲρ Μουσαίου το[ῦ ὑοῦ] | μαρτυροῦντες τὰς δ[υνά-] | μις τῶν θεῶν ἀπέδω[καν] | τὴν εὐχήν. Ἔτους σπα΄, [μη(νὸς)] | Δείου ι΄.",
+  "it": "Ad Artemis Anaitis e [a Men] Tiamou, Mousais II [e] Kalligeneia la sua consor[te], per Mousaios i[l figlio], attestando le p[oten]ze degli dèi, res[ero] il voto. Nell'anno 281, [il] 10 [del mese] Deios.",
+  "en": "To Artemis Anaitis and [to Men] Tiamou, Mousais II [and] Kalligeneia his wi[fe], on behalf of Mousaios [their] so[n], bearing witness to the p[owe]rs of the gods, ren[dered] the vow. In the year 281, [on the] 10th [of the month] Deios.",
+  "note": ""
+ },
+ {
+  "id": "ILA-036",
+  "lane": "Lane, CMRDM I 65",
+  "righe": 6,
+  "grc": "Μηνὶ Ἀξιττηνῷ | Ὀνησίμη ἡ μήτηρ ὑπὲρ | τοῦ υοῦ Τυράννου, ἐπει- | δὴ τὸν πόδα πονήσας εὐ- | λογοῦσα ἀνέθηκα. Ἔτους | τνδ΄, μη(νὸς) ς΄ Ξανδικοῦ θι΄.",
+  "it": "A Men Axittenos. Onesime, la madre, per il figlio Tyrannos: poiché soffriva al piede, rendendo lode dedicai. Nell'anno 354, del mese sesto Xandikos, il 19.",
+  "en": "To Men Axittenos. Onesime, the mother, on behalf of her son Tyrannos: since he was suffering in his foot, giving praise I dedicated (this). In the year 354, of the sixth month Xandikos, the 19th.",
+  "note": "Τύραννος è qui il nome proprio del figlio, non l'epiteto del dio."
+ },
+ {
+  "id": "ILA-037",
+  "lane": "Lane, CMRDM I 66",
+  "righe": 7,
+  "grc": "Μῆνα ἐγ Διοδότου | Ἀλέξανδρος Θαλού- | σης μετὰ Ἰουλίου καὶ | τῆς ἀδελφῆς ἐλυτρώ- | σαντο τὸν θεὸν ἐξ εἰδό- | των καὶ μὴ εἰδότων. | Ἔτους σλγ΄.",
+  "it": "Alexandros figlio di Thalousa, insieme a Ioulios e alla sorella, riscattarono il dio, Men da Diodotos, per (le colpe) note e non note. Nell'anno 233.",
+  "en": "Alexandros son of Thalousa, together with Ioulios and his sister, redeemed the god, Men from Diodotos, for things known and not known. In the year 233.",
+  "note": ""
+ },
+ {
+  "id": "ILA-039",
+  "lane": "Lane, CMRDM I 68",
+  "righe": 4,
+  "grc": "[Ἔτ]ους τηλ΄, μ[η(νὸς)...] | [·]ονις ὑπὲρ Μάρκου τοῦ | [ὑ]οῦ εὐξαμένη Μηνὶ | [Π]ετραείτῃ εὐλογῶ.",
+  "it": "Nell'[an]no 338, nel m[ese - - -]. [- - -]onis, per Markos [il] figlio, avendo fatto voto a Men [P]etraeites, rendo lode.",
+  "en": "In the [ye]ar 338, in the mo[nth - - -]. [- - -]onis, on behalf of Markos [her] son, having made a vow to Men [P]etraeites, I give praise.",
+  "note": "Il numerale dell'anno è inciso τηλ΄ per τλη΄ (338)."
+ },
+ {
+  "id": "ILA-040",
+  "lane": "Lane, CMRDM I 70",
+  "righe": 9,
+  "grc": "Ἔτους ρπγ΄, μη(νὸς) Πανήμου | ς΄, Δημήτριος Τειμάου καὶ | Ἀμμία ἡ γυνὴ αὐτοῦ Δη- | μόφιλον τὸν ἑαυτῶν υἱ- | ὸν καὶ Ζηνᾶς ὁ ἀδελφὸς | αὐτοῦ ἐτείμησαν. Εἰ δέ | τις προσαμαρτάνῃ τῷ μνημεί- | ῳ, τεύξηται τοῦ Ἀξιοττη- | νοῦ κεχολωμένου.",
+  "it": "Nell'anno 183, il 6 del mese Panemos. Demetrios figlio di Teimaos e Ammia sua moglie onorarono Demophilos, loro figlio, e Zenas suo fratello. Se qualcuno reca offesa al monumento, incontrerà Axiottenos κεχολωμένου.",
+  "en": "In the year 183, on the 6th of the month Panemos. Demetrios son of Teimaos and Ammia his wife honoured Demophilos, their son, and Zenas his brother. If anyone does harm to the monument, he shall meet Axiottenos κεχολωμένου.",
+  "note": ""
+ },
+ {
+  "id": "ILA-041",
+  "lane": "Lane, CMRDM I 71",
+  "righe": 9,
+  "grc": "Ἔτους ροη΄, μη(νὸς) Δείου δ΄, | Ἀμιὰς ἡ γυνὴ καὶ οἱ υἱοὶ | Ἀπολλώνιος καὶ Δημό- | φιλος ἐτείμησαν Πατερῆ | καὶ Τρύφαινα ἡ θρεπτή. | Ἵνα μὴ τις προσαμάρτῃ τῇ | στήλῃ ἢ τῷ μνημείῳ, σκή- | πτρα ἐπέστησαν τοῦ Ἀξ[ι-] | οτ-τηνοῦ καὶ Ἀναείτιδος.",
+  "it": "Nell'anno 178, il 4 del mese Deios. Amias la moglie e i figli Apollonios e Demophilos onorarono Pateres, e Tryphaina l'allevata in casa. Perché nessuno rechi offesa alla stele o al monumento, posero i σκῆπτρα di Ax[i]ottenos e di Anaitis.",
+  "en": "In the year 178, on the 4th of the month Deios. Amias the wife and the sons Apollonios and Demophilos honoured Pateres, and Tryphaina the foster-daughter. So that no one may do harm to the stele or to the monument, they set up the σκῆπτρα of Ax[i]ottenos and of Anaitis.",
+  "note": ""
+ },
+ {
+  "id": "ILA-043",
+  "lane": "Lane, CMRDM I 73",
+  "righe": 4,
+  "grc": "Μηνὶ Τιά- | μου Φρό- | νιμος | εὐχήν.",
+  "it": "A Men Tiamou, Phronimos, in voto.",
+  "en": "To Men Tiamou, Phronimos, in fulfilment of a vow.",
+  "note": ""
+ },
+ {
+  "id": "ILA-044",
+  "lane": "Lane, CMRDM I 74",
+  "righe": 5,
+  "grc": "Ἀρτέμιδι Ἀνάε[ιτι] | καὶ Μηνὶ Τιάμου Ἀ[λε-] | ξάνδρα ὑπὲρ τῶν | μαστῶν εὐχὴν | ἀνέστησαν.",
+  "it": "Ad Artemis Anae[itis] e a Men Tiamou, A[le]xandra, per i seni, eressero in voto.",
+  "en": "To Artemis Anae[itis] and to Men Tiamou, A[le]xandra, for her breasts, set (this) up in fulfilment of a vow.",
+  "note": "Il verbo è al plurale nel testo (ἀνέστησαν) con dedicante singola."
+ },
+ {
+  "id": "ILA-047",
+  "lane": "Lane, CMRDM I 77",
+  "righe": 6,
+  "grc": "[····ω]ν Ἀρίστ[ονεί-] | [κου] [ἐλεη]θεὶς καὶ ἄμ[αρ-] | [τήσας κα]ταπίπτω εἰς ἀ[σ-] | [θένειαν] καὶ ὁμολογῶ τ[ὸ] | [ἁμάτρημ]α Μηνὶ Ἀξιω[τ-] | [τηνῷ] καὶ στη]λογρ[αφῶ].",
+  "it": "[- - -]on figlio di Arist[oneikos], avendo ricevuto [misericordia] e avendo [peccato], cado in ma[lattia] e confesso la [colpa] a Men Axio[ttenos] e [scrivo su stele].",
+  "en": "[- - -]on son of Arist[oneikos], having received [mercy] and having [sinned], I fall into si[ckness] and I confess the [fault] to Men Axio[ttenos] and [I write it on a stele].",
+  "note": ""
+ },
+ {
+  "id": "ILA-050",
+  "lane": "Lane, CMRDM I 81",
+  "righe": 9,
+  "grc": "[.......... εἴ τις] δ[έ τινα] | [τῶν προδηλου]μένων ἔξω βάλῃ, | [......... Μ]ηνὸς Τυμωλεί[του] | [καὶ τῶν θεῶν τ]ῶν ἄλλων πάν[των] | [κεχολωμένων] τύχοιτο μετὰ πάν- | [ωλείας πάντ]ων μήτε θρεμμά- | [τῶν ὄνησις εἴ]η μήτε ὀμμάτων | [ὅρασις, αὐτῷ δὲ] ἔξώλη γένοιτο | [καὶ μετὰ θάνα]τον.",
+  "it": "[- - - se qualcuno] getti fuori [uno dei predet]ti, [- - -] incontri [M]en Tymolei[tes e t]utti gli [altri dèi κεχολωμένους], con [rovina] totale; né [vi sia giovamento] degli allevati né [vista] degli occhi, [ma per lui] vi sia rovina [anche dopo la mor]te.",
+  "en": "[- - - if anyone] casts out [one of the aforesa]id, [- - -] may he meet [M]en Tymolei[tes and a]ll the [other gods κεχολωμένους], with utter [ruin]; may there be neither [profit] of his nurslings nor [sight] of his eyes, [but for him] may there be destruction [even after dea]th.",
+  "note": ""
+ },
+ {
+  "id": "ILA-051",
+  "lane": "Lane, CMRDM I 82",
+  "righe": 3,
+  "grc": "Σέλευκος Σε- | λεύκου Μηνὶ Τι- | άμου εὐχήν.",
+  "it": "Seleukos figlio di Seleukos, a Men Tiamou, in voto.",
+  "en": "Seleukos son of Seleukos, to Men Tiamou, in fulfilment of a vow.",
+  "note": ""
+ },
+ {
+  "id": "ILA-052",
+  "lane": "Lane, CMRDM I 84",
+  "righe": 3,
+  "grc": "Μητρὶ θεῶν Πλαστήνῃ | Καλλεισὼς Ὀρφεὺς | ἀνέθηκεν.",
+  "it": "A Meter theon Plastene, Kalleiso Orpheus dedicò.",
+  "en": "To Meter theon Plastene, Kalleiso Orpheus dedicated (this).",
+  "note": ""
+ },
+ {
+  "id": "ILA-054",
+  "lane": "Lane, CMRDM I 86",
+  "righe": 4,
+  "grc": "Δεσκυλίς Δεσκύλου | Μηνὶ Ἀρτεμιδώρου Ἀξι- | οττα κατέχοντι ὑπὲρ τῶν | τέκνων εὐχήν.",
+  "it": "Deskylis figlia di Deskylos, a Men Artemidorou che tiene Axiotta, per i figli, in voto.",
+  "en": "Deskylis daughter of Deskylos, to Men Artemidorou who holds Axiotta, on behalf of her children, in fulfilment of a vow.",
+  "note": ""
+ },
+ {
+  "id": "ILA-056",
+  "lane": "Lane, CMRDM I 88",
+  "righe": 9,
+  "grc": "[Ἔτ]ους σοε΄ ἀ[····] | Νεικήτας Παρδ- | αλᾶ Μηνὶ θεῷ | εὐχὴν | ὁσίῳ κ(αὶ) δικέῳ. | Ἡ Ἀλιανῶν κα- | τοικία. Σῷζε | τὴν κατοικί- | αν.",
+  "it": "Nell'[an]no 275 [- - -]. Neiketas figlio di Pardalas, a Men dio santo e giusto, in voto. La comunità degli Alianoi. Salva la comunità.",
+  "en": "In the [ye]ar 275 [- - -]. Neiketas son of Pardalas, to Men, holy and just god, in fulfilment of a vow. The settlement of the Alianoi. Save the settlement.",
+  "note": ""
+ },
+ {
+  "id": "ILA-057",
+  "lane": "Lane, CMRDM I 89",
+  "righe": 4,
+  "grc": "Κυντιανὴ Κυντιανοῦ | ὑπὲρ τεκέως ἀνέθηκε | τᾷ Ἑκάτᾳ καὶ Μανὶ τὸν | υἱέα τῷ Παιᾶνος.",
+  "it": "Kyntiane figlia di Kyntianos, per il figlio, dedicò a Hekate e a Men il figlio, quello di Paian.",
+  "en": "Kyntiane daughter of Kyntianos, on behalf of her child, dedicated to Hekate and to Men her son, the one of Paian.",
+  "note": ""
+ },
+ {
+  "id": "ILA-058",
+  "lane": "Lane, CMRDM I 90",
+  "righe": 4,
+  "grc": "Γαλλικῷ Ἀσκληπιὰς | κώμης Κερυζέων πα(ι)- | δίσχη Διογένου | λύτρον.",
+  "it": "A Gallikos, Asklepias, del villaggio dei Keryzeis, serva di Diogenes, il riscatto.",
+  "en": "To Gallikos, Asklepias, of the village of the Keryzeis, maidservant of Diogenes, a ransom.",
+  "note": ""
+ },
+ {
+  "id": "ILA-059",
+  "lane": "Lane, CMRDM I 91",
+  "righe": 4,
+  "grc": "Παπᾶ Παπᾶς | (ὑπὲρ) τέκνων σωτ- | ηρίας Μηνὶ | εὐχήν.",
+  "it": "Papas figlio di Papas, per la salvezza dei figli, a Men, in voto.",
+  "en": "Papas son of Papas, for the safety of his children, to Men, in fulfilment of a vow.",
+  "note": ""
+ },
+ {
+  "id": "ILA-060",
+  "lane": "Lane, CMRDM I 92",
+  "righe": 6,
+  "grc": "Ξεῦνα Ἰάσονο[ς] | σύνβιος περὶ τῶ- | ν ἰδίων σωτηρί- | ας Μηνὶ Οὐρανί- | ῳ καὶ Ἀπόλλωνι | εὐχήν.",
+  "it": "Xeuna figlia di Iason, consorte, per la salvezza dei suoi, a Men Ouranios e ad Apollon, in voto.",
+  "en": "Xeuna daughter of Iason, wife, for the safety of her own, to Men Ouranios and to Apollon, in fulfilment of a vow.",
+  "note": ""
+ },
+ {
+  "id": "ILA-061",
+  "lane": "Lane, CMRDM I 93",
+  "righe": 3,
+  "grc": "Οὐεζαεῖται | Μηνὶ Ἰταλ[ι]κῷ | ἐξ ἐπιτα[γ]ῆς.",
+  "it": "Gli Ouezaeitai, a Men Ital[i]kos, per comando.",
+  "en": "The Ouezaeitai, to Men Ital[i]kos, in accordance with a command.",
+  "note": ""
+ },
+ {
+  "id": "ILA-062",
+  "lane": "Lane, CMRDM I 94",
+  "righe": 4,
+  "grc": "[Τατ]α Τατάδρος | [ὑπ]ὲρ παιδίων | [αὐτ]ῆς Μηνὶ Οὐρα- | [νίῳ εὐχ]ήν.",
+  "it": "[Tat]a figlia di Tatadros, [pe]r i [su]oi bambini, a Men Oura[nios, in vo]to.",
+  "en": "[Tat]a daughter of Tatadros, [o]n behalf of [her] little children, to Men Oura[nios, in fulfilment of a vo]w.",
+  "note": ""
+ },
+ {
+  "id": "ILA-063",
+  "lane": "Lane, CMRDM I 95",
+  "righe": 5,
+  "grc": "Φωτίων κ(αὶ) γυ- | γὴ αὐτοῦ (ὑ)πὲρ | [τ]έκνων Μη- | νὶ Οὐρανίω | εὐχή[ν].",
+  "it": "Photion e sua moglie, per i figli, a Men Ouranios, in vo[to].",
+  "en": "Photion and his wife, on behalf of their children, to Men Ouranios, in fulfilment of a vo[w].",
+  "note": ""
+ },
+ {
+  "id": "ILA-064",
+  "lane": "Lane, CMRDM I 96",
+  "righe": 5,
+  "grc": "Τυχάσ[ι]ος | Ἀπολλωνίου | Μηνὶ εὐχὴν | Κολιανοκωμή | τη. -τη[ς]?",
+  "it": "Tychas[i]os figlio di Apollonios, a Men, in voto, Kolianokomites.",
+  "en": "Tychas[i]os son of Apollonios, to Men, in fulfilment of a vow, Kolianokomites.",
+  "note": ""
+ },
+ {
+  "id": "ILA-065",
+  "lane": "Lane, CMRDM I 97",
+  "righe": 4,
+  "grc": "Κωμηνοὶ | Μηνὶ [ε]ὐ- | χὴν | [κα]ὶ Βέγνε[ι].",
+  "it": "I Komenoi, a Men, in [vo]to, [e] a Begne[i].",
+  "en": "The Komenoi, to Men, in [fulfilment of a vo]w, [and] to Begne[i].",
+  "note": ""
+ },
+ {
+  "id": "ILA-066",
+  "lane": "Lane, CMRDM I 98",
+  "righe": 5,
+  "grc": "Ἀεζηνο- | ί ἐνχώρι- | οι Μηνὶ | Τουιτη- | [ν]ῷ εὐχήν.",
+  "it": "Gli Aezenoi del luogo, a Men Touite[n]os, in voto.",
+  "en": "The local Aezenoi, to Men Touite[n]os, in fulfilment of a vow.",
+  "note": ""
+ },
+ {
+  "id": "ILA-067",
+  "lane": "Lane, CMRDM I 99",
+  "righe": 9,
+  "grc": "Ἄπψιον τὸν ἑαυτῆς σύνβιον Γάειον κατεειέρωσεν σωτίρῃ Ἑ- | κάτῃ καὶ Ἀπελλᾶς καὶ Γάειος ἐτείμησαν τοὺς ἑαυτῶν γο- | νῖς μν- | ήμης | χάριν. | Τειμέ- | ας Μου- | ρματε- | ανός.",
+  "it": "Apsion consacrò il proprio consorte Gaios a Hekate Soteira, e Apellas e Gaios onorarono i propri genitori, in memoria. Teimeas Mourmateanos.",
+  "en": "Apsion consecrated her own husband Gaios to Hekate Soteira, and Apellas and Gaios honoured their own parents, in memory. Teimeas Mourmateanos.",
+  "note": ""
+ },
+ {
+  "id": "ILA-068",
+  "lane": "Lane, CMRDM I 100",
+  "righe": 1,
+  "grc": "Α[---]",
+  "it": "—",
+  "en": "—",
+  "note": "Non tradotta: una sola lettera superstite."
+ },
+ {
+  "id": "ILA-070",
+  "lane": "Lane, CMRDM I 102",
+  "righe": 3,
+  "grc": "Ἀγαθόπο- | υς Καουλη- Μηνὶ | νῷ εὐχήν.",
+  "it": "Agathopous, a Men Kaulenos, in voto.",
+  "en": "Agathopous, to Men Kaulenos, in fulfilment of a vow.",
+  "note": ""
+ },
+ {
+  "id": "ILA-072",
+  "lane": "Lane, CMRDM I 104",
+  "righe": 7,
+  "grc": "Αὐρ. Ἀντίοχος | Νέω- νος | [Σ]κρ- αίου | Μη- | νὶ | Ἐπηκόῳ εὐ- | χήν.",
+  "it": "Aur(elios) Antiochos figlio di Neon, (figlio) di [S]kraios, a Men Epekoos, in voto.",
+  "en": "Aur(elios) Antiochos son of Neon, (son) of [S]kraios, to Men Epekoos, in fulfilment of a vow.",
+  "note": ""
+ },
+ {
+  "id": "ILA-073",
+  "lane": "Lane, CMRDM I 105",
+  "righe": 4,
+  "grc": "Ὑπὲρ δήμου Ἀππολη- | νῶν σωτηρίας Μηνὶ | Ἀσκαηνῷ εὐχὴν Δη- | [μοσθέν]ης Διο[τείμου].",
+  "it": "Per la salvezza del popolo degli Appolenoi, a Men Askaenos, in voto, De[mosthen]es figlio di Dio[teimos].",
+  "en": "For the safety of the people of the Appolenoi, to Men Askaenos, in fulfilment of a vow, De[mosthen]es son of Dio[teimos].",
+  "note": ""
+ },
+ {
+  "id": "ILA-074",
+  "lane": "Lane, CMRDM I 106",
+  "righe": 4,
+  "grc": "[Πετ]ρώνιος | [····]εὺς Ἄππας ὑε[ι-] | [ὸς αὐτοῦ Μ]ηνὶ Ἀσκαηνῷ | [εὐχ]ήν.",
+  "it": "[Pet]ronios [- - -]eus, Appas [suo] fi[glio], [a M]en Askaenos, [in vo]to.",
+  "en": "[Pet]ronios [- - -]eus, Appas [his] so[n], [to M]en Askaenos, [in fulfilment of a vo]w.",
+  "note": ""
+ },
+ {
+  "id": "ILA-075",
+  "lane": "Lane, CMRDM I 107",
+  "righe": 6,
+  "grc": "Αὐρ. Παπᾶς Γαίου | κὲ Γάιος Παπᾶς ὁ | υἱὸς αὐτοῦ ὑπὲ[ρ] | [τ]ῆς ἑαυτῶν σω[τη-] | [ρί]ας Μηνὶ Σελμεην[ῷ] | εὐχήν.",
+  "it": "Aur(elios) Papas figlio di Gaios e Gaios (figlio di) Papas, suo figlio, pe[r] [l]a propria sal[vezz]a, a Men Selmeen[os], in voto.",
+  "en": "Aur(elios) Papas son of Gaios and Gaios (son of) Papas, his son, fo[r] [t]heir own saf[et]y, to Men Selmeen[os], in fulfilment of a vow.",
+  "note": ""
+ },
+ {
+  "id": "ILA-076",
+  "lane": "Lane, CMRDM I 108",
+  "righe": 2,
+  "grc": "[ὁ δῆ]μος Σελμηνῶν | [Μ]ηνὶ εὐχήν.",
+  "it": "[Il po]polo dei Selmenoi, [a M]en, in voto.",
+  "en": "[The pe]ople of the Selmenoi, [to M]en, in fulfilment of a vow.",
+  "note": ""
+ },
+ {
+  "id": "ILA-077",
+  "lane": "Lane, CMRDM I 109",
+  "righe": 4,
+  "grc": "[······]αιο[ς] | [Μηνὶ Σε]λμηνῷ | [εὐ]χήν | αρσυ ιο",
+  "it": "[- - -]aios, [a Men Se]lmenos, [in vo]to. [- - -]",
+  "en": "[- - -]aios, [to Men Se]lmenos, [in fulfilment of a vo]w. [- - -]",
+  "note": ""
+ },
+ {
+  "id": "ILA-078",
+  "lane": "Lane, CMRDM I 110",
+  "righe": 3,
+  "grc": "[Δι]ογένης Ἑρμέρωτος ὑπε[ρ] | ἑαυτοῦ καὶ τέκνων Μηνὶ | εὐχήν.",
+  "it": "[Di]ogenes figlio di Hermeros, pe[r] sé e per i figli, a Men, in voto.",
+  "en": "[Di]ogenes son of Hermeros, fo[r] himself and his children, to Men, in fulfilment of a vow.",
+  "note": ""
+ },
+ {
+  "id": "ILA-079",
+  "lane": "Lane, CMRDM I 111",
+  "righe": 6,
+  "grc": "Λούκιος Σέργι[ος] | Κόρινθος Μην[ὶ] ...] | πυκηνῷ εὐχὴν τὸ[ν] | τε ναὸν ἐκ τῶν ἰδίων | ἐποίησεν, ἔτους | ριδ΄.",
+  "it": "Loukios Sergi[os] Korinthos, a Men [- - -]pykenos, in voto, costruì anche il tempio a proprie spese. Nell'anno 114.",
+  "en": "Loukios Sergi[os] Korinthos, to Men [- - -]pykenos, in fulfilment of a vow, also built the temple at his own expense. In the year 114.",
+  "note": ""
+ },
+ {
+  "id": "ILA-081",
+  "lane": "Lane, CMRDM I 113",
+  "righe": 4,
+  "grc": "Πυλάδης | Διόμα | Μηνὶ | εὐχήν.",
+  "it": "Pylades figlio di Dioma, a Men, in voto.",
+  "en": "Pylades son of Dioma, to Men, in fulfilment of a vow.",
+  "note": ""
+ },
+ {
+  "id": "ILA-082",
+  "lane": "Lane, CMRDM I 114",
+  "righe": 2,
+  "grc": "Ἄππας Ἀλεξάνδρο- | υ Μηνὶ εὐχήν.",
+  "it": "Appas figlio di Alexandros, a Men, in voto.",
+  "en": "Appas son of Alexandros, to Men, in fulfilment of a vow.",
+  "note": ""
+ },
+ {
+  "id": "ILA-083",
+  "lane": "Lane, CMRDM I 115",
+  "righe": 4,
+  "grc": "Πα-πᾶς | Μη-νὶ | Ξευναγονη- | νῷ εὐχήν.",
+  "it": "Papas, a Men Xeunagonenos, in voto.",
+  "en": "Papas, to Men Xeunagonenos, in fulfilment of a vow.",
+  "note": ""
+ },
+ {
+  "id": "ILA-087",
+  "lane": "Lane, CMRDM I 119",
+  "righe": 3,
+  "grc": "Ἡρακλεῖ καὶ τῷ [δή]μ[ῳ] [τ]ὴν [τρά]πεζαν | Καλλικράτης Μολο[σσοῦ] ἱε]ρ[εὺς] Μηνὸς | Ἀ[σκ]αινοῦ καὶ Ἑρμοῦ [Ἀγο]ραίου",
+  "it": "A Herakles e al [po]pol[o] [l]a [men]sa: Kallikrates figlio di Molo[ssos], sace[rdote] di Men A[sk]ainos e di Hermes [Ago]raios.",
+  "en": "To Herakles and to the [pe]opl[e], [t]he [tab]le: Kallikrates son of Molo[ssos], pri[est] of Men A[sk]ainos and of Hermes [Ago]raios.",
+  "note": ""
+ },
+ {
+  "id": "ILA-088",
+  "lane": "Lane, CMRDM I 120",
+  "righe": 9,
+  "grc": "Νίκη πά[ρ]ειμ[ι] | Καίσαρ[ι] ἀεί. | Θεοῖς Σεβαστο[ῖς καὶ τῷ] | δήμωι τὴν Νίκη[ν] καὶ τὸν] | [λ]έοντα Καλ[λικράτης] | [Μ]ολοσσοῦ ἱε[ρεὺς Μηνὸς Ἀσ- | καινοῦ] καὶ Ἑρ[μοῦ Ἀγοραίου], τὰ] | [προ]γονικὰ ἀν[αθήματα πάντα] | [ἐπ]ισκευάσας [ἀποκαθέστησεν].",
+  "it": "«Nike, sono sempre presso Kaisar.» Agli dèi Sebasto[i e al] popolo, la Nike e il [l]eone, Kal[likrates] figlio di [M]olossos, sace[rdote di Men As]kainos e di Her[mes Agoraios], avendo [re]staurato [tutte] le [dediche a]vite, [le ricollocò].",
+  "en": "“Nike, I am ever at Kaisar's side.” To the Sebasto[i gods and to the] people, the Nike and the [l]ion, Kal[likrates] son of [M]olossos, pri[est of Men As]kainos and of Her[mes Agoraios], having [re]paired [all] the [ance]stral [dedications, set them back in place].",
+  "note": "La r. 1 è la didascalia «parlante» della statua di Nike."
+ },
+ {
+  "id": "ILA-104",
+  "lane": "Lane, CMRDM I 83",
+  "righe": 8,
+  "grc": "Τῷ θεῷ ε- | ν οὐρανοῖς, | μέγας Μὴν | Οὐρανιός, | μεγάλη δυ- | ναμίς τοῦ ἀ- | θανάτου θε- | οῦ.",
+  "it": "Al dio che è nei cieli, grande Men Ouranios, grande la potenza del dio immortale.",
+  "en": "To the god who is in the heavens, great Men Ouranios, great the power of the immortal god.",
+  "note": ""
+ },
+ {
+  "id": "ILA-105",
+  "lane": "Lane, CMRDM I 260",
+  "righe": 5,
+  "grc": "Γαῖος Γαίου τοῦ Λουκίου | τεκμορεύσας σὺν καὶ | Πανχάρπῃ θρεπτῷ | ἰδίῳ Μηνὶ Ἀσκαηνῷ | εὐχήν.",
+  "it": "Gaios figlio di Gaios (figlio) di Loukios, avendo compiuto il tekmor insieme anche a Pancharpes, suo allevato in casa, a Men Askaenos, in voto.",
+  "en": "Gaios son of Gaios (son) of Loukios, having performed the tekmor together also with Pancharpes, his own foster-son, to Men Askaenos, in fulfilment of a vow.",
+  "note": ""
+ },
+ {
+  "id": "ILA-111",
+  "lane": "Lane, CMRDM I 122",
+  "righe": 4,
+  "grc": "Μηνογᾶς | Τροφίμο[υ] | Μηνὶ εὐ- | χήν.",
+  "it": "Menogas figlio di Trophimo[s], a Men, in voto.",
+  "en": "Menogas son of Trophimo[s], to Men, in fulfilment of a vow.",
+  "note": ""
+ },
+ {
+  "id": "ILA-113",
+  "lane": "Lane, CMRDM I 124",
+  "righe": 1,
+  "grc": "[Μη]νὶ Ἐπηκόῳ εὐχ[ήν].",
+  "it": "[A Me]n Epekoos, in vo[to].",
+  "en": "[To Me]n Epekoos, in fulfilment of a vo[w].",
+  "note": ""
+ },
+ {
+  "id": "ILA-114",
+  "lane": "Lane, CMRDM I 125",
+  "righe": 5,
+  "grc": "[Ὁ δεῖνα Τρο- | [φί]μου] Ζω[τι-] | [κοῦ] Μην[ὶ] | Ἐπηκόῳ εὐ- | χήν.",
+  "it": "[Il tale figlio di Tro]phimos, (figlio) di Zo[tikos], a Me[n] Epekoos, in voto.",
+  "en": "[N.N., son of Tro]phimos, (son) of Zo[tikos], to Me[n] Epekoos, in fulfilment of a vow.",
+  "note": ""
+ },
+ {
+  "id": "ILA-116",
+  "lane": "Lane, CMRDM I 127",
+  "righe": 4,
+  "grc": "οἱ περὶ Αυρ. | Ἀρτέμωνα Ἑρμοκλ[έ]- | ους φράτρα Μηνὶ | Πλουριστρέων εὐχήν.",
+  "it": "Quelli intorno ad Aur(elios) Artemon figlio di Hermokl[e]s, la fratria, a Men Pluristreon, in voto.",
+  "en": "Those about Aur(elios) Artemon son of Hermokl[e]s, the phratry, to Men Pluristreon, in fulfilment of a vow.",
+  "note": ""
+ },
+ {
+  "id": "ILA-117",
+  "lane": "Lane, CMRDM I 128",
+  "righe": 3,
+  "grc": "[.....]ας δὶς Μουσαίο[υ] | τὸν βωμὸν ἐκ τῶν | [ἰ]δίων Μηνὶ εὐχήν.",
+  "it": "[- - -]as, due volte (figlio di) Mousaios, l'altare a proprie spese, a Men, in voto.",
+  "en": "[- - -]as, twice (son of) Mousaios, the altar at his own expense, to Men, in fulfilment of a vow.",
+  "note": "δὶς Μουσαίου indica che il padre era omonimo del nonno."
+ },
+ {
+  "id": "ILA-118",
+  "lane": "Lane, CMRDM I 129",
+  "righe": 9,
+  "grc": "Κοίντος | Νούμερι- | ος ἱερεὺς | Μηνὸς Ο[ὑ-] | ρανίου κα- | τὰ χρήμα- | τισμὸν ἀνε- | θῆκε θεῷ | ὑψίστῳ.",
+  "it": "Kointos Noumerios, sacerdote di Men O[u]ranios, secondo un responso dedicò al dio Hypsistos.",
+  "en": "Kointos Noumerios, priest of Men O[u]ranios, in accordance with an oracular response dedicated (this) to the god Hypsistos.",
+  "note": ""
+ },
+ {
+  "id": "ILA-119",
+  "lane": "Lane, CMRDM I 130",
+  "righe": 3,
+  "grc": "Ὅρος ἱερὸς καὶ ἄσυ- | λος θεοῦ ἐπιφανοῦ[ς] | Μηνὸς Ἀσκ[α]ηνοῦ.",
+  "it": "Confine sacro e inviolabile del dio manifesto Men Ask[a]enos.",
+  "en": "Sacred and inviolable boundary of the manifest god Men Ask[a]enos.",
+  "note": ""
+ },
+ {
+  "id": "ILA-120",
+  "lane": "Lane, CMRDM I 132",
+  "righe": 5,
+  "grc": "κε΄ δςςςγ΄ Μηνὸς Φωσφόρου | Τέσσαρα δ᾽ εἰς πείπτων, τρεῖς δ᾽ ἐξεῖται, τρί᾽ ὁ πέμπτος | θάρσε, καίρον ἔχεις, πράξεις δ᾽ ἃ θέλεις, ἐπιτεύξῃ | εἰς ὁδὸν ὁρμηθῆναι. Ἔχει καρπόν τιν᾽ ὁ μόχθος, | ἔργον δ᾽ ἐνχειρεῖν ἀγαθὸν καὶ ἀγῶνα δίκην τε.",
+  "it": "25; 4, 6, 6, 6, 3. Di Men Phosphoros. «Uno cadendo quattro, tre sei, tre il quinto: coraggio, hai il momento opportuno, farai ciò che vuoi, riuscirai a metterti in cammino. La fatica ha qualche frutto; è bene intraprendere un'opera, e una contesa e un processo.»",
+  "en": "25; 4, 6, 6, 6, 3. Of Men Phosphoros. “One falling four, three sixes, three the fifth: take courage, you have the right moment, you will do what you wish, you will succeed in setting out on your way. Toil has some fruit; it is good to undertake a work, and a contest and a lawsuit.”",
+  "note": "L'intestazione dà i valori dei cinque astragali (δ ς ς ς γ) e la loro somma (κε΄ = 25)."
+ },
+ {
+  "id": "ILA-121",
+  "lane": "Lane, CMRDM I 133",
+  "righe": 5,
+  "grc": "ςςςςα΄ κε΄ Μηνὸς Φωσφόρου | τέσσαρες ἐξεῖται, πέμπτος χεῖος, τάδε φράζει, | ὡς ἄρνας κατέχουσι λύκοι κρατεροί τε λέοντες | βοῦς ἕλικας, πάντων τούτων καὶ σύ κρατήσεις | καὶ πάντ᾽ ἔσται σοι, ὅσ᾽ ἐπερωτᾷς, σὺν Διὸς Ἑρμῇ.",
+  "it": "6, 6, 6, 6, 1; 25. Di Men Phosphoros. «Quattro sei, il quinto chios. Questo dichiara: come i lupi e i forti leoni tengono gli agnelli e i buoi dalle corna ricurve, così anche tu prevarrai su tutti costoro, e tutto ciò che chiedi sarà tuo, con Hermes figlio di Zeus.»",
+  "en": "6, 6, 6, 6, 1; 25. Of Men Phosphoros. “Four sixes, the fifth a chios. This it declares: as wolves and mighty lions hold down lambs and crook-horned oxen, so shall you too prevail over all these, and all that you ask shall be yours, with Hermes son of Zeus.”",
+  "note": "χῖος è il tiro di valore 1 dell'astragalo; l'intestazione dà i cinque valori (ς ς ς ς α) e la somma (κε΄ = 25)."
+ },
+ {
+  "id": "ILA-122",
+  "lane": "Lane, CMRDM I 134",
+  "righe": 5,
+  "grc": "δςςςγ΄ κε΄ [Μ]ηνὸς Φωσφόρου | τέσσαρα εἷς πείπτων, [τρε]ῖς δ᾽ ἐξεῖται, κ[αὶ τ]ρεῖος ὁ πένπτος, | θάρσει, καίρον ἔχεις, πράξεις ἃ θέλεις, καίρου ἐπιτε[ύ]ξη | εἰς ὁδὸν ὁρμηθ[ῆ]ναι, ἔχει καρ(π)όν τ[ιν᾽ ὁ] μόχθος | ἔργον δ᾽ ἐνχειρεῖ[ν] ἀγαθὸν καὶ ἀγῶνα δίκην τε.",
+  "it": "4, 6, 6, 6, 3; 25. Di [M]en Phosphoros. «Uno cadendo quattro, [tr]e sei, e tre il quinto: coraggio, hai il momento opportuno, farai ciò che vuoi, cogli[er]ai il momento di metterti in cammino; la fatica ha qual[che] frutto; è bene intraprendere un'opera, e una contesa e un processo.»",
+  "en": "4, 6, 6, 6, 3; 25. Of [M]en Phosphoros. “One falling four, [thr]ee sixes, and three the fifth: take courage, you have the right moment, you will do what you wish, you will sei[z]e the moment to set out on your way; toil has so[me] fruit; it is good to undertake a work, and a contest and a lawsuit.”",
+  "note": "L'intestazione dà i valori dei cinque astragali e la loro somma (κε΄ = 25)."
+ },
+ {
+  "id": "ILA-123",
+  "lane": "Lane, CMRDM I 135",
+  "righe": 5,
+  "grc": "δςςςγ΄ κε΄ Μηνὸς Φωσφόρου | [Τ]έσσαρα δ᾽ εἰ(ς) πείπτων, τρεῖς δε ἐξῖται, τρί᾽ ὁ πέμπτος, | [θά]ρσει, καίρον ἔχεις, πράξεις ἃ θέ[λ]εις, καιρ[οῦ τ]ε ἐπιτεύ[ξη] | εἰς ὁδὸν [ὁ]ρμηθῆναι, ἔχει καιρόν τινα ὁ μόχθος, | ἔργον τ᾽ ἐ[γχ]ιρεῖν ἀγ[α]θὸν καὶ ἀγῶν(α) δίκην τε.",
+  "it": "4, 6, 6, 6, 3; 25. Di Men Phosphoros. «[Q]uattro cadendo uno, tre sei, tre il quinto: [cor]aggio, hai il momento opportuno, farai ciò che vu[o]i, e cogli[erai] il moment[o] di [m]etterti in cammino; la fatica ha un suo momento; è bene [intr]aprendere un'opera, e una contesa e un processo.»",
+  "en": "4, 6, 6, 6, 3; 25. Of Men Phosphoros. “[F]our falling one, three sixes, three the fifth: [take cour]age, you have the right moment, you will do what you wi[s]h, and you will se[ize] the momen[t] to set out on your way; toil has a moment of its own; it is good [to und]ertake a work, and a contest and a lawsuit.”",
+  "note": "L'intestazione dà i valori dei cinque astragali e la loro somma (κε΄ = 25)."
+ },
+ {
+  "id": "ILA-124",
+  "lane": "Lane, CMRDM I 136",
+  "righe": 4,
+  "grc": "δςςςγ΄ κε΄ Μηνὸς Φωσφόρου | [θά]ρσι, καιρὸν ἔχις, πράξις ὃ θέλις, καιροῦ δ᾽ ἐπιτε[ύξη] | [ἰς ὁ]δὸν ὁρμηθῆνε, ἔχις καιρόν τιν᾽ ὁ μόχθος | [ἔρ]γον τ᾽ ἐνχειρῖν ἀγαθὸν καὶ ἀγῶανα δίκ[ην τε].",
+  "it": "4, 6, 6, 6, 3; 25. Di Men Phosphoros. «[Cor]aggio, hai il momento opportuno, farai ciò che vuoi, e coglier[ai] il momento di [m]etterti in cammino; la fatica ha un suo momento; è bene intraprendere un'[op]era, e una contesa e un proces[so].»",
+  "en": "4, 6, 6, 6, 3; 25. Of Men Phosphoros. “[Take cour]age, you have the right moment, you will do what you wish, and you will se[ize] the moment to set out on your way; toil has a moment of its own; it is good to undertake a [w]ork, and a contest and a laws[uit].”",
+  "note": "Manca il primo verso, presente nelle altre redazioni; l'intestazione dà i valori dei cinque astragali e la loro somma (κε΄ = 25)."
+ },
+ {
+  "id": "ILA-130",
+  "lane": "Lane, CMRDM I 142",
+  "righe": 4,
+  "grc": "Μηνὶ | Σωτῆρι καὶ | Πλουτο- | δώτηι",
+  "it": "A Men Soter e Ploutodotes.",
+  "en": "To Men Soter and Ploutodotes.",
+  "note": ""
+ },
+ {
+  "id": "ILA-131",
+  "lane": "Lane, CMRDM I 143",
+  "righe": 3,
+  "grc": "[Ἡ δεῖνα] Ἀραμόου ἑαυτῇ καὶ ἀνδρὶ μνήμης χάριν, ἐνο- | [ρκιζόμεθα δ]ὲ Μῆνα καταχθόνιον εἰς τοῦτο μνημεῖον μη- | δένα εἰσελθεῖν.",
+  "it": "[La tale] figlia di Aramoas, per sé e per il marito, in memoria. [Scongiu]riamo Men Katachthonios che nessuno entri in questo sepolcro.",
+  "en": "[N.N.] daughter of Aramoas, for herself and for her husband, in memory. [We adju]re Men Katachthonios that no one enter this tomb.",
+  "note": ""
+ },
+ {
+  "id": "ILA-132",
+  "lane": "Lane, CMRDM I 144",
+  "righe": 6,
+  "grc": "Ἀπουλ[ήιος Ε]ὐφρόσυνος καὶ Αὐρη[λ]ία | Μάσγαρις ἡ γυνή αὐτοῦ μνήμης χάριν. | Ἐπεξορκίζομεν Μῆνας κατα- | χθονίους μετὰ ἡμᾶς μηκέτι μηδί- | νὰ τεθῆναι. Εἰ δὲ ποτέ τις θέλῃ ἀνῦξε | ἢ κακυργήσει εἰδούν, δώσει Σ΄ ε΄ τῷ ἱερῷ",
+  "it": "Apoul[eios E]uphrosynos e Aure[l]ia Masgaris sua moglie, in memoria. Ἐπεξορκίζομεν i Men Katachthonioi che dopo di noi nessun altro vi sia deposto. Se poi qualcuno voglia aprire o danneggi il sepolcro, darà 205 al santuario.",
+  "en": "Apoul[eios E]uphrosynos and Aure[l]ia Masgaris his wife, in memory. Ἐπεξορκίζομεν the Men Katachthonioi that after us no one else be laid here. And if anyone should wish to open or should damage the tomb, he shall give 205 to the sanctuary.",
+  "note": "La somma (σε΄ = 205) è incisa senza unità monetaria."
+ },
+ {
+  "id": "ILA-134",
+  "lane": "Lane, CMRDM I 146",
+  "righe": 9,
+  "grc": "[.......... Ἐλεύ- | θερος] [τῇ γυ-] | ναικὶ Τιεί[ᾳ] [μνή-] | μης χάριν. | Ἐάν τις τὴν στήλην | ἀδικήσει, κεχολω- | μένον ἔχοιτο | Μῆνα καταχθό- | νιον.",
+  "it": "[- - - Eleu]theros, [per la mo]glie Tiei[a, in memo]ria. Se qualcuno rechi offesa alla stele, abbia κεχολωμένον Men Katachthonios.",
+  "en": "[- - - Eleu]theros, [for his wi]fe Tiei[a, in memo]ry. If anyone does harm to the stele, may he have Men Katachthonios κεχολωμένον.",
+  "note": ""
+ },
+ {
+  "id": "ILA-136",
+  "lane": "Lane, CMRDM I 148",
+  "righe": 6,
+  "grc": "[Δο]ύδης Μ[ενεδήμου] [....... Πα]τροκλεῖ τῷ ἀνδρί | αὐτῆς τὸν κείονα ἀνέστησεν, μ(νήμης) χ(άριν), | [.........]τος καὶ Τείμονα θρεπτοὺς αὐτοῦ | [..........] ἐλεύθερον [...................] | Ὀρχίσζω Μῆνα Καταχθόνιον μηδένα [ἕτερον] | [ἐσενεχθῆναι] εἰ μὴ μόνον τὴν δούλην μου [........]",
+  "it": "[Do]udes figlia di M[enedemos - - -] eresse la colonna per [Pa]trokles suo marito, in memoria; [- - -]tos e Teimon suoi allevati in casa [- - -] libero [- - -]. Adiuro Men Katachthonios che nessun [altro vi sia introdotto] se non soltanto la mia schiava [- - -].",
+  "en": "[Do]udes daughter of M[enedemos - - -] set up the pillar for [Pa]trokles her husband, in memory; [- - -]tos and Teimon his foster-children [- - -] free [- - -]. I adjure Men Katachthonios that no [other be brought in] but only my slave-woman [- - -].",
+  "note": ""
+ },
+ {
+  "id": "ILA-139",
+  "lane": "Lane, CMRDM I 151",
+  "righe": 5,
+  "grc": "Ἐάν τις ἀδικήσει τή- | [ν] ἱστήλην Ἑρμίου [χεχολω-] | [μένον ἐχ]έτω [Μ]ῆνα χθόν[ι]ο[ν]. | Ἀνέστησεν δὲ Μάν- | ίῳ.",
+  "it": "Se qualcuno rechi offesa alla stele di Hermias, [ab]bia [M]en Chthon[i]o[s] [χεχολω]μένον. La eresse per Manios.",
+  "en": "If anyone does harm to the stele of Hermias, [may he ha]ve [M]en Chthon[i]o[s] [χεχολω]μένον. He set it up for Manios.",
+  "note": ""
+ },
+ {
+  "id": "ILA-140",
+  "lane": "Lane, CMRDM I 152",
+  "righe": 3,
+  "grc": "Ἀχύλας | ΜΕΝΙΔΣΕΚΟ | Μηνὶ εὐχήν.",
+  "it": "Achylas, ΜΕΝΙΔΣΕΚΟ, a Men, in voto.",
+  "en": "Achylas, ΜΕΝΙΔΣΕΚΟ, to Men, in fulfilment of a vow.",
+  "note": "La r. 2 (ΜΕΝΙΔΣΕΚΟ) non è interpretabile."
+ },
+ {
+  "id": "ILA-141",
+  "lane": "Lane, CMRDM I 153",
+  "righe": 8,
+  "grc": "[···]Ν[········] | ου Ἀδρια- | νοπο λείτη- | ς θεῷ | Οὐιν- | δίει- | νῷ | εὐχήν.",
+  "it": "[- - -]ou, Adrianopoleites, al dio Ouindieinos, in voto.",
+  "en": "[- - -]ou, Adrianopoleites, to the god Ouindieinos, in fulfilment of a vow.",
+  "note": ""
+ },
+ {
+  "id": "ILA-142",
+  "lane": "Lane, CMRDM I 154",
+  "righe": 4,
+  "grc": "[Π. Καλου]ίσιος ζ[ῶ]ν φρονῶν ἐπόησεν ἑαυτῷ | [καὶ Βάδ]ι τῇ ἰδ[ίᾳ] γυναικί· μνήμης ἕνεκεν· | [Ὅς δ᾽ ἄν ἀδ]ικήσῃ τὸ μνῆμα, Μῆνα ἄνωθεν καὶ κάτο- | [θεν κεχολωμένους ἔχοιτο.]",
+  "it": "[P. Kalou]isios, v[i]vo e in senno, fece per sé [e per Bad]is la [propria] moglie, in memoria. [Chi] rechi [of]fesa al monumento, [abbia i Men di sopra e di sotto κεχολωμένους.]",
+  "en": "[P. Kalou]isios, while a[l]ive and in his senses, made (this) for himself [and for Bad]is his [own] wife, in memory. [Whoever] does [ha]rm to the monument, [may he have the Men above and below κεχολωμένους.]",
+  "note": ""
+ },
+ {
+  "id": "ILA-145",
+  "lane": "Lane, CMRDM I 157",
+  "righe": 5,
+  "grc": "Μηνὶ | Ἀνδρωνη- | νῷ | Τρόπος καὶ Βέλ- | λα εὐχήν.",
+  "it": "A Men Andronenos, Tropos e Bella, in voto.",
+  "en": "To Men Andronenos, Tropos and Bella, in fulfilment of a vow.",
+  "note": ""
+ },
+ {
+  "id": "ILA-149",
+  "lane": "Lane, CMRDM I 161",
+  "righe": 7,
+  "grc": "στ[έφανος] | ἱερεὺς θ[εοῦ Μηνὸς καὶ θεᾶς] | Δήμητ[ρος] [...........] | [π]άντα [τὸν βίον ........] | Λυσιμαχ[ος][...............] | στέφαν[................] | ἱερεὺς τὸ δ'[...]",
+  "it": "[Corona.] Sacerdote del d[io Men e della dea] Demet[er - - -] tutta [la vita - - -] Lysimach[os - - -] coron[a - - -] sacerdote per la 4ª volta [- - -].",
+  "en": "[Crown.] Priest of the g[od Men and of the goddess] Demet[er - - -] all [his life - - -] Lysimach[os - - -] crow[n - - -] priest for the 4th time [- - -].",
+  "note": "στέφανος può essere il sostantivo «corona» o il nome proprio Stephanos."
+ },
+ {
+  "id": "ILA-150",
+  "lane": "Lane, CMRDM I 162",
+  "righe": 1,
+  "grc": "Ἀσκαίης ναέτην Μῆνα σέβων ἐθέμην.",
+  "it": "Venerando Men, abitante di Askaia, posi (questo).",
+  "en": "Revering Men, dweller of Askaia, I set (this) up.",
+  "note": ""
+ },
+ {
+  "id": "ILA-151",
+  "lane": "Lane, CMRDM I 163",
+  "righe": 4,
+  "grc": "Στήλην τοι καὶ τοῦτον ἐπευχάδιον θέτο βωμ[ὸν] | Πρωτίων Ἀσκαίης τῷ μεδέοντι θεῶι, | τὸν Μοῦσαι θρέψαντο, σὺ δ᾽ ὦ παροδεῖτα προσεύ[ξαι] | χαίρων καὶ σπένδ᾽ εὖ σαῖσιν ἐπ᾽ εὐτυχίαι[ς]",
+  "it": "Una stele e questo altare votivo ti pose Protion, al dio che regge Askaia, colui che le Muse allevarono; e tu, o passante, pre[ga] lieto e liba bene per le tue fortun[e].",
+  "en": "A stele and this votive altar Protion set up for you, to the god who rules Askaia, him whom the Muses reared; and you, O passer-by, pr[ay] gladly and pour good libations for your good fortun[es].",
+  "note": ""
+ },
+ {
+  "id": "ILA-164",
+  "lane": "Lane, CMRDM I 176",
+  "righe": 2,
+  "grc": "Sex(tus) Flavonius Naevius | LVS",
+  "it": "Sex(tus) Flavonius Naevius. Sciolse volentieri il voto.",
+  "en": "Sex(tus) Flavonius Naevius. He willingly fulfilled his vow.",
+  "note": ""
+ },
+ {
+  "id": "ILA-165",
+  "lane": "Lane, CMRDM I 177",
+  "righe": 9,
+  "grc": "Μ. Ἀγαθῇ Τύχῃ | Μ. Ουίρριος Γενοό- | κιος Ἀντωνιανὸς | καὶ Μάρκος Ουίρ- | ριος Γενοόκιος | Σάνκτος Ἀντω- | νιανὸς τέκμορεύ- | σαντες Μηνὶ Πατρίῳ | εὐχήν.",
+  "it": "M. Ad Agathe Tyche. M. Ouirrios Genoukios Antonianos e Markos Ouirrios Genoukios Sanktos Antonianos, avendo compiuto il tekmor, a Men Patrios, in voto.",
+  "en": "M. To Agathe Tyche. M. Ouirrios Genoukios Antonianos and Markos Ouirrios Genoukios Sanktos Antonianos, having performed the tekmor, to Men Patrios, in fulfilment of a vow.",
+  "note": ""
+ },
+ {
+  "id": "ILA-168",
+  "lane": "Lane, CMRDM I 180",
+  "righe": 8,
+  "grc": "Καισέν- | νιοι Ὀνή- | σιμος | Φιλήτος | τεκμο- | ρεύσαν- | τες τὸ β΄ | Μηνὶ εὐχή[ν]",
+  "it": "I Kaisennioi Onesimos (e) Philetos, avendo compiuto il tekmor per la 2ª volta, a Men, in vot[o].",
+  "en": "The Kaisennioi Onesimos (and) Philetos, having performed the tekmor for the 2nd time, to Men, in fulfilment of a vo[w].",
+  "note": ""
+ },
+ {
+  "id": "ILA-169",
+  "lane": "Lane, CMRDM I 181",
+  "righe": 3,
+  "grc": "Οὐίω Παῦλος | Μηνὶ Ἀσκαηνῷ εὐ- | χὴν μετὰ τῶν ἰδίων.",
+  "it": "Ouios Paulos, a Men Askaenos, in voto, insieme ai suoi.",
+  "en": "Ouios Paulos, to Men Askaenos, in fulfilment of a vow, together with his own.",
+  "note": ""
+ },
+ {
+  "id": "ILA-170",
+  "lane": "Lane, CMRDM I 182",
+  "righe": 1,
+  "grc": "Οἱ περὶ Ἀν...ον.",
+  "it": "Quelli intorno ad An[- - -]on.",
+  "en": "Those about An[- - -]on.",
+  "note": ""
+ },
+ {
+  "id": "ILA-171",
+  "lane": "Lane, CMRDM I 183",
+  "righe": 1,
+  "grc": "Ἡ σύνοδο[ς] [Μ]ηνὶ [Ἀ]σκαηνῷ.",
+  "it": "L'associazione, [a M]en [A]skaenos.",
+  "en": "The association, [to M]en [A]skaenos.",
+  "note": ""
+ },
+ {
+  "id": "ILA-173",
+  "lane": "Lane, CMRDM I 185",
+  "righe": 2,
+  "grc": "Μηνὶ Ἀσκληπιάδης | εὐχήν.",
+  "it": "A Men, Asklepiades, in voto.",
+  "en": "To Men, Asklepiades, in fulfilment of a vow.",
+  "note": ""
+ },
+ {
+  "id": "ILA-174",
+  "lane": "Lane, CMRDM I 186",
+  "righe": 3,
+  "grc": "Εὐχὴν | Λόλου Μηνὶ Ἀσ- | [καηνῷ].",
+  "it": "Voto di Lolos, a Men As[kaenos].",
+  "en": "Vow of Lolos, to Men As[kaenos].",
+  "note": ""
+ },
+ {
+  "id": "ILA-175",
+  "lane": "Lane, CMRDM I 187",
+  "righe": 2,
+  "grc": "Λούκιος Ἀττῆ- | ος Μηνὶ εὐχήν.",
+  "it": "Loukios Atteos, a Men, in voto.",
+  "en": "Loukios Atteos, to Men, in fulfilment of a vow.",
+  "note": ""
+ },
+ {
+  "id": "ILA-176",
+  "lane": "Lane, CMRDM I 188",
+  "righe": 4,
+  "grc": "Ἑρμῆς Ἄπριος | με(τὰ) Ζωτικοῦ Κοίν- | του Μηνὶ εὐ- | χήν.",
+  "it": "Hermes Aprios, con Zotikos figlio di Kointos, a Men, in voto.",
+  "en": "Hermes Aprios, with Zotikos son of Kointos, to Men, in fulfilment of a vow.",
+  "note": ""
+ },
+ {
+  "id": "ILA-177",
+  "lane": "Lane, CMRDM I 189",
+  "righe": 2,
+  "grc": "Ὁστιλία Ὀρεστεῖνα μετὰ | τέκνων Μηνὶ εὐχήν.",
+  "it": "Hostilia Oresteina, con i figli, a Men, in voto.",
+  "en": "Hostilia Oresteina, with her children, to Men, in fulfilment of a vow.",
+  "note": ""
+ },
+ {
+  "id": "ILA-178",
+  "lane": "Lane, CMRDM I 190",
+  "righe": 3,
+  "grc": "Λούκιος υἱὸς | Πουβνουαῖος | εὐχήν.",
+  "it": "Loukios, figlio, Poubnouaios, in voto.",
+  "en": "Loukios, son, Poubnouaios, in fulfilment of a vow.",
+  "note": ""
+ },
+ {
+  "id": "ILA-179",
+  "lane": "Lane, CMRDM I 191",
+  "righe": 8,
+  "grc": "Γ. Οὐέττιος | Οὐμβρικιανὸς | Μάξιμος | μετὰ Γαίου | ἀνεψιοῦ τεκμο- | ρεύσαντες Μηνὶ | Ἀσκαηνῷ εὐχ- | ήν.",
+  "it": "G(aios) Ouettios Oumbrikianos Maximos, con Gaios il cugino, avendo compiuto il tekmor, a Men Askaenos, in voto.",
+  "en": "G(aios) Ouettios Oumbrikianos Maximos, with Gaios his cousin, having performed the tekmor, to Men Askaenos, in fulfilment of a vow.",
+  "note": ""
+ },
+ {
+  "id": "ILA-180",
+  "lane": "Lane, CMRDM I 192",
+  "righe": 5,
+  "grc": "Αὔγμης Ἰλάρου | τεκμορεύ- | σας (μετά) θρεπ- | τοῦ συντρόφου | Μηνὶ εὐχήν.",
+  "it": "Augmes figlio di Ilaros, avendo compiuto il tekmor (con) l'allevato in casa, compagno di crescita, a Men, in voto.",
+  "en": "Augmes son of Ilaros, having performed the tekmor (with) his foster-brother, his companion in upbringing, to Men, in fulfilment of a vow.",
+  "note": ""
+ },
+ {
+  "id": "ILA-181",
+  "lane": "Lane, CMRDM I 193",
+  "righe": 3,
+  "grc": "Μεινοδώ[ρ- | α] Μηνὶ εὐ- | χήν.",
+  "it": "Meinodo[ra], a Men, in voto.",
+  "en": "Meinodo[ra], to Men, in fulfilment of a vow.",
+  "note": ""
+ },
+ {
+  "id": "ILA-182",
+  "lane": "Lane, CMRDM I 194",
+  "righe": 6,
+  "grc": "Ζώσιμ- | ος μετὰ τ- | έκνων | Μηνὶ Ἀσ- | καηνῷ εὐ- | χήν.",
+  "it": "Zosimos, con i figli, a Men Askaenos, in voto.",
+  "en": "Zosimos, with his children, to Men Askaenos, in fulfilment of a vow.",
+  "note": ""
+ },
+ {
+  "id": "ILA-184",
+  "lane": "Lane, CMRDM I 196",
+  "righe": 7,
+  "grc": "[Φ]αΐδρος | ['Α]κάσ[του] | μετὰ τῶ- | ν ἰδίων | Μηνὶ Ἀσ- | καηνῷ | εὐχήν.",
+  "it": "[Ph]aidros (figlio) di [A]kas[tos], con i suoi, a Men Askaenos, in voto.",
+  "en": "[Ph]aidros (son) of [A]kas[tos], with his own, to Men Askaenos, in fulfilment of a vow.",
+  "note": ""
+ },
+ {
+  "id": "ILA-185",
+  "lane": "Lane, CMRDM I 197",
+  "righe": 3,
+  "grc": "Π. Ἀντώνιος | Λ. Ἀντώνιος | Μηνὶ εὐχήν.",
+  "it": "P. Antonios, L. Antonios, a Men, in voto.",
+  "en": "P. Antonios, L. Antonios, to Men, in fulfilment of a vow.",
+  "note": ""
+ },
+ {
+  "id": "ILA-186",
+  "lane": "Lane, CMRDM I 198",
+  "righe": 4,
+  "grc": "Μ. Ἔρως μ- | ετὰ τέκνω[ν] | Μηνὶ Ἀσκαην- | ῷ εὐχήν.",
+  "it": "M. Eros, con i figl[i], a Men Askaenos, in voto.",
+  "en": "M. Eros, with his childre[n], to Men Askaenos, in fulfilment of a vow.",
+  "note": ""
+ },
+ {
+  "id": "ILA-187",
+  "lane": "Lane, CMRDM I 199",
+  "righe": 2,
+  "grc": "Κλαύδιος Παῦλος μετὰ τῶν ἰδίων Μηνὶ | Ἀσκαηνῷ εὐχήν.",
+  "it": "Klaudios Paulos, con i suoi, a Men Askaenos, in voto.",
+  "en": "Klaudios Paulos, with his own, to Men Askaenos, in fulfilment of a vow.",
+  "note": ""
+ },
+ {
+  "id": "ILA-188",
+  "lane": "Lane, CMRDM I 200",
+  "righe": 3,
+  "grc": "ἈργείαDemetriusΠοταμό[ς] | εὐχήν | LVS",
+  "it": "Argeia, Demetrius, Potamo[s], in voto. Sciolse volentieri il voto.",
+  "en": "Argeia, Demetrius, Potamo[s], in fulfilment of a vow. He willingly fulfilled his vow.",
+  "note": ""
+ },
+ {
+  "id": "ILA-189",
+  "lane": "Lane, CMRDM I 201",
+  "righe": 1,
+  "grc": "Φλάουιος Πατρούεινος Μηνὶ Ἀσκαηνῷ εὐχήν.",
+  "it": "Phlaouios Patroueinos, a Men Askaenos, in voto.",
+  "en": "Phlaouios Patroueinos, to Men Askaenos, in fulfilment of a vow.",
+  "note": ""
+ },
+ {
+  "id": "ILA-190",
+  "lane": "Lane, CMRDM I 202",
+  "righe": 5,
+  "grc": "Διονύσιος Ἰούλι- | ος Κέλερος με- | τὰ γυναικὸς καὶ | θρεπτοῦ Μη[νὶ] Ἀσ- | [καηνῷ] εὐχήν.",
+  "it": "Dionysios Ioulios Keleros, con la moglie e l'allevato in casa, a Me[n] As[kaenos], in voto.",
+  "en": "Dionysios Ioulios Keleros, with his wife and his foster-son, to Me[n] As[kaenos], in fulfilment of a vow.",
+  "note": ""
+ },
+ {
+  "id": "ILA-191",
+  "lane": "Lane, CMRDM I 203",
+  "righe": 5,
+  "grc": "Π. Βετεί(λιος) τέκτων | τεκμορεύσας | μετὰ γυναικὸς | καὶ ἀνεψίου | Μη(νὶ) Ἀσ(καηνῷ) εὐχήν.",
+  "it": "P. Betei(lios), carpentiere, avendo compiuto il tekmor con la moglie e il cugino, a Me(n) As(kaenos), in voto.",
+  "en": "P. Betei(lios), carpenter, having performed the tekmor with his wife and his cousin, to Me(n) As(kaenos), in fulfilment of a vow.",
+  "note": ""
+ },
+ {
+  "id": "ILA-192",
+  "lane": "Lane, CMRDM I 204",
+  "righe": 5,
+  "grc": "[Κ]αλικλῆς | καὶ υἱὸς αὐτ- | οῦ Μενέ- | μαχος Μη- | νὶ εὐχήν.",
+  "it": "[K]alikles e suo figlio Menemachos, a Men, in voto.",
+  "en": "[K]alikles and his son Menemachos, to Men, in fulfilment of a vow.",
+  "note": ""
+ },
+ {
+  "id": "ILA-193",
+  "lane": "Lane, CMRDM I 205",
+  "righe": 3,
+  "grc": "L. Vale- | rius Ni- | ger L V S.",
+  "it": "L. Valerius Niger. Sciolse volentieri il voto.",
+  "en": "L. Valerius Niger. He willingly fulfilled his vow.",
+  "note": ""
+ },
+ {
+  "id": "ILA-194",
+  "lane": "Lane, CMRDM I 206",
+  "righe": 3,
+  "grc": "Μ. Σεράπιος | [.........]ις | ·ολ·τριανός",
+  "it": "M. Serapios [- - -]is [- - -]trianos.",
+  "en": "M. Serapios [- - -]is [- - -]trianos.",
+  "note": ""
+ },
+ {
+  "id": "ILA-195",
+  "lane": "Lane, CMRDM I 207",
+  "righe": 3,
+  "grc": "Μόδεσ- | τος καὶ Γά- | ιλλα.",
+  "it": "Modestos e Gailla.",
+  "en": "Modestos and Gailla.",
+  "note": ""
+ },
+ {
+  "id": "ILA-196",
+  "lane": "Lane, CMRDM I 208",
+  "righe": 4,
+  "grc": "Κ. Λόλλιος μετὰ γυναικό- | ς καὶ ἀδελφοῦ καὶ | θρεπτοῦ τεκμορεύσαν- | τες Μηνὶ εὐχήν.",
+  "it": "K. Lollios, con la moglie, il fratello e l'allevato in casa, avendo compiuto il tekmor, a Men, in voto.",
+  "en": "K. Lollios, with his wife, his brother and his foster-son, having performed the tekmor, to Men, in fulfilment of a vow.",
+  "note": ""
+ },
+ {
+  "id": "ILA-197",
+  "lane": "Lane, CMRDM I 209",
+  "righe": 3,
+  "grc": "Μ. Ἰούλιος | Ἥλιος Μηνὶ | Ἀσκαηνῷ εὐ(χήν).",
+  "it": "M. Ioulios Helios, a Men Askaenos, in vo(to).",
+  "en": "M. Ioulios Helios, to Men Askaenos, in fulfilment of a vo(w).",
+  "note": ""
+ },
+ {
+  "id": "ILA-198",
+  "lane": "Lane, CMRDM I 210",
+  "righe": 4,
+  "grc": "ς Κόιντος | Λούκιος Τροφί- | μου Κουΐνθου | υἱοὶ Μηνὶ εὐχήν.",
+  "it": "[- - -]s Kointos (e) Loukios, figli di Trophimos (figlio) di Kouinthos, a Men, in voto.",
+  "en": "[- - -]s Kointos (and) Loukios, sons of Trophimos (son) of Kouinthos, to Men, in fulfilment of a vow.",
+  "note": ""
+ },
+ {
+  "id": "ILA-199",
+  "lane": "Lane, CMRDM I 211",
+  "righe": 8,
+  "grc": "Μηνὶ Ἀσκ- | αηνῷ | εὐχήν | Κάστωρ | Διονυσί- | ου μετὰ | τῶν ἰδίω- | ν.",
+  "it": "A Men Askaenos, in voto, Kastor figlio di Dionysios, con i suoi.",
+  "en": "To Men Askaenos, in fulfilment of a vow, Kastor son of Dionysios, with his own.",
+  "note": ""
+ },
+ {
+  "id": "ILA-200",
+  "lane": "Lane, CMRDM I 212",
+  "righe": 2,
+  "grc": "Ὑάκινθος Μνησιθέου | τεκμορεύσας.",
+  "it": "Hyakinthos figlio di Mnesitheos, avendo compiuto il tekmor.",
+  "en": "Hyakinthos son of Mnesitheos, having performed the tekmor.",
+  "note": ""
+ },
+ {
+  "id": "ILA-201",
+  "lane": "Lane, CMRDM I 213",
+  "righe": 1,
+  "grc": "P(?) L V S",
+  "it": "P. Sciolse volentieri il voto.",
+  "en": "P. He willingly fulfilled his vow.",
+  "note": ""
+ },
+ {
+  "id": "ILA-202",
+  "lane": "Lane, CMRDM I 214",
+  "righe": 3,
+  "grc": "Κρούμητος καὶ | Ἀσκάνιος β΄ | Μηνὶ εὐχήν.",
+  "it": "Kroumetos e Askanios II, a Men, in voto.",
+  "en": "Kroumetos and Askanios II, to Men, in fulfilment of a vow.",
+  "note": ""
+ },
+ {
+  "id": "ILA-203",
+  "lane": "Lane, CMRDM I 215",
+  "righe": 3,
+  "grc": "Γάλλος Αὐφούσ | τιος καὶ Μάρκελλος | Γάιος Οὐείβιος.",
+  "it": "Gallos Auphoustios e Markellos Gaios Oueibios.",
+  "en": "Gallos Auphoustios and Markellos Gaios Oueibios.",
+  "note": ""
+ },
+ {
+  "id": "ILA-204",
+  "lane": "Lane, CMRDM I 216",
+  "righe": 5,
+  "grc": "Μηνὶ Ἀσκαην | ῷ εὐχήν | Γάιος Οὐλτ | ώνιος Μ | άξιμος.",
+  "it": "A Men Askaenos, in voto, Gaios Oultonios Maximos.",
+  "en": "To Men Askaenos, in fulfilment of a vow, Gaios Oultonios Maximos.",
+  "note": ""
+ },
+ {
+  "id": "ILA-205",
+  "lane": "Lane, CMRDM I 217",
+  "righe": 3,
+  "grc": "Ἀλέξαν | δρος ζω | γράφος.",
+  "it": "Alexandros, pittore.",
+  "en": "Alexandros, painter.",
+  "note": ""
+ },
+ {
+  "id": "ILA-206",
+  "lane": "Lane, CMRDM I 218",
+  "righe": 3,
+  "grc": "Λυκίσκος | Ἀθηνίωνος | Μηνὶ εὐχήν.",
+  "it": "Lykiskos figlio di Athenion, a Men, in voto.",
+  "en": "Lykiskos son of Athenion, to Men, in fulfilment of a vow.",
+  "note": ""
+ },
+ {
+  "id": "ILA-207",
+  "lane": "Lane, CMRDM I 219",
+  "righe": 4,
+  "grc": "Μηνὶ Ἀσκαηνῷ εὐχήν | Λυκίσκος Ἀθηνίωνος | μετὰ γυναικὸς | καὶ τέκνων.",
+  "it": "A Men Askaenos, in voto, Lykiskos figlio di Athenion, con la moglie e i figli.",
+  "en": "To Men Askaenos, in fulfilment of a vow, Lykiskos son of Athenion, with his wife and children.",
+  "note": ""
+ },
+ {
+  "id": "ILA-208",
+  "lane": "Lane, CMRDM I 220",
+  "righe": 4,
+  "grc": "Μηνὶ εὐχήν. | Ἀντίπατρος Ἱμέρως Ἰούλιος | Βουβάλου Ἀσκληπιάδου Εὐάρεστος | LLL",
+  "it": "A Men, in voto. Antipatros (figlio) di Boubalos, Himeros (figlio) di Asklepiades, Ioulios Euarestos. L(ibens) l(ibens) l(ibens).",
+  "en": "To Men, in fulfilment of a vow. Antipatros (son) of Boubalos, Himeros (son) of Asklepiades, Ioulios Euarestos. L(ibens) l(ibens) l(ibens).",
+  "note": "Il testo è disposto su tre colonne (tre dedicanti); LLL ripete l'abbreviazione latina per ciascuno."
+ },
+ {
+  "id": "ILA-209",
+  "lane": "Lane, CMRDM I 221",
+  "righe": 2,
+  "grc": "Λοκᾶς Μηνὶ Ἀσκαηνῷ | εὐχήν.",
+  "it": "Lokas, a Men Askaenos, in voto.",
+  "en": "Lokas, to Men Askaenos, in fulfilment of a vow.",
+  "note": ""
+ },
+ {
+  "id": "ILA-210",
+  "lane": "Lane, CMRDM I 222",
+  "righe": 5,
+  "grc": "L. Sentius | Maximus | et | Sentia Utei | lia L V S",
+  "it": "L. Sentius Maximus e Sentia Uteilia. Sciolsero volentieri il voto.",
+  "en": "L. Sentius Maximus and Sentia Uteilia. They willingly fulfilled their vow.",
+  "note": ""
+ },
+ {
+  "id": "ILA-211",
+  "lane": "Lane, CMRDM I 223",
+  "righe": 3,
+  "grc": "Σεκοῦν | δος Μη | νὶ εὐχήν.",
+  "it": "Sekoundos, a Men, in voto.",
+  "en": "Sekoundos, to Men, in fulfilment of a vow.",
+  "note": ""
+ },
+ {
+  "id": "ILA-212",
+  "lane": "Lane, CMRDM I 224",
+  "righe": 2,
+  "grc": "Μ ΕΜηνὶ εὐχήν | Ι Κ ΠἸούλιος καὶ Παῦλος",
+  "it": "A Men, in voto. Ioulios e Paulos.",
+  "en": "To Men, in fulfilment of a vow. Ioulios and Paulos.",
+  "note": "Alle parole si intercalano le sigle Μ Ε e Ι Κ Π, che le abbreviano."
+ },
+ {
+  "id": "ILA-213",
+  "lane": "Lane, CMRDM I 225",
+  "righe": 7,
+  "grc": "Ἀπου | λεῖος Πρό | κλος Γά | ιος Τρεβ | ωνίου | νιτ | Μηνί.",
+  "it": "Apouleios Proklos, Gaios (figlio) di Trebonios, [- - -], a Men.",
+  "en": "Apouleios Proklos, Gaios (son) of Trebonios, [- - -], to Men.",
+  "note": ""
+ },
+ {
+  "id": "ILA-214",
+  "lane": "Lane, CMRDM I 226",
+  "righe": 4,
+  "grc": "Γ. Καλπούρνιος Οὖλις | σὺν τοῖς ἀδελ | φοῖς Μηνὶ Ἀσκαηνῷ | εὐχήν.",
+  "it": "G. Kalpournios Oulis, con i fratelli, a Men Askaenos, in voto.",
+  "en": "G. Kalpournios Oulis, with his brothers, to Men Askaenos, in fulfilment of a vow.",
+  "note": ""
+ },
+ {
+  "id": "ILA-215",
+  "lane": "Lane, CMRDM I 227",
+  "righe": 6,
+  "grc": "Li(bens) M(erito) | G. Valer(ius) | cum s[u-] | is fili- | is L V | S",
+  "it": "Volentieri e a buon diritto. G. Valer(ius), con i su[o]i figli. Sciolse volentieri il voto.",
+  "en": "Willingly and deservedly. G. Valer(ius), with h[i]s sons. He willingly fulfilled his vow.",
+  "note": ""
+ },
+ {
+  "id": "ILA-216",
+  "lane": "Lane, CMRDM I 228",
+  "righe": 2,
+  "grc": "Μάντοι Λούκιος καὶ Μᾶρκος τεκμορεύσαντες | μετὰ γυναικῶν καὶ τέκνων Μηνὶ. Ασκαηνῷ.",
+  "it": "Mantoi Loukios e Markos, avendo compiuto il tekmor con le mogli e i figli, a Men Askaenos.",
+  "en": "Mantoi Loukios and Markos, having performed the tekmor with their wives and children, to Men Askaenos.",
+  "note": ""
+ },
+ {
+  "id": "ILA-217",
+  "lane": "Lane, CMRDM I 229",
+  "righe": 2,
+  "grc": "νεος υἱὸς Διονυσίου Μηνὶ εὐχήν | σὺν θυγατρί μου Ἰσμάρη.",
+  "it": "[- - -]neos figlio di Dionysios, a Men, in voto, insieme a mia figlia Ismare.",
+  "en": "[- - -]neos son of Dionysios, to Men, in fulfilment of a vow, together with my daughter Ismare.",
+  "note": ""
+ },
+ {
+  "id": "ILA-218",
+  "lane": "Lane, CMRDM I 230",
+  "righe": 4,
+  "grc": "Πούβλιος | μετὰ γυναι | κὸς Μηνὶ | εὐχήν.",
+  "it": "Poublios, con la moglie, a Men, in voto.",
+  "en": "Poublios, with his wife, to Men, in fulfilment of a vow.",
+  "note": ""
+ },
+ {
+  "id": "ILA-219",
+  "lane": "Lane, CMRDM I 231",
+  "righe": 3,
+  "grc": "G(aiae) l(ibertus) | Alexander | L V S",
+  "it": "Alexander, liberto di una donna. Sciolse volentieri il voto.",
+  "en": "Alexander, freedman of a woman. He willingly fulfilled his vow.",
+  "note": ""
+ },
+ {
+  "id": "ILA-220",
+  "lane": "Lane, CMRDM I 232",
+  "righe": 3,
+  "grc": "Κόϊντος | Ἄττιος | Μηνὶ εὐχήν.",
+  "it": "Kointos Attios, a Men, in voto.",
+  "en": "Kointos Attios, to Men, in fulfilment of a vow.",
+  "note": ""
+ },
+ {
+  "id": "ILA-221",
+  "lane": "Lane, CMRDM I 233",
+  "righe": 4,
+  "grc": "Φ. Ἀγαθίων | μετὰ τέκ(νων) | Μηνὶ Ἀσκαη | νῷ εὐχήν.",
+  "it": "Ph. Agathion, con i fig(li), a Men Askaenos, in voto.",
+  "en": "Ph. Agathion, with his child(ren), to Men Askaenos, in fulfilment of a vow.",
+  "note": ""
+ },
+ {
+  "id": "ILA-222",
+  "lane": "Lane, CMRDM I 234",
+  "righe": 3,
+  "grc": "Ἄππως Νέ | τριος Μη | νὶ εὐχήν.",
+  "it": "Appos Netrios, a Men, in voto.",
+  "en": "Appos Netrios, to Men, in fulfilment of a vow.",
+  "note": ""
+ },
+ {
+  "id": "ILA-223",
+  "lane": "Lane, CMRDM I 235",
+  "righe": 3,
+  "grc": "Οὐακάρνιος Γάι | ος Μηνὶ Ἀσκαηνῷ | εὐχήν.",
+  "it": "Ouakarnios Gaios, a Men Askaenos, in voto.",
+  "en": "Ouakarnios Gaios, to Men Askaenos, in fulfilment of a vow.",
+  "note": ""
+ },
+ {
+  "id": "ILA-224",
+  "lane": "Lane, CMRDM I 236",
+  "righe": 1,
+  "grc": "L. Cathemerus et Titus et Lucius L V S.",
+  "it": "L. Cathemerus e Titus e Lucius. Sciolsero volentieri il voto.",
+  "en": "L. Cathemerus and Titus and Lucius. They willingly fulfilled their vow.",
+  "note": ""
+ },
+ {
+  "id": "ILA-225",
+  "lane": "Lane, CMRDM I 237",
+  "righe": 4,
+  "grc": "Γαλλικός | καὶ Οὐαλε | ριος Μηνὶ | εὐχήν.",
+  "it": "Gallikos e Oualerios, a Men, in voto.",
+  "en": "Gallikos and Oualerios, to Men, in fulfilment of a vow.",
+  "note": ""
+ },
+ {
+  "id": "ILA-226",
+  "lane": "Lane, CMRDM I 238",
+  "righe": 2,
+  "grc": "ος καὶ Τιττιανὸς | Μηνὶ Ἀσκαηνῷ εὐχήν.",
+  "it": "[- - -]os e Tittianos, a Men Askaenos, in voto.",
+  "en": "[- - -]os and Tittianos, to Men Askaenos, in fulfilment of a vow.",
+  "note": ""
+ },
+ {
+  "id": "ILA-227",
+  "lane": "Lane, CMRDM I 239",
+  "righe": 4,
+  "grc": "Φ. Νεικήτης Μη | νὶ Ἀσκαηνῷ | μετὰ τέκνων εὐ | χήν.",
+  "it": "Ph. Neiketes, a Men Askaenos, con i figli, in voto.",
+  "en": "Ph. Neiketes, to Men Askaenos, with his children, in fulfilment of a vow.",
+  "note": ""
+ },
+ {
+  "id": "ILA-228",
+  "lane": "Lane, CMRDM I 240",
+  "righe": 3,
+  "grc": "Ὀενούαος τε | κμορεύσας Μη | νὶ Ἀσκαηνῷ εὐχήν.",
+  "it": "Oenouaos, avendo compiuto il tekmor, a Men Askaenos, in voto.",
+  "en": "Oenouaos, having performed the tekmor, to Men Askaenos, in fulfilment of a vow.",
+  "note": ""
+ },
+ {
+  "id": "ILA-229",
+  "lane": "Lane, CMRDM I 241",
+  "righe": 6,
+  "grc": "Φ. Κί(γκιος) Εἰλάρας | τεκμορεύ | σας μετὰ γυ | ναικὸς καὶ τέκνου | Μηνὶ Ἀσκαηνῷ | εὐχήν.",
+  "it": "Ph. Ki(gkios) Eilaras, avendo compiuto il tekmor con la moglie e il figlio, a Men Askaenos, in voto.",
+  "en": "Ph. Ki(gkios) Eilaras, having performed the tekmor with his wife and son, to Men Askaenos, in fulfilment of a vow.",
+  "note": ""
+ },
+ {
+  "id": "ILA-230",
+  "lane": "Lane, CMRDM I 242",
+  "righe": 4,
+  "grc": "Κύγτις Μηνὶ εὐχὴν | ἀμαρτάγων τεκμο | ρεύσας μετὰ γυναι | κὸς καὶ τέκνων.",
+  "it": "Kygtis, a Men, in voto, avendo peccato, avendo compiuto il tekmor con la moglie e i figli.",
+  "en": "Kygtis, to Men, in fulfilment of a vow, having sinned, having performed the tekmor with his wife and children.",
+  "note": ""
+ },
+ {
+  "id": "ILA-231",
+  "lane": "Lane, CMRDM I 243",
+  "righe": 4,
+  "grc": "Ὀνήσιμος | μετὰ τέκν- | ων Μηνὶ Ἀσ | καηνῷ εὐχήν.",
+  "it": "Onesimos, con i figli, a Men Askaenos, in voto.",
+  "en": "Onesimos, with his children, to Men Askaenos, in fulfilment of a vow.",
+  "note": ""
+ },
+ {
+  "id": "ILA-232",
+  "lane": "Lane, CMRDM I 244",
+  "righe": 5,
+  "grc": "Βάσσος | τεκμορ[εύσας] | μετὰ τέ- | κνων | τάδε.",
+  "it": "Bassos, avendo compiuto il tek[mor] con i figli, queste cose.",
+  "en": "Bassos, having performed the tek[mor] with his children, these things.",
+  "note": ""
+ },
+ {
+  "id": "ILA-233",
+  "lane": "Lane, CMRDM I 245",
+  "righe": 7,
+  "grc": "Λ. Ἀντιόχου καὶ | Ἀντίοχος ἀδελφὸς | καὶ Μαξίμα ἀδελφὴ | μετὰ τέκνων καὶ | θρεπτῶν τεκμο- | ρεύσαντες Μηνὶ | Ἀσκαηνῷ εὐχήν.",
+  "it": "L. (figlio) di Antiochos, e Antiochos il fratello, e Maxima la sorella, con i figli e gli allevati in casa, avendo compiuto il tekmor, a Men Askaenos, in voto.",
+  "en": "L. (son) of Antiochos, and Antiochos his brother, and Maxima his sister, with their children and foster-children, having performed the tekmor, to Men Askaenos, in fulfilment of a vow.",
+  "note": ""
+ },
+ {
+  "id": "ILA-234",
+  "lane": "Lane, CMRDM I 246",
+  "righe": 3,
+  "grc": "......σ | ..........τερμορ- | εύσαντες Μηνὶ Ἀσκηνῷ.",
+  "it": "[- - -], avendo compiuto il tekmor, a Men Askenos.",
+  "en": "[- - -], having performed the tekmor, to Men Askenos.",
+  "note": ""
+ },
+ {
+  "id": "ILA-235",
+  "lane": "Lane, CMRDM I 247",
+  "righe": 3,
+  "grc": "Κείπιος Ἀσπρίνας | [τε]κμορεύσας μετὰ | [γυ]ναικὸς Μηνὶ εὐχήν.",
+  "it": "Keipios Asprinas, [avendo compiuto il te]kmor con la [mo]glie, a Men, in voto.",
+  "en": "Keipios Asprinas, [having performed the te]kmor with his [wi]fe, to Men, in fulfilment of a vow.",
+  "note": ""
+ },
+ {
+  "id": "ILA-236",
+  "lane": "Lane, CMRDM I 248",
+  "righe": 4,
+  "grc": "Λουκᾶς | Τίλλιο | ς Κρίτω | ν",
+  "it": "Loukas Tillios Kriton.",
+  "en": "Loukas Tillios Kriton.",
+  "note": ""
+ },
+ {
+  "id": "ILA-237",
+  "lane": "Lane, CMRDM I 249",
+  "righe": 2,
+  "grc": "M. Albucius Firmus | LVS",
+  "it": "M. Albucius Firmus. Sciolse volentieri il voto.",
+  "en": "M. Albucius Firmus. He willingly fulfilled his vow.",
+  "note": ""
+ },
+ {
+  "id": "ILA-238",
+  "lane": "Lane, CMRDM I 250",
+  "righe": 2,
+  "grc": "C. Albucius | Firmus L V S L M",
+  "it": "C. Albucius Firmus. Sciolse volentieri il voto, volentieri e a buon diritto.",
+  "en": "C. Albucius Firmus. He willingly fulfilled his vow, willingly and deservedly.",
+  "note": ""
+ },
+ {
+  "id": "ILA-239",
+  "lane": "Lane, CMRDM I 251",
+  "righe": 3,
+  "grc": "M. Ulpius | Pudens | Pompeianus",
+  "it": "M. Ulpius Pudens Pompeianus.",
+  "en": "M. Ulpius Pudens Pompeianus.",
+  "note": ""
+ },
+ {
+  "id": "ILA-240",
+  "lane": "Lane, CMRDM I 252",
+  "righe": 3,
+  "grc": "[Οὐ]εἴβιος Φίρμος Καπίτων μετὰ | [γυ]ναικὸς καὶ τέκνων τεκ[μ]ορεύσας | Μηνὶ Ἀσκαηνῷ εὐχήν.",
+  "it": "[Ou]eibios Firmos Kapiton, con la [mo]glie e i figli, avendo compiuto il tek[m]or, a Men Askaenos, in voto.",
+  "en": "[Ou]eibios Firmos Kapiton, with his [wi]fe and children, having performed the tek[m]or, to Men Askaenos, in fulfilment of a vow.",
+  "note": ""
+ },
+ {
+  "id": "ILA-241",
+  "lane": "Lane, CMRDM I 253",
+  "righe": 3,
+  "grc": "Μ. Σενπρώνιος Κάρπος | τεκμορεύσας μετὰ τέκνων | Μηνὶ Ἀσκαηνῷ εὐχὴν δ΄.",
+  "it": "M. Senpronios Karpos, avendo compiuto il tekmor con i figli, a Men Askaenos, in voto, la 4ª volta.",
+  "en": "M. Senpronios Karpos, having performed the tekmor with his children, to Men Askaenos, in fulfilment of a vow, the 4th time.",
+  "note": ""
+ },
+ {
+  "id": "ILA-242",
+  "lane": "Lane, CMRDM I 254",
+  "righe": 8,
+  "grc": "Γ. Φλάουιος Λόν- | γος τεκμορεύ- | σας μετὰ γυ- | ναικὸς καὶ | καὶ υἱῶν Γ. Φλαου- | ίου Λόγου καὶ Φλαουίου | Μηνὶ Ἀσκαινῷ | εὐχήν.",
+  "it": "G. Phlaouios Longos, avendo compiuto il tekmor con la moglie e con i figli G. Phlaouios Logos e Phlaouios, a Men Askainos, in voto.",
+  "en": "G. Phlaouios Longos, having performed the tekmor with his wife and with his sons G. Phlaouios Logos and Phlaouios, to Men Askainos, in fulfilment of a vow.",
+  "note": ""
+ },
+ {
+  "id": "ILA-243",
+  "lane": "Lane, CMRDM I 255",
+  "righe": 2,
+  "grc": "Ἡ Τράπεζα Μηνός, | Πρωτίωνος εὐχή.",
+  "it": "La mensa di Men; voto di Protion.",
+  "en": "The table of Men; the vow of Protion.",
+  "note": ""
+ },
+ {
+  "id": "ILA-244",
+  "lane": "Lane, CMRDM I 256",
+  "righe": 6,
+  "grc": "M. Cl. Clito- | machus et | Cornelia An- | tonis uxor eius | LVS | L V [S]",
+  "it": "M. Cl. Clitomachus e Cornelia Antonis sua moglie. Sciolsero volentieri il voto.",
+  "en": "M. Cl. Clitomachus and Cornelia Antonis his wife. They willingly fulfilled their vow.",
+  "note": ""
+ },
+ {
+  "id": "ILA-245",
+  "lane": "Lane, CMRDM I 257",
+  "righe": 3,
+  "grc": "M. Cl. Clitomachus cum | fil(iis) Cl. Prisco et Tauro | L V S",
+  "it": "M. Cl. Clitomachus, con i fig(li) Cl. Priscus e Taurus. Sciolse volentieri il voto.",
+  "en": "M. Cl. Clitomachus, with his son(s) Cl. Priscus and Taurus. He willingly fulfilled his vow.",
+  "note": ""
+ },
+ {
+  "id": "ILA-246",
+  "lane": "Lane, CMRDM I 258",
+  "righe": 3,
+  "grc": "Ἰόν(ιος) κατ(ὰ) τελ(ετήν) | μετ(ὰ) τέκ(νων) | Μήν(ι) Ἀσκ(αηνῷ) εὐχ(ήν).",
+  "it": "Ion(ios), secondo il rito, con i fig(li), a Men Ask(aenos), in vo(to).",
+  "en": "Ion(ios), according to the rite, with his child(ren), to Men Ask(aenos), in fulfilment of a vo(w).",
+  "note": ""
+ },
+ {
+  "id": "ILA-247",
+  "lane": "Lane, CMRDM I 259",
+  "righe": 5,
+  "grc": "1 | Τεκμορεύσας | σὺν γυναικί | Μηνὶ Ἀσκαηνῷ | εὐχήν.",
+  "it": "[- - -], avendo compiuto il tekmor insieme alla moglie, a Men Askaenos, in voto.",
+  "en": "[- - -], having performed the tekmor together with his wife, to Men Askaenos, in fulfilment of a vow.",
+  "note": ""
+ },
+ {
+  "id": "ILA-248",
+  "lane": "Lane, CMRDM I 261",
+  "righe": 5,
+  "grc": "Q. Licinius Naevius | f. et Aurelia Procula uxor | eius et Aureli Proculus et | C. et L. M. f. | LVS",
+  "it": "Q. Licinius Naevius f(ilius) e Aurelia Procula sua moglie e gli Aurelii Proculus e C. e L., figli di M. Sciolsero volentieri il voto.",
+  "en": "Q. Licinius Naevius f(ilius) and Aurelia Procula his wife and the Aurelii Proculus and C. and L., sons of M. They willingly fulfilled their vow.",
+  "note": ""
+ },
+ {
+  "id": "ILA-249",
+  "lane": "Lane, CMRDM I 262",
+  "righe": 2,
+  "grc": "Γ. Σεροϊλιος Μυρτίλος | τεκμορεύσας γ΄ Μηνὶ Ἀσκαηνῷ εὐχήν.",
+  "it": "G. Seroïlios Myrtilos, avendo compiuto il tekmor la 3ª volta, a Men Askaenos, in voto.",
+  "en": "G. Seroïlios Myrtilos, having performed the tekmor for the 3rd time, to Men Askaenos, in fulfilment of a vow.",
+  "note": ""
+ },
+ {
+  "id": "ILA-251",
+  "lane": "Lane, CMRDM I 264",
+  "righe": 5,
+  "grc": "Εὐδαίμων Γνωστοῦ | υἱὸς | τεκμορεύσας μετὰ τῶν ἰδίων | θρεπτῶν Μηνὶ Ἀσκαηνῷ | τὸ β΄ εὐχήν.",
+  "it": "Eudaimon figlio di Gnostos, avendo compiuto il tekmor con i propri allevati in casa, a Men Askaenos, la 2ª volta, in voto.",
+  "en": "Eudaimon son of Gnostos, having performed the tekmor with his own foster-children, to Men Askaenos, for the 2nd time, in fulfilment of a vow.",
+  "note": ""
+ },
+ {
+  "id": "ILA-252",
+  "lane": "Lane, CMRDM I 265",
+  "righe": 5,
+  "grc": "[.....]υμο[....] | [.....]οικκ[..] | Φρούγει | τεκμορεύσας | Μηνὶ εὐχήν.",
+  "it": "[- - -]ymo[- - -] [- - -]oikk[- - -] Phrougei, avendo compiuto il tekmor, a Men, in voto.",
+  "en": "[- - -]ymo[- - -] [- - -]oikk[- - -] Phrougei, having performed the tekmor, to Men, in fulfilment of a vow.",
+  "note": ""
+ },
+ {
+  "id": "ILA-253",
+  "lane": "Lane, CMRDM I 266",
+  "righe": 1,
+  "grc": "Μάξιμος Λουκίου τεκμορεύσας μετὰ τῶν ἰδίων Μηνὶ πατ(ρίῳ) εὐχήν.",
+  "it": "Maximos figlio di Loukios, avendo compiuto il tekmor con i suoi, a Men Pat(rios), in voto.",
+  "en": "Maximos son of Loukios, having performed the tekmor with his own, to Men Pat(rios), in fulfilment of a vow.",
+  "note": ""
+ },
+ {
+  "id": "ILA-254",
+  "lane": "Lane, CMRDM I 267",
+  "righe": 3,
+  "grc": "Τειμόθεος Ἀλεξάνδρου | [...]ν | Μηνὶ Ἀσκαηνῷ εὐχήν.",
+  "it": "Teimotheos figlio di Alexandros [- - -]n, a Men Askaenos, in voto.",
+  "en": "Teimotheos son of Alexandros [- - -]n, to Men Askaenos, in fulfilment of a vow.",
+  "note": ""
+ },
+ {
+  "id": "ILA-255",
+  "lane": "Lane, CMRDM I 268",
+  "righe": 3,
+  "grc": "Εὔβουλος Σωσίου | ὑπὲρ ἑαυτοῦ καὶ τέκνων | Μ(ηνὶ) Ἀ(σκαηνῷ) ε(ὐχήν).",
+  "it": "Euboulos figlio di Sosios, per sé e per i figli, a M(en) A(skaenos), in v(oto).",
+  "en": "Euboulos son of Sosios, for himself and his children, to M(en) A(skaenos), in fulfilment of a v(ow).",
+  "note": ""
+ },
+ {
+  "id": "ILA-257",
+  "lane": "Lane, CMRDM I 270",
+  "righe": 8,
+  "grc": "Ἀσκληπιάδης | Πρείμου | μετὰ καὶ τῶν | υἱῶν Ἀσκλη- | πιάδου καὶ Κο- | ίντου τεκμο- | ρεύσας Μηνὶ | Πατρίῳ εὐχήν.",
+  "it": "Asklepiades figlio di Preimos, insieme anche ai figli Asklepiades e Kointos, avendo compiuto il tekmor, a Men Patrios, in voto.",
+  "en": "Asklepiades son of Preimos, together also with his sons Asklepiades and Kointos, having performed the tekmor, to Men Patrios, in fulfilment of a vow.",
+  "note": ""
+ },
+ {
+  "id": "ILA-258",
+  "lane": "Lane, CMRDM I 271",
+  "righe": 2,
+  "grc": "Λ. Λόλ[λιο]ς Πρείσ- | κος τ[εκμορ]εύσας",
+  "it": "L. Lol[lio]s Preiskos, avendo compiuto il t[ekm]or.",
+  "en": "L. Lol[lio]s Preiskos, having performed the t[ekm]or.",
+  "note": ""
+ },
+ {
+  "id": "ILA-259",
+  "lane": "Lane, CMRDM I 272",
+  "righe": 3,
+  "grc": "τ[............] | τρ[.............] | τεκ[μ]ορεύσα[.....]",
+  "it": "[- - -] avendo compiuto il tek[m]or [- - -].",
+  "en": "[- - -] having performed the tek[m]or [- - -].",
+  "note": ""
+ },
+ {
+  "id": "ILA-260",
+  "lane": "Lane, CMRDM I 273",
+  "righe": 5,
+  "grc": "Γ. Νεικάνορος καὶ | Νεικάνωρ Ἀλεξάνδρου | [σὺ]ν τοῖς ἰδίοις [καὶ] | [θρε]πτοῖς τεκμορε[ύσαντες] | Μηνὶ Ἀσκαηνῷ εὐχήν.",
+  "it": "G. (figlio) di Neikanor, e Neikanor figlio di Alexandros, [insiem]e ai propri [e] agli [alleva]ti in casa, avendo compiuto il tekmor, a Men Askaenos, in voto.",
+  "en": "G. (son) of Neikanor, and Neikanor son of Alexandros, [togethe]r with their own [and] their [foster]-children, having performed the tekmor, to Men Askaenos, in fulfilment of a vow.",
+  "note": ""
+ },
+ {
+  "id": "ILA-261",
+  "lane": "Lane, CMRDM I 274",
+  "righe": 7,
+  "grc": "1 | Ζωτίκος μετὰ | τος καὶ Εὐτυχί | δος ἰδίων τε- | κμορεύσας | Μηνὶ Ἀσκαηνῷ | εὐχήν.",
+  "it": "[- - -] Zotikos, insieme a [- - -]tos ed Eutychis, i suoi, avendo compiuto il tekmor, a Men Askaenos, in voto.",
+  "en": "[- - -] Zotikos, together with [- - -]tos and Eutychis, his own, having performed the tekmor, to Men Askaenos, in fulfilment of a vow.",
+  "note": ""
+ },
+ {
+  "id": "ILA-262",
+  "lane": "Lane, CMRDM I 275",
+  "righe": 4,
+  "grc": "[......]τίος Ἀνίη[...] | [......]Τρίτος [.....] | [τεκμορ]εύσας Μηνὶ | Ἀσκαηνῷ εὐχήν.",
+  "it": "[- - -]tios Anie[- - -], [- - -] Tritos, [avendo compiuto il tekm]or, a Men Askaenos, in voto.",
+  "en": "[- - -]tios Anie[- - -], [- - -] Tritos, [having performed the tekm]or, to Men Askaenos, in fulfilment of a vow.",
+  "note": ""
+ },
+ {
+  "id": "ILA-263",
+  "lane": "Lane, CMRDM I 276",
+  "righe": 5,
+  "grc": "Μηνὶ εὐχήν | [.........] | [.........] | [......]ορος | [Μακ]εδών.",
+  "it": "A Men, in voto. [- - -] [- - -] [- - -]oros, [Mak]edon.",
+  "en": "To Men, in fulfilment of a vow. [- - -] [- - -] [- - -]oros, a [Mak]edon.",
+  "note": ""
+ },
+ {
+  "id": "ILA-264",
+  "lane": "Lane, CMRDM I 277",
+  "righe": 3,
+  "grc": "[......]πορος μετὰ τέκνων[......] | [.....]ος, Δόκιμος μετὰ γυ[ναικός] | [.....]μνόη καὶ Μαρ[........]",
+  "it": "[- - -]poros con i figli [- - -], [- - -]os, Dokimos con la mo[glie - - -], [- - -]mnoe e Mar[- - -].",
+  "en": "[- - -]poros with his children [- - -], [- - -]os, Dokimos with his wi[fe - - -], [- - -]mnoe and Mar[- - -].",
+  "note": ""
+ },
+ {
+  "id": "ILA-265",
+  "lane": "Lane, CMRDM I 278",
+  "righe": 6,
+  "grc": "Ἀγαθῇ [Τύχῃ] | Θεοδο[......] | Ποσειδ[....] | Ἑρμογα[....] | Τροφον[....] | Μηνὶ Ἀσκαηνῷ [εὐχήν.]",
+  "it": "Ad Agathe [Tyche]. Theodo[- - -], Poseid[- - -], Hermoga[- - -], Trophon[- - -], a Men Askaenos, [in voto].",
+  "en": "To Agathe [Tyche]. Theodo[- - -], Poseid[- - -], Hermoga[- - -], Trophon[- - -], to Men Askaenos, [in fulfilment of a vow].",
+  "note": ""
+ },
+ {
+  "id": "ILA-266",
+  "lane": "Lane, CMRDM I 279",
+  "righe": 7,
+  "grc": "Τίτος Οὐίσενν | ος Μάξιμος τε- | κμορεύσας μετὰ | γυνα[ι]κὸς καὶ τέ- | κνου Τίτου Οὐίσεννο | υ Μαξί | μου.",
+  "it": "Titos Ouisennos Maximos, avendo compiuto il tekmor con la mo[g]lie e il figlio Titos Ouisennos Maximos.",
+  "en": "Titos Ouisennos Maximos, having performed the tekmor with his wi[f]e and his son Titos Ouisennos Maximos.",
+  "note": ""
+ },
+ {
+  "id": "ILA-267",
+  "lane": "Lane, CMRDM I 280",
+  "righe": 3,
+  "grc": "Γ. Καλπούρνιος Ζώ[σι]μος καὶ Γ. Καλ- | πούρνιος Ζωτικὸς τεκμορεύσαντες | Μηνὶ ἐπηκόῳ εὐχήν.",
+  "it": "G. Kalpournios Zo[si]mos e G. Kalpournios Zotikos, avendo compiuto il tekmor, a Men Epekoos, in voto.",
+  "en": "G. Kalpournios Zo[si]mos and G. Kalpournios Zotikos, having performed the tekmor, to Men Epekoos, in fulfilment of a vow.",
+  "note": ""
+ },
+ {
+  "id": "ILA-268",
+  "lane": "Lane, CMRDM I 281",
+  "righe": 5,
+  "grc": "[.....]Τειμόθεος | [μετ]ὰ γυναικὸς | [καὶ τέκν]ων τε[κμορεύσας] | Μηνὶ Ἀσκαηνῷ | εὐχήν.",
+  "it": "[- - -] Teimotheos, [insiem]e alla moglie [e ai figl]i, [avendo compiuto] il te[kmor], a Men Askaenos, in voto.",
+  "en": "[- - -] Teimotheos, [togethe]r with his wife [and childr]en, [having performed] the te[kmor], to Men Askaenos, in fulfilment of a vow.",
+  "note": ""
+ },
+ {
+  "id": "ILA-269",
+  "lane": "Lane, CMRDM I 282",
+  "righe": 2,
+  "grc": "Λουκι[.........]ος | [....]ν[.........]ωτικῷ σύν",
+  "it": "Louki[- - -]os [- - -] a [- - -]otikos, insieme (a) [- - -].",
+  "en": "Louki[- - -]os [- - -] to [- - -]otikos, together (with) [- - -].",
+  "note": ""
+ },
+ {
+  "id": "ILA-270",
+  "lane": "Lane, CMRDM I 283",
+  "righe": 5,
+  "grc": "μβρ σκοπτο | τωλης μετὰ γυ- | ναικὸς τεκμο- | [ρεύ]σας Μηνὶ | [Ἀ]σκαηνῷ εὐχήν.",
+  "it": "[- - -]mbr[- - -] [- - -]toles, insieme alla moglie, avendo comp[iuto] il tekmor, a Men [A]skaenos, in voto.",
+  "en": "[- - -]mbr[- - -] [- - -]toles, together with his wife, having per[formed] the tekmor, to Men [A]skaenos, in fulfilment of a vow.",
+  "note": ""
+ },
+ {
+  "id": "ILA-271",
+  "lane": "Lane, CMRDM I 284",
+  "righe": 4,
+  "grc": "[Τιβ]έριος Κλ(α)ύδι- | ος Φρούγει τεκ- | μορεύσας Μη- | νὶ εὐχήν.",
+  "it": "[Tib]erios Kl(a)udios Phrougei, avendo compiuto il tekmor, a Men, in voto.",
+  "en": "[Tib]erios Kl(a)udios Phrougei, having performed the tekmor, to Men, in fulfilment of a vow.",
+  "note": ""
+ },
+ {
+  "id": "ILA-272",
+  "lane": "Lane, CMRDM I 285",
+  "righe": 3,
+  "grc": "Μηνὶ ἐπ[η]κόῳ | ευοισυμφ | [Τ]ρόφιμος Μακε[δών].",
+  "it": "A Men Ep[e]koos [- - -] [T]rophimos, Make[don].",
+  "en": "To Men Ep[e]koos [- - -] [T]rophimos, a Make[don].",
+  "note": ""
+ },
+ {
+  "id": "ILA-273",
+  "lane": "Lane, CMRDM I 286",
+  "righe": 4,
+  "grc": "Λυτρόνιος | Μαρκε[ιαν]ός | [Μ]ηνὶ Ἀσκα[ηνῷ] | εὐχ[ήν].",
+  "it": "Lytronios Marke[ian]os, [a M]en Aska[enos], in vo[to].",
+  "en": "Lytronios Marke[ian]os, [to M]en Aska[enos], in fulfilment of a vo[w].",
+  "note": ""
+ },
+ {
+  "id": "ILA-274",
+  "lane": "Lane, CMRDM I 287",
+  "righe": 6,
+  "grc": "[.....]ούλιος Ταρε[.....] | τεκμορεύσα[ς] | μετὰ γυναικ[ός] | καὶ τέκνων κ[αὶ] | θρεπτῶν Μην[ὶ] | Ἀσκαηνῷ [εὐχήν.]",
+  "it": "[- - -]oulios Tare[- - -], avendo compiuto il tekmo[r] con la mogli[e], i figli [e] gli allevati in casa, a Men Askaenos, [in voto].",
+  "en": "[- - -]oulios Tare[- - -], having performed the tekmo[r] with his wif[e], his children [and] his foster-children, to Men Askaenos, [in fulfilment of a vow].",
+  "note": ""
+ },
+ {
+  "id": "ILA-275",
+  "lane": "Lane, CMRDM I 288",
+  "righe": 5,
+  "grc": "[....]ωνήτιος Πωλι- | [....] Αὐξάνων με- | [τὰ γυ]ναικὸς Μαρκίας καὶ | τέ[κν]ων καὶ θρεπτοῦ | Μηνὶ Πατρίῳ εὐχήν.",
+  "it": "[- - -]onetios Poli[- - -] Auxanon, in[sieme alla mo]glie Markia, ai fi[gl]i e all'allevato in casa, a Men Patrios, in voto.",
+  "en": "[- - -]onetios Poli[- - -] Auxanon, to[gether with his wi]fe Markia, his chil[dre]n and his foster-son, to Men Patrios, in fulfilment of a vow.",
+  "note": ""
+ },
+ {
+  "id": "ILA-276",
+  "lane": "Lane, CMRDM I 289",
+  "righe": 5,
+  "grc": "Οὐέτ[τι]α | Μαγνίλλα | τεκμορεύσασα | Μηνὶ Ἀσκαηνῷ | εὐχήν.",
+  "it": "Ouet[ti]a Magnilla, avendo compiuto il tekmor, a Men Askaenos, in voto.",
+  "en": "Ouet[ti]a Magnilla, having performed the tekmor, to Men Askaenos, in fulfilment of a vow.",
+  "note": ""
+ },
+ {
+  "id": "ILA-277",
+  "lane": "Lane, CMRDM I 290",
+  "righe": 7,
+  "grc": "Τ. Κλαύδιος Πασι- | νιανὸς Νέος Σουμ- | μαρούδης τεκμο- | ρεύσας μετὰ γυναι- | κὸς καὶ ἀδελφῶν | Μηνὶ Πατρί[ῳ] | εὐχήν.",
+  "it": "T. Klaudios Pasinianos Neos Summaroudes, avendo compiuto il tekmor con la moglie e i fratelli, a Men Patri[os], in voto.",
+  "en": "T. Klaudios Pasinianos Neos Summaroudes, having performed the tekmor with his wife and brothers, to Men Patri[os], in fulfilment of a vow.",
+  "note": ""
+ },
+ {
+  "id": "ILA-278",
+  "lane": "Lane, CMRDM I 291",
+  "righe": 5,
+  "grc": "Γ. Ἡούλειος Μᾶρκος | καὶ Μάρ κελλος | ἀδελφοὶ | τεκμορεύσαντες μετὰ | θρεπτοῦ Μηνὶ Ἀσκαηνῷ εὐχήν.",
+  "it": "G. Heouleios Markos e Markellos, fratelli, avendo compiuto il tekmor con l'allevato in casa, a Men Askaenos, in voto.",
+  "en": "G. Heouleios Markos and Markellos, brothers, having performed the tekmor with their foster-son, to Men Askaenos, in fulfilment of a vow.",
+  "note": ""
+ },
+ {
+  "id": "ILA-279",
+  "lane": "Lane, CMRDM I 292",
+  "righe": 5,
+  "grc": "[........]ωνος | [........]ας | [........] τεκμο- | [ρ]εύσας Μ[ηνὶ Ἀσ]καηνῷ | εὐ[χήν].",
+  "it": "[- - -]onos [- - -]as [- - -], avendo compiuto il tekm[o]r, a M[en As]kaenos, in vo[to].",
+  "en": "[- - -]onos [- - -]as [- - -], having performed the tekm[o]r, to M[en As]kaenos, in fulfilment of a vo[w].",
+  "note": ""
+ },
+ {
+  "id": "ILA-280",
+  "lane": "Lane, CMRDM I 293",
+  "righe": 6,
+  "grc": "[καὶ τ]έκνου Μηνο[.....] | Π. Κλαύδιος [.......] | τεκμορεύσα[ς μετὰ] | Μαρίας Γαία[ς γυναι-] | κὸς | Μη[νὶ Ἀσκαηνῷ εὐχήν.",
+  "it": "[e del f]iglio Meno[- - -]. P. Klaudios [- - -], avendo compiuto il tekmor [insieme a] Maria Gaia [sua mo]glie, a Me[n Askaenos, in voto].",
+  "en": "[and of his s]on Meno[- - -]. P. Klaudios [- - -], having performed the tekmor [together with] Maria Gaia [his wi]fe, to Me[n Askaenos, in fulfilment of a vow].",
+  "note": ""
+ },
+ {
+  "id": "ILA-281",
+  "lane": "Lane, CMRDM I 294",
+  "righe": 5,
+  "grc": "[.....]ώνιος | [.....]είου υἱὸς | [τεκ]μορεύσας | [Μη]νὶ Ἀσκαηνῷ | εὐχήν.",
+  "it": "[- - -]onios figlio di [- - -]eios, [avendo compiuto il tek]mor, [a Me]n Askaenos, in voto.",
+  "en": "[- - -]onios son of [- - -]eios, [having performed the tek]mor, [to Me]n Askaenos, in fulfilment of a vow.",
+  "note": ""
+ }
+]
