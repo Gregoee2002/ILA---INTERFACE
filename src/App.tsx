@@ -5611,8 +5611,8 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                         <div className={cn(
                           "text-[9px] font-bold uppercase tracking-widest pl-0.5",
                           importStatus.type === 'loading' && "text-accent",
-                          importStatus.type === 'success' && "text-green-600",
-                          importStatus.type === 'error' && "text-red-600"
+                          importStatus.type === 'success' && "text-success",
+                          importStatus.type === 'error' && "text-danger"
                         )}>
                           {importStatus.message}
                         </div>
@@ -6840,8 +6840,8 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
 
                   {importStep === 'success' && (
                     <div className="py-6 text-center space-y-3">
-                      <div className="inline-block p-3 bg-green-500/10 text-green-600 rounded-full mb-1">
-                        <Check className="h-6 w-6 text-green-600" />
+                      <div className="inline-block p-3 bg-success/10 text-success rounded-full mb-1">
+                        <Check className="h-6 w-6 text-success" />
                       </div>
                       <h4 className="font-serif text-base font-bold">Importazione completata!</h4>
                       <p className="text-xs text-muted max-w-sm mx-auto font-serif italic">
@@ -7083,7 +7083,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                                     "text-[10px] font-bold px-2 py-0.5 rounded-sm uppercase tracking-tighter shadow-sm",
                                     selectedMonumento.editorialStatus === 'under-revision' && "bg-amber-500/10 text-amber-600 dark:text-amber-400",
                                     selectedMonumento.editorialStatus === 'draft' && "bg-sidebar text-muted",
-                                    (selectedMonumento.editorialStatus === 'published' || selectedMonumento.editorialStatus === 'diplomatic-edition') && "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
+                                    (selectedMonumento.editorialStatus === 'published' || selectedMonumento.editorialStatus === 'diplomatic-edition') && "bg-success/10 text-success"
                                   )}
                                   title="Stato editoriale (TEI revisionDesc/@status)"
                                 >
@@ -7091,7 +7091,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                                 </span>
                               )}
                               {selectedMonumento.textTypes?.map((tt, idx) => (
-                                <span key={idx} className="bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-[10px] font-bold px-2 py-0.5 rounded-sm uppercase tracking-tighter shadow-sm">
+                                <span key={idx} className="bg-success/10 text-success text-[10px] font-bold px-2 py-0.5 rounded-sm uppercase tracking-tighter shadow-sm">
                                   {labelInscriptionType(tt)}
                                 </span>
                               ))}
