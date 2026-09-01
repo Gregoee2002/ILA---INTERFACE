@@ -71,6 +71,31 @@ const FIELD_BOOST: Record<string, number> = {
   iconografia_norm: 1,
 };
 
+// La ricerca fuzzy sui numeri è dannosa: "186" con distanza 1 pesca anche
+// "086", "196", "180"... Sui termini che contengono cifre (di fatto gli id
+// delle schede) la disattiviamo del tutto e pretendiamo il match esatto.
+const TERM_FUZZY = (term: string): number | false =>
+  /\d/.test(term) ? false : 0.2;
+
+// Riconosce una query che è (solo) un id di scheda: "186", "ila 186",
+// "ILA-186", "ila186", con o senza zeri iniziali e con eventuale suffisso
+// di lettera ("107a"). Restituisce l'entryId canonico da confrontare.
+const ID_QUERY_RE = /^(?:ila[\s-]*)?(\d{1,4})([a-z]?)$/;
+
+function idQueryKey(q: string): string | null {
+  const m = q.trim().replace(/\s+/g, ' ').match(ID_QUERY_RE);
+  if (!m) return null;
+  return String(parseInt(m[1], 10)) + (m[2] || '');
+}
+
+// Chiave normalizzata di un entryId ("ILA-086" -> "86", "ILA-107a" -> "107a").
+function entryIdKey(entryId: string | undefined): string | null {
+  if (!entryId) return null;
+  const m = entryId.trim().toLowerCase().match(ID_QUERY_RE);
+  if (!m) return null;
+  return String(parseInt(m[1], 10)) + (m[2] || '');
+}
+
 interface IndexedDoc {
   id: number;
   entryId?: string;
@@ -120,7 +145,7 @@ export function buildSearchIndex(monumenti: any[]): MiniSearch<IndexedDoc> {
     storeFields: ['id', 'entryId'],
     searchOptions: {
       boost: FIELD_BOOST,
-      fuzzy: 0.2,
+      fuzzy: TERM_FUZZY,
       prefix: true,
     },
   });
@@ -185,14 +210,23 @@ export function searchMonumenti(
   // così il combineWith="AND" continua a funzionare correttamente.
   q = q.split(/\s+/).map(w => italianWordsToDigits(w) ?? w).join(' ');
 
-  const rawResults = index.search(q, {
+  // Query che è solo un id di scheda ("186", "ILA-186"): la scheda con
+  // quell'id esatto va in cima, e se la ricerca full-text non l'avesse
+  // pescata la aggiungiamo comunque.
+  const wantedId = idQueryKey(q);
+
+  // "ILA-186" non deve pesare il token "ila" (che sta in tutti gli id):
+  // cerchiamo solo la parte numerica.
+  const searchQ = wantedId ? q.replace(/^ila[\s-]*/, '') : q;
+
+  const rawResults = index.search(searchQ, {
     boost: FIELD_BOOST,
-    fuzzy: 0.2,
+    fuzzy: TERM_FUZZY,
     prefix: true,
     combineWith: opts.combineWith === 'AND' ? 'AND' : 'OR',
   });
 
-  return rawResults.map((r: any) => {
+  const results = rawResults.map((r: any) => {
     const monumento = monumentiById.get(r.id);
     const matchInSupplied = monumento
       ? r.terms.some((t: string) => termFallsInSuppliedRange(monumento, t))
@@ -207,4 +241,28 @@ export function searchMonumenti(
       matchInSupplied,
     };
   });
+
+  if (!wantedId) return results;
+
+  const isWanted = (r: SearchResult) => entryIdKey(r.entryId) === wantedId;
+  const exact = results.filter(isWanted);
+  const rest = results.filter(r => !isWanted(r));
+
+  if (exact.length === 0) {
+    for (const m of monumentiById.values()) {
+      if (entryIdKey(m.entryId) === wantedId) {
+        exact.push({
+          id: m.id,
+          entryId: m.entryId,
+          score: Number.MAX_SAFE_INTEGER,
+          match: {},
+          terms: [q],
+          matchInSupplied: false,
+        });
+        break;
+      }
+    }
+  }
+
+  return [...exact, ...rest];
 }
