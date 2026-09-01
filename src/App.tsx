@@ -3086,6 +3086,13 @@ const EpiDocRenderer = ({ xml, query, onTermClick, divinityIndex, onomasticaInde
             gapText = '·'.repeat(gapDotCount(quantityAttr));
           } else if (quantityAttr) {
             gapText = `[- ca. ${quantityAttr} -]`;
+          } else {
+            const atLeast = el.getAttribute('atLeast') || '';
+            const atMost = el.getAttribute('atMost') || '';
+            if (atLeast && atMost) {
+              gapText = `[- ${atLeast}-${atMost} -]`;
+              tooltipText = `Lacuna di ${atLeast}-${atMost} caratteri`;
+            }
           }
           return (
             <span 
@@ -3303,14 +3310,42 @@ const EpiDocRenderer = ({ xml, query, onTermClick, divinityIndex, onomasticaInde
           if (!abbrEl && !exEl) {
             return <span key={key} className="inline">{Array.from(node.childNodes).map((child: any, i) => renderNode(child, key + '-' + i))}</span>;
           }
+          // L'abbreviazione può contenere altro markup — un'integrazione
+          // dentro la parola (l[e]g(ionis)), un segno inciso — che appiattirlo
+          // a testo farebbe sparire: si rende ricorsivamente.
           return (
             <span
               key={key}
               className="hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors cursor-help inline"
               data-epidoc-tooltip={`Abbreviazione espansa: ${abbrText}(${exText})`}
             >
-              {abbrText}
+              {abbrEl
+                ? Array.from((abbrEl as Element).childNodes).map((child: any, i) => renderNode(child, key + '-a' + i))
+                : abbrText}
               {exText && <span className="text-muted/60">({exText})</span>}
+            </span>
+          );
+        }
+        case 'hi': {
+          const rend = el.getAttribute('rend') || '';
+          const kids = Array.from(node.childNodes).map((child: any, i) => renderNode(child, key + '-' + i));
+          if (rend === 'superscript') return <sup key={key} className="inline">{kids}</sup>;
+          if (rend === 'subscript') return <sub key={key} className="inline">{kids}</sub>;
+          return <span key={key} className="italic inline">{kids}</span>;
+        }
+        case 'g': {
+          // Segno inciso privo di equivalente Unicode: Lane lo disegna e lo
+          // scioglie in calce. Si mostra il posto che occupa sulla pietra,
+          // non un carattere inventato.
+          const gType = el.getAttribute('type') || '';
+          return (
+            <span
+              key={key}
+              data-epidoc-tooltip={gType ? `Segno inciso: ${gType}` : 'Segno inciso'}
+              className="text-muted/70 cursor-help inline"
+              style={{ fontFamily: 'monospace', fontStyle: 'normal' }}
+            >
+              ⟨segno⟩
             </span>
           );
         }
