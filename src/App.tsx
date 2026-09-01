@@ -48,7 +48,6 @@ import { cn, EASE_OUT, EASE_IN, SPRING_SNAPPY, SPRING_SOFT, gapDotCount } from '
 import { ICONOGRAPHY_LABELS } from './lib/iconographyLabels';
 import { labelEvidence, labelUnit, labelType, labelMaterial, labelInscriptionType } from './lib/vocabLabels';
 import { Monumento, FilterState, SortField, Bibliografia, EntryRegistro, BugReport, EDITORIAL_STATUS_LABELS } from './types';
-import { RAW_DATA } from './data';
 import { monumentiToXml, xmlToMonumenti, formatIlaLabel, splitDivineKey } from './lib/xmlUtils';
 import { buildDivinityIndex, buildOnomasticaIndex, buildClassificationAudit, DivinityStats, OnomasticaStats } from './lib/epithetIndex';
 import { PleiadesMap } from './components/PleiadesMap';
@@ -3906,6 +3905,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
   const onomasticaIndex = useMemo(() => buildOnomasticaIndex(monumenti), [monumenti]);
 
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
   const [showLanding, setShowLanding] = useState(!skipLanding);
   const logoImgRef = useRef<HTMLImageElement>(null);
   // Vedi PasswordGate.tsx: l'animazione del logo parte solo a caricamento
@@ -4301,17 +4301,21 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
   useEffect(() => {
     const loadData = async () => {
       setLoading(true);
+      setLoadError(null);
       try {
         const resMon = await fetch('/api/monumenti');
         if (resMon.ok) {
           const data = await resMon.json();
           setMonumenti(data);
         } else {
-          setMonumenti(RAW_DATA);
+          // Niente più fallback a RAW_DATA (dataset legacy di 46 voci inglesi
+          // con OCR corrotto): mascherava un errore di caricamento con un
+          // corpus falso. Meglio uno stato d'errore esplicito (BUG-05/DATA-07).
+          setLoadError(`Il corpus non è stato caricato (HTTP ${resMon.status}).`);
         }
       } catch (err) {
-        console.warn("Failed to load from local API, using RAW_DATA", err);
-        setMonumenti(RAW_DATA);
+        console.error("Caricamento del corpus fallito", err);
+        setLoadError("Il corpus non è stato caricato: errore di rete o snapshot non disponibile.");
       } finally {
         setLoading(false);
       }
@@ -5268,6 +5272,25 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
               <div className="h-2 w-1/2 bg-border/30 rounded-sm" />
             </div>
           ))}
+        </div>
+      </div>
+    );
+  }
+
+  if (loadError) {
+    return (
+      <div className="h-dvh w-full flex flex-col items-center justify-center bg-parchment gap-6 px-6 text-center">
+        <span className="text-3xl font-bold tracking-[0.15em] text-accent/40" style={{ fontFamily: '"Cinzel", serif' }}>ILA</span>
+        <div className="max-w-md flex flex-col items-center gap-3">
+          <AlertTriangle className="h-6 w-6 text-red-600" />
+          <p className="text-sm font-sans font-bold text-ink">Corpus non caricato</p>
+          <p className="text-xs text-muted leading-relaxed">{loadError}</p>
+          <button
+            onClick={() => window.location.reload()}
+            className="mt-2 px-4 py-1.5 text-xs font-sans font-bold uppercase tracking-widest bg-accent text-white rounded-sm"
+          >
+            Riprova
+          </button>
         </div>
       </div>
     );
