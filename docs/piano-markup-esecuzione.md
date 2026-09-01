@@ -1,7 +1,27 @@
 # Piano di esecuzione — markup dell'edizione
 
-Stato: **da eseguire** — redatto 2026-09-01.
+Stato: **in corso** — redatto e avviato 2026-09-01.
 Ricognizione di partenza: [`piano-markup-integrazioni-toponimi-date.md`](piano-markup-integrazioni-toponimi-date.md).
+
+## Stato di esecuzione — 2026-09-01
+
+| passo | stato | esito |
+|---|---|---|
+| Passo 0 — verifica repo dati | **fatto** | nessuna divergenza: il remoto `Gregoee2002/ILA/corpus` ha gli stessi **295** file, stessi nomi `ILA-NNN.xml`; contenuto identico tranne ILA-294. Il checkout locale `~/Documents/GitHub/ILA` (50 file, nomi `CMRDM-*`) è un clone vecchio: **ignorarlo**. |
+| Attrezzatura — `scripts/lint-corpus.py` | **fatto** | parentesi bilanciate, formulari `#formula-fissa`, coerenza `<num>`/numerale greco, `<origDate>` attesa; più i contatori di avanzamento di F1-F3 |
+| 12 schede con parentesi sbilanciate | **fatto** | tutte collazionate su Lane e corrette; 0 sbilanciate su 295 |
+| F5 — marcatura formula-fissa | **fatto** | ILA-136, ILA-139, ILA-144 |
+| F5 — `<origDate>` mancanti | **fatto** | ILA-038, ILA-055, ILA-115 |
+| F0, F1, F2, F3, F4 | da fare | |
+
+Il linter passa senza errori. Contatori di avanzamento correnti: `[ ]` non convertite
+607, `( )` 180, lacune non uniformate 146, `<supplied>` 77, `<gap>` 16, `<unclear>` 0,
+`<expan>` 9, `<num>` 0, `<date>` 1, `<placeName>` 2.
+
+> **Emerso durante la collazione**: il problema non è solo di markup. In 8 delle 12
+> schede controllate la trascrizione divergeva da Lane — parentesi spostate,
+> integrazioni perdute, e in ILA-103 e ILA-026 letture sbagliate che cambiano il senso.
+> Vedi §7-bis prima di lanciare qualsiasi conversione automatica.
 
 **Indipendente dalle traduzioni.** Questo piano tocca `<div type="edition">` e tre
 campi di header; le traduzioni vivono in `<div type="translation">` e non vengono
@@ -176,15 +196,45 @@ Ogni fase si chiude solo quando, **su tutte e 295 le schede**:
    questo punto non è verificato la fase non è finita, per quanto l'XML locale sia
    corretto.
 
+## 4-bis. Divergenze dalla trascrizione di Lane (§7-bis)
+
+La collazione delle 12 schede sbilanciate ha mostrato che l'errore ricorrente **non è
+la parentesi in sé**, ma la trascrizione da cui viene. Tre tipi, in ordine di gravità:
+
+1. **Letture sbagliate che cambiano il senso.**
+   - **ILA-026**: l'anno era `σγζ΄`; Lane ha `σ̣ν̣ζ΄` = **257** (ν letta γ), che con
+     l'era sillana dà i 172/3 d.C. stampati da Lane in margine. Il numerale non era
+     irregolare: era sbagliato.
+   - **ILA-103**: `οἰκο[γε-]νὸς` per `οἰκο[νό-][μος]` (*intendente*, non *nato in casa*);
+     `εὐχά[με-]νος` per `εὐξά[με-]νος`; e soprattutto `ἐὰν σ]ῴζ[η]ται` per
+     `ἐὰν λήψεται`. Il testo diceva «se sia salvo», Lane ha «se prenderà (in moglie)».
+     Anche `Δείου δι΄` per `βι΄`.
+   - **ILA-132**: la multa era letta `Σ΄ ε΄` = 205 senza unità. Lane stampa il **segno
+     del denario** e lo glossa lui stesso in calce: «Ͱ = δηνάρια». Sono **5 denari**.
+2. **Integrazioni perdute**: ILA-026 r. 4 (`ἀδε[λφῶν Διονυσίου, Ἀ-]`), ILA-289 r. 3
+   (`[Ῥείη τε καὶ Ἄττει]`, che in Lane è tutto restituito).
+3. **Integrazioni spezzate in due**: `] [` inserito dove Lane ha un gruppo solo —
+   ILA-047, ILA-069 (due volte), ILA-087, ILA-088. E il caso opposto, la parentesi
+   chiusa due volte a cavallo della fine riga: ILA-284 (`[ποι-]` / `ου]`).
+   Più una parentesi inventata di sana pianta: ILA-133 `Κλαυδ[ίᾳ`.
+
+**Conseguenza per il piano.** Convertire a macchina una trascrizione che diverge
+dall'edizione significa consolidare l'errore in struttura. Prima di F1 va deciso se
+fare una **collazione sistematica su Lane** — almeno delle schede con integrazioni
+lunghe (lotto C) e di tutte quelle con numerali, dove l'aritmetica dell'era è un
+controllo automatico gratuito. Le 12 collazionate sono l'8 % delle 141 con parentesi:
+se il tasso di errore è quello osservato, ce ne sono altre da correggere.
+
 ## 5. Rischi
 
 | rischio | mitigazione |
 |---|---|
-| divergenza fra le due repo (50 vs 295 file) | Passo 0 prima di tutto; se le repo divergono, riconciliarle **prima** del markup |
+| ~~divergenza fra le due repo~~ | **risolto**: Passo 0 eseguito, le repo coincidono |
 | il push per scheda riscrive il file intero | non lavorare su markup e traduzioni sullo stesso file in contemporanea |
 | conversione automatica su parentesi sbilanciate | chiuderle in F1 prima di lanciare qualsiasi script |
 | `( )` di correzione scambiate per scioglimenti | lista di eccezioni esplicita in F2, non euristiche |
 | perdita di lavoro fra sessioni | ogni fase committata e pushata appena chiusa |
+| conversione automatica su trascrizioni divergenti da Lane | collazione preventiva, vedi §4-bis |
 
 ## 6. Sequenza consigliata
 

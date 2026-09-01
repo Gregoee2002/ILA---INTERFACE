@@ -121,8 +121,8 @@
   "lane": "Lane, CMRDM I 22",
   "righe": 5,
   "grc": "ἐξεμ- | τονυμιν θ[εοῖσι] | ἀθανάτοις Ῥείη τε καὶ Ἄττει | Μηνοτύραννω· .....] | ... ια ...",
-  "it": "[- - -] agli dèi [immortali], a Rhea e ad Attis Menotyrannos [- - -].",
-  "en": "[- - -] to the [immortal] gods, to Rhea and to Attis Menotyrannos [- - -].",
+  "it": "[- - -] agli [dèi] immortali, [a Rhea e ad Attis] Menoty[rannos - - -].",
+  "en": "[- - -] to the [immortal] gods, [to Rhea and to Attis] Menoty[rannos - - -].",
   "note": ""
  },
  {
@@ -283,9 +283,9 @@
   "lane": "Lane, CMRDM I 55",
   "righe": 8,
   "grc": "[Ἔτου]ς σγζ΄, μη(νὸς) Πανήμ[ου· Ἐπεὶ] | Ἕρμιππος Ἑρμίππο[υ] ................] | σετο τὸν θεὸν Μῆνα ΚΓ[................] | μετὰ τῶν ἰδίων ἀδελφῶν Διονυσίου, Ἀ- | πολλωνίου, Ὀρφέος ἀ[πέκτεινε ........] | τὸν ἐπιζητηθέντ[α ...... μετὰ] | Διονυσίου τοῦ ἀδελ[φοῦ· ...... μετὰ] | τὸ τετελευτηκένα[ι αὐτοὺς ...........]",
-  "it": "Nell'[an]no 297, nel mese Panem[os. Poiché] Hermippos figlio di Hermippo[s - - -] il dio Men [- - -] insieme ai propri fratelli Dionysios, Apollonios, Orpheus u[ccise - - -] colui che era ricercat[o - - - insieme a] Dionysios il frat[ello - - - dopo] che [essi] furono morti [- - -].",
-  "en": "In the [ye]ar 297, in the month Panem[os. Since] Hermippos son of Hermippo[s - - -] the god Men [- - -] together with his own brothers Dionysios, Apollonios, Orpheus k[illed - - -] the man who was sought [- - - together with] Dionysios his broth[er - - - after] they had died [- - -].",
-  "note": "Il numerale dell'anno (σγζ΄) è irregolare: cifra incerta."
+  "it": "Nell'[an]no 257, nel mese Panem[os. Poiché] Hermippos figlio di Hermippo[s - - -] il dio Men [- - -] insieme ai propri fratelli Dionysios, Apollonios, Orpheus u[ccise - - -] colui che era ricercat[o - - - insieme a] Dionysios il frat[ello - - - dopo] che [essi] furono morti [- - -].",
+  "en": "In the [ye]ar 257, in the month Panem[os. Since] Hermippos son of Hermippo[s - - -] the god Men [- - -] together with his own brothers Dionysios, Apollonios, Orpheus k[illed - - -] the man who was sought [- - - together with] Dionysios his broth[er - - - after] they had died [- - -].",
+  "note": ""
  },
  {
   "id": "ILA-027",
@@ -841,9 +841,9 @@
   "lane": "Lane, CMRDM I 144",
   "righe": 6,
   "grc": "Ἀπουλ[ήιος Ε]ὐφρόσυνος καὶ Αὐρη[λ]ία | Μάσγαρις ἡ γυνή αὐτοῦ μνήμης χάριν. | Ἐπεξορκίζομεν Μῆνας κατα- | χθονίους μετὰ ἡμᾶς μηκέτι μηδί- | νὰ τεθῆναι. Εἰ δὲ ποτέ τις θέλῃ ἀνῦξε | ἢ κακυργήσει εἰδούν, δώσει Σ΄ ε΄ τῷ ἱερῷ",
-  "it": "Apoul[eios E]uphrosynos e Aure[l]ia Masgaris sua moglie, in memoria. Ἐπεξορκίζομεν i Men Katachthonioi che dopo di noi nessun altro vi sia deposto. Se poi qualcuno voglia aprire o danneggi il sepolcro, darà 205 al santuario.",
-  "en": "Apoul[eios E]uphrosynos and Aure[l]ia Masgaris his wife, in memory. Ἐπεξορκίζομεν the Men Katachthonioi that after us no one else be laid here. And if anyone should wish to open or should damage the tomb, he shall give 205 to the sanctuary.",
-  "note": "La somma (σε΄ = 205) è incisa senza unità monetaria."
+  "it": "Apoul[eios E]uphrosynos e Aure[l]ia Masgaris sua moglie, in memoria. Ἐπεξορκίζομεν i Men Katachthonioi che dopo di noi nessun altro vi sia deposto. Se poi qualcuno voglia aprire o danneggi il sepolcro, darà 5 denari al santuario.",
+  "en": "Apoul[eios E]uphrosynos and Aure[l]ia Masgaris his wife, in memory. Ἐπεξορκίζομεν the Men Katachthonioi that after us no one else be laid here. And if anyone should wish to open or should damage the tomb, he shall give 5 denarii to the sanctuary.",
+  "note": "La somma è incisa col segno del denario, che Lane glossa esplicitamente («Ͱ = δηνάρια»)."
  },
  {
   "id": "ILA-134",
