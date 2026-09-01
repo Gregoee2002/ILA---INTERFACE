@@ -132,6 +132,18 @@
   button, input, select, textarea {
     font-family: var(--font-sans);
   }
+
+  /* Pavimento di focus visibile: gran parte della UI fuori dal Catalogo non
+     aveva alcuno stato di focus (UI-15). Questa regola in @layer base ha
+     specificità bassa, quindi i componenti che già definiscono un
+     focus:ring/focus-visible proprio continuano a vincere; dove non c'è
+     nulla, compare almeno questo anello. :focus-visible = solo navigazione
+     da tastiera, non al click del mouse. */
+  :where(a, button, [role="button"], input, select, textarea, summary, [tabindex]):focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+    border-radius: inherit;
+  }
 }
 
 @layer utilities {
