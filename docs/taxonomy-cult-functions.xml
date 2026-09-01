@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
   Tassonomia ILA delle funzioni cultuali (marcatura lessicale <w>/<rs> nell'edizione).
-  Stato: BOZZA v2 (2026-08-30) — non ancora referenziata dalle schede.
-  Quando approvata: spostare in <encodingDesc><classDecl> di un header condiviso
-  del corpus (repo dati Gregoee2002/ILA), e referenziare via @ana="#agency" ecc.
+  Stato: v2 in uso (2026-09-01). La marcatura lessicale è già viva nel corpus
+  (<w ana="#…">, <rs type="cultTerm|cultFormula">) e in CultAttestation
+  (src/types.ts); questa tassonomia ne è il vocabolario di riferimento. Vive
+  ancora solo qui in docs/, NON in un header condiviso del corpus.
+  Da fare: spostare la <taxonomy> in <encodingDesc><classDecl> di un header
+  condiviso del corpus (repo dati Gregoee2002/ILA) e referenziarla formalmente.
   Doc: docs/tassonomia-funzioni-cultuali.md
 -->
 <TEI xmlns="http://www.tei-c.org/ns/1.0">
