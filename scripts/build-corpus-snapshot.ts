@@ -38,7 +38,12 @@ async function main() {
     );
     console.log(`Sync live completata: ${pulled} file scaricati${skipped.length ? `, ${skipped.length} saltati` : ""}.`);
   } else {
-    console.log("GITHUB_TOKEN/GITHUB_REPO non impostati: uso src/data/corpus/ dal checkout così com'è.");
+    // Build locale / dev: nessuna rete. Lo scatto viene rigenerato dai file
+    // XML presenti ORA in src/data/corpus/ — così `npm run build` in locale
+    // non serve mai uno snapshot fermo a un commit precedente (vedi la
+    // sezione "Drift corpus-snapshot.json" dell'audit 2026-09-01). In CI il
+    // workflow imposta i secret e legge invece il corpus live dalla repo dati.
+    console.log("GITHUB_TOKEN/GITHUB_REPO non impostati (build locale): rigenero lo scatto da src/data/corpus/ dal checkout, senza rete.");
   }
 
   const entries = listCorpusFiles();
