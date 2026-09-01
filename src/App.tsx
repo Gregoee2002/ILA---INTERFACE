@@ -3017,6 +3017,10 @@ const EpiDocRenderer = ({ xml, query, onTermClick, divinityIndex, onomasticaInde
               {nAttr}
             </span>
           );
+          // <lb rend="indent"/>: riga rientrata sulla pietra (EpiDoc @rend)
+          const indentSpan = (el.getAttribute('rend') || '') === 'indent'
+            ? <span key={key + '-i'} className="inline-block w-8 select-none" />
+            : null;
           if (breakAttr === 'no') {
             // Word continues across lines: add a hyphen, break the line, and show the line number in the margin
             return (
@@ -3024,13 +3028,10 @@ const EpiDocRenderer = ({ xml, query, onTermClick, divinityIndex, onomasticaInde
                 <span className="text-muted/40 select-none">-</span>
                 <br />
                 {lineNumSpan}
+                {indentSpan}
               </span>
             );
           }
-          // <lb rend="indent"/>: riga rientrata sulla pietra (EpiDoc @rend)
-          const indentSpan = (el.getAttribute('rend') || '') === 'indent'
-            ? <span key={key + '-i'} className="inline-block w-8 select-none" />
-            : null;
           if (nAttr === '1') {
             // First line: no preceding newline, just show number
             return <span key={key}>{lineNumSpan}{indentSpan}</span>;

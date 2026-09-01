@@ -96,7 +96,7 @@ def check(name, src, errors, warnings, counters):
     # <div type="textpart" subtype="column">, un vacat sulla pietra con <space/>.
     spazi = len(re.findall(r'\S {3,}\S', txt))
     if spazi:
-        warnings.append((name, '%d punt%s di impaginazione a spazi nel testo dell\'edizione: se sono'
+        errors.append((name, '%d punt%s di impaginazione a spazi nel testo dell\'edizione: se sono'
                                ' colonne servono <div type="textpart" subtype="column">,'
                                ' se è un vacat serve <space/>' % (spazi, 'o' if spazi == 1 else 'i')))
     counters['impaginazioni a spazi'] += spazi
