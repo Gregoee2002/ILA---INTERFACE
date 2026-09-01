@@ -94,28 +94,14 @@ export function PasswordGate() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1, transition: { duration: 1, ease: 'easeInOut' } }}
         exit={{ opacity: 0, transition: { duration: 0.6, ease: 'easeInOut' } }}
-        className="fixed inset-0 z-[200] flex items-center justify-center overflow-y-auto bg-parchment py-8"
+        className="light fixed inset-0 z-[200] flex items-center justify-center overflow-y-auto bg-parchment py-8"
         style={{
-          // Sempre in tema chiaro, a prescindere dalla modalità notte:
-          // il ritaglio del logo non è pulito sullo sfondo scuro, quindi
-          // qui le custom property del tema vengono fissate ai valori
-          // light indipendentemente da .dark sull'antenato (elenco
-          // completo delle var definite in :root/.dark in index.css —
-          // un elenco parziale lasciava trapelare il tema scuro su
-          // elementi come il campo password, che usa --card).
+          // Sempre in tema chiaro, a prescindere dalla modalità notte: il
+          // ritaglio del logo non è pulito sullo sfondo scuro. La classe
+          // `.light` (index.css) rifà TUTTA la palette chiara — prima qui
+          // c'era un elenco parziale di var, con valori un po' diversi da
+          // :root, che lasciava trapelare il tema scuro (UI-02).
           colorScheme: 'light',
-          ['--parchment' as any]: '#F7F4EC',
-          ['--ink' as any]: '#1E2A26',
-          ['--sidebar' as any]: '#F1EDE1',
-          ['--card' as any]: '#FEFDFA',
-          ['--accent' as any]: '#1F8377',
-          ['--muted' as any]: '#6E6A5E',
-          ['--border' as any]: '#E1DBC8',
-          ['--shadow-color' as any]: '61, 53, 38',
-          ['--tint-1' as any]: 'rgba(233, 238, 231, 0.55)',
-          ['--tint-2' as any]: 'rgba(244, 238, 223, 0.55)',
-          ['--tint-3' as any]: 'rgba(232, 238, 238, 0.55)',
-          ['--tint-4' as any]: 'rgba(243, 233, 226, 0.55)',
         }}
       >
         <div
@@ -151,11 +137,11 @@ export function PasswordGate() {
           </motion.div>
 
           {!requiredHash ? (
-            <p className="text-sm text-center max-w-sm" style={{ color: '#E08585' }}>
+            <p className="text-sm text-center max-w-sm text-danger">
               Configurazione mancante: VITE_SITE_PASSWORD_HASH non impostata in build. Sito bloccato per sicurezza.
             </p>
           ) : corpusError ? (
-            <p className="text-sm text-center max-w-sm" style={{ color: '#E08585' }}>
+            <p className="text-sm text-center max-w-sm text-danger">
               Errore caricamento corpus: {corpusError}
             </p>
           ) : !unlocked ? (
@@ -168,7 +154,7 @@ export function PasswordGate() {
                 placeholder="Password"
                 className="w-full max-w-xs rounded-full px-5 py-3 text-sm text-center outline-none transition-colors font-sans bg-[var(--card)] border border-[var(--border)] text-[var(--ink)]"
               />
-              {error && <p className="text-xs mt-3" style={{ color: '#E08585' }}>{error}</p>}
+              {error && <p className="text-xs mt-3 text-danger">{error}</p>}
               <motion.button
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}

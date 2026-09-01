@@ -4,6 +4,19 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ILA — Database</title>
+    <script>
+      // Applica il tema PRIMA del primo paint per evitare il flash chiaro
+      // (FOUC) su un utente 'dark' o 'system'-in-dark durante l'idratazione
+      // di React (UI-07). Stessa chiave e stessa logica di App.tsx.
+      (function () {
+        try {
+          var t = localStorage.getItem('theme-preference') || 'light';
+          var dark = t === 'dark' ||
+            (t === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+          if (dark) document.documentElement.classList.add('dark');
+        } catch (e) {}
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>
