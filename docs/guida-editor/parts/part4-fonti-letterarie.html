@@ -17,7 +17,7 @@ maschera a schermo intero con quattro sezioni:</p>
   <tr><td><b>Opere</b></td><td>L'indice bibliografico: un'opera antica per riga (Esiodo, <i>Teogonia</i>). Autore, lingua, genere, datazione, edizione, CTS URN.</td></tr>
   <tr><td><b>Testimonianze</b></td><td>I passi. È l'unità catalogabile — l'equivalente della scheda del monumento — e vive al primo livello.</td></tr>
   <tr><td><b>Saggi</b></td><td>Le voci di lessico sul modello LARES, che <b>richiamano</b> testimonianze già catalogate senza contenerle.</td></tr>
-  <tr><td><b>Controlli</b></td><td>Integrità dei rimandi e copertura del markup (§29).</td></tr>
+  <tr><td><b>Controlli</b></td><td>Integrità dei rimandi e copertura del markup (§30).</td></tr>
 </table>
 
 <div class="callout">
@@ -27,7 +27,7 @@ un saggio che richiama testimonianze non ancora scritte. Il salvataggio scrive
 <span class="mono">fonti-letterarie.json</span> sulla repo dati.
 </div>
 
-<h3>23.1 — I tre stati dello stesso contenuto</h3>
+<h3>24.1 — I tre stati dello stesso contenuto</h3>
 <p>L'editor dichiara sempre quale dei tre sta leggendo, perché un redattore deve
 sapere se sta guardando dati suoi o il seme di partenza. La precedenza è
 automatica: 1 se c'è, altrimenti 2, altrimenti 3.</p>
@@ -78,12 +78,12 @@ schede, e gli indici sono <b>calcolati</b> dal markup. Qui vale lo stesso.</p>
       <tr><th style="width:24%">Campo</th><th>Note</th></tr>
       <tr><td>Opera <span class="req">*</span> · Locus</td><td>il riferimento canonico dentro l'opera, es. <span class="mono">371–374</span>. Senza opera collegata la testimonianza resta senza datazione, genere ed edizione, e l'editor lo dice in rosso.</td></tr>
       <tr><td>Identificatore</td><td><span class="mono">ILA-LIT-hes-th-371</span>: si rigenera da opera + locus</td></tr>
-      <tr><td>Testo antico</td><td>l'editor di markup — §25</td></tr>
+      <tr><td>Testo antico</td><td>l'editor di markup — §26</td></tr>
       <tr><td>Traduzione · Traduttore</td><td>la traduzione italiana è sempre firmata</td></tr>
       <tr><td>Collazione</td><td><b>da collazionare</b> / <b>verificato sull'edizione</b>. Nessuna trascrizione è «vera» finché non è stata riscontrata sull'edizione dichiarata: il campo rende esplicito il debito invece di nasconderlo, alimenta il contatore della sezione e mette il triangolo giallo sulla riga.</td></tr>
       <tr><td>Tipologia</td><td>12 valori chiusi, cumulabili: genealogia, menzione diretta, etimologia, epiclesi, notizia cultuale, descrizione rituale, descrizione iconografica, allegoria, assimilazione, invocazione, <i>aition</i>, computo del tempo</td></tr>
-      <tr><td>Marcatori LARES</td><td>i nove della griglia — §27</td></tr>
-      <tr><td>Commento</td><td><b>che cosa il passo fa alla costruzione della divinità, non che cosa dice.</b> È anche il posto dove si spiega perché una parola marcata è notevole (§26).</td></tr>
+      <tr><td>Marcatori LARES</td><td>i nove della griglia — §28</td></tr>
+      <tr><td>Commento</td><td><b>che cosa il passo fa alla costruzione della divinità, non che cosa dice.</b> È anche il posto dove si spiega perché una parola marcata è notevole (§27).</td></tr>
     </table>
   </div>
 </div>
@@ -104,16 +104,15 @@ schede, e gli indici sono <b>calcolati</b> dal markup. Qui vale lo stesso.</p>
 <section class="section-break">
 <h2><span class="num">25</span>Il testo antico: lo stesso markup dell'Edizione</h2>
 <p class="lead">L'editor del testo antico è quello della sezione Edizione (Parte I):
-stessa selezione col mouse, stesso menu contestuale, stesso popover per modificare
-un tag già inserito, stesse tre modalità <i>wrap / replace / insert</i>. Non è
-un'economia di sviluppo: è <b>la condizione</b> perché una parola marcata in Esiodo
-e la stessa parola marcata su una stele finiscano nello stesso indice.</p>
+stessa selezione col mouse, stesso menu contestuale, stesse tre modalità <i>wrap /
+replace / insert</i>. Non è un'economia di sviluppo: è <b>la condizione</b> perché una
+parola marcata in Esiodo e la stessa marcata su una stele finiscano nello stesso indice.</p>
 
-<h3>25.1 — Che cosa è condiviso e che cosa no</h3>
+<h3>26.1 — Che cosa è condiviso e che cosa no</h3>
 <p>Del catalogo epigrafico si riusano solo le azioni che marcano <b>entità</b> e
-<b>lessico</b>, cioè le uniche i cui risultati devono confluire negli stessi indici:
-divinità ed epiteti, persone, patronimici, etnici, cariche, lessico cultuale,
-numeri e date, incertezze e correzioni, lacune e integrazioni.</p>
+<b>lessico</b>, le uniche i cui risultati devono confluire negli stessi indici:
+divinità ed epiteti, persone, patronimici, etnici, cariche, lessico cultuale, numeri
+e date, incertezze e correzioni, lacune e integrazioni.</p>
 <div class="callout warn">
 <b>Restano fuori le azioni che descrivono la pietra e il lapicida</b> — <i>vacat</i>,
 lettere riscritte, nomi frammentari, legature. Un libro non ha un lapicida, e
@@ -121,14 +120,14 @@ offrirle qui inviterebbe a marcature false. Per lo stesso motivo il validatore
 scarta le diagnosi epigrafiche prive di senso in un testo letterario.
 </div>
 
-<h3>25.2 — <code>&lt;lb/&gt;</code> è il verso, non la riga incisa</h3>
+<h3>26.2 — L'accapo è il verso, non la riga incisa</h3>
 <p>In epigrafia <code>&lt;lb/&gt;</code> è la riga incisa, un fatto materiale. Qui è
-il <b>verso</b> (poesia) o l'accapo dell'edizione (prosa): resta utile per citare
-«vv. 3-4», ma non porta <b>mai</b> <code>break="no"</code>, che descrive una parola
-spezzata dalla pietra. Se arriva da un incolla epigrafico viene tolto in automatico
-al salvataggio, e la numerazione dei versi è sempre ricalcolata.</p>
+il <b>verso</b> (poesia) o l'accapo dell'edizione (prosa): resta utile per citare «vv.
+3-4», ma non porta <b>mai</b> <code>break="no"</code>, che descrive una parola spezzata
+dalla pietra — se arriva da un incolla epigrafico viene tolto in automatico, e la
+numerazione dei versi è sempre ricalcolata.</p>
 
-<h3>25.3 — Le lacune sono della tradizione, non della pietra</h3>
+<h3>26.3 — Le lacune sono della tradizione, non della pietra</h3>
 <p>Le stesse marcature, con una spiegazione diversa: qui una lacuna è il guasto
 della tradizione manoscritta o del papiro, e l'aiuto in linea lo dice.</p>
 <table class="field-table">
@@ -139,17 +138,13 @@ della tradizione manoscritta o del papiro, e l'aiuto in linea lo dice.</p>
   <tr><td>Tracce illeggibili</td><td>tracce sul papiro o nel codice</td></tr>
 </table>
 
-<h3>25.4 — Testo semplice e markup convivono</h3>
+<h3>26.4 — Testo semplice e markup convivono</h3>
 <p>Il campo accetta due forme, e deve continuare ad accettarle: <b>testo semplice</b>
-(righe separate da a capo, nessun tag — è il modo in cui si comincia a redigere,
-e la casella iniziale di incolla serve a questo) e <b>markup inline</b>, la stessa
-cosa già marcata. La linguetta <b>XML</b> mostra e permette di riscrivere a mano il
-markup serializzato; «Applica XML» lo riporta nel flusso, rifiutandolo se malformato.</p>
-<div class="callout">
-Un eventuale involucro <code>&lt;quote&gt;</code> attorno a tutto è ridondante e viene
-tolto: <b>il campo è già la citazione</b>. Il valore finisce in un campo di dati, non
-in un file XML impaginato — l'esportazione TEI l'involucro lo aggiunge da sé.
-</div>
+(righe separate da a capo, nessun tag — è il modo in cui si comincia a redigere) e
+<b>markup inline</b>, la stessa cosa già marcata. La linguetta <b>XML</b> permette di
+riscrivere a mano il markup serializzato, e lo rifiuta se malformato. Un involucro
+<code>&lt;quote&gt;</code> attorno a tutto viene tolto: <b>il campo è già la
+citazione</b>, e l'esportazione TEI l'involucro lo aggiunge da sé.</p>
 </section>
 
 
@@ -159,7 +154,7 @@ in un file XML impaginato — l'esportazione TEI l'involucro lo aggiunge da sé.
 poche di proposito: ogni tag in più è una decisione che qualcuno dovrà prendere su
 ogni passo.</p>
 
-<h3>26.1 — Nomi e luoghi</h3>
+<h3>27.1 — Nomi e luoghi</h3>
 <div class="action">
   <div class="action-head"><span class="name">Toponimo</span><span class="glyph">Κάρραι</span></div>
   <div class="action-body">
@@ -186,7 +181,7 @@ ogni passo.</p>
   </div>
 </div>
 
-<h3>26.2 — Parole e citazioni</h3>
+<h3>27.2 — Parole e citazioni</h3>
 <div class="action">
   <div class="action-head"><span class="name">Parola notevole</span><span class="glyph">σελήνη</span></div>
   <div class="action-body">
@@ -198,7 +193,7 @@ ogni passo.</p>
     </table>
     <pre>&lt;w lemma="<span class="greek">σελήνη</span>" xml:lang="grc"&gt;<span class="greek">σελήνης</span>&lt;/w&gt;</pre>
     <div class="callout warn">
-      <b>La differenza è <code>@ana</code>, non l'azione.</b> «Funzione cultuale (parola)» vincola il lemma ai 54 del vocabolario controllato e scrive la famiglia in <code>@ana</code>; «Parola notevole» dà lo stesso tag <code>&lt;w&gt;</code> <b>senza</b> famiglia. Un <code>&lt;w&gt;</code> con famiglia entra nel <b>lessico cultuale</b> e nel ponte con il corpus (§26.4); uno senza entra nell'indice dei <b>termini</b>. Confonderli falserebbe il lessico.
+      <b>La differenza è <code>@ana</code>, non l'azione.</b> «Funzione cultuale (parola)» vincola il lemma ai 54 del vocabolario controllato e scrive la famiglia in <code>@ana</code>; «Parola notevole» dà lo stesso tag <code>&lt;w&gt;</code> <b>senza</b> famiglia. Un <code>&lt;w&gt;</code> con famiglia entra nel <b>lessico cultuale</b> e nel ponte con il corpus (§27.4); uno senza entra nell'indice dei <b>termini</b>. Confonderli falserebbe il lessico.
     </div>
   </div>
 </div>
@@ -245,7 +240,7 @@ ogni passo.</p>
   </div>
 </div>
 
-<h3>26.3 — Tradizione del testo</h3>
+<h3>27.3 — Tradizione del testo</h3>
 <div class="action">
   <div class="action-head"><span class="name">Variante di tradizione</span><span class="glyph">λέγει / φησί</span></div>
   <div class="action-body">
@@ -269,7 +264,7 @@ ogni passo.</p>
   </div>
 </div>
 
-<h3>26.4 — Il suggeritore del lessico cultuale</h3>
+<h3>27.4 — Il suggeritore del lessico cultuale</h3>
 <p>Sotto l'editor, quando il testo contiene parole del vocabolario controllato non
 ancora marcate, compare una riga viola: «<i>N parole del lessico cultuale non ancora
 marcate</i>». Aprendola si vede forma → lemma → famiglia.</p>
@@ -326,17 +321,17 @@ qualificano</b>: il passo intero o un segmento di testo.</p>
 <section class="section-break">
 <h2><span class="num">28</span>Le categorie stanno nel markup, non nei campi liberi</h2>
 <p class="lead">È la regola che governa tutta la sezione, e la ragione per cui esiste
-il controllo di copertura (§29). Una categoria scritta a mano in un campo è testo
+il controllo di copertura (§30). Una categoria scritta a mano in un campo è testo
 nudo: non è normalizzata sulle chiavi del corpus, e <b>non arriva</b> alle pagine di
 divinità ed epiteti. La stessa categoria marcata nel testo entra negli indici da sé.</p>
 
 <table class="field-table">
   <tr><th style="width:30%">Se scrivi…</th><th>…invece marca</th><th>Indice raggiunto</th></tr>
   <tr><td>Divinità: «Men Askaenos»</td><td>Divinità + epiteto nel testo</td><td>pagine di divinità ed epiteti del corpus</td></tr>
-  <tr><td>Personaggi mitici: «Endimione»</td><td>Personaggio mitico (§26.1)</td><td>indice dei personaggi</td></tr>
+  <tr><td>Personaggi mitici: «Endimione»</td><td>Personaggio mitico (§27.1)</td><td>indice dei personaggi</td></tr>
   <tr><td>Figure storiche: «Caracalla»</td><td>Persona attestata / Imperatore</td><td>indice delle persone</td></tr>
-  <tr><td>Luoghi: «Carre»</td><td>Toponimo (§26.1)</td><td>indice dei luoghi</td></tr>
-  <tr><td>Termini notevoli</td><td>Parola notevole o Funzione cultuale (§26.2)</td><td>indice dei termini · lessico cultuale</td></tr>
+  <tr><td>Luoghi: «Carre»</td><td>Toponimo (§27.1)</td><td>indice dei luoghi</td></tr>
+  <tr><td>Termini notevoli</td><td>Parola notevole o Funzione cultuale (§27.2)</td><td>indice dei termini · lessico cultuale</td></tr>
 </table>
 
 <div class="field">
@@ -367,14 +362,14 @@ rendere misurabile questo passaggio invece di farlo a memoria.
 perché riguardano rimandi fra oggetti e stato del lavoro. Il badge conta i problemi
 aperti.</p>
 
-<h3>29.1 — Integrità</h3>
+<h3>30.1 — Integrità</h3>
 <table class="field-table">
   <tr><th style="width:20%">Gravità</th><th>Casi</th></tr>
   <tr><td><b>errore</b></td><td>opera senza identificatore o con identificatore duplicato; due saggi con lo stesso identificatore; un nucleo che richiama una testimonianza <b>inesistente</b></td></tr>
   <tr><td><b>avviso</b></td><td>opera senza autore o titolo; testimonianza senza locus («la citazione non è verificabile») o senza testo; errori di markup nel testo; nucleo vuoto; stessa testimonianza in due nuclei dello stesso saggio; testimonianza catalogata ma non richiamata da nessun saggio; opera nell'indice ma senza testimonianze</td></tr>
 </table>
 
-<h3>29.2 — Copertura del markup</h3>
+<h3>30.2 — Copertura del markup</h3>
 <p>In fondo ai Controlli, una tabella misura quanto delle categorie di ogni scheda è
 già passato dal campo libero al markup, con un contatore <span class="mono">fatte /
 con categorie</span>. Ogni riga apre la testimonianza corrispondente.</p>
