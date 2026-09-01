@@ -162,6 +162,9 @@ Due incoerenze nella marcatura `@ana="#formula-fissa"` (v. `tassonomia-funzioni-
 
 ## Ordine di lavoro proposto
 
+> Il piano operativo dettagliato — decisioni bloccanti, fasi, attrezzatura, criteri di
+> accettazione — è in [`piano-markup-esecuzione.md`](piano-markup-esecuzione.md).
+
 1. **Integrazioni editoriali** (§1) — il più esteso e il più meccanizzabile:
    `[…]` → `<supplied reason="lost">`, lacune → `<gap>` con `@unit`/`@extent`,
    puntini sottoscritti → `<unclear>`. Da fare a macchina con revisione a campione,
