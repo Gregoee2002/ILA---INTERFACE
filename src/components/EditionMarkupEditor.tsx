@@ -10,7 +10,7 @@ import { ErrorBoundary } from './ErrorBoundary';
 import {
   MarkupToken, TokenPath, MarkupAction, ValidationIssue, EpithetScanIssue, LbInfo,
   parseEdition, serializeEdition, collectLbs, sliceText,
-  wrapSlice, unwrapElement, removeElement, updateElementAttrs, appendElement,
+  wrapSlice, unwrapElement, removeElement, updateElementAttrs, appendElement, insertAtPoint,
   validateEditionTokens, scanEpithetIssues, MARKUP_ACTIONS, DIVINE_KEYS,
 } from '../lib/leidenMarkup';
 
@@ -75,6 +75,33 @@ interface MenuState {
 
 interface ElPopover { path: TokenPath; token: MarkupToken & { kind: 'el' }; x: number; y: number; }
 
+/** Punto d'inserimento scelto col click: percorso del token, offset nel testo e
+ *  posizione (relativa al riquadro del flusso) per disegnare il cursore. */
+interface CaretPoint { path: TokenPath; offset: number; left: number; top: number; height: number }
+
+/** Posizione del caret sotto le coordinate del click, senza contentEditable. */
+function caretFromXY(x: number, y: number): { node: Node; offset: number } | null {
+  const doc = document as any;
+  if (typeof doc.caretPositionFromPoint === 'function') {
+    const p = doc.caretPositionFromPoint(x, y);
+    return p?.offsetNode ? { node: p.offsetNode, offset: p.offset } : null;
+  }
+  if (typeof doc.caretRangeFromPoint === 'function') {
+    const r = doc.caretRangeFromPoint(x, y);
+    return r ? { node: r.startContainer, offset: r.startOffset } : null;
+  }
+  return null;
+}
+
+/** Rettangolo del carattere adiacente all'offset: un range collassato non ne ha uno affidabile. */
+function caretRect(node: Node, offset: number): DOMRect | null {
+  const len = (node.textContent || '').length;
+  const r = document.createRange();
+  if (offset < len) { r.setStart(node, offset); r.setEnd(node, offset + 1); return r.getBoundingClientRect(); }
+  if (offset > 0) { r.setStart(node, offset - 1); r.setEnd(node, offset); const b = r.getBoundingClientRect(); return new DOMRect(b.right, b.top, 0, b.height); }
+  return null;
+}
+
 /** parseEdition lancia su markup che il modello a flusso unico non sa rappresentare
  *  (es. più <div type="textpart"> nella stessa edizione, caso reale nel corpus:
  *  I.Milet VI 3 1029+1040). Senza questo guard il crash arriva nudo dall'inizializzatore
@@ -88,6 +115,7 @@ export const EditionMarkupEditor: React.FC<Props> = ({ value, onChange, anepigra
   const [parseError, setParseError] = useState(() => safeParseEdition(value) === null);
   const [menu, setMenu] = useState<MenuState | null>(null);
   const [pop, setPop] = useState<ElPopover | null>(null);
+  const [caret, setCaret] = useState<CaretPoint | null>(null);
   const [tab, setTab] = useState<'anteprima' | 'xml'>('anteprima');
   const [xmlDraft, setXmlDraft] = useState<string | null>(null);
   const [xmlError, setXmlError] = useState<string | null>(null);
@@ -95,11 +123,12 @@ export const EditionMarkupEditor: React.FC<Props> = ({ value, onChange, anepigra
   const [scan, setScan] = useState<{ running: boolean; done: number; total: number; issues: EpithetScanIssue[] } | null>(null);
   const lastEmitted = useRef(value);
   const rootRef = useRef<HTMLDivElement>(null);
+  const flowRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (value !== lastEmitted.current) {
       const next = safeParseEdition(value);
-      if (next) { setTokens(next); setParseError(false); }
+      if (next) { setTokens(next); setParseError(false); setCaret(null); }
       else setParseError(true);
       lastEmitted.current = value;
     }
@@ -107,6 +136,7 @@ export const EditionMarkupEditor: React.FC<Props> = ({ value, onChange, anepigra
 
   const commit = useCallback((next: MarkupToken[]) => {
     setTokens(next);
+    setCaret(null);
     const xml = serializeEdition(next);
     lastEmitted.current = xml;
     onChange(xml);
@@ -150,6 +180,24 @@ export const EditionMarkupEditor: React.FC<Props> = ({ value, onChange, anepigra
     setMenu({ sel, step: 'list', params: {}, x: sel.x, y: sel.y });
   };
 
+  /* ── punto d'inserimento (click senza selezione) ─────────────── */
+  const onFlowClick = (e: React.MouseEvent) => {
+    const s = window.getSelection();
+    if (s && !s.isCollapsed && s.toString().length > 0) return; // se ne occupa onMouseUp
+    const pt = caretFromXY(e.clientX, e.clientY);
+    const host = pt && (pt.node.nodeType === 3 ? pt.node.parentElement : (pt.node as HTMLElement))?.closest('[data-tok]');
+    if (!pt || !host || !flowRef.current?.contains(host)) { setCaret(null); return; }
+    const path = JSON.parse(host.getAttribute('data-tok') || '[]') as TokenPath;
+    const rect = caretRect(pt.node, pt.offset);
+    const box = flowRef.current.getBoundingClientRect();
+    if (!rect) { setCaret(null); return; }
+    setCaret({
+      path, offset: pt.offset,
+      left: rect.left - box.left, top: rect.top - box.top, height: rect.height,
+    });
+    setSelWarn(null);
+  };
+
   useEffect(() => {
     const onDown = (e: MouseEvent) => {
       const t = e.target as HTMLElement;
@@ -169,6 +217,8 @@ export const EditionMarkupEditor: React.FC<Props> = ({ value, onChange, anepigra
         const composer = (slice: MarkupToken[]) =>
           action.compose ? action.compose(slice, params) : action.build(sliceText(slice), params);
         commit(wrapSlice(tokens, startPath, startOffset, endPath, endOffset, composer));
+      } else if (caret) {
+        commit(insertAtPoint(tokens, caret.path, caret.offset, action.build('', params)));
       } else {
         commit(appendElement(tokens, action.build('', params)));
       }
@@ -270,7 +320,12 @@ export const EditionMarkupEditor: React.FC<Props> = ({ value, onChange, anepigra
 
       {!isEmpty && (
         <div className="bg-white/50 dark:bg-white/5 border border-border/40 rounded-xl px-5 py-6 backdrop-blur-sm min-h-[280px]" onMouseUp={onMouseUp}>
-          <div className="font-greek text-[21px] md:text-[23px] leading-[2.3] text-ink pl-20 py-2" lang="grc">
+          <div ref={flowRef} onClick={onFlowClick}
+            className="relative font-greek text-[21px] md:text-[23px] leading-[2.3] text-ink pl-20 py-2" lang="grc">
+            {caret && (
+              <span aria-hidden className="absolute w-[2px] bg-accent animate-pulse pointer-events-none rounded-full"
+                style={{ left: caret.left, top: caret.top, height: caret.height || '1em' }} />
+            )}
             <TokenFlow
               tokens={tokens} basePath={[]} lbByPath={lbByPath} lbCount={lbs.length}
               onElClick={(path, token, ev) => {
@@ -293,12 +348,19 @@ export const EditionMarkupEditor: React.FC<Props> = ({ value, onChange, anepigra
               <CornerDownLeft className="w-3 h-3" /> Aggiungi riga
             </button>
             <button onClick={(e) => { const r = (e.currentTarget as HTMLElement).getBoundingClientRect(); setPop(null); setMenu({ sel: null, step: 'list', params: {}, x: r.left, y: r.bottom }); }}
-              className="inline-flex items-center gap-1.5 text-[11px] font-sans font-semibold uppercase tracking-[0.12em] text-muted hover:text-accent transition-colors">
-              <Plus className="w-3 h-3" /> Inserisci lacuna / vacat
+              className={cn('inline-flex items-center gap-1.5 text-[11px] font-sans font-semibold uppercase tracking-[0.12em] transition-colors',
+                caret ? 'text-accent' : 'text-muted hover:text-accent')}>
+              <Plus className="w-3 h-3" /> {caret ? 'Inserisci lacuna / vacat qui' : 'Inserisci lacuna / vacat (in fondo)'}
             </button>
+            {caret && (
+              <button onClick={() => setCaret(null)}
+                className="inline-flex items-center gap-1 text-[11px] font-sans font-semibold uppercase tracking-[0.12em] text-muted/60 hover:text-muted transition-colors">
+                <X className="w-3 h-3" /> Annulla punto
+              </button>
+            )}
           </div>
           <p className="text-[10px] text-muted/50 italic mt-2.5 pl-20 select-none">
-            Seleziona il greco (anche attraverso gli accapi) per il menu di markup · clicca un tag per modificarlo · ⌁ nel margine = break="no"
+            Seleziona il greco (anche attraverso gli accapi) per il menu di markup · clicca nel testo per fissare il punto d'inserimento · clicca un tag per modificarlo · ⌁ nel margine = break="no"
           </p>
         </div>
       )}

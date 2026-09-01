@@ -373,6 +373,33 @@ export function appendElement(tokens: MarkupToken[], el: MarkupToken): MarkupTok
   return [...cloneTokens(tokens), el];
 }
 
+/**
+ * Inserisce un elemento in un punto preciso del flusso, senza consumare testo:
+ * dentro un token testo (che viene spezzato all'offset) oppure, se il percorso
+ * punta a un elemento (tipicamente un <lb/>), prima o dopo di esso.
+ * Serve per le azioni "replace" (gap, space, vacat) applicate senza selezione.
+ */
+export function insertAtPoint(
+  tokens: MarkupToken[],
+  path: TokenPath,
+  offset: number,
+  el: MarkupToken
+): MarkupToken[] {
+  const tok = getTokenAt(tokens, path);
+  if (!tok) return tokens;
+  if (tok.kind === "text") {
+    const cut = Math.max(0, Math.min(offset, tok.value.length));
+    const pre = tok.value.slice(0, cut);
+    const post = tok.value.slice(cut);
+    const replacement: MarkupToken[] = [];
+    if (pre) replacement.push({ kind: "text", value: pre });
+    replacement.push(el);
+    if (post) replacement.push({ kind: "text", value: post });
+    return spliceAt(tokens, path, replacement);
+  }
+  return spliceAt(tokens, path, offset <= 0 ? [el, tok] : [tok, el]);
+}
+
 /* ================================================================ */
 /* Vocabolario chiavi divine (attestate nel corpus; lista estendibile)*/
 /* ================================================================ */
