@@ -1,0 +1,398 @@
+<section>
+<h2><span class="num">23</span>La redazione delle Fonti letterarie</h2>
+<p class="lead">
+«Fonti letterarie» non è un secondo catalogo epigrafico: è lo spoglio ragionato
+dei testi antichi sulla divinità lunare. Il corpus risponde alla domanda
+<i>che cosa si scriveva sulla pietra</i>, questa sezione a <i>che cosa si diceva
+nei testi</i>, e le due risposte vanno lette una contro l'altra. Si redige da un
+editor proprio, che però usa <b>lo stesso markup</b> della sezione Edizione: ciò
+che si marca qui entra negli stessi indici del database.
+</p>
+
+<p class="when"><b>Come si apre:</b> vista <b>Fonti letterarie</b> del sito → pulsante
+<b>Redigi</b> in alto a destra, visibile solo a redazione sbloccata. Si apre una
+maschera a schermo intero con quattro sezioni:</p>
+<table class="field-table">
+  <tr><th style="width:22%">Sezione</th><th>Che cosa contiene</th></tr>
+  <tr><td><b>Opere</b></td><td>L'indice bibliografico: un'opera antica per riga (Esiodo, <i>Teogonia</i>). Autore, lingua, genere, datazione, edizione, CTS URN.</td></tr>
+  <tr><td><b>Testimonianze</b></td><td>I passi. È l'unità catalogabile — l'equivalente della scheda del monumento — e vive al primo livello.</td></tr>
+  <tr><td><b>Saggi</b></td><td>Le voci di lessico sul modello LARES, che <b>richiamano</b> testimonianze già catalogate senza contenerle.</td></tr>
+  <tr><td><b>Controlli</b></td><td>Integrità dei rimandi e copertura del markup (§29).</td></tr>
+</table>
+
+<div class="callout">
+<b>Un file solo, non uno per saggio.</b> Opere, testimonianze e saggi si rimandano
+l'un l'altro per <code>id</code>: salvarli separatamente vorrebbe dire poter salvare
+un saggio che richiama testimonianze non ancora scritte. Il salvataggio scrive
+<span class="mono">fonti-letterarie.json</span> sulla repo dati.
+</div>
+
+<h3>23.1 — I tre stati dello stesso contenuto</h3>
+<p>L'editor dichiara sempre quale dei tre sta leggendo, perché un redattore deve
+sapere se sta guardando dati suoi o il seme di partenza. La precedenza è
+automatica: 1 se c'è, altrimenti 2, altrimenti 3.</p>
+<table class="field-table">
+  <tr><th style="width:26%">Stato</th><th>Dove</th><th>Quando vale</th></tr>
+  <tr><td><b>Archivio live</b></td><td><span class="mono">fonti-letterarie.json</span> sulla repo dati</td><td>è la fonte di verità: la scrive l'editor a redazione sbloccata</td></tr>
+  <tr><td><b>Scatto statico</b></td><td><span class="mono">public/fonti-letterarie.json</span></td><td>copia generata a ogni deploy: è quello che legge chi apre il sito con la sola password</td></tr>
+  <tr><td><b>Seme compilato</b></td><td><span class="mono">src/data/fontiLetterarie.ts</span></td><td>vale finché nessuno ha mai salvato — senza, al primo deploy la sezione sarebbe vuota</td></tr>
+</table>
+<div class="callout warn">
+Un archivio assente, irraggiungibile o malformato <b>non</b> è un errore bloccante:
+si ricade sul seme compilato, perché una sezione che non si apre è peggio di una
+ferma all'ultimo deploy. Se leggi «seme» dove ti aspetti «archivio», il salvataggio
+precedente non è arrivato.
+</div>
+</section>
+
+
+<section class="section-break">
+<h2><span class="num">24</span>Opera, testimonianza, saggio: chi contiene chi</h2>
+<p class="lead">Tre entità, in quest'ordine. Il rovesciamento rispetto alla prima
+stesura — dove le testimonianze stavano dentro la voce di lessico — non è
+cosmetico: nel corpus nessuno scrive «la pagina di Men» a mano, si scrivono
+schede, e gli indici sono <b>calcolati</b> dal markup. Qui vale lo stesso.</p>
+
+<div class="field">
+  <div class="field-head"><span class="name">Opera</span><span class="where">sezione Opere</span></div>
+  <div class="field-body">
+    <p class="when"><b>Quando:</b> una volta sola per unità bibliografica. Tutto ciò che vale per l'opera intera — lingua, genere, datazione, edizione critica — sta qui e non va ripetuto sui singoli passi.</p>
+    <table class="field-table">
+      <tr><th style="width:24%">Campo</th><th>Note</th></tr>
+      <tr><td>Autore · Titolo</td><td>più le forme abbreviate di citazione (<span class="mono">Hes.</span>, <span class="mono">Th.</span>); la sigla del titolo resta vuota per Strabone, Pausania…</td></tr>
+      <tr><td>Tipo di fonte</td><td>vocabolario chiuso <span class="mono">lit</span> / <span class="mono">ins</span> / <span class="mono">pap</span> — è l'<code>@type</code> di <code>&lt;ref&gt;</code> del lessico LARES</td></tr>
+      <tr><td>Genere</td><td>16 valori chiusi: epica, innodia, lirica, tragedia, commedia, filosofia, storiografia, geografia, mitografia, lessicografia, poesia ellenistica, biografia, erudizione antiquaria, periegesi, testi magici, scoli e commentari</td></tr>
+      <tr><td>Datazione</td><td>testo libero, più un <b>anno indicativo</b> per l'ordinamento (negativo = a.C.): è quello, non la stringa, a mettere in fila le testimonianze</td></tr>
+      <tr><td>Edizione</td><td>l'edizione critica di riferimento — è ciò rispetto a cui una trascrizione può dirsi collazionata</td></tr>
+      <tr><td>Identificatore</td><td>handle stabile, es. <span class="mono">hes-th</span>; il pulsante <b>rigenera</b> compare solo finché nessuna testimonianza la cita</td></tr>
+    </table>
+    <div class="callout warn">Un'opera citata da almeno una testimonianza <b>non si elimina</b>: il pulsante resta disabilitato e dice da quante è citata. Prima si spostano i passi.</div>
+  </div>
+</div>
+
+<div class="field">
+  <div class="field-head"><span class="name">Testimonianza</span><span class="where">sezione Testimonianze</span></div>
+  <div class="field-body">
+    <p class="when"><b>Quando:</b> per ogni passo che dice qualcosa della divinità lunare. Vive da sé: un saggio la richiama, non la contiene — e la stessa testimonianza può comparire in due saggi con due letture diverse, che è il caso normale.</p>
+    <table class="field-table">
+      <tr><th style="width:24%">Campo</th><th>Note</th></tr>
+      <tr><td>Opera <span class="req">*</span> · Locus</td><td>il riferimento canonico dentro l'opera, es. <span class="mono">371–374</span>. Senza opera collegata la testimonianza resta senza datazione, genere ed edizione, e l'editor lo dice in rosso.</td></tr>
+      <tr><td>Identificatore</td><td><span class="mono">ILA-LIT-hes-th-371</span>: si rigenera da opera + locus</td></tr>
+      <tr><td>Testo antico</td><td>l'editor di markup — §25</td></tr>
+      <tr><td>Traduzione · Traduttore</td><td>la traduzione italiana è sempre firmata</td></tr>
+      <tr><td>Collazione</td><td><b>da collazionare</b> / <b>verificato sull'edizione</b>. Nessuna trascrizione è «vera» finché non è stata riscontrata sull'edizione dichiarata: il campo rende esplicito il debito invece di nasconderlo, alimenta il contatore della sezione e mette il triangolo giallo sulla riga.</td></tr>
+      <tr><td>Tipologia</td><td>12 valori chiusi, cumulabili: genealogia, menzione diretta, etimologia, epiclesi, notizia cultuale, descrizione rituale, descrizione iconografica, allegoria, assimilazione, invocazione, <i>aition</i>, computo del tempo</td></tr>
+      <tr><td>Marcatori LARES</td><td>i nove della griglia — §27</td></tr>
+      <tr><td>Commento</td><td><b>che cosa il passo fa alla costruzione della divinità, non che cosa dice.</b> È anche il posto dove si spiega perché una parola marcata è notevole (§26).</td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="field">
+  <div class="field-head"><span class="name">Saggio</span><span class="where">sezione Saggi</span></div>
+  <div class="field-body">
+    <p class="when"><b>Quando:</b> per trattare discorsivamente un <b>lemma</b>. Le voci LARES sono voci di lemma, non di divinità: il titolo è la parola (Selene, non «la dea lunare»).</p>
+    <p class="when">Lo scheletro segue le schede LARES pubblicate: morfologia, etimologia, cappello, discussione, bibliografia divisa fra <b>corpora</b> e <b>studi</b>. I <b>nuclei tematici</b> raggruppano le testimonianze richiamate: sono una scelta redazionale, non un dato calcolato — determinano l'ordine della vista Lettura e le sigle T1, T2… che valgono <b>solo dentro quel saggio</b>.</p>
+    <div class="callout">
+      <b>Ponte con il corpus epigrafico.</b> La sezione «testimonianze epigrafiche» di un saggio non si scrive: si calcola. I campi <b>Divinità</b> ed <b>Epiteti</b> sotto «Ponte con il corpus» sono le <code>key</code> normalizzate del markup (<span class="mono">Men</span>, <span class="mono">Askaenos</span>), <b>non stringhe di ricerca</b>: una chiave sbagliata non dà zero risultati con un avviso, dà zero risultati e basta.
+    </div>
+  </div>
+</div>
+</section>
+
+
+<section class="section-break">
+<h2><span class="num">25</span>Il testo antico: lo stesso markup dell'Edizione</h2>
+<p class="lead">L'editor del testo antico è quello della sezione Edizione (Parte I):
+stessa selezione col mouse, stesso menu contestuale, stesso popover per modificare
+un tag già inserito, stesse tre modalità <i>wrap / replace / insert</i>. Non è
+un'economia di sviluppo: è <b>la condizione</b> perché una parola marcata in Esiodo
+e la stessa parola marcata su una stele finiscano nello stesso indice.</p>
+
+<h3>25.1 — Che cosa è condiviso e che cosa no</h3>
+<p>Del catalogo epigrafico si riusano solo le azioni che marcano <b>entità</b> e
+<b>lessico</b>, cioè le uniche i cui risultati devono confluire negli stessi indici:
+divinità ed epiteti, persone, patronimici, etnici, cariche, lessico cultuale,
+numeri e date, incertezze e correzioni, lacune e integrazioni.</p>
+<div class="callout warn">
+<b>Restano fuori le azioni che descrivono la pietra e il lapicida</b> — <i>vacat</i>,
+lettere riscritte, nomi frammentari, legature. Un libro non ha un lapicida, e
+offrirle qui inviterebbe a marcature false. Per lo stesso motivo il validatore
+scarta le diagnosi epigrafiche prive di senso in un testo letterario.
+</div>
+
+<h3>25.2 — <code>&lt;lb/&gt;</code> è il verso, non la riga incisa</h3>
+<p>In epigrafia <code>&lt;lb/&gt;</code> è la riga incisa, un fatto materiale. Qui è
+il <b>verso</b> (poesia) o l'accapo dell'edizione (prosa): resta utile per citare
+«vv. 3-4», ma non porta <b>mai</b> <code>break="no"</code>, che descrive una parola
+spezzata dalla pietra. Se arriva da un incolla epigrafico viene tolto in automatico
+al salvataggio, e la numerazione dei versi è sempre ricalcolata.</p>
+
+<h3>25.3 — Le lacune sono della tradizione, non della pietra</h3>
+<p>Le stesse marcature, con una spiegazione diversa: qui una lacuna è il guasto
+della tradizione manoscritta o del papiro, e l'aiuto in linea lo dice.</p>
+<table class="field-table">
+  <tr><th style="width:34%">Azione</th><th>Che cosa significa qui</th></tr>
+  <tr><td>Integrazione</td><td>integrazione dell'editore dove la tradizione è guasta o il papiro lacunoso</td></tr>
+  <tr><td>Lacuna di lunghezza ignota</td><td>papiro mutilo, codice guasto, ampiezza ignota</td></tr>
+  <tr><td>Lacuna di N caratteri</td><td>ampiezza nota o stimata — soprattutto papiri</td></tr>
+  <tr><td>Tracce illeggibili</td><td>tracce sul papiro o nel codice</td></tr>
+</table>
+
+<h3>25.4 — Testo semplice e markup convivono</h3>
+<p>Il campo accetta due forme, e deve continuare ad accettarle: <b>testo semplice</b>
+(righe separate da a capo, nessun tag — è il modo in cui si comincia a redigere,
+e la casella iniziale di incolla serve a questo) e <b>markup inline</b>, la stessa
+cosa già marcata. La linguetta <b>XML</b> mostra e permette di riscrivere a mano il
+markup serializzato; «Applica XML» lo riporta nel flusso, rifiutandolo se malformato.</p>
+<div class="callout">
+Un eventuale involucro <code>&lt;quote&gt;</code> attorno a tutto è ridondante e viene
+tolto: <b>il campo è già la citazione</b>. Il valore finisce in un campo di dati, non
+in un file XML impaginato — l'esportazione TEI l'involucro lo aggiunge da sé.
+</div>
+</section>
+
+
+<section class="section-break">
+<h2><span class="num">26</span>Le azioni proprie del testo letterario</h2>
+<p class="lead">Si aggiunge solo ciò che nella pietra non esiste e nel libro sì. Sono
+poche di proposito: ogni tag in più è una decisione che qualcuno dovrà prendere su
+ogni passo.</p>
+
+<h3>26.1 — Nomi e luoghi</h3>
+<div class="action">
+  <div class="action-head"><span class="name">Toponimo</span><span class="glyph">Κάρραι</span></div>
+  <div class="action-body">
+    <p class="when"><b>Quando:</b> una città, una regione, un santuario <b>nominati</b> nel testo. Nell'epigrafia esiste solo l'etnico (<span class="greek">Λύκιος</span>): il nome del luogo serve qui.</p>
+    <table class="field-table">
+      <tr><th>Parametro</th><th>Note</th></tr>
+      <tr><td>Lemma (nominativo) <span class="req">*</span></td><td>la forma normalizzata che finisce nell'indice, es. <span class="greek">Κάρραι</span></td></tr>
+      <tr><td>URI Pleiades</td><td><b>mai dedotto</b> — stessa regola del corpus: si compila solo se certo</td></tr>
+    </table>
+    <pre>&lt;placeName nymRef="<span class="greek">Κάρραι</span>" ref="https://pleiades.stoa.org/places/…"&gt;<span class="greek">Κάρραις</span>&lt;/placeName&gt;</pre>
+  </div>
+</div>
+
+<div class="action">
+  <div class="action-head"><span class="name">Personaggio mitico</span><span class="glyph">Ἐνδυμίων</span></div>
+  <div class="action-body">
+    <p class="when"><b>Quando:</b> una figura del mito che <b>non è un dio</b> e <b>non è mai esistita</b>: Endimione, Fetonte. Per gli dèi si usa «Divinità», per gli uomini «Persona attestata» — le tre categorie finiscono in tre indici diversi, e confonderle significa contare un personaggio del mito fra le persone storiche.</p>
+    <table class="field-table">
+      <tr><th>Parametro</th><th>Note</th></tr>
+      <tr><td>Key <span class="req">*</span></td><td>forma normalizzata italiana, es. <span class="mono">Endimione</span></td></tr>
+      <tr><td>Lemma greco</td><td>nominativo; se compilato, il testo va dentro un <code>&lt;name nymRef&gt;</code></td></tr>
+    </table>
+    <pre>&lt;persName type="mythological" key="Endimione"&gt;&lt;name nymRef="<span class="greek">Ἐνδυμίων</span>"&gt;<span class="greek">Ἐνδυμίωνα</span>&lt;/name&gt;&lt;/persName&gt;</pre>
+  </div>
+</div>
+
+<h3>26.2 — Parole e citazioni</h3>
+<div class="action">
+  <div class="action-head"><span class="name">Parola notevole</span><span class="glyph">σελήνη</span></div>
+  <div class="action-body">
+    <p class="when"><b>Quando:</b> una parola merita l'indice ma <b>non appartiene</b> al lessico cultuale — un dialettismo, un hapax, un tecnicismo. <b>Perché sia notevole si dice nel commento, non qui:</b> la parola si marca dove sta, e la ragione si argomenta in prosa.</p>
+    <table class="field-table">
+      <tr><th>Parametro</th><th>Note</th></tr>
+      <tr><td>Lemma <span class="req">*</span></td><td>forma di citazione</td></tr>
+      <tr><td>Lingua</td><td><span class="mono">grc</span> / <span class="mono">lat</span>; se omessa vale quella dell'opera</td></tr>
+    </table>
+    <pre>&lt;w lemma="<span class="greek">σελήνη</span>" xml:lang="grc"&gt;<span class="greek">σελήνης</span>&lt;/w&gt;</pre>
+    <div class="callout warn">
+      <b>La differenza è <code>@ana</code>, non l'azione.</b> «Funzione cultuale (parola)» vincola il lemma ai 54 del vocabolario controllato e scrive la famiglia in <code>@ana</code>; «Parola notevole» dà lo stesso tag <code>&lt;w&gt;</code> <b>senza</b> famiglia. Un <code>&lt;w&gt;</code> con famiglia entra nel <b>lessico cultuale</b> e nel ponte con il corpus (§26.4); uno senza entra nell'indice dei <b>termini</b>. Confonderli falserebbe il lessico.
+    </div>
+  </div>
+</div>
+
+<div class="action">
+  <div class="action-head"><span class="name">Parola citata in quanto parola</span><span class="glyph">«σελήνη»</span></div>
+  <div class="action-body">
+    <p class="when"><b>Quando:</b> il passo parla <b>della parola</b> — etimologie, glosse. È il caso più frequente nei lessicografi, e non va confuso con l'uso della parola: in <i>Luna a lucendo nominata</i> la parola non designa la luna, la nomina.</p>
+    <table class="field-table">
+      <tr><th>Parametro</th><th>Note</th></tr>
+      <tr><td>Lemma di indicizzazione</td><td>facoltativo: se manca, si indicizza la forma nel testo</td></tr>
+      <tr><td>Lingua</td><td><span class="mono">grc</span> / <span class="mono">lat</span></td></tr>
+    </table>
+    <pre>&lt;mentioned corresp="<span class="greek">σελήνη</span>" xml:lang="grc"&gt;<span class="greek">σελήνη</span>&lt;/mentioned&gt;</pre>
+  </div>
+</div>
+
+<div class="action">
+  <div class="action-head"><span class="name">Citazione dentro la citazione</span><span class="glyph">“…”</span></div>
+  <div class="action-body">
+    <p class="when"><b>Quando:</b> l'autore cita a sua volta un altro testo, o riporta un discorso diretto. Parametro facoltativo: la fonte citata (<span class="mono">Hom. Il. 1.1</span>).</p>
+    <pre>&lt;quote source="Hom. Il. 1.1"&gt;…&lt;/quote&gt;</pre>
+  </div>
+</div>
+
+<div class="action">
+  <div class="action-head"><span class="name">Titolo d'opera</span><span class="glyph">Θεογονία</span></div>
+  <div class="action-body">
+    <p class="when"><b>Quando:</b> il testo nomina un'opera. Nessun parametro.</p>
+    <pre>&lt;title&gt;<span class="greek">Θεογονία</span>&lt;/title&gt;</pre>
+  </div>
+</div>
+
+<div class="action">
+  <div class="action-head"><span class="name">Rimando a una fonte antica</span><span class="glyph">&lt;ref type="lit"&gt;</span></div>
+  <div class="action-body">
+    <p class="when"><b>Quando:</b> il passo rimanda a un'altra fonte. È un elemento del lessico LARES e serve a distinguere <b>di che natura</b> è la fonte richiamata.</p>
+    <table class="field-table">
+      <tr><th>Parametro</th><th>Valori</th></tr>
+      <tr><td>Tipo di fonte <span class="req">*</span></td><td><span class="mono">lit</span> letteraria · <span class="mono">ins</span> epigrafica · <span class="mono">pap</span> papiracea</td></tr>
+      <tr><td>Riferimento</td><td><span class="mono">Hes. Th. 371</span>, <span class="mono">CMRDM I 12</span></td></tr>
+    </table>
+    <p class="when">Un <code>@type</code> fuori da <span class="mono">lit / ins / pap</span> produce un <b>avviso</b> del validatore, non un errore: <span class="mono">external</span> è tollerato per i rimandi che escono dal sistema delle fonti antiche.</p>
+  </div>
+</div>
+
+<h3>26.3 — Tradizione del testo</h3>
+<div class="action">
+  <div class="action-head"><span class="name">Variante di tradizione</span><span class="glyph">λέγει / φησί</span></div>
+  <div class="action-body">
+    <p class="when"><b>Quando:</b> i testimoni divergono. <b>La selezione è la lezione accolta</b>, e nei parametri si dichiara la variante.</p>
+    <table class="field-table">
+      <tr><th>Parametro</th><th>Note</th></tr>
+      <tr><td>Testimoni della lezione accolta</td><td>sigle: <span class="mono">M</span>, <span class="mono">codd.</span>, <span class="mono">Wilamowitz</span></td></tr>
+      <tr><td>Lezione alternativa <span class="req">*</span></td><td>forma tràdita o congetturata</td></tr>
+      <tr><td>Testimoni della variante</td><td>come sopra</td></tr>
+    </table>
+    <pre>&lt;app&gt;&lt;lem wit="codd."&gt;<span class="greek">λέγει</span>&lt;/lem&gt;&lt;rdg wit="M"&gt;<span class="greek">φησί</span>&lt;/rdg&gt;&lt;/app&gt;</pre>
+    <div class="callout warn">Il validatore pretende <b>esattamente un</b> <code>&lt;lem&gt;</code> per <code>&lt;app&gt;</code> (errore se manca o se ce n'è più d'uno) e avvisa se non c'è nessun <code>&lt;rdg&gt;</code>: un apparato con la sola lezione accolta non dice nulla.</div>
+  </div>
+</div>
+
+<div class="action">
+  <div class="action-head"><span class="name">Espunzione dell'editore</span><span class="glyph">[[αβγ]]</span></div>
+  <div class="action-body">
+    <p class="when"><b>Quando:</b> testo <b>tràdito</b> che l'editore considera interpolato — non testo mancante. Parametro facoltativo: chi espunge.</p>
+    <pre>&lt;surplus resp="West"&gt;<span class="greek">αβγ</span>&lt;/surplus&gt;</pre>
+  </div>
+</div>
+
+<h3>26.4 — Il suggeritore del lessico cultuale</h3>
+<p>Sotto l'editor, quando il testo contiene parole del vocabolario controllato non
+ancora marcate, compare una riga viola: «<i>N parole del lessico cultuale non ancora
+marcate</i>». Aprendola si vede forma → lemma → famiglia.</p>
+<div class="callout">
+<b>Propone, non marca.</b> Come lo scanner diagnostico del corpus: la decisione resta
+redazionale — dire che il <span class="greek">χαῖρε</span> di un inno è la stessa
+formula del <span class="greek">χρηστὲ χαῖρε</span> delle stele è una <b>tesi</b>, non
+un'operazione meccanica. Per marcare si seleziona la parola nel testo e si usa
+«Funzione cultuale (parola)».
+</div>
+</section>
+
+
+<section class="section-break">
+<h2><span class="num">27</span>Toolbox LARES e marcatori concettuali</h2>
+<p class="lead">Due strumenti LARES che è facile confondere, perché portano lo stesso
+nome nella conversazione e non nel software. Si distinguono per <b>che cosa
+qualificano</b>: il passo intero o un segmento di testo.</p>
+
+<div class="field">
+  <div class="field-head"><span class="name">I nove marcatori concettuali</span><span class="where">campo della testimonianza, sezione Analisi</span></div>
+  <div class="field-body">
+    <p class="when"><b>Quando:</b> sempre, e riferiti al <b>passo intero</b>. Sono una griglia 3 × 3 — tre campi, tre ambiti ciascuno — e si selezionano come chip colorati per campo.</p>
+    <table class="field-table">
+      <tr><th style="width:26%">Campo</th><th>Ambiti</th></tr>
+      <tr><td><b>rappresentazione</b></td><td>pratica · credenza · finzione</td></tr>
+      <tr><td><b>comunicazione</b></td><td>segno · senso · parola</td></tr>
+      <tr><td><b>fruizione</b></td><td>sistemi · strumenti · strutture</td></tr>
+    </table>
+    <div class="callout">
+      <b>Il marcatore di rappresentazione viaggia con la testimonianza.</b> Dove un passo compare fuori dalla propria sezione — nel blocco «Nelle fonti letterarie» delle pagine di divinità ed epiteti — porta con sé <i>pratica</i>, <i>credenza</i> o <i>finzione</i>, perché non possono comparire con lo stesso peso: Strabone sugli <span class="greek">ἱερόδουλοι</span> ed Esiodo che genera Selene da Tia non provano la stessa cosa.
+    </div>
+  </div>
+</div>
+
+<div class="action">
+  <div class="action-head"><span class="name">Categoria del toolbox LARES</span><span class="glyph">&lt;rs type subtype&gt;</span></div>
+  <div class="action-body">
+    <p class="when"><b>Quando:</b> per classificare un <b>segmento preciso</b> del testo — non il passo intero — secondo l'<i>Analytical Toolbox</i>. Si applica <b>nel markup</b>, mai in un campo della scheda.</p>
+    <p class="when">Il parametro è un solo campo con ricerca (digita <span class="mono">sacrificio</span>, <span class="mono">sacerdote</span>, <span class="mono">tempio</span>…) che elenca il percorso <b>item → categoria → sottocategoria</b>. <b>Ogni grado è selezionabile per sé</b>, perché non sempre si sa scendere fino alla sottocategoria — e una classificazione approssimata ma vera vale più di una precisa e inventata.</p>
+    <table class="field-table">
+      <tr><th style="width:26%">Grado scelto</th><th>Attributi prodotti</th></tr>
+      <tr><td>solo l'item</td><td><code>type</code></td></tr>
+      <tr><td>item / categoria</td><td><code>type</code> + <code>subtype</code></td></tr>
+      <tr><td>item / categoria / sottocategoria</td><td><code>type</code> + <code>subtype</code> con i due gradi <b>separati da spazio</b>, come prescrive LARES</td></tr>
+    </table>
+    <pre>&lt;rs type="ritual" subtype="sacrifice animal"&gt;…&lt;/rs&gt;</pre>
+    <div class="callout warn">Un <code>@subtype</code> che non appartiene all'item scelto è un <b>errore</b> del validatore, con il nome della categoria incriminata: «<i>«X» non è una categoria di «Y» nel toolbox LARES</i>».</div>
+  </div>
+</div>
+</section>
+
+
+<section class="section-break">
+<h2><span class="num">28</span>Le categorie stanno nel markup, non nei campi liberi</h2>
+<p class="lead">È la regola che governa tutta la sezione, e la ragione per cui esiste
+il controllo di copertura (§29). Una categoria scritta a mano in un campo è testo
+nudo: non è normalizzata sulle chiavi del corpus, e <b>non arriva</b> alle pagine di
+divinità ed epiteti. La stessa categoria marcata nel testo entra negli indici da sé.</p>
+
+<table class="field-table">
+  <tr><th style="width:30%">Se scrivi…</th><th>…invece marca</th><th>Indice raggiunto</th></tr>
+  <tr><td>Divinità: «Men Askaenos»</td><td>Divinità + epiteto nel testo</td><td>pagine di divinità ed epiteti del corpus</td></tr>
+  <tr><td>Personaggi mitici: «Endimione»</td><td>Personaggio mitico (§26.1)</td><td>indice dei personaggi</td></tr>
+  <tr><td>Figure storiche: «Caracalla»</td><td>Persona attestata / Imperatore</td><td>indice delle persone</td></tr>
+  <tr><td>Luoghi: «Carre»</td><td>Toponimo (§26.1)</td><td>indice dei luoghi</td></tr>
+  <tr><td>Termini notevoli</td><td>Parola notevole o Funzione cultuale (§26.2)</td><td>indice dei termini · lessico cultuale</td></tr>
+</table>
+
+<div class="field">
+  <div class="field-head"><span class="name">Entità nominate</span><span class="where">campi liberi della testimonianza</span></div>
+  <div class="field-body">
+    <p class="when"><b>Quando restano legittimi:</b> solo per ciò che il markup non copre — un'entità <b>presupposta e non nominata</b> nel passo, o un'inferenza esplicita del redattore. Tutto il resto è materiale da travasare nel markup.</p>
+  </div>
+</div>
+
+<div class="field">
+  <div class="field-head"><span class="name">Termini da riassorbire</span><span class="where">compare solo se la lista è non vuota</span></div>
+  <div class="field-body">
+    <p class="when">Residuo della vecchia lista di termini notevoli, ora in sola lettura. Il flusso è: <b>marca la parola nel testo</b>, <b>travasa la nota nel commento</b>, poi togli la riga col cestino. Quando la lista è vuota il riquadro sparisce da solo.</p>
+  </div>
+</div>
+
+<div class="callout warn">
+<b>Non cancellare prima di marcare.</b> Il campo libero è comunque un dato: sparisce
+quando il markup lo ha ripreso, non prima. Il controllo di copertura serve proprio a
+rendere misurabile questo passaggio invece di farlo a memoria.
+</div>
+</section>
+
+
+<section class="section-break">
+<h2><span class="num">29</span>Controlli: integrità e copertura del markup</h2>
+<p class="lead">La sezione <b>Controlli</b> fa i controlli che nessun tipo può fare,
+perché riguardano rimandi fra oggetti e stato del lavoro. Il badge conta i problemi
+aperti.</p>
+
+<h3>29.1 — Integrità</h3>
+<table class="field-table">
+  <tr><th style="width:20%">Gravità</th><th>Casi</th></tr>
+  <tr><td><b>errore</b></td><td>opera senza identificatore o con identificatore duplicato; due saggi con lo stesso identificatore; un nucleo che richiama una testimonianza <b>inesistente</b></td></tr>
+  <tr><td><b>avviso</b></td><td>opera senza autore o titolo; testimonianza senza locus («la citazione non è verificabile») o senza testo; errori di markup nel testo; nucleo vuoto; stessa testimonianza in due nuclei dello stesso saggio; testimonianza catalogata ma non richiamata da nessun saggio; opera nell'indice ma senza testimonianze</td></tr>
+</table>
+
+<h3>29.2 — Copertura del markup</h3>
+<p>In fondo ai Controlli, una tabella misura quanto delle categorie di ogni scheda è
+già passato dal campo libero al markup, con un contatore <span class="mono">fatte /
+con categorie</span>. Ogni riga apre la testimonianza corrispondente.</p>
+<table class="field-table">
+  <tr><th style="width:30%">Stato</th><th>Significa</th></tr>
+  <tr><td>senza categorie</td><td>nessun campo libero compilato: niente da travasare</td></tr>
+  <tr><td>solo testo libero</td><td>nessun valore trova riscontro nel markup</td></tr>
+  <tr><td>in parte marcata</td><td>qualcuno sì, qualcuno no — sono elencati i valori scoperti, rubrica per rubrica</td></tr>
+  <tr><td>tutto nel markup</td><td>traguardo raggiunto per quella scheda</td></tr>
+</table>
+<p class="when">Il confronto ignora maiuscole, diacritici e punteggiatura, e accetta
+le <b>coppie ricomposte</b>: il markup tiene teonimo ed epiteto separati
+(<code>key="Men Pharnakou"</code> → divinità «Men» + epiteto «Pharnakou») mentre la
+redazione scrive «Men Pharnakou» in un campo solo. Sono la stessa cosa detta a due
+granularità.</p>
+<div class="callout">
+Nei problemi di integrità la copertura compare come <b>un solo avviso aggregato</b>
+(<span class="mono">copertura del markup</span>): il dettaglio scheda per scheda sta
+nella tabella, non moltiplicato in elenco.
+</div>
+</section>

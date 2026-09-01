@@ -36,7 +36,8 @@ docs/guida-editor/
 │   ├── manifest.json            ← elenco ordinato delle "parti" (Parte I/II/III/…) e i loro file
 │   ├── part1-edizione.html      ← sezioni 1-10: markup Leiden/EpiDoc dell'Edizione
 │   ├── part2-altre-sezioni.html ← sezioni 11-21: le altre sezioni dell'editor a sezioni
-│   └── part3-ruoli-editoriali.html ← sezione 22: ruoli editoriali / tagliandino
+│   ├── part3-ruoli-editoriali.html ← sezione 22: ruoli editoriali / tagliandino
+│   └── part4-fonti-letterarie.html ← sezioni 23-29: la redazione delle Fonti letterarie
 ├── guida-editor-ila.html        ← OUTPUT generato — non editare a mano
 └── guida-editor-ila.pdf         ← OUTPUT generato — il PDF da consegnare
 ```
