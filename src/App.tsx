@@ -4909,6 +4909,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
           tm: m.tm || '',
           tmLink: m.tmLink || '',
           phi: Array.isArray(m.phi) ? m.phi : [],
+          extRefs: Array.isArray(m.extRefs) ? m.extRefs : [],
           authority: m.authority || '',
           // Facsimile
           facsimile_url: m.facsimile_url || '',
@@ -7219,6 +7220,25 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                                   </span>
                                 )
                               )}
+                              {/* Altri repertori esterni (EDCS, EDH, …), stessa resa dei TM */}
+                              {(selectedMonumento.extRefs || []).filter(r => r.type?.trim() && r.value?.trim()).map((r, idx) => (
+                                r.url?.trim() ? (
+                                  <a
+                                    key={idx}
+                                    href={r.url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="inline-flex items-center gap-1 bg-sidebar text-muted hover:text-accent text-[10px] font-bold px-2 py-0.5 rounded-sm uppercase tracking-tighter shadow-sm transition-colors"
+                                    title={`Apri la scheda su ${r.type}`}
+                                  >
+                                    {r.type} {r.value} <ExternalLink className="h-2.5 w-2.5" />
+                                  </a>
+                                ) : (
+                                  <span key={idx} className="bg-sidebar text-muted text-[10px] font-bold px-2 py-0.5 rounded-sm uppercase tracking-tighter">
+                                    {r.type} {r.value}
+                                  </span>
+                                )
+                              ))}
                               {selectedMonumento.editorialStatus && (
                                 <span
                                   className={cn(

@@ -35,6 +35,18 @@ export interface Responsabile {
   nome: string;
 }
 
+/** Riferimento a un repertorio epigrafico esterno (EDCS, EDH, EDR, …).
+ *  `type` è la sigla del repertorio — vocabolario aperto: le sigle nuove
+ *  digitate in redazione restano disponibili per le schede successive
+ *  (vedi lib/extRefs.ts). `value` è l'identificativo nel repertorio,
+ *  `url` il link diretto alla scheda (compilato da sé per i repertori noti).
+ *  In TEI: <idno type="EDCS" corresp="…">…</idno> dentro publicationStmt. */
+export interface ExternalRef {
+  type: string;
+  value: string;
+  url?: string;
+}
+
 // Stato editoriale del testo, TEI-conforme: attributo @status su
 // <revisionDesc>, previsto da TEI P5 (non un'invenzione su <change>).
 // Vocabolario controllato ispirato alle diciture del progetto I.Sicily
@@ -155,6 +167,8 @@ export interface Monumento {
   phi?: string[];
   tm?: string;
   tmLink?: string;
+  /** Altri repertori esterni (EDCS, EDH, EDR, …), oltre a TM e PHI. */
+  extRefs?: ExternalRef[];
   authority?: string;
   msIdnos?: string[];
   dim_altezza?: string;

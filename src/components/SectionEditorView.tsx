@@ -2,16 +2,17 @@ import React, { useState, useEffect, useMemo, useRef, useId, ChangeEvent } from 
 import { motion, AnimatePresence } from 'motion/react';
 import {
   Upload, Database, Save, Loader2, AlertTriangle, Check, X, Plus, Trash2,
-  ChevronRight, ChevronUp, ChevronDown, FileText, Search, Download, Sparkles, LogIn, ShieldCheck, Users
+  ChevronRight, ChevronUp, ChevronDown, FileText, Search, Download, Sparkles, LogIn, ShieldCheck, Users, ExternalLink
 } from 'lucide-react';
 import { cn, stripAccents } from '../lib/utils';
-import { Monumento, OrigDate, Traduzione, Bibliografia, Revision, Responsabile, IconographicFigure, IconographicTrait, EDITORIAL_STATUS_LABELS } from '../types';
+import { Monumento, OrigDate, Traduzione, Bibliografia, Revision, Responsabile, ExternalRef, IconographicFigure, IconographicTrait, EDITORIAL_STATUS_LABELS } from '../types';
 import { xmlToMonumenti, formatIlaLabel } from '../lib/xmlUtils';
 import { EditionMarkupEditor } from './EditionMarkupEditor';
 import { DivinityEpithetIndex } from './DivinityEpithetIndex';
 import { ICONOGRAPHY_LABELS } from '../lib/iconographyLabels';
 import { INSCRIPTION_TYPES, OBJECT_TYPES, MATERIALS, EXECUTION_TECHNIQUES, VocabTerm } from '../lib/eagleVocab';
 import { extractIndexSuggestions, extractPersonsFromEdition } from '../lib/leidenMarkup';
+import { buildExtRefUrl, collectExtRefTypes, findExtRefRepo, normalizeExtRefType, rememberExtRefType } from '../lib/extRefs';
 
 /** Le 18 sezioni canoniche, ora mappate su campi Monumento (già separati nel corpus). */
 export type SectionId =
@@ -81,6 +82,14 @@ function collectResponsabileRoles(monumenti: Monumento[]): string[] {
 
 /** Suggerimenti di testo libero raccolti dai valori già distinti nel corpus in memoria:
  *  riduce le varianti di battitura sullo stesso repository o toponimo tra schede diverse. */
+/** Sigle di repertorio esterno già usate nel corpus: la memoria condivisa delle
+ *  sigle inventate in redazione, perché viaggia nell'XML e non nel browser. */
+function collectExtRefTypesInCorpus(monumenti: Monumento[]): string[] {
+  const seen = new Set<string>();
+  monumenti.forEach(m => (m.extRefs || []).forEach(r => { if (r.type?.trim()) seen.add(r.type.trim()); }));
+  return Array.from(seen);
+}
+
 function collectDistinct(monumenti: Monumento[], field: keyof Monumento): string[] {
   const seen = new Set<string>();
   monumenti.forEach(m => {
@@ -93,7 +102,7 @@ function collectDistinct(monumenti: Monumento[], field: keyof Monumento): string
 /** Campi Monumento che compongono ciascuna sezione (per il diff e per lo stato presente/assente). */
 const SECTION_FIELDS: Record<SectionId, (keyof Monumento)[]> = {
   title: ['titolo', 'textTypes'],
-  publication: ['authority', 'tm', 'tmLink', 'phi'],
+  publication: ['authority', 'tm', 'tmLink', 'phi', 'extRefs'],
   msIdentifier: ['luogo_cons', 'msIdnos'],
   support: ['dim', 'materiale', 'materialRef', 'tipo', 'tipo_ref', 'dim_altezza', 'dim_larghezza', 'dim_profondita', 'dim_unita'],
   layout: ['layout_desc', 'scrittura', 'scrittura_ref'],
@@ -552,6 +561,7 @@ export const SectionEditorView: React.FC<Props> = ({ monumenti, effectiveAdmin, 
     luogo_moderno: collectDistinct(monumenti, 'luogo_moderno'),
     luogo_rit: collectDistinct(monumenti, 'luogo_rit'),
     responsabileRuolo: collectResponsabileRoles(monumenti),
+    extRefType: collectExtRefTypes(collectExtRefTypesInCorpus(monumenti)),
   }), [monumenti]);
 
   /* ── stato di ogni sezione per il rail ─────────────────────────── */
@@ -783,6 +793,96 @@ export const SectionEditorView: React.FC<Props> = ({ monumenti, effectiveAdmin, 
   );
 };
 
+/** Riferimenti a repertori esterni (EDCS, EDH, EDR, …) oltre a TM e PHI.
+ *  La sigla è testo libero con suggerimenti: quelle nuove digitate qui
+ *  vengono ricordate e riproposte nelle schede successive. Per i repertori
+ *  con URL prevedibili il link si compila da sé dall'identificativo, e resta
+ *  comunque modificabile a mano (un link scritto a mano non viene sovrascritto). */
+const ExternalRefsEditor: React.FC<{
+  refs: ExternalRef[];
+  onChange: (v: ExternalRef[]) => void;
+  typeOptions: string[];
+}> = ({ refs, onChange, typeOptions }) => {
+  const update = (i: number, patch: Partial<ExternalRef>) => {
+    const next = refs.map((r, j) => {
+      if (j !== i) return r;
+      const merged = { ...r, ...patch };
+      // Il link si aggiorna da sé solo finché è vuoto o è ancora quello
+      // generato dalla coppia sigla/identificativo precedente.
+      const wasAuto = !r.url?.trim() || r.url.trim() === buildExtRefUrl(r.type, r.value);
+      if (patch.url === undefined && wasAuto) {
+        const auto = buildExtRefUrl(merged.type, merged.value);
+        return { ...merged, url: auto || undefined };
+      }
+      return merged;
+    });
+    onChange(next);
+  };
+
+  return (
+    <div className="space-y-3">
+      {refs.length === 0 && (
+        <p className="text-xs text-muted/60 italic">Nessun riferimento esterno registrato.</p>
+      )}
+      {refs.map((r, i) => {
+        const repo = findExtRefRepo(r.type);
+        return (
+          <div key={i} className="flex items-start gap-2">
+            <div className="w-36 shrink-0" title={repo?.label}>
+              <SuggestInput
+                value={r.type}
+                onChange={v => update(i, { type: normalizeExtRefType(v) })}
+                options={typeOptions}
+                placeholder="EDCS"
+              />
+            </div>
+            <div className="w-44 shrink-0">
+              <TextInput
+                value={r.value}
+                onChange={e => update(i, { value: e.target.value })}
+                onBlur={() => rememberExtRefType(r.type)}
+                placeholder={repo?.placeholder || 'identificativo'}
+              />
+            </div>
+            <div className="flex-1 min-w-0">
+              <TextInput
+                value={r.url || ''}
+                onChange={e => update(i, { url: e.target.value })}
+                placeholder="https://…"
+                className="font-sans text-xs"
+              />
+            </div>
+            {r.url?.trim() && (
+              <a
+                href={r.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-2 text-muted/50 hover:text-accent transition-colors"
+                title="Apri il riferimento"
+              >
+                <ExternalLink className="w-4 h-4" />
+              </a>
+            )}
+            <button
+              onClick={() => onChange(refs.filter((_, j) => j !== i))}
+              className="p-2 text-muted/50 hover:text-red-500 transition-colors"
+              title="Rimuovi il riferimento"
+            >
+              <Trash2 className="w-4 h-4" />
+            </button>
+          </div>
+        );
+      })}
+      <button
+        onClick={() => onChange([...refs, { type: '', value: '' }])}
+        className="inline-flex items-center gap-1.5 text-xs font-sans font-semibold uppercase tracking-[0.12em] text-accent hover:text-accent/70 transition-colors"
+      >
+        <Plus className="w-3.5 h-3.5" /> Aggiungi riferimento
+      </button>
+    </div>
+  );
+};
+
 /* ================================================================
  * Form delle singole sezioni
  * ================================================================ */
@@ -792,7 +892,7 @@ function renderSectionForm(
   m: Monumento,
   set: <K extends keyof Monumento>(k: K, v: Monumento[K]) => void,
   setEditionText: (xml: string) => void,
-  suggestions: { luogo_cons: string[]; citta: string[]; luogo_moderno: string[]; luogo_rit: string[]; responsabileRuolo: string[] },
+  suggestions: { luogo_cons: string[]; citta: string[]; luogo_moderno: string[]; luogo_rit: string[]; responsabileRuolo: string[]; extRefType: string[] },
 ) {
   switch (id) {
     case 'title':
@@ -828,6 +928,18 @@ function renderSectionForm(
           <div>
             <FieldLabel>Link TM</FieldLabel>
             <TextInput value={m.tmLink || ''} onChange={e => set('tmLink', e.target.value)} placeholder="https://www.trismegistos.org/text/…" />
+          </div>
+          <div className="md:col-span-2 border-t border-line/40 pt-4">
+            <FieldLabel hint="EDCS, EDH, EDR… sigle nuove ammesse">Altri repertori esterni</FieldLabel>
+            <p className="text-[11px] text-muted/60 mb-3">
+              Sigla del repertorio, identificativo e link diretto. Per i repertori noti il link si compila da sé;
+              una sigla nuova resta disponibile per le schede successive.
+            </p>
+            <ExternalRefsEditor
+              refs={m.extRefs || []}
+              onChange={v => set('extRefs', v)}
+              typeOptions={suggestions.extRefType}
+            />
           </div>
           <div className="md:col-span-2 flex gap-6 text-xs text-muted font-serif italic pt-1">
             <span>ID applicativo: <span className="not-italic font-semibold text-ink">{formatIlaLabel(m.id)}</span></span>

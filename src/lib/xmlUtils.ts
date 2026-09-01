@@ -447,6 +447,30 @@ function parseTeiElement(teiString: string): Monumento {
   // 4. Parse PHI list
   const phi = extractAllMatches(/<idno\s+type="PHI">([\s\S]*?)<\/idno>/, teiString).map(unescapeXml);
 
+  // 4b. Parse degli altri repertori esterni (EDCS, EDH, EDR, sigle nuove…).
+  // Vocabolario aperto: si legge QUALUNQUE <idno type="…"> del publicationStmt
+  // che non sia già gestito da un campo proprio, così una sigla inventata in
+  // redazione sopravvive al round-trip senza modifiche al codice.
+  const RESERVED_IDNO_TYPES = new Set(["id", "entryid", "firebaseid", "tm", "phi"]);
+  const extRefs: { type: string; value: string; url?: string }[] = [];
+  const pubBlock = teiString.match(/<publicationStmt>([\s\S]*?)<\/publicationStmt>/);
+  if (pubBlock) {
+    const idnoRe = /<idno\s+type="([^"]+)"([^>]*)>([\s\S]*?)<\/idno>/g;
+    let idnoMatch;
+    while ((idnoMatch = idnoRe.exec(pubBlock[1])) !== null) {
+      const type = unescapeXml(idnoMatch[1].trim());
+      if (RESERVED_IDNO_TYPES.has(type.toLowerCase())) continue;
+      const value = unescapeXml(idnoMatch[3].replace(/<!--[\s\S]*?-->/g, "").trim());
+      if (!value) continue;
+      const corresp = idnoMatch[2].match(/corresp="([^"]*)"/) || idnoMatch[2].match(/ref="([^"]*)"/);
+      const rawUrl = corresp ? unescapeXml(corresp[1].trim()) : "";
+      const url = rawUrl && !/^https?:\/\//i.test(rawUrl)
+        ? `https://${rawUrl.replace(/^\/\//, "")}`
+        : rawUrl;
+      extRefs.push(url ? { type, value, url } : { type, value });
+    }
+  }
+
   // 5. Parse authority
   let authority = "";
   const authMatch = teiString.match(/<authority>([\s\S]*?)<\/authority>/);
@@ -1268,6 +1292,7 @@ function parseTeiElement(teiString: string): Monumento {
     tm,
     tmLink,
     phi,
+    extRefs,
     authority,
     titolo,
     luogo_cons,
@@ -1421,6 +1446,16 @@ export function monumentiToXml(monumenti: Monumento[]): string {
       for (const p of m.phi) {
         block += `                <idno type="PHI">${escapeXml(p)}</idno>\n`;
       }
+    }
+    // Altri repertori esterni (EDCS, EDH, …): stesso schema dell'idno TM,
+    // con @corresp per il link diretto alla scheda nel repertorio.
+    for (const r of m.extRefs || []) {
+      if (!r.type?.trim() || !r.value?.trim()) continue;
+      const refAttr = r.url?.trim() ? ` corresp="${escapeXml(r.url.trim())}"` : "";
+      // @type su <idno> è data.enumerated: niente spazi né caratteri fuori dal token.
+      const type = r.type.trim().replace(/\s+/g, "-").replace(/[^A-Za-z0-9._:-]/g, "");
+      if (!type) continue;
+      block += `                <idno type="${escapeXml(type)}"${refAttr}>${escapeXml(r.value.trim())}</idno>\n`;
     }
     block += `            </publicationStmt>\n`;
     
