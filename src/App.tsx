@@ -2345,6 +2345,28 @@ function Timeline({ monumenti, onSelect, paused = false }: { monumenti: Monument
       .sort((a, b) => (a.data_inizio || 0) - (b.data_inizio || 0));
   }, [monumenti]);
 
+  // Il complemento di `sorted`: le schede che la cronologia non puo' collocare perche'
+  // prive di estremi cronologici. Senza questo elenco l'assenza di una scheda dalla
+  // timeline e' indistinguibile da un bug ("perche' la #289 non c'e'?"): il conteggio
+  // "N di M schede datate" dice quante mancano, non quali.
+  const undated = useMemo(() => {
+    return monumenti
+      .filter(m => m.data_inizio === undefined)
+      .sort((a, b) => (a.id || 0) - (b.id || 0));
+  }, [monumenti]);
+  const [showUndated, setShowUndated] = useState(false);
+  const [undatedFilter, setUndatedFilter] = useState('');
+  const undatedShown = useMemo(() => {
+    const q = undatedFilter.trim().toLowerCase();
+    if (!q) return undated;
+    return undated.filter(m =>
+      String(m.id).includes(q) ||
+      (m.citta || '').toLowerCase().includes(q) ||
+      (m.regione || '').toLowerCase().includes(q) ||
+      (m.titolo || '').toLowerCase().includes(q)
+    );
+  }, [undated, undatedFilter]);
+
   // Dominio cronologico dell'asse: derivato dai dati reali (con un secolo di margine per lato).
   const { yearMin, yearMax } = useMemo(() => {
     if (sorted.length === 0) return { yearMin: -400, yearMax: 400 };
@@ -2550,12 +2572,17 @@ function Timeline({ monumenti, onSelect, paused = false }: { monumenti: Monument
   useEffect(() => {
     if (paused) return;
     const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') handleZoomReset();
+      if (e.key !== 'Escape') return;
+      // Con l'elenco delle schede non datate aperto, Esc lo chiude: e' l'ultimo
+      // livello aperto sopra la timeline, resettare lo zoom sotto sarebbe una
+      // modifica invisibile a una vista coperta (stessa logica di `paused`).
+      if (showUndated) { setShowUndated(false); return; }
+      handleZoomReset();
     };
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [paused]);
+  }, [paused, showUndated]);
 
   // Click diretto sull'asse (fuori da una barra): zoom interattivo centrato sul punto
   // cronologico cliccato. Le barre fermano la propagazione del click.
@@ -2595,13 +2622,53 @@ function Timeline({ monumenti, onSelect, paused = false }: { monumenti: Monument
          dall'area di scroll così non scorre via col contenuto. */
       <div className="relative flex-1 min-h-0">
         {sorted.length < monumenti.length && (
-          <div
-            className="absolute top-3 left-3 z-20 h-8 px-3 rounded-full flex items-center gap-1.5 text-[10px] font-sans font-bold text-muted bg-parchment/90 border border-border/60 shadow-sm backdrop-blur-sm"
-            title={`Solo le schede con una datazione numerica (notBefore/notAfter) compaiono nella cronologia. Le altre ${monumenti.length - sorted.length} non hanno estremi cronologici sfruttabili.`}
-          >
-            <Clock className="h-3.5 w-3.5 text-muted/70" />
-            <span className="tabular-nums text-ink">{sorted.length}</span>
-            <span className="uppercase tracking-wide">di {monumenti.length} schede datate</span>
+          <div className="absolute top-3 left-3 z-30">
+            <button
+              onClick={() => setShowUndated(v => !v)}
+              aria-expanded={showUndated}
+              className={`h-8 px-3 rounded-full flex items-center gap-1.5 text-[10px] font-sans font-bold border shadow-sm backdrop-blur-sm transition-colors ${showUndated ? 'text-accent bg-accent/15 border-accent/40' : 'text-muted bg-parchment/90 border-border/60 hover:bg-accent/10 hover:text-accent hover:border-accent/30'}`}
+              title={`Solo le schede con una datazione numerica (notBefore/notAfter) compaiono nella cronologia. Clicca per vedere quali sono le ${monumenti.length - sorted.length} schede senza estremi cronologici.`}
+            >
+              <Clock className={`h-3.5 w-3.5 ${showUndated ? 'text-accent' : 'text-muted/70'}`} />
+              <span className={`tabular-nums ${showUndated ? 'text-accent' : 'text-ink'}`}>{sorted.length}</span>
+              <span className="uppercase tracking-wide">di {monumenti.length} schede datate</span>
+            </button>
+            {/* Elenco esplicito delle schede escluse: risponde alla domanda "perche' la
+                scheda X non compare nella cronologia?" senza dover aprire l'XML. Ogni voce
+                apre la scheda, cioe' porta direttamente dove si compila la datazione. */}
+            {showUndated && (
+              <div className="mt-2 w-80 max-w-[85vw] rounded-lg border border-border bg-parchment/95 shadow-lg backdrop-blur-sm overflow-hidden">
+                <div className="px-3 pt-3 pb-2 border-b border-border/60">
+                  <div className="text-[10px] font-sans font-bold uppercase tracking-wide text-muted mb-2">
+                    {undated.length} schede senza datazione
+                  </div>
+                  <div className="relative">
+                    <Search className="absolute left-2 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted/60 pointer-events-none" />
+                    <input
+                      value={undatedFilter}
+                      onChange={e => setUndatedFilter(e.target.value)}
+                      placeholder="Filtra per numero, luogo, titolo..."
+                      className="w-full h-8 pl-7 pr-2 rounded-md bg-card border border-border/60 text-[11px] font-sans text-ink placeholder:text-muted/60 focus:outline-none focus:border-accent/50"
+                    />
+                  </div>
+                </div>
+                <div className="max-h-[45vh] overflow-y-auto custom-scrollbar py-1">
+                  {undatedShown.length === 0 ? (
+                    <div className="px-3 py-4 text-[11px] font-sans text-muted italic">Nessuna scheda corrisponde al filtro.</div>
+                  ) : undatedShown.map(m => (
+                    <button
+                      key={m.entryId || `id-${m.id}`}
+                      onClick={() => { setShowUndated(false); onSelect(m); }}
+                      className="w-full px-3 py-1.5 flex items-baseline gap-2 text-left text-[11px] font-sans hover:bg-accent/10 transition-colors"
+                      title={`Apri la scheda #${m.id} per compilarne la datazione`}
+                    >
+                      <span className="text-accent font-bold tabular-nums shrink-0">#{m.id}</span>
+                      <span className="truncate min-w-0 text-ink">{m.citta || m.regione || getDisplayTitle(m)}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         )}
         <div className="absolute top-3 right-3 z-20 flex items-center gap-2">
