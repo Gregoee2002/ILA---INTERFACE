@@ -4,9 +4,32 @@
 > eseguito da **Claude Sonnet** (`claude-sonnet-5`) con impegno medio. Metodo e perimetro
 > invariati; segnalato come richiesto dalla skill.
 
-Questo documento è l'**unico deliverable** del run di audit. Nessuna modifica a codice o dati
-è stata fatta. Ogni rilievo ha un ID stabile (`BUG-nn`, `DATA-nn`, `UI-nn`) richiamato dal
-piano di lavoro nella Parte 4.
+Questo documento è il deliverable originale del run di audit. Ogni rilievo ha un ID stabile
+(`BUG-nn`, `DATA-nn`, `UI-nn`) richiamato dal piano di lavoro nella Parte 4.
+
+---
+
+## 0. Stato di esecuzione — aggiornato 2026-09-01
+
+Sessioni eseguite (Claude Sonnet, in autonomia) e pushate su `main`:
+
+| Sessione | Stato | Note |
+|---|---|---|
+| S1 — igiene TS & gate CI | ✅ fatta | `tsc` con `noUnused*`/`noFallthrough`; ~45 simboli morti rimossi; ESLint minimale (react-hooks) attivo; file/branch morti rimossi. Lo step `tsc` in `deploy-pages.yml` è in `docs/patches/S1-deploy-pages-tsc-gate.patch` (token senza scope `workflow`). |
+| S2 — parità apiShim/server | ✅ fatta | BUG-01/06/08/09. |
+| S3 — reset ErrorBoundary | ✅ fatta | BUG-02: prop `resetKeys`. |
+| S4 — rimozione RAW_DATA | ✅ fatta | BUG-05/DATA-07: `src/data.ts` rimosso, stato d'errore esplicito. |
+| S5 — lessico teonimi/epiteti | ⚠️ parziale | `textNorm.ts` unico + `epithetAliases.ts` (varianti grafiche, 64→60). Casi editoriali (Dionysos, patronimici, granularità teonimi) → `docs/piano-audit-dati-da-fare.md`. |
+| S6 — ILA-294, TM, tassonomia | ✅ fatta | `src/data/corpus/` è gitignored: ILA-294 corretto in locale + `docs/patches/ILA-294.xml.fixed`, da applicare sulla repo dati. CSV e tassonomia committati. |
+| S7 — snapshot in build | ✅ fatta | `prebuild` rigenera `public/corpus-snapshot.json`. |
+| S8 — design token stato/tema | ⚠️ parziale | Token `--danger/--warning/--success/--info` + `.light` + `--parchment-rgb` + anti-FOUC + PasswordGate. Codemod dei ~230 usi `text-red/amber` e palette mappa → `docs/piano-audit-ui-da-fare.md`. |
+| S9 — primitivi di componente | ❌ da fare | Richiede confronto screenshot per gruppo. Vedi `docs/piano-audit-ui-da-fare.md`. |
+| S10 — focus & stati | ⚠️ parziale | Pavimento `:focus-visible` (UI-15) + fix fallback `--accent` (UI-14). UI-17 (z-index felt) e UI-18 (rami vuoti) → doc. |
+| S11 — tipografia & ritmo | ❌ da fare | Vedi `docs/piano-audit-ui-da-fare.md`. |
+| S12 — perf & storage | ✅ fatta | BUG-15 (parseCache), BUG-14 (`pushJsonFileWithRetry`), BUG-07 (retry su 5xx/429/403 rate-limit). |
+
+Code: `npx tsc --noEmit` pulito con i flag nuovi, `npm run lint` (tsc+eslint) 0
+errori, `npm run build` ok.
 
 ---
 

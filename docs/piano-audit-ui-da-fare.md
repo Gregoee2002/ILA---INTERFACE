@@ -10,10 +10,12 @@ esecuzione autonoma senza un giudizio umano sul risultato renderizzato).
 Fatto: definiti i token `--danger/--warning/--success/--info` (chiaro+scuro) in
 `src/index.css`, più `--color-*` in `@theme`; classe `.light`; `--parchment-rgb`;
 scrollbar dark → `var(--border)`; anti-FOUC in `index.html`; PasswordGate
-allineato a `:root` via `.light`; `#E08585` → `text-danger`.
+allineato a `:root` via `.light`; `#E08585` → `text-danger`. Primo scaglione del
+codemod: i 6 usi non ambigui di "successo"/"errore" in `App.tsx` (importStatus,
+badge published) → `text-success`/`text-danger`.
 
-**Da fare:** sostituire i ~250 usi ad-hoc di colori Tailwind di stato con le
-classi tokenizzate. Conteggi (da `grep -rhoE "(text|bg|border)-(red|amber|emerald|green)-[0-9]+" src/`):
+**Da fare:** sostituire i restanti ~230 usi ad-hoc di colori Tailwind di stato
+con le classi tokenizzate. Conteggi (da `grep -rhoE "(text|bg|border)-(red|amber|emerald|green)-[0-9]+" src/`):
 
 | pattern | → |
 |---|---|
