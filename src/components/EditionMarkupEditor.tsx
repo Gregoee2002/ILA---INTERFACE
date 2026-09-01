@@ -5,7 +5,7 @@ import {
   Plus, Trash2, Check, X, AlertTriangle, Eye, Code2,
   Loader2, Stethoscope, ChevronLeft, Sparkles, CornerDownLeft, Search
 } from 'lucide-react';
-import { cn, stripAccents, EASE_OUT } from '../lib/utils';
+import { cn, stripAccents, EASE_OUT, gapDotCount } from '../lib/utils';
 import { ErrorBoundary } from './ErrorBoundary';
 import {
   MarkupToken, TokenPath, MarkupAction, ValidationIssue, EpithetScanIssue, LbInfo,
@@ -528,7 +528,7 @@ const ElementChrome: React.FC<{
     }
     case 'gap': {
       let g = '[- - -]';
-      if (a.reason === 'illegible') g = a.quantity ? '·'.repeat(Math.min(Math.max(Math.floor(Number(a.quantity)) || 5, 1), 12)) : '·····';
+      if (a.reason === 'illegible') g = '·'.repeat(gapDotCount(a.quantity));
       else if (a.quantity) g = `[- ca. ${a.quantity} -]`;
       else if (a.atLeast) g = `[- ${a.atLeast}-${a.atMost} -]`;
       return <span onClick={click} title="Lacuna" className={cn('font-mono text-sm tracking-widest text-muted px-0.5', base)}>{g}</span>;

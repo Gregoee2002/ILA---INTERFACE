@@ -1,5 +1,5 @@
 import React from 'react';
-import { cn } from '../lib/utils';
+import { cn, gapDotCount } from '../lib/utils';
 import { MarkupToken, safeParseLitTesto } from '../lib/litMarkup';
 import { TokenPath } from '../lib/leidenMarkup';
 import { CAMPO_COLOR, LaresCampo } from '../lib/litSources';
@@ -89,7 +89,7 @@ const Flow: React.FC<FlowProps> = ({ tokens, numeri, contatore, basePath, onElCl
           }
           case 'gap': {
             let g = '[- - -]';
-            if (a.reason === 'illegible') g = a.quantity ? '·'.repeat(Math.min(Math.max(Math.floor(Number(a.quantity)) || 5, 1), 12)) : '·····';
+            if (a.reason === 'illegible') g = '·'.repeat(gapDotCount(a.quantity));
             else if (a.quantity) g = `[- ca. ${a.quantity} -]`;
             else if (a.atLeast) g = `[- ${a.atLeast}-${a.atMost} -]`;
             return <span key={i} onClick={click} title="Lacuna della tradizione"

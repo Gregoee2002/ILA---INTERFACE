@@ -212,9 +212,23 @@ function dispatchWriteProgress(done: number, total: number): void {
 async function handleRequest(url: URL, init: RequestInit | undefined): Promise<Response> {
   const method = (init?.method || "GET").toUpperCase();
   const path = url.pathname;
-  const body = init?.body ? JSON.parse(init.body as string) : undefined;
 
   try {
+    // Parse del body dentro il try: un JSON malformato (o un body non-stringa)
+    // deve produrre un 400 JSON come fa express.json() sul server, non far
+    // rigettare la fetch intercettata con un SyntaxError grezzo (BUG-01).
+    let body: any = undefined;
+    if (init?.body != null) {
+      if (typeof init.body !== "string") {
+        return json({ error: "Body della richiesta non è una stringa JSON" }, 400);
+      }
+      try {
+        body = JSON.parse(init.body);
+      } catch {
+        return json({ error: "Body JSON non valido" }, 400);
+      }
+    }
+
     if (path === "/api/monumenti" && method === "GET") {
       return json(readCorpusFiles());
     }
@@ -340,7 +354,10 @@ async function handleRequest(url: URL, init: RequestInit | undefined): Promise<R
     if (path === "/api/corpus/files" && method === "GET") {
       const files = Array.from(corpusStore.entries())
         .sort(([a], [b]) => a.localeCompare(b))
-        .map(([filename, content]) => ({ filename, size: new TextEncoder().encode(content).length, modified: new Date().toISOString() }));
+        // `modified` è null sullo statico: lo store in memoria non conserva un
+        // mtime reale e restituire `now` per ogni file era fuorviante (BUG-08).
+        // Il server Express restituisce qui l'mtime vero del file su disco.
+        .map(([filename, content]) => ({ filename, size: new TextEncoder().encode(content).length, modified: null }));
       return json(files);
     }
 

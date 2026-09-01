@@ -44,7 +44,7 @@ import {
   Tags,
   ScrollText
 } from 'lucide-react';
-import { cn, EASE_OUT, EASE_IN, SPRING_SNAPPY, SPRING_SOFT } from './lib/utils';
+import { cn, EASE_OUT, EASE_IN, SPRING_SNAPPY, SPRING_SOFT, gapDotCount } from './lib/utils';
 import { ICONOGRAPHY_LABELS } from './lib/iconographyLabels';
 import { labelEvidence, labelUnit, labelType, labelMaterial, labelInscriptionType } from './lib/vocabLabels';
 import { Monumento, FilterState, SortField, Bibliografia, EntryRegistro, BugReport, EDITORIAL_STATUS_LABELS } from './types';
@@ -3084,12 +3084,7 @@ const EpiDocRenderer = ({ xml, query, onTermClick, divinityIndex, onomasticaInde
           let tooltipText = 'Lacuna nel testo';
           if (reasonAttr === 'illegible') {
             tooltipText = 'Testo illeggibile';
-            const qn = Number(quantityAttr);
-            if (quantityAttr && Number.isFinite(qn) && qn > 0) {
-              gapText = '·'.repeat(Math.min(Math.floor(qn), 40));
-            } else {
-              gapText = '·····';
-            }
+            gapText = '·'.repeat(gapDotCount(quantityAttr));
           } else if (quantityAttr) {
             gapText = `[- ca. ${quantityAttr} -]`;
           }
@@ -7579,7 +7574,13 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                            style={{ fontFamily: 'var(--font-greek)', lineHeight: '1.9' }}>
                         {m.testo ? (
                           <ErrorBoundary fallback={<pre className="whitespace-pre-wrap font-mono text-sm text-muted/80">{m.testo}</pre>}>
-                            <EpiDocRenderer xml={m.testo} query={filters.searchText} />
+                            <EpiDocRenderer
+                              xml={m.testo}
+                              query={filters.searchText}
+                              onTermClick={handleTermClick}
+                              divinityIndex={divinityIndex}
+                              onomasticaIndex={onomasticaIndex}
+                            />
                           </ErrorBoundary>
                         ) : <span className="italic opacity-50">[Anepigrafe]</span>}
                       </div>
