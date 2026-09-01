@@ -10,7 +10,7 @@ import {
   INDICE_LABELS,
   risolviTutte, buildIndici, citaBreve, citaCts, foldForSearch, searchableOf, saggioToTei,
   saggioStats, opereSpogliate, sigleDelSaggio, testimoniaDelSaggio, perCronologia,
-  catalogoOccorrenze, arcoCronologico, markupIndexOf, testoPiano, toolboxLabel,
+  catalogoOccorrenze, arcoCronologico, markupIndexOf, testoPiano,
 } from '../lib/litSources';
 import { caricaLitDataset, salvaLitDataset, clonaDataset, FonteDati, SEME } from '../lib/litStore';
 import { MarkupText } from './MarkupText';

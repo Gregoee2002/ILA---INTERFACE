@@ -9,7 +9,7 @@ import { cn, stripAccents, EASE_OUT } from '../lib/utils';
 import { ErrorBoundary } from './ErrorBoundary';
 import {
   MarkupToken, TokenPath, MarkupAction, ValidationIssue, EpithetScanIssue, LbInfo,
-  parseEdition, serializeEdition, collectLbs, tokenize, serializeTokens, sliceText,
+  parseEdition, serializeEdition, collectLbs, sliceText,
   wrapSlice, unwrapElement, removeElement, updateElementAttrs, appendElement,
   validateEditionTokens, scanEpithetIssues, MARKUP_ACTIONS, DIVINE_KEYS,
 } from '../lib/leidenMarkup';

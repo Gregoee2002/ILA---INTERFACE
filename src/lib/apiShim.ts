@@ -30,7 +30,7 @@
 //    stesso — non solo lato UI — così un bug nell'interfaccia non può mai
 //    tradursi in una scrittura non autorizzata.
 
-import { xmlToMonumenti, monumentiToXml, renderIconography } from "./xmlUtils";
+import { xmlToMonumenti, monumentiToXml } from "./xmlUtils";
 import { buildSearchIndex, searchMonumenti } from "./searchIndex";
 import MiniSearch from "minisearch";
 import { pullAllCorpusFiles, pushCorpusFile, deleteCorpusFile, testGitHubAccess, setStoredToken, clearStoredToken, pullFlagsFile, pushFlagsFile, pullBugsFile, pushBugsFile, pullIconographyVocabFile, pushIconographyVocabFile, pullLitSourcesFile, pushLitSourcesFile, scheduleRedeploy } from "./githubStorageBrowser";

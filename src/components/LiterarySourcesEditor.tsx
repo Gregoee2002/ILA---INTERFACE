@@ -5,10 +5,10 @@ import {
 } from 'lucide-react';
 import { cn } from '../lib/utils';
 import {
-  LitDataset, Saggio, Opera, Testimonium, Nucleo, TerminNotevole, LinkEsterno,
+  LitDataset, Saggio, Opera, Testimonium, Nucleo, LinkEsterno,
   Genere, GENERI, GENERE_LABELS, TIPI, TIPO_LABELS,
   LARES_GRID, CAMPO_COLOR, LaresCampo, LaresAmbito,
-  RefType, REFTYPE_LABELS, opereById, risolviTutte, citaBreve, sigleDelSaggio,
+  RefType, REFTYPE_LABELS, risolviTutte, citaBreve, sigleDelSaggio,
 } from '../lib/litSources';
 import {
   FonteDati, verificaIntegrita, coperturaMarkup, CoperturaTestimonium,
@@ -278,8 +278,6 @@ const TestimoniumEditor: React.FC<{
   const lingua = opera?.lingua || 'grc';
   const richiamata = dataset.saggi.filter(s => s.nuclei.some(n => n.testimonia.includes(t.id)));
 
-  const setTermine = (i: number, w: TerminNotevole) =>
-    onChange({ ...t, termini: t.termini.map((x, j) => (j === i ? w : x)) });
 
   const ordinate = [...dataset.opere].sort((a, b) => a.autore.localeCompare(b.autore, 'it'));
 
@@ -548,7 +546,6 @@ const SaggioEditor: React.FC<{
   saggio: Saggio; dataset: LitDataset; onChange: (s: Saggio) => void; onElimina: () => void;
 }> = ({ saggio, dataset, onChange, onElimina }) => {
   const [tab, setTab] = useState<'intestazione' | 'nuclei'>('intestazione');
-  const opere = opereById(dataset.opere);
   const sigle = sigleDelSaggio(saggio);
   const risolte = useMemo(() => risolviTutte(dataset.testimonia, dataset.opere), [dataset]);
 

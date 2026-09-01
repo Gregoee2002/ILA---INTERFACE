@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect, useLayoutEffect, useRef, lazy, Suspense, ChangeEvent } from 'react';
+import React, { useState, useMemo, useEffect, useLayoutEffect, useRef, lazy, Suspense } from 'react';
 import { motion, AnimatePresence, MotionConfig } from 'motion/react';
 import { 
   Search,
@@ -7,26 +7,18 @@ import {
   ChevronLeft,
   ChevronDown,
   X,
-  Database,
   Trash2,
-  Languages,
-  Plus,
   Edit2,
-  Save,
   LogIn,
   LogOut,
   Sparkles,
   Loader2,
-  WifiOff,
   BarChart2,
   Clock,
   Columns,
   Upload,
   Book,
-  Calendar,
   Download,
-  AlertCircle,
-  Menu,
   Settings,
   Info,
   Hash,
@@ -35,7 +27,6 @@ import {
   Moon,
   Sun,
   Monitor,
-  Filter,
   Check,
   AlertTriangle,
   Feather,
@@ -56,7 +47,7 @@ import {
 import { cn, EASE_OUT, EASE_IN, SPRING_SNAPPY, SPRING_SOFT } from './lib/utils';
 import { ICONOGRAPHY_LABELS } from './lib/iconographyLabels';
 import { labelEvidence, labelUnit, labelType, labelMaterial, labelInscriptionType } from './lib/vocabLabels';
-import { Monumento, FilterState, SortField, Traduzione, Bibliografia, Appunto, EntryRegistro, BugReport, EDITORIAL_STATUS_LABELS } from './types';
+import { Monumento, FilterState, SortField, Bibliografia, EntryRegistro, BugReport, EDITORIAL_STATUS_LABELS } from './types';
 import { RAW_DATA } from './data';
 import { monumentiToXml, xmlToMonumenti, formatIlaLabel, splitDivineKey } from './lib/xmlUtils';
 import { buildDivinityIndex, buildOnomasticaIndex, buildClassificationAudit, DivinityStats, OnomasticaStats } from './lib/epithetIndex';
@@ -154,11 +145,6 @@ const formatDateRange = (start?: number, end?: number) => {
   if (start !== undefined && start !== 0) return formatDate(start);
   if (end !== undefined && end !== 0) return formatDate(end);
   return '-';
-};
-
-const getLocationName = (m: Monumento) => {
-  if (m.citta && m.regione) return `${m.citta}, ${m.regione.toUpperCase()}`;
-  return m.citta || m.regione || 'N/A';
 };
 
 const getDisplayTitle = (m: Monumento) => {
@@ -655,7 +641,7 @@ const EpithetTree = ({ divinity, epithets, onSelectEpithet, onSelectAll, preview
 
 // Helper per la lista attestazioni
 const AttestationList = ({
-  label, context, items, monumenti, onSelectMonumento, variant = 'epithet'
+  label, context, items, onSelectMonumento, variant = 'epithet'
 }: {
   label: string;
   context?: string; // es. il nome della divinità di appartenenza, per il breadcrumb
@@ -3943,7 +3929,6 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
   };
   const [showSettings, setShowSettings] = useState(false);
   const [showFilterPanel, setShowFilterPanel] = useState(false);
-  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const ITEMS_PER_PAGE = 25;
   const [compareList, setCompareList] = useState<Monumento[]>([]);
@@ -3967,8 +3952,6 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
   const selectAll = () => setSelectedIds(new Set(filteredMonumenti.map(m => m.entryId || m.id)));
   const deselectAll = () => setSelectedIds(new Set());
   const selectedMonumenti = monumenti.filter(m => selectedIds.has(m.entryId || m.id));
-  
-  const [selectedNoteId, setSelectedNoteId] = useState<string | null>(null);
   
   const [filters, setFilters] = useState<FilterState>(DEFAULT_FILTERS);
 
@@ -4247,7 +4230,6 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
       const result = await handleUnlockSubmit(token);
       if (result.ok) await handleUnlocked();
     })();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const [translating, setTranslating] = useState(false);
@@ -4392,7 +4374,6 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
   useEffect(() => {
     if (effectiveAdmin) { fetchRegistri(); fetchBugs(); }
     else { setRegistri([]); setBugs([]); }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [effectiveAdmin]);
 
   const knownAuthors = useMemo(() => {
@@ -5268,77 +5249,6 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
     console.error('Export PDF fallito', e);
     setExportError('Errore durante la generazione del PDF.');
    }
-  };
-
-  const importXml = async (e: ChangeEvent<HTMLInputElement>) => {
-    if (!effectiveAdmin || !e.target.files?.[0]) return;
-    const file = e.target.files[0];
-    const reader = new FileReader();
-    setImportStatus({ type: 'loading', message: 'Leggendo il file...' });
-    
-    reader.onload = async (event) => {
-      try {
-        const content = event.target?.result as string;
-        if (!content) throw new Error("File vuoto o illeggibile.");
-        let data = xmlToMonumenti(content);
-        if (!Array.isArray(data)) data = [data];
-
-        setImportStatus({ type: 'loading', message: `Salvataggio di ${data.length} schede...` });
-        
-        const combined = [...monumenti];
-
-        data.forEach((parsedItem: any) => {
-          const fId = parsedItem.entryId || `local-${Date.now()}-${Math.random().toString(36).substr(2, 5)}`;
-          parsedItem.entryId = fId;
-
-          // Replace duplicate if entryId is already present
-          const duplicateIdx = combined.findIndex(m => m.entryId === fId);
-          if (duplicateIdx > -1) {
-            combined[duplicateIdx] = { ...combined[duplicateIdx], ...parsedItem };
-          } else {
-            combined.push(parsedItem);
-          }
-        });
-
-        // Preserve existing ids; assign new sequential ids only where missing
-        const takenIds = new Set(combined.map(m => m.id).filter(n => n > 0));
-        let seq = takenIds.size > 0 ? Math.max(...Array.from(takenIds)) + 1 : 1;
-        const finalData = combined.map(m => {
-          if (m.id && m.id > 0) return m;
-          while (takenIds.has(seq)) seq++;
-          takenIds.add(seq);
-          return { ...m, id: seq };
-        });
-
-        const res = await fetch('/api/monumenti', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(finalData)
-        });
-        
-        if (res.ok) {
-          // Re-fetch from server so the UI reflects the patched XML files
-          const freshRes = await fetch('/api/monumenti');
-          const fresh = freshRes.ok ? await freshRes.json() : finalData;
-
-          setMonumenti(fresh);
-          setImportStatus({ type: 'success', message: `Importazione completata: ${finalData.length} schede.` });
-          e.target.value = '';
-        } else {
-          throw new Error("Errore durante il salvataggio sul server.");
-        }
-        
-        setTimeout(() => setImportStatus({ type: 'idle', message: '' }), 10000);
-      } catch (err: any) {
-        console.error("Import error", err);
-        setImportStatus({ type: 'error', message: `Errore: ${err.message || "Caricamento fallito."}` });
-        e.target.value = '';
-      }
-    };
-    reader.onerror = () => {
-      setImportStatus({ type: 'error', message: "Errore durante la lettura del file." });
-    };
-    reader.readAsText(file);
   };
 
   if (loading) {

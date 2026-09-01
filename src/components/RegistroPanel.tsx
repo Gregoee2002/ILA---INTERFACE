@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { NotebookPen, ChevronRight, Check, RotateCcw, Loader2 } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { EntryRegistro } from '../types';

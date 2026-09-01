@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, FormEvent } from 'react';
+import { useEffect, useRef, useState, FormEvent } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import App from '../App';
 import { EASE_OUT } from '../lib/utils';

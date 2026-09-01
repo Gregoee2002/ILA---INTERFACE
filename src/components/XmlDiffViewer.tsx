@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { diffLines, Change } from 'diff';
 import { cn } from '../lib/utils';
 

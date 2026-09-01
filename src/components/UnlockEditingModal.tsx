@@ -1,4 +1,4 @@
-import React, { useState, FormEvent } from 'react';
+import { useState, FormEvent } from 'react';
 import { KeyRound, X } from 'lucide-react';
 
 // Sostituisce il vecchio gate a pagina intera: sulla build statica,

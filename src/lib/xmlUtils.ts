@@ -143,9 +143,6 @@ export function extractCultAttestations(
 // Vero anche quando il segnaposto è annegato in una frase (es. "Height of
 // letters: DA_COMPILARE.", ref="DA_COMPILARE"): l'intero campo va nascosto,
 // non solo il token, perché il resto della frase da solo non ha senso.
-function containsPlaceholder(s: string): boolean {
-  return !!s && s.toUpperCase().includes('DA_COMPILARE');
-}
 
 function resolveXmlTextWithPtrs(xmlBlock: string): { resolvedText: string; citedRanges: string[]; rawXml: string } {
   const rawXml = xmlBlock;
@@ -851,7 +848,6 @@ function parseTeiElement(teiString: string): Monumento {
     // Capture the full <rs ...> opening tag (group 1 = attributes) and inner text (group 2).
     // Preference: use the key="" attribute as the canonical epithet label; fall back to
     // the inner Greek text only when no key is present.
-    const rsEpithetRegex = /<rs\s+([^>]*type="epithet"[^>]*)>([\s\S]*?)<\/rs>/g;
     // Source 2 intentionally does NOT populate epiteti.
     // The canonical English epithet label is extracted by Source 3 from
     // persName key tokens (e.g. "Men Tyrannos" → "Tyrannos").

@@ -405,7 +405,7 @@ interface Props {
   onInitialEntryIdConsumed?: () => void;
 }
 
-export const SectionEditorView: React.FC<Props> = ({ monumenti, effectiveAdmin, currentUserEmail, onLogin, onSave, onCreate, onExport, initialEntryId, onInitialEntryIdConsumed }) => {
+export const SectionEditorView: React.FC<Props> = ({ monumenti, effectiveAdmin, onLogin, onSave, onCreate, onExport, initialEntryId, onInitialEntryIdConsumed }) => {
   /* sorgente e caricamento */
   const [source, setSource] = useState<Source | null>(null);
   const [baseModel, setBaseModel] = useState<Monumento | null>(null); // stato al caricamento (per il diff)

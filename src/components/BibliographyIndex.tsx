@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { BookMarked, Loader2, Search, Wand2, Check, ChevronRight, AlertTriangle } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { Monumento } from '../types';

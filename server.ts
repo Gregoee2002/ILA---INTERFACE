@@ -5,8 +5,8 @@ import fs from "fs";
 import crypto from "crypto";
 import { createServer as createViteServer } from "vite";
 import { GoogleGenAI } from "@google/genai";
-import { xmlToMonumenti, monumentiToXml, renderIconography } from "./src/lib/xmlUtils";
-import { pullCorpusFromGitHub, pushFileToGitHub, deleteFileFromGitHub, isGitHubConfigured, testGitHubAccess, pullDraftsFromGitHub, pullFlagsFileFromGitHub, pushFlagsFileToGitHub, pullBugsFileFromGitHub, pushBugsFileToGitHub, pullIconographyVocabFileFromGitHub, pushIconographyVocabFileToGitHub, pullLitSourcesFileFromGitHub, pushLitSourcesFileToGitHub, scheduleRedeploy } from "./src/lib/githubStorage";
+import { xmlToMonumenti, monumentiToXml } from "./src/lib/xmlUtils";
+import { pullCorpusFromGitHub, pushFileToGitHub, deleteFileFromGitHub, isGitHubConfigured, testGitHubAccess, pullDraftsFromGitHub, pullFlagsFileFromGitHub, pushFlagsFileToGitHub, pullBugsFileFromGitHub, pushBugsFileToGitHub, pullIconographyVocabFileFromGitHub, pushIconographyVocabFileToGitHub, pushLitSourcesFileToGitHub, scheduleRedeploy } from "./src/lib/githubStorage";
 import { EntryRegistro, BugReport } from "./src/types";
 import { normalizeRegistro } from "./src/lib/registroMigration";
 import { mergeIconographyOverrides } from "./src/lib/iconographyLabels";
@@ -307,7 +307,7 @@ async function startServer() {
   // ── Routes ───────────────────────────────────────────────────────────────
 
   // GET all monuments — reads from corpus dir, falls back to legacy file
-  app.get("/api/monumenti", (req, res) => {
+  app.get("/api/monumenti", (_req, res) => {
     try {
       const corpusFiles = fs.readdirSync(CORPUS_DIR)
         .filter(f => f.endsWith('.xml') && !f.startsWith('_'));
@@ -365,7 +365,6 @@ async function startServer() {
           // fuori da CORPUS_DIR.
           const rawFilename = (m as any)._corpusFile as string | undefined;
           const filename = rawFilename ? rawFilename.replace(/[^a-zA-Z0-9._-]/g, '_') : buildFilename(m);
-          const filepath = path.join(CORPUS_DIR, filename);
           writtenFiles.add(filename);
 
           try {
@@ -509,7 +508,7 @@ async function startServer() {
   });
 
   // GET list corpus files
-  app.get("/api/corpus/files", (req, res) => {
+  app.get("/api/corpus/files", (_req, res) => {
     try {
       const files = fs.readdirSync(CORPUS_DIR)
         .filter(f => f.endsWith('.xml') && !f.startsWith('_'))
@@ -526,7 +525,7 @@ async function startServer() {
   });
 
   // GET download the cumulative backup
-  app.get("/api/corpus/backup", (req, res) => {
+  app.get("/api/corpus/backup", (_req, res) => {
     try {
       if (!fs.existsSync(BACKUP_FILE)) rebuildBackup();
       res.setHeader('Content-Type', 'application/xml');
@@ -558,7 +557,7 @@ async function startServer() {
 
   // GET list draft files, con eventuale match verso un file già presente nel
   // corpus vero (stesso filename) per segnalare che è già stato revisionato.
-  app.get("/api/drafts/files", (req, res) => {
+  app.get("/api/drafts/files", (_req, res) => {
     try {
       if (!fs.existsSync(DRAFTS_DIR)) return res.json([]);
       const corpusFiles = new Set(
@@ -594,7 +593,7 @@ async function startServer() {
 
   // GET stato della persistenza GitHub — utile per verificare la config
   // (token/repo/permessi) senza dover rilanciare uno script a parte.
-  app.get("/api/corpus/github-status", async (req, res) => {
+  app.get("/api/corpus/github-status", async (_req, res) => {
     const result = await testGitHubAccess();
     res.json(result);
   });
@@ -603,7 +602,7 @@ async function startServer() {
   // all'avvio (corpus + segnalazioni), senza dover riavviare il processo.
   // Serve per rendere visibili modifiche fatte direttamente sul repo dati
   // (es. a mano su GitHub) senza aspettare il prossimo restart del server.
-  app.post("/api/corpus/sync", async (req, res) => {
+  app.post("/api/corpus/sync", async (_req, res) => {
     if (!isGitHubConfigured()) {
       return res.status(400).json({ error: "Persistenza GitHub non configurata su questo server." });
     }
@@ -639,7 +638,7 @@ async function startServer() {
 
   // ── Registro collaboratori ────────────────────────────────────────────────
 
-  app.get("/api/flags", (req, res) => {
+  app.get("/api/flags", (_req, res) => {
     res.json(readFlags());
   });
 
@@ -695,7 +694,7 @@ async function startServer() {
 
   // ── Bug segnalati dai collaboratori ───────────────────────────────────────
 
-  app.get("/api/bugs", (req, res) => {
+  app.get("/api/bugs", (_req, res) => {
     res.json(readBugs());
   });
 
@@ -750,7 +749,7 @@ async function startServer() {
   // di una scheda con un termine iconografico fuori dal vocabolario curato
   // (vedi SectionEditorView.tsx) o inseribile a mano da qui.
 
-  app.get("/api/iconography-vocab", (req, res) => {
+  app.get("/api/iconography-vocab", (_req, res) => {
     res.json(readIconographyVocab());
   });
 
@@ -784,7 +783,7 @@ async function startServer() {
   // non esiste ancora, perché la sezione parte dal seme compilato nel bundle
   // e non da un file vuoto.
 
-  app.get("/api/fonti-letterarie", (req, res) => {
+  app.get("/api/fonti-letterarie", (_req, res) => {
     try {
       if (!fs.existsSync(LIT_SOURCES_FILE)) return res.status(204).end();
       res.type("application/json").send(fs.readFileSync(LIT_SOURCES_FILE, "utf-8"));
@@ -825,7 +824,7 @@ async function startServer() {
     }
   });
 
-  app.post("/api/reindex", (req, res) => {
+  app.post("/api/reindex", (_req, res) => {
     // In a real app we'd check req.headers for an admin token or rely on an auth middleware.
     // For now, since the task asks to expose this endpoint, we'll assume it's protected or will be verified.
     try {

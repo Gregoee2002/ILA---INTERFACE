@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { FileSearch, CheckCircle2, Circle, ChevronRight } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { XmlDiffViewer } from './XmlDiffViewer';
