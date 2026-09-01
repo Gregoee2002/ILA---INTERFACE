@@ -25,3 +25,4 @@ public/corpus-snapshot.json
 # al repo dati via pushFileToGitHub, tenerla anche qui duplica la fonte di
 # verità e genera commit rumorosi.
 src/data/corpus/
+__pycache__/
