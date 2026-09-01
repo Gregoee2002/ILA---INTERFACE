@@ -133,20 +133,43 @@ function validateMonumentoShape(m: any): string | null {
 
 // ── Store in-memory (sostituisce CORPUS_DIR) ─────────────────────────────
 
+// Cache del parse per file: xmlToMonumenti() è costoso e prima veniva
+// rieseguito su TUTTI i ~295 file ad ogni GET /api/monumenti e dentro
+// updateSearchIndex() — in editor mode ogni PATCH di una scheda faceva un
+// reparse completo del corpus (BUG-15). Chiave = contenuto XML corrente:
+// quando lo string in corpusStore cambia (writeCorpusFile) la voce non
+// combacia più e si riparsa solo quel file.
+const parseCache = new Map<string, { src: string; parsed: any[] }>();
+let parseCacheHits = 0;
+let parseCacheMisses = 0;
+
+function parseCorpusFile(file: string, xml: string): any[] {
+  const cached = parseCache.get(file);
+  if (cached && cached.src === xml) {
+    parseCacheHits++;
+    return cached.parsed;
+  }
+  parseCacheMisses++;
+  const parsed = xmlToMonumenti(xml);
+  parsed.forEach((m: any) => { m._corpusFile = file; });
+  parseCache.set(file, { src: xml, parsed });
+  return parsed;
+}
+
 function readCorpusFiles(): any[] {
   const monumenti: any[] = [];
   for (const [file, xml] of corpusStore) {
     try {
-      const parsed = xmlToMonumenti(xml);
-      if (parsed.length > 0) {
-        parsed.forEach((m: any) => {
-          m._corpusFile = file;
-        });
-        monumenti.push(...parsed);
-      }
+      const parsed = parseCorpusFile(file, xml);
+      if (parsed.length > 0) monumenti.push(...parsed);
     } catch (e) {
       console.warn(`[apiShim] File corpus malformato ignorato: ${file}`, e);
     }
+  }
+  if (import.meta.env.DEV && (parseCacheHits + parseCacheMisses) > 0) {
+    console.debug(`[apiShim] parse corpus: ${parseCacheMisses} riparsati, ${parseCacheHits} da cache`);
+    parseCacheHits = 0;
+    parseCacheMisses = 0;
   }
   return monumenti;
 }
@@ -185,6 +208,7 @@ async function writeCorpusFile(filename: string, content: string, commitMessage:
 
 async function removeCorpusFile(filename: string, commitMessage: string): Promise<void> {
   corpusStore.delete(filename);
+  parseCache.delete(filename);
   if (mockMode) return;
   await deleteCorpusFile(filename, commitMessage);
 }

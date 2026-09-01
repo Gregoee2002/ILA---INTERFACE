@@ -168,6 +168,78 @@ async function fetchCurrentSha(filename: string): Promise<string | null> {
  * riletto fresco e un piccolo backoff per diradare le collisioni.
  */
 const MAX_PUSH_ATTEMPTS = 6;
+const JSON_PUSH_ATTEMPTS = 4;
+
+const sleep = (ms: number) => new Promise<void>(r => setTimeout(r, ms));
+
+/**
+ * Casi in cui vale la pena ritentare una PUT sulla Contents API (BUG-07):
+ *  - 409/422: race sull'HEAD del branch (vedi commento su pushCorpusFile);
+ *  - 5xx: errori transitori lato GitHub;
+ *  - 403 con X-RateLimit-Remaining: 0, oppure 429: secondary rate limit —
+ *    prima venivano trattati come errore fatale e "Riordina ID" su ~295 file
+ *    tornava status:"partial" con molti failures.
+ */
+function isRetryableWrite(res: Response): boolean {
+  if (res.status === 409 || res.status === 422) return true;
+  if (res.status >= 500) return true;
+  if (res.status === 429) return true;
+  if (res.status === 403 && res.headers.get("x-ratelimit-remaining") === "0") return true;
+  return false;
+}
+
+/** Attesa prima del retry: rispetta Retry-After se presente, altrimenti
+ *  backoff lineare — più lungo per rate limit / 5xx che per una semplice race. */
+function backoffMs(res: Response, attempt: number): number {
+  const retryAfter = Number(res.headers.get("retry-after"));
+  if (Number.isFinite(retryAfter) && retryAfter > 0) return retryAfter * 1000;
+  const slow = res.status === 403 || res.status === 429 || res.status >= 500;
+  return (slow ? 1000 : 150) * attempt + Math.random() * 200;
+}
+
+interface ShaRef { sha: string | null }
+
+/**
+ * Push generico di un file JSON singolo alla radice della repo dati, con
+ * retry (BUG-14: prima erano 4 blocchi copia-incolla quasi identici per
+ * flags/bugs/iconography-vocab/fonti-letterarie). `ref` porta lo sha corrente
+ * fra una chiamata e l'altra e viene aggiornato in caso di successo.
+ */
+async function pushJsonFileWithRetry(
+  path: string,
+  content: string,
+  message: string,
+  ref: ShaRef,
+  label: string,
+): Promise<void> {
+  const url = `${GITHUB_API}/repos/${REPO}/contents/${path}`;
+  let sha = ref.sha;
+
+  for (let attempt = 1; attempt <= JSON_PUSH_ATTEMPTS; attempt++) {
+    const body: Record<string, unknown> = {
+      message,
+      content: utf8ToBase64(content),
+      branch: BRANCH,
+    };
+    if (sha) body.sha = sha;
+
+    const res = await fetch(url, { method: "PUT", headers: headers(), body: JSON.stringify(body) });
+    if (res.ok) {
+      const data = await res.json();
+      ref.sha = data.content.sha;
+      return;
+    }
+
+    const detail = await res.text();
+    if (isRetryableWrite(res) && attempt < JSON_PUSH_ATTEMPTS) {
+      await sleep(backoffMs(res, attempt));
+      const refreshedRes = await fetch(`${url}?ref=${encodeURIComponent(BRANCH)}`, { headers: headers(), cache: "no-store" });
+      sha = refreshedRes.ok ? (await refreshedRes.json()).sha : null;
+      continue;
+    }
+    throw new Error(`Scrittura GitHub fallita per ${label} (${res.status}) dopo ${attempt} tentativi: ${detail}`);
+  }
+}
 
 export async function pushCorpusFile(filename: string, content: string, message: string): Promise<void> {
   const url = `${GITHUB_API}/repos/${REPO}/contents/${repoPath(filename)}`;
@@ -190,9 +262,8 @@ export async function pushCorpusFile(filename: string, content: string, message:
     }
 
     const detail = await res.text();
-    const isRaceConflict = res.status === 409 || res.status === 422;
-    if (isRaceConflict && attempt < MAX_PUSH_ATTEMPTS) {
-      await new Promise(r => setTimeout(r, 150 * attempt + Math.random() * 200));
+    if (isRetryableWrite(res) && attempt < MAX_PUSH_ATTEMPTS) {
+      await sleep(backoffMs(res, attempt));
       sha = null; // forza a rileggere lo sha aggiornato al prossimo giro
       continue;
     }
@@ -227,15 +298,15 @@ export async function deleteCorpusFile(filename: string, _message: string): Prom
 // della repo, fuori da CORPUS_PATH), variante browser: vedi commento
 // gemello lì per il perché di un file unico invece che uno per scheda.
 const FLAGS_PATH = "flags.json";
-let flagsSha: string | null = null;
+const flagsShaRef: ShaRef = { sha: null };
 
 export async function pullFlagsFile(): Promise<string | null> {
   const url = `${GITHUB_API}/repos/${REPO}/contents/${FLAGS_PATH}?ref=${encodeURIComponent(BRANCH)}`;
   const res = await fetch(url, { headers: headers() });
-  if (res.status === 404) { flagsSha = null; return null; }
+  if (res.status === 404) { flagsShaRef.sha = null; return null; }
   if (!res.ok) throw new Error(`GitHub get flags.json fallita (${res.status}): ${await res.text()}`);
   const data = await res.json();
-  flagsSha = data.sha || null;
+  flagsShaRef.sha = data.sha || null;
   if (data.encoding !== "base64" || typeof data.content !== "string") {
     throw new Error("Formato risposta inatteso per flags.json");
   }
@@ -243,49 +314,22 @@ export async function pullFlagsFile(): Promise<string | null> {
 }
 
 export async function pushFlagsFile(content: string, message: string): Promise<void> {
-  const url = `${GITHUB_API}/repos/${REPO}/contents/${FLAGS_PATH}`;
-  let sha = flagsSha;
-
-  for (let attempt = 1; attempt <= 3; attempt++) {
-    const body: Record<string, unknown> = {
-      message,
-      content: utf8ToBase64(content),
-      branch: BRANCH,
-    };
-    if (sha) body.sha = sha;
-
-    const res = await fetch(url, { method: "PUT", headers: headers(), body: JSON.stringify(body) });
-    if (res.ok) {
-      const data = await res.json();
-      flagsSha = data.content.sha;
-      return;
-    }
-
-    const detail = await res.text();
-    const isRaceConflict = res.status === 409 || res.status === 422;
-    if (isRaceConflict && attempt < 3) {
-      await new Promise(r => setTimeout(r, 150 * attempt));
-      const refreshedRes = await fetch(`${url}?ref=${encodeURIComponent(BRANCH)}`, { headers: headers(), cache: "no-store" });
-      sha = refreshedRes.ok ? (await refreshedRes.json()).sha : null;
-      continue;
-    }
-    throw new Error(`Scrittura GitHub fallita per flags.json (${res.status}) dopo ${attempt} tentativi: ${detail}`);
-  }
+  await pushJsonFileWithRetry(FLAGS_PATH, content, message, flagsShaRef, "flags.json");
 }
 
 // ── Bug segnalati dai collaboratori (bugs.json) ────────────────────────
 // Stesso file di githubStorage.ts, variante browser: vedi commento gemello
 // sopra per il perché di un file unico.
 const BUGS_PATH = "bugs.json";
-let bugsSha: string | null = null;
+const bugsShaRef: ShaRef = { sha: null };
 
 export async function pullBugsFile(): Promise<string | null> {
   const url = `${GITHUB_API}/repos/${REPO}/contents/${BUGS_PATH}?ref=${encodeURIComponent(BRANCH)}`;
   const res = await fetch(url, { headers: headers() });
-  if (res.status === 404) { bugsSha = null; return null; }
+  if (res.status === 404) { bugsShaRef.sha = null; return null; }
   if (!res.ok) throw new Error(`GitHub get bugs.json fallita (${res.status}): ${await res.text()}`);
   const data = await res.json();
-  bugsSha = data.sha || null;
+  bugsShaRef.sha = data.sha || null;
   if (data.encoding !== "base64" || typeof data.content !== "string") {
     throw new Error("Formato risposta inatteso per bugs.json");
   }
@@ -293,49 +337,22 @@ export async function pullBugsFile(): Promise<string | null> {
 }
 
 export async function pushBugsFile(content: string, message: string): Promise<void> {
-  const url = `${GITHUB_API}/repos/${REPO}/contents/${BUGS_PATH}`;
-  let sha = bugsSha;
-
-  for (let attempt = 1; attempt <= 3; attempt++) {
-    const body: Record<string, unknown> = {
-      message,
-      content: utf8ToBase64(content),
-      branch: BRANCH,
-    };
-    if (sha) body.sha = sha;
-
-    const res = await fetch(url, { method: "PUT", headers: headers(), body: JSON.stringify(body) });
-    if (res.ok) {
-      const data = await res.json();
-      bugsSha = data.content.sha;
-      return;
-    }
-
-    const detail = await res.text();
-    const isRaceConflict = res.status === 409 || res.status === 422;
-    if (isRaceConflict && attempt < 3) {
-      await new Promise(r => setTimeout(r, 150 * attempt));
-      const refreshedRes = await fetch(`${url}?ref=${encodeURIComponent(BRANCH)}`, { headers: headers(), cache: "no-store" });
-      sha = refreshedRes.ok ? (await refreshedRes.json()).sha : null;
-      continue;
-    }
-    throw new Error(`Scrittura GitHub fallita per bugs.json (${res.status}) dopo ${attempt} tentativi: ${detail}`);
-  }
+  await pushJsonFileWithRetry(BUGS_PATH, content, message, bugsShaRef, "bugs.json");
 }
 
 // ── Overlay del vocabolario iconografico (iconography-vocab.json) ────
 // Variante browser di githubStorage.ts, stesso schema minimale — vedi
 // commento gemello lì per il perché di un file unico.
 const ICONOGRAPHY_VOCAB_PATH = "iconography-vocab.json";
-let iconographyVocabSha: string | null = null;
+const iconographyVocabShaRef: ShaRef = { sha: null };
 
 export async function pullIconographyVocabFile(): Promise<string | null> {
   const url = `${GITHUB_API}/repos/${REPO}/contents/${ICONOGRAPHY_VOCAB_PATH}?ref=${encodeURIComponent(BRANCH)}`;
   const res = await fetch(url, { headers: headers() });
-  if (res.status === 404) { iconographyVocabSha = null; return null; }
+  if (res.status === 404) { iconographyVocabShaRef.sha = null; return null; }
   if (!res.ok) throw new Error(`GitHub get iconography-vocab.json fallita (${res.status}): ${await res.text()}`);
   const data = await res.json();
-  iconographyVocabSha = data.sha || null;
+  iconographyVocabShaRef.sha = data.sha || null;
   if (data.encoding !== "base64" || typeof data.content !== "string") {
     throw new Error("Formato risposta inatteso per iconography-vocab.json");
   }
@@ -343,34 +360,7 @@ export async function pullIconographyVocabFile(): Promise<string | null> {
 }
 
 export async function pushIconographyVocabFile(content: string, message: string): Promise<void> {
-  const url = `${GITHUB_API}/repos/${REPO}/contents/${ICONOGRAPHY_VOCAB_PATH}`;
-  let sha = iconographyVocabSha;
-
-  for (let attempt = 1; attempt <= 3; attempt++) {
-    const body: Record<string, unknown> = {
-      message,
-      content: utf8ToBase64(content),
-      branch: BRANCH,
-    };
-    if (sha) body.sha = sha;
-
-    const res = await fetch(url, { method: "PUT", headers: headers(), body: JSON.stringify(body) });
-    if (res.ok) {
-      const data = await res.json();
-      iconographyVocabSha = data.content.sha;
-      return;
-    }
-
-    const detail = await res.text();
-    const isRaceConflict = res.status === 409 || res.status === 422;
-    if (isRaceConflict && attempt < 3) {
-      await new Promise(r => setTimeout(r, 150 * attempt));
-      const refreshedRes = await fetch(`${url}?ref=${encodeURIComponent(BRANCH)}`, { headers: headers(), cache: "no-store" });
-      sha = refreshedRes.ok ? (await refreshedRes.json()).sha : null;
-      continue;
-    }
-    throw new Error(`Scrittura GitHub fallita per iconography-vocab.json (${res.status}) dopo ${attempt} tentativi: ${detail}`);
-  }
+  await pushJsonFileWithRetry(ICONOGRAPHY_VOCAB_PATH, content, message, iconographyVocabShaRef, "iconography-vocab.json");
 }
 
 // ── Fonti letterarie (fonti-letterarie.json) ──────────────────────────
@@ -382,15 +372,15 @@ export async function pushIconographyVocabFile(content: string, message: string)
 // (src/data/fontiLetterarie.ts) resta il fallback quando questo file non
 // esiste ancora.
 const LIT_PATH = "fonti-letterarie.json";
-let litSha: string | null = null;
+const litShaRef: ShaRef = { sha: null };
 
 export async function pullLitSourcesFile(): Promise<string | null> {
   const url = `${GITHUB_API}/repos/${REPO}/contents/${LIT_PATH}?ref=${encodeURIComponent(BRANCH)}`;
   const res = await fetch(url, { headers: headers() });
-  if (res.status === 404) { litSha = null; return null; }
+  if (res.status === 404) { litShaRef.sha = null; return null; }
   if (!res.ok) throw new Error(`GitHub get fonti-letterarie.json fallita (${res.status}): ${await res.text()}`);
   const data = await res.json();
-  litSha = data.sha || null;
+  litShaRef.sha = data.sha || null;
   if (data.encoding !== "base64" || typeof data.content !== "string") {
     throw new Error("Formato risposta inatteso per fonti-letterarie.json");
   }
@@ -398,34 +388,7 @@ export async function pullLitSourcesFile(): Promise<string | null> {
 }
 
 export async function pushLitSourcesFile(content: string, message: string): Promise<void> {
-  const url = `${GITHUB_API}/repos/${REPO}/contents/${LIT_PATH}`;
-  let sha = litSha;
-
-  for (let attempt = 1; attempt <= 3; attempt++) {
-    const body: Record<string, unknown> = {
-      message,
-      content: utf8ToBase64(content),
-      branch: BRANCH,
-    };
-    if (sha) body.sha = sha;
-
-    const res = await fetch(url, { method: "PUT", headers: headers(), body: JSON.stringify(body) });
-    if (res.ok) {
-      const data = await res.json();
-      litSha = data.content.sha;
-      return;
-    }
-
-    const detail = await res.text();
-    const isRaceConflict = res.status === 409 || res.status === 422;
-    if (isRaceConflict && attempt < 3) {
-      await new Promise(r => setTimeout(r, 150 * attempt));
-      const refreshedRes = await fetch(`${url}?ref=${encodeURIComponent(BRANCH)}`, { headers: headers(), cache: "no-store" });
-      sha = refreshedRes.ok ? (await refreshedRes.json()).sha : null;
-      continue;
-    }
-    throw new Error(`Scrittura GitHub fallita per fonti-letterarie.json (${res.status}) dopo ${attempt} tentativi: ${detail}`);
-  }
+  await pushJsonFileWithRetry(LIT_PATH, content, message, litShaRef, "fonti-letterarie.json");
 }
 
 // ── Redeploy automatico del sito statico dopo un salvataggio ──────────
