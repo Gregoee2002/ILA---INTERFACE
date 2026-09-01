@@ -7316,6 +7316,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                                 <div className="relative z-10 max-w-[62ch] mx-auto pl-10 border-l-2 border-border/40 max-h-[52vh] overflow-y-auto custom-scrollbar pr-4 pt-10">
                                   {selectedMonumento.testo ? (
                                     <ErrorBoundary
+                                      resetKeys={[selectedMonumento.entryId ?? selectedMonumento.id]}
                                       fallback={
                                         <pre className="whitespace-pre-wrap font-mono text-sm text-muted/80">
                                           {selectedMonumento.testo}
@@ -7573,7 +7574,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                       <div className="text-sm bg-sidebar/50 p-4 border border-border/40"
                            style={{ fontFamily: 'var(--font-greek)', lineHeight: '1.9' }}>
                         {m.testo ? (
-                          <ErrorBoundary fallback={<pre className="whitespace-pre-wrap font-mono text-sm text-muted/80">{m.testo}</pre>}>
+                          <ErrorBoundary resetKeys={[m.entryId ?? m.id]} fallback={<pre className="whitespace-pre-wrap font-mono text-sm text-muted/80">{m.testo}</pre>}>
                             <EpiDocRenderer
                               xml={m.testo}
                               query={filters.searchText}
