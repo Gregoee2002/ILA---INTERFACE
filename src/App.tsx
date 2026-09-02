@@ -68,6 +68,8 @@ import { UnlockEditingModal } from './components/UnlockEditingModal';
 import { RegistroPanel } from './components/RegistroPanel';
 import { RegistroForm } from './components/RegistroForm';
 import { BugReportsPanel } from './components/BugReportsPanel';
+import { ApparatusNotes } from './components/ApparatusNotes';
+import { apparatusEntryToText } from './lib/apparatus';
 import { BibliographyIndex, BiblioReplacement, BiblioApplyResult } from './components/BibliographyIndex';
 import { auth, loginWithGoogle, logout } from './lib/firebase';
 import { onAuthStateChanged, User } from 'firebase/auth';
@@ -4919,7 +4921,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
           revisions: Array.isArray((m as any).revisions) ? (m as any).revisions : [],
           apparatus: m.apparatus || '',
           testo_tradotto: Array.isArray(m.apparatus)
-            ? (m.apparatus as any[]).map((e: any) => `${e.loc}: ${e.note}`).join('\n')
+            ? (m.apparatus as any[]).map((e: any) => apparatusEntryToText(e)).join('\n')
             : (m.apparatus || ''),
           traduzioni: Array.isArray(m.traduzioni) ? m.traduzioni : [],
           note_interne: m.note_interne || '',
@@ -7571,8 +7573,11 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                              })()}
                              {hasApparatusContent(selectedMonumento.apparatus) && (
                                <div className="bg-sidebar/20 border border-border/40 p-6 rounded-sm font-sans text-xs leading-relaxed text-muted block">
-                                 <div className="text-[9px] font-sans font-bold uppercase tracking-widest text-muted mb-2 font-semibold">Apparatus Critico</div>
-                                 <Highlight text={stripXml(selectedMonumento.apparatus)} query={filters.searchText} />
+                                 <div className="text-[9px] font-sans font-bold uppercase tracking-widest text-muted mb-3 font-semibold">Apparatus Critico</div>
+                                 <ApparatusNotes
+                                   value={selectedMonumento.apparatus}
+                                   render={t => <Highlight text={t} query={filters.searchText} />}
+                                 />
                                </div>
                              )}
                            </div>
@@ -7796,9 +7801,11 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                     {hasApparatusContent(m.apparatus) && (
                       <section>
                         <h5 className="text-[9px] font-bold uppercase text-muted underline underline-offset-4 mb-3 font-sans">Apparatus Critico</h5>
-                        <p className="text-xs font-mono leading-relaxed text-muted whitespace-pre-wrap">
-                          <Highlight text={stripXml(m.apparatus)} query={filters.searchText} />
-                        </p>
+                        <ApparatusNotes
+                          className="text-xs leading-relaxed text-muted"
+                          value={m.apparatus}
+                          render={t => <Highlight text={t} query={filters.searchText} />}
+                        />
                       </section>
                     )}
                     <section>

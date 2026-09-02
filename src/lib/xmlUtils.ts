@@ -1,3 +1,4 @@
+import { apparatusEntryToText } from './apparatus';
 import { Monumento, Traduzione, Bibliografia, OrigDate, IconographyData, CultAttestation } from "../types";
 import { canonicalDivinityName } from "./divinityAliases";
 import { canonicalEpithet } from "./epithetAliases";
@@ -644,14 +645,49 @@ function parseTeiElement(teiString: string): Monumento {
     if (refMatch) scrittura_ref = refMatch[1];
   }
 
-  // 13. Hand notes (letter heights)
+  // 13. Hand notes: altezza delle lettere (<dimensions type="letterHeight">)
+  //     e note paleografiche vere e proprie (<p>), tenute separate.
   let scrittura_note = "";
+  let altezza_lettere = "";
+  let altezza_lettere_unita = "";
   const handPMatch = teiString.match(/<handDesc>[\s\S]*?<handNote[^>]*>([\s\S]*?)<\/handNote>/);
   if (handPMatch) {
-    // Extract first <p> if present, otherwise use full content
     const handContent = handPMatch[1];
+    const heightMatch = handContent.match(/<height([^>]*)>([\s\S]*?)<\/height>/);
+    if (heightMatch) {
+      altezza_lettere = unescapeXml(heightMatch[2].trim());
+      const unitMatch = heightMatch[1].match(/unit="([^"]*)"/);
+      altezza_lettere_unita = unitMatch ? unitMatch[1] : "cm";
+    }
+    // Extract first <p> if present, otherwise use full content
     const handP = handContent.match(/<p>([\s\S]*?)<\/p>/);
-    scrittura_note = resolveXmlTextWithPtrs(handP ? handP[1].trim() : handContent.trim()).resolvedText;
+    const noteRaw = resolveXmlTextWithPtrs(
+      handP ? handP[1].trim() : handContent.replace(/<dimensions[\s\S]*?<\/dimensions>/, '').trim()
+    ).resolvedText;
+    // Retrocompatibilità: schede vecchie con la misura scritta in prosa dentro il
+    // <p> ("Height of letters: 0,35 cm." / "Altezza delle lettere: 2 cm.").
+    const legacy = noteRaw.match(/^\s*(?:Height of letters|Altezza delle lettere)\s*:\s*([\s\S]*)$/i);
+    if (legacy) {
+      const rest = legacy[1].trim().replace(/\.\s*$/, '').trim();
+      if (/DA_COMPILARE/i.test(rest)) {
+        // "DA_COMPILARE (dimensioni mai fornite da Hardie)": la misura manca,
+        // ma l'eventuale spiegazione fra parentesi è una nota paleografica.
+        const paren = rest.match(/\(([^)]*)\)/);
+        if (paren) scrittura_note = paren[1].trim();
+      } else if (!altezza_lettere) {
+        const withUnit = rest.match(/^(.*?)\s*(cm|mm|m)\b\.?\s*([\s\S]*)$/);
+        if (withUnit) {
+          altezza_lettere = withUnit[1].trim();
+          altezza_lettere_unita = withUnit[2];
+          scrittura_note = withUnit[3].trim();
+        } else {
+          altezza_lettere = rest;
+          altezza_lettere_unita = "cm";
+        }
+      }
+    } else {
+      scrittura_note = noteRaw;
+    }
   }
 
   // 14. Place definitions
@@ -1129,7 +1165,7 @@ function parseTeiElement(teiString: string): Monumento {
   }
 
   // 21. Apparatus
-  let apparatus: { loc: string; note: string }[] | string = [];
+  let apparatus: { loc: string; note: string; source?: string }[] | string = [];
   const appMatch = teiString.match(/<div type="apparatus"[^>\/]*>([\s\S]*?)<\/div>/);
   if (appMatch) {
     const appContent = appMatch[1].trim();
@@ -1137,17 +1173,21 @@ function parseTeiElement(teiString: string): Monumento {
       apparatus = [];
     } else {
       const appTagRegex = /<app\s+[^>]*loc="([^"]*)"[^>]*>([\s\S]*?)<\/app>/g;
-      const entries: { loc: string; note: string }[] = [];
+      const entries: { loc: string; note: string; source?: string }[] = [];
       let tagMatch;
       while ((tagMatch = appTagRegex.exec(appContent)) !== null) {
         const loc = unescapeXml(tagMatch[1].trim());
         const innerContent = tagMatch[2];
         let note = "";
+        // @resp sulla <note>: il nome dell'editore che propone la lezione.
+        let source = "";
 
         // Format 1: <note> only (52.xml style)
-        const noteMatch = innerContent.match(/<note[^>]*>([\s\S]*?)<\/note>/);
+        const noteMatch = innerContent.match(/<note([^>]*)>([\s\S]*?)<\/note>/);
         if (noteMatch) {
-          note = resolveXmlTextWithPtrs(noteMatch[1].trim()).resolvedText;
+          note = resolveXmlTextWithPtrs(noteMatch[2].trim()).resolvedText;
+          const respMatch = noteMatch[1].match(/\bresp="([^"]*)"/);
+          if (respMatch) source = unescapeXml(respMatch[1]).replace(/^#/, '').trim();
         } else {
           // Format 2: <lem>/<rdg> (IGCyr style)
           const lemMatch = innerContent.match(/<lem[^>]*>([\s\S]*?)<\/lem>/);
@@ -1172,7 +1212,7 @@ function parseTeiElement(teiString: string): Monumento {
             note = resolveXmlTextWithPtrs(innerContent.trim()).resolvedText;
           }
         }
-        if (note) entries.push({ loc, note });
+        if (note) entries.push(source ? { loc, note, source } : { loc, note });
       }
       if (entries.length > 0) {
         apparatus = entries;
@@ -1327,6 +1367,8 @@ function parseTeiElement(teiString: string): Monumento {
     scrittura,
     scrittura_ref,
     scrittura_note,
+    altezza_lettere,
+    altezza_lettere_unita,
     citta,
     place_ref_ancient,
     luogo_rit,
@@ -1354,7 +1396,7 @@ function parseTeiElement(teiString: string): Monumento {
     revisions,
     editorialStatus,
     apparatus,
-    testo_tradotto: Array.isArray(apparatus) ? apparatus.map(e => `${e.loc}: ${e.note}`).join('\n') : apparatus,
+    testo_tradotto: Array.isArray(apparatus) ? apparatus.map(apparatusEntryToText).join('\n') : apparatus,
     traduzioni,
     note_interne,
     note_interne_rawXml,
@@ -1519,6 +1561,12 @@ export function monumentiToXml(monumenti: Monumento[]): string {
     
     block += `                        <handDesc>\n`;
     block += `                            <handNote>\n`;
+    if ((m.altezza_lettere || '').trim()) {
+      const lhUnit = (m.altezza_lettere_unita || 'cm').trim() || 'cm';
+      block += `                                <dimensions type="letterHeight">\n`;
+      block += `                                    <height unit="${escapeXml(lhUnit)}">${escapeXml(m.altezza_lettere!.trim())}</height>\n`;
+      block += `                                </dimensions>\n`;
+    }
     block += `                                <p>${escapeXml(m.scrittura_note || '')}</p>\n`;
     block += `                            </handNote>\n`;
     block += `                        </handDesc>\n`;
@@ -1666,7 +1714,10 @@ export function monumentiToXml(monumenti: Monumento[]): string {
       block += `            <div type="apparatus">\n`;
       if (Array.isArray(appVal)) {
         for (const entry of appVal as any[]) {
-          block += `                <app loc="${escapeXml(entry.loc)}"><note>${escapeXml(entry.note)}</note></app>\n`;
+          const resp = entry.source && String(entry.source).trim()
+            ? ` resp="${escapeXml(String(entry.source).trim())}"`
+            : '';
+          block += `                <app loc="${escapeXml(entry.loc)}"><note${resp}>${escapeXml(entry.note)}</note></app>\n`;
         }
       } else if (typeof appVal === 'string') {
         if (appVal.includes("<")) {

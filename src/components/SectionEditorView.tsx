@@ -1,3 +1,4 @@
+import { toApparatusRow } from '../lib/apparatus';
 import React, { useState, useEffect, useMemo, useRef, useId, ChangeEvent } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import {
@@ -1235,19 +1236,30 @@ function renderSectionForm(
           </div>
         );
       }
-      const update = (i: number, patch: Partial<{ loc: string; note: string }>) =>
-        set('apparatus', entries.map((r, j) => j === i ? { ...r, ...patch } : r));
+      // Le voci storiche hanno lezione e lettore schiacciati in un'unica stringa:
+      // qui si mostrano già divisi, e la divisione viene fissata alla prima modifica.
+      const rows = entries.map(e => ({ ...toApparatusRow(e), locRaw: e.loc }));
+      const update = (i: number, patch: Partial<{ loc: string; note: string; source: string }>) =>
+        set('apparatus', entries.map((r, j) => {
+          if (j !== i) return r;
+          const cur = toApparatusRow(r);
+          return { loc: r.loc, note: cur.lezione, source: cur.lettore, ...patch };
+        }));
       return (
         <div className="space-y-3 max-w-3xl">
-          {entries.map((a, i) => (
-            <div key={i} className="flex items-start gap-3">
-              <TextInput className="w-20" value={a.loc} onChange={e => update(i, { loc: e.target.value })} placeholder="r. 1" />
-              <TextInput className="flex-1" value={a.note} onChange={e => update(i, { note: e.target.value })} placeholder="Μὲς lapis pro Μὴν…" />
+          <div className="grid grid-cols-[5rem_1fr_10rem_2.25rem] gap-3 text-[10px] font-sans uppercase tracking-[0.12em] text-muted/60">
+            <span>Riga</span><span>Lezione</span><span>Lettore</span><span />
+          </div>
+          {rows.map((a, i) => (
+            <div key={i} className="grid grid-cols-[5rem_1fr_10rem_2.25rem] gap-3 items-start">
+              <TextInput value={a.locRaw} onChange={e => update(i, { loc: e.target.value })} placeholder="5" />
+              <TextInput value={a.lezione} onChange={e => update(i, { note: e.target.value })} placeholder="Μὲς lapis pro Μὴν…" />
+              <TextInput value={a.lettore} onChange={e => update(i, { source: e.target.value })} placeholder="Lane" />
               <button onClick={() => set('apparatus', entries.filter((_, j) => j !== i))} className="p-2 text-muted/50 hover:text-red-500 transition-colors"><Trash2 className="w-4 h-4" /></button>
             </div>
           ))}
           <button
-            onClick={() => set('apparatus', [...entries, { loc: '', note: '' }])}
+            onClick={() => set('apparatus', [...entries, { loc: '', note: '', source: '' }])}
             className="inline-flex items-center gap-1.5 text-xs font-sans font-semibold uppercase tracking-[0.12em] text-accent hover:text-accent/70 transition-colors"
           >
             <Plus className="w-3.5 h-3.5" /> Aggiungi nota di apparato

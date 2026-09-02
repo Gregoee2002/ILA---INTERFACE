@@ -160,7 +160,8 @@ export interface Monumento {
   responsabili?: Responsabile[];
   note_interne?: string;
   note_interne_rawXml?: string;
-  apparatus?: { loc: string; note: string }[] | string;
+  // loc = riga, note = lezione, source = chi la legge così (reso in maiuscoletto)
+  apparatus?: { loc: string; note: string; source?: string }[] | string;
   testo_tradotto?: string; // Kept for backwards compatibility if needed elsewhere
   
   // Custom new fields for enhanced TEI coverage
@@ -179,6 +180,10 @@ export interface Monumento {
   scrittura_ref?: string;
   scrittura?: string;
   scrittura_note?: string;
+  /** Altezza delle lettere (solo la misura o l'intervallo, senza unità): "2,5", "2,5–3", "ca. 1,5". */
+  altezza_lettere?: string;
+  /** Unità di misura dell'altezza delle lettere (default: cm). */
+  altezza_lettere_unita?: string;
   place_ref_ancient?: string;
   place_ref_modern?: string;
   origDates?: OrigDate[];
