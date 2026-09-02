@@ -49,6 +49,7 @@ import { ICONOGRAPHY_LABELS } from './lib/iconographyLabels';
 import { labelEvidence, labelUnit, labelType, labelMaterial, labelInscriptionType } from './lib/vocabLabels';
 import { Monumento, FilterState, SortField, Bibliografia, EntryRegistro, BugReport, EDITORIAL_STATUS_LABELS } from './types';
 import { monumentiToXml, xmlToMonumenti, formatIlaLabel, splitDivineKey } from './lib/xmlUtils';
+import { buildPhiUrl } from './lib/extRefs';
 import { buildDivinityIndex, buildOnomasticaIndex, buildClassificationAudit, DivinityStats, OnomasticaStats } from './lib/epithetIndex';
 import { PleiadesMap } from './components/PleiadesMap';
 // Leaflet + markercluster sono pesanti e servono solo nella vista Mappa:
@@ -7220,6 +7221,26 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                                   </span>
                                 )
                               )}
+                              {/* Numeri PHI: link diretto a Packard Humanities */}
+                              {(selectedMonumento.phi || []).filter(v => v?.trim()).map((v, idx) => {
+                                const url = buildPhiUrl(v);
+                                return url ? (
+                                  <a
+                                    key={`phi-${idx}`}
+                                    href={url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="inline-flex items-center gap-1 bg-sidebar text-muted hover:text-accent text-[10px] font-bold px-2 py-0.5 rounded-sm uppercase tracking-tighter shadow-sm transition-colors"
+                                    title="Apri la scheda su PHI Greek Inscriptions"
+                                  >
+                                    PHI {v} <ExternalLink className="h-2.5 w-2.5" />
+                                  </a>
+                                ) : (
+                                  <span key={`phi-${idx}`} className="bg-sidebar text-muted text-[10px] font-bold px-2 py-0.5 rounded-sm uppercase tracking-tighter">
+                                    PHI {v}
+                                  </span>
+                                );
+                              })}
                               {/* Altri repertori esterni (EDCS, EDH, …), stessa resa dei TM */}
                               {(selectedMonumento.extRefs || []).filter(r => r.type?.trim() && r.value?.trim()).map((r, idx) => (
                                 r.url?.trim() ? (

@@ -74,6 +74,14 @@ export const EXT_REF_REPOS: ExtRefRepo[] = [
   { type: 'IK', label: 'Inschriften griechischer Städte aus Kleinasien', placeholder: 'IK 17,1, 3252' },
 ];
 
+/** Link alla scheda PHI (Packard Humanities) da un identificativo nella forma
+ *  "PH260619" o "260619": il campo PHI ha un campo proprio nella sezione
+ *  Pubblicazione, ma il link si costruisce con la stessa ricetta dei repertori. */
+export function buildPhiUrl(value: string): string {
+  const id = digits(value);
+  return id ? `https://inscriptions.packhum.org/text/${id}` : '';
+}
+
 /** Normalizza la sigla in un token valido come @type di <idno> (TEI:
  *  data.enumerated non ammette spazi): "Repertorio Mio" → "Repertorio-Mio". */
 export function normalizeExtRefType(type: string): string {

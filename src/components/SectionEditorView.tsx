@@ -929,6 +929,14 @@ function renderSectionForm(
             <FieldLabel>Link TM</FieldLabel>
             <TextInput value={m.tmLink || ''} onChange={e => set('tmLink', e.target.value)} placeholder="https://www.trismegistos.org/text/…" />
           </div>
+          <div className="md:col-span-2">
+            <FieldLabel hint="PH260619 — uno per riga, Invio per aggiungere">Numeri PHI</FieldLabel>
+            <ChipListEditor
+              values={m.phi || []}
+              onChange={v => set('phi', v)}
+              placeholder="PH260619"
+            />
+          </div>
           <div className="md:col-span-2 border-t border-line/40 pt-4">
             <FieldLabel hint="EDCS, EDH, EDR… sigle nuove ammesse">Altri repertori esterni</FieldLabel>
             <p className="text-[11px] text-muted/60 mb-3">
