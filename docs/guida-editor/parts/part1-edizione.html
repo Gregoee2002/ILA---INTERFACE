@@ -125,6 +125,21 @@ dall'editore, oppure lacune non colmate.</p>
 </div>
 
 <div class="action">
+  <div class="action-head"><span class="name">Integrazione a ridosso di lacuna</span><span class="glyph">[--- αβγ]</span></div>
+  <div class="action-body">
+    <p class="when"><b>Quando:</b> il testo integrato confina, <b>dentro la stessa parentesi quadra</b>, con una porzione perduta e non ricostruibile — la notazione a stampa <span class="greek">[--- </span>αβγ<span class="greek">]</span>. Seleziona solo le lettere che integri: la lacuna la aggiunge l'azione. Le parentesi quadre eventualmente incluse nella selezione vengono consumate.</p>
+    <table class="field-table">
+      <tr><th>Parametro</th><th>Valori</th><th>Effetto</th></tr>
+      <tr><td>Lacuna</td><td>prima <span class="greek">[--- αβγ]</span> / dopo <span class="greek">[αβγ ---]</span> / prima e dopo <span class="greek">[--- αβγ ---]</span></td><td>posizione del <code>&lt;gap&gt;</code> rispetto al testo integrato</td></tr>
+      <tr><td>Unità della lacuna</td><td>character / line</td><td>sul <code>&lt;gap&gt;</code> generato</td></tr>
+    </table>
+    <pre>&lt;supplied reason="lost"&gt;&lt;gap reason="lost" extent="unknown" unit="character"/&gt; <span class="greek">θεοῖσι</span>&lt;/supplied&gt;</pre>
+  </div>
+</div>
+
+<div class="callout">Il <code>&lt;gap&gt;</code> figlio diretto di <code>&lt;supplied&gt;</code> non stampa parentesi quadre proprie: le fornisce già il <code>&lt;supplied&gt;</code> che lo contiene. La resa è una parentesi sola — <span class="greek">[--- θεοῖσι]</span>, non <span class="greek">[[---] θεοῖσι]</span>. Vale in tutte e tre le viste (superficie dell'editor, anteprima, trascrizione pubblicata).</div>
+
+<div class="action">
   <div class="action-head"><span class="name">Testo da editori precedenti</span><span class="glyph">[K&amp;P]</span></div>
   <div class="action-body">
     <p class="when"><b>Quando:</b> la pietra è oggi danneggiata o perduta in quel punto, ma un editore precedente (es. Keil &amp; Premerstein) l'aveva letta per intero — è una <b>testimonianza</b>, non una congettura tua. Distinguila sempre dall'integrazione ordinaria.</p>
