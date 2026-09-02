@@ -19,6 +19,23 @@ function escapeXml(unsafe: any): string {
     .replace(/'/g, "&apos;");
 }
 
+/** xml:id deve essere un NCName: niente spazi, niente due punti, primo carattere
+ *  lettera o underscore. Le persone del corpus sono identificate da etichette
+ *  leggibili ("Apollonios figlio di Menis", "Antiochos (padre)", "*lia figlia di
+ *  Poplios"), che restano intatte in @key e nell'indice onomastico: qui se ne
+ *  ricava soltanto la forma normalizzata da mettere in xml:id, altrimenti la
+ *  scheda esportata non passa la validazione EpiDoc (Jing: "value of attribute
+ *  of type ID contained multiple tokens"). */
+export function toXmlId(label: string): string {
+  const base = String(label || '')
+    .normalize('NFC')
+    .replace(/[^\p{L}\p{N}_.-]+/gu, '-')
+    .replace(/-{2,}/g, '-')
+    .replace(/^[^\p{L}_]+/u, '')
+    .replace(/[-.]+$/, '');
+  return base || 'persona';
+}
+
 function unescapeXml(unsafe: string): string {
   if (!unsafe) return "";
   return unsafe
@@ -1571,8 +1588,15 @@ export function monumentiToXml(monumenti: Monumento[]): string {
       if (m.persone && m.persone.length > 0) {
         block += `            <particDesc>\n`;
         block += `                <listPerson>\n`;
+        const usedPersonIds = new Set<string>();
         for (const p of m.persone) {
-          block += `                    <person xml:id="${escapeXml(p.xmlId)}">\n`;
+          // Due etichette diverse possono normalizzarsi allo stesso NCName: gli
+          // xml:id devono restare unici nel documento, quindi si numerano.
+          const baseId = toXmlId(p.xmlId);
+          let personId = baseId;
+          for (let n = 2; usedPersonIds.has(personId); n++) personId = `${baseId}-${n}`;
+          usedPersonIds.add(personId);
+          block += `                    <person xml:id="${escapeXml(personId)}">\n`;
           block += `                        <persName type="attested"${p.key ? ` key="${escapeXml(p.key)}"` : ''}>\n`;
           block += `                            <name${p.nymRef ? ` nymRef="${escapeXml(p.nymRef)}"` : ''}>${escapeXml(p.name)}</name>\n`;
           block += `                        </persName>\n`;
