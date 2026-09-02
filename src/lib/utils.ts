@@ -30,6 +30,30 @@ export function gapDotCount(quantity: unknown): number {
 }
 
 /**
+ * Glifo di una lacuna `<gap>` per tutti e tre i renderer (EpiDocRenderer in
+ * App.tsx, MarkupText, EditionMarkupEditor) — dopo BUG-06 la resa dev'essere
+ * identica ovunque.
+ *
+ * `insideSupplied` = il gap è figlio diretto di un `<supplied>` (notazione
+ * `[--- θεοῖσι]`: un unico tratto perduto, parte non integrabile + parte
+ * integrata). In quel caso il gap NON stampa parentesi quadre proprie: le
+ * fornisce già il `<supplied>` che lo contiene. Fuori da `<supplied>` il gap
+ * porta le sue: `[- - -]`, `[- ca. 5 -]`, `[- 2-4 -]`.
+ */
+export function gapGlyph(
+  opts: { reason?: string | null; quantity?: string | number | null; atLeast?: string | null; atMost?: string | null },
+  insideSupplied = false,
+): string {
+  if (opts.reason === 'illegible') return '·'.repeat(gapDotCount(opts.quantity));
+  let inner: string;
+  if (opts.quantity) inner = `ca. ${opts.quantity}`;
+  else if (opts.atLeast && opts.atMost) inner = `${opts.atLeast}-${opts.atMost}`;
+  else inner = '- - -';
+  if (insideSupplied) return inner;
+  return inner === '- - -' ? '[- - -]' : `[- ${inner} -]`;
+}
+
+/**
  * Normalizza per confronto case/accent-insensitive (autocomplete, matching di
  * vocabolari). Alias storico di foldAscii da src/lib/textNorm.ts \u2014 unico
  * normalizzatore del progetto (BUG-13). Nuovi call site importino da textNorm.

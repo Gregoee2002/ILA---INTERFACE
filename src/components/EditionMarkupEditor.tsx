@@ -5,7 +5,7 @@ import {
   Plus, Trash2, Check, X, AlertTriangle, Eye, Code2,
   Loader2, Stethoscope, ChevronLeft, Sparkles, CornerDownLeft, Search
 } from 'lucide-react';
-import { cn, stripAccents, EASE_OUT, gapDotCount } from '../lib/utils';
+import { cn, stripAccents, EASE_OUT, gapGlyph } from '../lib/utils';
 import { ErrorBoundary } from './ErrorBoundary';
 import {
   MarkupToken, TokenPath, MarkupAction, ValidationIssue, EpithetScanIssue, LbInfo,
@@ -513,10 +513,12 @@ const TokenFlow: React.FC<{
   lbByPath: Map<string, LbInfo>;
   lbCount: number;
   preview?: boolean;
+  /** nome dell'elemento che racchiude questo flusso (resa contestuale: gap dentro supplied) */
+  parentName?: string;
   onElClick?: (path: TokenPath, token: MarkupToken, ev: React.MouseEvent) => void;
   onToggleBreak?: (info: LbInfo) => void;
   onDeleteLb?: (info: LbInfo) => void;
-}> = ({ tokens, basePath, lbByPath, lbCount, preview, onElClick, onToggleBreak, onDeleteLb }) => (
+}> = ({ tokens, basePath, lbByPath, lbCount, preview, parentName, onElClick, onToggleBreak, onDeleteLb }) => (
   <>
     {tokens.map((t, i) => {
       const path = [...basePath, i];
@@ -559,7 +561,7 @@ const TokenFlow: React.FC<{
         );
       }
       return (
-        <ElementChrome key={i} token={t} path={path} preview={preview} onElClick={onElClick}
+        <ElementChrome key={i} token={t} path={path} preview={preview} parentName={parentName} onElClick={onElClick}
           lbByPath={lbByPath} lbCount={lbCount} onToggleBreak={onToggleBreak} onDeleteLb={onDeleteLb} />
       );
     })}
@@ -570,15 +572,16 @@ const ElementChrome: React.FC<{
   token: MarkupToken & { kind: 'el' };
   path: TokenPath;
   preview?: boolean;
+  parentName?: string;
   onElClick?: (path: TokenPath, token: MarkupToken, ev: React.MouseEvent) => void;
   lbByPath: Map<string, LbInfo>;
   lbCount: number;
   onToggleBreak?: (info: LbInfo) => void;
   onDeleteLb?: (info: LbInfo) => void;
-}> = ({ token: t, path, preview, onElClick, lbByPath, lbCount, onToggleBreak, onDeleteLb }) => {
+}> = ({ token: t, path, preview, parentName, onElClick, lbByPath, lbCount, onToggleBreak, onDeleteLb }) => {
   const click = preview || !onElClick ? undefined : (e: React.MouseEvent) => onElClick(path, t, e);
   const base = preview ? '' : 'cursor-pointer hover:bg-accent/10 rounded transition-colors';
-  const kids = <TokenFlow tokens={t.children} basePath={path} preview={preview} onElClick={onElClick}
+  const kids = <TokenFlow tokens={t.children} basePath={path} preview={preview} parentName={t.name} onElClick={onElClick}
     lbByPath={lbByPath} lbCount={lbCount} onToggleBreak={onToggleBreak} onDeleteLb={onDeleteLb} />;
   const a = t.attrs;
 
@@ -589,10 +592,7 @@ const ElementChrome: React.FC<{
       return <span onClick={click} title={a.reason === 'omitted' ? 'Omesse dal lapicida' : 'Integrazione (lacuna)'} className={cn('text-muted px-0.5', base)}>{open}{kids}{close}</span>;
     }
     case 'gap': {
-      let g = '[- - -]';
-      if (a.reason === 'illegible') g = '·'.repeat(gapDotCount(a.quantity));
-      else if (a.quantity) g = `[- ca. ${a.quantity} -]`;
-      else if (a.atLeast) g = `[- ${a.atLeast}-${a.atMost} -]`;
+      const g = gapGlyph(a, parentName === 'supplied');
       return <span onClick={click} title="Lacuna" className={cn('font-mono text-sm tracking-widest text-muted px-0.5', base)}>{g}</span>;
     }
     case 'unclear':

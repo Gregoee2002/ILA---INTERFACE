@@ -44,7 +44,7 @@ import {
   Tags,
   ScrollText
 } from 'lucide-react';
-import { cn, EASE_OUT, EASE_IN, SPRING_SNAPPY, SPRING_SOFT, gapDotCount } from './lib/utils';
+import { cn, EASE_OUT, EASE_IN, SPRING_SNAPPY, SPRING_SOFT, gapGlyph } from './lib/utils';
 import { ICONOGRAPHY_LABELS } from './lib/iconographyLabels';
 import { labelEvidence, labelUnit, labelType, labelMaterial, labelInscriptionType } from './lib/vocabLabels';
 import { Monumento, FilterState, SortField, Bibliografia, EntryRegistro, BugReport, EDITORIAL_STATUS_LABELS } from './types';
@@ -3160,21 +3160,14 @@ const EpiDocRenderer = ({ xml, query, onTermClick, divinityIndex, onomasticaInde
           );
         }
         case 'gap': {
-          let gapText = '[---]';
+          const parentName = (el.parentElement && (el.parentElement.localName || el.parentElement.tagName || '').toLowerCase()) || '';
+          const inSupplied = parentName === 'supplied';
+          const atLeast = el.getAttribute('atLeast') || '';
+          const atMost = el.getAttribute('atMost') || '';
+          const gapText = gapGlyph({ reason: reasonAttr, quantity: quantityAttr, atLeast, atMost }, inSupplied);
           let tooltipText = 'Lacuna nel testo';
-          if (reasonAttr === 'illegible') {
-            tooltipText = 'Testo illeggibile';
-            gapText = '·'.repeat(gapDotCount(quantityAttr));
-          } else if (quantityAttr) {
-            gapText = `[- ca. ${quantityAttr} -]`;
-          } else {
-            const atLeast = el.getAttribute('atLeast') || '';
-            const atMost = el.getAttribute('atMost') || '';
-            if (atLeast && atMost) {
-              gapText = `[- ${atLeast}-${atMost} -]`;
-              tooltipText = `Lacuna di ${atLeast}-${atMost} caratteri`;
-            }
-          }
+          if (reasonAttr === 'illegible') tooltipText = 'Testo illeggibile';
+          else if (!quantityAttr && atLeast && atMost) tooltipText = `Lacuna di ${atLeast}-${atMost} caratteri`;
           return (
             <span 
               key={key} 

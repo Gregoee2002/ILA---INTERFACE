@@ -518,6 +518,23 @@ const exOf = (typed: string | undefined, fromText: string) =>
 const DOT_BELOW = /\u0323/g;
 
 
+/**
+ * Figli di un <supplied reason="lost"> che nella stessa parentesi quadra
+ * contiene anche una lacuna non integrabile: notazione `[--- αβγ]` (lacuna
+ * prima), `[αβγ ---]` (dopo) o `[--- αβγ ---]` (entrambi i lati). Il <gap> è
+ * figlio diretto del <supplied>, così i renderer non gli fanno stampare
+ * parentesi quadre proprie (una sola coppia, quella del supplied).
+ */
+function suppliedGapChildren(p: Record<string, string>, inner: MarkupToken[]): MarkupToken[] {
+  const unit = p.unit === "line" ? "line" : "character";
+  const gap = () => el("gap", { reason: "lost", extent: "unknown", unit }, [], true);
+  const pos = (p.pos || "").startsWith("dopo") ? "after"
+    : (p.pos || "").startsWith("prima e") ? "both" : "before";
+  if (pos === "after") return [...inner, txt(" "), gap()];
+  if (pos === "both") return [gap(), txt(" "), ...inner, txt(" "), gap()];
+  return [gap(), txt(" "), ...inner];
+}
+
 /** Nome frammentario (casi-complessi §1.2): <seg part> + <gap> nell'ordine giusto. */
 function buildFragmentName(p: Record<string, string>, inner: MarkupToken[]): MarkupToken {
   const part = (p.part || "I").charAt(0); // "I" | "F" | "M"
@@ -616,6 +633,17 @@ export const MARKUP_ACTIONS: MarkupAction[] = [
     ],
     build: (s, p) => el("supplied", { reason: "lost", ...(p.cert?.startsWith("dubbia") ? { cert: "low" } : {}) }, [txt(s.replace(/^\[/, "").replace(/\]$/, ""))]),
     compose: (slice, p) => el("supplied", { reason: "lost", ...(p.cert?.startsWith("dubbia") ? { cert: "low" } : {}) }, stripWrapping(slice, [["[", "]"]])),
+  },
+  {
+    id: "supplied_lost_gap", label: "Integrazione a ridosso di lacuna", glyph: "[--- αβγ]",
+    group: "Lacune e integrazioni", mode: "wrap",
+    hint: "Testo integrato dall'editore con, nella stessa parentesi quadra, una lacuna di lunghezza ignota non integrabile (notazione [--- αβγ]). Seleziona solo le lettere integrate.",
+    params: [
+      { id: "pos", label: "Lacuna", type: "select", options: ["prima [--- αβγ]", "dopo [αβγ ---]", "prima e dopo [--- αβγ ---]"] },
+      { id: "unit", label: "Unità della lacuna", type: "select", options: ["character", "line"] },
+    ],
+    build: (s, p) => el("supplied", { reason: "lost" }, suppliedGapChildren(p, [txt(s.replace(/^\[/, "").replace(/\]$/, ""))])),
+    compose: (slice, p) => el("supplied", { reason: "lost" }, suppliedGapChildren(p, stripWrapping(slice, [["[", "]"]]))),
   },
   {
     id: "supplied_previous", label: "Testo da editori precedenti", glyph: "[K&P]",

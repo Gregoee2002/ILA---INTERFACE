@@ -1,5 +1,5 @@
 import React from 'react';
-import { cn, gapDotCount } from '../lib/utils';
+import { cn, gapGlyph } from '../lib/utils';
 import { MarkupToken, safeParseLitTesto } from '../lib/litMarkup';
 import { TokenPath } from '../lib/leidenMarkup';
 import { CAMPO_COLOR, LaresCampo } from '../lib/litSources';
@@ -34,14 +34,16 @@ interface FlowProps {
   contatore: { n: number };
   /** in scrittura: percorso del token padre, per il data-tok dei figli */
   basePath?: TokenPath;
+  /** nome dell'elemento che racchiude questo flusso (per la resa contestuale, es. gap dentro supplied) */
+  parentName?: string;
   onElClick?: (path: TokenPath, token: MarkupToken & { kind: 'el' }, ev: React.MouseEvent) => void;
 }
 
-const Flow: React.FC<FlowProps> = ({ tokens, numeri, contatore, basePath, onElClick }) => {
+const Flow: React.FC<FlowProps> = ({ tokens, numeri, contatore, basePath, parentName, onElClick }) => {
   const editable = !!basePath;
-  const sub = (children: MarkupToken[], path: TokenPath) => (
+  const sub = (children: MarkupToken[], path: TokenPath, parent?: string) => (
     <Flow tokens={children} numeri={numeri} contatore={contatore}
-      basePath={editable ? path : undefined} onElClick={onElClick} />
+      basePath={editable ? path : undefined} parentName={parent} onElClick={onElClick} />
   );
 
   return (
@@ -52,7 +54,7 @@ const Flow: React.FC<FlowProps> = ({ tokens, numeri, contatore, basePath, onElCl
           return <span key={i} data-tok={editable ? JSON.stringify(path) : undefined}>{t.value}</span>;
         }
         const a = t.attrs;
-        const kids = sub(t.children, path);
+        const kids = sub(t.children, path, t.name);
         const click = onElClick ? (e: React.MouseEvent) => {
           // Una selezione in corso vince sempre sul click: aprire il popover
           // dell'elemento chiuderebbe il menu di markup appena evocato.
@@ -88,10 +90,7 @@ const Flow: React.FC<FlowProps> = ({ tokens, numeri, contatore, basePath, onElCl
             );
           }
           case 'gap': {
-            let g = '[- - -]';
-            if (a.reason === 'illegible') g = '·'.repeat(gapDotCount(a.quantity));
-            else if (a.quantity) g = `[- ca. ${a.quantity} -]`;
-            else if (a.atLeast) g = `[- ${a.atLeast}-${a.atMost} -]`;
+            const g = gapGlyph(a, parentName === 'supplied');
             return <span key={i} onClick={click} title="Lacuna della tradizione"
               className={cn('font-mono text-sm tracking-widest text-muted/80', hover)}>{g}</span>;
           }
