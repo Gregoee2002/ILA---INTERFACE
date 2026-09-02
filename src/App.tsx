@@ -4900,6 +4900,8 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
           scrittura: m.scrittura || '',
           scrittura_ref: m.scrittura_ref || '',
           scrittura_note: m.scrittura_note || '',
+          altezza_lettere: m.altezza_lettere || '',
+          altezza_lettere_unita: m.altezza_lettere_unita || '',
           msIdnos: Array.isArray(m.msIdnos) ? m.msIdnos : [],
           // Identifiers
           tm: m.tm || '',
@@ -7358,6 +7360,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                                   )}
                                 </div>
                               )}
+                              {isFilled(selectedMonumento.altezza_lettere) && <div><span className="text-muted uppercase font-bold text-[9px]">Altezza delle lettere:</span> <span className="text-ink font-serif text-xs">{selectedMonumento.altezza_lettere} {selectedMonumento.altezza_lettere_unita || 'cm'}</span></div>}
                               {isFilled(selectedMonumento.scrittura_note) && <div><span className="text-muted uppercase font-bold text-[9px]">Note paleografiche:</span> <span className="text-ink font-serif text-xs">{selectedMonumento.scrittura_note}</span></div>}
 
                               {selectedMonumento.tipo && (

@@ -107,7 +107,7 @@ const SECTION_FIELDS: Record<SectionId, (keyof Monumento)[]> = {
   msIdentifier: ['luogo_cons', 'msIdnos'],
   support: ['dim', 'materiale', 'materialRef', 'tipo', 'tipo_ref', 'dim_altezza', 'dim_larghezza', 'dim_profondita', 'dim_unita'],
   layout: ['layout_desc', 'scrittura', 'scrittura_ref'],
-  hand: ['scrittura_note'],
+  hand: ['altezza_lettere', 'altezza_lettere_unita', 'scrittura_note'],
   origPlace: ['citta', 'luogo_moderno', 'regione', 'place_ref_ancient', 'place_ref_modern', 'origPlace_nota'],
   origDate: ['origDates', 'data', 'data_inizio', 'data_fine'],
   provenance: ['luogo_rit', 'conserv'],
@@ -1034,14 +1034,39 @@ function renderSectionForm(
 
     case 'hand':
       return (
-        <div className="max-w-2xl">
+        <div className="space-y-5 max-w-2xl">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div>
+              <FieldLabel hint="solo la misura, senza unità: «2,5», «2,5–3», «ca. 1,5». Le precisazioni (righe, medie, interlinea) vanno nelle note paleografiche">Altezza delle lettere</FieldLabel>
+              <TextInput
+                value={m.altezza_lettere || ''}
+                onChange={e => set('altezza_lettere', e.target.value)}
+                placeholder="2,5"
+              />
+            </div>
+            <div>
+              <FieldLabel>Unità</FieldLabel>
+              <select
+                value={m.altezza_lettere_unita || 'cm'}
+                style={{ colorScheme: 'light dark' }}
+                className="w-full bg-white/60 dark:bg-white/5 border border-border/50 rounded-lg px-3 py-2 text-sm text-ink font-serif focus:outline-none focus:ring-1 focus:ring-accent/40"
+                onChange={e => set('altezza_lettere_unita', e.target.value)}
+              >
+                <option value="cm">cm</option>
+                <option value="mm">mm</option>
+                <option value="m">m</option>
+              </select>
+            </div>
+          </div>
+          <div>
           <FieldLabel hint="forme delle lettere, legature, abbreviazioni, interpunzione, qualità/regolarità dell'incisione — non la tecnica esecutiva (già in Impaginazione)">Note paleografiche</FieldLabel>
           <TextArea
             rows={3}
             value={m.scrittura_note || ''}
             onChange={e => set('scrittura_note', e.target.value)}
-            placeholder="es. Lettere capitali regolari, alte ca. 2 cm; omega lunato; interpunzione a punto triangolare tra le parole; nessi nelle ultime righe, mano meno accurata"
+            placeholder="es. Lettere capitali regolari; omega lunato; interpunzione a punto triangolare tra le parole; nessi nelle ultime righe, mano meno accurata"
           />
+          </div>
         </div>
       );
 
