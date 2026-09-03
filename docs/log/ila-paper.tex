@@ -201,6 +201,45 @@ dall'utente sia sempre generata direttamente dalla codifica filologica
 sottostante, e non da una rappresentazione parallela soggetta a
 disallineamento.
 
+Lo stesso criterio guida anche gli interventi più recenti di
+affinamento della rappresentazione, rivolti in particolare a due
+attributi che in una prima stesura della codifica restavano mescolati
+a un commento discorsivo più ampio. Il primo riguarda le note
+paleografiche associate a ciascuna epigrafe, che in origine
+contenevano, insieme al commento sulle forme delle lettere, sulle
+legature o sull'interpunzione, anche la misura dell'altezza dei
+caratteri, ereditata nella sua formulazione originaria dall'edizione a
+stampa di riferimento e per questo spesso espressa in inglese
+all'interno di un testo altrimenti redatto in italiano. Si è scelto di
+isolare questa misura in un attributo strutturato a sé, distinto dal
+commento paleografico vero e proprio, cosicché la scheda possa
+mostrare separatamente un dato quantitativo, confrontabile tra voci
+diverse, e un giudizio discorsivo sulla mano del lapicida, che tale
+non è. Le schede compilate secondo la vecchia convenzione restano
+leggibili senza reintervento manuale: la misura viene riconosciuta
+all'interno del testo esistente, tanto nella sua formulazione italiana
+quanto in quella originaria inglese, e ricondotta automaticamente al
+nuovo attributo, cosicché la migrazione dell'intero corpus a questa
+rappresentazione più puntuale non ha richiesto la revisione manuale di
+ciascuna voce.
+
+Un affinamento dello stesso tipo ha interessato l'apparato critico, la
+nota che segnala, per una determinata porzione di testo, letture
+alternative proposte da altri editori. Anche in questo caso
+l'informazione era in origine un unico blocco di prosa (\virg{riga
+cinque: ια secondo Lane}), che mescolava indistintamente tre dati di
+natura diversa --- la collocazione della lettura all'interno del
+testo, la lettura stessa e la fonte a cui va attribuita. Si è scelto
+di scomporre la nota nei tre componenti corrispondenti, presentati
+nella scheda in colonne distinte anziché come un'unica riga di prosa,
+in modo che ciascuna informazione resti autonomamente leggibile e, in
+prospettiva, interrogabile alla stregua degli altri attributi
+epigrafici. Anche in questo caso le voci storiche, prive di
+un'attribuzione esplicita della fonte, vengono scomposte
+automaticamente al momento della lettura, isolando la sequenza di nomi
+propri che tipicamente chiude la nota dal resto del commento, così da
+non richiedere una revisione sistematica del corpus pregresso.
+
 \screenshotplaceholder{8cm}{Esempio di scheda epigrafica nell'interfaccia di consultazione}
 
 \section{Il sistema di marcatura filologica}
@@ -228,6 +267,22 @@ riducendo il rischio di errore nella trascrizione dei fenomeni testuali
 più complessi e rendendo il processo di marcatura accessibile anche a chi
 non abbia una lunga esperienza diretta con la sintassi del formato di
 codifica sottostante.
+
+Un caso specifico, emerso nella pratica quotidiana di trascrizione,
+riguarda la combinazione tra una lacuna materiale del supporto e
+un'integrazione editoriale che occupa, in tutto o in parte, la
+medesima porzione di testo. La convenzione a stampa rende normalmente
+questo fenomeno racchiudendo l'intera sequenza --- lacuna e
+integrazione insieme --- in un'unica coppia di parentesi quadre; una
+prima resa nell'interfaccia trattava invece i due fenomeni come
+indipendenti, producendo due coppie di parentesi annidate l'una
+nell'altra anziché una sola. Si è pertanto introdotta un'azione di
+marcatura dedicata a questo caso, che riconosce quando un'integrazione
+racchiude direttamente una lacuna adiacente e restituisce, coerentemente
+con la convenzione a stampa, un'unica coppia di parentesi per l'intera
+sequenza, evitando una doppia parentesizzazione che, per quanto
+formalmente equivalente, risulterebbe fuorviante per un lettore
+abituato alla notazione tradizionale.
 
 A questo sistema di marcatura mutuato dalla tradizione epigrafica si
 affiancano, in analogia con le proposte già avanzate in altri progetti
@@ -405,6 +460,27 @@ di materiale fotografico del monumento e riporta, oltre al testo
 dell'iscrizione e ai principali attributi epigrafici, un rimando
 puntuale alla codifica filologica sottostante, liberamente
 consultabile e scaricabile.
+
+A questo insieme di rimandi si affianca, per ciascuna epigrafe, un
+ulteriore livello di collegamento verso i principali repertori
+digitali di riferimento per l'epigrafia antica --- tra gli altri, le
+banche dati che raccolgono trascrizioni e immagini su scala regionale
+o tematica, e i grandi indici prosopografici e geografici del mondo
+antico. Ogni riferimento è codificato come una coppia costituita dalla
+sigla del repertorio e dall'identificativo assegnato dalla risorsa
+esterna, da cui l'interfaccia ricava --- per i repertori più diffusi
+--- il collegamento diretto, lasciando comunque la possibilità di
+correggerlo a mano nei casi meno standard. Anche in questo caso si è
+scelto un vocabolario di sigle aperto, anziché un elenco chiuso
+stabilito una volta per tutte: le sigle già presenti nel corpus
+costituiscono l'elenco di base proposto in fase di redazione, ma è
+possibile introdurne di nuove senza dover intervenire sullo schema di
+codifica, secondo lo stesso principio già illustrato a proposito del
+vocabolario iconografico (sottosezione 5.1). Nella scheda, questi
+riferimenti compaiono come elementi cliccabili accanto agli altri
+identificativi bibliografici dell'epigrafe, così da rendere il
+passaggio verso la risorsa esterna corrispondente immediato quanto la
+consultazione di un rimando interno al corpus.
 
 La visualizzazione cronologica applica alla dimensione temporale lo
 stesso principio di trasparenza già adottato altrove nel progetto (si
