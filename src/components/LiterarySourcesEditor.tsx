@@ -97,7 +97,7 @@ const ListaTesti: React.FC<{
             onChange={e => onChange(values.map((x, j) => (j === i ? e.target.value : x)))}
             className={cn(INPUT, 'leading-relaxed custom-scrollbar flex-1')} />
           <button type="button" onClick={() => onChange(values.filter((_, j) => j !== i))}
-            className="p-2 text-muted/40 hover:text-red-500 transition-colors shrink-0" title="Elimina">
+            className="p-2 text-muted/40 hover:text-danger transition-colors shrink-0" title="Elimina">
             <Trash2 className="h-3.5 w-3.5" />
           </button>
         </div>
@@ -130,7 +130,7 @@ const ListaLink: React.FC<{ label: string; values: LinkEsterno[]; onChange: (v: 
               onChange={e => onChange(values.map((x, j) => (j === i ? { ...x, url: e.target.value } : x)))}
               className={cn(INPUT, 'flex-1 font-mono text-xs')} />
             <button type="button" onClick={() => onChange(values.filter((_, j) => j !== i))}
-              className="p-2 text-muted/40 hover:text-red-500 transition-colors shrink-0" title="Elimina">
+              className="p-2 text-muted/40 hover:text-danger transition-colors shrink-0" title="Elimina">
               <Trash2 className="h-3.5 w-3.5" />
             </button>
           </div>
@@ -199,7 +199,7 @@ const OpereEditor: React.FC<{ dataset: LitDataset; onChange: (d: LitDataset) => 
                   {o.titolo && <span className="italic">, {o.titolo}</span>}
                 </span>
                 <span className="text-[11px] font-sans text-muted/60 shrink-0">{o.datazione || '—'}</span>
-                <span className={cn('text-[10px] font-sans tabular-nums shrink-0', uso ? 'text-accent' : 'text-amber-600 dark:text-amber-400')}>
+                <span className={cn('text-[10px] font-sans tabular-nums shrink-0', uso ? 'text-accent' : 'text-warning')}>
                   {uso} passi
                 </span>
               </button>
@@ -253,7 +253,7 @@ const OpereEditor: React.FC<{ dataset: LitDataset; onChange: (d: LitDataset) => 
                     <button type="button" disabled={uso > 0}
                       onClick={() => { onChange({ ...dataset, opere: dataset.opere.filter(x => x.id !== o.id) }); setApertaId(null); }}
                       title={uso > 0 ? `Citata da ${uso} testimonianze: prima vanno spostate` : 'Elimina l\'opera'}
-                      className="inline-flex items-center gap-1.5 text-[10px] font-sans font-bold uppercase tracking-[0.12em] text-muted/50 hover:text-red-500 disabled:opacity-30 disabled:hover:text-muted/50 transition-colors">
+                      className="inline-flex items-center gap-1.5 text-[10px] font-sans font-bold uppercase tracking-[0.12em] text-muted/50 hover:text-danger disabled:opacity-30 disabled:hover:text-muted/50 transition-colors">
                       <Trash2 className="h-3 w-3" /> Elimina
                     </button>
                   </div>
@@ -298,7 +298,7 @@ const TestimoniumEditor: React.FC<{
             {t.edizioneSpecifica || opera.edizione}
           </p>
         ) : (
-          <p className="text-[12px] font-sans text-red-600 dark:text-red-400">
+          <p className="text-[12px] font-sans text-danger">
             Nessuna opera collegata: la testimonianza resta senza datazione, genere ed edizione.
           </p>
         )}
@@ -403,7 +403,7 @@ const TestimoniumEditor: React.FC<{
                 {w.nota && <span className="text-[12px] font-serif italic text-muted/75 flex-1">{w.nota}</span>}
                 <button type="button" title="Riassorbito: togli la riga"
                   onClick={() => onChange({ ...t, termini: t.termini.filter((_, j) => j !== i) })}
-                  className="p-1.5 ml-auto text-muted/40 hover:text-red-500 transition-colors shrink-0">
+                  className="p-1.5 ml-auto text-muted/40 hover:text-danger transition-colors shrink-0">
                   <Trash2 className="h-3.5 w-3.5" />
                 </button>
               </div>
@@ -439,7 +439,7 @@ const TestimoniumEditor: React.FC<{
             : 'Non richiamata da nessun saggio — si legge solo dall\'elenco.'}
         </span>
         <button type="button" onClick={onElimina}
-          className="shrink-0 inline-flex items-center gap-1.5 text-[10px] font-sans font-bold uppercase tracking-[0.12em] text-muted/50 hover:text-red-500 transition-colors">
+          className="shrink-0 inline-flex items-center gap-1.5 text-[10px] font-sans font-bold uppercase tracking-[0.12em] text-muted/50 hover:text-danger transition-colors">
           <Trash2 className="h-3 w-3" /> Elimina testimonianza
         </button>
       </div>
@@ -518,10 +518,10 @@ const TestimonianzeEditor: React.FC<{
                 <ChevronRight className={cn('h-3.5 w-3.5 text-muted/40 transition-transform shrink-0', aperto && 'rotate-90')} />
                 <span className="font-serif text-[14px] text-ink flex-1 min-w-0 truncate">
                   {t.operaRef.id ? <>{t.autore}, <span className="italic">{t.opera}</span> {t.locus}</>
-                    : <span className="text-red-600 dark:text-red-400">opera non collegata — {t.id}</span>}
+                    : <span className="text-danger">opera non collegata — {t.id}</span>}
                 </span>
                 <span className="text-[11px] font-sans text-muted/50 shrink-0 hidden sm:block">{t.datazione}</span>
-                {t.collazione === 'da-collazionare' && <AlertTriangle className="h-3 w-3 text-amber-500 shrink-0" />}
+                {t.collazione === 'da-collazionare' && <AlertTriangle className="h-3 w-3 text-warning shrink-0" />}
               </button>
               {aperto && (
                 <div className="px-4 pb-6 pt-1 bg-sidebar/25">
@@ -572,7 +572,7 @@ const SaggioEditor: React.FC<{
         ))}
         <span className="flex-1" />
         <button type="button" onClick={onElimina}
-          className="inline-flex items-center gap-1.5 text-[10px] font-sans font-bold uppercase tracking-[0.12em] text-muted/40 hover:text-red-500 transition-colors">
+          className="inline-flex items-center gap-1.5 text-[10px] font-sans font-bold uppercase tracking-[0.12em] text-muted/40 hover:text-danger transition-colors">
           <Trash2 className="h-3 w-3" /> Elimina saggio
         </button>
       </div>
@@ -683,7 +683,7 @@ const SaggioEditor: React.FC<{
                   </div>
                 </div>
                 <button type="button" onClick={() => onChange({ ...saggio, nuclei: saggio.nuclei.filter(x => x.id !== n.id) })}
-                  className="p-2 text-muted/40 hover:text-red-500 transition-colors shrink-0"><Trash2 className="h-3.5 w-3.5" /></button>
+                  className="p-2 text-muted/40 hover:text-danger transition-colors shrink-0"><Trash2 className="h-3.5 w-3.5" /></button>
               </div>
             </div>
           ))}
@@ -732,7 +732,7 @@ export const LiterarySourcesEditor: React.FC<Props> = ({
             <BookMarked className="h-4 w-4 shrink-0" style={{ color: 'var(--lit)' }} />
             <h2 className="font-serif font-bold text-ink text-lg leading-none">Redazione delle fonti letterarie</h2>
             <span className={cn('text-[10px] font-sans uppercase tracking-wide px-1.5 py-0.5 rounded-sm',
-              fonte === 'archivio' ? 'text-accent bg-accent/10' : 'text-amber-600 dark:text-amber-400 bg-amber-500/10')}>
+              fonte === 'archivio' ? 'text-accent bg-accent/10' : 'text-warning bg-warning/10')}>
               {fonte === 'archivio' ? 'archivio' : 'seme compilato'}
             </span>
           </div>
@@ -755,13 +755,13 @@ export const LiterarySourcesEditor: React.FC<Props> = ({
         </div>
 
         {errore && (
-          <div className="shrink-0 px-5 md:px-8 py-2 bg-red-500/10 border-b border-red-500/25 text-[12px] font-sans text-red-700 dark:text-red-400 flex items-center gap-2">
+          <div className="shrink-0 px-5 md:px-8 py-2 bg-danger/10 border-b border-danger/25 text-[12px] font-sans text-danger flex items-center gap-2">
             <AlertTriangle className="h-3.5 w-3.5 shrink-0" /> {errore}
           </div>
         )}
         {fonte === 'seme' && (
-          <div className="shrink-0 px-5 md:px-8 py-2 bg-amber-500/[0.07] border-b border-amber-500/20 text-[12px] font-serif text-muted/85 flex items-center gap-2">
-            <AlertTriangle className="h-3.5 w-3.5 text-amber-600 dark:text-amber-400 shrink-0" />
+          <div className="shrink-0 px-5 md:px-8 py-2 bg-warning/10 border-b border-warning/25 text-[12px] font-serif text-muted/85 flex items-center gap-2">
+            <AlertTriangle className="h-3.5 w-3.5 text-warning shrink-0" />
             Stai lavorando sul seme compilato nel bundle: nessuno ha ancora salvato un archivio. Il primo salvataggio lo crea sulla repo dati.
           </div>
         )}
@@ -851,8 +851,8 @@ export const LiterarySourcesEditor: React.FC<Props> = ({
                   problemi.map((p, i) => (
                     <div key={i} className={cn('flex items-start gap-2.5 rounded-lg px-3.5 py-2.5 border text-[13px] font-serif',
                       p.severita === 'errore'
-                        ? 'text-red-700 dark:text-red-400 bg-red-500/8 border-red-500/25'
-                        : 'text-amber-800 dark:text-amber-400 bg-amber-500/8 border-amber-500/25')}>
+                        ? 'text-danger bg-danger/10 border-danger/25'
+                        : 'text-warning bg-warning/10 border-warning/25')}>
                       <AlertTriangle className="h-3.5 w-3.5 mt-0.5 shrink-0" />
                       <span>
                         <span className="font-mono not-italic text-[10px] opacity-60 mr-2">{p.dove}</span>
@@ -929,7 +929,7 @@ const TabellaCopertura: React.FC<{
                   </span>
                   <span className={cn(
                     'text-[10px] font-sans uppercase tracking-wider shrink-0 ml-auto',
-                    c.stato === 'assente' ? 'text-red-600/70 dark:text-red-400/70' : 'text-amber-700/70 dark:text-amber-400/70',
+                    c.stato === 'assente' ? 'text-danger/70' : 'text-warning/70',
                   )}>
                     {STATO_LABEL[c.stato]}
                   </span>

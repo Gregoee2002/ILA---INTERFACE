@@ -313,7 +313,7 @@ const ChipListEditor: React.FC<{ values: string[]; onChange: (v: string[]) => vo
         {values.map((v, i) => (
           <span key={i} className="inline-flex items-center gap-1.5 bg-accent/10 text-accent border border-accent/20 rounded-full px-2.5 py-0.5 text-xs font-serif">
             {v}
-            <button onClick={() => onChange(values.filter((_, j) => j !== i))} className="hover:text-red-500 transition-colors" title="Rimuovi">
+            <button onClick={() => onChange(values.filter((_, j) => j !== i))} className="hover:text-danger transition-colors" title="Rimuovi">
               <X className="w-3 h-3" />
             </button>
           </span>
@@ -591,7 +591,7 @@ export const SectionEditorView: React.FC<Props> = ({ monumenti, effectiveAdmin, 
         </motion.div>
 
         {!effectiveAdmin && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mb-6 flex items-center justify-between gap-3 text-sm text-amber-800 dark:text-amber-400 bg-amber-500/8 border border-amber-500/25 rounded-xl px-4 py-3">
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mb-6 flex items-center justify-between gap-3 text-sm text-warning bg-warning/10 border border-warning/25 rounded-xl px-4 py-3">
             <span className="flex items-center gap-2.5"><ShieldCheck className="w-4 h-4 shrink-0" /> Puoi sfogliare le schede, ma per salvare serve l’accesso come amministratore.</span>
             <button onClick={onLogin} className="inline-flex items-center gap-1.5 shrink-0 rounded-full px-3.5 py-1.5 text-xs font-sans font-bold uppercase tracking-[0.12em] bg-accent text-white hover:shadow-md transition-all">
               <LogIn className="w-3.5 h-3.5" /> Accedi
@@ -600,7 +600,7 @@ export const SectionEditorView: React.FC<Props> = ({ monumenti, effectiveAdmin, 
         )}
 
         {loadError && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mb-6 flex items-start gap-2.5 text-sm text-red-700 dark:text-red-400 bg-red-500/5 border border-red-500/20 rounded-xl px-4 py-3">
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mb-6 flex items-start gap-2.5 text-sm text-danger bg-danger/10 border border-danger/25 rounded-xl px-4 py-3">
             <AlertTriangle className="w-4 h-4 mt-0.5 shrink-0" /> {loadError}
           </motion.div>
         )}
@@ -686,7 +686,7 @@ export const SectionEditorView: React.FC<Props> = ({ monumenti, effectiveAdmin, 
         </div>
         <div className="flex items-center gap-2">
           {!effectiveAdmin && (
-            <button onClick={onLogin} className="inline-flex items-center gap-1.5 text-xs font-sans font-semibold uppercase tracking-[0.14em] text-amber-700 dark:text-amber-400 hover:text-amber-600 transition-colors px-3 py-2">
+            <button onClick={onLogin} className="inline-flex items-center gap-1.5 text-xs font-sans font-semibold uppercase tracking-[0.14em] text-warning hover:opacity-70 transition-colors px-3 py-2">
               <LogIn className="w-3.5 h-3.5" /> Accedi per salvare
             </button>
           )}
@@ -725,7 +725,7 @@ export const SectionEditorView: React.FC<Props> = ({ monumenti, effectiveAdmin, 
               </div>
             )}
             {saveWarnings.map((w, i) => (
-              <div key={i} className="flex items-start gap-2.5 text-sm text-amber-800 dark:text-amber-400 bg-amber-500/8 border border-amber-500/25 rounded-xl px-4 py-2.5 font-serif">
+              <div key={i} className="flex items-start gap-2.5 text-sm text-warning bg-warning/10 border border-warning/25 rounded-xl px-4 py-2.5 font-serif">
                 <AlertTriangle className="w-4 h-4 mt-0.5 shrink-0" /> {w}
               </div>
             ))}
@@ -753,10 +753,10 @@ export const SectionEditorView: React.FC<Props> = ({ monumenti, effectiveAdmin, 
                   >
                     <span className={cn(
                       'w-1.5 h-1.5 rounded-full shrink-0 transition-colors',
-                      st === 'dirty' ? 'bg-amber-500' : st === 'present' ? 'bg-accent/60' : 'bg-transparent border border-muted/30',
+                      st === 'dirty' ? 'bg-warning' : st === 'present' ? 'bg-accent/60' : 'bg-transparent border border-muted/30',
                     )} />
                     <span className={cn('text-[13px] font-serif flex-1 truncate', isActive && 'font-semibold')}>{s.label}</span>
-                    {st === 'dirty' && <span className="text-[9px] font-sans font-bold uppercase tracking-wider text-amber-600">mod.</span>}
+                    {st === 'dirty' && <span className="text-[9px] font-sans font-bold uppercase tracking-wider text-warning">mod.</span>}
                   </button>
                 );
               })}
@@ -866,7 +866,7 @@ const ExternalRefsEditor: React.FC<{
             )}
             <button
               onClick={() => onChange(refs.filter((_, j) => j !== i))}
-              className="p-2 text-muted/50 hover:text-red-500 transition-colors"
+              className="p-2 text-muted/50 hover:text-danger transition-colors"
               title="Rimuovi il riferimento"
             >
               <Trash2 className="w-4 h-4" />
@@ -1109,7 +1109,7 @@ function renderSectionForm(
                   <FieldLabel>Testo della datazione</FieldLabel>
                   <TextInput value={d.testo || ''} onChange={e => update(i, { testo: e.target.value })} />
                 </div>
-                <button onClick={() => set('origDates', dates.filter((_, j) => j !== i))} className="mt-6 p-1.5 text-muted/50 hover:text-red-500 transition-colors" title="Rimuovi datazione">
+                <button onClick={() => set('origDates', dates.filter((_, j) => j !== i))} className="mt-6 p-1.5 text-muted/50 hover:text-danger transition-colors" title="Rimuovi datazione">
                   <Trash2 className="w-4 h-4" />
                 </button>
               </div>
@@ -1228,7 +1228,7 @@ function renderSectionForm(
               <TextInput className="w-36" type="date" value={r.date || ''} onChange={e => update(i, { date: e.target.value })} />
               <TextInput className="w-28" value={r.who || ''} onChange={e => update(i, { who: e.target.value })} placeholder="#GG" />
               <TextInput className="flex-1" value={r.note || ''} onChange={e => update(i, { note: e.target.value })} placeholder="Descrizione della modifica…" />
-              <button onClick={() => set('revisions', revs.filter((_, j) => j !== i))} className="p-2 text-muted/50 hover:text-red-500 transition-colors"><Trash2 className="w-4 h-4" /></button>
+              <button onClick={() => set('revisions', revs.filter((_, j) => j !== i))} className="p-2 text-muted/50 hover:text-danger transition-colors"><Trash2 className="w-4 h-4" /></button>
             </div>
           ))}
           <button
@@ -1280,7 +1280,7 @@ function renderSectionForm(
               <TextInput value={a.locRaw} onChange={e => update(i, { loc: e.target.value })} placeholder="5" />
               <TextInput value={a.lezione} onChange={e => update(i, { note: e.target.value })} placeholder="Μὲς lapis pro Μὴν…" />
               <TextInput value={a.lettore} onChange={e => update(i, { source: e.target.value })} placeholder="Lane" />
-              <button onClick={() => set('apparatus', entries.filter((_, j) => j !== i))} className="p-2 text-muted/50 hover:text-red-500 transition-colors"><Trash2 className="w-4 h-4" /></button>
+              <button onClick={() => set('apparatus', entries.filter((_, j) => j !== i))} className="p-2 text-muted/50 hover:text-danger transition-colors"><Trash2 className="w-4 h-4" /></button>
             </div>
           ))}
           <button
@@ -1305,7 +1305,7 @@ function renderSectionForm(
                   <FieldLabel>Lingua</FieldLabel>
                   <TextInput value={t.lang} onChange={e => update(i, { lang: e.target.value })} placeholder="it" />
                 </div>
-                <button onClick={() => set('traduzioni', trads.filter((_, j) => j !== i))} className="p-1.5 text-muted/50 hover:text-red-500 transition-colors mt-4"><Trash2 className="w-4 h-4" /></button>
+                <button onClick={() => set('traduzioni', trads.filter((_, j) => j !== i))} className="p-1.5 text-muted/50 hover:text-danger transition-colors mt-4"><Trash2 className="w-4 h-4" /></button>
               </div>
               <div>
                 <FieldLabel>Traduzione</FieldLabel>
@@ -1333,7 +1333,7 @@ function renderSectionForm(
           <FieldLabel>Commento</FieldLabel>
           <TextArea rows={8} value={m.note_interne || ''} onChange={e => { set('note_interne', e.target.value); set('note_interne_rawXml', undefined); }} />
           {m.note_interne_rawXml && (
-            <p className="text-[11px] text-amber-700 dark:text-amber-400 italic mt-2 flex items-center gap-1.5">
+            <p className="text-[11px] text-warning italic mt-2 flex items-center gap-1.5">
               <AlertTriangle className="w-3 h-3" /> Il commento contiene markup TEI (ptr, foreign…): modificandolo qui verrà riscritto come testo semplice.
             </p>
           )}
@@ -1381,8 +1381,8 @@ function renderSectionForm(
             ><ChevronDown className="w-3.5 h-3.5" /></button>
           </div>
           <TextInput className="flex-1" value={b.titolo} onChange={e => update(i, e.target.value)} />
-          {b.rawXml && <span title="Contiene markup TEI: la modifica lo converte in testo semplice" className="mt-2.5"><AlertTriangle className="w-3.5 h-3.5 text-amber-500/70" /></span>}
-          <button onClick={() => remove(i)} className="p-2 text-muted/50 hover:text-red-500 transition-colors"><Trash2 className="w-4 h-4" /></button>
+          {b.rawXml && <span title="Contiene markup TEI: la modifica lo converte in testo semplice" className="mt-2.5"><AlertTriangle className="w-3.5 h-3.5 text-warning/70" /></span>}
+          <button onClick={() => remove(i)} className="p-2 text-muted/50 hover:text-danger transition-colors"><Trash2 className="w-4 h-4" /></button>
         </div>
       );
 
@@ -1431,7 +1431,7 @@ function renderSectionForm(
                 <div className="w-48">
                   <SuggestInput value={r.ruolo} onChange={v => updateResp(i, { ruolo: v })} options={suggestions.responsabileRuolo} placeholder="editor" />
                 </div>
-                <button onClick={() => removeResp(i)} className="p-2 text-muted/50 hover:text-red-500 transition-colors"><Trash2 className="w-4 h-4" /></button>
+                <button onClick={() => removeResp(i)} className="p-2 text-muted/50 hover:text-danger transition-colors"><Trash2 className="w-4 h-4" /></button>
               </div>
             ))}
             <button
@@ -1634,7 +1634,7 @@ const AddTermButton: React.FC<{ onAdd: (id: string, label: string) => void; labe
       <button type="button" onClick={submit} title="Aggiungi termine" className="p-1 text-accent hover:text-accent/70 shrink-0">
         <Check className="w-3.5 h-3.5" />
       </button>
-      <button type="button" onClick={() => { setOpen(false); setId(''); setItLabel(''); }} title="Annulla" className="p-1 text-muted/50 hover:text-red-500 shrink-0">
+      <button type="button" onClick={() => { setOpen(false); setId(''); setItLabel(''); }} title="Annulla" className="p-1 text-muted/50 hover:text-danger shrink-0">
         <X className="w-3.5 h-3.5" />
       </button>
     </div>
@@ -1691,7 +1691,7 @@ const IconographyEditor: React.FC<{ m: Monumento; set: <K extends keyof Monument
           </div>
         )}
         {functionConflict && (
-          <div className="mt-2 flex items-start gap-2.5 text-xs bg-amber-500/8 border border-amber-500/25 rounded-lg px-3 py-2 text-amber-800 dark:text-amber-400">
+          <div className="mt-2 flex items-start gap-2.5 text-xs bg-warning/10 border border-warning/25 rounded-lg px-3 py-2 text-warning">
             <AlertTriangle className="w-3.5 h-3.5 mt-0.5 shrink-0" />
             <span>
               Funzione impostata su «{vocabLabel(ico.function!)}», ma il titolo suggerisce «{vocabLabel(suggestedFunction!)}».
@@ -1731,7 +1731,7 @@ const IconographyEditor: React.FC<{ m: Monumento; set: <K extends keyof Monument
                   </div>
                 </div>
                 <button onClick={() => update({ figures: ico.figures.filter((_, i) => i !== fi) })}
-                  className="p-1.5 mt-5 text-muted/50 hover:text-red-500 transition-colors" title="Rimuovi figura">
+                  className="p-1.5 mt-5 text-muted/50 hover:text-danger transition-colors" title="Rimuovi figura">
                   <Trash2 className="w-4 h-4" />
                 </button>
               </div>
@@ -1776,7 +1776,7 @@ const IconographyEditor: React.FC<{ m: Monumento; set: <K extends keyof Monument
                         <option value="left">sx</option>
                       </select>
                       <button onClick={() => updateFigure(fi, { traits: fig.traits.filter((_, i) => i !== ti) })}
-                        className="p-1.5 text-muted/40 hover:text-red-500 transition-colors shrink-0" title="Rimuovi tratto">
+                        className="p-1.5 text-muted/40 hover:text-danger transition-colors shrink-0" title="Rimuovi tratto">
                         <X className="w-3.5 h-3.5" />
                       </button>
                     </div>

@@ -293,7 +293,7 @@ export const EditionMarkupEditor: React.FC<Props> = ({ value, onChange, anepigra
 
   if (parseError) {
     return (
-      <div className="flex items-start gap-2.5 text-sm text-amber-800 dark:text-amber-400 bg-amber-500/8 border border-amber-500/25 rounded-xl px-4 py-3">
+      <div className="flex items-start gap-2.5 text-sm text-warning bg-warning/10 border border-warning/25 rounded-xl px-4 py-3">
         <AlertTriangle className="w-4 h-4 mt-0.5 shrink-0" />
         <span>
           Questa edizione ha una struttura che l'editor assistito non sa ancora rappresentare
@@ -366,7 +366,7 @@ export const EditionMarkupEditor: React.FC<Props> = ({ value, onChange, anepigra
       )}
 
       {selWarn && (
-        <div className="flex items-center gap-2 text-xs text-amber-700 dark:text-amber-400 bg-amber-500/8 border border-amber-500/25 rounded-lg px-3 py-2">
+        <div className="flex items-center gap-2 text-xs text-warning bg-warning/10 border border-warning/25 rounded-lg px-3 py-2">
           <AlertTriangle className="w-3.5 h-3.5 shrink-0" /> {selWarn}
         </div>
       )}
@@ -377,8 +377,8 @@ export const EditionMarkupEditor: React.FC<Props> = ({ value, onChange, anepigra
             <div key={i} className={cn(
               'flex items-start gap-2 text-xs rounded-lg px-3 py-2 border font-serif',
               iss.severity === 'error'
-                ? 'text-red-700 dark:text-red-400 bg-red-500/8 border-red-500/25'
-                : 'text-amber-800 dark:text-amber-400 bg-amber-500/8 border-amber-500/25',
+                ? 'text-danger bg-danger/10 border-danger/25'
+                : 'text-warning bg-warning/10 border-warning/25',
             )}>
               <AlertTriangle className="w-3.5 h-3.5 mt-0.5 shrink-0" />
               <span><span className="font-mono not-italic text-[10px] opacity-60 mr-1.5">r.{iss.line}</span>{iss.message}</span>
@@ -418,7 +418,7 @@ export const EditionMarkupEditor: React.FC<Props> = ({ value, onChange, anepigra
                   spellCheck={false}
                   className="w-full font-mono text-[11px] leading-relaxed text-ink/90 bg-white/60 dark:bg-black/30 border border-border/40 rounded-lg p-3 focus:outline-none focus:ring-1 focus:ring-accent/40 custom-scrollbar"
                 />
-                {xmlError && <p className="text-[11px] text-red-500 mt-1.5">{xmlError}</p>}
+                {xmlError && <p className="text-[11px] text-danger mt-1.5">{xmlError}</p>}
                 {xmlDraft !== null && (
                   <div className="flex gap-2 mt-2">
                     <button onClick={applyXmlDraft} className="inline-flex items-center gap-1.5 rounded-full px-4 py-1.5 text-[10px] font-sans font-bold uppercase tracking-[0.12em] bg-accent text-white hover:shadow-md transition-all">
@@ -549,7 +549,7 @@ const TokenFlow: React.FC<{
                       <button
                         contentEditable={false}
                         onClick={(e) => { e.stopPropagation(); onDeleteLb?.(info); }}
-                        className="text-muted/20 hover:text-red-400 transition-colors"
+                        className="text-muted/20 hover:text-danger transition-colors"
                       ><X className="w-2.5 h-2.5" /></button>
                     </Tip>
                   )}
@@ -870,7 +870,7 @@ const ElementPopover: React.FC<{
             Togli markup
           </button>
         )}
-        <button onClick={onRemove} title="Elimina l'elemento" className="p-1.5 text-muted/50 hover:text-red-500 transition-colors">
+        <button onClick={onRemove} title="Elimina l'elemento" className="p-1.5 text-muted/50 hover:text-danger transition-colors">
           <Trash2 className="w-3.5 h-3.5" />
         </button>
       </div>
