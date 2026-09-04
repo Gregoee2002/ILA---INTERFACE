@@ -212,11 +212,21 @@ EOF
     echo "Claude ha fallito (exit $claude_exit). Vedi $log_file.stderr"
     outcome="failed-agent"
   else
-    echo "Verifico il typecheck..."
-    if npm run typecheck --silent >/dev/null 2>&1; then
-      outcome="ok"
-    else
+    # Gate a due stadi. Il typecheck da solo NON basta: sui nomi delle classi
+    # Tailwind è cieco, quindi un token inesistente (bg-warnign/10) passerebbe
+    # il tsc e renderebbe l'elemento senza colore. La build vera genera il CSS
+    # e le classi sbagliate semplicemente non compaiono, quindi è lei la rete
+    # di sicurezza per i task di codemod. Costa ~4 secondi.
+    echo "Verifico typecheck..."
+    if ! npm run typecheck --silent >/dev/null 2>&1; then
       outcome="failed-build"
+    else
+      echo "Verifico la build..."
+      if npm run build >/dev/null 2>&1; then
+        outcome="ok"
+      else
+        outcome="failed-build"
+      fi
     fi
   fi
 

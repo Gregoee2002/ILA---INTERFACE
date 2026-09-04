@@ -14,7 +14,7 @@ nel riepilogo.
 
 **Fa:** prende un task da `tasks.yaml`, crea il branch `auto/task-NNN` dal
 `main` **locale**, lancia `claude -p` headless con permessi ristretti, gira il
-typecheck e fa **commit locale** sul branch. Poi torna su `main` e appende una
+typecheck **e la build** e fa **commit locale** sul branch. Poi torna su `main` e appende una
 voce leggibile a `logs/autonomous/RIEPILOGO.md`.
 
 **NON fa mai** (guardrail su due livelli — prompt runtime + `.claude/settings.autonomous.json`):
