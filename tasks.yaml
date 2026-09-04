@@ -1,22 +1,269 @@
 # tasks.yaml — Backlog per esecuzione autonoma con Claude Code (headless)
 # Progetto: ILA / MENISKOS
 #
+# Aggiornato 2026-09-05: i task 011-020 sono la coda dell'audit totale del
+# 2026-09-01 (vedi docs/piano-audit-ui-da-fare.md e docs/piano-audit-dati-da-fare.md).
+# I task 001-010 sono il backlog "feature" precedente, ancora valido ma meno
+# urgente: stanno in fondo apposta, perché il runner prende i task pending
+# nell'ordine in cui compaiono qui.
+#
+# ORDINE NON CASUALE: 011-013 (codemod dei token colore) devono girare PRIMA
+# di 017-020 (primitivi di componente), che quei token li usano.
+#
 # REGOLE GENERALI (valgono per ogni task, ripetute anche nel prompt runtime):
-#   - MAI modificare file .xml del corpus (cartella corpus/ o equivalente) — questi
-#     restano di esclusiva revisione manuale in Oxygen XML Editor.
-#   - MAI modificare <xenoData> in qualsiasi contesto.
-#   - MAI abilitare o toccare GITHUB_ALLOW_DELETE.
-#   - MAI eseguire git push, git push --force, git checkout main, npm publish,
-#     comandi di delete permanente.
-#   - Ogni task lavora su un branch dedicato auto/task-<id>, creato da main
-#     aggiornato, e produce SOLO commit locali.
-#   - Se la build/typecheck fallisce dopo le modifiche, il task va marcato
-#     "failed" e il branch NON va cancellato (serve per debug).
+#   - MAI modificare file .xml del corpus, né blocchi <xenoData>.
+#   - MAI toccare GITHUB_ALLOW_DELETE, mai git push, mai main/master, mai merge.
+#   - Ogni task lavora su un branch auto/task-<id> creato da main, e produce
+#     SOLO commit locali.
+#   - Se typecheck fallisce dopo le modifiche, il task va marcato "failed" e il
+#     branch NON va cancellato (serve per debug).
 #   - status: pending | running | done | failed | skipped
-#   - risk: low | medium | high  (lo script di default esegue solo low/medium
-#     in modalità unattended; gli "high" richiedono lancio esplicito manuale)
+#   - risk: low | medium | high  (unattended gira solo low/medium)
 
 tasks:
+  # ==========================================================================
+  # CODA AUDIT 2026-09-01 — S8: codemod dei colori di stato (UI-01)
+  # 179 usi residui di colori Tailwind ad-hoc da sostituire coi token
+  # --danger/--warning/--success/--info già definiti in src/index.css (righe
+  # 29-32 chiaro, 51-54 scuro) ed esposti come --color-* in @theme (78-81).
+  # Spezzato in tre task per avere diff piccoli e revisionabili a vista.
+  # ==========================================================================
+
+  - id: 011
+    title: "Codemod colori di stato — App.tsx"
+    area: frontend
+    risk: medium
+    status: pending
+    scope:
+      - src/App.tsx
+    prompt: >
+      Sostituisci in src/App.tsx (e SOLO lì) gli usi ad-hoc di colori Tailwind
+      di stato con le classi tokenizzate già disponibili. Mappatura:
+      text-red-{400,500,600,700} -> text-danger;
+      bg-red-* -> bg-danger/10 (o bg-danger se è un fondo pieno);
+      border-red-* -> border-danger/25;
+      text-amber-* -> text-warning; bg-amber-* -> bg-warning/10;
+      border-amber-* -> border-warning/25;
+      text-green-600 e text-emerald-* -> text-success;
+      bg-emerald-*/bg-green-500/10 -> bg-success/10.
+      IMPORTANTE: dove trovi una coppia tipo "text-amber-800 dark:text-amber-400",
+      il token gestisce già chiaro e scuro: rimuovi il modificatore dark:
+      ridondante e lascia la sola classe tokenizzata.
+      NON tokenizzare usi puramente decorativi o di data-visualization (colori
+      dichiarati di una palette, non stati): se un uso è ambiguo, LASCIALO
+      com'è e annotalo. Al termine scrivi in fondo al tuo output un elenco
+      puntato dei casi che hai lasciato invariati e perché, così posso
+      controllarli a vista.
+      Non toccare nessun altro file.
+
+  - id: 012
+    title: "Codemod colori di stato — editor (4 componenti)"
+    area: frontend
+    risk: medium
+    status: pending
+    scope:
+      - src/components/LiterarySourcesEditor.tsx
+      - src/components/SectionEditorView.tsx
+      - src/components/EditionMarkupEditor.tsx
+      - src/components/LiteraryMarkupEditor.tsx
+    prompt: >
+      Stessa mappatura del task 011 (text-red-* -> text-danger, bg-red-* ->
+      bg-danger/10, border-red-* -> border-danger/25, text-amber-* ->
+      text-warning, bg-amber-* -> bg-warning/10, border-amber-* ->
+      border-warning/25, text-green-600 e text-emerald-* -> text-success,
+      bg-emerald-*/bg-green-500/10 -> bg-success/10; rimuovi i dark:
+      ridondanti), applicata SOLO a questi quattro file:
+      src/components/LiterarySourcesEditor.tsx, src/components/SectionEditorView.tsx,
+      src/components/EditionMarkupEditor.tsx, src/components/LiteraryMarkupEditor.tsx.
+      Attenzione: in questi editor il colore può marcare la validità del markup
+      epigrafico (es. parentesi non bilanciate in rosso, avvisi in ambra) —
+      quello è uno *stato*, quindi va tokenizzato. Se invece un colore
+      distingue tipi di markup fra loro (una legenda cromatica), NON è uno
+      stato: lascialo e annotalo.
+      Al termine elenca i casi lasciati invariati e perché.
+
+  - id: 013
+    title: "Codemod colori di stato — pannelli residui"
+    area: frontend
+    risk: low
+    status: pending
+    scope:
+      - src/components/LiterarySourcesPanel.tsx
+      - src/components/BibliographyIndex.tsx
+      - src/components/XmlDiffViewer.tsx
+      - src/components/BugReportsPanel.tsx
+      - src/components/RegistroPanel.tsx
+      - src/components/UnlockEditingModal.tsx
+    prompt: >
+      Stessa mappatura dei task 011/012, applicata SOLO a questi sei file:
+      LiterarySourcesPanel, BibliographyIndex, XmlDiffViewer, BugReportsPanel,
+      RegistroPanel, UnlockEditingModal (tutti in src/components/).
+      Eccezione esplicita per XmlDiffViewer.tsx: i colori del diff
+      (verde = aggiunta, rosso = rimozione) sono semantici del diff, non stati
+      dell'applicazione. Valuta caso per caso e, se decidi di lasciarli,
+      annotalo invece di forzare il token.
+      NON toccare src/components/PleiadesMap.tsx, MapView.tsx,
+      CooccurrenceHeatmap.tsx: hanno una palette data-viz propria, gestita dal
+      task 014.
+      Al termine elenca i casi lasciati invariati e perché.
+
+  # ==========================================================================
+  # CODA AUDIT — S8/UI-05: palette mappa centralizzata
+  # ==========================================================================
+
+  - id: 014
+    title: "Palette mappa centralizzata (UI-05)"
+    area: frontend
+    risk: low
+    status: pending
+    scope:
+      - src/lib/mapPalette.ts
+      - src/components/MapView.tsx
+      - src/components/PleiadesMap.tsx
+      - src/index.css
+    prompt: >
+      In src/components/MapView.tsx sono hard-coded i colori regione
+      (#5B7A8C, #B5651D, #7A8F5E, #0d5147, #1F8377), una DENSITY_SCALE e
+      #B0233F (cluster-highlight, duplicato anche in src/index.css nella regola
+      .marker-cluster-highlight). Estrai tutto in un nuovo file
+      src/lib/mapPalette.ts che esporti costanti tipizzate con nomi
+      descrittivi, e referenzialo da MapView.tsx (e da PleiadesMap.tsx se usa
+      gli stessi valori). Per il lato CSS: definisci una custom property in
+      src/index.css (es. --map-cluster-highlight) e usala nella regola
+      .marker-cluster-highlight, così il valore esiste in un posto solo.
+      NON cambiare nessun valore cromatico: è una pura estrazione, i colori
+      resi devono essere identici a prima. Non toccare la logica della mappa.
+
+  # ==========================================================================
+  # CODA AUDIT — S10: focus visibile e scala z (UI-15, UI-17, UI-18)
+  # ==========================================================================
+
+  - id: 015
+    title: "Focus visibile: regola pavimento globale (UI-15)"
+    area: frontend
+    risk: low
+    status: pending
+    scope:
+      - src/index.css
+    prompt: >
+      Aggiungi in src/index.css, dentro un blocco @layer base, una regola
+      "pavimento" per il focus da tastiera:
+      :where(a, button, [role="button"], input, select, textarea, [tabindex]):focus-visible
+      { outline: 2px solid var(--accent); outline-offset: 2px; }
+      Usa :where() proprio perché la specificità resti zero: qualunque
+      componente che definisce già un suo focus continua a vincere.
+      Verifica che non esista già una regola :focus-visible globale in
+      conflitto; se c'è, unificale invece di aggiungerne una seconda.
+      Non toccare altri file.
+
+  - id: 016
+    title: "Scala z coerente e grana felt sotto il contenuto (UI-17, UI-18)"
+    area: frontend
+    risk: medium
+    status: pending
+    scope:
+      - src/index.css
+    prompt: >
+      In src/index.css la texture di sfondo body::before (riga ~109, immagine
+      felt.png con opacity 0.15) ha uno z-index alto che la mette sopra il
+      contenuto invece che sotto. Portala a z-index 0 (o -1) e assicurati che
+      il contenuto della pagina resti sopra, senza rompere il fondo in dark
+      mode (.dark body::before ha filter: invert(1)).
+      Poi introduci in cima al file una scala z documentata come custom
+      properties (es. --z-background, --z-content, --z-sticky, --z-overlay,
+      --z-modal, --z-toast) e usala almeno per le regole di z-index già
+      presenti in questo file, così i valori smettono di essere numeri magici.
+      NON cambiare gli z-index inline nei componenti React in questo task:
+      qui si tocca solo il CSS globale. Se trovi un valore in index.css che
+      non riesci a collocare nella scala senza rischiare una regressione
+      visiva, lascialo e annotalo.
+
+  # ==========================================================================
+  # CODA AUDIT — S9: primitivi di componente (UI-10, UI-12, UI-13, UI-14, UI-16)
+  # Dipendono dai token del codemod 011-013: NON anticiparli.
+  # ==========================================================================
+
+  - id: 017
+    title: "Primitivo <Button> ed eliminazione dei bottoni scritti a mano"
+    area: frontend
+    risk: medium
+    status: pending
+    scope:
+      - src/components/ui/**
+      - src/App.tsx
+      - src/components/**
+    prompt: >
+      Crea src/components/ui/Button.tsx: un primitivo tipizzato con varianti
+      (primary, secondary, ghost, danger) e dimensioni (sm, md), che usi i
+      token del design system e NON colori Tailwind ad-hoc. Uniforma nel
+      primitivo lo stato disabilitato (in giro convivono disabled:opacity-40 e
+      disabled:opacity-50: scegline uno solo, motivalo in un commento).
+      Poi sostituisci con <Button> i bottoni primari scritti a mano (pattern
+      "bg-accent text-white ..."): comincia da src/App.tsx e da un solo altro
+      componente, NON convertirli tutti in questo task — l'obiettivo è un diff
+      revisionabile a vista. Elenca alla fine quali restano da convertire.
+      Il rendering deve restare visivamente identico: è un refactor, non un
+      redesign.
+
+  - id: 018
+    title: "Primitivi <Chip> e <Badge>"
+    area: frontend
+    risk: medium
+    status: pending
+    scope:
+      - src/components/ui/**
+      - src/components/**
+      - src/App.tsx
+    prompt: >
+      In giro esistono 3 varianti di "chip"/badge che differiscono solo per
+      l'opacità del fondo (bg-accent/5, bg-accent/8, bg-accent/10). Crea
+      src/components/ui/Chip.tsx e src/components/ui/Badge.tsx che le
+      unifichino su un solo valore, motivato in un commento, con varianti
+      semantiche (default, accent, danger, warning, success) basate sui token.
+      Sostituisci le occorrenze in un numero limitato di file (max 3) per
+      tenere il diff leggibile, ed elenca quelle rimaste.
+      Rendering visivamente equivalente: refactor, non redesign.
+
+  - id: 019
+    title: "Primitivo <FilterSelect> per i 7 filtri di App.tsx"
+    area: frontend
+    risk: medium
+    status: pending
+    scope:
+      - src/components/ui/**
+      - src/App.tsx
+    prompt: >
+      In src/App.tsx ci sono 7 elementi <select> di filtro con markup e classi
+      praticamente identici (intorno alle righe 5674-5783 alla data
+      dell'audit: verifica la posizione attuale, non fidarti dei numeri di
+      riga). Crea src/components/ui/FilterSelect.tsx che incapsuli label,
+      select e opzioni, e sostituisci tutti e 7 gli usi.
+      Attenzione a NON cambiare la logica dei filtri né i valori/onChange:
+      solo la presentazione va incapsulata. Il comportamento deve restare
+      identico.
+
+  - id: 020
+    title: "Primitivo <Card> e fallback --accent"
+    area: frontend
+    risk: low
+    status: pending
+    scope:
+      - src/components/ui/**
+      - src/components/**
+    prompt: >
+      Crea src/components/ui/Card.tsx per il contenitore glassmorphism
+      ricorrente (fondo semitrasparente + bordo + blur), con le sue varianti
+      di padding, e sostituiscilo in max 3 file.
+      Inoltre (UI-14): negli editor si trova il fallback CSS
+      "var(--accent, #2da199)" — quel colore di fallback non appartiene alla
+      palette (l'accent reale è #1F8377). Poiché --accent è sempre definito in
+      :root, rimuovi il fallback, oppure allinealo a #1F8377 se preferisci
+      tenerlo: scegli e motiva in una riga di commento.
+
+  # ==========================================================================
+  # BACKLOG FEATURE PRECEDENTE (agosto 2026) — ancora valido, minore urgenza
+  # ==========================================================================
+
   - id: 001
     title: "Checklist di validazione completezza entry"
     area: frontend
@@ -34,23 +281,6 @@ tasks:
       Calcola un "completeness score" percentuale per entry. Segui lo stile
       glassmorphism/dark del design system esistente (vedi altri componenti in
       src/components per convenzioni Tailwind v4).
-
-  - id: 002
-    title: "Diff viewer XML (versione generata vs corretta)"
-    area: frontend
-    risk: medium
-    status: done
-    scope:
-      - src/components/**
-      - src/lib/diff/**
-    prompt: >
-      Implementa un componente XmlDiffViewer.tsx che mostri un diff riga per riga
-      tra due stringhe XML EpiDoc (es. versione originale generata e versione
-      dopo revisione manuale in Oxygen). Usa una libreria di diffing leggera
-      (es. 'diff' via npm, valuta prima se già presente in package.json).
-      Il componente è SOLO di visualizzazione: non deve scrivere né modificare
-      alcun file XML, non deve interagire con githubStorage.ts. Prende in input
-      due stringhe già caricate a monte.
 
   - id: 003
     title: "Densità storica sopra la timeline"
@@ -95,7 +325,9 @@ tasks:
       testo semplice e JSON. Leggi SOLO metadati già presenti nel documento
       EpiDoc (non inventare concordanze mancanti: se il dato non c'è, il campo
       va omesso, mai fabbricato — principio cardine del progetto). Non
-      modificare alcun file XML.
+      modificare alcun file XML. Ricorda che il target reale del progetto è il
+      sito statico: se l'endpoint ha senso anche lì, prevedi la controparte in
+      src/lib/apiShim.ts.
 
   - id: 006
     title: "Statistiche automatiche per capitolo di tesi"
@@ -111,25 +343,8 @@ tasks:
       indici automatici) in JSON, pensati per essere incollati in tabelle di
       tesi. Aggiungi anche un piccolo pannello frontend con bottone "Genera
       tabella" che mostri i dati in una tabella HTML copiabile. Nessuna
-      scrittura sui dati sorgente.
-
-  - id: 007
-    title: "Network graph relazioni onomastiche"
-    area: backend+frontend
-    risk: high
-    status: pending
-    scope:
-      - src/lib/onomastics/**
-      - src/components/**
-    prompt: >
-      Costruisci un grafo (nodi = persone via persName, archi = relazioni
-      dichiarate come patronimico/parentela quando esplicitamente marcate nel
-      testo) derivato ESCLUSIVAMENTE da markup <persName> già presente nelle
-      edizioni (stesso principio di extractIndexSuggestions/
-      applyDerivedIndices). Non inferire relazioni non esplicite nel testo.
-      Componente di visualizzazione read-only, nessuna scrittura su XML.
-      Segnalato come rischio alto: la logica di inferenza delle relazioni va
-      rivista a mano prima del merge.
+      scrittura sui dati sorgente. Il target reale è il sito statico: prevedi
+      la controparte in src/lib/apiShim.ts.
 
   - id: 008
     title: "Layer mappa colorato per epiteto"
@@ -143,7 +358,7 @@ tasks:
       i marker per epiteto di Men (Axiottenos, Askaenos, Tyrannos, etc.)
       derivato dagli indici automatici già disponibili (epiteti derivati da
       persName), con legenda. Non introdurre nuove fonti dati, non toccare
-      XML.
+      XML. Usa la palette centralizzata di src/lib/mapPalette.ts (task 014).
 
   - id: 009
     title: "API pubblica read-only (bozza)"
@@ -170,8 +385,44 @@ tasks:
       - .github/workflows/**
     prompt: >
       Crea un workflow GitHub Actions (.github/workflows/ci.yml) che ad ogni
-      push/PR esegua: npm run typecheck (o tsc --noEmit se non presente uno
-      script dedicato) e una validazione XML di base (well-formedness) sui
-      file in corpus/ tramite un parser XML standard, SENZA modificare i file
-      XML stessi — solo lettura per validazione. Fallisce la build se un file
-      XML non è well-formed o se il typecheck fallisce.
+      push/PR esegua: npm run typecheck e una validazione XML di base
+      (well-formedness) sui file del corpus tramite un parser XML standard,
+      SENZA modificare i file XML stessi — solo lettura per validazione.
+      Fallisce la build se un file XML non è well-formed o se il typecheck
+      fallisce. NOTA: il PAT in uso non ha scope 'workflow', quindi questo
+      commit non sarà pushabile finché non viene rigenerato il token; produci
+      comunque il file, resterà sul branch. Vedi anche
+      docs/patches/S1-*.patch per lo step tsc già preparato per deploy-pages.yml.
+
+  # --------------------------------------------------------------------------
+  # Task già completati o ad alto rischio
+  # --------------------------------------------------------------------------
+
+  - id: 002
+    title: "Diff viewer XML (versione generata vs corretta)"
+    area: frontend
+    risk: medium
+    status: done
+    scope:
+      - src/components/**
+      - src/lib/diff/**
+    prompt: >
+      (completato: src/components/XmlDiffViewer.tsx)
+
+  - id: 007
+    title: "Network graph relazioni onomastiche"
+    area: backend+frontend
+    risk: high
+    status: pending
+    scope:
+      - src/lib/onomastics/**
+      - src/components/**
+    prompt: >
+      Costruisci un grafo (nodi = persone via persName, archi = relazioni
+      dichiarate come patronimico/parentela quando esplicitamente marcate nel
+      testo) derivato ESCLUSIVAMENTE da markup <persName> già presente nelle
+      edizioni (stesso principio di extractIndexSuggestions/
+      applyDerivedIndices). Non inferire relazioni non esplicite nel testo.
+      Componente di visualizzazione read-only, nessuna scrittura su XML.
+      Segnalato come rischio alto: la logica di inferenza delle relazioni va
+      rivista a mano prima del merge.

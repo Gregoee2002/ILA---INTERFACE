@@ -26,3 +26,10 @@ public/corpus-snapshot.json
 # verità e genera commit rumorosi.
 src/data/corpus/
 __pycache__/
+
+# Runner autonomo: ledger di stato e log delle run. Non vanno tracciati —
+# se lo fossero, finirebbero nei commit dei branch auto/* e sporcherebbero
+# il diff da revisionare (e lo stato si azzererebbe ad ogni checkout di main).
+.autonomous/
+.autonomous.lock
+logs/
