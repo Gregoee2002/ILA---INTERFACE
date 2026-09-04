@@ -254,11 +254,9 @@ tasks:
       Crea src/components/ui/Card.tsx per il contenitore glassmorphism
       ricorrente (fondo semitrasparente + bordo + blur), con le sue varianti
       di padding, e sostituiscilo in max 3 file.
-      Inoltre (UI-14): negli editor si trova il fallback CSS
-      "var(--accent, #2da199)" — quel colore di fallback non appartiene alla
-      palette (l'accent reale è #1F8377). Poiché --accent è sempre definito in
-      :root, rimuovi il fallback, oppure allinealo a #1F8377 se preferisci
-      tenerlo: scegli e motiva in una riga di commento.
+      NOTA: la seconda metà originale di questo task (UI-14, fallback
+      "var(--accent, #2da199)") è già stata fatta nel commit 6d1b471 — non
+      cercarla, non c'è più nulla da correggere lì.
 
   # ==========================================================================
   # BACKLOG FEATURE PRECEDENTE (agosto 2026) — ancora valido, minore urgenza

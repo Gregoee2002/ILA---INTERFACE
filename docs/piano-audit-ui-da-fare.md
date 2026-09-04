@@ -55,6 +55,11 @@ usando i token di S8, e sostituire progressivamente (un gruppo per commit):
 
 ## S10 — focus visibile & z-scale (UI-15, UI-17, UI-18)
 
+> AGGIORNATO 2026-09-05: UI-15 (focus-visible) risulta GIÀ FATTO nel commit
+> 6d1b471, così come il fallback --accent di UI-14. Restano solo UI-17/UI-18
+> (grana felt a z-index 100, scala z). Verificato lanciando il task 015 del
+> runner autonomo, che non ha trovato nulla da cambiare.
+
 Non ancora iniziata.
 - `@layer base` con regola pavimento `:where(a,button,[role="button"],input,select,textarea,[tabindex]):focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }`.
 - `body::before` (grana felt) da `z-index:100` a `0`; scala z coerente
