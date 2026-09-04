@@ -81,7 +81,7 @@ export function UnlockEditingModal({ onClose, onUnlocked, onSubmit }: Props) {
           placeholder="github_pat_..."
           className="w-full rounded-full bg-sidebar border border-border px-4 py-2.5 text-sm outline-none focus:border-accent transition-colors font-mono text-center"
         />
-        {error && <p className="text-xs text-red-500">{error}</p>}
+        {error && <p className="text-xs text-danger">{error}</p>}
         <button
           type="submit"
           disabled={checking || !input.trim()}

@@ -221,7 +221,7 @@ export function BibliographyIndex({ monumenti, onApply, onSelectMonumento, progr
         <div className={cn(
           'mb-4 rounded-sm border px-3 py-2 text-[11px] font-sans',
           lastResult.failures.length
-            ? 'border-amber-400/40 bg-amber-400/5 text-amber-600'
+            ? 'border-warning/25 bg-warning/10 text-warning'
             : 'border-accent/30 bg-accent/5 text-accent'
         )}>
           {lastResult.updatedEntries} diciture aggiornate in {lastResult.updatedSchede} schede.
@@ -279,7 +279,7 @@ export function BibliographyIndex({ monumenti, onApply, onSelectMonumento, progr
           className={cn(
             'px-3 py-1.5 font-sans text-[9px] font-bold uppercase tracking-widest transition-colors rounded-sm border flex items-center gap-1.5',
             onlyConflicts
-              ? 'border-amber-400/50 bg-amber-400/10 text-amber-600'
+              ? 'border-warning/25 bg-warning/10 text-warning'
               : 'border-border text-muted hover:text-ink hover:border-accent/40'
           )}
         >
@@ -295,7 +295,7 @@ export function BibliographyIndex({ monumenti, onApply, onSelectMonumento, progr
             <div className="flex items-start gap-2 px-3 py-2">
               <div className="flex-1 min-w-0">
                 <div className="text-xs font-serif text-ink leading-snug flex items-start gap-1.5">
-                  {row.conflict && <AlertTriangle className="h-3 w-3 text-amber-500 mt-0.5 shrink-0" />}
+                  {row.conflict && <AlertTriangle className="h-3 w-3 text-warning mt-0.5 shrink-0" />}
                   <span>{row.val}</span>
                 </div>
                 <div className="mt-1 flex flex-wrap gap-1">

@@ -174,7 +174,7 @@ const SchedaTestimonium: React.FC<{
                 <p className="text-[11px] font-serif text-muted/85 leading-snug">{t.edizione}</p>
                 <p className="text-[11px] font-serif text-muted/70 leading-snug mt-1">Traduzione: {t.traduttore}</p>
                 {t.collazione === 'da-collazionare' && (
-                  <p className="mt-3 inline-flex items-start gap-1.5 text-[10px] font-sans uppercase tracking-wide text-amber-600 dark:text-amber-400">
+                  <p className="mt-3 inline-flex items-start gap-1.5 text-[10px] font-sans uppercase tracking-wide text-warning">
                     <AlertTriangle className="h-3 w-3 shrink-0 mt-px" /> da collazionare
                   </p>
                 )}
@@ -563,8 +563,8 @@ const SaggioView: React.FC<{
                 ))}
 
                 {stats.daCollazionare > 0 && (
-                  <div className="mt-4 flex items-start gap-2.5 rounded-lg border border-amber-500/25 bg-amber-500/[0.06] px-3.5 py-2.5">
-                    <AlertTriangle className="h-3.5 w-3.5 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
+                  <div className="mt-4 flex items-start gap-2.5 rounded-lg border border-warning/25 bg-warning/[0.06] px-3.5 py-2.5">
+                    <AlertTriangle className="h-3.5 w-3.5 text-warning shrink-0 mt-0.5" />
                     <p className="text-[12px] font-sans leading-relaxed text-muted/85">
                       <span className="font-bold">{stats.daCollazionare} testi su {stats.testimonianze}</span> sono
                       trascritti in redazione e attendono riscontro sull'edizione indicata in ciascuna scheda.
@@ -1126,7 +1126,7 @@ export const LiterarySourcesPanel: React.FC<Props> = ({ editingUnlocked, apriTes
                             <span className="text-muted/50">{st.arco}</span>
                           </div>
                           {st.daCollazionare > 0 && (
-                            <span className="inline-flex items-center gap-1.5 mt-2 text-[10px] font-sans uppercase tracking-wide text-amber-600 dark:text-amber-400">
+                            <span className="inline-flex items-center gap-1.5 mt-2 text-[10px] font-sans uppercase tracking-wide text-warning">
                               <AlertTriangle className="h-3 w-3" /> {st.daCollazionare} testi da collazionare
                             </span>
                           )}
