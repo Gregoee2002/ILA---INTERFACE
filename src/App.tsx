@@ -1432,15 +1432,15 @@ function CorpusHealth({ monumenti, onSelectMonumento }: { monumenti: Monumento[]
 
         {/* Markup escaped — errore bloccante per il parser */}
         {missing.escapedMarkup.length > 0 && (
-          <div className="border-l-2 border-red-500 pl-4">
-            <h3 className="font-bold text-sm mb-2 text-red-600">⚠ Markup EpiDoc non interpretato</h3>
+          <div className="border-l-2 border-danger/25 pl-4">
+            <h3 className="font-bold text-sm mb-2 text-danger">⚠ Markup EpiDoc non interpretato</h3>
             <p className="text-xs text-muted font-serif mb-3">
               Questi file contengono <code>&amp;lt;persName&amp;gt;</code> come testo letterale invece di veri tag XML. Le divinità e gli epiteti al loro interno NON vengono indicizzati. Vanno ricodificati.
             </p>
             <div className="flex flex-wrap gap-2">
               {missing.escapedMarkup.map(m => (
                 <button key={m.id} onClick={() => onSelectMonumento(m)}
-                  className="text-xs font-sans border border-red-300 text-red-700 px-2 py-1 hover:bg-red-50 transition-colors">
+                  className="text-xs font-sans border border-danger/25 text-danger px-2 py-1 hover:bg-danger/10 transition-colors">
                   {formatIlaLabel(m.id)}
                 </button>
               ))}
@@ -1459,8 +1459,8 @@ function CorpusHealth({ monumenti, onSelectMonumento }: { monumenti: Monumento[]
             </h3>
             <div className="space-y-3 mt-3">
               {report.conflicts.map(conflict => (
-                <div key={conflict.key} className="rounded-xl border border-amber-300/60 bg-amber-50/30 dark:bg-amber-950/10 backdrop-blur-md p-4 shadow-sm">
-                  <div className="text-[10px] font-sans uppercase tracking-widest text-amber-700/80 mb-2">
+                <div key={conflict.key} className="rounded-xl border border-warning/25 bg-warning/10 backdrop-blur-md p-4 shadow-sm">
+                  <div className="text-[10px] font-sans uppercase tracking-widest text-warning mb-2">
                     Stessa forma, grafie diverse:
                   </div>
                   <div className="flex flex-wrap gap-2">
@@ -1500,10 +1500,10 @@ function CorpusHealth({ monumenti, onSelectMonumento }: { monumenti: Monumento[]
                   Probabile stessa divinità in forma variante ({naRelated.length}) — mai attestata da sola e con token in comune con un teonimo co-presente
                 </div>
                 {naRelated.map(d => (
-                  <div key={d.name} className="rounded-xl border border-amber-300/60 bg-amber-50/30 dark:bg-amber-950/10 backdrop-blur-md p-4 shadow-sm">
+                  <div key={d.name} className="rounded-xl border border-warning/25 bg-warning/10 backdrop-blur-md p-4 shadow-sm">
                     <div className="flex items-baseline gap-2 mb-2">
                       <span className="font-serif text-sm font-semibold">{d.name}</span>
-                      <span className="text-[10px] text-muted">×{d.count} · confronta con: <span className="text-amber-700/90 font-semibold">{d.relatedNames.join(', ')}</span></span>
+                      <span className="text-[10px] text-muted">×{d.count} · confronta con: <span className="text-warning font-semibold">{d.relatedNames.join(', ')}</span></span>
                     </div>
                     <IdChips ids={d.monumentIds} />
                   </div>
@@ -1532,14 +1532,14 @@ function CorpusHealth({ monumenti, onSelectMonumento }: { monumenti: Monumento[]
                   Stessa forma usata sia come divinità sia come epiteto ({audit.divVsEpi.length})
                 </div>
                 {audit.divVsEpi.map(t => (
-                  <div key={t.key} className="rounded-xl border border-amber-300/60 bg-amber-50/30 dark:bg-amber-950/10 backdrop-blur-md p-4 shadow-sm space-y-2">
+                  <div key={t.key} className="rounded-xl border border-warning/25 bg-warning/10 backdrop-blur-md p-4 shadow-sm space-y-2">
                     <div>
-                      <span className="text-[10px] font-sans uppercase tracking-widest text-amber-700/80">come divinità: </span>
+                      <span className="text-[10px] font-sans uppercase tracking-widest text-warning">come divinità: </span>
                       <span className="font-serif text-sm font-semibold">{t.asDivinita.form}</span>
                       <div className="mt-1"><IdChips ids={t.asDivinita.monumentIds} /></div>
                     </div>
                     <div>
-                      <span className="text-[10px] font-sans uppercase tracking-widest text-amber-700/80">come epiteto: </span>
+                      <span className="text-[10px] font-sans uppercase tracking-widest text-warning">come epiteto: </span>
                       <span className="font-serif text-sm font-semibold">{t.asEpiteto.form}</span>
                       <div className="mt-1"><IdChips ids={t.asEpiteto.monumentIds} /></div>
                     </div>
@@ -5423,7 +5423,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
       <div className="h-dvh w-full flex flex-col items-center justify-center bg-parchment gap-6 px-6 text-center">
         <span className="text-3xl font-bold tracking-[0.15em] text-accent/40" style={{ fontFamily: '"Cinzel", serif' }}>ILA</span>
         <div className="max-w-md flex flex-col items-center gap-3">
-          <AlertTriangle className="h-6 w-6 text-red-600" />
+          <AlertTriangle className="h-6 w-6 text-danger" />
           <p className="text-sm font-sans font-bold text-ink">Corpus non caricato</p>
           <p className="text-xs text-muted leading-relaxed">{loadError}</p>
           <button
@@ -6172,7 +6172,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                                   <div className="flex items-center gap-1 flex-wrap">
                                     <span className="font-mono text-[10px] font-bold text-accent bg-accent/5 px-1.5 py-0.5 rounded-sm border border-accent/10 tabular-nums">#{m.id.toString().padStart(3, '0')}</span>
                                     {searchResultIds?.has(m.id) && matchInSuppliedById.get(m.id) && (
-                                      <span className="font-mono text-[8px] font-bold text-amber-700 bg-amber-500/10 px-1 py-0.5 rounded-sm border border-amber-500/20">RICOSTR.</span>
+                                      <span className="font-mono text-[8px] font-bold text-warning bg-warning/10 px-1 py-0.5 rounded-sm border border-warning/25">RICOSTR.</span>
                                     )}
                                   </div>
                                   <span className="text-[10px] font-bold text-ink/75 tabular-nums shrink-0">{formatDateRange(m.data_inizio, m.data_fine)}</span>
@@ -6238,7 +6238,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                                 <span className="font-mono text-[10px] font-bold text-accent bg-accent/5 px-1.5 py-0.5 rounded-sm border border-accent/10 tabular-nums">#{m.id.toString().padStart(3, '0')}</span>
                                 {searchResultIds?.has(m.id) && matchInSuppliedById.get(m.id) && (
                                   <span
-                                    className="font-mono text-[8px] font-bold text-amber-700 bg-amber-500/10 px-1 py-0.5 rounded-sm border border-amber-500/20 whitespace-nowrap"
+                                    className="font-mono text-[8px] font-bold text-warning bg-warning/10 px-1 py-0.5 rounded-sm border border-warning/25 whitespace-nowrap"
                                     title="Il termine cercato compare in una parte ricostruita editorialmente (supplied), non attestata sulla pietra"
                                   >
                                     RICOSTR.
@@ -6438,7 +6438,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                           </div>
                           <div aria-live="polite" role="status" className="w-full text-right">
                             {exportError
-                              ? <span className="text-[9px] font-sans font-bold uppercase tracking-widest text-red-500">{exportError}</span>
+                              ? <span className="text-[9px] font-sans font-bold uppercase tracking-widest text-danger">{exportError}</span>
                               : exportFlash
                                 ? <span className="sr-only">Esportazione {exportFlash.toUpperCase()} completata</span>
                                 : null}
@@ -6993,11 +6993,11 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
 
                   {importStep === 'error' && (
                     <div className="py-6 text-center space-y-3">
-                      <div className="inline-block p-3 bg-red-500/10 text-red-600 rounded-full mb-1">
-                        <AlertTriangle className="h-6 w-6 text-red-600" />
+                      <div className="inline-block p-3 bg-danger/10 text-danger rounded-full mb-1">
+                        <AlertTriangle className="h-6 w-6 text-danger" />
                       </div>
-                      <h4 className="font-serif text-base font-bold text-red-600">Errore elaborazione</h4>
-                      <p className="text-xs text-muted max-w-sm mx-auto bg-red-500/5 p-3 border border-red-500/20 font-mono text-left overflow-x-auto text-[10px]">
+                      <h4 className="font-serif text-base font-bold text-danger">Errore elaborazione</h4>
+                      <p className="text-xs text-muted max-w-sm mx-auto bg-danger/10 p-3 border border-danger/25 font-mono text-left overflow-x-auto text-[10px]">
                         {importErrorMsg}
                       </p>
                       <button 
@@ -7261,7 +7261,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                                 <span
                                   className={cn(
                                     "text-[10px] font-bold px-2 py-0.5 rounded-sm uppercase tracking-tighter shadow-sm",
-                                    selectedMonumento.editorialStatus === 'under-revision' && "bg-amber-500/10 text-amber-600 dark:text-amber-400",
+                                    selectedMonumento.editorialStatus === 'under-revision' && "bg-warning/10 text-warning",
                                     selectedMonumento.editorialStatus === 'draft' && "bg-sidebar text-muted",
                                     (selectedMonumento.editorialStatus === 'published' || selectedMonumento.editorialStatus === 'diplomatic-edition') && "bg-success/10 text-success"
                                   )}
@@ -7303,7 +7303,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                                </button>
                                <button 
                                  onClick={() => setShowDeleteConfirm(true)}
-                                 className="p-2 hover:bg-sidebar text-muted hover:text-red-600 transition-all rounded-full"
+                                 className="p-2 hover:bg-sidebar text-muted hover:text-danger transition-all rounded-full"
                                  title="Elimina"
                                >
                                  <Trash2 className="h-5 w-5" />
@@ -7311,10 +7311,10 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                              </>
                            ) : (
                              <div className="flex items-center gap-3 animate-in fade-in zoom-in-95 duration-200">
-                               <span className="text-[10px] font-bold uppercase text-red-600 tracking-widest whitespace-nowrap">Sicuro di voler eliminare?</span>
-                               <button 
+                               <span className="text-[10px] font-bold uppercase text-danger tracking-widest whitespace-nowrap">Sicuro di voler eliminare?</span>
+                               <button
                                  onClick={() => handleDelete()}
-                                 className="px-4 py-1.5 bg-red-600 text-white font-sans text-[9px] font-bold uppercase tracking-widest hover:bg-red-700 transition-colors"
+                                 className="px-4 py-1.5 bg-danger text-white font-sans text-[9px] font-bold uppercase tracking-widest hover:bg-danger/90 transition-colors"
                                >
                                  Conferma
                                </button>
