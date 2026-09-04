@@ -64,6 +64,20 @@ fi
 echo $$ > "$LOCK_FILE"
 trap 'rm -f "$LOCK_FILE"' EXIT
 
+# --- guardia: sessione Claude autenticata ----------------------------------
+# Senza questa, ogni task fallirebbe con "OAuth session expired" bruciando un
+# branch per nulla, e in una run notturna non se ne accorgerebbe nessuno.
+if ! auth_probe=$(claude -p "rispondi soltanto: ok" --output-format json 2>&1); then
+  msg="[$(date -Iseconds)] SESSIONE CLAUDE NON VALIDA: il runner non parte.
+Probabile causa: sessione OAuth scaduta. Rilancia 'claude' in un terminale e
+rifai il login, oppure imposta ANTHROPIC_API_KEY per le run headless.
+Dettaglio: $(echo "$auth_probe" | head -c 300)"
+  echo "$msg" >&2
+  mkdir -p "$LOG_DIR"
+  { echo "## $(date '+%Y-%m-%d %H:%M') — run non partita"; echo; echo "$msg"; echo; echo "---"; echo; } >> "$DIGEST"
+  exit 1
+fi
+
 # --- guardia: l'albero di lavoro deve essere pulito ------------------------
 if [ -n "$(git status --porcelain)" ]; then
   echo "[$(date -Iseconds)] ALBERO DI LAVORO SPORCO: ci sono modifiche non committate."
@@ -123,11 +137,15 @@ run_one_task() {
 
   state_set "$task_id" running
 
+  # Si parte SEMPRE dal main locale: origin/main può essere indietro (qui i
+  # commit restano locali finché non li pushi tu), e un branch nato dal remoto
+  # non avrebbe le modifiche locali — .gitignore compreso, con l'effetto di
+  # farsi committare dentro il ledger di stato e i log.
   git fetch origin main --quiet 2>/dev/null || true
   if git show-ref --verify --quiet "refs/heads/$branch"; then
     git checkout --quiet "$branch"
   else
-    git checkout --quiet -b "$branch" origin/main 2>/dev/null || git checkout --quiet -b "$branch" main
+    git checkout --quiet -b "$branch" main
   fi
 
   local full_prompt
@@ -231,7 +249,10 @@ Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>"
     *)   state_set "$task_id" failed ;;
   esac
 
-  git checkout --quiet main
+  if ! git checkout --quiet main 2>/dev/null; then
+    echo "AVVISO: checkout di main bloccato, forzo (le modifiche restano su $branch)."
+    git checkout --quiet -f main
+  fi
 
   # --- riga nel riepilogo leggibile ---------------------------------------
   local icon

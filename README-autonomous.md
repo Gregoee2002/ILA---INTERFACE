@@ -1,122 +1,144 @@
 # Esecuzione autonoma dei task ILA con Claude Code
 
-Questo pacchetto ti permette di far lavorare Claude Code **senza presidio**,
-sfruttando i tempi morti (notte, mentre lavori su altro), su un backlog di
-migliorie predefinite — con guardrail espliciti perché il progetto ha già
-avuto un incidente di near-data-loss e segue una filosofia "patch-only" sui
-dati epigrafici.
+Fa lavorare Claude Code **senza presidio** (di notte, o mentre non sei al PC)
+su un backlog predefinito, con guardrail espliciti: il progetto ha già avuto
+un incidente di near-data-loss e segue una filosofia *patch-only* sui dati
+epigrafici.
+
+Stato al **2026-09-05**: infrastruttura installata, backlog aggiornato,
+launchd attivo. **Manca solo il login headless** — vedi "Prerequisito" qui
+sotto: finché non è risolto, ogni run si ferma prima di partire e lo scrive
+nel riepilogo.
 
 ## Cosa fa e cosa NON fa
 
-**Fa:**
-- Prende un task alla volta da `tasks.yaml`, crea un branch `auto/task-NNN`,
-  lancia Claude Code in modalità headless (`claude -p`) con permessi
-  ristretti, verifica che build/typecheck passino, e se sì fa **commit
-  locale** sul branch.
+**Fa:** prende un task da `tasks.yaml`, crea il branch `auto/task-NNN` dal
+`main` **locale**, lancia `claude -p` headless con permessi ristretti, gira il
+typecheck e fa **commit locale** sul branch. Poi torna su `main` e appende una
+voce leggibile a `logs/autonomous/RIEPILOGO.md`.
 
-**NON fa mai (guardrail su due livelli — prompt + `settings.autonomous.json`):**
-- Non tocca file `.xml` del corpus né blocchi `<xenoData>` — restano di
-  esclusiva revisione manuale in Oxygen.
-- Non fa `git push`, non tocca `main`/`master`, non fa merge.
-- Non abilita `GITHUB_ALLOW_DELETE`.
-- Non fabbrica dati epigrafici mancanti (principio "XML come fonte di
-  verità" del progetto).
-- Non committa se la build/typecheck fallisce dopo le sue modifiche.
+**NON fa mai** (guardrail su due livelli — prompt runtime + `.claude/settings.autonomous.json`):
+non tocca `.xml` del corpus né `<xenoData>`; non fa `git push`, non tocca
+`main`, non fa merge; non abilita `GITHUB_ALLOW_DELETE`; non fabbrica dati
+epigrafici mancanti.
 
-Il risultato di ogni run è **materiale da rivedere tu**: branch locali con
-commit chiari e un log Markdown per ciascun task in `logs/autonomous/` —
-utile anche come appendice metodologica per la tesi (hai già l'abitudine di
-tenere session log).
+Il risultato di ogni run è **materiale da rivedere**: branch locali con commit
+chiari e un log per task — utile anche come appendice metodologica per la tesi.
 
-## Setup (una tantum)
+## Prerequisito: sessione headless autenticata
+
+`claude -p` usa la stessa sessione della CLI interattiva, e al 2026-09-05 quella
+sessione è **scaduta**:
+
+```
+Failed to authenticate: OAuth session expired and could not be refreshed
+```
+
+Due modi per risolverlo, entrambi da fare a mano una volta sola:
 
 ```bash
-# 1. Copia questi file nella root del repo di ILA (non del corpus separato)
-cp tasks.yaml run-autonomous.sh /path/to/ILA/
-cp -r .claude /path/to/ILA/
-
-# 2. Dipendenze
-brew install yq jq        # macOS
-# oppure: sudo apt install yq jq   # Linux
-
-# 3. Assicurati che Claude Code sia autenticato e nel PATH
-claude --version
-
-# 4. Verifica che nel package.json esista uno script "typecheck"
-#    (altrimenti lo script usa 'npx tsc --noEmit' come fallback)
+claude
 ```
+
+(rifà il login OAuth; poi esci con `/exit`) — **oppure**, più stabile per le run
+notturne, imposta una API key nell'ambiente di launchd:
+
+```bash
+launchctl setenv ANTHROPIC_API_KEY sk-ant-...
+```
+
+Per renderla persistente ai riavvii va aggiunta come `EnvironmentVariables` in
+`~/Library/LaunchAgents/com.ila.autonomous.plist`.
+
+Il runner **verifica l'autenticazione prima di toccare git**: se la sessione non
+è valida non crea branch e scrive "run non partita" nel riepilogo, così la
+mattina te ne accorgi invece di trovare branch vuoti.
 
 ## Uso manuale
 
 ```bash
-cd /path/to/ILA
-./run-autonomous.sh                    # 1 task (risk low/medium)
-MAX_TASKS=3 ./run-autonomous.sh        # fino a 3 task in sequenza
-```
-
-Poi, per rivedere:
-
-```bash
-git branch --list "auto/*"
-git checkout auto/task-001
-git diff main...auto/task-001
-```
-
-Se ti convince, fai tu il merge/push. Se un task fallisce (`status: failed`
-in `tasks.yaml`), il branch resta lì per debug — non viene toccato in
-automatico da run successive.
-
-## Task ad alto rischio
-
-Il task `007` (network graph onomastico) è marcato `risk: high` perché
-comporta logica di inferenza di relazioni che tu stesso vuoi rivedere prima
-del merge. Non viene eseguito nelle run automatiche di default. Per
-lanciarlo esplicitamente:
-
-```bash
+cd /Users/gabriele/Documents/STAR
+DRY_RUN=1 ./run-autonomous.sh     # mostra quale task partirebbe, senza lanciarlo
+./run-autonomous.sh               # 1 task (risk low/medium)
+MAX_TASKS=3 ./run-autonomous.sh   # fino a 3 in sequenza
+TASK_ID=014 ./run-autonomous.sh   # forza un task specifico
 ALLOW_HIGH_RISK=1 ./run-autonomous.sh
 ```
 
-## Scheduling nei "tempi morti"
+Il runner **rifiuta di partire con l'albero di lavoro sporco**, per non
+mescolare il tuo lavoro in corso con quello automatico.
 
-### Cron (Linux/macOS), es. ogni notte alle 2:00
+## Revisione (la parte che resta a te)
 
 ```bash
-crontab -e
+cat logs/autonomous/RIEPILOGO.md      # cosa è successo, in italiano
+git branch --list "auto/*"
+git diff main...auto/task-011         # il diff di un task
+git merge auto/task-011               # se ti convince
 ```
 
-Aggiungi:
+Un commit che inizia con `[BUILD FALLITA]` **non va mergiato**: è lì solo per
+non perdere il lavoro e lasciare l'albero pulito per la run successiva.
 
-```cron
-0 2 * * * cd /path/to/ILA && MAX_TASKS=2 ./run-autonomous.sh >> logs/cron.log 2>&1
+## Scheduling
+
+Già installato e caricato: `~/Library/LaunchAgents/com.ila.autonomous.plist`,
+ogni notte alle **02:00**, `MAX_TASKS=2`.
+
+```bash
+launchctl print gui/$(id -u)/com.ila.autonomous   # stato
+launchctl kickstart -k gui/$(id -u)/com.ila.autonomous  # lancia subito, per provare
+launchctl bootout gui/$(id -u)/com.ila.autonomous       # disattiva
 ```
 
-### launchd (macOS, alternativa a cron)
+Per cambiare orario: modifica `StartCalendarInterval` nel plist, poi `bootout` +
+`bootstrap`. Il Mac deve essere acceso (o in sleep: launchd recupera il job al
+risveglio, non a Mac spento).
 
-Crea `~/Library/LaunchAgents/com.ila.autonomous.plist` con un
-`ScheduledTime` alle 2:00 e `ProgramArguments` che puntano allo script — se
-ti serve te lo preparo nel dettaglio identico al cron sopra.
+## Stato dei task
 
-Il file di lock (`.autonomous.lock`) evita run sovrapposte se una run
-precedente sta ancora andando.
+Lo stato **non** sta in `tasks.yaml`: sta in `.autonomous/state.tsv`, che è
+gitignored. Motivo: `tasks.yaml` è tracciato, quindi scrivere lì lo stato lo
+faceva finire nel commit del branch `auto/*`, e il successivo `checkout main`
+lo riportava a `pending` — ogni run avrebbe rifatto lo stesso task all'infinito.
+
+`tasks.yaml` resta la fonte dichiarativa del backlog. Per rimettere in coda un
+task già fatto, basta cancellarne le righe da `.autonomous/state.tsv`.
+
+## Il backlog attuale
+
+`tasks.yaml` (aggiornato 2026-09-05) ha in testa i task **011-020**, cioè la
+coda dell'audit del 2026-09-01 (`docs/piano-audit-ui-da-fare.md`):
+
+| # | cosa | rischio |
+|---|---|---|
+| 011-013 | codemod dei 179 colori di stato ad-hoc → token `--danger/--warning/--success` | medium/low |
+| 014 | palette mappa centralizzata in `src/lib/mapPalette.ts` | low |
+| 015 | regola `:focus-visible` globale | low |
+| 016 | scala z documentata, grana felt sotto il contenuto | medium |
+| 017-020 | primitivi `src/components/ui/{Button,Chip,Badge,FilterSelect,Card}` | medium/low |
+
+**L'ordine conta**: 011-013 devono girare prima di 017-020, che usano quei token.
+Dopo vengono i task feature 001-010 di agosto, ancora validi ma meno urgenti.
+
+Restano **fuori** dal backlog automatico le correzioni editoriali su epiteti e
+teonimi (`docs/piano-audit-dati-da-fare.md`): richiedono una decisione tua con
+verifica su Lane 1971, e toccherebbero XML del corpus — che il runner ha il
+divieto assoluto di modificare.
 
 ## Estendere il backlog
 
-Aggiungi voci a `tasks.yaml` seguendo lo schema esistente. Cose a cui stare
-attento scrivendo un nuovo prompt:
-- Specifica sempre lo `scope` (percorsi) per limitare dove Claude può
-  scrivere.
-- Se il task tocca in qualunque modo dati epigrafici derivati (indici,
-  epiteti, `_section`), ricorda esplicitamente nel prompt i principi del
-  progetto (mai inferire dati non presenti nel markup, `entryId` non
-  `firebaseId`, patch-only).
-- Se non sei sicuro del livello di rischio, meglio `medium` che `low`: i
-  `low` partono anche senza supervisione ravvicinata.
+Aggiungi voci a `tasks.yaml` con lo schema esistente. Accortezze:
+- specifica sempre lo `scope` (percorsi) per limitare dove Claude può scrivere;
+- i task migliori per l'esecuzione non presidiata sono quelli **verificabili per
+  grep o per typecheck**; quelli che richiedono un giudizio visivo vanno spezzati
+  in modo che il diff resti piccolo;
+- chiedi sempre all'agente di **elencare cosa ha lasciato invariato e perché**:
+  è quella lista che rende la revisione veloce;
+- nel dubbio sul rischio, meglio `medium` che `low`.
 
 ## Costi
 
-Ogni run headless da giugno 2026 viene fatturata sul credito Agent SDK
-separato (se hai un piano in abbonamento), non sui limiti interattivi. Ogni
-log in `logs/autonomous/*.md` riporta il costo stimato della singola
-esecuzione (`total_cost_usd` dall'output JSON di Claude Code) — utile per
-tenere sotto controllo la spesa se lasci girare più task a notte.
+Ogni log in `logs/autonomous/*.md` riporta il costo stimato della singola
+esecuzione (`total_cost_usd`), ripreso anche nel riepilogo — utile per tenere
+sotto controllo la spesa se lasci girare più task a notte.
