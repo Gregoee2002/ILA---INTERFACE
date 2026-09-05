@@ -74,7 +74,7 @@ export const PRINT_SOURCES: PrintSource[] = [
     collazione: {
       pdf: 'CMRDM-I.pdf',
       entryStart: /^\s*(\d{1,3})\.\s/,
-      note: 'Due colonne in alcune sezioni; i vacat sono resi come spazi lunghi. Estrarre con `pdftotext -layout`.',
+      note: 'Il livello di testo del PDF non mappa il font greco in Unicode: `pdftotext` da solo restituisce mojibake. Passare prima da `scripts/ocr-print-source.py`, che ritaglia i blocchi greci e li legge con Tesseract `grc`, e collazionare il .ocr.txt che ne esce.',
     },
   },
   {

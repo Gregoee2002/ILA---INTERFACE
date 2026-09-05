@@ -54,7 +54,7 @@ import {
 } from './litMarkup';
 
 export * from './laresToolbox';
-import { LaresMarker, LARES_GRID, AMBITO_LABELS, AMBITO_CAMPO } from './laresToolbox';
+import { LaresMarker, LARES_GRID, AMBITO_LABELS, AMBITO_CAMPO, ToolboxMarker } from './laresToolbox';
 import { injectToolboxPaths } from './cultToolboxExport';
 
 
@@ -579,6 +579,34 @@ export function lessicoLetterario(testimonia: TestimoniumRisolto[]): Map<string,
         forma: c.forma,
         lingua: t.lingua,
       });
+    }
+  }
+  return out;
+}
+
+export interface PercorsoLetterario {
+  /** "activities/expiation/confession" — la stessa chiave dell'indice epigrafico */
+  key: string;
+  label: string;
+  marker: ToolboxMarker;
+  /** i segmenti marcati, con il passo da cui vengono */
+  occorrenze: { testimoniumId: string; cita: string; testo: string; lingua: 'grc' | 'lat' }[];
+}
+
+/**
+ * I percorsi del toolbox visti dai testi, con la stessa chiave che l'indice
+ * epigrafico ricava dal corpus (`buildCultIndex().toolbox`). È il ponte fra le
+ * due metà del database sull'asse LARES: dove una parola marcata su una stele e
+ * un segmento marcato in un libro cadono nello stesso ramo, la vista lo mostra —
+ * accostati, mai sommati (vedi la nota di `lessicoLetterario`).
+ */
+export function toolboxLetterario(testimonia: TestimoniumRisolto[]): Map<string, PercorsoLetterario> {
+  const out = new Map<string, PercorsoLetterario>();
+  for (const t of testimonia) {
+    for (const x of markupIndexOf(t).toolbox) {
+      let e = out.get(x.key);
+      if (!e) { e = { key: x.key, label: x.label, marker: x.marker, occorrenze: [] }; out.set(x.key, e); }
+      e.occorrenze.push({ testimoniumId: t.id, cita: citaBreve(t), testo: x.testo, lingua: t.lingua });
     }
   }
   return out;

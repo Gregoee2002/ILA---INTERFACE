@@ -1,0 +1,47 @@
+# Cancello unico su ogni push e su ogni pull request.
+#
+# Il corpus è la cosa che non si può rompere ed era l'unica senza rete: fino a
+# ieri l'unico controllo automatico era il `tsc` del deploy. Qui girano, in
+# ordine di costo crescente, i controlli che un errore vero lo fermano prima
+# che arrivi sul sito.
+name: Verifica
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  verifica:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+
+      - name: Installazione
+        run: npm ci
+
+      - name: Tipi
+        run: npx tsc --noEmit
+
+      # Copre il round-trip dell'edizione, la validazione del markup cultuale
+      # e dei percorsi LARES, il registro delle fonti e cinque invarianti sul
+      # corpus reale (XML ben formato, id unici, scrittura/rilettura).
+      - name: Test
+        run: npm test
+
+      # Controlli epigrafici che i test TypeScript non fanno: residui di
+      # notazione Leiden non convertiti, coerenza fra testo e <origDate>,
+      # avanzamento delle fasi di markup. Esce con 1 solo su errori veri.
+      - name: Controlli sul corpus
+        run: python3 scripts/lint-corpus.py
+
+      # Ultima perché è la più lenta: se la build non passa, non serve sapere
+      # altro — ma serve saperlo prima del deploy, non durante.
+      - name: Build
+        run: npx vite build

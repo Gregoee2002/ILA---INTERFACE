@@ -38,11 +38,26 @@ import { normalizeGreek } from '../src/lib/textNorm';
 
 const GRECO = /[Ͱ-Ͽἀ-῿]/;
 
-/** Solo le sequenze in alfabeto greco, tutto il resto via. */
+/**
+ * Solo le sequenze in alfabeto greco, tutto il resto via — e le parole
+ * spezzate dall'a-capo ricongiunte prima, su entrambi i lati del confronto:
+ * la sillabazione di fine riga è la stessa cosa sulla pietra e sul libro, ma
+ * se la si lascia dov'è, ogni riga che va a capo in un punto diverso conta
+ * come divergenza. Sono differenze di impaginazione, non di lettura.
+ */
 function soloGreco(s: string): string {
-  const pezzi = s.match(/[Ͱ-Ͽἀ-῿][Ͱ-Ͽἀ-῿'’ͅ\s]*/g) || [];
-  return pezzi.join(' ');
+  const ricongiunto = s.replace(/(\S)-\s+/g, '$1');
+  const pezzi = ricongiunto.match(/[Ͱ-Ͽἀ-῿][Ͱ-Ͽἀ-῿'’ͅ\s]*/g) || [];
+  return pezzi.join(' ').replace(SEGNI_SCIOLTI, '');
 }
+
+/**
+ * Spiriti e accenti *sciolti* — non uniti a una lettera: nel blocco greco
+ * esteso sono caratteri a sé, e l'OCR ne produce a bizzeffe quando la
+ * scansione stacca un accento dal suo rigo. Non sono lettere e non vanno
+ * confrontati: `normalizeGreek` toglie i diacritici combinanti, non questi.
+ */
+const SEGNI_SCIOLTI = /[\u037E\u0384\u0385\u1FBD-\u1FC1\u1FCD-\u1FCF\u1FDD-\u1FDF\u1FED-\u1FEF\u1FFD\u1FFE]/g;
 
 /** Testo dell'edizione di una scheda, senza tag e senza segni di lacuna. */
 function edizioneDiScheda(xml: string): string {

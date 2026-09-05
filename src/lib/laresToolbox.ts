@@ -101,6 +101,24 @@ export const CAMPO_COLOR: Record<LaresCampo, string> = {
   fruizione: '#7B8F6A',        // verde salvia
 };
 
+/**
+ * Una tinta per **item** del toolbox, sorella di CAMPO_COLOR e della palette
+ * delle famiglie del lessico cultuale (CultLexiconPanel): stessa gamma terrosa,
+ * nessuna coincidenza con --lit né con le tinte dei campi concettuali. Vive qui
+ * e solo qui, così le due viste che la usano non possono divergere.
+ */
+export const ITEM_COLOR: Record<string, string> = {
+  'human-agents': '#c19a3e',       // ocra bruciata
+  'superhuman-agents': '#8f6a9e',  // viola polvere — come la famiglia agency
+  'activities': '#c57a4f',         // terracotta chiara
+  'states-of-mind': '#9a7b6a',     // seppia
+  'spaces': '#7b8f6a',             // verde salvia
+  'institutions': '#6e8bab',       // grigio-blu
+  'materiality': '#a85250',        // terracotta scura
+};
+
+export const itemColor = (id: string) => ITEM_COLOR[id] || '#8a8a80';
+
 // ── 2. l'Analytical Toolbox ───────────────────────────────────────────────
 
 export interface ToolboxSub {
