@@ -54,6 +54,11 @@
      CLUSTER_HIGHLIGHT_COLOR in src/lib/mapPalette.ts, unica fonte per il
      lato JS. Non fa parte della palette di stato sopra: è data-viz mappa. */
   --map-cluster-highlight: #B0233F;
+  /* Stessa tinta in componenti r/g/b, per le regole che ne usano una versione
+     translucida (alone del cluster, animazione di pulsazione): senza questa,
+     il valore resterebbe ripetuto a mano come rgba(176, 35, 63, …) in più
+     punti del file (sei, in realtà), che è il difetto che UI-05 doveva togliere. */
+  --map-cluster-highlight-rgb: 176 35 63;
 }
 
 .dark {
@@ -446,9 +451,9 @@
     animation: site-marker-pulse 1.3s ease-out 2;
   }
   @keyframes site-marker-pulse {
-    0% { filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.95)) drop-shadow(0 0 0 rgba(176, 35, 63, 0.9)); }
-    50% { filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.95)) drop-shadow(0 0 14px rgba(176, 35, 63, 0.95)); }
-    100% { filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.95)) drop-shadow(0 0 0 rgba(176, 35, 63, 0.9)); }
+    0% { filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.95)) drop-shadow(0 0 0 rgb(var(--map-cluster-highlight-rgb) / 0.9)); }
+    50% { filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.95)) drop-shadow(0 0 14px rgb(var(--map-cluster-highlight-rgb) / 0.95)); }
+    100% { filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.95)) drop-shadow(0 0 0 rgb(var(--map-cluster-highlight-rgb) / 0.9)); }
   }
 
   /* Tooltip epiteti al passaggio del mouse sui marker: il chrome bianco di
@@ -474,11 +479,11 @@
      sia dalla scala di densità teal sia dai colori delle regioni, così resta
      riconoscibile a qualunque livello di zoom e densità. */
   .marker-cluster-highlight {
-    background-color: rgba(176, 35, 63, 0.32) !important;
+    background-color: rgb(var(--map-cluster-highlight-rgb) / 0.32) !important;
   }
   .marker-cluster-highlight div {
     background-color: var(--map-cluster-highlight) !important;
-    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.95), 0 0 10px rgba(176, 35, 63, 0.85) !important;
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.95), 0 0 10px rgb(var(--map-cluster-highlight-rgb) / 0.85) !important;
   }
 
   /* Mappa: bollini dei cluster — sostituiscono la palette giallo/arancio di
