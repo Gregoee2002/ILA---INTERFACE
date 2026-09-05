@@ -56,6 +56,11 @@ TRATTI = [
     re.compile(r"[a-z][A-Z]"),                    # maiuscola in mezzo: XClL, ALVOUV
     re.compile(r"[A-Za-z][\"'][A-Za-z]"),         # apostrofo interno: 't\"OC
     re.compile(r"[A-Za-z][\"'~$&<>]|[\"'~$&<>][A-Za-z]"),  # segno attaccato a una lettera: 't\"<il, 'Yj-
+    # Parentesi *dentro* la parola: x(Xl, OC!L[(Xp. Sono le righe di
+    # un'iscrizione con lacune, dove il mojibake si mescola alle parentesi
+    # dell'edizione — proprio le righe che non si possono perdere. Il segno
+    # deve stare fra due lettere: «(hereafter» resta inglese.
+    re.compile(r"[A-Za-z][()\[\]!{}][A-Za-z]"),
 ]
 # Parole inglesi frequentissime in questo genere di pagine: la loro presenza
 # smentisce il mojibake anche quando la riga ha qualche carattere strano.

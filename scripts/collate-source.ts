@@ -182,8 +182,11 @@ function main() {
     scheda: string; numero: string; regione: string;
     similarita: number; nDiv: number; div: Divergenza[];
     lungStampa: number; lungCorpus: number;
+    /** i due testi hanno lunghezze incomparabili: quasi sempre è il ritaglio
+     *  dell'entry a stampa ad essere sbagliato, non la scheda. */
+    sospetta: boolean;
   }
-  const righe: Riga[] = [];
+  let righe: Riga[] = [];
   let senzaRif = 0, senzaEntry = 0, senzaGreco = 0;
 
   let scartate = 0;
@@ -216,9 +219,16 @@ function main() {
       scheda: f.replace(/\.xml$/, ''), numero: rif.numero, regione,
       similarita: migliore.sim, nDiv: comuni.length, div: comuni,
       lungStampa: migliore.st.length, lungCorpus: corpus.length,
+      // Un'entry a stampa lunga il triplo della scheda non è una scheda
+      // sbagliata: è il numero di catalogo della *successiva* che non è stato
+      // riconosciuto, e il ritaglio si è mangiato anche quella. Confrontarle
+      // non dice nulla, e lasciarle nel mucchio falserebbe ogni conteggio.
+      sospetta: migliore.st.length > 3 * corpus.length || corpus.length > 3 * migliore.st.length,
     });
   }
 
+  const sospette = righe.filter(r => r.sospetta);
+  righe = righe.filter(r => !r.sospetta);
   righe.sort((a, b) => a.similarita - b.similarita);
 
   // Campione stratificato per regione, se richiesto: si prendono le schede
@@ -243,6 +253,7 @@ function main() {
   console.log(`│ senza rif. alla fonte   ${String(senzaRif).padStart(5)}`);
   console.log(`│ rif. senza entry        ${String(senzaEntry).padStart(5)}`);
   console.log(`│ senza greco confrontab. ${String(senzaGreco).padStart(5)}`);
+  console.log(`│ ritaglio sospetto       ${String(sospette.length).padStart(5)}   (escluse: ${sospette.slice(0, 6).map(r => r.scheda).join(', ')}${sospette.length > 6 ? '…' : ''})`);
   console.log(`│ identiche               ${String(pulite).padStart(5)}`);
   if (letture.length > 1) {
     console.log(`│ scartate perché una sola lettura le vedeva: ${scartate}`);
