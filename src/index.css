@@ -35,6 +35,10 @@
   --tint-2: rgba(239, 237, 230, 0.55); /* perla calda */
   --tint-3: rgba(232, 238, 238, 0.55); /* grigio-blu polvere */
   --tint-4: rgba(240, 235, 231, 0.55); /* terracotta smorzata */
+  /* Colore di evidenziazione cluster mappa (UI-05): stessa costante di
+     CLUSTER_HIGHLIGHT_COLOR in src/lib/mapPalette.ts, unica fonte per il
+     lato JS. Non fa parte della palette di stato sopra: è data-viz mappa. */
+  --map-cluster-highlight: #B0233F;
 }
 
 .dark {
@@ -457,7 +461,7 @@
     background-color: rgba(176, 35, 63, 0.32) !important;
   }
   .marker-cluster-highlight div {
-    background-color: #B0233F !important;
+    background-color: var(--map-cluster-highlight) !important;
     box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.95), 0 0 10px rgba(176, 35, 63, 0.85) !important;
   }
 
