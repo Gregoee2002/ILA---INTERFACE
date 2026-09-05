@@ -42,7 +42,8 @@ import {
   BookMarked,
   Type,
   Tags,
-  ScrollText
+  ScrollText,
+  AlignCenter
 } from 'lucide-react';
 import { cn, EASE_OUT, EASE_IN, SPRING_SNAPPY, SPRING_SOFT, gapGlyph } from './lib/utils';
 import { ICONOGRAPHY_LABELS } from './lib/iconographyLabels';
@@ -59,6 +60,7 @@ import { IconographyPanel } from './components/IconographyPanel';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { CooccurrenceHeatmap } from './components/CooccurrenceHeatmap';
 import { CultLexiconPanel } from './components/CultLexiconPanel';
+import { ConcordancePanel } from './components/ConcordancePanel';
 import { LiterarySourcesPanel } from './components/LiterarySourcesPanel';
 import { LiteraryEchoes } from './components/LiteraryEchoes';
 // Editor a sezioni: pesante e usato solo da chi ha sbloccato la modifica.
@@ -87,7 +89,7 @@ interface SearchResult {
   matchInSupplied: boolean;
 }
 
-type AppView = 'home' | 'catalog' | 'sources' | 'stats' | 'timeline' | 'health' | 'map' | 'heatmap' | 'cult' | 'editor' | 'review' | 'flags' | 'bugs' | 'biblio';
+type AppView = 'home' | 'catalog' | 'sources' | 'stats' | 'timeline' | 'health' | 'map' | 'heatmap' | 'cult' | 'concordanza' | 'editor' | 'review' | 'flags' | 'bugs' | 'biblio';
 
 // true sulla build GitHub Pages (vedi vite.config.ts / apiShim.ts): niente
 // server.ts, quindi le funzionalità che dipendevano da Gemini AI o dalla
@@ -1696,6 +1698,7 @@ const RAIL_ITEMS: { view: AppView; label: string; icon: React.ReactNode; adminOn
   { view: 'stats', label: 'Statistiche Epiteti', icon: <BarChart2 className="h-4 w-4" /> },
   { view: 'heatmap', label: 'Heatmap', icon: <Columns className="h-4 w-4" /> },
   { view: 'cult', label: 'Lessico cultuale', icon: <Tags className="h-4 w-4" /> },
+  { view: 'concordanza', label: 'Concordanza', icon: <AlignCenter className="h-4 w-4" /> },
   { view: 'health', label: 'Coerenza', icon: <Check className="h-4 w-4" />, adminOnly: true },
   { view: 'flags', label: 'Registro', icon: <NotebookPen className="h-4 w-4" />, adminOnly: true },
   { view: 'bugs', label: 'Bug', icon: <Bug className="h-4 w-4" />, adminOnly: true },
@@ -2071,6 +2074,7 @@ function HomeView({ monumenti, onNavigate, onSearch, effectiveAdmin }: { monumen
     { view: 'stats', label: 'Statistiche Epiteti', desc: 'Frequenza e distribuzione degli epiteti di Men.', icon: <BarChart2 className="h-5 w-5" /> },
     { view: 'heatmap', label: 'Heatmap Co-occorrenze', desc: 'Quali epiteti e attributi ricorrono insieme.', icon: <Columns className="h-5 w-5" /> },
     { view: 'cult', label: 'Lessico cultuale', desc: 'Il vocabolario delle funzioni cultuali marcato nelle edizioni, per lemma e famiglia.', icon: <Tags className="h-5 w-5" /> },
+    { view: 'concordanza', label: 'Concordanza', desc: 'Dove ricorre una parola nel testo delle iscrizioni, e che cosa le sta intorno.', icon: <AlignCenter className="h-5 w-5" /> },
     { view: 'health', label: 'Coerenza', desc: "Controlli di qualità e coerenza sui dati del corpus.", icon: <Check className="h-5 w-5" />, adminOnly: true },
     { view: 'flags', label: 'Registro', desc: 'Lavorazioni in corso dei collaboratori sulle schede del catalogo.', icon: <NotebookPen className="h-5 w-5" />, adminOnly: true },
     { view: 'bugs', label: 'Bug', desc: 'Problemi di funzionamento segnalati dai collaboratori.', icon: <Bug className="h-5 w-5" />, adminOnly: true },
@@ -6477,6 +6481,12 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                 }} 
               />
             </div>
+          )}
+          {activeView === 'concordanza' && (
+            <ConcordancePanel
+              monumenti={monumenti}
+              onSelectMonumento={(m) => { setSelectedMonumento(m); setActiveView('catalog'); }}
+            />
           )}
           {activeView === 'cult' && (
             <CultLexiconPanel
