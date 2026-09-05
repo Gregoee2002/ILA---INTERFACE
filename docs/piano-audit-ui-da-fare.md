@@ -14,8 +14,22 @@ allineato a `:root` via `.light`; `#E08585` → `text-danger`. Primo scaglione d
 codemod: i 6 usi non ambigui di "successo"/"errore" in `App.tsx` (importStatus,
 badge published) → `text-success`/`text-danger`.
 
-**Da fare:** sostituire i restanti ~230 usi ad-hoc di colori Tailwind di stato
-con le classi tokenizzate. Conteggi (da `grep -rhoE "(text|bg|border)-(red|amber|emerald|green)-[0-9]+" src/`):
+> **CHIUSO il 2026-09-05.** Il codemod è stato eseguito dal runner autonomo
+> (task 011-013, branch `auto/task-011..013`, mergiati in `ec55166..492d8d8`)
+> più `0e6eee6` per tre usi sfuggiti allo scope. Dei 179 usi ad-hoc censiti
+> restano i **7 voluti**: `XmlDiffViewer.tsx` (4 — rosso/verde sono la
+> semantica del diff, non stati dell'app) e `PleiadesMap.tsx` (3 — palette
+> data-viz). I `dark:` ridondanti sono stati rimossi. Typecheck e build verdi.
+>
+> Resta da fare una **verifica a vista**: la mappatura normalizza le opacità
+> (es. `bg-amber-400/5` → `bg-warning/10`), quindi alcuni fondi sono più
+> carichi di prima. Due punti segnalati dall'agente: in `SectionEditorView.tsx`
+> l'hover del bottone di login è diventato `hover:opacity-70` (non esisteva un
+> token per quella tinta), e il bottone "Annulla" del form vocabolario conserva
+> l'hover rosso che aveva già — annullare non è eliminare, la scelta è aperta.
+
+~~**Da fare:** sostituire i restanti ~230 usi ad-hoc di colori Tailwind di stato
+con le classi tokenizzate.~~ Conteggi (da `grep -rhoE "(text|bg|border)-(red|amber|emerald|green)-[0-9]+" src/`):
 
 | pattern | → |
 |---|---|
