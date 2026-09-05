@@ -176,7 +176,7 @@ export const LiteraryMarkupEditor: React.FC<Props> = ({ value, lingua, onChange 
   if (parseError) {
     return (
       <div className="space-y-3">
-        <div className="flex items-start gap-2.5 text-sm text-amber-800 dark:text-amber-400 bg-amber-500/8 border border-amber-500/25 rounded-xl px-4 py-3">
+        <div className="flex items-start gap-2.5 text-sm text-warning bg-warning/10 border border-warning/25 rounded-xl px-4 py-3">
           <AlertTriangle className="w-4 h-4 mt-0.5 shrink-0" />
           <span>
             Il markup di questo testo è malformato e l'editor assistito non riesce ad aprirlo.
@@ -260,7 +260,7 @@ export const LiteraryMarkupEditor: React.FC<Props> = ({ value, lingua, onChange 
                 spellCheck={false}
                 className="w-full font-mono text-[11px] leading-relaxed text-ink/90 bg-white/60 dark:bg-black/30 border border-border/40 rounded-lg p-3 focus:outline-none focus:ring-1 focus:ring-accent/40 custom-scrollbar"
               />
-              {xmlError && <p className="text-[11px] text-red-500 mt-1.5">{xmlError}</p>}
+              {xmlError && <p className="text-[11px] text-danger mt-1.5">{xmlError}</p>}
               {xmlDraft !== null && (
                 <div className="flex gap-2 mt-2">
                   <button type="button" onClick={applyXmlDraft}
@@ -279,7 +279,7 @@ export const LiteraryMarkupEditor: React.FC<Props> = ({ value, lingua, onChange 
       )}
 
       {selWarn && (
-        <div className="flex items-center gap-2 text-xs text-amber-700 dark:text-amber-400 bg-amber-500/8 border border-amber-500/25 rounded-lg px-3 py-2">
+        <div className="flex items-center gap-2 text-xs text-warning bg-warning/10 border border-warning/25 rounded-lg px-3 py-2">
           <AlertTriangle className="w-3.5 h-3.5 shrink-0" /> {selWarn}
         </div>
       )}
@@ -290,8 +290,8 @@ export const LiteraryMarkupEditor: React.FC<Props> = ({ value, lingua, onChange 
             <div key={i} className={cn(
               'flex items-start gap-2 text-xs rounded-lg px-3 py-2 border font-serif',
               iss.severity === 'error'
-                ? 'text-red-700 dark:text-red-400 bg-red-500/8 border-red-500/25'
-                : 'text-amber-800 dark:text-amber-400 bg-amber-500/8 border-amber-500/25',
+                ? 'text-danger bg-danger/10 border-danger/25'
+                : 'text-warning bg-warning/10 border-warning/25',
             )}>
               <AlertTriangle className="w-3.5 h-3.5 mt-0.5 shrink-0" />
               <span><span className="font-mono not-italic text-[10px] opacity-60 mr-1.5">v.{iss.line}</span>{iss.message}</span>
@@ -572,7 +572,7 @@ const LitPopover: React.FC<{
           </button>
         )}
         <button type="button" onClick={onRemove} title="Elimina l'elemento"
-          className="p-1.5 text-white/40 hover:text-red-400 transition-colors">
+          className="p-1.5 text-white/40 hover:text-danger transition-colors">
           <Trash2 className="w-3.5 h-3.5" />
         </button>
       </div>
