@@ -345,11 +345,20 @@ Nell'ordine, ognuno verificabile da solo:
    Attenzione al tetto `arrCap("cultAttestations", 500)` in `apiShim.ts`.
 5. Guida editor §8: una tabella «famiglia → percorso» e la regola «il percorso lo scrive
    il codice, tu rispondi a una domanda sola». PDF rigenerato.
-6. Corpus: **non fatto, e non urgente**. `extractCultAttestations` deriva il percorso dal
-   lemma, quindi i 301 `<w>` già nel corpus lo hanno senza essere riscritti (verificato:
-   297 con percorso, 4 senza). Riscriverli serve solo per un TEI auto-descrittivo da
-   consegnare a LARES; in quel caso, script sul clone fresco del repo dati, mai per copia
-   (i due repo divergono: vedi le note di progetto).
+6. Corpus: **deciso il 2026-09-05 di non scriverli nei file**, ma di iniettarli **in
+   uscita**. Il percorso è una copia derivata del `@lemma`: scriverlo nei 295 file creerebbe
+   una seconda fonte di verità da riallineare a ogni ritocco della griglia — e le quattro
+   domande del §9 sono ancora aperte con la redazione. Dentro ILA si deriva a runtime;
+   serve scritto solo quando il TEI esce di casa, perché fuori nessuno ha la nostra tabella.
+   - `src/lib/cultToolboxExport.ts` → `injectToolboxPaths(xml)`: aggiunge `@type`/`@subtype`
+     a ogni `<w>` cultuale che non ne ha, per sostituzione sull'apertura del tag (niente
+     round-trip di parsing: il testo antico esce identico). Un `@type` scritto a mano —
+     lo scarto editoriale — non si tocca mai.
+   - `scripts/export-lares.ts` → copia arricchita in `exports/lares/` (gitignorata).
+     Verificato: 299 `<w>` in 187 file, i 295 file di uscita tutti ben formati, il corpus
+     invariato. `<rs type="cultTerm|cultFormula">` restano come sono: il loro `@type` è già
+     occupato, e sovrascriverlo perderebbe l'informazione.
+   - `saggioToTei()` (fonti letterarie) inietta il percorso nel `<quote>` del testo antico.
 
 ### Verificato il 2026-09-05
 

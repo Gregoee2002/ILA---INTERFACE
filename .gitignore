@@ -33,3 +33,7 @@ __pycache__/
 .autonomous/
 .autonomous.lock
 logs/
+
+# Copia del corpus arricchita col percorso LARES (scripts/export-lares.ts):
+# si rigenera, non è una fonte.
+exports/lares/

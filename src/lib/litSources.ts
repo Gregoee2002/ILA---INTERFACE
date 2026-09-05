@@ -55,6 +55,7 @@ import {
 
 export * from './laresToolbox';
 import { LaresMarker, LARES_GRID, AMBITO_LABELS, AMBITO_CAMPO } from './laresToolbox';
+import { injectToolboxPaths } from './cultToolboxExport';
 
 
 export type RefType = 'lit' | 'ins' | 'pap';
@@ -796,7 +797,10 @@ ${o.ctsUrn ? `          <idno type="CTS-URN">${xmlEsc(o.ctsUrn)}</idno>\n` : ''}
     // Il testo antico esce con il proprio markup inline: appiattirlo
     // significherebbe buttare via la sola cosa che lega davvero le due metà
     // del database. `testo` è già XML ben formato quando è marcato.
-    const quote = t.testo.includes('<') ? t.testo : xmlEsc(t.testo);
+    // In uscita le parole del lessico cultuale prendono anche il percorso del
+    // toolbox LARES: dentro ILA si deriva dal lemma, ma fuori nessuno ha la
+    // nostra tabella (vedi cultToolboxExport.ts).
+    const quote = t.testo.includes('<') ? injectToolboxPaths(t.testo).xml : xmlEsc(t.testo);
 
     // I raggruppamenti stanno dentro <note type="…">: <listRelation> ammette
     // solo <relation>, e qui i figli sono <term>, <rs>, <placeName>, <ref>.
