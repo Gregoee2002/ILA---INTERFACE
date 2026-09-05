@@ -26,6 +26,13 @@ interface Props {
   /** i lemmi passati sono già filtrati: la griglia mostra i conteggi visibili. */
   schede: (n: number) => string;
   atts: (n: number) => string;
+  /**
+   * Passi letterari per percorso (chiave "item/cat/sub"). Il ponte fra le due
+   * metà del database sull'asse LARES: accostato, mai sommato alle attestazioni
+   * epigrafiche — una parola incisa è un atto, la stessa parola in un libro è
+   * una parola.
+   */
+  letterari?: Map<string, number>;
 }
 
 const FONTE_LABEL: Record<ToolboxFonte, string> = {
@@ -33,7 +40,7 @@ const FONTE_LABEL: Record<ToolboxFonte, string> = {
   'ILA': 'voce innestata da ILA sul corpus di Men',
 };
 
-const Segno: React.FC<{ fonte?: ToolboxFonte }> = ({ fonte }) =>
+export const Segno: React.FC<{ fonte?: ToolboxFonte }> = ({ fonte }) =>
   fonte ? (
     <span
       title={FONTE_LABEL[fonte]}
@@ -48,7 +55,7 @@ const Segno: React.FC<{ fonte?: ToolboxFonte }> = ({ fonte }) =>
     </span>
   ) : null;
 
-export const LaresGrid: React.FC<Props> = ({ percorsi, senzaPercorso, renderLemmaRow, schede, atts }) => {
+export const LaresGrid: React.FC<Props> = ({ percorsi, senzaPercorso, renderLemmaRow, schede, atts, letterari }) => {
   const perKey = new Map(percorsi.map(p => [p.key, p]));
   /** somma i percorsi attestati che stanno sotto un prefisso della griglia. */
   const sotto = (prefisso: string) => {
@@ -58,6 +65,24 @@ export const LaresGrid: React.FC<Props> = ({ percorsi, senzaPercorso, renderLemm
       count: dentro.reduce((n, p) => n + p.count, 0),
       schedeCount: dentro.reduce((n, p) => Math.max(n, p.schedeCount), 0),
     };
+  };
+
+  /** i passi letterari sotto un prefisso della griglia, sommati come i percorsi. */
+  const nelTesti = (prefisso: string) => {
+    if (!letterari) return 0;
+    let n = 0;
+    for (const [k, v] of letterari) if (k === prefisso || k.startsWith(prefisso + '/')) n += v;
+    return n;
+  };
+
+  const contaTesti = (prefisso: string) => {
+    const n = nelTesti(prefisso);
+    return n > 0 ? (
+      <span className="text-[11px] font-sans tabular-nums" style={{ color: 'var(--lit)' }}
+        title="passi delle fonti letterarie marcati su questo ramo — contati a parte">
+        {n} {n === 1 ? 'passo' : 'passi'} nei testi
+      </span>
+    ) : null;
   };
 
   const contatore = (n: { count: number; lemmi: CultLemmaStats[] }) =>
@@ -91,6 +116,7 @@ export const LaresGrid: React.FC<Props> = ({ percorsi, senzaPercorso, renderLemm
               </h3>
               <span className="text-[10px] font-sans text-muted/40">{item.en}</span>
               {contatore(tot)}
+              {contaTesti(item.id)}
               <code className="ml-auto text-[10px] font-sans text-muted/40 hidden sm:block">{item.id}</code>
             </div>
 
@@ -113,6 +139,7 @@ export const LaresGrid: React.FC<Props> = ({ percorsi, senzaPercorso, renderLemm
                       </span>
                       <Segno fonte={cat.fonte} />
                       {contatore(totCat)}
+                      {contaTesti(`${item.id}/${cat.id}`)}
                       {cat.esempi && (
                         <span className="text-[11px] font-serif italic text-muted/45 truncate hidden md:block">
                           {cat.esempi}
@@ -140,6 +167,7 @@ export const LaresGrid: React.FC<Props> = ({ percorsi, senzaPercorso, renderLemm
                               ) : (
                                 <span className="text-[11px] font-sans italic text-muted/30">—</span>
                               )}
+                              {contaTesti(`${item.id}/${cat.id}/${sub.id}`)}
                               {sub.esempi && (
                                 <span className="text-[11px] font-serif italic text-muted/40 truncate hidden md:block">
                                   {sub.esempi}
