@@ -15,6 +15,7 @@ import {
 import { caricaLitDataset, salvaLitDataset, clonaDataset, FonteDati, SEME } from '../lib/litStore';
 import { MarkupText } from './MarkupText';
 import { LiterarySourcesEditor } from './LiterarySourcesEditor';
+import { ToolboxIndex, AmbitiIndex } from './LaresMarkersIndex';
 
 /**
  * LiterarySourcesPanel — la sezione «Fonti letterarie».
@@ -666,7 +667,7 @@ const SaggioView: React.FC<{
         {/* ══ INDICI del saggio ══ */}
         {vista === 'indici' && (
           <div className="max-w-6xl mx-auto w-full px-6 md:px-10 py-6">
-            <RubricheIndici indici={indici} tab={indiceTab} setTab={setIndiceTab} onGo={onApri} />
+            <RubricheIndici indici={indici} testimonia={suoi} tab={indiceTab} setTab={setIndiceTab} onGo={onApri} />
           </div>
         )}
       </div>
@@ -731,12 +732,21 @@ const RigaTestimonianza: React.FC<{ t: TestimoniumRisolto; sigla?: string; onApr
   </div>
 );
 
+/**
+ * Le rubriche. Otto sono elenchi di voci — opere, autori, divinità, luoghi… —
+ * e restano tali: sono liste di nomi, e una lista di nomi si legge come lista.
+ * Le due griglie LARES no: sono classificazioni, e la domanda che si fa loro è
+ * dove si addensa la marcatura. Prendono quindi la grafica della vista «Lessico
+ * cultuale» (LaresMarkersIndex), e con essa il filtro, le barre e i passi che si
+ * aprono sotto la riga.
+ */
 const RubricheIndici: React.FC<{
   indici: ReturnType<typeof buildIndici>;
+  testimonia: TestimoniumRisolto[];
   tab: IndiceKey;
   setTab: (k: IndiceKey) => void;
   onGo: (id: string) => void;
-}> = ({ indici, tab, setTab, onGo }) => (
+}> = ({ indici, testimonia, tab, setTab, onGo }) => (
   <>
     <div className="flex flex-wrap items-center gap-1 mb-5 pb-2 border-b border-border/40">
       {(Object.keys(INDICE_LABELS) as IndiceKey[]).map(k => (
@@ -749,7 +759,11 @@ const RubricheIndici: React.FC<{
         </button>
       ))}
     </div>
-    {indici[tab].length === 0 ? (
+    {tab === 'toolbox' ? (
+      <ToolboxIndex testimonia={testimonia} onGo={onGo} />
+    ) : tab === 'ambiti' ? (
+      <AmbitiIndex testimonia={testimonia} onGo={onGo} />
+    ) : indici[tab].length === 0 ? (
       <p className="text-sm italic text-muted/60 py-10 text-center">
         Indice vuoto. Le rubriche di divinità, epiteti, lessico cultuale e toolbox si riempiono marcando il testo delle testimonianze.
       </p>
@@ -1084,7 +1098,7 @@ export const LiterarySourcesPanel: React.FC<Props> = ({ editingUnlocked, apriTes
               ambiti vengono dai campi delle schede; divinità, epiteti, lessico cultuale e toolbox vengono
               invece dal <em>markup del testo</em> — le stesse marche con cui è codificato il corpus epigrafico.
             </p>
-            <RubricheIndici indici={indici} tab={indiceTab} setTab={setIndiceTab} onGo={setAperto} />
+            <RubricheIndici indici={indici} testimonia={tutte} tab={indiceTab} setTab={setIndiceTab} onGo={setAperto} />
           </div>
         )}
 

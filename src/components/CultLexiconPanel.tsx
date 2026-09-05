@@ -3,7 +3,7 @@ import { Monumento } from '../types';
 import { cn } from '../lib/utils';
 import { buildCultIndex, CultLemmaStats } from '../lib/cultIndex';
 import { CULT_FAMILIES } from '../lib/cultLexicon';
-import { LemmaLetterario, lessicoLetterario, risolviTutte } from '../lib/litSources';
+import { LemmaLetterario, PercorsoLetterario, lessicoLetterario, risolviTutte, toolboxLetterario } from '../lib/litSources';
 import { LaresGrid } from './LaresGrid';
 import { caricaLitDatasetCondiviso } from '../lib/litStore';
 import { Tags, ExternalLink, ChevronRight, ChevronDown, Search, ScrollText } from 'lucide-react';
@@ -58,10 +58,16 @@ export const CultLexiconPanel: React.FC<Props> = ({ monumenti, onSelectMonumento
   // epigrafico riga per riga, non vi confluisce. Il filtro per regione non lo
   // tocca — un passo di Strabone non ha una regione di ritrovamento.
   const [letterario, setLetterario] = useState<Map<string, LemmaLetterario>>(new Map());
+  // Il ponte vale anche sull'asse LARES: dove un ramo della griglia è toccato sia
+  // dalla pietra sia dai libri, la riga lo dice — accostato, mai sommato.
+  const [percorsiLett, setPercorsiLett] = useState<Map<string, PercorsoLetterario>>(new Map());
   useEffect(() => {
     let vivo = true;
     caricaLitDatasetCondiviso().then(({ dataset }) => {
-      if (vivo) setLetterario(lessicoLetterario(risolviTutte(dataset.testimonia, dataset.opere)));
+      if (!vivo) return;
+      const risolte = risolviTutte(dataset.testimonia, dataset.opere);
+      setLetterario(lessicoLetterario(risolte));
+      setPercorsiLett(toolboxLetterario(risolte));
     });
     return () => { vivo = false; };
   }, []);
@@ -382,6 +388,7 @@ export const CultLexiconPanel: React.FC<Props> = ({ monumenti, onSelectMonumento
         <div className="text-sm italic text-muted/60 py-12 text-center">Nessuna attestazione per questi filtri.</div>
       ) : groupBy === 'lares' ? (
         <LaresGrid
+          letterari={new Map([...percorsiLett].map(([k, v]) => [k, v.occorrenze.length]))}
           percorsi={percorsiToRender}
           senzaPercorso={senzaPercorso}
           renderLemmaRow={renderLemmaRow}
