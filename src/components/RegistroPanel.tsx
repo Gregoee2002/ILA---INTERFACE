@@ -73,7 +73,7 @@ export function RegistroPanel({ registri, loading, onResolve, onReopen, onSelect
         {filtered.map(r => {
           const lastNote = [...r.notes].sort((a, b) => b.createdAt.localeCompare(a.createdAt))[0];
           return (
-            <li key={r.entryId} className={cn('rounded-lg border px-4 py-3', r.status === 'open' ? 'border-amber-500/30 bg-amber-500/5' : 'border-border/40 bg-border/10 opacity-70')}>
+            <li key={r.entryId} className={cn('rounded-lg border px-4 py-3', r.status === 'open' ? 'border-warning/25 bg-warning/10' : 'border-border/40 bg-border/10 opacity-70')}>
               <div className="flex items-start justify-between gap-3">
                 <button
                   onClick={() => onSelectEntry(r.entryId)}

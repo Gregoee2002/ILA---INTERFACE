@@ -112,7 +112,7 @@ export function BugReportsPanel({ bugs, loading, knownAuthors, onCreate, onResol
               rows={3}
               className="w-full text-xs font-serif rounded-sm border border-border bg-sidebar px-2.5 py-2 outline-none focus:border-accent transition-colors resize-none"
             />
-            {error && <p className="text-[10px] text-red-500">{error}</p>}
+            {error && <p className="text-[10px] text-danger">{error}</p>}
             <div className="flex gap-2">
               <button
                 type="submit"
@@ -141,7 +141,7 @@ export function BugReportsPanel({ bugs, loading, knownAuthors, onCreate, onResol
 
       <ul className="space-y-3">
         {filtered.map(b => (
-          <li key={b.id} className={cn('rounded-lg border px-4 py-3', b.status === 'open' ? 'border-amber-500/30 bg-amber-500/5' : 'border-border/40 bg-border/10 opacity-70')}>
+          <li key={b.id} className={cn('rounded-lg border px-4 py-3', b.status === 'open' ? 'border-warning/25 bg-warning/10' : 'border-border/40 bg-border/10 opacity-70')}>
             <p className="text-sm font-serif text-ink leading-relaxed whitespace-pre-wrap">{b.testo}</p>
             <div className="flex items-center justify-between mt-1.5 gap-2">
               <span className="text-[9px] font-sans uppercase tracking-wide text-muted/70">
