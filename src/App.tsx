@@ -60,6 +60,8 @@ import { PleiadesMap } from './components/PleiadesMap';
 const MapView = lazy(() => import('./components/MapView').then(m => ({ default: m.MapView })));
 import { IconographyPanel } from './components/IconographyPanel';
 import { ErrorBoundary } from './components/ErrorBoundary';
+import { CitaCosi } from './components/CitaCosi';
+import { leggiPermalink, scriviPermalink } from './lib/permalink';
 const CooccurrenceHeatmap = lazy(() => import('./components/CooccurrenceHeatmap').then(m => ({ default: m.CooccurrenceHeatmap })));
 const CultLexiconPanel = lazy(() => import('./components/CultLexiconPanel').then(m => ({ default: m.CultLexiconPanel })));
 const ConcordancePanel = lazy(() => import('./components/ConcordancePanel').then(m => ({ default: m.ConcordancePanel })));
@@ -4315,6 +4317,36 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
     return () => { vivo = false; disiscrivi?.(); };
   }, []);
 
+  // ── Indirizzi stabili (lib/permalink.ts) ────────────────────────────────
+  // Si legge una volta sola, quando le schede sono arrivate: prima non c'è
+  // nulla da selezionare. `applicato` evita che un secondo giro di monumenti
+  // (ricarico, salvataggio) riporti l'utente dove non è più.
+  const permalinkApplicato = useRef(false);
+  useEffect(() => {
+    if (permalinkApplicato.current || monumenti.length === 0) return;
+    permalinkApplicato.current = true;
+    const { vista, scheda } = leggiPermalink();
+    // Un indirizzo profondo salta il frontespizio: chi arriva da un
+    // collegamento a una scheda ha già detto dove vuole andare.
+    if (vista || scheda !== undefined) setShowLanding(false);
+    if (scheda !== undefined) {
+      const m = monumenti.find(x => x.id === scheda);
+      if (m) { setSelectedMonumento(m); setActiveView('catalog'); setHasNavigated(true); return; }
+    }
+    if (vista) { setActiveView(vista as AppView); setHasNavigated(true); }
+  }, [monumenti]);
+
+  // …e si riscrive a ogni cambio, con replaceState: navigare dentro
+  // l'applicazione non deve riempire la cronologia di passi indietro.
+  useEffect(() => {
+    if (!permalinkApplicato.current) return;
+    const q = scriviPermalink({
+      vista: activeView,
+      ...(selectedMonumento ? { scheda: selectedMonumento.id } : {}),
+    });
+    window.history.replaceState(null, '', `${window.location.pathname}${q}`);
+  }, [activeView, selectedMonumento]);
+
   // Sulla build statica: di default si consulta lo snapshot statico del
   // corpus (nessun token richiesto, solo il gate password in main.tsx).
   // editingUnlocked diventa true solo dopo un PAT GitHub valido inserito
@@ -7312,6 +7344,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                               {getDisplayTitle(selectedMonumento)}
                             </h2>
                             <div className="ornament-rule !my-0 mt-2 max-w-[6rem] mx-0" />
+                            <CitaCosi m={selectedMonumento} />
                           </div>
                       </div>
                       
