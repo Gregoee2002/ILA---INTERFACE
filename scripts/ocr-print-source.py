@@ -61,11 +61,18 @@ TRATTI = [
     # dell'edizione — proprio le righe che non si possono perdere. Il segno
     # deve stare fra due lettere: «(hereafter» resta inglese.
     re.compile(r"[A-Za-z][()\[\]!{}][A-Za-z]"),
+    # Maiuscola in mezzo a una parola che ha anche minuscole: IX.UTn, tLIX.P,
+    # xIX.l. In inglese la maiuscola sta solo in testa; qui è la firma della
+    # sostituzione di font, e cattura le righe di solo alfabeto e punti che
+    # nessun altro tratto vede.
+    re.compile(r"(?=[^a-z]*[a-z])[A-Za-z.'\"]*[a-z.'\"][A-Z]"),
 ]
 # Parole inglesi frequentissime in questo genere di pagine: la loro presenza
 # smentisce il mojibake anche quando la riga ha qualche carattere strano.
 INGLESI = re.compile(
-    r"\b(the|of|and|in|with|from|found|height|width|depth|cm|no|p{1,2}|op|cit|col|vol|"
+    # «p» da solo no: comparirebbe dentro il mojibake (tLIX.P') e basterebbe a
+    # far passare per inglese una riga greca.
+    r"\b(the|of|and|in|with|from|found|height|width|depth|cm|no|op|cit|col|vol|"
     r"stone|altar|marble|inscription|bears|now|museum|left|right|top|line|lines)\b",
     re.I,
 )
@@ -168,13 +175,23 @@ def raggruppa(righe: list) -> list:
     while cambiato:
         cambiato = False
         for i, r in enumerate(righe):
-            if greche[i] or len(r.testo) > 4 or INGLESI.search(r.testo) or solo_numero.match(r.testo):
+            if greche[i] or INGLESI.search(r.testo) or solo_numero.match(r.testo):
                 continue
-            for j in (i - 1, i + 1):
-                if 0 <= j < len(righe) and greche[j] and abs(righe[j].y0 - r.y0) < 1.8 * altezza_tipica:
-                    greche[i] = True
-                    cambiato = True
-                    break
+            vicini = [j for j in (i - 1, i + 1)
+                      if 0 <= j < len(righe) and greche[j]
+                      and abs(righe[j].y0 - r.y0) < 1.8 * altezza_tipica]
+            # Corta e attaccata a una riga greca: è la coda di un'iscrizione.
+            # Oppure — ed è il caso che sfuggiva — una riga *in mezzo* a due
+            # righe greche: dentro un blocco d'iscrizione non ci finisce prosa
+            # inglese, e una riga di tre parole può non avere abbastanza
+            # tratti per essere riconosciuta da sola.
+            # …oppure una riga che qualche tratto ce l'ha, ma diluito fra
+            # parentesi e puntini di lacuna: da sola non supera la soglia,
+            # attaccata a un'iscrizione e senza una parola inglese è greca.
+            qualche_tratto = any(t.search(p) for p in r.testo.split() if len(p) >= 2 for t in TRATTI)
+            if vicini and (len(r.testo) <= 4 or len(vicini) == 2 or qualche_tratto):
+                greche[i] = True
+                cambiato = True
 
     blocchi, corrente = [], []
     for i, r in enumerate(righe):
