@@ -12,13 +12,20 @@
  *
  *  Uso:
  *    npx tsx scripts/collate-source.ts --source cmrdm-i --pdf ~/scans/CMRDM-I.pdf
- *    npx tsx scripts/collate-source.ts --source cmrdm-i --txt /tmp/cmrdm.txt --csv docs/collazione-cmrdm-i.csv
+ *    npx tsx scripts/collate-source.ts --source cmrdm-i --txt a.txt --txt b.txt --csv rapporto.csv
  *    …aggiungi --campione 30 per un campione stratificato per regione.
  *
  *  Il testo a stampa si estrae con `pdftotext -layout` (una volta sola: il
  *  .txt viene tenuto accanto al PDF). Dell'entry a stampa si prendono solo
  *  le sequenze in alfabeto greco: il resto — commento, apparato, traduzione —
  *  non è confrontabile con l'edizione EpiDoc.
+ *
+ *  `--txt` si può ripetere con **più letture della stessa fonte** (per esempio
+ *  due modelli OCR diversi, `grc` e `ell`). Allora una divergenza viene
+ *  riportata solo se **tutte** le letture la vedono: quello che due OCR
+ *  indipendenti leggono in modo diverso è rumore dell'OCR, non una
+ *  divergenza fra il libro e il corpus. È il filtro che rende questi numeri
+ *  guardabili.
  *
  *  Cosa NON garantisce, e va detto prima di leggere i numeri:
  *    · l'estrazione da un PDF a colonne sbaglia gli a-capo e le colonne;
@@ -141,6 +148,7 @@ function spezzaEntry(testo: string, entryStart: RegExp): Map<string, string> {
 function main() {
   const argv = process.argv.slice(2);
   const arg = (n: string) => { const i = argv.indexOf(n); return i >= 0 ? argv[i + 1] : undefined; };
+  const args = (n: string) => argv.flatMap((a, i) => (a === n && argv[i + 1] ? [argv[i + 1]] : []));
 
   const sourceId = arg('--source') || COLLATABLE_SOURCES[0]?.id;
   const fonte = sourceId ? printSource(sourceId) : undefined;
@@ -151,16 +159,20 @@ function main() {
     process.exit(1);
   }
 
-  const txtArg = arg('--txt');
+  const txtArgs = args('--txt');
   const pdfArg = arg('--pdf') || (process.env.ILA_SCANS_DIR ? path.join(process.env.ILA_SCANS_DIR, fonte.collazione.pdf) : undefined);
-  if (!txtArg && !pdfArg) {
+  if (txtArgs.length === 0 && !pdfArg) {
     console.error(`Serve la scansione: --pdf <file> (atteso «${fonte.collazione.pdf}») oppure --txt <file già estratto>.`);
     console.error('In alternativa imposta ILA_SCANS_DIR alla cartella delle scansioni.');
     process.exit(1);
   }
-  const testoStampa = txtArg ? fs.readFileSync(txtArg, 'utf-8') : estraiTesto(pdfArg!);
-  const entries = spezzaEntry(testoStampa, fonte.collazione.entryStart);
-  console.log(`${fonte.sigla}: ${entries.size} schede riconosciute nel testo a stampa.`);
+  const letture = (txtArgs.length ? txtArgs.map(f => fs.readFileSync(f, 'utf-8')) : [estraiTesto(pdfArg!)])
+    .map(t => spezzaEntry(t, fonte.collazione!.entryStart));
+  const nomiLetture = txtArgs.length ? txtArgs.map(f => path.basename(f)) : [path.basename(pdfArg!)];
+  console.log(`${fonte.sigla}: ${letture[0].size} schede riconosciute nel testo a stampa.`);
+  if (letture.length > 1) {
+    console.log(`${letture.length} letture della stessa fonte (${nomiLetture.join(', ')}): si riporta solo ciò su cui vanno d'accordo.`);
+  }
   if (fonte.collazione.note) console.log(`Nota di lettura: ${fonte.collazione.note}`);
 
   const corpusDir = path.resolve(arg('--corpus') || 'src/data/corpus');
@@ -174,24 +186,36 @@ function main() {
   const righe: Riga[] = [];
   let senzaRif = 0, senzaEntry = 0, senzaGreco = 0;
 
+  let scartate = 0;
+  const chiave = (d: Divergenza) => `${d.atteso}→${d.trovato}`;
+
   for (const f of file) {
     const xml = fs.readFileSync(path.join(corpusDir, f), 'utf-8');
     const rif = extractSourceRefs(xml).find(r => r.sourceId === fonte.id);
     if (!rif?.numero) { senzaRif++; continue; }
-    const entry = entries.get(rif.numero);
-    if (!entry) { senzaEntry++; continue; }
+    const testiStampa = letture.map(l => l.get(rif.numero!)).filter((x): x is string => !!x);
+    if (testiStampa.length === 0) { senzaEntry++; continue; }
 
-    const stampa = normalizeGreek(soloGreco(entry));
     const corpus = normalizeGreek(soloGreco(edizioneDiScheda(xml)));
-    if (!stampa || !corpus) { senzaGreco++; continue; }
+    const stampe = testiStampa.map(t => normalizeGreek(soloGreco(t))).filter(Boolean);
+    if (!corpus || stampe.length === 0) { senzaGreco++; continue; }
+
+    const perLettura = stampe.map(st => ({ st, sim: similarita(st, corpus), div: divergenze(st, corpus) }));
+    // La lettura più vicina al corpus è quella da credere: se *una* lettura
+    // OCR coincide col corpus, la divergenza dell'altra è un errore di quella.
+    const migliore = perLettura.reduce((a, b) => (b.sim > a.sim ? b : a));
+    // …e delle divergenze si tiene solo ciò che tutte le letture vedono.
+    const comuni = perLettura.length === 1
+      ? migliore.div
+      : migliore.div.filter(d => perLettura.every(l => l.div.some(x => chiave(x) === chiave(d))));
+    scartate += migliore.div.length - comuni.length;
 
     const regione = (xml.match(/<region>([^<]*)<\/region>/) || [])[1]
       || (xml.match(/<placeName[^>]*type="region"[^>]*>([^<]*)</) || [])[1] || '—';
-    const div = divergenze(stampa, corpus);
     righe.push({
       scheda: f.replace(/\.xml$/, ''), numero: rif.numero, regione,
-      similarita: similarita(stampa, corpus), nDiv: div.length, div,
-      lungStampa: stampa.length, lungCorpus: corpus.length,
+      similarita: migliore.sim, nDiv: comuni.length, div: comuni,
+      lungStampa: migliore.st.length, lungCorpus: corpus.length,
     });
   }
 
@@ -220,6 +244,9 @@ function main() {
   console.log(`│ rif. senza entry        ${String(senzaEntry).padStart(5)}`);
   console.log(`│ senza greco confrontab. ${String(senzaGreco).padStart(5)}`);
   console.log(`│ identiche               ${String(pulite).padStart(5)}`);
+  if (letture.length > 1) {
+    console.log(`│ scartate perché una sola lettura le vedeva: ${scartate}`);
+  }
   console.log('├─ divergenze per tipo ─────────────────────');
   for (const [k, v] of Object.entries(conta).sort((a, b) => b[1] - a[1])) {
     console.log(`│ ${k.padEnd(22)} ${String(v).padStart(5)}`);
@@ -262,9 +289,10 @@ function main() {
   console.log('\nDa ricordare leggendo questi numeri: lo script confronta solo il greco,');
   console.log('senza parentesi né punti sottoscritti. Una divergenza è un posto dove');
   console.log('guardare, non un errore accertato.');
-  if (!GRECO.test(testoStampa)) {
-    console.log('\nATTENZIONE: nel testo estratto non c\'è alfabeto greco. Probabilmente la');
-    console.log('scansione non ha uno strato di testo: serve un OCR politonico prima.');
+  const senzaGrecoDelTutto = letture.every(l => ![...l.values()].some(t => GRECO.test(t)));
+  if (senzaGrecoDelTutto) {
+    console.log('\nATTENZIONE: nel testo a stampa non c\'è alfabeto greco. Il livello di testo');
+    console.log('del PDF non mappa il font greco: passare prima da scripts/ocr-print-source.py.');
   }
 }
 
