@@ -1,6 +1,21 @@
 @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Gentium+Book+Plus:ital,wght@0,400;0,700;1,400;1,700&family=Inter:wght@400;500;600;700&family=Noto+Serif+Display:ital,wght@0,400..900;1,400..900&family=Cinzel:wght@400..900&display=swap');
 @import "tailwindcss";
 
+/* Scala z coerente per il CSS globale (UI-17/UI-18): unica fonte per lo
+   sfondo fisso, il contenuto, gli elementi sticky, gli overlay leggeri
+   (popover/tooltip), i modali e i toast, così i valori smettono di essere
+   numeri magici sparsi nel file. I componenti React continuano a usare le
+   proprie classi Tailwind z-*: qui la scala si applica solo alle regole di
+   z-index già presenti in questo file. */
+:root {
+  --z-background: -1;
+  --z-content: 1;
+  --z-sticky: 10;
+  --z-overlay: 20;
+  --z-modal: 50;
+  --z-toast: 100;
+}
+
 /* `.light` forza la palette chiara anche dentro un sottoalbero con `.dark`
    sull'antenato (es. PasswordGate: il logo non si ritaglia pulito su fondo
    scuro). Prima quella schermata ridefiniva a mano ~13 var con valori
@@ -116,7 +131,7 @@
     background-image: url("https://www.transparenttextures.com/patterns/felt.png");
     opacity: 0.15;
     pointer-events: none;
-    z-index: 100;
+    z-index: var(--z-background);
     transition: opacity 0.3s ease;
   }
   
@@ -349,7 +364,8 @@
   }
 
   .digital-seal {
-    @apply text-[100px] leading-none opacity-[0.02] fixed -bottom-10 -right-10 pointer-events-none select-none font-serif italic rotate-[-15deg] z-0;
+    @apply text-[100px] leading-none opacity-[0.02] fixed -bottom-10 -right-10 pointer-events-none select-none font-serif italic rotate-[-15deg];
+    z-index: var(--z-background);
   }
 
   .custom-scrollbar::-webkit-scrollbar {
