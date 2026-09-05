@@ -52,6 +52,14 @@ token gestisce già chiaro/scuro): rimuovere il modificatore `dark:`.
 
 ## S8 — UI-05 (resto): palette mappa centralizzata
 
+> **CHIUSO il 2026-09-05** (task 014 del runner + `7aafd77`). I colori regione,
+> la `DENSITY_SCALE` e il colore cluster stanno in `src/lib/mapPalette.ts`, con
+> commenti sul perché di ogni scelta; `index.css` usa `--map-cluster-highlight`
+> e `--map-cluster-highlight-rgb`, quest'ultima per le sei occorrenze `rgba()`
+> che il task aveva lasciato indietro. Nessun valore cromatico cambiato.
+> Resta una copia inevitabile del solo colore cluster fra CSS e TS (il CSS non
+> legge da TypeScript, Leaflet vuole una stringa): documentata in entrambi.
+
 `MapView.tsx` ha i colori regione (`#5B7A8C`, `#B5651D`, `#7A8F5E`, `#0d5147`,
 `#1F8377`), la `DENSITY_SCALE` e `#B0233F` (cluster-highlight, anche in
 `index.css` `.marker-cluster-highlight`). Estrarre in `src/lib/mapPalette.ts`,
@@ -68,6 +76,15 @@ usando i token di S8, e sostituire progressivamente (un gruppo per commit):
 - fallback `var(--accent, #2da199)` negli editor → `#1F8377` o rimuovere (UI-14).
 
 ## S10 — focus visibile & z-scale (UI-15, UI-17, UI-18)
+
+> **CHIUSO il 2026-09-05.** UI-15 era già fatto (commit 6d1b471). UI-17/UI-18
+> col task 016: scala z documentata (`--z-background/content/sticky/overlay/
+> modal/toast`) e grana felt da `z-index: 100` a `var(--z-background)`, quindi
+> finalmente sotto il contenuto invece che sopra. Verificato in browser che a
+> `z-index: -1` la texture resta visibile: lo sfondo del `body` si propaga al
+> canvas e viene dipinto prima, quindi il pseudo-elemento negativo ci sta
+> comunque sopra. Gli z-index inline nei componenti React non sono stati
+> toccati: quello resta da fare.
 
 > AGGIORNATO 2026-09-05: UI-15 (focus-visible) risulta GIÀ FATTO nel commit
 > 6d1b471, così come il fallback --accent di UI-14. Restano solo UI-17/UI-18

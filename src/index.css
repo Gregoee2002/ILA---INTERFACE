@@ -56,8 +56,8 @@
   --map-cluster-highlight: #B0233F;
   /* Stessa tinta in componenti r/g/b, per le regole che ne usano una versione
      translucida (alone del cluster, animazione di pulsazione): senza questa,
-     il valore resterebbe ripetuto a mano come rgba(176, 35, 63, …) in più
-     punti del file (sei, in realtà), che è il difetto che UI-05 doveva togliere. */
+     il valore resterebbe scritto a mano come rgba(176, 35, 63, …) in sei punti
+     del file — la duplicazione che UI-05 doveva eliminare. */
   --map-cluster-highlight-rgb: 176 35 63;
 }
 
