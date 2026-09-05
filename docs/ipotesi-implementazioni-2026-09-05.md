@@ -1,5 +1,20 @@
 # Ipotesi di implementazione — 2026-09-05
 
+> **Stato al 2026-09-05, sera: tutte e otto eseguite.** Sotto ogni voce c'è
+> come è finita. Insieme è stato fatto anche il lavoro che non era un'ipotesi
+> ma la condizione delle altre: **disancorare il progetto da Lane**. ILA non è
+> la digitalizzazione del CMRDM. Il registro `src/lib/printSources.ts` tiene
+> dieci edizioni sullo stesso piano — CMRDM I, «Berytus» 15, BWK di Petzl, TAM
+> V, MAMA, SEG, IG, CIG, CIL, IGRR — ognuna coi propri pattern di
+> riconoscimento; `xmlUtils` non ricostruisce più a mano la stringa «Lane,
+> CMRDM I NN» da attaccare a ogni attestazione, `Monumento.fontiStampa`
+> espone tutte quelle riconosciute nella scheda, `CultAttestation.laneRef` è
+> diventato `sourceRef`, la collazione prende una fonte qualsiasi del registro
+> come argomento, e le diciture dell'interfaccia che trattavano una singola
+> edizione come l'autorità di verifica dicono ora «edizioni a stampa».
+> La citazione di una scheda le elenca tutte: «ILA-042 (= CMRDM I 72 = Lane,
+> Berytus 15, n. 38)».
+
 Non è un piano di lavoro (quello è [`piano-2026-09-05.md`](piano-2026-09-05.md), e
 resta valido): è l'elenco delle **cose che si potrebbero costruire** e che oggi non
 sono in coda a nessuno. Ogni voce dice cosa, perché, dove si tocca, quanto costa e
@@ -20,6 +35,15 @@ attributi che nessun pannello legge. È il presupposto dell'ipotesi 3.
 
 ## 1. Banco di prova per le librerie pure (vitest)
 
+> **Fatto.** 60 test su vitest in `src/lib/__tests__/`; `npm test` gira in mezzo
+> secondo ed entra in `lint` e in `prebuild`. Hanno già ripagato: hanno trovato un
+> bug vero nella concordanza (`normalizeGreek` fa `trim()`, quindi normalizzare
+> carattere per carattere incollava le parole) e messo per iscritto due confini
+> che prima si scoprivano a caso — le forme verbali con aumento che
+> `matchCultLemma` non aggancia, e le quattro edizioni in più `<ab>` che
+> l'editor non sa aprire.
+
+
 **Cosa.** Il progetto non ha **un solo test**. `checkToolboxTable()` è documentata
 «usata dai test»; quei test non esistono. Aggiungere `vitest` e coprire le librerie
 che sono funzioni pure e già isolate: `leidenMarkup` (round-trip Leiden → EpiDoc →
@@ -39,6 +63,19 @@ l'unico cancello è `tsc`, che non sa nulla di epigrafia.
 **Rischio:** nullo.
 
 ## 2. Collazione assistita su Lane — il modo di sbloccare A1
+
+> **Fatto, e con una risposta ad A1 che non ci si aspettava.**
+> `npm run collate -- --source <id> --pdf <scansione>` funziona su qualunque
+> fonte del registro che dichiari una configurazione «collazione». Provato sul
+> PDF vero (`~/Documents/OCR/Corpus monumentorum dei mensis.pdf`): **264 schede
+> su 295 si agganciano alla loro entry a stampa** — l'allineamento, che era la
+> parte difficile, è risolto. Ma il testo estratto contiene **zero caratteri
+> greci**: il livello di testo del PDF non mappa il font greco in Unicode.
+> Quindi A1 non è più «vale la pena collazionare?» ma «serve un OCR politonico
+> dei blocchi greci», che le pagine già rasterizzate in `output_ocr/pages/`
+> rendono un lavoro delimitato. Lo script lo dice da solo, invece di dare zero
+> divergenze e sembrare una promozione.
+
 
 **Cosa.** Uno script che allinea il testo di ogni scheda al testo di Lane estratto
 con `pdftotext -layout` (già verificato estraibile), normalizza entrambi con
@@ -65,6 +102,13 @@ mai come correttore automatico — nessuna scrittura sul corpus.
 
 ## 3. Navigazione per percorso LARES
 
+> **Fatto.** La vista «per griglia LARES» mostra ora i sette item con categorie
+> e sottocategorie **per intero**, rami vuoti compresi: un ramo a zero è un dato,
+> non un buco. Le voci innestate portano un segno — «ILA» per quelle del merge,
+> «LARES+» per la versione allargata. Sulla scheda, il tooltip di una parola
+> cultuale mostra il percorso, ma solo se esiste davvero nella griglia.
+
+
 **Cosa.** Un albero dei sette item → categorie → sottocategorie con i conteggi
 reali sul corpus, che filtra il catalogo; e sulla scheda, accanto alla resa viola
 del lessico cultuale, l'etichetta del percorso. Le voci con `fonte: 'ILA'` marcate
@@ -83,6 +127,14 @@ subito ma resta quasi vuoto finché le schede non sono marcate.
 
 ## 4. Concordanza KWIC greca
 
+> **Fatto.** Nuova sezione Concordanza: 178 occorrenze di «μηνι» su 188 schede,
+> incolonnate; ordinando per contesto destro le formule emergono da sole (tutti
+> gli Ἀξιοττηνῷ finiscono uno sotto l'altro). Le parole spezzate dall'a-capo
+> sono ricongiunte, la ricerca ignora accenti e maiuscole, c'è l'esportazione
+> CSV. Un dato che è emerso subito: «Μηνί» ricorre sotto **cinque grafie**
+> diverse nel corpus.
+
+
 **Cosa.** La ricerca oggi restituisce **schede**; una concordanza restituisce
 **occorrenze in contesto** — forma al centro, N caratteri a destra e a sinistra,
 raggruppabili per lemma, ordinabili per contesto destro, esportabili in CSV.
@@ -96,6 +148,14 @@ Il costo è basso perché l'infrastruttura c'è già tutta: `testo_searchable`,
 **Costo.** Una sessione. **Blocchi:** nessuno.
 
 ## 5. Code splitting (D2, già censito ma mai tradotto in lavoro)
+
+> **Fatto.** Bundle principale da 1620 kB a 845 kB (452 → 247 kB gzip). Heatmap,
+> lessico, concordanza, fonti letterarie, revisione draft e i pannelli riservati
+> passano a `import()`; Firebase — mezzo megabyte, serve solo al login del
+> server mode — non è più importato staticamente e sulla build statica non viene
+> scaricato affatto. Resta grosso `App.tsx` da solo: 420 kB di sorgente in un
+> file, e spezzarlo è un lavoro a sé.
+
 
 **Cosa.** `React.lazy` su `MapView`, `CooccurrenceHeatmap`, i tre editor e
 `LiterarySourcesPanel`; `leaflet` e `jspdf` in chunk separati.
@@ -111,6 +171,13 @@ si incrocia col task 023 (`role="status"`).
 
 ## 6. Un cancello solo sul dato (sblocca A2 senza deciderla al buio)
 
+> **Fatto.** `npm run sync:report` accoppia le due copie per `entryId`, poi per
+> riferimento alla fonte a stampa, e solo da ultimo per nome file: i due naming
+> incompatibili non sono più un ostacolo. Il boot-sync del server passa ora una
+> guardia: se sul remoto mancano più di cinque schede presenti in locale, la
+> sincronizzazione si ferma e il corpus locale resta intatto.
+
+
 **Cosa.** `scripts/data-sync-report.ts`: confronta `src/data/corpus/` con la repo
 dati `Gregoee2002/ILA`, riconcilia i due naming (`CMRDM-*` ↔ `ILA-NNN`), e stampa
 chi ha più schede, quali file divergono e in che campi. Più una guardia al boot del
@@ -125,6 +192,14 @@ finora si sono persi fix XML (il boot-sync che riporta indietro il corpus).
 
 ## 7. Validazione del corpus in CI (task 010, esteso)
 
+> **Scritto e provato in locale, non pushabile.** `.github/workflows/verify.yml`
+> gira tipi, test, `lint-corpus.py` e build su ogni push e PR — ma GitHub
+> rifiuta il push di `.github/workflows` da un token senza scope `workflow`, ed
+> è ancora il caso (D1). Il workflow, insieme al vecchio gate `tsc` del deploy,
+> sta in `docs/patches/ci-verify-e-tsc-gate.patch`: con un token nuovo basta
+> `git apply` e un commit.
+
+
 **Cosa.** Su ogni push: `tsc`, well-formedness XML, `scripts/validate.py` (RNG
 EpiDoc), `scripts/lint-corpus.py`, `checkToolboxTable()`, e i test dell'ipotesi 1.
 
@@ -134,6 +209,12 @@ EpiDoc), `scripts/lint-corpus.py`, `checkToolboxTable()`, e i test dell'ipotesi 
 Finché resta così la patch dorme in `docs/patches/`.
 
 ## 8. Permalink citabili ed esportazioni
+
+> **Fatto.** `?vista=catalog&scheda=ILA-042` — in query string, perché GitHub
+> Pages non sa riscrivere le rotte — e un collegamento profondo salta il
+> frontespizio. Sotto il titolo di ogni scheda: citazione pronta, collegamento,
+> scarico XML, per tutti e non solo per chi ha sbloccato la modifica.
+
 
 **Cosa.** URL profondo per scheda (`?scheda=ILA-042`, oggi lo stato è solo in
 memoria), un riquadro «cita così» con la forma canonica, scarico dell'XML della
@@ -163,4 +244,11 @@ ricordando che **il bersaglio vero è la build statica**, non `server.ts`.
 | 7 | **8** — permalink ed export | 1 | parziale su D4 |
 | 8 | **7** — CI sul corpus | ½ | fermo su D1 |
 
-Le prime tre non dipendono da nessuna decisione editoriale: si possono fare domani.
+Le prime tre non dipendevano da nessuna decisione editoriale, e sono state fatte;
+poi tutte le altre. Resta aperto quello che dipende da te:
+
+- **il token con scope `workflow`** (un minuto), che sblocca l'ipotesi 7;
+- **l'OCR politonico** delle pagine greche del CMRDM, senza il quale la
+  collazione dell'ipotesi 2 gira a vuoto pur avendo già allineato 264 schede;
+- **A2**: ora il rapporto di divergenza c'è, la decisione su quale copia è
+  canonica resta tua.
