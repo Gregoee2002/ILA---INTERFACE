@@ -538,8 +538,12 @@ in automatico dall'estrattore (tabella §5).</p>
       <tr><td>Famiglia (@ana) <span class="req">*</span></td><td>una delle 5 (§8.1); precompilata quando la forma selezionata è riconducibile a un lemma noto</td></tr>
       <tr><td>Lemma (@lemma) <span class="req">*</span></td><td>autocompletamento sui 54 lemmi controllati; se manca, va segnalato — non si inventa. Il lemma noto porta con sé <code>@lemmaRef</code> (Logeion) in automatico</td></tr>
       <tr><td>In locuzione fissa?</td><td>"sì" aggiunge <span class="mono">#formula</span> oltre alla famiglia</td></tr>
+      <tr><td>Percorso LARES</td><td>non si sceglie: <code>@type</code>/<code>@subtype</code> vengono dal lemma (§8.3)</td></tr>
     </table>
-    <pre>&lt;w lemma="<span class="greek">ἀνατίθημι</span>" ana="#atto-cultuale" lemmaRef="https://logeion.uchicago.edu/<span class="greek">ἀνατίθημι</span>"&gt;<span class="greek">ἀνέθηκεν</span>&lt;/w&gt;</pre>
+    <pre>&lt;w lemma="<span class="greek">ἀνατίθημι</span>" ana="#atto-cultuale" lemmaRef="https://logeion.uchicago.edu/<span class="greek">ἀνατίθημι</span>"
+   type="activities" subtype="offering dedication"&gt;<span class="greek">ἀνέθηκεν</span>&lt;/w&gt;</pre>
+    <p><code>@type</code> e <code>@subtype</code> sono il <b>percorso LARES</b>: li scrive
+    l'editor da solo a partire dal lemma — vedi §8.3.</p>
     <p>Lettura incerta o forma dentro <code>[ ]</code>: aggiungi <code>@cert="low"</code> sul <code>&lt;w&gt;</code> (dal popover dell'elemento).</p>
   </div>
 </div>
@@ -556,6 +560,36 @@ in automatico dall'estrattore (tabella §5).</p>
     <pre>&lt;rs type="cultFormula" key="hye-kye" ana="#formula-fissa #formula"&gt;<span class="greek">ὗε κύε ὑπέρχυε</span>&lt;/rs&gt;</pre>
   </div>
 </div>
+
+<h3>8.3 — Il percorso LARES (<code>@type</code> / <code>@subtype</code>)</h3>
+<p>Oltre alla famiglia, ogni parola marcata porta il suo posto nella griglia
+dell'<i>Analytical Toolbox</i> di <b>LARES</b>, il lessico concettuale con cui ILA
+dialoga: <code>@type</code> è l'item (uno dei sette), <code>@subtype</code> la
+categoria e la sottocategoria, separate da spazio.</p>
+<p class="when"><b>Quando lo si sceglie: mai.</b> Il percorso è una proprietà del
+lemma, come la sotto-funzione fine: lo scrive l'editor in automatico appena il
+lemma è riconosciuto. Si tocca a mano solo per correggere un caso particolare —
+per esempio <span class="greek">μαρτυρέω</span>, che di norma è la registrazione
+su pietra, ma in una scheda dove è il dio a testimoniare va spostato altrove.
+Il validatore in quel caso avvisa e non blocca.</p>
+<p>I due assi rispondono a due domande diverse, e per questo convivono sullo
+stesso elemento: la famiglia dice <b>chi è il soggetto</b>, il percorso <b>che
+cosa è la cosa nominata</b>. È la ragione per cui
+<span class="greek">ναός</span> è <span class="mono">#atto-cultuale</span> (l'uomo
+costruisce) ma nella griglia sta fra gli spazi: la parola nomina un edificio.</p>
+<table class="field-table">
+  <tr><th>Famiglia</th><th>Dove cade di norma nella griglia</th></tr>
+  <tr><td><span class="mono">#agency</span></td><td>Agenti sovrumani → Divinità (potenza, scelta, ingiunzione, signoria territoriale, azione giuridica; gli aggettivi che fanno da epiclesi vanno in <i>epiteti</i>)</td></tr>
+  <tr><td><span class="mono">#atto-cultuale</span></td><td>Attività (preghiere, offerta, espiazione) · Istituzioni (norma, registrazione, onori) · Spazi / Materialità quando la parola nomina la cosa</td></tr>
+  <tr><td><span class="mono">#colpa</span></td><td>Attività → Trasgressione (peccato, spergiuro)</td></tr>
+  <tr><td><span class="mono">#formula-fissa</span></td><td>Attività → Preghiere quando la formula è un atto di parola; <span class="greek">σκῆπτρον</span> fa eccezione (Materialità → strumenti)</td></tr>
+  <tr><td><span class="mono">#ruolo-istituzione</span></td><td>Agenti umani (personale di culto, gruppi, status personale)</td></tr>
+</table>
+<div class="callout">Due lemmi non hanno percorso, ed è giusto così:
+<span class="greek">χαίρω</span> e <span class="greek">χρηστὸς χαῖρε</span> non
+nominano un agente, un'attività o uno spazio. Metterli sotto "preghiere" darebbe
+un dato falso: restano qualificati dalla sola famiglia. Se l'editor non propone
+un percorso, non bisogna inventarne uno.</div>
 
 <div class="callout warn">Un <code>&lt;w&gt;</code> di funzione cultuale annidato dentro
 <code>persName</code>, <code>supplied</code> o un altro tag semantico è quasi
@@ -636,6 +670,8 @@ di chiudere una scheda.</p>
 <div class="rule"><span class="sev warning">Warning</span><span><code>&lt;w&gt;</code> senza <code>@lemma</code>, oppure con un <code>@lemma</code> fuori dal vocabolario controllato: da verificare o da aggiungere alla tabella.</span></div>
 <div class="rule"><span class="sev warning">Warning</span><span><code>@lemma</code> e <code>@ana</code> incoerenti: il lemma è di norma di un'altra famiglia — confermare se la scelta è voluta.</span></div>
 <div class="rule"><span class="sev warning">Warning</span><span><code>&lt;w&gt;</code> di funzione cultuale annidato dentro <code>persName</code> / <code>name</code> / <code>rs</code> / <code>supplied</code> / <code>expan</code>: quasi sempre un errore.</span></div>
+<div class="rule"><span class="sev warning">Warning</span><span>Percorso LARES inesistente: l'item non è uno dei sette, oppure la categoria/sottocategoria non appartiene al ramo indicato (§8.3). Anche <code>@subtype</code> senza <code>@type</code> è segnalato: il percorso parte sempre dall'item.</span></div>
+<div class="rule"><span class="sev warning">Warning</span><span>Percorso LARES diverso da quello abituale del lemma: la segnalazione dice quale sarebbe la norma, e va confermata se la scelta è voluta.</span></div>
 </section>
 
 <section class="section-break">

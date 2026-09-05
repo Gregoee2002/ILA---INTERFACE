@@ -593,6 +593,18 @@ export function extractLitMarkupIndex(tokens: MarkupToken[]): LitMarkupIndex {
         } else {
           parole.push({ forma: testoDi(t).trim(), lemma: a.lemma, lang: a['xml:lang'] });
         }
+        // Dal merge coi marcatori LARES il <w> cultuale porta anche il percorso
+        // del toolbox (docs/merge-lessico-lares.md §7): entra nell'indice del
+        // toolbox come un <rs>, senza contare due volte la marcatura.
+        if (TOOLBOX_ITEM_IDS.includes(a.type || '')) {
+          const marker: ToolboxMarker = { item: a.type!, subtype: (a.subtype || '').split(/\s+/).filter(Boolean) };
+          toolbox.push({
+            key: [marker.item, ...marker.subtype].join('/'),
+            label: toolboxLabel(marker),
+            testo: testoDi(t).trim(),
+            marker,
+          });
+        }
       }
 
       if (t.name === 'rs' && a.type === 'cultFormula') {

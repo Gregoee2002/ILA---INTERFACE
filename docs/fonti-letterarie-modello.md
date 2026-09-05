@@ -113,8 +113,15 @@ secondo e terzo    <rs subtype="… …">   (valori multipli, separati da spazio
 Il documento avverte che il toolbox è «only a preliminary classification grid
 that can be expanded, modified, deconstructed, restructured, or even
 reformulated»: è una risorsa flessibile, non uno standard chiuso. Dove ILA
-aggiunge qualcosa lo dichiara (`aggiunta: true`) invece di confonderlo con
-l'originale.
+aggiunge qualcosa lo dichiara (`aggiunta: true`, più `fonte: 'ILA'` o
+`'LARES-enlarged'`) invece di confonderlo con l'originale.
+
+Dal 2026-09-05 la griglia porta **3 categorie e 18 sottocategorie** innestate da
+ILA per il lessico cultuale del corpus di Men — espiazione, trasgressione, status
+personale e i rami sotto *divinities*, *prayers*, *offering*: norma e tabella
+completa in [`merge-lessico-lares.md`](merge-lessico-lares.md). Una parola del
+lessico cultuale porta il percorso **da sola**, derivato dal lemma: non va marcata
+anche con l'azione «Categoria del toolbox», che resta per tutto il resto.
 
 ## 5. Il markup: uno solo per le due metà del database
 

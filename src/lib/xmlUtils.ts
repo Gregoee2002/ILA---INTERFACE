@@ -2,7 +2,7 @@ import { apparatusEntryToText } from './apparatus';
 import { Monumento, Traduzione, Bibliografia, OrigDate, IconographyData, CultAttestation } from "../types";
 import { canonicalDivinityName } from "./divinityAliases";
 import { canonicalEpithet } from "./epithetAliases";
-import { CULT_FAMILY_IDS, lookupCultLemma } from "./cultLexicon";
+import { CULT_FAMILY_IDS, lookupCultLemma, toolboxForLemma } from "./cultLexicon";
 
 // Unica fonte per l'etichetta identificativa del record — sostituisce le
 // vecchie stringhe "corpus numero" (CMRDM I 29) costruite ad hoc in più punti.
@@ -109,6 +109,18 @@ export function extractCultAttestations(
     return { family, formula: toks.includes('formula') };
   };
 
+  // Percorso LARES: quello scritto nel markup se c'è (chi marca può correggere
+  // il default), altrimenti quello derivato dal lemma. Vedi merge-lessico-lares.md.
+  const toolboxOf = (attrs: string, lemma: string): { item: string; subtype: string[] } | undefined => {
+    const type = (attrs.match(/\btype="([^"]*)"/) || [])[1] || '';
+    if (type && type !== 'cultTerm' && type !== 'cultFormula') {
+      const sub = ((attrs.match(/\bsubtype="([^"]*)"/) || [])[1] || '').split(/\s+/).filter(Boolean);
+      return { item: type, subtype: sub };
+    }
+    const derived = toolboxForLemma(lemma);
+    return derived ? { item: derived.item, subtype: [...derived.subtype] } : undefined;
+  };
+
   // 1) <w ...>...</w>
   const wRe = /<w\b([^>]*)>([\s\S]*?)<\/w>/g;
   let wm: RegExpExecArray | null;
@@ -130,6 +142,7 @@ export function extractCultAttestations(
       ...(cert === 'low' ? { cert: 'low' as const } : {}),
       scheda,
       ...(laneRef ? { laneRef } : {}),
+      ...(() => { const tb = toolboxOf(attrs, lemma); return tb ? { toolbox: tb } : {}; })(),
     });
   }
 
@@ -153,6 +166,7 @@ export function extractCultAttestations(
       ...(cert === 'low' ? { cert: 'low' as const } : {}),
       scheda,
       ...(laneRef ? { laneRef } : {}),
+      ...(() => { const tb = toolboxOf(attrs, key); return tb ? { toolbox: tb } : {}; })(),
     });
   }
 

@@ -109,9 +109,19 @@ export interface ToolboxSub {
   en: string;
   /** esempi dati dal documento LARES, riportati come aiuto per chi marca */
   esempi?: string;
-  /** true per le voci aggiunte nella versione «enlarged» */
+  /** true per le voci che non sono nella griglia base del documento LARES */
   aggiunta?: boolean;
+  /** chi ha aggiunto la voce: la redazione («enlarged») o ILA (merge col lessico cultuale) */
+  fonte?: ToolboxFonte;
 }
+
+/**
+ * Provenienza di una voce aggiunta. `LARES-enlarged` = le voci in rosso della
+ * versione allargata del documento di redazione; `ILA` = le voci innestate dal
+ * merge col lessico cultuale (docs/merge-lessico-lares.md). Le voci senza
+ * `aggiunta` sono della griglia originale e non si toccano.
+ */
+export type ToolboxFonte = 'LARES-enlarged' | 'ILA';
 
 export interface ToolboxCategoria {
   id: string;
@@ -119,6 +129,8 @@ export interface ToolboxCategoria {
   en: string;
   esempi?: string;
   sub: ToolboxSub[];
+  aggiunta?: boolean;
+  fonte?: ToolboxFonte;
 }
 
 export interface ToolboxItem {
@@ -144,6 +156,7 @@ export const LARES_TOOLBOX: ToolboxItem[] = [
         sub: [
           { id: 'priest', label: 'sacerdote', en: 'Priest' },
           { id: 'assistant', label: 'assistente', en: 'Assistant' },
+          { id: 'high-priest', label: 'sommo sacerdote', en: 'High priest', esempi: 'ἀρχιερεύς', aggiunta: true, fonte: 'ILA' },
         ],
       },
       {
@@ -159,6 +172,7 @@ export const LARES_TOOLBOX: ToolboxItem[] = [
           { id: 'ethnic-group', label: 'gruppo etnico', en: 'Ethnic group' },
           { id: 'political-group', label: 'gruppo politico', en: 'Political group' },
           { id: 'associations', label: 'associazioni', en: 'Associations' },
+          { id: 'local-community', label: 'comunità locale', en: 'Local community', esempi: 'κατοικία — né etnia né gruppo politico né associazione', aggiunta: true, fonte: 'ILA' },
         ],
       },
       {
@@ -170,6 +184,16 @@ export const LARES_TOOLBOX: ToolboxItem[] = [
             en: 'Extraordinary Religious Professionals',
             esempi: 'iniziatori, purificatori, indovini, oracolanti, uomini santi',
           },
+        ],
+      },
+      // Categoria ILA: lo status non è un ruolo rituale (cult-personnel) né un
+      // collettivo (groups) né il fedele in quanto tale (worshippers).
+      {
+        id: 'status', label: 'Status personale', en: 'Personal status', aggiunta: true, fonte: 'ILA',
+        sub: [
+          { id: 'threptos', label: 'allevato in casa', en: 'Threptos', esempi: 'θρεπτός, θρέμμα, τρέφω', aggiunta: true, fonte: 'ILA' },
+          { id: 'servant', label: 'servo / serva', en: 'Servant', esempi: 'παιδίσκη — dichiarata, 0 attestazioni nel corpus', aggiunta: true, fonte: 'ILA' },
+          { id: 'devotee', label: 'devoto', en: 'Devotee', esempi: 'φιλόθεος — dichiarata, 0 attestazioni nel corpus', aggiunta: true, fonte: 'ILA' },
         ],
       },
     ],
@@ -189,9 +213,16 @@ export const LARES_TOOLBOX: ToolboxItem[] = [
           // item e categoria: stanno qui perché descrivono azioni di un agente
           // sovrumano, che è il loro unico posto sensato nella griglia — ma la
           // collocazione va confermata con la redazione LARES.
-          { id: 'legal-action', label: 'azione giuridica', en: 'Legal action', esempi: 'costrizione, sanzione', aggiunta: true },
-          { id: 'benevolent-action', label: 'azione benevola', en: 'Benevolent action', esempi: 'benedizione', aggiunta: true },
-          { id: 'malevolent-action', label: 'azione malevola', en: 'Malevolent action', esempi: 'maledizione', aggiunta: true },
+          { id: 'legal-action', label: 'azione giuridica', en: 'Legal action', esempi: 'costrizione, sanzione', aggiunta: true, fonte: 'LARES-enlarged' },
+          { id: 'benevolent-action', label: 'azione benevola', en: 'Benevolent action', esempi: 'benedizione', aggiunta: true, fonte: 'LARES-enlarged' },
+          { id: 'malevolent-action', label: 'azione malevola', en: 'Malevolent action', esempi: 'maledizione', aggiunta: true, fonte: 'LARES-enlarged' },
+          // Innesti ILA (docs/merge-lessico-lares.md §4): quattro modi d'agire
+          // del dio che il corpus di Men predica di continuo e che `agencies`
+          // da solo dissolverebbe. `agencies` resta il ramo di ripiego.
+          { id: 'power', label: 'potenza', en: 'Power', esempi: 'δύναμις, μεγάλη ἡ δύναμις', aggiunta: true, fonte: 'ILA' },
+          { id: 'election', label: 'scelta', en: 'Election', esempi: 'αἱρετίζω: il dio che sceglie un uomo o un luogo', aggiunta: true, fonte: 'ILA' },
+          { id: 'injunction', label: 'ingiunzione', en: 'Injunction', esempi: 'ἐπιταγή, χρηματισμός — ordine che obbliga a un atto, non sanzione', aggiunta: true, fonte: 'ILA' },
+          { id: 'territorial-lordship', label: 'signoria territoriale', en: 'Territorial lordship', esempi: 'βασιλεύω, κατέχω', aggiunta: true, fonte: 'ILA' },
         ],
       },
       {
@@ -223,10 +254,45 @@ export const LARES_TOOLBOX: ToolboxItem[] = [
           { id: 'animal-sacrifice', label: 'sacrificio cruento', en: 'Animal sacrifices' },
           { id: 'bloodless-sacrifice', label: 'sacrificio incruento', en: 'Bloodless sacrifices', esempi: 'frutti, libagioni, focacce' },
           { id: 'ex-voto', label: 'ex voto', en: 'Ex-votes' },
+          // `ex-votes` nomina l'oggetto donato; questi due nominano l'atto.
+          { id: 'dedication', label: 'dedica', en: 'Dedication', esempi: 'ἀνατίθημι, ἀνίστημι', aggiunta: true, fonte: 'ILA' },
+          { id: 'consecration', label: 'consacrazione', en: 'Consecration', esempi: 'καθιερόω, καθιδρύω — passaggio di statuto, non dono', aggiunta: true, fonte: 'ILA' },
         ],
       },
       { id: 'rites-de-passage', label: 'Riti di passaggio', en: 'Rites de passage', sub: [] },
-      { id: 'prayers', label: 'Preghiere', en: 'Prayers', sub: [] },
+      {
+        id: 'prayers', label: 'Preghiere', en: 'Prayers',
+        sub: [
+          { id: 'vow', label: 'voto', en: 'Vow', esempi: 'εὐχή, εὔχομαι', aggiunta: true, fonte: 'ILA' },
+          { id: 'thanksgiving', label: 'ringraziamento', en: 'Thanksgiving', esempi: 'εὐχαριστέω, εὐλογέω', aggiunta: true, fonte: 'ILA' },
+          { id: 'veneration', label: 'venerazione', en: 'Veneration', esempi: 'σέβω', aggiunta: true, fonte: 'ILA' },
+          { id: 'invocation', label: 'invocazione', en: 'Invocation', esempi: 'ὗε κύε', aggiunta: true, fonte: 'ILA' },
+          // speculare a `malevolent-action`: là il soggetto è il dio, qui l'uomo
+          // che lo invoca contro qualcuno.
+          { id: 'imprecation', label: 'imprecazione', en: 'Imprecation', esempi: 'ἐπεξορκίζω, κεχολωμένος', aggiunta: true, fonte: 'ILA' },
+        ],
+      },
+      // Categoria ILA. Senza di essa la catena colpa → castigo → confessione →
+      // riscatto, che definisce le stele di confessione, si sparpaglia fra
+      // `prayers` e `offering`.
+      {
+        id: 'expiation', label: 'Espiazione', en: 'Expiation', aggiunta: true, fonte: 'ILA',
+        sub: [
+          { id: 'confession', label: 'confessione', en: 'Confession', esempi: 'ἐξομολογέομαι, ὁμολογέω', aggiunta: true, fonte: 'ILA' },
+          { id: 'propitiation', label: 'propiziazione', en: 'Propitiation', esempi: 'ἐξειλάσκομαι', aggiunta: true, fonte: 'ILA' },
+          { id: 'ransom', label: 'riscatto', en: 'Ransom', esempi: 'λύτρον, λυτρόω', aggiunta: true, fonte: 'ILA' },
+          { id: 'purification', label: 'purificazione', en: 'Purification', esempi: 'καθαρίζω — l\'atto; la norma di purità sta in institutions', aggiunta: true, fonte: 'ILA' },
+        ],
+      },
+      // Categoria ILA: la trasgressione è un'azione umana, non merita un item.
+      {
+        id: 'transgression', label: 'Trasgressione', en: 'Transgression', aggiunta: true, fonte: 'ILA',
+        sub: [
+          { id: 'sin', label: 'peccato', en: 'Sin', esempi: 'ἁμαρτάνω', aggiunta: true, fonte: 'ILA' },
+          { id: 'perjury', label: 'spergiuro', en: 'Perjury', esempi: 'ἐπιορκέω', aggiunta: true, fonte: 'ILA' },
+          { id: 'impiety', label: 'empietà', en: 'Impiety', esempi: 'ἀσεβέω — dichiarata, 0 attestazioni nel corpus', aggiunta: true, fonte: 'ILA' },
+        ],
+      },
       { id: 'divination', label: 'Divinazione', en: 'Divination', sub: [] },
     ],
   },
@@ -264,13 +330,20 @@ export const LARES_TOOLBOX: ToolboxItem[] = [
   {
     id: 'institutions', label: 'Istituzioni', en: 'Institutions',
     categorie: [
-      { id: 'civic-customs', label: 'Consuetudini civiche', en: 'Civic customs', sub: [] },
+      {
+        id: 'civic-customs', label: 'Consuetudini civiche', en: 'Civic customs',
+        sub: [
+          { id: 'honours', label: 'onori decretati', en: 'Decreed honours', esempi: 'στέφανος', aggiunta: true, fonte: 'ILA' },
+        ],
+      },
       {
         id: 'religious-practices', label: 'Pratiche religiose', en: 'Religious practices',
         sub: [
           { id: 'policy', label: 'politica religiosa', en: '(Religious) Policy' },
           { id: 'law', label: 'norma', en: 'Law' },
           { id: 'administration', label: 'amministrazione', en: 'Administration' },
+          { id: 'record', label: 'registrazione', en: 'Record', esempi: 'μαρτυρέω, στηλογραφέω — la pubblicazione su pietra come atto', aggiunta: true, fonte: 'ILA' },
+          { id: 'purity-rule', label: 'norma di purità', en: 'Purity rule', esempi: 'ἀκάθαρτος; `law` resta per asylia e norme generali', aggiunta: true, fonte: 'ILA' },
         ],
       },
     ],
@@ -316,3 +389,22 @@ export function parseToolboxAttrs(type?: string, subtype?: string): ToolboxMarke
 }
 
 export const TOOLBOX_ITEM_IDS = LARES_TOOLBOX.map(i => i.id);
+
+/**
+ * Verifica che un percorso `item → categoria → sottocategoria` esista davvero
+ * nella griglia, nell'ordine giusto. Restituisce null se va bene, altrimenti il
+ * messaggio da mostrare a chi marca. Un percorso troncato all'item o alla
+ * categoria è legittimo: la griglia ha categorie senza sottocategorie.
+ */
+export function validateToolboxPath(item: string, subtype: string[]): string | null {
+  const it = toolboxItem(item);
+  if (!it) return `Item «${item}» inesistente: usa uno dei sette (${TOOLBOX_ITEM_IDS.join(", ")}).`;
+  if (subtype.length === 0) return null;
+  const [catId, subId, ...resto] = subtype;
+  const cat = it.categorie.find(c => c.id === catId);
+  if (!cat) return `«${catId}» non è una categoria di «${it.label}».`;
+  if (subId === undefined) return null;
+  if (!cat.sub.some(x => x.id === subId)) return `«${subId}» non è una sottocategoria di «${cat.label}».`;
+  if (resto.length > 0) return `Il toolbox ha tre gradi: «${resto.join(" ")}» è di troppo.`;
+  return null;
+}

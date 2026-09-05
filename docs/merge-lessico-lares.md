@@ -1,14 +1,17 @@
 # Merge fra il lessico cultuale ILA e i marcatori LARES — proposta v1
 
-Stato: **proposta, da approvare** — 2026-09-05.
+Stato: **approvata e implementata (passi 1-5 del §8)** — 2026-09-05.
+Il passo 6 (riscrittura di `@type`/`@subtype` nei file del corpus) **non è stato
+fatto**: il percorso si deriva dal lemma a runtime, quindi il markup esistente
+funziona così com'è. Serve solo se si vuole un TEI auto-descrittivo per LARES.
 Sorgenti: [`src/lib/cultLexicon.ts`](../src/lib/cultLexicon.ts) (5 famiglie, 54 lemmi,
 ~25 sotto-funzioni) · [`src/lib/laresToolbox.ts`](../src/lib/laresToolbox.ts) (9 marcatori
 concettuali + Analytical Toolbox a 3 gradi) · norme in
 [`docs/tassonomia-funzioni-cultuali.md`](tassonomia-funzioni-cultuali.md) §§2-5 e
 [`docs/fonti-letterarie-modello.md`](fonti-letterarie-modello.md) §4.2, §5.
 
-Nessuna modifica al codice è stata fatta: qui c'è solo il disegno del merge e l'elenco
-delle voci nuove da confermare.
+Il disegno qui sotto è stato realizzato. Dove il codice si discosta dalla proposta è
+segnato in §8.
 
 ## 1. Perché un merge, e che cosa NON è
 
@@ -325,9 +328,10 @@ Nell'ordine, ognuno verificabile da solo:
 1. `laresToolbox.ts`: le 3 categorie e 18 sottocategorie nuove, con
    `aggiunta: true` e un campo nuovo `fonte?: 'LARES-enlarged' | 'ILA'` — così le tre
    voci in rosso della redazione e le nostre non si confondono. Nessun id esistente cambia.
-2. `cultLexicon.ts`: campo `toolbox?: { item: string; subtype: string[] }` su
-   `CultLemma`, popolato dalla tabella §3. `undefined` = «nessun percorso» (§5).
-   Nuova `toolboxForLemma(lemma)` accanto a `lookupCultLemma`.
+2. `cultLexicon.ts`: **fatto diversamente** — non una colonna di `CULT_LEXICON` ma una
+   tabella a parte, `LEMMA_TOOLBOX`, con `toolboxForLemma()`, `toolboxAttrs()` e
+   `checkToolboxTable()` (coerenza della tabella: 0 errori). È un asse diverso e si
+   legge meglio accanto alla §3 di questo documento. 52 lemmi su 54 hanno percorso.
 3. `leidenMarkup.ts` / `litMarkup.ts`: l'azione «Funzione cultuale (parola)» prefilla
    anche `@type`/`@subtype` da `toolboxForLemma`; la validazione avverte (warning, non
    error) se il percorso scritto a mano non esiste in griglia o non è coerente con la
@@ -338,9 +342,28 @@ Nell'ordine, ognuno verificabile da solo:
    Attenzione al tetto `arrCap("cultAttestations", 500)` in `apiShim.ts`.
 5. Guida editor §8: una tabella «famiglia → percorso» e la regola «il percorso lo scrive
    il codice, tu rispondi a una domanda sola». PDF rigenerato.
-6. Corpus: `@type`/`@subtype` **non** vanno riscritti a tappeto sui 298 `<w>` esistenti
-   finché il punto 2 non è approvato; poi si applicano con uno script sul clone fresco del
-   repo dati, mai per copia (i due repo divergono: vedi le note di progetto).
+6. Corpus: **non fatto, e non urgente**. `extractCultAttestations` deriva il percorso dal
+   lemma, quindi i 301 `<w>` già nel corpus lo hanno senza essere riscritti (verificato:
+   297 con percorso, 4 senza). Riscriverli serve solo per un TEI auto-descrittivo da
+   consegnare a LARES; in quel caso, script sul clone fresco del repo dati, mai per copia
+   (i due repo divergono: vedi le note di progetto).
+
+### Verificato il 2026-09-05
+
+- `checkToolboxTable()`: 0 errori; 52/54 lemmi con percorso, senza = χαίρω, χρηστὸς χαῖρε.
+- Estrazione su tutti i 295 file: 301 attestazioni, 297 con percorso.
+- Validatore: percorso inesistente, item inventato, `@subtype` senza `@type` e percorso
+  diverso da quello abituale del lemma → un warning ciascuno, nessun falso positivo sul
+  markup corretto.
+- Vista «Lessico cultuale» → «per griglia LARES» nel build statico: 32 percorsi in ordine
+  di griglia + sezione «Senza percorso».
+
+### Emerso durante l'implementazione — da decidere
+
+`ὁρκίζω` e `ἐνορκίζω` sono marcati `<w>` nel corpus ma **non sono fra i 54 lemmi
+controllati** di `cultLexicon.ts` (il validatore lo segnala già come warning). Cadrebbero
+in `activities → prayers → imprecation`, accanto a ἐπεξορκίζω. Aggiungerli al vocabolario
+è una decisione editoriale, come fu per παιδίσκη/φιλόθεος: non l'ho presa.
 
 ## 9. Da confermare con la redazione LARES
 

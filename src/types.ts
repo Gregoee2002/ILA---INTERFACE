@@ -115,6 +115,13 @@ export interface CultAttestation {
   scheda: string;
   /** riferimento Lane/CMRDM, se ricavabile dalla bibliografia. */
   laneRef?: string;
+  /**
+   * Percorso dell'Analytical Toolbox LARES (@type + @subtype), es.
+   * `{ item: "activities", subtype: ["expiation", "confession"] }`. Derivato dal
+   * lemma (docs/merge-lessico-lares.md); assente per i lemmi che non hanno
+   * percorso — χαίρω, χρηστὸς χαῖρε — e per il markup anteriore al merge.
+   */
+  toolbox?: { item: string; subtype: string[] };
 }
 
 export interface Monumento {

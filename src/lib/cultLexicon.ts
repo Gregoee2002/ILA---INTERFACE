@@ -11,9 +11,17 @@
  * sotto-funzione fine NON è una decisione editoriale, si ricava di qui dal
  * `@lemma`. Vedi il doc per la norma completa.
  *
- * Nessuna dipendenza. Node + browser.
+ * Il merge coi marcatori LARES (docs/merge-lessico-lares.md) sta in fondo:
+ * `LEMMA_TOOLBOX` porta ogni lemma sul suo percorso della griglia LARES. È una
+ * tabella a parte, non una colonna di `CULT_LEXICON`, perché è un asse diverso —
+ * la famiglia dice chi è il soggetto, il percorso che cosa è la cosa nominata —
+ * e perché così si legge accanto alla §3 del documento.
+ *
+ * Dipende solo da laresToolbox.ts (dati, nessuna dipendenza a sua volta).
  * ------------------------------------------------------------------
  */
+
+import { ToolboxMarker, validateToolboxPath } from "./laresToolbox";
 
 export type CultFamily =
   | "agency"
@@ -211,4 +219,114 @@ export function matchCultLemma(form: string): CultLemma | undefined {
     }
   }
   return best;
+}
+
+/* ================================================================ */
+/* Merge coi marcatori LARES — docs/merge-lessico-lares.md §3        */
+/* ================================================================ */
+
+/**
+ * `lemma → percorso dell'Analytical Toolbox`. Si legge come la tabella
+ * `lemma → sotto-funzione`: **non è una scelta editoriale**, è una proprietà del
+ * lemma, e la scrive il codice. L'editor risponde a una domanda sola («il
+ * soggetto è il dio o l'uomo?») e continua a scegliere solo `@lemma` + `@ana`.
+ *
+ * I lemmi assenti da questa tabella **non hanno percorso**, ed è un esito
+ * legittimo: χαίρω e χρηστὸς χαῖρε non nominano un agente, un'attività o uno
+ * spazio, e metterli sotto `prayers` sarebbe un dato falso (§5 del documento).
+ */
+export const LEMMA_TOOLBOX: Record<string, ToolboxMarker> = {
+  // ── agency → il dio come agente ─────────────────────────────────────
+  "δύναμις": { item: "superhuman-agents", subtype: ["divinities", "power"] },
+  "αἱρετίζω": { item: "superhuman-agents", subtype: ["divinities", "election"] },
+  "χρηματισμός": { item: "superhuman-agents", subtype: ["divinities", "injunction"] },
+  "ἐπιταγή": { item: "superhuman-agents", subtype: ["divinities", "injunction"] },
+  "βασιλεύω": { item: "superhuman-agents", subtype: ["divinities", "territorial-lordship"] },
+  "κατέχω": { item: "superhuman-agents", subtype: ["divinities", "territorial-lordship"] },
+  "κολάζω": { item: "superhuman-agents", subtype: ["divinities", "legal-action"] },
+  "νεμεσάω": { item: "superhuman-agents", subtype: ["divinities", "legal-action"] },
+  // Un aggettivo che nel testo funziona da epiclesi va in `epithets`, non nel
+  // ramo della sua funzione: così continua ad alimentare l'indice degli epiteti
+  // invece di sparpagliare gli stessi aggettivi su tre rami.
+  "ἐπήκοος": { item: "superhuman-agents", subtype: ["divinities", "epithets"] },
+  "εὐίλατος": { item: "superhuman-agents", subtype: ["divinities", "epithets"] },
+  "ἐπιφανής": { item: "superhuman-agents", subtype: ["divinities", "epithets"] },
+
+  // ── atto-cultuale → l'atto, la norma, la cosa ───────────────────────
+  "εὐχή": { item: "activities", subtype: ["prayers", "vow"] },
+  "εὔχομαι": { item: "activities", subtype: ["prayers", "vow"] },
+  "εὐχαριστέω": { item: "activities", subtype: ["prayers", "thanksgiving"] },
+  "εὐχαριστία": { item: "activities", subtype: ["prayers", "thanksgiving"] },
+  "εὐλογέω": { item: "activities", subtype: ["prayers", "thanksgiving"] },
+  "σέβω": { item: "activities", subtype: ["prayers", "veneration"] },
+  "ἀνατίθημι": { item: "activities", subtype: ["offering", "dedication"] },
+  "ἀνίστημι": { item: "activities", subtype: ["offering", "dedication"] },
+  "καθιερόω": { item: "activities", subtype: ["offering", "consecration"] },
+  "καθιδρύω": { item: "activities", subtype: ["offering", "consecration"] },
+  "ἐξειλάσκομαι": { item: "activities", subtype: ["expiation", "propitiation"] },
+  "ἐξομολογέομαι": { item: "activities", subtype: ["expiation", "confession"] },
+  "ὁμολογέω": { item: "activities", subtype: ["expiation", "confession"] },
+  "λύτρον": { item: "activities", subtype: ["expiation", "ransom"] },
+  "λυτρόω": { item: "activities", subtype: ["expiation", "ransom"] },
+  // καθαρίζω è l'atto, ἀκάθαρτος la norma: stessa sotto-funzione ILA
+  // (norma-santuariale), rami diversi. È il guadagno del doppio asse.
+  "καθαρίζω": { item: "activities", subtype: ["expiation", "purification"] },
+  "ἀκάθαρτος": { item: "institutions", subtype: ["religious-practices", "purity-rule"] },
+  "ἄσυλος": { item: "institutions", subtype: ["religious-practices", "law"] },
+  "μαρτυρέω": { item: "institutions", subtype: ["religious-practices", "record"] },
+  "στηλογραφέω": { item: "institutions", subtype: ["religious-practices", "record"] },
+  "τεκμωρεύω": { item: "institutions", subtype: ["religious-practices", "administration"] },
+  "στέφανος": { item: "institutions", subtype: ["civic-customs", "honours"] },
+  // La parola nomina l'edificio, anche se la famiglia guarda a chi lo costruisce.
+  "ναός": { item: "spaces", subtype: ["constructions", "public"] },
+
+  // ── colpa ───────────────────────────────────────────────────────────
+  "ἁμαρτάνω": { item: "activities", subtype: ["transgression", "sin"] },
+  "ἐπιορκέω": { item: "activities", subtype: ["transgression", "perjury"] },
+
+  // ── formula-fissa (χαίρω e χρηστὸς χαῖρε restano senza percorso) ─────
+  "ἐπεξορκίζω": { item: "activities", subtype: ["prayers", "imprecation"] },
+  "κεχολωμένος": { item: "activities", subtype: ["prayers", "imprecation"] },
+  "ὗε κύε": { item: "activities", subtype: ["prayers", "invocation"] },
+  // eccezione dentro la famiglia: nomina un oggetto, non un atto di parola.
+  "σκῆπτρον": { item: "materiality", subtype: ["instruments"] },
+
+  // ── ruolo-istituzione ───────────────────────────────────────────────
+  "ἱερεύς": { item: "human-agents", subtype: ["cult-personnel", "priest"] },
+  "ἱερατεύω": { item: "human-agents", subtype: ["cult-personnel", "priest"] },
+  "ἀρχιερεύς": { item: "human-agents", subtype: ["cult-personnel", "high-priest"] },
+  "στολιστής": { item: "human-agents", subtype: ["cult-personnel", "assistant"] },
+  "σύνοδος": { item: "human-agents", subtype: ["groups", "associations"] },
+  "φράτρα": { item: "human-agents", subtype: ["groups", "associations"] },
+  "-ιασταί": { item: "human-agents", subtype: ["groups", "associations"] },
+  "συνβολαφόρος": { item: "human-agents", subtype: ["groups", "associations"] },
+  "κατοικία": { item: "human-agents", subtype: ["groups", "local-community"] },
+  "θρεπτός": { item: "human-agents", subtype: ["status", "threptos"] },
+  "θρέμμα": { item: "human-agents", subtype: ["status", "threptos"] },
+  "τρέφω": { item: "human-agents", subtype: ["status", "threptos"] },
+};
+
+/** Percorso LARES di un lemma controllato, o undefined se non ne ha (§5 del doc). */
+export function toolboxForLemma(lemma: string): ToolboxMarker | undefined {
+  return LEMMA_TOOLBOX[(lemma || "").trim()];
+}
+
+/** `subtype` come stringa per il markup: gli id separati da spazio. */
+export function toolboxAttrs(m: ToolboxMarker | undefined): { type: string; subtype: string } | undefined {
+  if (!m) return undefined;
+  return { type: m.item, subtype: m.subtype.join(" ") };
+}
+
+/**
+ * Coerenza interna della tabella: ogni chiave è un lemma controllato e ogni
+ * percorso esiste nella griglia. Usata dai test; non costa nulla chiamarla.
+ */
+export function checkToolboxTable(): string[] {
+  const errs: string[] = [];
+  for (const [lemma, m] of Object.entries(LEMMA_TOOLBOX)) {
+    if (!BY_LEMMA.has(lemma)) errs.push(`«${lemma}» non è nel vocabolario controllato.`);
+    const bad = validateToolboxPath(m.item, m.subtype);
+    if (bad) errs.push(`«${lemma}»: ${bad}`);
+  }
+  return errs;
 }

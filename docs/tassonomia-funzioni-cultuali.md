@@ -17,6 +17,14 @@ automatica del markup.
 
 > `@lemmaRef` → **LSJ** via Perseus/Logeion.
 
+> **Merge coi marcatori LARES** (2026-09-05): ogni lemma porta anche
+> `@type`/`@subtype`, il suo posto nell'*Analytical Toolbox* LARES. È un asse
+> diverso — la famiglia dice chi è il soggetto, il percorso che cosa è la cosa
+> nominata — e non è una scelta editoriale: si deriva dal lemma come la
+> sotto-funzione. Tabella e norma in
+> [`merge-lessico-lares.md`](merge-lessico-lares.md); in codice
+> `LEMMA_TOOLBOX` in `src/lib/cultLexicon.ts`.
+
 ## 1. Idea di fondo
 
 Marcare **selettivamente** dentro `<div type="edition">` le parole/formule rilevanti

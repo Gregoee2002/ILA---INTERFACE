@@ -28,7 +28,10 @@ import {
   lookupCultLemma,
   lemmaRefFor,
   matchCultLemma,
+  toolboxForLemma,
+  toolboxAttrs,
 } from "./cultLexicon";
+import { validateToolboxPath, toolboxLabel } from "./laresToolbox";
 
 const AB_INDENT = "                ";      // 16 spazi (ab dentro div a 12)
 const LB_INDENT = "                    ";  // 20 spazi
@@ -1110,13 +1113,17 @@ export const MARKUP_ACTIONS: MarkupAction[] = [
 
 /** Attributi di un <w> di funzione cultuale. Se il lemma è noto e la famiglia
  *  non è stata toccata, la famiglia viene dalla tabella; l'editor può sempre
- *  correggerla scegliendola nel menu. @lemmaRef aggiunto solo se ricavabile. */
+ *  correggerla scegliendola nel menu. @lemmaRef aggiunto solo se ricavabile.
+ *  @type/@subtype = percorso LARES, derivato dal lemma come la sotto-funzione
+ *  (docs/merge-lessico-lares.md §7): non è una scelta editoriale. Chi marca può
+ *  sempre correggerli a mano — la validazione avvisa, non blocca. */
 function cultWordAttrs(p: Record<string, string>): Record<string, string> {
   const known = lookupCultLemma(p.lemma);
   const family = p.family || known?.family || "atto-cultuale";
   const ana = p.formula === "sì" ? `#${family} #formula` : `#${family}`;
   const ref = lemmaRefFor(p.lemma);
-  return { lemma: p.lemma, ana, ...(ref ? { lemmaRef: ref } : {}) };
+  const tb = toolboxAttrs(toolboxForLemma(p.lemma));
+  return { lemma: p.lemma, ana, ...(ref ? { lemmaRef: ref } : {}), ...(tb || {}) };
 }
 
 /* ================================================================ */
@@ -1260,6 +1267,22 @@ export function validateEditionTokens(tokens: MarkupToken[]): ValidationIssue[] 
           } else if (famToken && known.family !== famToken) {
             issues.push({ severity: "warning", line: lineN || 1, message: `Il lemma «${a.lemma}» di solito è #${known.family}, qui è marcato #${famToken}: confermare se è voluto.` });
           }
+        }
+        // ── percorso LARES (docs/merge-lessico-lares.md) ──
+        if (a.type) {
+          const sub = (a.subtype || "").split(/\s+/).filter(Boolean);
+          const bad = validateToolboxPath(a.type, sub);
+          if (bad) {
+            issues.push({ severity: "warning", line: lineN || 1, message: `Percorso LARES non valido: ${bad}` });
+          } else if (a.lemma) {
+            const atteso = toolboxForLemma(a.lemma);
+            const scritto = [a.type, ...sub].join(" ");
+            if (atteso && [atteso.item, ...atteso.subtype].join(" ") !== scritto) {
+              issues.push({ severity: "warning", line: lineN || 1, message: `Il lemma «${a.lemma}» di norma è «${toolboxLabel(atteso)}», qui è marcato «${toolboxLabel({ item: a.type, subtype: sub })}»: confermare se è voluto.` });
+            }
+          }
+        } else if (a.subtype) {
+          issues.push({ severity: "warning", line: lineN || 1, message: "@subtype senza @type: il percorso LARES parte sempre dall'item." });
         }
         const semAncestor = ["persName", "name", "rs", "supplied", "expan"].find(x => ancestors.includes(x));
         if (semAncestor) {

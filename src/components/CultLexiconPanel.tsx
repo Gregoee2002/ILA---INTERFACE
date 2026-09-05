@@ -14,7 +14,7 @@ interface Props {
   onVaiAllaFonte?: (testimoniumId: string) => void;
 }
 
-type GroupBy = 'family' | 'lemma';
+type GroupBy = 'family' | 'lemma' | 'lares';
 
 const foldForSearch = (s: string) =>
   (s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
@@ -291,6 +291,12 @@ export const CultLexiconPanel: React.FC<Props> = ({ monumenti, onSelectMonumento
     );
   };
 
+  // I percorsi LARES coi soli lemmi che passano i filtri (docs/merge-lessico-lares.md).
+  const percorsiToRender = index.toolbox
+    .map(t => ({ ...t, lemmata: t.lemmata.filter(matchLemma) }))
+    .filter(t => t.lemmata.length > 0);
+  const senzaPercorso = index.senzaPercorso.filter(matchLemma);
+
   const familiesToRender = index.families
     .map(f => ({ ...f, lemmata: f.lemmata.filter(matchLemma) }))
     .filter(f => f.lemmata.length > 0 || soloNeiTesti.some(l => l.family === f.id));
@@ -356,7 +362,7 @@ export const CultLexiconPanel: React.FC<Props> = ({ monumenti, onSelectMonumento
         </div>
 
         <div className="inline-flex rounded-lg border border-[var(--border)]/50 dark:border-white/5 overflow-hidden text-[10px] font-sans font-bold uppercase tracking-widest shadow-inner">
-          {(['family', 'lemma'] as GroupBy[]).map(g => (
+          {(['family', 'lemma', 'lares'] as GroupBy[]).map(g => (
             <button
               key={g}
               onClick={() => setGroupBy(g)}
@@ -365,7 +371,7 @@ export const CultLexiconPanel: React.FC<Props> = ({ monumenti, onSelectMonumento
                 groupBy === g ? 'bg-accent/10 text-accent' : 'text-muted hover:text-ink',
               )}
             >
-              {g === 'family' ? 'per famiglia' : 'per lemma'}
+              {g === 'family' ? 'per famiglia' : g === 'lemma' ? 'per lemma' : 'per griglia LARES'}
             </button>
           ))}
         </div>
@@ -373,6 +379,47 @@ export const CultLexiconPanel: React.FC<Props> = ({ monumenti, onSelectMonumento
 
       {filteredLemmata.length === 0 && soloNeiTesti.length === 0 ? (
         <div className="text-sm italic text-muted/60 py-12 text-center">Nessuna attestazione per questi filtri.</div>
+      ) : groupBy === 'lares' ? (
+        <div className="space-y-7">
+          <p className="text-[13px] font-serif italic text-muted/70 leading-relaxed -mt-1">
+            Gli stessi lemmi visti dall'altro asse: la famiglia dice chi è il soggetto,
+            il percorso dell'<em>Analytical Toolbox</em> dice che cosa è la cosa nominata.
+            L'ordine è quello della griglia LARES, non quello della frequenza.
+          </p>
+          {percorsiToRender.map(t => (
+            <section key={t.key}>
+              <div className="flex items-baseline gap-2.5 mb-2 pb-1 border-b border-border/40">
+                <h3 className="text-sm font-sans font-bold uppercase tracking-[0.15em] text-ink/90">
+                  {t.label}
+                </h3>
+                <span className="text-xs font-sans text-muted/60">
+                  {t.lemmata.length} {t.lemmata.length === 1 ? 'lemma' : 'lemmi'} · {schede(t.schedeCount)} · {atts(t.count)}
+                </span>
+                <code className="ml-auto text-[10px] font-sans text-muted/40 hidden sm:block">
+                  {[t.marker.item, ...t.marker.subtype].join(' ')}
+                </code>
+              </div>
+              <div className="space-y-0.5">{t.lemmata.map(renderLemmaRow)}</div>
+            </section>
+          ))}
+          {senzaPercorso.length > 0 && (
+            <section>
+              <div className="flex items-baseline gap-2.5 mb-2 pb-1 border-b border-border/40">
+                <h3 className="text-sm font-sans font-bold uppercase tracking-[0.15em] text-ink/70">
+                  Senza percorso
+                </h3>
+                <span className="text-xs font-sans text-muted/60">
+                  {senzaPercorso.length} {senzaPercorso.length === 1 ? 'lemma' : 'lemmi'}
+                </span>
+              </div>
+              <p className="text-[13px] font-serif italic text-muted/60 mb-2 leading-relaxed">
+                Formule che non nominano un agente, un'attività o uno spazio: metterle
+                nella griglia darebbe un dato falso. Restano qualificate dalla famiglia.
+              </p>
+              <div className="space-y-0.5">{senzaPercorso.map(renderLemmaRow)}</div>
+            </section>
+          )}
+        </div>
       ) : groupBy === 'lemma' ? (
         <div className="space-y-0.5">
           {[...filteredLemmata].sort((a, b) => b.count - a.count || a.lemma.localeCompare(b.lemma)).map(renderLemmaRow)}
