@@ -1,3 +1,4 @@
+import { SourceRef } from './lib/printSources';
 export interface Traduzione {
   lang: string;
   testo: string;
@@ -113,8 +114,12 @@ export interface CultAttestation {
   cert?: "low";
   /** id scheda, es. "ILA-107". */
   scheda: string;
-  /** riferimento Lane/CMRDM, se ricavabile dalla bibliografia. */
-  laneRef?: string;
+  /**
+   * Riferimento alla fonte a stampa principale della scheda, se riconosciuta
+   * nella bibliografia — «CMRDM I 29», «BWK 5», «MAMA V 12»… Il registro delle
+   * fonti sta in `lib/printSources.ts`: nessuna è privilegiata dal codice.
+   */
+  sourceRef?: string;
   /**
    * Percorso dell'Analytical Toolbox LARES (@type + @subtype), es.
    * `{ item: "activities", subtype: ["expiation", "confession"] }`. Derivato dal
@@ -164,6 +169,12 @@ export interface Monumento {
   iconografia?: IconographyData;
   traduzioni?: Traduzione[];
   bibliografia?: Bibliografia[];
+  /**
+   * Le fonti a stampa riconosciute nella bibliografia della scheda, nell'ordine
+   * del registro (`lib/printSources.ts`). Serve a interrogare il corpus per
+   * fonte senza che nessuna sia cablata nel codice.
+   */
+  fontiStampa?: SourceRef[];
   responsabili?: Responsabile[];
   note_interne?: string;
   note_interne_rawXml?: string;

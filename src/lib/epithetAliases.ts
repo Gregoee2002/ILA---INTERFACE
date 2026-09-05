@@ -11,10 +11,10 @@
 //  - Solo varianti grafiche o flessive della stessa parola. NON unire epiteti
 //    che potrebbero essere cult-title distinti (es. Chthonios ≠ Katachthonios,
 //    dove kata- cambia il senso): quelli, se davvero da unire, vanno risolti a
-//    mano sullo XML dopo verifica su Lane 1971.
+//    mano sullo XML dopo verifica sulle edizioni a stampa.
 //  - La FORMA CANONICA (valore della mappa) è di norma quella più attestata nel
-//    corpus e/o quella usata da Lane 1971. Le direzioni qui sotto sono da
-//    ricontrollare su Lane prima di considerarle definitive; cambiarle è una
+//    corpus e/o quella usata dalle edizioni a stampa. Le direzioni qui sotto sono da
+//    ricontrollare sulle edizioni prima di considerarle definitive; cambiarle è una
 //    riga di codice, non una migrazione di dati.
 //
 // Fonte dei gruppi: rilievo DATA-01 dell'audit 2026-09-01 (conteggi indicati).
@@ -31,7 +31,7 @@ export const EPITHET_ALIASES: Record<string, string> = {
   // Tiamou(1) è il genitivo di Tiamos(14) trattato per errore come forma a sé.
   Tiamou: "Tiamos",
 
-  // Coppie grafiche (nessun conteggio nell'audit: direzione da confermare su Lane).
+  // Coppie grafiche (nessun conteggio nell'audit: direzione da confermare sulle edizioni).
   Motyleites: "Motelleites",
   Selmenos: "Selmeenos",
   Labanes: "Labanas",

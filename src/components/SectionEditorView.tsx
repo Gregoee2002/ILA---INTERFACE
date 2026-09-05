@@ -63,9 +63,10 @@ const SECTION_META: SectionMeta[] = [
 
 const GROUPS: SectionMeta['group'][] = ['Intestazione', 'Storia', 'Testo', 'Apparato scientifico'];
 
-/** Ripartizioni regionali storicamente attestate nel corpus, offerte come
- *  suggerimento — il campo resta testo libero per qualunque altro valore. */
-const CMRDM_REGIONS = ['Graecia', 'Dacia', 'Italia', 'Asia Minor'];
+/** Ripartizioni regionali attestate nel corpus, offerte come suggerimento —
+ *  il campo resta testo libero per qualunque altro valore. Non sono le sezioni
+ *  di un'edizione a stampa: sono i valori che le schede usano davvero. */
+const CORPUS_REGIONS = ['Graecia', 'Dacia', 'Italia', 'Asia Minor'];
 
 /** Ruoli editoriali di base per il campo "carica" dei curatori/collaboratori
  *  (sezione Bibliografia): si aggiungono ai ruoli già usati altrove nel corpus,
@@ -1091,7 +1092,7 @@ function renderSectionForm(
           </div>
           <div>
             <FieldLabel>Regione</FieldLabel>
-            <SuggestInput value={m.regione || ''} onChange={v => set('regione', v)} options={CMRDM_REGIONS} placeholder="Asia Minor" />
+            <SuggestInput value={m.regione || ''} onChange={v => set('regione', v)} options={CORPUS_REGIONS} placeholder="Asia Minor" />
           </div>
         </div>
       );
@@ -1279,7 +1280,7 @@ function renderSectionForm(
             <div key={i} className="grid grid-cols-[5rem_1fr_10rem_2.25rem] gap-3 items-start">
               <TextInput value={a.locRaw} onChange={e => update(i, { loc: e.target.value })} placeholder="5" />
               <TextInput value={a.lezione} onChange={e => update(i, { note: e.target.value })} placeholder="Μὲς lapis pro Μὴν…" />
-              <TextInput value={a.lettore} onChange={e => update(i, { source: e.target.value })} placeholder="Lane" />
+              <TextInput value={a.lettore} onChange={e => update(i, { source: e.target.value })} placeholder="cognome del lettore" />
               <button onClick={() => set('apparatus', entries.filter((_, j) => j !== i))} className="p-2 text-muted/50 hover:text-danger transition-colors"><Trash2 className="w-4 h-4" /></button>
             </div>
           ))}
@@ -1342,7 +1343,7 @@ function renderSectionForm(
 
     case 'bibliography': {
       const bibl: Bibliografia[] = m.bibliografia || [];
-      // Convenzione di Lane: la lista è piatta, ma la prima voce che inizia
+      // Convenzione corrente dei corpora epigrafici: la lista è piatta, ma la prima voce che inizia
       // con "Cf." segna il passaggio dalle edizioni precedenti del testo ai
       // riferimenti di confronto. Nessun campo XML nuovo: si legge/scrive
       // solo il testo, quindi il round-trip resta valido come oggi.
@@ -1409,7 +1410,7 @@ function renderSectionForm(
           </div>
           <div className="space-y-3 border-t border-line/40 pt-4">
             <FieldLabel>Bibliografia (cfr.)</FieldLabel>
-            <p className="text-[11px] text-muted/60">Le voci che iniziano con "Cf." separano le edizioni precedenti del testo dai riferimenti di confronto, come nel testo di Lane.</p>
+            <p className="text-[11px] text-muted/60">Le voci che iniziano con "Cf." separano le edizioni precedenti del testo dai riferimenti di confronto, come negli apparati dei corpora epigrafici.</p>
             {comparisons.length === 0 && <p className="text-xs text-muted/60 italic">Nessun riferimento di confronto.</p>}
             {comparisons.map(({ b, i }) => renderRow(b, i))}
             <button

@@ -6,8 +6,9 @@ import { XmlDiffViewer } from './XmlDiffViewer';
 /**
  * DraftReviewPanel
  * -----------------
- * Vista di sola lettura sulle estrazioni draft dell'agente Vision (Lane
- * 1971, volume I) non ancora integrate nel corpus. Per ogni entry con un
+ * Vista di sola lettura sulle estrazioni draft dell'agente Vision sulle
+ * scansioni delle fonti a stampa (finora CMRDM I) non ancora integrate nel
+ * corpus. Per ogni entry con un
  * corrispettivo già revisionato in src/data/corpus mostra il diff
  * riga-per-riga (via XmlDiffViewer); per le altre mostra il draft grezzo
  * per una prima lettura. Non scrive né importa nulla: la revisione vera e
@@ -79,7 +80,7 @@ export function DraftReviewPanel() {
           Revisione estrazioni draft
         </div>
         <p className="text-xs font-serif italic text-muted leading-relaxed mb-4">
-          Draft generati dall'agente di estrazione Vision su Lane 1971, vol. I. Sola lettura: nessuna
+          Draft generati dall'agente di estrazione Vision sulle scansioni a stampa. Sola lettura: nessuna
           scrittura sul corpus. {drafts.length} entry draft, {reviewedCount} già presenti (revisionate) nel corpus.
         </p>
 

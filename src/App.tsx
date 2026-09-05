@@ -1490,7 +1490,7 @@ function CorpusHealth({ monumenti, onSelectMonumento }: { monumenti: Monumento[]
             <h3 className="font-bold text-sm mb-1">
               Classificazione divinità / epiteti
               <span className="ml-2 text-[10px] font-sans font-normal text-muted uppercase tracking-widest">
-                da verificare su Lane 1971, poi correggere sullo XML
+                da verificare sulle edizioni a stampa, poi correggere sullo XML
               </span>
             </h3>
 
@@ -6574,8 +6574,8 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
               </div>
               <p className="text-sm font-serif text-ink/80 leading-relaxed">
                 Riorganizzare tutti gli ID in modo sequenziale? Questa operazione riassegna
-                l'ID interno di ogni scheda in base all'ordine attuale, senza toccare il
-                numero di catalogo (CMRDM) né i file fisici.
+                l'ID interno di ogni scheda in base all'ordine attuale, senza toccare i
+                numeri di catalogo delle fonti a stampa né i file fisici.
               </p>
               <div className="flex items-center justify-end gap-3 pt-1">
                 <button

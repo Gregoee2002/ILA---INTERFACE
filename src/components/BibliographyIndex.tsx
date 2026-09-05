@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { BookMarked, Loader2, Search, Wand2, Check, ChevronRight, AlertTriangle } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { Monumento } from '../types';
+import { PRINT_SOURCES } from '../lib/printSources';
 
 /**
  * BibliographyIndex — censimento e modifica in blocco delle diciture
@@ -62,15 +63,27 @@ const familyOf = (v: string): string => {
   return m ? m[1].toLowerCase() : '(altro)';
 };
 
+// Cognomi degli autori del registro delle fonti a stampa: «E. N. Lane» → «Lane».
+// Servono alle regole rapide che normalizzano la forma delle citazioni.
+const SOURCE_SURNAMES = Array.from(new Set(
+  PRINT_SOURCES.map(f => (f.autore || '').split(/\s+/).filter(Boolean).pop() || '').filter(x => x.length > 2),
+));
+
 // Normalizzazioni sicure predefinite (approvate 29 ago 2026). Ognuna è una
 // funzione pura stringa→stringa; il pannello calcola in tempo reale quante
 // diciture cambierebbero prima di applicare.
 const QUICK_RULES: { id: string; label: string; desc: string; fn: (s: string) => string }[] = [
   {
-    id: 'lane-comma',
-    label: 'Virgola dopo «Lane»',
-    desc: 'Lane I, p. … → Lane, I, p. …',
-    fn: (s) => s.replace(/\bLane\s+(?=[IVX]+\b)/g, 'Lane, '),
+    // Il cognome dell'autore e il numero di volume vanno separati da virgola.
+    // I cognomi vengono dal registro delle fonti (printSources.ts): la regola
+    // non conosce nessun autore in particolare, e cresce col registro.
+    id: 'autore-volume-comma',
+    label: 'Virgola fra autore e volume',
+    desc: 'Lane I, p. … → Lane, I, p. … (vale per ogni autore del registro fonti)',
+    fn: (s) => SOURCE_SURNAMES.reduce(
+      (acc, cognome) => acc.replace(new RegExp(`\\b${cognome}\\s+(?=[IVX]+\\b)`, 'g'), `${cognome}, `),
+      s,
+    ),
   },
   {
     id: 'pp-ranges',

@@ -54,7 +54,7 @@ export function buildDivinityIndex(monumenti: Monumento[]): Record<string, Divin
 // --- Audit di classificazione divinità / epiteti ------------------------------
 // Tre segnali di sospetta misclassificazione, calcolati sul corpus già
 // parsato (stessi dati di buildDivinityIndex). Nessuna correzione automatica:
-// ogni voce è un candidato da verificare a mano su Lane 1971 e poi correggere
+// ogni voce è un candidato da verificare a mano sulle edizioni a stampa e poi correggere
 // sullo XML (vedi divinityAliases.ts per quando è invece solo variante grafica).
 
 export interface ClassificationAudit {

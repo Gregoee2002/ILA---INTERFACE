@@ -3,6 +3,7 @@ import { Monumento, Traduzione, Bibliografia, OrigDate, IconographyData, CultAtt
 import { canonicalDivinityName } from "./divinityAliases";
 import { canonicalEpithet } from "./epithetAliases";
 import { CULT_FAMILY_IDS, lookupCultLemma, toolboxForLemma } from "./cultLexicon";
+import { extractSourceRefs } from "./printSources";
 
 // Unica fonte per l'etichetta identificativa del record — sostituisce le
 // vecchie stringhe "corpus numero" (CMRDM I 29) costruite ad hoc in più punti.
@@ -77,7 +78,10 @@ function isPlaceholder(s: string): boolean {
 export function extractCultAttestations(
   teiString: string,
   scheda: string,
-  laneRef?: string,
+  /** riferimento alla fonte a stampa principale della scheda, se riconosciuta
+   *  (registro in printSources.ts). Prima era per forza Lane; ora è la prima
+   *  fonte riconosciuta fra quelle del registro. */
+  sourceRef?: string,
 ): CultAttestation[] {
   const out: CultAttestation[] = [];
   const edMatch = teiString.match(/<div\s+type="edition"[^>]*>([\s\S]*?)(?=<div\s+type="(?:apparatus|translation|commentary|bibliography)"|<\/body>)/);
@@ -141,7 +145,7 @@ export function extractCultAttestations(
       formula,
       ...(cert === 'low' ? { cert: 'low' as const } : {}),
       scheda,
-      ...(laneRef ? { laneRef } : {}),
+      ...(sourceRef ? { sourceRef } : {}),
       ...(() => { const tb = toolboxOf(attrs, lemma); return tb ? { toolbox: tb } : {}; })(),
     });
   }
@@ -165,7 +169,7 @@ export function extractCultAttestations(
       formula: formula || rm[2] === 'cultFormula',
       ...(cert === 'low' ? { cert: 'low' as const } : {}),
       scheda,
-      ...(laneRef ? { laneRef } : {}),
+      ...(sourceRef ? { sourceRef } : {}),
       ...(() => { const tb = toolboxOf(attrs, key); return tb ? { toolbox: tb } : {}; })(),
     });
   }
@@ -1329,12 +1333,10 @@ function parseTeiElement(teiString: string): Monumento {
 
   // 25. Lessico cultuale (tassonomia cult-functions) — dal markup dell'edizione.
   const cultScheda = `ILA-${String(id).padStart(3, '0')}`;
-  // Lane 1971 = CMRDM vol. I: la bibliografia lo cita come "…Leiden 1971, n. NN".
-  // Ricostruisco la forma normalizzata "Lane, CMRDM I NN" usata nello spoglio.
-  const laneNumMatch = teiString.match(/Leiden\s+1971,?\s*n[or]?\.?\s*(\d+)/i)
-    || teiString.match(/CMRDM(?:\)?\.?\s*I\b)?[^<]{0,60}?\bn[or]?\.?\s*(\d+)/i);
-  const cultLaneRef = laneNumMatch ? `Lane, CMRDM I ${laneNumMatch[1]}` : undefined;
-  const cultAttestations = extractCultAttestations(teiString, cultScheda, cultLaneRef);
+  // I riferimenti alle fonti a stampa li riconosce il registro (printSources.ts):
+  // CMRDM I è la più frequente, non l'unica, e il codice non deve saperlo.
+  const fontiStampa = extractSourceRefs(teiString);
+  const cultAttestations = extractCultAttestations(teiString, cultScheda, fontiStampa[0]?.ref);
 
   // Canonicalizzazione delle varianti grafiche/flessive degli epiteti (DATA-01):
   // stessa strategia dei teonimi (canonicalDivinityName), applicata qui a valle
@@ -1407,6 +1409,7 @@ function parseTeiElement(teiString: string): Monumento {
     persone,
     imperatori,
     cultAttestations,
+    fontiStampa,
     revisions,
     editorialStatus,
     apparatus,

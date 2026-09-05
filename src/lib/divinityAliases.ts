@@ -6,7 +6,7 @@
 //
 // Aggiungere qui SOLO varianti verificate (stessa divinità, grafia diversa),
 // non casi ambigui da investigare — quelli vanno risolti a mano sullo XML
-// dopo verifica su Lane 1971, non silenziati con un alias.
+// dopo verifica sulle edizioni a stampa, non silenziati con un alias.
 export const DIVINITY_ALIASES: Record<string, string> = {
   Apollon: "Apollo",
 };
