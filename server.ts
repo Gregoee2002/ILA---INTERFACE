@@ -67,6 +67,23 @@ async function startServer() {
     }
   }
 
+  // Cancello sul dato: la repo dati e questo corpus si sono già disallineati,
+  // e il pull all'avvio sovrascrive il locale. Se il remoto è più povero — non
+  // ha schede che qui esistono — quasi sempre è il remoto a essere indietro,
+  // non il locale a essere di troppo: meglio partire con dati locali stantii
+  // che perdere lavoro. La soglia non è zero perché una singola scheda tolta
+  // apposta è un'operazione legittima.
+  const SOGLIA_MANCANTI = 5;
+  function corpusSyncGuard({ remote, local }: { remote: string[]; local: string[] }): string | null {
+    if (local.length === 0) return null;                     // primo avvio: tutto lecito
+    if (remote.length === 0) return `il remoto non ha nessuna scheda, il locale ne ha ${local.length}`;
+    const mancanti = local.filter(f => !remote.includes(f));
+    if (mancanti.length > SOGLIA_MANCANTI) {
+      return `sul remoto mancano ${mancanti.length} schede presenti in locale (${mancanti.slice(0, 3).join(', ')}…), su ${local.length} totali`;
+    }
+    return null;
+  }
+
   if (isGitHubConfigured()) {
     try {
       await pullCorpusFromGitHub(
@@ -74,7 +91,8 @@ async function startServer() {
         (filepath, content) => fs.writeFileSync(filepath, content, "utf-8"),
         (...parts) => path.join(...parts),
         (dir) => fs.readdirSync(dir).filter(f => f.endsWith('.xml') && !f.startsWith('_')),
-        (filepath) => fs.unlinkSync(filepath)
+        (filepath) => fs.unlinkSync(filepath),
+        corpusSyncGuard
       );
     } catch (e: any) {
       console.error("[githubStorage] Sync iniziale fallita — il server parte comunque con il filesystem locale (probabilmente vuoto o stale):", e.message || e);

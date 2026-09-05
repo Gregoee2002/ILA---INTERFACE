@@ -7,6 +7,8 @@
     "dev": "tsx server.ts",
     "typecheck": "tsc --noEmit",
     "snapshot": "tsx scripts/build-corpus-snapshot.ts",
+    "sync:report": "tsx scripts/data-sync-report.ts",
+    "collate": "tsx scripts/collate-source.ts",
     "prebuild": "tsc --noEmit && tsx scripts/build-corpus-snapshot.ts",
     "build": "vite build && esbuild server.ts --bundle --platform=node --format=cjs --packages=external --sourcemap --outfile=dist/server.cjs",
     "start": "node dist/server.cjs",

@@ -165,8 +165,15 @@ export async function pullCorpusFromGitHub(
   fsWriteFileSync: (filepath: string, content: string) => void,
   pathJoin: (...parts: string[]) => string,
   fsListLocalXmlFiles?: (dir: string) => string[],
-  fsUnlinkSync?: (filepath: string) => void
-): Promise<{ pulled: number; skipped: string[]; deletedLocally: string[] }> {
+  fsUnlinkSync?: (filepath: string) => void,
+  /**
+   * Cancello sul dato: viene chiamata dopo aver letto l'elenco remoto e prima
+   * di scrivere qualunque cosa. Se restituisce un messaggio, la sincronizzazione
+   * si ferma e il locale resta com'è. Serve a non ripetere il modo in cui si
+   * sono già persi fix XML: un remoto più povero del locale che lo sovrascrive.
+   */
+  guard?: (info: { remote: string[]; local: string[] }) => string | null
+): Promise<{ pulled: number; skipped: string[]; deletedLocally: string[]; aborted?: string }> {
   if (!isGitHubConfigured()) return { pulled: 0, skipped: [], deletedLocally: [] };
   const cfg = getConfig();
 
@@ -175,6 +182,16 @@ export async function pullCorpusFromGitHub(
   const { entries, confirmed } = await listRepoFiles(cfg);
   const xmlFiles = entries.filter(e => e.type === "file" && e.name.endsWith(".xml") && !e.name.startsWith("_"));
   const remoteNames = new Set(xmlFiles.map(e => e.name));
+
+  if (guard) {
+    const local = fsListLocalXmlFiles ? fsListLocalXmlFiles(localDir) : [];
+    const motivo = guard({ remote: [...remoteNames], local });
+    if (motivo) {
+      console.error(`[githubStorage] SINCRONIZZAZIONE ANNULLATA — ${motivo}`);
+      console.error('[githubStorage] Il corpus locale non è stato toccato. Vedi `npx tsx scripts/data-sync-report.ts` per il dettaglio.');
+      return { pulled: 0, skipped: [], deletedLocally: [], aborted: motivo };
+    }
+  }
 
   shaCache.clear();
   const skipped: string[] = [];
