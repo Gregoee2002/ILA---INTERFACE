@@ -1,0 +1,89 @@
+commit 261c5e5f2262898b8439fbe3181abe34bd06503b
+Author: Gregoee2002 <gabrielegregorio@hotmail.it>
+Date:   Sat Sep 5 16:07:03 2026 +0200
+
+    ci: un cancello solo su tipi, test, corpus e build
+    
+    Il corpus non aveva rete: l'unico controllo automatico era il tsc del deploy,
+    e nemmeno quello — la patch che lo aggiungeva dormiva in docs/patches perché
+    il token non aveva lo scope workflow.
+    
+    `.github/workflows/verify.yml` gira su ogni push e ogni PR: tipi, i 60 test,
+    i controlli epigrafici di lint-corpus.py (residui Leiden, coerenza fra testo e
+    origDate), e infine la build. In ordine di costo: il fallimento arriva presto.
+    
+    Applicata anche la patch S1: il deploy chiama `npx vite build`, che non lancia
+    tsc, quindi senza quello step un errore di tipo finiva online.
+    
+    Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>
+
+diff --git a/.github/workflows/deploy-pages.yml b/.github/workflows/deploy-pages.yml
+index b1a061b..cb7fac2 100644
+--- a/.github/workflows/deploy-pages.yml
++++ b/.github/workflows/deploy-pages.yml
+@@ -34,6 +34,12 @@ jobs:
+             exit 1
+           fi
+ 
++      # Gate di tipo: `npm run build` in locale lo esegue via `prebuild`, ma il
++      # deploy chiama direttamente `npx vite build` (che NON lancia tsc). Senza
++      # questo step un errore di tipo verrebbe deployato — vedi BUG-03 dell'audit.
++      - name: Controllo dei tipi (tsc --noEmit)
++        run: npx tsc --noEmit
++
+       # Scatto statico del corpus per chi visita con la sola password (senza
+       # token personale) — vedi scripts/build-corpus-snapshot.ts. Se i secret
+       # DATA_REPO_TOKEN/DATA_REPO sono impostati, sincronizza prima il corpus
+diff --git a/.github/workflows/verify.yml b/.github/workflows/verify.yml
+new file mode 100644
+index 0000000..a2b9ad6
+--- /dev/null
++++ b/.github/workflows/verify.yml
+@@ -0,0 +1,47 @@
++# Cancello unico su ogni push e su ogni pull request.
++#
++# Il corpus è la cosa che non si può rompere ed era l'unica senza rete: fino a
++# ieri l'unico controllo automatico era il `tsc` del deploy. Qui girano, in
++# ordine di costo crescente, i controlli che un errore vero lo fermano prima
++# che arrivi sul sito.
++name: Verifica
++
++on:
++  push:
++    branches: [main]
++  pull_request:
++  workflow_dispatch:
++
++jobs:
++  verifica:
++    runs-on: ubuntu-latest
++    steps:
++      - uses: actions/checkout@v4
++
++      - uses: actions/setup-node@v4
++        with:
++          node-version: '20'
++          cache: npm
++
++      - name: Installazione
++        run: npm ci
++
++      - name: Tipi
++        run: npx tsc --noEmit
++
++      # Copre il round-trip dell'edizione, la validazione del markup cultuale
++      # e dei percorsi LARES, il registro delle fonti e cinque invarianti sul
++      # corpus reale (XML ben formato, id unici, scrittura/rilettura).
++      - name: Test
++        run: npm test
++
++      # Controlli epigrafici che i test TypeScript non fanno: residui di
++      # notazione Leiden non convertiti, coerenza fra testo e <origDate>,
++      # avanzamento delle fasi di markup. Esce con 1 solo su errori veri.
++      - name: Controlli sul corpus
++        run: python3 scripts/lint-corpus.py
++
++      # Ultima perché è la più lenta: se la build non passa, non serve sapere
++      # altro — ma serve saperlo prima del deploy, non durante.
++      - name: Build
++        run: npx vite build
