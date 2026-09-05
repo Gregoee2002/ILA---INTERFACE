@@ -126,7 +126,7 @@ export function RegistroForm({ entryId, entryLabel, registro, effectiveAdmin, kn
             rows={3}
             className="w-full text-xs font-serif rounded-sm border border-border bg-sidebar px-2.5 py-2 outline-none focus:border-accent transition-colors resize-none"
           />
-          {error && <p className="text-[10px] text-red-500">{error}</p>}
+          {error && <p className="text-[10px] text-danger">{error}</p>}
           <div className="flex gap-2">
             <button
               type="submit"

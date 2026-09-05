@@ -181,7 +181,7 @@ export const CultLexiconPanel: React.FC<Props> = ({ monumenti, onSelectMonumento
                     <span className="uppercase tracking-wide">{r.scheda}</span>
                     {r.form && <span className="font-greek text-muted/60" lang="grc">{r.form}</span>}
                     {r.line && <span className="text-muted/40">r.{r.line}</span>}
-                    {r.cert === 'low' && <span className="text-amber-500" title="forma integrata">[ ]</span>}
+                    {r.cert === 'low' && <span className="text-warning" title="forma integrata">[ ]</span>}
                     {r.formula && <span className="text-cult" title="#formula">✦</span>}
                   </button>
                 );

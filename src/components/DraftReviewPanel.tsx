@@ -99,7 +99,7 @@ export function DraftReviewPanel() {
         </div>
 
         {loading && <div className="text-xs text-muted italic">Caricamento…</div>}
-        {error && <div className="text-xs text-red-500">{error}</div>}
+        {error && <div className="text-xs text-danger">{error}</div>}
 
         <div className="space-y-0.5">
           {filtered.map(d => (
