@@ -13,6 +13,7 @@ import { formatIlaLabel } from '../lib/xmlUtils';
 import { formatSecoliAttestazione } from '../lib/chronology';
 import L from 'leaflet';
 import { Search, X, ChevronDown, MapPinned, Locate } from 'lucide-react';
+import { REGION_COLORS, DENSITY_SCALE, FILTER_MATCH_COLOR, GRAYED_OUT_FILL_COLOR } from '../lib/mapPalette';
 
 // Fix for default marker icon in react-leaflet just in case
 delete (L.Icon.Default.prototype as any)._getIconUrl;
@@ -38,22 +39,14 @@ interface Site {
 }
 
 function getRegionColor(regione?: string) {
-  if (!regione) return '#9ca3af'; // stone gray
+  if (!regione) return REGION_COLORS.fallback;
   const r = regione.toLowerCase();
-  if (r.includes('asia minor')) return '#1F8377'; // accent teal — regione di culto principale di Men
-  if (r.includes('graecia')) return '#5B7A8C'; // blu-grigio polvere
-  if (r.includes('dacia')) return '#B5651D'; // terracotta
-  if (r.includes('italia')) return '#7A8F5E'; // salvia
-  return '#9ca3af'; // stone gray
+  if (r.includes('asia minor')) return REGION_COLORS.asiaMinor;
+  if (r.includes('graecia')) return REGION_COLORS.graecia;
+  if (r.includes('dacia')) return REGION_COLORS.dacia;
+  if (r.includes('italia')) return REGION_COLORS.italia;
+  return REGION_COLORS.fallback;
 }
-
-// Scala di densità sequenziale a più tappe (chiaro → accento teal scuro),
-// interpolata in HSL invece che RGB grezzo: una singola interpolazione a 2
-// colori (come in precedenza) rendeva densità medie e alte quasi
-// indistinguibili fra loro. La prima tappa resta un grigio-verde scuro
-// deliberatamente più marcato delle tile di base (quasi bianche), per
-// restare leggibile anche per i siti con una sola iscrizione.
-const DENSITY_SCALE = ['#8b9089', '#a9c2ba', '#6fab99', '#3d9484', '#1F8377', '#0d5147'];
 
 function hexToRgb(hex: string): [number, number, number] {
   const h = parseInt(hex.slice(1), 16);
@@ -647,11 +640,11 @@ export const MapView: React.FC<MapViewProps> = ({ monumenti, onSelectMonumento }
               // Senza filtro: riempimento = densità totale (grigio → accento
               // teal), bordo = regione.
               const fillColor = isGrayedOut
-                ? '#c7c2b4'
+                ? GRAYED_OUT_FILL_COLOR
                 : hasActiveFilter
-                  ? '#0d5147'
+                  ? FILTER_MATCH_COLOR
                   : getDensityColor(site.totalCount, maxSiteCount);
-              const strokeColor = isGrayedOut ? '#9ca3af' : site.color;
+              const strokeColor = isGrayedOut ? REGION_COLORS.fallback : site.color;
               const isHighlighted = !isGrayedOut && hasActiveFilter;
               const isHot = !isGrayedOut && !hasActiveFilter && site.totalCount >= hotThreshold;
               const radius = isHighlighted
@@ -762,7 +755,7 @@ export const MapView: React.FC<MapViewProps> = ({ monumenti, onSelectMonumento }
             <>
               <h4 className="field-label mb-3">Filtro attivo</h4>
               <div className="flex items-center gap-3 mb-4">
-                <span className="w-3.5 h-3.5 rounded-full shrink-0 border-2" style={{ backgroundColor: '#0d5147', borderColor: '#0d5147' }}></span>
+                <span className="w-3.5 h-3.5 rounded-full shrink-0 border-2" style={{ backgroundColor: FILTER_MATCH_COLOR, borderColor: FILTER_MATCH_COLOR }}></span>
                 <span className="text-[11px] text-ink/80">Sito con corrispondenze</span>
               </div>
             </>
@@ -782,11 +775,11 @@ export const MapView: React.FC<MapViewProps> = ({ monumenti, onSelectMonumento }
 
           <h4 className="field-label mb-3">Regione (bordo)</h4>
           <div className="flex flex-col gap-2 font-serif text-ink/90">
-            <div className="flex items-center gap-3"><span className="w-3 h-3 rounded-full shrink-0 border-2" style={{ borderColor: '#1F8377' }}></span> Asia Minor</div>
-            <div className="flex items-center gap-3"><span className="w-3 h-3 rounded-full shrink-0 border-2" style={{ borderColor: '#5B7A8C' }}></span> Graecia</div>
-            <div className="flex items-center gap-3"><span className="w-3 h-3 rounded-full shrink-0 border-2" style={{ borderColor: '#B5651D' }}></span> Dacia</div>
-            <div className="flex items-center gap-3"><span className="w-3 h-3 rounded-full shrink-0 border-2" style={{ borderColor: '#7A8F5E' }}></span> Italia</div>
-            <div className="flex items-center gap-3 pt-2 mt-1 border-t border-border/50"><span className="w-3 h-3 rounded-full shrink-0 border-2" style={{ borderColor: '#9ca3af' }}></span> Filtrato / Altro</div>
+            <div className="flex items-center gap-3"><span className="w-3 h-3 rounded-full shrink-0 border-2" style={{ borderColor: REGION_COLORS.asiaMinor }}></span> Asia Minor</div>
+            <div className="flex items-center gap-3"><span className="w-3 h-3 rounded-full shrink-0 border-2" style={{ borderColor: REGION_COLORS.graecia }}></span> Graecia</div>
+            <div className="flex items-center gap-3"><span className="w-3 h-3 rounded-full shrink-0 border-2" style={{ borderColor: REGION_COLORS.dacia }}></span> Dacia</div>
+            <div className="flex items-center gap-3"><span className="w-3 h-3 rounded-full shrink-0 border-2" style={{ borderColor: REGION_COLORS.italia }}></span> Italia</div>
+            <div className="flex items-center gap-3 pt-2 mt-1 border-t border-border/50"><span className="w-3 h-3 rounded-full shrink-0 border-2" style={{ borderColor: REGION_COLORS.fallback }}></span> Filtrato / Altro</div>
           </div>
         </div>
       </div>
