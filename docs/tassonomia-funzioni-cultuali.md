@@ -5,7 +5,8 @@ Fonte: `Traduzioni_ILA_schede_brevi.docx` (216 schede brevi, campo *Note*) + spo
 grep-testuale su tutti i 293 file dell'edizione + verifica a mano dei riscontri a
 rischio + `integrazionetassonomia.md`.
 Dati: [`spoglio-lessico-cultuale.csv`](spoglio-lessico-cultuale.csv) **v2** — 318
-righe, 54 lemmi, 197 schede (decisioni a–g applicate 2026-08-30). Colonne: `scheda,
+righe, 56 lemmi, 197 schede (decisioni a–g applicate 2026-08-30; ὁρκίζω ed ἐνορκίζω
+aggiunti il 2026-09-05, +2 righe). Colonne: `scheda,
 lane_ref, famiglia, lemma, sotto_funzione, forma_attestata, cert, verifica`.
 `cert=low` = forma fra `[ ]`; `verifica=manuale` = i 2 casi residui (`τρέφω`/ILA-151
 metafora poetica, `ἱερεύς`/ILA-097 datazione eponimica) — esclusi dall'applicazione
@@ -206,6 +207,8 @@ il lemma è attestato (dallo spoglio v2). `@lemmaRef` = pagina Logeion (LSJ + al
 | χαίρω ² | acclamazione | 1 | https://logeion.uchicago.edu/χαίρω |
 | χρηστὸς χαῖρε | saluto-funerario | 1 | — |
 | ἐπεξορκίζω | imprecazione | 1 | https://logeion.uchicago.edu/ἐπεξορκίζω |
+| ὁρκίζω ³ | imprecazione | 1 | https://logeion.uchicago.edu/ὁρκίζω |
+| ἐνορκίζω ³ | imprecazione | 1 | https://logeion.uchicago.edu/ἐνορκίζω |
 | ὗε κύε | formula-pioggia | 1 | — |
 | **`ruolo-istituzione`** | | | |
 | θρεπτός | status-allevato | 13 | https://logeion.uchicago.edu/θρεπτός |
@@ -227,6 +230,11 @@ e 5 le schede — è elemento fisso della formula protettiva/imprecatoria «ἐ�
 confessione è lo scettro-strumento del dio, ma la marcatura segue la formula, non l'oggetto.
 ² `χαίρω`: solo ILA-094 «χαίρετε νύνφαι καλαί» = `acclamazione`. In ILA-286 «Χρηστοὶ
 χαίρετε» è coperto dalla riga unica `χρηστὸς χαῖρε` (`saluto-funerario`), non da `χαίρω`.
+³ `ὁρκίζω` (ILA-136, forma «Ὀρχίσζω», grafia particolare registrata da Lane) ed
+`ἐνορκίζω` (ILA-144): aggiunti al controllato il 2026-09-05. Erano già marcati
+`#formula-fissa` nell'edizione ma mancavano dalla tabella, e il validatore li
+segnalava come fuori vocabolario. Stessa sotto-funzione di `ἐπεξορκίζω`: la formula
+di adiurazione che affida al dio la tutela della tomba o della stele.
 
 **Lemmi del controllato NON attestati nel CMRDM I** (non nel CSV, da aggiungere solo
 se emergono): `ἱλάσκομαι` (simplex), `ἐπακούω`, `ἵλεως`, `ἀσεβέω`, `λύμη`, `ἵστημι`

@@ -1086,7 +1086,7 @@ export const MARKUP_ACTIONS: MarkupAction[] = [
         id: "lemma", label: "Lemma (@lemma)", type: "datalist",
         options: [...CULT_LEMMATA], required: true,
         placeholder: "forma di citazione greca (dizionario)",
-        hint: "54 lemmi controllati; se manca, segnalarlo — non inventare",
+        hint: "56 lemmi controllati; se manca, segnalarlo — non inventare",
         prefill: s => matchCultLemma(s)?.lemma || "",
       },
       { id: "formula", label: "In locuzione fissa?", type: "select", options: ["no", "sì"], hint: "aggiunge #formula oltre alla famiglia" },

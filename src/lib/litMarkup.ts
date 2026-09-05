@@ -270,7 +270,7 @@ const azioniLetterarie: MarkupAction[] = [
   },
 
   /* ── Parole ──
-   * «Funzione cultuale (parola)» vincola il lemma ai 54 del vocabolario
+   * «Funzione cultuale (parola)» vincola il lemma ai 56 del vocabolario
    * controllato, ed è giusto che lo faccia. Ma una parola può meritare l'indice
    * senza appartenere al lessico cultuale — un dialettismo, un hapax, un
    * tecnicismo. Questa azione le dà il tag senza pretendere una famiglia: se

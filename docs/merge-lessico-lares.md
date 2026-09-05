@@ -4,7 +4,8 @@ Stato: **approvata e implementata (passi 1-5 del §8)** — 2026-09-05.
 Il passo 6 (riscrittura di `@type`/`@subtype` nei file del corpus) **non è stato
 fatto**: il percorso si deriva dal lemma a runtime, quindi il markup esistente
 funziona così com'è. Serve solo se si vuole un TEI auto-descrittivo per LARES.
-Sorgenti: [`src/lib/cultLexicon.ts`](../src/lib/cultLexicon.ts) (5 famiglie, 54 lemmi,
+Sorgenti: [`src/lib/cultLexicon.ts`](../src/lib/cultLexicon.ts) (5 famiglie, 56 lemmi —
+54 al momento della proposta,
 ~25 sotto-funzioni) · [`src/lib/laresToolbox.ts`](../src/lib/laresToolbox.ts) (9 marcatori
 concettuali + Analytical Toolbox a 3 gradi) · norme in
 [`docs/tassonomia-funzioni-cultuali.md`](tassonomia-funzioni-cultuali.md) §§2-5 e
@@ -58,7 +59,7 @@ toolbox al referente della parola**. Per questo `ναός` è `#atto-cultuale`
 `spaces → constructions → public`, perché la parola nomina un edificio. Non è
 un'incoerenza da sanare: è esattamente il guadagno informativo del doppio asse.
 
-## 3. Tabella completa — i 54 lemmi
+## 3. Tabella completa — i lemmi
 
 Percorsi in `item → categoria → sottocategoria`. In **grassetto** le voci proposte come
 nuove (§4). Le sotto-funzioni sono quelle già in `cultLexicon.ts`.
@@ -84,12 +85,12 @@ epiclesi va in `epithets`**, non in `agencies`/`benevolent-action`, anche quando
 sua funzione è l'ascolto o la benevolenza — quella resta registrata nella
 sotto-funzione ILA. Così `epithets` continua ad alimentare l'indice degli epiteti
 insieme a `<rs type="epithet">`, invece di spargere gli stessi aggettivi su tre rami.
-`benevolent-action` / `malevolent-action` restano per i **verbi** (nessuno dei 54 li
+`benevolent-action` / `malevolent-action` restano per i **verbi** (nessuno dei lemmi li
 usa oggi: entrano appena si marcheranno εὐλογέω *detto del dio*, ἵλεως γίνομαι, o le
 maledizioni).
 
 `agencies` («azioni, funzioni, epifanie») resta il contenitore generico: non lo usiamo
-per nessuno dei 54, perché ognuno trova un ramo più preciso. È voluto — `agencies` è il
+per nessuno di essi, perché ognuno trova un ramo più preciso. È voluto — `agencies` è il
 fallback quando un lemma nuovo non ha ancora un ramo.
 
 ### 3.2 `atto-cultuale` (23 lemmi)
@@ -142,11 +143,13 @@ in griglia anche **impiety** (ἀσεβέω, ἀσέβεια), oggi a zero attes
 la si dichiara nella tassonomia ma, come per παιδίσκη/φιλόθεος, **non** entra nel
 vocabolario dell'editor finché non ci sono riscontri.
 
-### 3.4 `formula-fissa` (6 lemmi)
+### 3.4 `formula-fissa` (8 lemmi)
 
 | lemma | sotto-funzione | percorso toolbox |
 |---|---|---|
 | ἐπεξορκίζω | imprecazione | activities → prayers → **imprecation** |
+| ὁρκίζω | imprecazione | activities → prayers → **imprecation** |
+| ἐνορκίζω | imprecazione | activities → prayers → **imprecation** |
 | κεχολωμένος | imprecazione | activities → prayers → **imprecation** |
 | σκῆπτρον | imprecazione | materiality → `instruments` |
 | ὗε κύε | formula-pioggia | activities → prayers → **invocation** |
@@ -350,7 +353,7 @@ Nell'ordine, ognuno verificabile da solo:
 
 ### Verificato il 2026-09-05
 
-- `checkToolboxTable()`: 0 errori; 52/54 lemmi con percorso, senza = χαίρω, χρηστὸς χαῖρε.
+- `checkToolboxTable()`: 0 errori; 54/56 lemmi con percorso, senza = χαίρω, χρηστὸς χαῖρε.
 - Estrazione su tutti i 295 file: 301 attestazioni, 297 con percorso.
 - Validatore: percorso inesistente, item inventato, `@subtype` senza `@type` e percorso
   diverso da quello abituale del lemma → un warning ciascuno, nessun falso positivo sul
@@ -358,12 +361,13 @@ Nell'ordine, ognuno verificabile da solo:
 - Vista «Lessico cultuale» → «per griglia LARES» nel build statico: 32 percorsi in ordine
   di griglia + sezione «Senza percorso».
 
-### Emerso durante l'implementazione — da decidere
+### Emerso durante l'implementazione — deciso
 
-`ὁρκίζω` e `ἐνορκίζω` sono marcati `<w>` nel corpus ma **non sono fra i 54 lemmi
-controllati** di `cultLexicon.ts` (il validatore lo segnala già come warning). Cadrebbero
-in `activities → prayers → imprecation`, accanto a ἐπεξορκίζω. Aggiungerli al vocabolario
-è una decisione editoriale, come fu per παιδίσκη/φιλόθεος: non l'ho presa.
+`ὁρκίζω` (ILA-136) ed `ἐνορκίζω` (ILA-144) erano marcati `<w ana="#formula-fissa">` nel
+corpus ma mancavano dal vocabolario controllato, e il validatore li segnalava come fuori
+tabella. **Aggiunti il 2026-09-05** in `formula-fissa` / `imprecazione`, accanto a
+ἐπεξορκίζω, e quindi in `activities → prayers → imprecation`. Il controllato passa da 54 a
+**56 lemmi**, lo spoglio a 320 righe; senza percorso restano solo χαίρω e χρηστὸς χαῖρε.
 
 ## 9. Da confermare con la redazione LARES
 

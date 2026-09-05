@@ -4,7 +4,7 @@
  * Tabella del lessico delle funzioni cultuali (tassonomia cult-functions).
  * Porta in codice la §5 di `docs/tassonomia-funzioni-cultuali.md` (v2) e
  * l'insieme unico `lemma → famiglia, sotto-funzione` ricavato da
- * `docs/spoglio-lessico-cultuale.csv` (v2 — 54 lemmi).
+ * `docs/spoglio-lessico-cultuale.csv` (v2 — 56 lemmi).
  *
  * Nel markup dell'edizione l'editor sceglie solo `@lemma` + `@ana="#famiglia"`
  * (una domanda: «chi è il soggetto dell'azione, il dio o l'uomo?»); la
@@ -83,7 +83,7 @@ export const CULT_FAMILY_IDS: CultFamily[] = CULT_FAMILIES.map(f => f.id);
 const LOGEION = "https://logeion.uchicago.edu/";
 
 /**
- * I 54 lemmi controllati. `family`/`subFunction` dallo spoglio v2 (insieme unico
+ * I 56 lemmi controllati. `family`/`subFunction` dallo spoglio v2 (insieme unico
  * per lemma); `lemmaRef` dalla tabella §5 del doc (alcuni puntano a un lemma di
  * dizionario diverso dalla forma di citazione usata qui — es. κεχολωμένος→χολόω,
  * φράτρα→φρήτρη — e sono riportati alla lettera).
@@ -137,6 +137,10 @@ export const CULT_LEXICON: CultLemma[] = [
   { lemma: "χαίρω", family: "formula-fissa", subFunction: "acclamazione", lemmaRef: LOGEION + "χαίρω" },
   { lemma: "χρηστὸς χαῖρε", family: "formula-fissa", subFunction: "saluto-funerario" },
   { lemma: "ἐπεξορκίζω", family: "formula-fissa", subFunction: "imprecazione", lemmaRef: LOGEION + "ἐπεξορκίζω" },
+  // Aggiunti il 2026-09-05: già marcati #formula-fissa nel corpus (ILA-136, ILA-144)
+  // ma mancanti dal vocabolario controllato. Stessa sotto-funzione di ἐπεξορκίζω.
+  { lemma: "ὁρκίζω", family: "formula-fissa", subFunction: "imprecazione", lemmaRef: LOGEION + "ὁρκίζω" },
+  { lemma: "ἐνορκίζω", family: "formula-fissa", subFunction: "imprecazione", lemmaRef: LOGEION + "ἐνορκίζω" },
   { lemma: "ὗε κύε", family: "formula-fissa", subFunction: "formula-pioggia" },
 
   // ── ruolo-istituzione ───────────────────────────────────────────────
@@ -154,7 +158,7 @@ export const CULT_LEXICON: CultLemma[] = [
   { lemma: "ἱερεύς", family: "ruolo-istituzione", subFunction: "sacerdozio", lemmaRef: LOGEION + "ἱερεύς" },
 ];
 
-/** I 54 lemmi come lista piatta di stringhe (per datalist e option). */
+/** I 56 lemmi come lista piatta di stringhe (per datalist e option). */
 export const CULT_LEMMATA: string[] = CULT_LEXICON.map(l => l.lemma);
 
 const BY_LEMMA: Map<string, CultLemma> = new Map(CULT_LEXICON.map(l => [l.lemma, l]));
@@ -286,6 +290,8 @@ export const LEMMA_TOOLBOX: Record<string, ToolboxMarker> = {
 
   // ── formula-fissa (χαίρω e χρηστὸς χαῖρε restano senza percorso) ─────
   "ἐπεξορκίζω": { item: "activities", subtype: ["prayers", "imprecation"] },
+  "ὁρκίζω": { item: "activities", subtype: ["prayers", "imprecation"] },
+  "ἐνορκίζω": { item: "activities", subtype: ["prayers", "imprecation"] },
   "κεχολωμένος": { item: "activities", subtype: ["prayers", "imprecation"] },
   "ὗε κύε": { item: "activities", subtype: ["prayers", "invocation"] },
   // eccezione dentro la famiglia: nomina un oggetto, non un atto di parola.
