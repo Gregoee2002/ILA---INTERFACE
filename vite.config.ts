@@ -11,6 +11,22 @@ export default defineConfig({
     react(),
     tailwindcss()
   ],
+  build: {
+    rollupOptions: {
+      output: {
+        // Le librerie di terze parti hanno una vita loro: separarle dal codice
+        // dell'applicazione fa sì che una modifica a una scheda non invalidi
+        // 700 kB di cache del visitatore. Firebase e motion pesano quanto
+        // mezza applicazione e servono a due cose sole (login e transizioni).
+        manualChunks: {
+          react: ['react', 'react-dom'],
+          motion: ['motion'],
+          ricerca: ['minisearch'],
+          xml: ['fast-xml-parser', 'diff'],
+        },
+      },
+    },
+  },
   optimizeDeps: {
     exclude: [
       'react-leaflet',

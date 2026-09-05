@@ -53,28 +53,30 @@ import { monumentiToXml, xmlToMonumenti, formatIlaLabel, splitDivineKey } from '
 import { buildPhiUrl } from './lib/extRefs';
 import { buildDivinityIndex, buildOnomasticaIndex, buildClassificationAudit, DivinityStats, OnomasticaStats } from './lib/epithetIndex';
 import { PleiadesMap } from './components/PleiadesMap';
-// Leaflet + markercluster sono pesanti e servono solo nella vista Mappa:
-// caricati on-demand per alleggerire il bundle iniziale.
+// Le sezioni che il visitatore medio non apre mai — mappa, heatmap, editor,
+// pannelli riservati — non stanno nel bundle iniziale: si caricano quando
+// qualcuno ci va davvero. Sono tutte dietro <Suspense> (vedi il blocco delle
+// viste): il fallback è la riga di caricamento, non una pagina bianca.
 const MapView = lazy(() => import('./components/MapView').then(m => ({ default: m.MapView })));
 import { IconographyPanel } from './components/IconographyPanel';
 import { ErrorBoundary } from './components/ErrorBoundary';
-import { CooccurrenceHeatmap } from './components/CooccurrenceHeatmap';
-import { CultLexiconPanel } from './components/CultLexiconPanel';
-import { ConcordancePanel } from './components/ConcordancePanel';
-import { LiterarySourcesPanel } from './components/LiterarySourcesPanel';
+const CooccurrenceHeatmap = lazy(() => import('./components/CooccurrenceHeatmap').then(m => ({ default: m.CooccurrenceHeatmap })));
+const CultLexiconPanel = lazy(() => import('./components/CultLexiconPanel').then(m => ({ default: m.CultLexiconPanel })));
+const ConcordancePanel = lazy(() => import('./components/ConcordancePanel').then(m => ({ default: m.ConcordancePanel })));
+const LiterarySourcesPanel = lazy(() => import('./components/LiterarySourcesPanel').then(m => ({ default: m.LiterarySourcesPanel })));
 import { LiteraryEchoes } from './components/LiteraryEchoes';
 // Editor a sezioni: pesante e usato solo da chi ha sbloccato la modifica.
 const SectionEditorView = lazy(() => import('./components/SectionEditorView').then(m => ({ default: m.SectionEditorView })));
-import { DraftReviewPanel } from './components/DraftReviewPanel';
+const DraftReviewPanel = lazy(() => import('./components/DraftReviewPanel').then(m => ({ default: m.DraftReviewPanel })));
 import { UnlockEditingModal } from './components/UnlockEditingModal';
-import { RegistroPanel } from './components/RegistroPanel';
+const RegistroPanel = lazy(() => import('./components/RegistroPanel').then(m => ({ default: m.RegistroPanel })));
 import { RegistroForm } from './components/RegistroForm';
-import { BugReportsPanel } from './components/BugReportsPanel';
+const BugReportsPanel = lazy(() => import('./components/BugReportsPanel').then(m => ({ default: m.BugReportsPanel })));
 import { ApparatusNotes } from './components/ApparatusNotes';
 import { apparatusEntryToText } from './lib/apparatus';
-import { BibliographyIndex, BiblioReplacement, BiblioApplyResult } from './components/BibliographyIndex';
-import { auth, loginWithGoogle, logout } from './lib/firebase';
-import { onAuthStateChanged, User } from 'firebase/auth';
+import type { BiblioReplacement, BiblioApplyResult } from './components/BibliographyIndex';
+const BibliographyIndex = lazy(() => import('./components/BibliographyIndex').then(m => ({ default: m.BibliographyIndex })));
+import { watchAuth, loginWithGoogle, logout, type User } from './lib/authLazy';
 import ilaLogo from './assets/images/ila-logo.webp';
 
 // Forma della risposta di GET /api/search (vedi src/lib/searchIndex.ts).
@@ -4301,11 +4303,16 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
     recordContentRef.current?.scrollTo({ top: 0 });
   };
 
+  // Sulla build statica non esiste nessuna sessione Firebase da osservare, e
+  // chiedere il modulo qui vorrebbe dire scaricare mezzo megabyte per nulla.
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setCurrentUser(user);
-    });
-    return () => unsubscribe();
+    if (isStaticBuild) return;
+    let vivo = true;
+    let disiscrivi: (() => void) | undefined;
+    watchAuth(user => { if (vivo) setCurrentUser(user); })
+      .then(u => { if (vivo) disiscrivi = u; else u(); })
+      .catch(e => console.error('[auth] osservatore non avviato:', e));
+    return () => { vivo = false; disiscrivi?.(); };
   }, []);
 
   // Sulla build statica: di default si consulta lo snapshot statico del
@@ -6040,6 +6047,14 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
           className="absolute inset-0 flex flex-col"
           style={{ position: 'absolute', inset: 0 }}
         >
+          {/* Un solo Suspense per tutte le sezioni caricate on-demand: il
+              fallback è una riga, non una pagina bianca, e ha role="status"
+              perché un lettore di schermo sappia che sta arrivando qualcosa. */}
+          <Suspense fallback={
+            <div role="status" className="flex-1 flex items-center justify-center text-sm text-muted italic">
+              Caricamento della sezione…
+            </div>
+          }>
           {activeView === 'home' && (
             <HomeView
               monumenti={monumenti}
@@ -6558,6 +6573,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
               <MapView monumenti={monumenti} onSelectMonumento={(id) => { const m = monumenti.find(x => x.id.toString() === id || x.entryId === id); if (m) { setSelectedMonumento(m); setActiveView('catalog'); } }} />
             </Suspense>
           )}
+          </Suspense>
         </motion.div>
         </section>
       </div>
