@@ -4,6 +4,7 @@ import { cn } from '../lib/utils';
 import { buildCultIndex, CultLemmaStats } from '../lib/cultIndex';
 import { CULT_FAMILIES } from '../lib/cultLexicon';
 import { LemmaLetterario, lessicoLetterario, risolviTutte } from '../lib/litSources';
+import { LaresGrid } from './LaresGrid';
 import { caricaLitDatasetCondiviso } from '../lib/litStore';
 import { Tags, ExternalLink, ChevronRight, ChevronDown, Search, ScrollText } from 'lucide-react';
 
@@ -380,46 +381,13 @@ export const CultLexiconPanel: React.FC<Props> = ({ monumenti, onSelectMonumento
       {filteredLemmata.length === 0 && soloNeiTesti.length === 0 ? (
         <div className="text-sm italic text-muted/60 py-12 text-center">Nessuna attestazione per questi filtri.</div>
       ) : groupBy === 'lares' ? (
-        <div className="space-y-7">
-          <p className="text-[13px] font-serif italic text-muted/70 leading-relaxed -mt-1">
-            Gli stessi lemmi visti dall'altro asse: la famiglia dice chi è il soggetto,
-            il percorso dell'<em>Analytical Toolbox</em> dice che cosa è la cosa nominata.
-            L'ordine è quello della griglia LARES, non quello della frequenza.
-          </p>
-          {percorsiToRender.map(t => (
-            <section key={t.key}>
-              <div className="flex items-baseline gap-2.5 mb-2 pb-1 border-b border-border/40">
-                <h3 className="text-sm font-sans font-bold uppercase tracking-[0.15em] text-ink/90">
-                  {t.label}
-                </h3>
-                <span className="text-xs font-sans text-muted/60">
-                  {t.lemmata.length} {t.lemmata.length === 1 ? 'lemma' : 'lemmi'} · {schede(t.schedeCount)} · {atts(t.count)}
-                </span>
-                <code className="ml-auto text-[10px] font-sans text-muted/40 hidden sm:block">
-                  {[t.marker.item, ...t.marker.subtype].join(' ')}
-                </code>
-              </div>
-              <div className="space-y-0.5">{t.lemmata.map(renderLemmaRow)}</div>
-            </section>
-          ))}
-          {senzaPercorso.length > 0 && (
-            <section>
-              <div className="flex items-baseline gap-2.5 mb-2 pb-1 border-b border-border/40">
-                <h3 className="text-sm font-sans font-bold uppercase tracking-[0.15em] text-ink/70">
-                  Senza percorso
-                </h3>
-                <span className="text-xs font-sans text-muted/60">
-                  {senzaPercorso.length} {senzaPercorso.length === 1 ? 'lemma' : 'lemmi'}
-                </span>
-              </div>
-              <p className="text-[13px] font-serif italic text-muted/60 mb-2 leading-relaxed">
-                Formule che non nominano un agente, un'attività o uno spazio: metterle
-                nella griglia darebbe un dato falso. Restano qualificate dalla famiglia.
-              </p>
-              <div className="space-y-0.5">{senzaPercorso.map(renderLemmaRow)}</div>
-            </section>
-          )}
-        </div>
+        <LaresGrid
+          percorsi={percorsiToRender}
+          senzaPercorso={senzaPercorso}
+          renderLemmaRow={renderLemmaRow}
+          schede={schede}
+          atts={atts}
+        />
       ) : groupBy === 'lemma' ? (
         <div className="space-y-0.5">
           {[...filteredLemmata].sort((a, b) => b.count - a.count || a.lemma.localeCompare(b.lemma)).map(renderLemmaRow)}

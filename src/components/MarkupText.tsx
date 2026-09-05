@@ -3,6 +3,7 @@ import { cn, gapGlyph } from '../lib/utils';
 import { MarkupToken, safeParseLitTesto } from '../lib/litMarkup';
 import { TokenPath } from '../lib/leidenMarkup';
 import { CAMPO_COLOR, LaresCampo } from '../lib/litSources';
+import { TOOLBOX_ITEM_IDS, toolboxLabel, validateToolboxPath } from '../lib/laresToolbox';
 
 /**
  * MarkupText — resa di un testo antico marcato, in lettura e in scrittura.
@@ -165,7 +166,14 @@ const Flow: React.FC<FlowProps> = ({ tokens, numeri, contatore, basePath, parent
           case 'w':
             return (
               <span key={i} onClick={click} className={cn('text-cult', hover)}
-                title={`${a.lemma ? `Lessico cultuale: ${a.lemma}` : 'Parola marcata'}${a.ana ? ` — ${a.ana.replace(/#/g, '')}` : ''}`}>
+                // Al lemma e alla famiglia si aggiunge il percorso LARES, quando
+                // c'è: è l'altro asse della marcatura, e senza questo non si
+                // vedrebbe da nessuna parte leggendo la scheda.
+                title={[
+                  a.lemma ? `Lessico cultuale: ${a.lemma}` : 'Parola marcata',
+                  a.ana ? a.ana.replace(/#/g, '') : '',
+                  percorsoLares(a.type, a.subtype),
+                ].filter(Boolean).join(' — ')}>
                 {kids}
               </span>
             );
@@ -212,6 +220,14 @@ const Flow: React.FC<FlowProps> = ({ tokens, numeri, contatore, basePath, parent
     </>
   );
 };
+
+/** Etichetta leggibile del percorso LARES scritto sul <w>, se c'è e se esiste
+ *  davvero nella griglia (un percorso inventato non va mostrato come vero). */
+function percorsoLares(type?: string, subtype?: string): string {
+  if (!type || !TOOLBOX_ITEM_IDS.includes(type)) return '';
+  const marker = { item: type, subtype: (subtype || '').split(/\s+/).filter(Boolean) };
+  return validateToolboxPath(marker.item, marker.subtype) ? '' : toolboxLabel(marker);
+}
 
 export const MarkupText: React.FC<{
   testo: string;
