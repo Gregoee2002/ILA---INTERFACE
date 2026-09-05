@@ -436,6 +436,68 @@ il lavoro editoriale.
 
 \screenshotplaceholder{6.5cm}{Confronto tra testo a stampa e trascrizione ottenuta tramite riconoscimento ottico}
 
+Il testo digitale già incorporato nell'edizione a stampa di riferimento
+pone un problema specifico quando si tratta di verificare, per una
+singola voce, la lettura originaria del testo greco: il livello testuale
+del documento digitalizzato rende correttamente le porzioni in caratteri
+latini, ma restituisce le porzioni in greco come una sequenza di
+caratteri privi di senso, esito di una corrispondenza tra il font
+tipografico originale e la codifica dei caratteri che non riproduce un
+alfabeto greco standard. Applicare indiscriminatamente alla pagina intera
+uno strumento di riconoscimento ottico specializzato per il greco non
+risolve il problema, perché un simile strumento tende a leggere come
+greco anche le porzioni in inglese del commento circostante,
+introducendo un rumore che complica il confronto più di quanto non lo
+agevoli. Si è scelto pertanto un procedimento più mirato: a partire
+dalla posizione di ciascuna riga sulla pagina, si distinguono le righe
+effettivamente redatte in inglese da quelle che, pur apparendo come
+sequenze illeggibili, corrispondono in realtà a testo greco mal
+codificato --- riconoscibili da alcuni indizi strutturali, come la
+presenza di cifre all'interno di una parola o di maiuscole in posizione
+mediana, estranee alla tipografia inglese corrente --- per poi ritagliare
+dalla sola immagine della pagina i blocchi corrispondenti alle righe
+greche e sottoporli, isolatamente, al riconoscimento ottico specializzato.
+La pagina ricomposta unisce così il testo inglese, già attendibile a
+partire dal livello testuale originario, e il testo greco, ottenuto per
+la sola porzione che lo richiede da un riconoscimento ottico mirato
+anziché generico.
+
+Il confronto sistematico tra la trascrizione presente nel corpus e la
+lettura offerta da un'edizione a stampa, già indicato altrove in questo
+lavoro come uno dei fronti di sviluppo in corso, ha trovato in questa
+fase un primo strumento operativo dedicato. Una procedura di collazione
+assistita affianca, voce per voce, il testo greco del corpus e quello
+della corrispondente edizione a stampa presa a riferimento --- non
+necessariamente il solo CMRDM, ma una qualunque delle edizioni a stampa
+ormai riconosciute dal sistema secondo un registro esteso, che affianca
+all'opera di Lane altre raccolte epigrafiche di riferimento ---
+classificando ogni divergenza riscontrata per tipologia (una singola
+lettera, un numerale, un intero blocco di testo) e raggruppando gli
+scambi che ricorrono più di frequente, poiché è precisamente in queste
+classi di errore sistematico, e non nelle singole discrepanze isolate,
+che conviene concentrare la revisione filologica.
+
+Una prima applicazione di questo strumento a un'intera edizione del
+corpus di riferimento ha mostrato, tuttavia, che affidarsi a una sola
+lettura automatica della fonte a stampa produce un numero di divergenze
+poco significativo, perché la classe di errore più frequente non era
+imputabile al corpus, ma allo stesso riconoscimento ottico: una
+confusione sistematica e unidirezionale tra due lettere greche
+graficamente simili, che nessun trascrittore umano commetterebbe con la
+medesima regolarità. Si è scelto pertanto di raddoppiare la lettura
+automatica della fonte a stampa, impiegando due motori di riconoscimento
+ottico distinti, che si è osservato commettere errori sistematici
+differenti l'uno dall'altro: una divergenza rispetto al corpus viene
+riportata come tale soltanto quando entrambe le letture concordano nel
+segnalarla, e la misura di somiglianza adottata è quella della lettura
+più vicina al testo del corpus, cosicché, quando una delle due letture
+automatiche coincide con il corpus, la discrepanza dell'altra viene
+correttamente attribuita a un errore del riconoscimento ottico e non a
+un problema della trascrizione. Questo doppio controllo incrociato
+riduce sensibilmente il rumore introdotto dal solo processo di OCR,
+lasciando emergere con maggiore nitidezza le divergenze che meritano
+davvero una verifica sulle fonti primarie.
+
 \section{Organizzazione dell'interfaccia digitale}
 
 Al fine di rendere il patrimonio epigrafico raccolto fruibile sia agli
@@ -481,6 +543,38 @@ riferimenti compaiono come elementi cliccabili accanto agli altri
 identificativi bibliografici dell'epigrafe, così da rendere il
 passaggio verso la risorsa esterna corrispondente immediato quanto la
 consultazione di un rimando interno al corpus.
+
+Fino a poco tempo fa, lo stato di consultazione dell'interfaccia viveva
+soltanto nella memoria della sessione in corso: aprire una scheda,
+ricaricare la pagina o condividerne l'indirizzo con un collega
+significava perdere il punto in cui ci si trovava e ripartire dalla
+pagina iniziale, senza alcun modo di indirizzare qualcuno direttamente
+verso \emph{quella} scheda. Si è scelto pertanto di far viaggiare,
+nell'indirizzo stesso della pagina, sia la sezione dell'interfaccia
+attualmente aperta sia, quando pertinente, la singola scheda consultata,
+così da rendere possibile un collegamento diretto che salti la pagina
+iniziale e conduca chi lo riceve esattamente alla voce che si intendeva
+condividere. Questa informazione è stata inserita come parte
+interrogabile dell'indirizzo, anziché come segmento del percorso, poiché
+l'infrastruttura su cui l'interfaccia è pubblicata non consente di
+riscrivere le rotte lato server, e un collegamento di questo tipo deve
+poter funzionare anche in un ambiente di pubblicazione puramente
+statico.
+
+Sotto il titolo di ciascuna scheda compaiono ora, alla portata di
+chiunque consulti il corpus e non soltanto di chi dispone dei permessi
+di modifica, tre elementi pensati per agevolare il riuso scientifico del
+materiale: il collegamento diretto appena descritto, lo scarico del
+documento filologico sottostante, già previsto fin dall'inizio del
+progetto (si veda la sezione 2), e una proposta di citazione già pronta
+all'uso. Quest'ultima elenca, nell'ordine in cui compaiono nel registro
+delle edizioni a stampa riconosciute dal sistema --- esteso, come si è
+detto, ben oltre la sola opera di Lane --- tutti i riferimenti
+bibliografici a stampa individuati per quella scheda, componendo una
+stringa del tipo \virg{ILA-042 (= CMRDM I 72 = Lane, Berytus 15, n.
+38)}, che restituisce in un colpo d'occhio la concordanza tra la
+numerazione interna del progetto e le diverse numerazioni con cui la
+medesima epigrafe è già nota alla tradizione a stampa.
 
 La visualizzazione cronologica applica alla dimensione temporale lo
 stesso principio di trasparenza già adottato altrove nel progetto (si
@@ -948,6 +1042,62 @@ deriva.
 
 \screenshotplaceholder{7.5cm}{Vista a barre del lessico cultuale, con attestazioni epigrafiche e letterarie a confronto}
 
+Il lessico cultuale appena descritto dice a quale famiglia semantica
+appartiene un termine --- un voto, una colpa, una formula di espiazione
+--- ma lascia aperta una domanda distinta, altrettanto rilevante per uno
+studio comparativo del culto: entro quale funzione più ampia si colloca,
+nell'economia complessiva della pratica religiosa, l'atto o la
+condizione che quel termine designa. Per rispondere a questa seconda
+domanda si è integrata nel sistema una tassonomia funzionale di
+riferimento, elaborata da un progetto dedicato allo studio comparato del
+lessico delle iscrizioni confessionali anatoliche, articolata in un
+ristretto numero di categorie principali --- l'espiazione, la
+trasgressione, la condizione della persona coinvolta --- a loro volta
+suddivise in sottocategorie più specifiche, innestate su due livelli
+successivi.
+
+Questa seconda classificazione non è stata trattata come una scelta
+editoriale ulteriore da compiere voce per voce, ma come un'informazione
+derivata dal lemma stesso, secondo lo stesso principio già enunciato a
+proposito della rappresentazione dei dati (sezione 2): chi marca il
+lessico cultuale continua a rispondere a una sola domanda --- quale
+lemma ricorre in quel punto del testo --- e il collocamento all'interno
+della tassonomia funzionale viene ricavato automaticamente da questa
+scelta, anziché richiedere una seconda decisione indipendente che
+rischierebbe, con il tempo, di disallinearsi dalla prima. Per la stessa
+ragione la tassonomia non viene scritta stabilmente all'interno di
+ciascuna epigrafe del corpus, ma calcolata al momento della
+consultazione: la si scrive esplicitamente soltanto quando il documento
+filologico è destinato a lasciare il progetto per essere condiviso con
+chi cura la tassonomia di riferimento, così che quella collocazione
+compaia dove effettivamente serve senza costituire, all'interno del
+corpus stesso, una seconda fonte di verità da mantenere sincronizzata a
+ogni ritocco della griglia esterna.
+
+A questa nuova classificazione è stata affiancata una vista di
+navigazione dedicata, che riprende la stessa resa grafica già impiegata
+per il lessico cultuale --- barre in scala di radice quadrata, conteggio
+a fianco --- disponendo però i lemmi secondo la struttura della
+tassonomia funzionale anziché per famiglia semantica o per frequenza
+assoluta. La vista mostra l'intera griglia, comprese le categorie e
+sottocategorie per cui il corpus non offre, al momento, alcuna
+attestazione: anche un ramo vuoto è un'informazione, poiché indica dove
+la documentazione epigrafica e letteraria tace, e nasconderlo
+restituirebbe un'immagine incompleta della tassonomia di riferimento. Le
+voci proprie del progetto e quelle introdotte da un ampliamento della
+griglia originaria restano inoltre segnalate distintamente, cosicché chi
+consulta la vista possa sempre distinguere ciò che appartiene alla
+tassonomia di riferimento da ciò che il progetto vi ha aggiunto in
+proprio. Poiché la stessa suddivisione funzionale viene applicata sia al
+lessico attestato nelle epigrafi sia a quello rilevato nelle fonti
+letterarie, la griglia diventa un secondo punto di incontro tra le due
+collezioni, distinto da quello già descritto a proposito delle divinità
+e degli epiteti (sottosezione 5.2): ogni ramo della tassonomia riporta,
+affiancate e mai sommate, le attestazioni provenienti da entrambe le
+fonti.
+
+\screenshotplaceholder{7.5cm}{Vista a griglia della tassonomia funzionale del lessico cultuale, con rami non attestati dichiarati come tali}
+
 \subsection{Ricerca}
 
 L'interfaccia digitale dispone di un modulo di ricerca che consente di
@@ -981,6 +1131,37 @@ richiesto.
 
 \screenshotplaceholder{7cm}{Interfaccia del modulo di ricerca con filtri combinati}
 
+La ricerca appena descritta risponde a un'esigenza di tipo
+catalografico: individuare le epigrafi che condividono un determinato
+attributo. Chi lavora invece direttamente sul testo delle iscrizioni ha
+spesso una domanda diversa, di natura più propriamente filologica e
+linguistica: dove ricorre una determinata parola nel corpus, e che cosa
+la circonda. Per rispondere a questa seconda esigenza si è introdotta
+una sezione di concordanza, che restituisce ciascuna occorrenza del
+termine cercato accompagnata dal proprio contesto immediato, secondo il
+modello consolidato della concordanza a parola-chiave-in-contesto
+(\textit{key word in context}, KWIC), ben noto a chi si occupa di
+linguistica dei corpora.
+
+La concordanza legge lo stesso testo già impiegato dal modulo di ricerca
+generale, senza richiedere un indice dedicato: la sola differenza è che,
+in questo caso, l'unità restituita è la singola occorrenza in contesto e
+non la scheda nel suo complesso. Anche qui le parole spezzate da
+un'interruzione di riga --- un fenomeno frequente nel testo epigrafico
+trascritto secondo le convenzioni descritte nella sezione 3 --- vengono
+ricongiunte prima della ricerca, cosicché un termine che nel testo
+originale attraversa un cambio di riga resti comunque cercabile nella
+sua forma intera; e la ricerca resta, come altrove nel modulo di ricerca
+generale, insensibile a differenze di accentazione e di maiuscole. I
+risultati possono essere ordinati per il contesto che precede o che
+segue l'occorrenza --- un'operazione che, applicata a un insieme
+sufficientemente ampio di attestazioni, fa emergere da sola le formule
+ricorrenti, senza che sia necessario cercarle esplicitamente ---
+filtrati per regione di provenienza, ed esportati in un formato
+tabellare per un'elaborazione al di fuori dell'interfaccia.
+
+\screenshotplaceholder{7cm}{Sezione di concordanza, con le occorrenze disposte in contesto}
+
 \section{Considerazioni finali e sviluppi futuri}
 
 Il lavoro descritto in questo articolo rappresenta un primo bilancio
@@ -999,7 +1180,13 @@ divinità, degli epiteti e delle figure onomastiche attestate nel corpus,
 affiancate da una visualizzazione cronologica delle attestazioni e da una
 sezione, di pari rango rispetto al catalogo epigrafico, dedicata alla
 raccolta delle fonti letterarie relative alla divinità e al lessico
-cultuale che le accomuna al materiale inciso sulla pietra.
+cultuale che le accomuna al materiale inciso sulla pietra. A queste
+attività si sono affiancati, più di recente, un primo strumento di
+collazione assistita tra il corpus e le edizioni a stampa di
+riferimento, una tassonomia funzionale che affianca al lessico cultuale
+una seconda chiave di lettura, una sezione di concordanza pensata per
+chi lavora direttamente sul testo delle iscrizioni, e un apparato di
+citazione stabile per ciascuna voce del corpus.
 
 L'approccio complessivamente seguito privilegia la trasparenza e la
 verificabilità del dato rispetto alla comodità di gestione a breve
@@ -1015,9 +1202,12 @@ Per quanto riguarda gli sviluppi futuri, il lavoro prosegue
 principalmente su due fronti. Da un lato si sta portando avanti la
 revisione sistematica, voce per voce, delle trascrizioni derivate
 dall'edizione a stampa originaria, sulla base di un confronto diretto
-con le fonti primarie disponibili, così da ridurre progressivamente la
-dipendenza dal testo di Lane e trasformarlo, per ciascuna voce
-revisionata, da testo sottostante a semplice riferimento bibliografico.
+con le fonti primarie disponibili --- confronto per cui si dispone ora
+di un primo strumento di collazione assistita, descritto nella sezione
+4, ma che resta da estendere sistematicamente all'intero corpus --- così
+da ridurre progressivamente la dipendenza dal testo di Lane e
+trasformarlo, per ciascuna voce revisionata, da testo sottostante a
+semplice riferimento bibliografico.
 Dall'altro lato si prevede di ampliare ulteriormente il vocabolario
 controllato utilizzato per la descrizione iconografica, e di
 sviluppare strumenti di confronto comparativo tra le diverse
