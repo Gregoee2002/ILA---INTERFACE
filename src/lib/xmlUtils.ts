@@ -645,7 +645,11 @@ function parseTeiElement(teiString: string): Monumento {
     if (unitMatch) dim_unita = unitMatch[1];
   }
 
-  let dim = support_p || `${dim_altezza} x ${dim_larghezza} x ${dim_profondita} ${dim_unita}`.trim();
+  // Il ripiego sulle misure vale solo se una misura c'è davvero: con <support><p>
+  // vuoto e <height>/<width>/<depth> vuoti dava la stringa fantasma "x  x  cm",
+  // che poi il salvataggio successivo riscriveva dentro <p>.
+  const misure = [dim_altezza, dim_larghezza, dim_profondita].filter(Boolean);
+  let dim = support_p || (misure.length ? `${misure.join(" x ")} ${dim_unita}`.trim() : "");
 
   // 12. Layout description
   let layout_desc = "";
