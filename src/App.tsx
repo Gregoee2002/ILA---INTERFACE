@@ -59,7 +59,6 @@ import { PleiadesMap } from './components/PleiadesMap';
 const MapView = lazy(() => import('./components/MapView').then(m => ({ default: m.MapView })));
 import { IconographyPanel } from './components/IconographyPanel';
 import { ErrorBoundary } from './components/ErrorBoundary';
-import { CitaCosi } from './components/CitaCosi';
 import { leggiPermalink, scriviPermalink } from './lib/permalink';
 const CooccurrenceHeatmap = lazy(() => import('./components/CooccurrenceHeatmap').then(m => ({ default: m.CooccurrenceHeatmap })));
 const CultLexiconPanel = lazy(() => import('./components/CultLexiconPanel').then(m => ({ default: m.CultLexiconPanel })));
@@ -7334,7 +7333,6 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                               {getDisplayTitle(selectedMonumento)}
                             </h2>
                             <div className="ornament-rule !my-0 mt-2 max-w-[6rem] mx-0" />
-                            <CitaCosi m={selectedMonumento} />
                           </div>
                       </div>
                       
