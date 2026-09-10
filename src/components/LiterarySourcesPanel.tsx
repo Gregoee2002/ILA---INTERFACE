@@ -930,8 +930,7 @@ export const LiterarySourcesPanel: React.FC<Props> = ({ editingUnlocked, apriTes
               </div>
               <p className="font-serif italic text-[14px] md:text-[15px] text-muted/85 max-w-3xl leading-relaxed">
                 Lo spoglio delle fonti antiche sulla divinità lunare: {tutte.length} testimonianze da {opere.length} opere,
-                {' '}{arcoCronologico(tutte)}. Dove il catalogo registra ciò che è inciso sulla pietra, qui si registra ciò
-                che è scritto nei testi — e lo scarto fra le due cose è il punto.
+                {' '}{arcoCronologico(tutte)}.
               </p>
             </div>
 
