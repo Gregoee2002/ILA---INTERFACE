@@ -103,7 +103,7 @@ export const CultLexiconPanel: React.FC<Props> = ({ monumenti, onSelectMonumento
           />
 
           <span
-            className="font-greek text-cult text-base shrink-0 w-[8rem] truncate"
+            className="font-greek text-ink/85 text-base shrink-0 w-[8rem] truncate"
             lang="grc"
             title={l.lemma}
           >
@@ -117,8 +117,7 @@ export const CultLexiconPanel: React.FC<Props> = ({ monumenti, onSelectMonumento
           {/* Due numeri accanto, mai un totale: la pietra e i testi si contano
               separatamente perché non provano la stessa cosa. */}
           <span
-            className="shrink-0 w-9 text-right text-xs font-sans tabular-nums"
-            style={{ color: 'var(--lit)' }}
+            className="shrink-0 w-9 text-right text-xs font-sans tabular-nums text-muted/60"
             title={lett ? `${lett.occorrenze.length} nei testi letterari` : undefined}
           >
             {lett ? `+${lett.occorrenze.length}` : ''}
@@ -178,8 +177,8 @@ export const CultLexiconPanel: React.FC<Props> = ({ monumenti, onSelectMonumento
                     <span className="uppercase tracking-wide">{r.scheda}</span>
                     {r.form && <span className="font-greek text-muted/60" lang="grc">{r.form}</span>}
                     {r.line && <span className="text-muted/40">r.{r.line}</span>}
-                    {r.cert === 'low' && <span className="text-warning" title="forma integrata">[ ]</span>}
-                    {r.formula && <span className="text-cult" title="#formula">✦</span>}
+                    {r.cert === 'low' && <span className="text-muted/60" title="forma integrata">[ ]</span>}
+                    {r.formula && <span className="text-muted/60" title="#formula">✦</span>}
                   </button>
                 );
               })}
@@ -188,8 +187,8 @@ export const CultLexiconPanel: React.FC<Props> = ({ monumenti, onSelectMonumento
             {lett && (
               <div className="mt-2.5 pt-2 border-t border-border/30">
                 <div className="flex items-baseline gap-1.5 mb-1">
-                  <ScrollText className="h-3 w-3 shrink-0 self-center" style={{ color: 'var(--lit)' }} />
-                  <span className="text-[10px] font-sans uppercase tracking-widest" style={{ color: 'var(--lit)' }}>
+                  <ScrollText className="h-3 w-3 shrink-0 self-center text-muted/50" />
+                  <span className="text-[10px] font-sans uppercase tracking-widest text-muted/60">
                     Nei testi
                   </span>
                   <span className="text-[10px] font-sans text-muted/50 tabular-nums">
@@ -248,8 +247,8 @@ export const CultLexiconPanel: React.FC<Props> = ({ monumenti, onSelectMonumento
     return (
       <div className="mt-3 pt-2.5 border-t border-dashed border-border/50">
         <div className="flex items-baseline gap-1.5 mb-1.5 pl-2">
-          <ScrollText className="h-3 w-3 shrink-0 self-center" style={{ color: 'var(--lit)' }} />
-          <span className="text-[10px] font-sans font-bold uppercase tracking-widest" style={{ color: 'var(--lit)' }}>
+          <ScrollText className="h-3 w-3 shrink-0 self-center text-muted/50" />
+          <span className="text-[10px] font-sans font-bold uppercase tracking-widest text-muted/70">
             Solo nei testi
           </span>
           <span className="text-[10px] font-sans text-muted/50 tabular-nums">{lemmi.length}</span>
@@ -260,9 +259,9 @@ export const CultLexiconPanel: React.FC<Props> = ({ monumenti, onSelectMonumento
         <div className="space-y-0.5">
           {lemmi.map(l => (
             <div key={`lit::${l.lemma}`} className="flex items-baseline gap-3 px-2 py-1">
-              <span className="h-1.5 w-1.5 rounded-full shrink-0 self-center" style={{ backgroundColor: 'var(--lit)' }} />
-              <span className="font-greek text-base w-[8rem] shrink-0 truncate"
-                style={{ color: 'var(--lit)' }} lang={l.occorrenze[0]?.lingua} title={l.lemma}>
+              <span className="h-1.5 w-1.5 rounded-full shrink-0 self-center bg-muted/40" />
+              <span className="font-greek text-base w-[8rem] shrink-0 truncate text-ink/70"
+                lang={l.occorrenze[0]?.lingua} title={l.lemma}>
                 {l.lemma}
               </span>
               <div className="flex flex-wrap gap-x-4 gap-y-1 flex-1">
@@ -310,9 +309,7 @@ export const CultLexiconPanel: React.FC<Props> = ({ monumenti, onSelectMonumento
           {occorrenzeLetterarie > 0 && (
             <>
               {' · '}
-              <span style={{ color: 'var(--lit)' }}>
-                {occorrenzeLetterarie} {occorrenzeLetterarie === 1 ? 'occorrenza' : 'occorrenze'} nei testi
-              </span>
+              {occorrenzeLetterarie} {occorrenzeLetterarie === 1 ? 'occorrenza' : 'occorrenze'} nei testi
               {' — contate a parte: sulla pietra la parola è un atto, in un libro è una parola.'}
             </>
           )}
