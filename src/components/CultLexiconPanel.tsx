@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { Monumento } from '../types';
 import { cn } from '../lib/utils';
 import { buildCultIndex, CultLemmaStats } from '../lib/cultIndex';
-import { CULT_FAMILIES } from '../lib/cultLexicon';
+import { CULT_FAMILIES, cultFamilyColor, cultFamilyShort } from '../lib/cultLexicon';
 import { LemmaLetterario, PercorsoLetterario, lessicoLetterario, risolviTutte, toolboxLetterario } from '../lib/litSources';
 import { LaresGrid } from './LaresGrid';
 import { caricaLitDatasetCondiviso } from '../lib/litStore';
@@ -19,18 +19,6 @@ type GroupBy = 'family' | 'lemma' | 'lares';
 
 const foldForSearch = (s: string) =>
   (s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
-
-// Una tinta terrosa per famiglia — leggibile su pergamena chiara e scura.
-const FAMILY_COLOR: Record<string, string> = {
-  'agency': '#8f6a9e',
-  'atto-cultuale': '#c57a4f',
-  'colpa': '#a85250',
-  'formula-fissa': '#6e8bab',
-  'ruolo-istituzione': '#c19a3e',
-  '(altro)': '#8a8a80',
-};
-const famColor = (id: string) => FAMILY_COLOR[id] || FAMILY_COLOR['(altro)'];
-const familyShort = (label: string) => label.split(/[—–-]/)[0].trim();
 
 // Stessi stili dei campi di ricerca/tendina usati altrove nell'app (indice epiteti).
 const FIELD_BASE =
@@ -84,8 +72,6 @@ export const CultLexiconPanel: React.FC<Props> = ({ monumenti, onSelectMonumento
   };
 
   const filteredLemmata = index.lemmata.filter(matchLemma);
-  // scala comune a tutte le barre: √(attestazioni) del lemma più frequente visibile.
-  const maxCount = Math.max(1, ...filteredLemmata.map(l => l.count));
 
   const toggle = (key: string) =>
     setExpanded(prev => {
@@ -97,50 +83,53 @@ export const CultLexiconPanel: React.FC<Props> = ({ monumenti, onSelectMonumento
   const schede = (n: number) => `${n} ${n === 1 ? 'scheda' : 'schede'}`;
   const atts = (n: number) => `${n} att.`;
 
+  // Riga = elenco, non grafico: lemma, conteggio, sotto-funzione, Logeion. La
+  // famiglia è un pallino, non il riempimento di una barra. Stesso impianto
+  // dell'indice epiteti e della bibliografia.
   const renderLemmaRow = (l: CultLemmaStats) => {
     const key = `${l.family}::${l.lemma}`;
     const open = expanded.has(key);
-    const color = famColor(l.family);
     const lett = letterario.get(l.lemma);
-    const barPct = Math.max(2, (Math.sqrt(l.count) / Math.sqrt(maxCount)) * 100);
     return (
       <div key={key} className="rounded-sm">
         <button
           onClick={() => toggle(key)}
-          className="w-full flex items-center gap-3 px-2 py-1.5 text-left rounded-sm hover:bg-sidebar/50 transition-colors"
+          className="w-full flex items-baseline gap-3 px-2 py-1.5 text-left rounded-sm hover:bg-sidebar/50 transition-colors"
         >
           <span
-            className="font-greek text-cult text-base w-[6.5rem] shrink-0 text-right truncate"
+            className="h-1.5 w-1.5 rounded-full shrink-0 self-center"
+            style={{ backgroundColor: cultFamilyColor(l.family) }}
+            title={cultFamilyShort(l.family)}
+          />
+
+          <span
+            className="font-greek text-cult text-base shrink-0 w-[8rem] truncate"
             lang="grc"
             title={l.lemma}
           >
             {l.lemma}
           </span>
 
-          <span className="flex-1 min-w-[3rem] max-w-[22rem] h-2.5 rounded-sm bg-border/30 overflow-hidden">
-            <span
-              className="block h-full rounded-sm"
-              style={{ width: `${barPct}%`, backgroundColor: color }}
-            />
-          </span>
-
-          <span className="shrink-0 w-8 text-right text-xs font-sans text-muted/80 tabular-nums">
+          <span className="shrink-0 w-10 text-right text-xs font-sans text-muted/80 tabular-nums">
             {l.count}
           </span>
 
           {/* Due numeri accanto, mai un totale: la pietra e i testi si contano
               separatamente perché non provano la stessa cosa. */}
-          <span className="shrink-0 w-10 text-right text-xs font-sans tabular-nums"
+          <span
+            className="shrink-0 w-9 text-right text-xs font-sans tabular-nums"
             style={{ color: 'var(--lit)' }}
-            title={lett ? `${lett.occorrenze.length} nei testi letterari` : undefined}>
+            title={lett ? `${lett.occorrenze.length} nei testi letterari` : undefined}
+          >
             {lett ? `+${lett.occorrenze.length}` : ''}
           </span>
 
           {l.subFunction && (
-            <span className="shrink-0 hidden sm:block text-xs font-serif italic text-muted/80 truncate max-w-[9rem]">
+            <span className="flex-1 hidden sm:block text-xs font-serif italic text-muted/70 truncate">
               {l.subFunction}
             </span>
           )}
+          <span className="flex-1 sm:hidden" />
 
           {l.lemmaRef && (
             <a
@@ -148,19 +137,20 @@ export const CultLexiconPanel: React.FC<Props> = ({ monumenti, onSelectMonumento
               target="_blank"
               rel="noreferrer"
               onClick={e => e.stopPropagation()}
-              className="shrink-0 text-[10px] font-sans uppercase tracking-wide text-accent hover:opacity-70 inline-flex items-center gap-0.5"
+              className="shrink-0 text-accent hover:opacity-70 self-center"
+              title="Logeion"
             >
               <ExternalLink className="h-3 w-3" />
             </a>
           )}
 
           <ChevronRight
-            className={cn('shrink-0 h-3.5 w-3.5 text-muted/60 transition-transform', open && 'rotate-90')}
+            className={cn('shrink-0 h-3.5 w-3.5 text-muted/60 self-center transition-transform', open && 'rotate-90')}
           />
         </button>
 
         {open && (
-          <div className="ml-[6.5rem] mt-0.5 mb-1.5 px-3 py-2 rounded-sm bg-sidebar/40 border border-border/30">
+          <div className="ml-5 mt-0.5 mb-1.5 px-3 py-2 rounded-sm bg-sidebar/40 border border-border/30">
             <div className="mb-1.5">
               <span className="text-[10px] font-sans uppercase tracking-widest text-muted/50">
                 {schede(l.schedeCount)} · {atts(l.count)}
@@ -241,7 +231,7 @@ export const CultLexiconPanel: React.FC<Props> = ({ monumenti, onSelectMonumento
 
   // Lemmi cultuali che nel corpus epigrafico non compaiono affatto. Vanno
   // mostrati — altrimenti il ponte nasconde metà di ciò che serve a vedere —
-  // ma in un blocco proprio, senza barra e senza fingere un'attestazione.
+  // ma in un blocco proprio, senza fingere un'attestazione.
   const notiSullaPietra = new Set(index.lemmata.map(l => l.lemma));
   const soloNeiTesti = [...letterario.values()]
     .filter(l => !notiSullaPietra.has(l.lemma))
@@ -269,8 +259,9 @@ export const CultLexiconPanel: React.FC<Props> = ({ monumenti, onSelectMonumento
         </div>
         <div className="space-y-0.5">
           {lemmi.map(l => (
-            <div key={`lit::${l.lemma}`} className="flex items-center gap-3 px-2 py-1">
-              <span className="font-greek text-base w-[6.5rem] shrink-0 text-right truncate"
+            <div key={`lit::${l.lemma}`} className="flex items-baseline gap-3 px-2 py-1">
+              <span className="h-1.5 w-1.5 rounded-full shrink-0 self-center" style={{ backgroundColor: 'var(--lit)' }} />
+              <span className="font-greek text-base w-[8rem] shrink-0 truncate"
                 style={{ color: 'var(--lit)' }} lang={l.occorrenze[0]?.lingua} title={l.lemma}>
                 {l.lemma}
               </span>
@@ -363,13 +354,14 @@ export const CultLexiconPanel: React.FC<Props> = ({ monumenti, onSelectMonumento
             style={{ ...FIELD_STYLE, WebkitAppearance: 'none' as const, appearance: 'none' as const }}
           >
             <option value="">Tutte le famiglie</option>
-            {CULT_FAMILIES.map(f => <option key={f.id} value={f.id}>{familyShort(f.label)}</option>)}
+            {CULT_FAMILIES.map(f => <option key={f.id} value={f.id}>{cultFamilyShort(f.label)}</option>)}
           </select>
           <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted/50 pointer-events-none" />
         </div>
 
+        {/* raggruppamento primario: due modi, come l'indice epiteti */}
         <div className="inline-flex rounded-lg border border-[var(--border)]/50 dark:border-white/5 overflow-hidden text-[10px] font-sans font-bold uppercase tracking-widest shadow-inner">
-          {(['family', 'lemma', 'lares'] as GroupBy[]).map(g => (
+          {(['family', 'lemma'] as GroupBy[]).map(g => (
             <button
               key={g}
               onClick={() => setGroupBy(g)}
@@ -378,10 +370,23 @@ export const CultLexiconPanel: React.FC<Props> = ({ monumenti, onSelectMonumento
                 groupBy === g ? 'bg-accent/10 text-accent' : 'text-muted hover:text-ink',
               )}
             >
-              {g === 'family' ? 'per famiglia' : g === 'lemma' ? 'per lemma' : 'per griglia LARES'}
+              {g === 'family' ? 'per famiglia' : 'per lemma'}
             </button>
           ))}
         </div>
+
+        {/* la griglia LARES è un'altra lettura, non un terzo raggruppamento: sta fuori */}
+        <button
+          onClick={() => setGroupBy(g => (g === 'lares' ? 'family' : 'lares'))}
+          className={cn(
+            'px-3 py-2 rounded-lg border text-[10px] font-sans font-bold uppercase tracking-widest transition-colors',
+            groupBy === 'lares'
+              ? 'border-accent/40 bg-accent/10 text-accent'
+              : 'border-border/50 text-muted hover:text-ink hover:bg-sidebar/60',
+          )}
+        >
+          griglia LARES
+        </button>
       </div>
 
       {filteredLemmata.length === 0 && soloNeiTesti.length === 0 ? (
@@ -407,9 +412,9 @@ export const CultLexiconPanel: React.FC<Props> = ({ monumenti, onSelectMonumento
             return (
               <section key={f.id}>
                 <div className="flex items-baseline gap-2.5 mb-2 pb-1 border-b border-border/40">
-                  <span className="h-2.5 w-2.5 rounded-sm shrink-0" style={{ backgroundColor: famColor(f.id) }} />
+                  <span className="h-2.5 w-2.5 rounded-sm shrink-0" style={{ backgroundColor: cultFamilyColor(f.id) }} />
                   <h3 className="text-sm font-sans font-bold uppercase tracking-[0.15em] text-ink/90">
-                    {familyShort(f.label)}
+                    {cultFamilyShort(f.label)}
                   </h3>
                   <span className="text-xs font-sans text-muted/60">
                     {f.lemmata.length} lemmi · {schede(f.schedeCount)} · {atts(totAtt)}

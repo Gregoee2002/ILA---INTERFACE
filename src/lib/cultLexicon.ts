@@ -80,6 +80,28 @@ export const CULT_FAMILIES: CultFamilyInfo[] = [
 
 export const CULT_FAMILY_IDS: CultFamily[] = CULT_FAMILIES.map(f => f.id);
 
+/**
+ * Una tinta per famiglia, sorella di ITEM_COLOR (laresToolbox.ts): stessa gamma
+ * terrosa, leggibile su pergamena chiara e scura, nessuna coincidenza con
+ * --accent / --lit / --cult. Serve solo come pallino di riconoscimento nella
+ * vista «Lessico cultuale» — non è più il riempimento di una barra. Vive qui e
+ * solo qui, così il componente non porta esadecimali propri.
+ */
+export const CULT_FAMILY_COLOR: Record<string, string> = {
+  "agency": "#8f6a9e",
+  "atto-cultuale": "#c57a4f",
+  "colpa": "#a85250",
+  "formula-fissa": "#6e8bab",
+  "ruolo-istituzione": "#c19a3e",
+  "(altro)": "#8a8a80",
+};
+
+export const cultFamilyColor = (id: string) =>
+  CULT_FAMILY_COLOR[id] || CULT_FAMILY_COLOR["(altro)"];
+
+/** «Agency — il dio…» → «Agency». La testa dell'etichetta, per chip e intestazioni. */
+export const cultFamilyShort = (label: string) => label.split(/[—–-]/)[0].trim();
+
 const LOGEION = "https://logeion.uchicago.edu/";
 
 /**
