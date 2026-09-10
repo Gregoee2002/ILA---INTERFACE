@@ -42,12 +42,9 @@ export const CultLexiconPanel: React.FC<Props> = ({ monumenti, onSelectMonumento
     return m;
   }, [monumenti]);
 
-  // Il bacino letterario resta un oggetto suo: si accosta all'indice
-  // epigrafico riga per riga, non vi confluisce. Il filtro per regione non lo
-  // tocca — un passo di Strabone non ha una regione di ritrovamento.
+  // Il conteggio letterario è accostato, non sommato; il filtro per regione non lo tocca.
   const [letterario, setLetterario] = useState<Map<string, LemmaLetterario>>(new Map());
-  // Il ponte vale anche sull'asse LARES: dove un ramo della griglia è toccato sia
-  // dalla pietra sia dai libri, la riga lo dice — accostato, mai sommato.
+  // Stesso accostamento sull'asse LARES.
   const [percorsiLett, setPercorsiLett] = useState<Map<string, PercorsoLetterario>>(new Map());
   useEffect(() => {
     let vivo = true;
@@ -114,8 +111,7 @@ export const CultLexiconPanel: React.FC<Props> = ({ monumenti, onSelectMonumento
             {l.count}
           </span>
 
-          {/* Due numeri accanto, mai un totale: la pietra e i testi si contano
-              separatamente perché non provano la stessa cosa. */}
+          {/* Conteggio epigrafico e conteggio letterario, separati. */}
           <span
             className="shrink-0 w-9 text-right text-xs font-sans tabular-nums text-muted/60"
             title={lett ? `${lett.occorrenze.length} nei testi letterari` : undefined}
@@ -218,7 +214,7 @@ export const CultLexiconPanel: React.FC<Props> = ({ monumenti, onSelectMonumento
                   ))}
                 </div>
                 <p className="text-[10px] font-serif italic text-muted/50 mt-1.5 leading-snug">
-                  Usi della parola in un testo, non atti di culto: restano fuori dal conteggio delle attestazioni.
+                  Occorrenze in un testo, fuori dal conteggio delle attestazioni.
                 </p>
               </div>
             )}
@@ -228,9 +224,7 @@ export const CultLexiconPanel: React.FC<Props> = ({ monumenti, onSelectMonumento
     );
   };
 
-  // Lemmi cultuali che nel corpus epigrafico non compaiono affatto. Vanno
-  // mostrati — altrimenti il ponte nasconde metà di ciò che serve a vedere —
-  // ma in un blocco proprio, senza fingere un'attestazione.
+  // Lemmi solo letterari: in un blocco a parte, senza conteggio epigrafico.
   const notiSullaPietra = new Set(index.lemmata.map(l => l.lemma));
   const soloNeiTesti = [...letterario.values()]
     .filter(l => !notiSullaPietra.has(l.lemma))
@@ -253,7 +247,7 @@ export const CultLexiconPanel: React.FC<Props> = ({ monumenti, onSelectMonumento
           </span>
           <span className="text-[10px] font-sans text-muted/50 tabular-nums">{lemmi.length}</span>
           <span className="text-[11px] font-serif italic text-muted/60 ml-1">
-            mai sulla pietra, nel corpus finora spogliato
+            mai sulla pietra
           </span>
         </div>
         <div className="space-y-0.5">
@@ -309,8 +303,7 @@ export const CultLexiconPanel: React.FC<Props> = ({ monumenti, onSelectMonumento
           {occorrenzeLetterarie > 0 && (
             <>
               {' · '}
-              {occorrenzeLetterarie} {occorrenzeLetterarie === 1 ? 'occorrenza' : 'occorrenze'} nei testi
-              {' — contate a parte: sulla pietra la parola è un atto, in un libro è una parola.'}
+              {occorrenzeLetterarie} {occorrenzeLetterarie === 1 ? 'occorrenza' : 'occorrenze'} nei testi, contate a parte.
             </>
           )}
         </p>
@@ -394,7 +387,6 @@ export const CultLexiconPanel: React.FC<Props> = ({ monumenti, onSelectMonumento
           percorsi={percorsiToRender}
           senzaPercorso={senzaPercorso}
           renderLemmaRow={renderLemmaRow}
-          schede={schede}
           atts={atts}
         />
       ) : groupBy === 'lemma' ? (

@@ -70,7 +70,7 @@ export interface CultIndex {
   regioni: string[];
   /** gli stessi lemmi raggruppati per percorso LARES, in ordine di griglia. */
   toolbox: CultToolboxStats[];
-  /** lemmi senza percorso: legittimo (χαίρω, χρηστὸς χαῖρε), non un buco. */
+  /** lemmi senza percorso LARES (es. χαίρω, χρηστὸς χαῖρε). */
   senzaPercorso: CultLemmaStats[];
 }
 
@@ -251,7 +251,7 @@ export function buildCultIndex(
 /**
  * Percorso di un lemma: quello che il markup usa più spesso (chi marca può
  * correggere il default), altrimenti quello della tabella. Undefined se il
- * lemma non ne ha — χαίρω, χρηστὸς χαῖρε: non nominano nulla.
+ * lemma non ne ha (es. χαίρω, χρηστὸς χαῖρε).
  */
 function pathOf(pathCounts: Map<string, number>, lemma: string): ToolboxMarker | undefined {
   const top = Array.from(pathCounts.entries()).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))[0];
