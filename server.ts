@@ -6,10 +6,11 @@ import crypto from "crypto";
 import { createServer as createViteServer } from "vite";
 import { GoogleGenAI } from "@google/genai";
 import { xmlToMonumenti, monumentiToXml } from "./src/lib/xmlUtils";
-import { pullCorpusFromGitHub, pushFileToGitHub, deleteFileFromGitHub, isGitHubConfigured, testGitHubAccess, pullDraftsFromGitHub, pullFlagsFileFromGitHub, pushFlagsFileToGitHub, pullBugsFileFromGitHub, pushBugsFileToGitHub, pullIconographyVocabFileFromGitHub, pushIconographyVocabFileToGitHub, pushLitSourcesFileToGitHub, scheduleRedeploy } from "./src/lib/githubStorage";
+import { pullCorpusFromGitHub, pushFileToGitHub, deleteFileFromGitHub, isGitHubConfigured, testGitHubAccess, pullDraftsFromGitHub, pullFlagsFileFromGitHub, pushFlagsFileToGitHub, pullBugsFileFromGitHub, pushBugsFileToGitHub, pullIconographyVocabFileFromGitHub, pushIconographyVocabFileToGitHub, pushLitSourcesFileToGitHub, pullLessicoLaresFileFromGitHub, pushLessicoLaresFileToGitHub, scheduleRedeploy } from "./src/lib/githubStorage";
 import { EntryRegistro, BugReport } from "./src/types";
 import { normalizeRegistro } from "./src/lib/registroMigration";
 import { mergeIconographyOverrides } from "./src/lib/iconographyLabels";
+import { validateOverlay } from "./src/lib/lessicoLaresOverlay";
 import { buildSearchIndex, searchMonumenti } from "./src/lib/searchIndex";
 import MiniSearch from 'minisearch';
 
@@ -37,6 +38,9 @@ async function startServer() {
   // Fonti letterarie: opere, voci e testimonianze in un file solo (vedi
   // fonti-letterarie.json su GitHub, radice repo dati).
   const LIT_SOURCES_FILE = path.join(DATA_DIR, "fonti-letterarie.json");
+  // Overlay del vocabolario «Lessico cultuale · LARES» (vedi
+  // lessico-lares-overlay.json su GitHub, radice repo dati).
+  const LESSICO_LARES_FILE = path.join(DATA_DIR, "lessico-lares-overlay.json");
 
   const ai = new GoogleGenAI({
     apiKey: process.env.GEMINI_API_KEY,
@@ -125,6 +129,12 @@ async function startServer() {
       if (remoteVocab !== null) fs.writeFileSync(ICONOGRAPHY_VOCAB_FILE, remoteVocab, "utf-8");
     } catch (e: any) {
       console.error("[githubStorage] Sync vocabolario iconografico iniziale fallita — il server parte comunque con il filesystem locale (probabilmente vuoto o stale):", e.message || e);
+    }
+    try {
+      const remoteLessicoLares = await pullLessicoLaresFileFromGitHub();
+      if (remoteLessicoLares !== null) fs.writeFileSync(LESSICO_LARES_FILE, remoteLessicoLares, "utf-8");
+    } catch (e: any) {
+      console.error("[githubStorage] Sync overlay lessico/LARES iniziale fallita — il server parte comunque con il filesystem locale (probabilmente assente):", e.message || e);
     }
   }
   if (!fs.existsSync(FLAGS_FILE)) fs.writeFileSync(FLAGS_FILE, "[]", "utf-8");
@@ -823,6 +833,38 @@ async function startServer() {
       res.json({ status: "ok", bytes: content.length });
     } catch (error: any) {
       console.error("Error writing fonti-letterarie.json:", error);
+      res.status(500).json({ error: error.message || "Scrittura fallita" });
+    }
+  });
+
+  // ── Overlay lessico cultuale / LARES ────────────────────────────────────
+  // Stessa semantica di fonti-letterarie: 204 quando l'overlay non esiste
+  // ancora, la vista «Lessico cultuale» parte allora dal solo seed.
+
+  app.get("/api/lessico-lares-vocab", (_req, res) => {
+    try {
+      if (!fs.existsSync(LESSICO_LARES_FILE)) return res.status(204).end();
+      res.type("application/json").send(fs.readFileSync(LESSICO_LARES_FILE, "utf-8"));
+    } catch (error: any) {
+      console.error("Error reading lessico-lares-overlay.json:", error);
+      res.status(500).json({ error: error.message || "Lettura fallita" });
+    }
+  });
+
+  app.post("/api/lessico-lares-vocab", async (req, res) => {
+    try {
+      const { overlay, message } = req.body || {};
+      if (!overlay || typeof overlay !== "object") {
+        return res.status(400).json({ error: "Campo 'overlay' mancante" });
+      }
+      const errs = validateOverlay(overlay);
+      if (errs.length > 0) return res.status(400).json({ error: "Overlay incoerente", dettagli: errs });
+      const content = JSON.stringify(overlay, null, 2);
+      fs.writeFileSync(LESSICO_LARES_FILE, content, "utf-8");
+      await pushLessicoLaresFileToGitHub(content, message || "Vocabolario lessico/LARES: aggiornamento");
+      res.json({ status: "ok", bytes: content.length });
+    } catch (error: any) {
+      console.error("Error writing lessico-lares-overlay.json:", error);
       res.status(500).json({ error: error.message || "Scrittura fallita" });
     }
   });

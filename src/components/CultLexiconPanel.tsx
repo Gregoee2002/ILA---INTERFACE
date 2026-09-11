@@ -2,17 +2,22 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { Monumento } from '../types';
 import { cn } from '../lib/utils';
 import { buildCultIndex, CultLemmaStats } from '../lib/cultIndex';
-import { CULT_FAMILIES, cultFamilyColor, cultFamilyShort } from '../lib/cultLexicon';
+import { cultFamilyShort } from '../lib/cultLexicon';
+import { ResolvedVocab, buildLessicoLares } from '../lib/lessicoLaresOverlay';
+import { caricaVocabCondiviso } from '../lib/lessicoLaresStore';
 import { LemmaLetterario, PercorsoLetterario, lessicoLetterario, risolviTutte, toolboxLetterario } from '../lib/litSources';
 import { LaresGrid } from './LaresGrid';
 import { caricaLitDatasetCondiviso } from '../lib/litStore';
-import { Tags, ExternalLink, ChevronRight, ChevronDown, Search, ScrollText } from 'lucide-react';
+import { Tags, ExternalLink, ChevronRight, ChevronDown, Search, ScrollText, Pencil } from 'lucide-react';
 
 interface Props {
   monumenti: Monumento[];
   onSelectMonumento: (m: Monumento) => void;
   /** apre una testimonianza nella sezione Fonti letterarie */
   onVaiAllaFonte?: (testimoniumId: string) => void;
+  /** editing sbloccato: mostra l'accesso all'editor del vocabolario */
+  canWrite?: boolean;
+  onApriVocabolario?: () => void;
 }
 
 type GroupBy = 'family' | 'lemma' | 'lares';
@@ -25,16 +30,25 @@ const FIELD_BASE =
   'bg-[var(--card)] dark:bg-black/25 border border-[var(--border)]/50 dark:border-white/5 rounded-lg font-sans text-xs outline-none shadow-inner focus:border-accent/50 focus:ring-1 focus:ring-accent/30 hover:bg-[var(--sidebar)] dark:hover:bg-black/40 transition-all duration-300';
 const FIELD_STYLE = { backgroundColor: 'var(--card)', color: 'var(--ink)' } as const;
 
-export const CultLexiconPanel: React.FC<Props> = ({ monumenti, onSelectMonumento, onVaiAllaFonte }) => {
+export const CultLexiconPanel: React.FC<Props> = ({ monumenti, onSelectMonumento, onVaiAllaFonte, canWrite, onApriVocabolario }) => {
   const [search, setSearch] = useState('');
   const [regione, setRegione] = useState('');
   const [familyFilter, setFamilyFilter] = useState('');
   const [groupBy, setGroupBy] = useState<GroupBy>('family');
   const [expanded, setExpanded] = useState<Set<string>>(new Set());
 
+  // Vocabolario risolto (seed ⊕ overlay); parte dal seed e si aggiorna appena
+  // l'overlay è caricato, così la vista non aspetta la rete per comparire.
+  const [vocab, setVocab] = useState<ResolvedVocab>(() => buildLessicoLares());
+  useEffect(() => {
+    let vivo = true;
+    caricaVocabCondiviso().then(({ vocab: v }) => { if (vivo) setVocab(v); });
+    return () => { vivo = false; };
+  }, []);
+
   const index = useMemo(
-    () => buildCultIndex(monumenti, { regione: regione || undefined }),
-    [monumenti, regione],
+    () => buildCultIndex(monumenti, { regione: regione || undefined, vocab }),
+    [monumenti, regione, vocab],
   );
   const byId = useMemo(() => {
     const m = new Map<number, Monumento>();
@@ -95,7 +109,7 @@ export const CultLexiconPanel: React.FC<Props> = ({ monumenti, onSelectMonumento
         >
           <span
             className="h-1.5 w-1.5 rounded-full shrink-0 self-center"
-            style={{ backgroundColor: cultFamilyColor(l.family) }}
+            style={{ backgroundColor: vocab.familyColor(l.family) }}
             title={cultFamilyShort(l.family)}
           />
 
@@ -294,19 +308,29 @@ export const CultLexiconPanel: React.FC<Props> = ({ monumenti, onSelectMonumento
 
   return (
     <div className="flex-1 overflow-y-auto p-6 md:p-10 max-w-4xl mx-auto w-full">
-      <div className="mb-5">
-        <div className="text-xs font-sans font-bold uppercase tracking-[0.22em] text-accent/70 flex items-center gap-1.5">
-          <Tags className="h-3.5 w-3.5" /> Lessico cultuale
+      <div className="mb-5 flex items-start justify-between gap-3">
+        <div>
+          <div className="text-xs font-sans font-bold uppercase tracking-[0.22em] text-accent/70 flex items-center gap-1.5">
+            <Tags className="h-3.5 w-3.5" /> Lessico cultuale
+          </div>
+          <p className="text-[13px] font-serif italic text-muted/75 mt-1.5 leading-relaxed">
+            {index.totalAttestations} attestazioni epigrafiche su {index.totalSchede} schede
+            {occorrenzeLetterarie > 0 && (
+              <>
+                {' · '}
+                {occorrenzeLetterarie} {occorrenzeLetterarie === 1 ? 'occorrenza' : 'occorrenze'} nei testi, contate a parte.
+              </>
+            )}
+          </p>
         </div>
-        <p className="text-[13px] font-serif italic text-muted/75 mt-1.5 leading-relaxed">
-          {index.totalAttestations} attestazioni epigrafiche su {index.totalSchede} schede
-          {occorrenzeLetterarie > 0 && (
-            <>
-              {' · '}
-              {occorrenzeLetterarie} {occorrenzeLetterarie === 1 ? 'occorrenza' : 'occorrenze'} nei testi, contate a parte.
-            </>
-          )}
-        </p>
+        {canWrite && onApriVocabolario && (
+          <button
+            onClick={onApriVocabolario}
+            className="shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-accent/40 bg-accent/10 text-accent text-[10px] font-sans font-bold uppercase tracking-widest hover:bg-accent/20 transition-colors"
+          >
+            <Pencil className="h-3 w-3" /> Modifica vocabolario
+          </button>
+        )}
       </div>
 
       {/* Ricerca / filtri */}
@@ -344,7 +368,7 @@ export const CultLexiconPanel: React.FC<Props> = ({ monumenti, onSelectMonumento
             style={{ ...FIELD_STYLE, WebkitAppearance: 'none' as const, appearance: 'none' as const }}
           >
             <option value="">Tutte le famiglie</option>
-            {CULT_FAMILIES.map(f => <option key={f.id} value={f.id}>{cultFamilyShort(f.label)}</option>)}
+            {vocab.families.filter(f => !f.deprecated).map(f => <option key={f.id} value={f.id}>{cultFamilyShort(f.label)}</option>)}
           </select>
           <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted/50 pointer-events-none" />
         </div>
@@ -383,6 +407,7 @@ export const CultLexiconPanel: React.FC<Props> = ({ monumenti, onSelectMonumento
         <div className="text-sm italic text-muted/60 py-12 text-center">Nessuna attestazione per questi filtri.</div>
       ) : groupBy === 'lares' ? (
         <LaresGrid
+          toolbox={vocab.toolbox}
           letterari={new Map([...percorsiLett].map(([k, v]) => [k, v.occorrenze.length]))}
           percorsi={percorsiToRender}
           senzaPercorso={senzaPercorso}
@@ -401,7 +426,7 @@ export const CultLexiconPanel: React.FC<Props> = ({ monumenti, onSelectMonumento
             return (
               <section key={f.id}>
                 <div className="flex items-baseline gap-2.5 mb-2 pb-1 border-b border-border/40">
-                  <span className="h-2.5 w-2.5 rounded-sm shrink-0" style={{ backgroundColor: cultFamilyColor(f.id) }} />
+                  <span className="h-2.5 w-2.5 rounded-sm shrink-0" style={{ backgroundColor: vocab.familyColor(f.id) }} />
                   <h3 className="text-sm font-sans font-bold uppercase tracking-[0.15em] text-ink/90">
                     {cultFamilyShort(f.label)}
                   </h3>

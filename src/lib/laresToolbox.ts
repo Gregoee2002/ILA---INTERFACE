@@ -131,6 +131,8 @@ export interface ToolboxSub {
   aggiunta?: boolean;
   /** chi ha aggiunto la voce: la redazione («enlarged») o ILA (merge col lessico cultuale) */
   fonte?: ToolboxFonte;
+  /** voce ritirata via overlay: resta risolvibile ma non si offre più a chi marca */
+  deprecated?: boolean;
 }
 
 /**
@@ -149,6 +151,7 @@ export interface ToolboxCategoria {
   sub: ToolboxSub[];
   aggiunta?: boolean;
   fonte?: ToolboxFonte;
+  deprecated?: boolean;
 }
 
 export interface ToolboxItem {
@@ -157,6 +160,9 @@ export interface ToolboxItem {
   label: string;
   en: string;
   categorie: ToolboxCategoria[];
+  aggiunta?: boolean;
+  fonte?: ToolboxFonte;
+  deprecated?: boolean;
 }
 
 /**

@@ -597,6 +597,36 @@ un percorso, non bisogna inventarne uno.</div>
 sempre un errore: gli epiteti non si marcano con <code>&lt;w&gt;</code>, e una
 parola già dentro <code>&lt;supplied&gt;</code> di norma si salta finché non
 serve davvero taggarla a mano.</div>
+
+<h3>8.4 — Correggere un tag esistente: il popover</h3>
+<p>Cliccando su un <code>&lt;w&gt;</code> di lessico cultuale già marcato, il
+popover dell'elemento non offre più solo campi di testo grezzo su
+<code>@lemma</code>/<code>@ana</code>: la famiglia è una tendina sulle famiglie
+attive, il lemma un autocompletamento sul vocabolario controllato. Scegliere un
+lemma noto riscrive <code>@ana</code> e <code>@lemmaRef</code> di conseguenza
+(conservando <span class="mono">#formula</span> se già presente); il flag
+<span class="mono">#formula</span> ha una casella a parte.</p>
+<p>Lo stesso vale per un <code>&lt;rs&gt;</code> che marca <b>direttamente</b> un
+percorso del toolbox LARES (<code>@type</code> = un item della griglia, non
+<span class="mono">cultTerm</span>/<span class="mono">cultFormula</span>): il
+popover mostra una selezione a cascata item → categoria → sottocategoria invece
+di due stringhe da scrivere a mano.</p>
+
+<h3>8.5 — Estendere il vocabolario controllato</h3>
+<p>Le famiglie, i lemmi, le sotto-funzioni e la griglia del toolbox LARES non
+sono più fissi nel codice: chi ha sbloccato l'editing trova un bottone
+<b>"Modifica vocabolario"</b> in testa alla vista <i>Lessico cultuale</i>
+(barra laterale), che apre un editor a schede (Lemmi, Famiglie, Sotto-funzioni,
+Toolbox LARES, Marcatori concettuali).</p>
+<p class="when"><b>Quando si usa:</b> per aggiungere un lemma nuovo trovato nel
+corpus, correggere una famiglia o un percorso LARES, o innestare una categoria
+non ancora prevista dalla griglia — <b>mai</b> per rinominare o spostare una
+voce della griglia originale di LARES, che resta fissa (si "ritira" con la
+casella <i>ritirata</i>, non si cancella).</p>
+<div class="callout">Le modifiche vivono in un archivio a parte (non nel
+codice) e si sommano alla base di partenza: un lemma o un percorso aggiunti da
+qui compaiono subito nella vista <i>Lessico cultuale</i> e nel popover
+dell'Edizione, senza bisogno di una nuova versione del sito.</div>
 </section>
 
 <section class="section-break">

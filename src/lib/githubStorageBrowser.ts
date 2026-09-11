@@ -391,6 +391,27 @@ export async function pushLitSourcesFile(content: string, message: string): Prom
   await pushJsonFileWithRetry(LIT_PATH, content, message, litShaRef, "fonti-letterarie.json");
 }
 
+// ── Overlay lessico cultuale / LARES (lessico-lares-overlay.json) ─────
+const LESSICO_LARES_PATH = "lessico-lares-overlay.json";
+const lessicoLaresShaRef: ShaRef = { sha: null };
+
+export async function pullLessicoLaresFile(): Promise<string | null> {
+  const url = `${GITHUB_API}/repos/${REPO}/contents/${LESSICO_LARES_PATH}?ref=${encodeURIComponent(BRANCH)}`;
+  const res = await fetch(url, { headers: headers() });
+  if (res.status === 404) { lessicoLaresShaRef.sha = null; return null; }
+  if (!res.ok) throw new Error(`GitHub get lessico-lares-overlay.json fallita (${res.status}): ${await res.text()}`);
+  const data = await res.json();
+  lessicoLaresShaRef.sha = data.sha || null;
+  if (data.encoding !== "base64" || typeof data.content !== "string") {
+    throw new Error("Formato risposta inatteso per lessico-lares-overlay.json");
+  }
+  return base64ToUtf8(data.content);
+}
+
+export async function pushLessicoLaresFile(content: string, message: string): Promise<void> {
+  await pushJsonFileWithRetry(LESSICO_LARES_PATH, content, message, lessicoLaresShaRef, "lessico-lares-overlay.json");
+}
+
 // ── Redeploy automatico del sito statico dopo un salvataggio ──────────
 // Vedi commento gemello in githubStorage.ts: il workflow di deploy vive
 // su un repository di CODICE separato (DEPLOY_REPO) e non parte mai da

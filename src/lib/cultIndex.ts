@@ -9,8 +9,9 @@
  */
 
 import { Monumento, CultAttestation } from "../types";
-import { CULT_FAMILIES, lemmaRefFor, lookupCultLemma, toolboxForLemma } from "./cultLexicon";
-import { LARES_TOOLBOX, ToolboxMarker, toolboxLabel } from "./laresToolbox";
+import { CULT_FAMILIES } from "./cultLexicon";
+import { ToolboxItem, ToolboxMarker } from "./laresToolbox";
+import { ResolvedVocab, buildLessicoLares } from "./lessicoLaresOverlay";
 
 export interface CultSchedaRef {
   scheda: string;
@@ -76,13 +77,13 @@ export interface CultIndex {
 
 /**
  * Ordine di griglia: item, poi categoria, poi sottocategoria, come stanno nel
- * documento LARES. Serve a non mostrare i percorsi in ordine di frequenza, che
+ * toolbox risolto. Serve a non mostrare i percorsi in ordine di frequenza, che
  * spezzerebbe la lettura della griglia.
  */
-const PATH_ORDER: Map<string, number> = (() => {
+function buildPathOrder(toolbox: ToolboxItem[]): Map<string, number> {
   const m = new Map<string, number>();
   let i = 0;
-  for (const item of LARES_TOOLBOX) {
+  for (const item of toolbox) {
     m.set(item.id, i++);
     for (const cat of item.categorie) {
       m.set(`${item.id}/${cat.id}`, i++);
@@ -90,15 +91,17 @@ const PATH_ORDER: Map<string, number> = (() => {
     }
   }
   return m;
-})();
+}
 
 const FAMILY_LABEL = new Map(CULT_FAMILIES.map(f => [f.id, f]));
 
 export function buildCultIndex(
   monumenti: Monumento[],
-  opts: { regione?: string } = {},
+  opts: { regione?: string; vocab?: ResolvedVocab } = {},
 ): CultIndex {
   const wantRegion = (opts.regione || "").trim();
+  const vocab = opts.vocab ?? buildLessicoLares();
+  const PATH_ORDER = buildPathOrder(vocab.toolbox);
 
   // lemma → stats accumulate
   const lemmaMap = new Map<string, {
@@ -131,7 +134,7 @@ export function buildCultIndex(
       const key = a.lemma || `(${a.family})`;
       let entry = lemmaMap.get(key);
       if (!entry) {
-        const known = lookupCultLemma(a.lemma);
+        const known = vocab.lookupLemma(a.lemma);
         entry = {
           lemma: a.lemma || key,
           family: a.family || known?.family || "",
@@ -169,18 +172,18 @@ export function buildCultIndex(
       lemma: e.lemma,
       family: e.family,
       subFunction: e.subFunction,
-      lemmaRef: lemmaRefFor(e.lemma),
+      lemmaRef: vocab.lemmaRefFor(e.lemma),
       forms: Array.from(e.formCounts.entries())
         .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
         .map(([f]) => f),
       count: e.refs.length,
       schedeCount: e.schede.size,
       refs: e.refs.sort((a, b) => a.id - b.id),
-      toolbox: pathOf(e.pathCounts, e.lemma),
+      toolbox: pathOf(e.pathCounts, e.lemma, vocab),
     }))
     .sort((a, b) => b.count - a.count || a.lemma.localeCompare(b.lemma));
 
-  const families: CultFamilyStats[] = CULT_FAMILIES.map(f => {
+  const families: CultFamilyStats[] = vocab.families.filter(f => !f.deprecated).map(f => {
     const ls = lemmata.filter(l => l.family === f.id);
     const schede = new Set<string>();
     ls.forEach(l => l.refs.forEach(r => schede.add(r.scheda)));
@@ -194,8 +197,8 @@ export function buildCultIndex(
     };
   });
 
-  // lemmi con famiglia fuori dai 5 id noti (non dovrebbe capitare): raccolti a parte
-  const knownIds = new Set<string>(CULT_FAMILIES.map(f => f.id));
+  // lemmi con famiglia fuori da quelle note (non dovrebbe capitare): raccolti a parte
+  const knownIds = new Set<string>(vocab.families.map(f => f.id));
   const orphans = lemmata.filter(l => !knownIds.has(l.family));
   if (orphans.length > 0) {
     const schede = new Set<string>();
@@ -228,7 +231,7 @@ export function buildCultIndex(
       return {
         key,
         marker,
-        label: toolboxLabel(marker),
+        label: vocab.toolboxLabel(marker),
         count: ls.reduce((s, l) => s + l.count, 0),
         schedeCount: schede.size,
         lemmata: ls.sort((a, b) => b.count - a.count || a.lemma.localeCompare(b.lemma)),
@@ -253,13 +256,13 @@ export function buildCultIndex(
  * correggere il default), altrimenti quello della tabella. Undefined se il
  * lemma non ne ha (es. χαίρω, χρηστὸς χαῖρε).
  */
-function pathOf(pathCounts: Map<string, number>, lemma: string): ToolboxMarker | undefined {
+function pathOf(pathCounts: Map<string, number>, lemma: string, vocab: ResolvedVocab): ToolboxMarker | undefined {
   const top = Array.from(pathCounts.entries()).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))[0];
   if (top) {
     const parti = top[0].split("/").filter(Boolean);
     if (parti.length > 0) return { item: parti[0], subtype: parti.slice(1) };
   }
-  const derived = toolboxForLemma(lemma);
+  const derived = vocab.toolboxForLemma(lemma);
   return derived ? { item: derived.item, subtype: [...derived.subtype] } : undefined;
 }
 

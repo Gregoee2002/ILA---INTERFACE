@@ -13,6 +13,9 @@ import {
   wrapSlice, unwrapElement, removeElement, updateElementAttrs, appendElement, insertAtPoint,
   validateEditionTokens, scanEpithetIssues, MARKUP_ACTIONS, DIVINE_KEYS,
 } from '../lib/leidenMarkup';
+import { ResolvedVocab, buildLessicoLares } from '../lib/lessicoLaresOverlay';
+import { caricaVocabCondiviso } from '../lib/lessicoLaresStore';
+import { ToolboxMarker } from '../lib/laresToolbox';
 
 /* ================================================================
  * EditionMarkupEditor — inserimento assistito Leiden/EpiDoc
@@ -115,6 +118,12 @@ export const EditionMarkupEditor: React.FC<Props> = ({ value, onChange, anepigra
   const [parseError, setParseError] = useState(() => safeParseEdition(value) === null);
   const [menu, setMenu] = useState<MenuState | null>(null);
   const [pop, setPop] = useState<ElPopover | null>(null);
+  const [vocab, setVocab] = useState<ResolvedVocab>(() => buildLessicoLares());
+  useEffect(() => {
+    let vivo = true;
+    caricaVocabCondiviso().then(({ vocab: v }) => { if (vivo) setVocab(v); });
+    return () => { vivo = false; };
+  }, []);
   const [caret, setCaret] = useState<CaretPoint | null>(null);
   const [tab, setTab] = useState<'anteprima' | 'xml'>('anteprima');
   const [xmlDraft, setXmlDraft] = useState<string | null>(null);
@@ -468,7 +477,7 @@ export const EditionMarkupEditor: React.FC<Props> = ({ value, onChange, anepigra
         {menu && <MarkupMenu menu={menu} setMenu={setMenu} onApply={applyAction} onPick={pickAction} />}
       </AnimatePresence>
       <AnimatePresence>
-        {pop && <ElementPopover pop={pop} onClose={() => setPop(null)} onUnwrap={doUnwrap} onRemove={doRemove} onUpdate={doUpdateAttrs} />}
+        {pop && <ElementPopover pop={pop} vocab={vocab} onClose={() => setPop(null)} onUnwrap={doUnwrap} onRemove={doRemove} onUpdate={doUpdateAttrs} />}
       </AnimatePresence>
     </div>
   );
@@ -806,13 +815,57 @@ const MarkupMenu: React.FC<{
 /* Popover per elementi esistenti                                    */
 /* ================================================================ */
 
+const POP_SELECT = 'bg-white/10 border border-white/15 rounded-lg px-2 py-1 text-xs text-white font-mono focus:outline-none focus:ring-1 focus:ring-accent/50';
+
+/** Selezione a cascata item → categoria → sottocategoria, per il popover (tema scuro). */
+const PercorsoPickerPop: React.FC<{
+  vocab: ResolvedVocab;
+  value?: ToolboxMarker;
+  onChange: (m: ToolboxMarker | null) => void;
+}> = ({ vocab, value, onChange }) => {
+  const itemId = value?.item || '';
+  const catId = value?.subtype[0] || '';
+  const subId = value?.subtype[1] || '';
+  const item = vocab.toolbox.find(i => i.id === itemId);
+  const cat = item?.categorie.find(c => c.id === catId);
+  return (
+    <div className="flex flex-col gap-1.5">
+      <select value={itemId} onChange={e => onChange(e.target.value ? { item: e.target.value, subtype: [] } : null)} className={POP_SELECT}>
+        <option value="">— nessun item —</option>
+        {vocab.toolbox.filter(i => !i.deprecated).map(i => <option key={i.id} value={i.id}>{i.label}</option>)}
+      </select>
+      {item && item.categorie.length > 0 && (
+        <select
+          value={catId}
+          onChange={e => onChange(e.target.value ? { item: itemId, subtype: [e.target.value] } : { item: itemId, subtype: [] })}
+          className={POP_SELECT}
+        >
+          <option value="">(categoria)</option>
+          {item.categorie.filter(c => !c.deprecated).map(c => <option key={c.id} value={c.id}>{c.label}</option>)}
+        </select>
+      )}
+      {cat && cat.sub.length > 0 && (
+        <select
+          value={subId}
+          onChange={e => onChange(e.target.value ? { item: itemId, subtype: [catId, e.target.value] } : { item: itemId, subtype: [catId] })}
+          className={POP_SELECT}
+        >
+          <option value="">(sottocategoria)</option>
+          {cat.sub.filter(s => !s.deprecated).map(s => <option key={s.id} value={s.id}>{s.label}</option>)}
+        </select>
+      )}
+    </div>
+  );
+};
+
 const ElementPopover: React.FC<{
   pop: ElPopover;
+  vocab: ResolvedVocab;
   onClose: () => void;
   onUnwrap: () => void;
   onRemove: () => void;
   onUpdate: (attrs: Record<string, string>) => void;
-}> = ({ pop, onClose, onUnwrap, onRemove, onUpdate }) => {
+}> = ({ pop, vocab, onClose, onUnwrap, onRemove, onUpdate }) => {
   const [attrs, setAttrs] = useState<Record<string, string>>({ ...pop.token.attrs });
   const vw = typeof window !== 'undefined' ? window.innerWidth : 1200;
   const vh = typeof window !== 'undefined' ? window.innerHeight : 800;
@@ -822,10 +875,27 @@ const ElementPopover: React.FC<{
   const flipUp = spaceBelow < 180 && pop.y > POP_H;
   const top = flipUp ? Math.max(8, pop.y - POP_H - 12) : Math.min(pop.y + 8, vh - 60);
   const isDivine = pop.token.name === 'persName' && pop.token.attrs.type === 'divine';
-  const editable = Object.keys(attrs);
+  // parola di lessico cultuale: <w lemma ana>
+  const isCultWord = pop.token.name === 'w' && 'lemma' in pop.token.attrs;
+  // marcatura diretta di un percorso del toolbox LARES: <rs type="item" subtype="cat sub">
+  const toolboxItemId = pop.token.name === 'rs' ? pop.token.attrs.type : undefined;
+  const isToolboxPath = !!toolboxItemId && vocab.toolbox.some(i => i.id === toolboxItemId);
+  // lemma/ana (parola cultuale) e type/subtype (percorso toolbox) hanno un
+  // controllo strutturato dedicato più sotto, invece del campo testo grezzo.
+  const structured = new Set<string>([
+    ...(isCultWord ? ['lemma', 'ana'] : []),
+    ...(isToolboxPath ? ['type', 'subtype'] : []),
+  ]);
+  const editable = Object.keys(attrs).filter(k => !structured.has(k));
   const forbidden = (k: string) =>
     (pop.token.name === 'persName' && k === 'nymRef') ||
     (pop.token.name === 'rs' && (k === 'nymRef' || k === 'key'));
+  const setAttr = (k: string, v: string) => setAttrs(a => ({ ...a, [k]: v }));
+  const currentFamily = (attrs.ana || '').split(/\s+/).map(s => s.replace(/^#/, '')).find(f => vocab.families.some(fam => fam.id === f)) || '';
+  const hasFormula = /#formula\b/.test(attrs.ana || '');
+  const currentMarker: ToolboxMarker | undefined = isToolboxPath
+    ? { item: toolboxItemId!, subtype: (attrs.subtype || '').split(/\s+/).filter(Boolean) }
+    : undefined;
 
   return createPortal(
     <motion.div
@@ -843,6 +913,54 @@ const ElementPopover: React.FC<{
       </div>
 
       <div className="space-y-2">
+        {isCultWord && (
+          <>
+            <div>
+              <label className="block text-[10px] font-sans font-semibold uppercase tracking-[0.12em] text-white/60 mb-1">lemma (@lemma)</label>
+              <input
+                value={attrs.lemma || ''}
+                list="dl-cult-lemmata"
+                onChange={e => {
+                  const lemma = e.target.value;
+                  const known = vocab.lookupLemma(lemma);
+                  setAttrs(a => ({
+                    ...a,
+                    lemma,
+                    ...(known ? { ana: hasFormula ? `#${known.family} #formula` : `#${known.family}` } : {}),
+                    ...(vocab.lemmaRefFor(lemma) ? { lemmaRef: vocab.lemmaRefFor(lemma)! } : {}),
+                  }));
+                }}
+                className="w-full bg-white/10 border border-white/15 rounded-lg px-2.5 py-1.5 text-xs text-white font-mono focus:outline-none focus:ring-1 focus:ring-accent/50"
+              />
+              <datalist id="dl-cult-lemmata">{vocab.lemmi.filter(l => !l.deprecated).map(l => <option key={l.lemma} value={l.lemma} />)}</datalist>
+            </div>
+            <div>
+              <label className="block text-[10px] font-sans font-semibold uppercase tracking-[0.12em] text-white/60 mb-1">famiglia (@ana)</label>
+              <select
+                value={currentFamily}
+                onChange={e => setAttr('ana', hasFormula ? `#${e.target.value} #formula` : `#${e.target.value}`)}
+                className="w-full bg-white/10 border border-white/15 rounded-lg px-2.5 py-1.5 text-xs text-white font-mono focus:outline-none focus:ring-1 focus:ring-accent/50"
+              >
+                <option value="">—</option>
+                {vocab.families.filter(f => !f.deprecated).map(f => <option key={f.id} value={f.id}>{f.label}</option>)}
+              </select>
+              <label className="flex items-center gap-1.5 mt-1.5 text-[10px] font-sans text-white/60">
+                <input type="checkbox" checked={hasFormula} onChange={e => setAttr('ana', e.target.checked ? `#${currentFamily} #formula` : `#${currentFamily}`)} />
+                #formula (parola in locuzione fissa)
+              </label>
+            </div>
+          </>
+        )}
+        {isToolboxPath && (
+          <div>
+            <label className="block text-[10px] font-sans font-semibold uppercase tracking-[0.12em] text-white/60 mb-1">percorso toolbox LARES</label>
+            <PercorsoPickerPop
+              vocab={vocab}
+              value={currentMarker}
+              onChange={m => { setAttr('type', m?.item || ''); setAttr('subtype', (m?.subtype || []).join(' ')); }}
+            />
+          </div>
+        )}
         {editable.map(k => (
           <div key={k}>
             <label className="block text-[10px] font-sans font-semibold uppercase tracking-[0.12em] text-white/60 mb-1">{k}</label>

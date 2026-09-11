@@ -14,7 +14,8 @@
 // checkout — comportamento precedente, invariato.
 import fs from "fs";
 import path from "path";
-import { isGitHubConfigured, pullCorpusFromGitHub, pullLitSourcesFileFromGitHub } from "../src/lib/githubStorage";
+import { isGitHubConfigured, pullCorpusFromGitHub, pullLitSourcesFileFromGitHub, pullLessicoLaresFileFromGitHub } from "../src/lib/githubStorage";
+import { validateOverlay } from "../src/lib/lessicoLaresOverlay";
 
 const CORPUS_DIR = path.join(process.cwd(), "src", "data", "corpus");
 
@@ -84,6 +85,31 @@ async function main() {
   } catch (e: any) {
     if (fs.existsSync(litOut)) fs.unlinkSync(litOut);
     console.warn(`Fonti letterarie: scatto non generato (${e.message || e}); si usa il seme compilato.`);
+  }
+
+  // ── Overlay lessico cultuale / LARES ──────────────────────────────────
+  // Stessa logica: nessun overlay sulla repo dati non è un errore, la vista
+  // resta sul solo seed compilato (cultLexicon.ts / laresToolbox.ts). Un
+  // overlay incoerente (fallisce validateOverlay) non va in produzione: si
+  // scarta e si tiene lo scatto precedente/il seed, con un avviso in build.
+  const vocabOut = path.join(outDir, "lessico-lares-overlay.json");
+  try {
+    const raw = await pullLessicoLaresFileFromGitHub();
+    if (raw) {
+      const overlay = JSON.parse(raw);
+      const errs = validateOverlay(overlay);
+      if (errs.length > 0) {
+        console.warn(`Vocabolario lessico/LARES: overlay incoerente, scatto NON aggiornato:\n  - ${errs.join("\n  - ")}`);
+      } else {
+        fs.writeFileSync(vocabOut, JSON.stringify(overlay, null, 2), "utf-8");
+        console.log(`Vocabolario lessico/LARES: scatto aggiornato → ${vocabOut}`);
+      }
+    } else {
+      if (fs.existsSync(vocabOut)) fs.unlinkSync(vocabOut);
+      console.log("Vocabolario lessico/LARES: nessun overlay sulla repo dati, si usa il seed compilato.");
+    }
+  } catch (e: any) {
+    console.warn(`Vocabolario lessico/LARES: scatto non generato (${e.message || e}); si usa il seed compilato.`);
   }
 }
 

@@ -33,7 +33,8 @@
 import { xmlToMonumenti, monumentiToXml } from "./xmlUtils";
 import { buildSearchIndex, searchMonumenti } from "./searchIndex";
 import MiniSearch from "minisearch";
-import { pullAllCorpusFiles, pushCorpusFile, deleteCorpusFile, testGitHubAccess, setStoredToken, clearStoredToken, pullFlagsFile, pushFlagsFile, pullBugsFile, pushBugsFile, pullIconographyVocabFile, pushIconographyVocabFile, pullLitSourcesFile, pushLitSourcesFile, scheduleRedeploy } from "./githubStorageBrowser";
+import { pullAllCorpusFiles, pushCorpusFile, deleteCorpusFile, testGitHubAccess, setStoredToken, clearStoredToken, pullFlagsFile, pushFlagsFile, pullBugsFile, pushBugsFile, pullIconographyVocabFile, pushIconographyVocabFile, pullLitSourcesFile, pushLitSourcesFile, pullLessicoLaresFile, pushLessicoLaresFile, scheduleRedeploy } from "./githubStorageBrowser";
+import { validateOverlay } from "./lessicoLaresOverlay";
 import { EntryRegistro, BugReport } from "../types";
 import { normalizeRegistro } from "./registroMigration";
 import { mergeIconographyOverrides } from "./iconographyLabels";
@@ -62,6 +63,10 @@ let iconographyVocabStore: Record<string, string> = {};
 // archivio»: il client usa allora il seme compilato nel bundle
 // (src/data/fontiLetterarie.ts). Vedi litStore.ts.
 let litStore: string | null = null;
+// Overlay lessico cultuale / LARES: come le fonti letterarie ha uno scatto
+// statico (public/lessico-lares-overlay.json), perché la vista «Lessico
+// cultuale» dev'essere leggibile da chiunque. `null` = nessun overlay → seed.
+let lessicoLaresStore: string | null = null;
 
 export function isEditingUnlocked(): boolean {
   return canWrite;
@@ -429,6 +434,7 @@ async function handleRequest(url: URL, init: RequestInit | undefined): Promise<R
           const remoteVocab = await pullIconographyVocabFile();
           iconographyVocabStore = remoteVocab ? JSON.parse(remoteVocab) : {};
           mergeIconographyOverrides(iconographyVocabStore);
+          lessicoLaresStore = await pullLessicoLaresFile();
           scheduleRedeploy();
         }
         return json({
@@ -586,6 +592,27 @@ async function handleRequest(url: URL, init: RequestInit | undefined): Promise<R
       return json({ status: "ok", bytes: content.length, mock: mockMode });
     }
 
+    // ── Overlay lessico cultuale / LARES ─────────────────────────────
+    if (path === "/api/lessico-lares-vocab" && method === "GET") {
+      if (lessicoLaresStore === null) return new Response(null, { status: 204 });
+      return new Response(lessicoLaresStore, { status: 200, headers: { "Content-Type": "application/json" } });
+    }
+
+    if (path === "/api/lessico-lares-vocab" && method === "POST") {
+      if (!canWrite) return json({ error: "Modifica non abilitata. Sblocca l'editing con un token GitHub per aggiornare il vocabolario." }, 403);
+      const { overlay, message } = (body || {}) as { overlay?: any; message?: string };
+      if (!overlay || typeof overlay !== "object") return json({ error: "Campo 'overlay' mancante" }, 400);
+      const errs = validateOverlay(overlay);
+      if (errs.length > 0) return json({ error: "Overlay incoerente", dettagli: errs }, 400);
+      const content = JSON.stringify(overlay, null, 2);
+      lessicoLaresStore = content;
+      if (!mockMode) {
+        await pushLessicoLaresFile(content, message || "Vocabolario lessico/LARES: aggiornamento");
+        scheduleRedeploy();
+      }
+      return json({ status: "ok", bytes: content.length, mock: mockMode });
+    }
+
     if (path === "/api/translate" || path.startsWith("/api/drafts/")) {
       return json({ error: "Non disponibile nella build GitHub Pages (funzionalità AI/draft, solo in locale)" }, 501);
     }
@@ -626,6 +653,18 @@ async function loadLitSnapshot(): Promise<string | null> {
     if (!res.ok) return null;
     const text = await res.text();
     JSON.parse(text); // uno scatto illeggibile equivale a nessuno scatto
+    return text;
+  } catch {
+    return null;
+  }
+}
+
+async function loadLessicoLaresSnapshot(): Promise<string | null> {
+  try {
+    const res = await fetch(`${import.meta.env.BASE_URL}lessico-lares-overlay.json`);
+    if (!res.ok) return null;
+    const text = await res.text();
+    JSON.parse(text);
     return text;
   } catch {
     return null;
@@ -766,6 +805,7 @@ export async function unlockEditing(token: string): Promise<{ ok: boolean; detai
     flagsStore = [];
     bugsStore = [];
     iconographyVocabStore = {};
+    lessicoLaresStore = null;
     canWrite = true;
     return { ok: true, detail: "Modalità mock: 25 schede fittizie, nessuna chiamata a GitHub." };
   }
@@ -791,6 +831,7 @@ export async function unlockEditing(token: string): Promise<{ ok: boolean; detai
     // uno scatto vecchio quanto l'ultimo deploy e si sovrascriverebbero le
     // modifiche di un'altra sessione.
     litStore = await pullLitSourcesFile();
+    lessicoLaresStore = await pullLessicoLaresFile();
     canWrite = true;
     return result;
   } catch (e: any) {
@@ -810,6 +851,7 @@ export async function lockEditing(): Promise<void> {
   bugsStore = [];
   iconographyVocabStore = {};
   litStore = await loadLitSnapshot();
+  lessicoLaresStore = await loadLessicoLaresSnapshot();
   updateSearchIndex();
 }
 
@@ -823,6 +865,7 @@ export async function installApiShim(): Promise<void> {
 
   corpusStore = await loadSnapshot();
   litStore = await loadLitSnapshot();
+  lessicoLaresStore = await loadLessicoLaresSnapshot();
   updateSearchIndex();
 
   const originalFetch = window.fetch.bind(window);

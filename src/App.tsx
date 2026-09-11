@@ -62,6 +62,7 @@ import { ErrorBoundary } from './components/ErrorBoundary';
 import { leggiPermalink, scriviPermalink } from './lib/permalink';
 const CooccurrenceHeatmap = lazy(() => import('./components/CooccurrenceHeatmap').then(m => ({ default: m.CooccurrenceHeatmap })));
 const CultLexiconPanel = lazy(() => import('./components/CultLexiconPanel').then(m => ({ default: m.CultLexiconPanel })));
+const LessicoLaresEditor = lazy(() => import('./components/LessicoLaresEditor').then(m => ({ default: m.LessicoLaresEditor })));
 const LiterarySourcesPanel = lazy(() => import('./components/LiterarySourcesPanel').then(m => ({ default: m.LiterarySourcesPanel })));
 import { LiteraryEchoes } from './components/LiteraryEchoes';
 // Editor a sezioni: pesante e usato solo da chi ha sbloccato la modifica.
@@ -90,7 +91,7 @@ interface SearchResult {
   matchInSupplied: boolean;
 }
 
-type AppView = 'home' | 'catalog' | 'sources' | 'stats' | 'timeline' | 'health' | 'map' | 'heatmap' | 'cult' | 'editor' | 'review' | 'flags' | 'bugs' | 'biblio';
+type AppView = 'home' | 'catalog' | 'sources' | 'stats' | 'timeline' | 'health' | 'map' | 'heatmap' | 'cult' | 'editor' | 'review' | 'flags' | 'bugs' | 'biblio' | 'lessico-lares';
 
 // true sulla build GitHub Pages (vedi vite.config.ts / apiShim.ts): niente
 // server.ts, quindi le funzionalità che dipendevano da Gemini AI o dalla
@@ -6529,6 +6530,15 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
               monumenti={monumenti}
               onSelectMonumento={(m) => { setSelectedMonumento(m); setActiveView('catalog'); }}
               onVaiAllaFonte={(id) => { setFonteTarget(id); setActiveView('sources'); setHasNavigated(true); }}
+              canWrite={effectiveAdmin}
+              onApriVocabolario={() => setActiveView('lessico-lares')}
+            />
+          )}
+          {activeView === 'lessico-lares' && effectiveAdmin && (
+            <LessicoLaresEditor
+              monumenti={monumenti}
+              onSelectMonumento={(m) => { setSelectedMonumento(m); setActiveView('catalog'); }}
+              onChiudi={() => setActiveView('cult')}
             />
           )}
           {activeView === 'sources' && (

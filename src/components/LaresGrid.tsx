@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { cn } from '../lib/utils';
-import { LARES_TOOLBOX, ToolboxFonte, ToolboxItem, itemColor, toolboxItem } from '../lib/laresToolbox';
+import { ToolboxFonte, ToolboxItem, itemColor } from '../lib/laresToolbox';
 import { CultToolboxStats, CultLemmaStats } from '../lib/cultIndex';
 import { ChevronRight } from 'lucide-react';
 
@@ -12,6 +12,8 @@ import { ChevronRight } from 'lucide-react';
  */
 
 interface Props {
+  /** griglia risolta (seed ⊕ overlay). */
+  toolbox: ToolboxItem[];
   /** percorsi attestati, in ordine di griglia, già filtrati. */
   percorsi: CultToolboxStats[];
   senzaPercorso: CultLemmaStats[];
@@ -42,9 +44,9 @@ export const Segno: React.FC<{ fonte?: ToolboxFonte }> = ({ fonte }) =>
   ) : null;
 
 /** La fonte della voce più profonda del percorso. */
-const fonteDi = (key: string): ToolboxFonte | undefined => {
+const fonteDi = (toolbox: ToolboxItem[], key: string): ToolboxFonte | undefined => {
   const [itemId, catId, subId] = key.split('/');
-  const item = toolboxItem(itemId);
+  const item = toolbox.find(i => i.id === itemId);
   const cat = item?.categorie.find(c => c.id === catId);
   const sub = cat?.sub.find(s => s.id === subId);
   return sub?.fonte || cat?.fonte;
@@ -60,7 +62,7 @@ interface Riga {
   stats?: CultToolboxStats;
 }
 
-export const LaresGrid: React.FC<Props> = ({ percorsi, senzaPercorso, renderLemmaRow, atts, letterari }) => {
+export const LaresGrid: React.FC<Props> = ({ toolbox, percorsi, senzaPercorso, renderLemmaRow, atts, letterari }) => {
   const [mostraVuoti, setMostraVuoti] = useState(false);
   const [chiusi, setChiusi] = useState<Set<string>>(new Set());
   const toggle = (k: string) =>
@@ -82,7 +84,7 @@ export const LaresGrid: React.FC<Props> = ({ percorsi, senzaPercorso, renderLemm
   const righeAttestate = (itemId: string): Riga[] =>
     percorsi
       .filter(p => p.marker.item === itemId)
-      .map(p => ({ key: p.key, label: etichettaCoda(p.label), fonte: fonteDi(p.key), stats: p }));
+      .map(p => ({ key: p.key, label: etichettaCoda(p.label), fonte: fonteDi(toolbox, p.key), stats: p }));
 
   const righeComplete = (item: ToolboxItem): Riga[] => {
     const out: Riga[] = [];
@@ -157,7 +159,7 @@ export const LaresGrid: React.FC<Props> = ({ percorsi, senzaPercorso, renderLemm
         </button>
       </div>
 
-      {LARES_TOOLBOX.map(item => {
+      {toolbox.filter(item => !item.deprecated).map(item => {
         const righe = mostraVuoti ? righeComplete(item) : righeAttestate(item.id);
         const conAtt = righe.filter(r => r.stats);
         if (righe.length === 0 || (!mostraVuoti && conAtt.length === 0)) return null;
