@@ -434,6 +434,26 @@ delle singole mani che hanno contribuito a una voce resta così parte
 integrante della scheda, anziché affidata alla memoria di chi coordina
 il lavoro editoriale.
 
+A complemento della revisione manuale si è successivamente introdotta
+anche una procedura di verifica sistematica, pensata per controllare
+l'affidabilità della trascrizione rispetto alla fonte a stampa anziché
+limitarsi a presumerla. La procedura confronta, voce per voce, il testo
+greco già codificato nel corpus con una nuova estrazione ottica della
+pagina a stampa corrispondente; per contenere il rumore proprio del
+riconoscimento ottico applicato a un alfabeto ricco di segni diacritici,
+la pagina viene sottoposta a due motori di riconoscimento indipendenti, i
+cui errori sistematici non coincidono, e una discrepanza fra corpus e
+stampa viene segnalata come potenzialmente significativa solo quando
+entrambe le letture automatiche la confermano concordemente: un
+disaccordo rilevato da una sola delle due letture viene invece trattato
+come artefatto del riconoscimento, non come indizio di un reale errore di
+trascrizione. Una prima applicazione di questa procedura a un
+sottoinsieme rilevante del corpus ha restituito, per circa il sessanta
+per cento delle voci confrontabili, una coincidenza esatta con la fonte a
+stampa, con una mediana dell'indice di similarità superiore a 0,95: un
+riscontro quantitativo, non solo qualitativo, della cura con cui il
+corpus è stato trascritto.
+
 \screenshotplaceholder{6.5cm}{Confronto tra testo a stampa e trascrizione ottenuta tramite riconoscimento ottico}
 
 \section{Organizzazione dell'interfaccia digitale}
@@ -481,6 +501,21 @@ riferimenti compaiono come elementi cliccabili accanto agli altri
 identificativi bibliografici dell'epigrafe, così da rendere il
 passaggio verso la risorsa esterna corrispondente immediato quanto la
 consultazione di un rimando interno al corpus.
+
+Ogni vista e ogni singola scheda dispongono inoltre di un indirizzo
+stabile, ottenuto combinando la vista attiva con l'identificativo della
+scheda eventualmente aperta: un accorgimento che permette di condividere,
+salvare fra i preferiti o ritrovare, dopo un ricaricamento della pagina,
+esattamente il contenuto che si stava consultando, anche in assenza di un
+sistema di instradamento lato server --- l'interfaccia, distribuita come
+sito statico, non potrebbe altrimenti risolvere un percorso interno
+diverso dalla pagina principale. A partire dallo stesso indirizzo stabile
+è possibile comporre automaticamente un riferimento pronto per la
+citazione della scheda, comprensivo dei rimandi alle edizioni a stampa già
+riconosciute per quella voce: un'estensione naturale del principio di
+rintracciabilità già adottato altrove nel progetto, applicato questa
+volta all'atto stesso di citare una scheda anziché soltanto alla sua
+codifica filologica.
 
 La visualizzazione cronologica applica alla dimensione temporale lo
 stesso principio di trasparenza già adottato altrove nel progetto (si
@@ -923,30 +958,81 @@ due conteggi distinti, uno per le epigrafi e uno per le fonti letterarie,
 mai sommati fra loro, e i lemmi attestati soltanto nei testi letterari,
 senza alcun riscontro epigrafico, sono segnalati come tali anziché essere
 presentati con un'attestazione fittizia pari a zero. La visualizzazione
-dispone i lemmi come una serie di barre, raggruppabili per famiglia
-tematica o elencabili singolarmente per frequenza complessiva, la cui
-lunghezza non è proporzionale al numero di attestazioni ma alla sua
-radice quadrata:
+dispone i lemmi come un elenco ordinabile per famiglia lessicale o per
+frequenza complessiva, con lemma, indicatore cromatico di famiglia,
+conteggio e sotto-funzione affiancati su una stessa riga: una scelta
+volutamente sobria, coerente con il resto degli indici del corpus --- da
+quello degli epiteti a quello bibliografico --- che restano elenchi da
+scorrere e non grafici da interpretare, riservando il colore soltanto a
+ciò che è segno, come l'indicatore di famiglia o il collegamento allo
+strumento lessicografico esterno, e mai al testo del lemma stesso. Ogni
+voce consente comunque di raggiungere direttamente le singole
+attestazioni, epigrafiche o letterarie, da cui il conteggio deriva.
+
+Il lessico cultuale osserva ciascun termine da un solo lato, quello della
+famiglia lessicale a cui appartiene; ma la stessa parola può essere
+interrogata anche da un lato diverso, quello di che cosa, concretamente,
+essa nomina all'interno della pratica di culto --- un'espiazione, una
+trasgressione, una condizione di status personale. Per rendere
+interrogabile anche questo secondo aspetto si è affiancato al lessico un
+repertorio distinto, organizzato come una gerarchia di categorie e
+sottocategorie innestate su più livelli, che funziona da asse di
+classificazione indipendente e complementare rispetto alla famiglia
+lessicale: i due assi convivono sulla stessa marcatura, ma rispondono a
+domande diverse, e chi codifica un termine continua a rispondere a una
+sola domanda per volta, poiché il percorso lungo questo secondo asse è
+derivato automaticamente dal lemma stesso e non richiede una scelta
+editoriale autonoma. La griglia risultante viene mostrata per intero,
+comprese le diramazioni che il corpus non attesta ancora --- anche
+un'assenza, in questo caso, resta un dato dichiarato piuttosto che
+un'informazione taciuta --- e ogni categoria innestata porta con sé
+l'indicazione della propria origine, distinguendo quelle ereditate
+dall'inventario di partenza da quelle introdotte in fase di ampliamento
+del progetto. Le stesse due griglie sono state successivamente estese
+anche agli indici tematici già impiegati per le fonti letterarie,
+descritti in apertura di questa sottosezione, diventando così uno
+strumento di ricerca trasversale che permette di leggere lo stesso ramo
+concettuale --- ad esempio l'insieme delle espiazioni --- attraverso il
+corpus epigrafico e attraverso le testimonianze letterarie, mantenendo
+tuttavia sempre distinti, anche in questo caso, i due tipi di conteggio.
+
+In questa seconda visualizzazione, dove il numero di rami possibili è più
+alto e la frequenza delle singole diramazioni più disomogenea, si è
+scelto di tornare a una rappresentazione proporzionale, con la lunghezza
+della barra associata a ciascun ramo espressa non in proporzione diretta
+al numero di attestazioni $n$, ma alla sua radice quadrata:
 
 \[
-  \ell(A) \;\propto\; \sqrt{n(A)}
+  \ell \;\propto\; \sqrt{n}
 \]
 
-dove $n(A)$ indica il numero di attestazioni del lemma $A$. Questa scelta
-ha una motivazione puramente percettiva: alcune famiglie lessicali sono,
-per la natura stessa del materiale, molto più frequenti di altre, e una
-scala lineare le renderebbe leggibili a scapito delle famiglie più rare,
-che si ridurrebbero a barre praticamente invisibili; comprimendo la scala
-secondo la radice quadrata, le famiglie rare restano percepibili senza
-che quelle dominanti perdano la propria posizione relativa. Ogni voce
-della lista rimanda inoltre a uno strumento lessicografico greco esterno
-per la consultazione del lemma, e consente di raggiungere direttamente le
-singole attestazioni, epigrafiche o letterarie, da cui il conteggio
-deriva.
+una scelta motivata dalla stessa esigenza percettiva già incontrata
+altrove nel corpus: alcuni rami della gerarchia sono, per la natura del
+materiale, molto più frequenti di altri, e una scala lineare renderebbe
+le diramazioni più rare praticamente invisibili a fronte di quelle
+dominanti; comprimendo la scala secondo la radice quadrata, i rami meno
+frequenti restano percepibili senza che quelli dominanti perdano la
+propria posizione relativa.
+
+Come già per il vocabolario iconografico (sottosezione 5.1), anche il
+vocabolario controllato che sostiene questi due assi --- famiglie
+lessicali e categorie di classificazione --- non resta fissato una volta
+per tutte nel codice dell'applicazione, ma può essere corretto o ampliato
+attraverso un livello di correzioni distinto dall'inventario di base,
+secondo lo stesso principio di apertura già adottato per le sigle dei
+repertori bibliografici esterni, illustrato in apertura di questa
+sezione. La stessa infrastruttura ha inoltre reso possibile sostituire,
+nel modulo di codifica filologica, l'inserimento a testo libero degli
+attributi legati al lessico cultuale con una selezione guidata a partire
+dal vocabolario corrente, riducendo il rischio che un refuso o una forma
+non normalizzata sfugga proprio al controllo che un vocabolario chiuso è
+pensato per garantire.
 
 \screenshotplaceholder{8cm}{Indice delle voci della sezione dedicata alle fonti letterarie}
 
-\screenshotplaceholder{7.5cm}{Vista a barre del lessico cultuale, con attestazioni epigrafiche e letterarie a confronto}
+\screenshotplaceholder{7.5cm}{Elenco del lessico cultuale, con attestazioni epigrafiche e letterarie a confronto}
+
+\screenshotplaceholder{7.5cm}{Griglia di classificazione per categoria d'uso cultuale, con rami non attestati e confronto fra corpus epigrafico e fonti letterarie}
 
 \subsection{Ricerca}
 
