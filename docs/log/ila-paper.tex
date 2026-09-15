@@ -419,6 +419,67 @@ mancante viene stimato o integrato arbitrariamente: un'informazione non
 attestata resta dichiaratamente assente, piuttosto che essere colmata
 per congettura non verificabile.
 
+A sostegno di questo confronto sistematico con le fonti primarie è stato
+messo a punto uno strumento dedicato di collazione, che confronta
+automaticamente il testo greco trascritto in ciascuna scheda con una nuova
+lettura ottica, del tutto indipendente, della pagina corrispondente
+dell'edizione a stampa di riferimento. Coerentemente con il principio di
+verificabilità più volte richiamato in questo lavoro, lo strumento non
+scrive mai direttamente sul corpus: si limita a segnalare le divergenze
+da verificare, lasciando alla decisione editoriale se e come intervenire
+su ciascuna di esse.
+
+La messa a punto di questo strumento ha richiesto di risolvere due
+difficoltà specifiche del materiale. La prima riguarda il testo greco
+dell'edizione a stampa, che nella sua rappresentazione digitale nativa
+risultava spesso irriconoscibile --- ridotto a sequenze di caratteri privi
+di senso da un processo di conversione pensato per il solo testo latino
+--- cosicché il confronto non aveva, in partenza, nulla da collazionare sul
+lato della fonte a stampa. Si è dovuto pertanto isolare, all'interno di
+ciascuna pagina, i blocchi di testo effettivamente in caratteri greci,
+distinguendoli dal testo inglese circostante sulla base di alcuni tratti
+tipografici ricorrenti, e sottoporre soltanto quei blocchi a un
+riconoscimento ottico dedicato. La seconda difficoltà riguarda
+l'affidabilità del riconoscimento ottico in sé: una singola lettura
+commette errori sistematici e non casuali --- una medesima lettera
+confusa sistematicamente con la stessa lettera vicina nella grafia,
+anziché con esiti imprevedibili --- che, se presi alla lettera,
+farebbero apparire come divergenze dal testo a stampa fenomeni che sono
+in realtà soltanto difetti di lettura ottica. Si è scelto pertanto di
+produrre due letture indipendenti della medesima pagina, ottenute con
+motori di riconoscimento ottico distinti e dunque soggetti a errori
+sistematici differenti, e di segnalare una divergenza rispetto al corpus
+soltanto quando entrambe le letture la confermano concordemente: se una
+delle due coincide con il testo già presente in scheda, la divergenza
+dell'altra è imputabile al riconoscimento ottico e non al dato
+trascritto.
+
+Applicato per la prima volta all'intero primo volume dell'edizione a
+stampa, lo strumento ha permesso di rispondere in maniera quantitativa a
+un dubbio più volte sollevato nel corso della revisione, ossia se una
+parte consistente delle voci del corpus recasse errori di trascrizione
+non ancora individuati: la maggioranza assoluta delle schede
+confrontabili risulta coincidere esattamente con il testo a stampa, con
+un livello di somiglianza complessivo molto elevato anche per le
+restanti, ridimensionando un timore che, sulla sola base
+dell'impressione qualitativa, sarebbe stato difficile confermare o
+smentire. Lo strumento classifica inoltre le divergenze residue per
+tipologia --- una singola lettera, un numerale, un intero blocco di testo
+--- e raggruppa le sostituzioni ricorrenti tra le medesime coppie di
+caratteri, cosicché un errore sistematico del riconoscimento ottico possa
+essere corretto una volta per tutte come classe, anziché caso per caso.
+
+Un ulteriore accorgimento, complementare a questo strumento di
+collazione, riguarda la sincronizzazione dei dati tra l'ambiente di
+lavoro quotidiano e il repository che ne conserva la versione di
+riferimento: poiché un disallineamento silenzioso tra le due copie
+rischierebbe di far scomparire, senza alcun avviso, schede già corredate
+di correzioni filologiche, la procedura di sincronizzazione verifica ora
+preventivamente l'entità delle differenze tra le due copie, e si arresta
+segnalando il problema anziché procedere in automatico, qualora il
+numero di schede che risulterebbero perse superi una soglia minima di
+sicurezza.
+
 Poiché la revisione di una singola voce può coinvolgere più interventi
 distinti nel tempo --- trascrizione iniziale, correzione dell'OCR,
 integrazione filologica, revisione finale --- e non necessariamente ad
@@ -481,6 +542,21 @@ riferimenti compaiono come elementi cliccabili accanto agli altri
 identificativi bibliografici dell'epigrafe, così da rendere il
 passaggio verso la risorsa esterna corrispondente immediato quanto la
 consultazione di un rimando interno al corpus.
+
+Un ulteriore accorgimento, trasversale a tutte le sezioni descritte in
+questo capitolo, riguarda la persistenza dello stato di navigazione: la
+vista attualmente aperta e, quando pertinente, la singola scheda
+selezionata vengono ora riportate nell'indirizzo della pagina, cosicché
+un aggiornamento del browser, o l'invio dello stesso indirizzo a
+un'altra persona, restituiscano esattamente lo stesso punto di
+consultazione, anziché far ripartire la navigazione dalla schermata
+iniziale. Si tratta di un accorgimento minore nella sua realizzazione,
+ma che risolve un limite pratico non trascurabile per un progetto
+pensato anche per un uso collaborativo, in cui il rimando diretto a una
+scheda precisa --- per una verifica, per una discussione, per un
+riferimento in altro contesto --- è un'esigenza ricorrente quanto quella
+di rimando bibliografico già descritta poco sopra a proposito dei
+repertori esterni.
 
 La visualizzazione cronologica applica alla dimensione temporale lo
 stesso principio di trasparenza già adottato altrove nel progetto (si
@@ -922,31 +998,88 @@ offuscherebbe la diversa natura probatoria: ogni voce del lessico riporta
 due conteggi distinti, uno per le epigrafi e uno per le fonti letterarie,
 mai sommati fra loro, e i lemmi attestati soltanto nei testi letterari,
 senza alcun riscontro epigrafico, sono segnalati come tali anziché essere
-presentati con un'attestazione fittizia pari a zero. La visualizzazione
-dispone i lemmi come una serie di barre, raggruppabili per famiglia
-tematica o elencabili singolarmente per frequenza complessiva, la cui
-lunghezza non è proporzionale al numero di attestazioni ma alla sua
-radice quadrata:
+presentati con un'attestazione fittizia pari a zero. La lista dispone i
+lemmi in forma di elenco navigabile, raggruppabile per famiglia tematica
+o percorribile singolarmente per lemma, sullo stesso modello già
+impiegato altrove nell'interfaccia per il registro onomastico e per la
+bibliografia: non un grafico quantitativo, ma un indice da consultare. La
+famiglia di appartenenza di ciascun lemma è segnalata da un piccolo
+indicatore colorato affiancato al termine, anziché --- come in una prima
+versione di questa vista --- da un colore applicato al testo stesso, una
+scelta che privilegia la leggibilità della lista quando il numero di voci
+cresce. Accanto al lemma compaiono il conteggio delle attestazioni, la
+sotto-funzione specifica a cui è ricondotto e un rimando a uno strumento
+lessicografico greco esterno per la sua consultazione, con accesso
+diretto alle singole attestazioni, epigrafiche o letterarie, da cui il
+conteggio deriva.
 
-\[
-  \ell(A) \;\propto\; \sqrt{n(A)}
-\]
+A questa classificazione per famiglia cultuale se ne è affiancata di
+recente una seconda, del tutto indipendente dalla prima, mutuata da un
+repertorio di analisi delle religioni antiche elaborato al di fuori del
+progetto ILA. Se la famiglia risponde alla domanda su quale funzione
+cultuale svolga una parola all'interno dell'atto religioso (un voto, una
+dedica, una colpa da espiare), questa seconda classificazione risponde a
+una domanda diversa: a quale genere di realtà appartenga ciò che la
+parola designa, che si tratti di un agente divino, di un agente umano, di
+un'azione, di un'istituzione, di uno spazio o di un oggetto materiale. Le
+due letture convivono sulla stessa occorrenza marcata senza confondersi
+--- una parola che designa un tempio, ad esempio, può condividere la
+stessa famiglia cultuale di una che designa un voto, pur ricadendo in un
+ramo completamente diverso di questa seconda classificazione --- ed è
+proprio questa reciproca indipendenza a renderle, prese insieme, più
+informative di quanto lo sarebbe ciascuna presa da sola. Come già per la
+sotto-funzione descritta poco sopra, anche questo secondo percorso di
+classificazione non è una scelta editoriale ulteriore: si deriva
+automaticamente dal lemma, cosicché chi marca il testo continui a
+rispondere a una sola domanda, quella della famiglia di appartenenza,
+mentre il resto della classificazione viene calcolato dal sistema ---
+lo stesso principio, già illustrato a proposito dello strumento di
+marcatura nella sezione 3, per cui l'onere della codifica ricade il meno
+possibile su chi la esegue materialmente.
 
-dove $n(A)$ indica il numero di attestazioni del lemma $A$. Questa scelta
-ha una motivazione puramente percettiva: alcune famiglie lessicali sono,
-per la natura stessa del materiale, molto più frequenti di altre, e una
-scala lineare le renderebbe leggibili a scapito delle famiglie più rare,
-che si ridurrebbero a barre praticamente invisibili; comprimendo la scala
-secondo la radice quadrata, le famiglie rare restano percepibili senza
-che quelle dominanti perdano la propria posizione relativa. Ogni voce
-della lista rimanda inoltre a uno strumento lessicografico greco esterno
-per la consultazione del lemma, e consente di raggiungere direttamente le
-singole attestazioni, epigrafiche o letterarie, da cui il conteggio
-deriva.
+Poiché lo schema completo di questa seconda classificazione distingue
+categorie e sottocategorie in numero superiore a quelle di fatto
+attestate nel corpus di Men, l'interfaccia elenca di norma soltanto i
+percorsi che trovano effettivo riscontro nelle epigrafi, lasciando
+dietro un comando esplicito la possibilità di rivelare anche i rami che
+il corpus non ha ancora toccato: una scelta di presentazione, non di
+sostanza, che permette comunque di non nascondere quanto lo schema
+teorico preveda ma il materiale non attesti, coerentemente con il
+principio, già richiamato a proposito della visualizzazione cronologica
+(sezione 5), per cui l'assenza di un dato deve restare dichiarata e mai
+indistinguibile da una lacuna dello strumento. Ogni ramo innestato in
+questo schema per esigenze specifiche del corpus di Men, e non già
+presente nel repertorio di origine, resta inoltre segnalato come tale,
+così che chi consulta la griglia sappia sempre distinguere il nucleo
+mutuato dal modello di riferimento dalle estensioni introdotte in sede
+redazionale. Poiché la stessa struttura di classificazione è impiegata
+anche negli indici della sezione dedicata alle fonti letterarie descritta
+in apertura di questa sottosezione, l'interfaccia accosta a ciascun ramo,
+oltre al conteggio delle attestazioni epigrafiche, il numero dei passi
+letterari che vi fanno riferimento --- due conteggi tenuti sempre
+distinti e mai sommati, secondo lo stesso principio già enunciato più
+sopra per il lessico cultuale nel suo complesso ---, cosicché al
+collegamento onomastico e divino con la sottosezione 5.2, già descritto
+in apertura di questa sottosezione, se ne affianchi ora un secondo,
+costruito sull'asse di questa classificazione condivisa.
+
+Anche questo intero apparato lessicale --- famiglie, sotto-funzioni,
+lemmi, rami della seconda classificazione --- è ora amministrato
+attraverso lo stesso meccanismo di vocabolario aperto già descritto a
+proposito della sezione iconografica (sottosezione 5.1): chi dispone dei
+permessi di modifica può correggere o ampliare qualunque componente del
+vocabolario senza dover intervenire sullo schema di codifica sottostante.
+Lo strumento assistito di marcatura filologica (sezione 3) ne beneficia
+direttamente: nel marcare una parola del lessico cultuale, o un'entità
+classificata direttamente secondo la seconda classificazione, propone ora
+menu di selezione strutturati costruiti su questo stesso vocabolario, al
+posto della digitazione libera degli attributi corrispondenti, riducendo
+ulteriormente il rischio di introdurre, per semplice errore di battitura,
+un valore estraneo al vocabolario condiviso.
 
 \screenshotplaceholder{8cm}{Indice delle voci della sezione dedicata alle fonti letterarie}
 
-\screenshotplaceholder{7.5cm}{Vista a barre del lessico cultuale, con attestazioni epigrafiche e letterarie a confronto}
+\screenshotplaceholder{7.5cm}{Elenco del lessico cultuale, con la seconda classificazione e attestazioni epigrafiche e letterarie a confronto}
 
 \subsection{Ricerca}
 
@@ -1017,7 +1150,11 @@ revisione sistematica, voce per voce, delle trascrizioni derivate
 dall'edizione a stampa originaria, sulla base di un confronto diretto
 con le fonti primarie disponibili, così da ridurre progressivamente la
 dipendenza dal testo di Lane e trasformarlo, per ciascuna voce
-revisionata, da testo sottostante a semplice riferimento bibliografico.
+revisionata, da testo sottostante a semplice riferimento bibliografico:
+un lavoro che, come illustrato nella sezione 4, dispone ora di uno
+strumento automatico di collazione capace di orientarne le priorità, e i
+cui primi risultati quantitativi confermano l'affidabilità complessiva
+delle trascrizioni già presenti nel corpus.
 Dall'altro lato si prevede di ampliare ulteriormente il vocabolario
 controllato utilizzato per la descrizione iconografica, e di
 sviluppare strumenti di confronto comparativo tra le diverse
