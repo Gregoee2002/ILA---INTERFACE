@@ -1092,11 +1092,6 @@ export const LiterarySourcesPanel: React.FC<Props> = ({ editingUnlocked, apriTes
         {/* ══ INDICI ══ */}
         {vista === 'indici' && (
           <div className="max-w-6xl mx-auto w-full px-6 md:px-10 py-6">
-            <p className="font-serif italic text-[14px] text-muted/80 max-w-3xl leading-relaxed mb-5">
-              Le rubriche trasversali, sul modello degli indici del lessico LARES. Opere, autori, termini e
-              ambiti vengono dai campi delle schede; divinità, epiteti, lessico cultuale e toolbox vengono
-              invece dal <em>markup del testo</em> — le stesse marche con cui è codificato il corpus epigrafico.
-            </p>
             <RubricheIndici indici={indici} testimonia={tutte} tab={indiceTab} setTab={setIndiceTab} onGo={setAperto} />
           </div>
         )}
