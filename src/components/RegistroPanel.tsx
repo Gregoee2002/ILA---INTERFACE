@@ -37,7 +37,8 @@ export function RegistroPanel({ registri, loading, onResolve, onReopen, onSelect
   }
 
   return (
-    <div className="flex-1 overflow-y-auto p-6 md:p-10 max-w-3xl mx-auto w-full">
+    <div className="flex-1 overflow-y-auto">
+      <div className="p-6 md:p-10 max-w-3xl mx-auto w-full">
       <div className="mb-6">
         <div className="text-[10px] font-sans font-bold uppercase tracking-[0.22em] text-accent/70 mb-2 flex items-center gap-1.5">
           <NotebookPen className="h-3 w-3" /> Registro collaboratori
@@ -107,6 +108,7 @@ export function RegistroPanel({ registri, loading, onResolve, onReopen, onSelect
           );
         })}
       </ul>
+      </div>
     </div>
   );
 }

@@ -233,7 +233,8 @@ export const LessicoLaresEditor: React.FC<Props> = ({ monumenti, onSelectMonumen
   }).sort((a, b) => a.lemma.localeCompare(b.lemma));
 
   return (
-    <div className="flex-1 overflow-y-auto p-6 md:p-10 max-w-5xl mx-auto w-full">
+    <div className="flex-1 overflow-y-auto">
+      <div className="p-6 md:p-10 max-w-5xl mx-auto w-full">
       <div className="flex items-start justify-between gap-3 mb-5">
         <div>
           <button onClick={onChiudi} className="text-[10px] font-sans font-bold uppercase tracking-widest text-muted hover:text-accent flex items-center gap-1 mb-1.5">
@@ -531,6 +532,7 @@ export const LessicoLaresEditor: React.FC<Props> = ({ monumenti, onSelectMonumen
           </div>
         </div>
       )}
+      </div>
     </div>
   );
 };

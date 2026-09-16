@@ -210,7 +210,8 @@ export function BibliographyIndex({ monumenti, onApply, onSelectMonumento, progr
   const busy = applying || ruleBusy !== null;
 
   return (
-    <div className="flex-1 overflow-y-auto p-6 md:p-10 max-w-4xl mx-auto w-full">
+    <div className="flex-1 overflow-y-auto">
+      <div className="p-6 md:p-10 max-w-4xl mx-auto w-full">
       <div className="mb-6">
         <div className="text-[10px] font-sans font-bold uppercase tracking-[0.22em] text-accent/70 mb-2 flex items-center gap-1.5">
           <BookMarked className="h-3 w-3" /> Bibliografia — censimento e modifica in blocco
@@ -364,6 +365,7 @@ export function BibliographyIndex({ monumenti, onApply, onSelectMonumento, progr
         {rows.length === 0 && (
           <div className="text-sm italic text-muted/60 py-12 text-center">Nessuna dicitura corrisponde al filtro.</div>
         )}
+      </div>
       </div>
     </div>
   );

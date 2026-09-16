@@ -297,7 +297,8 @@ export const CultLexiconPanel: React.FC<Props> = ({ monumenti, onSelectMonumento
   );
 
   return (
-    <div className="flex-1 overflow-y-auto p-6 md:p-10 max-w-4xl mx-auto w-full">
+    <div className="flex-1 overflow-y-auto">
+      <div className="p-6 md:p-10 max-w-4xl mx-auto w-full">
       <div className="mb-4 pb-2 border-b border-border/40 flex items-baseline justify-between gap-4">
         <h2 className="font-serif text-xl text-ink">
           Lessico cultuale
@@ -404,6 +405,7 @@ export const CultLexiconPanel: React.FC<Props> = ({ monumenti, onSelectMonumento
           })}
         </div>
       )}
+      </div>
     </div>
   );
 };
