@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { cn } from '../lib/utils';
 import { ToolboxFonte, ToolboxItem, itemColor } from '../lib/laresToolbox';
 import { CultToolboxStats, CultLemmaStats } from '../lib/cultIndex';
-import { ChevronRight } from 'lucide-react';
 
 /**
  * LaresGrid — gli stessi lemmi ordinati per percorso dell'Analytical Toolbox
@@ -33,13 +32,11 @@ export const Segno: React.FC<{ fonte?: ToolboxFonte }> = ({ fonte }) =>
     <span
       title={FONTE_LABEL[fonte]}
       className={cn(
-        'shrink-0 text-[9px] font-sans uppercase tracking-[0.1em] px-1 py-px rounded-sm border',
-        fonte === 'ILA'
-          ? 'text-cult border-[var(--cult)]/40'
-          : 'text-muted/60 border-border/50',
+        'shrink-0 font-serif text-[10px] align-super',
+        fonte === 'ILA' ? 'text-cult' : 'text-muted/60',
       )}
     >
-      {fonte === 'ILA' ? 'ILA' : 'LARES+'}
+      {fonte === 'ILA' ? 'ila' : 'lar'}
     </span>
   ) : null;
 
@@ -103,10 +100,10 @@ export const LaresGrid: React.FC<Props> = ({ toolbox, percorsi, senzaPercorso, r
   const renderRiga = (r: Riga) => {
     if (!r.stats) {
       return (
-        <div key={r.key} className="flex items-baseline gap-2 px-2 py-1 text-xs">
-          <span className="font-serif text-muted/40">{r.label}</span>
+        <div key={r.key} className="flex items-baseline gap-2 px-1.5 py-[3px] text-xs">
+          <span className="font-serif text-muted/60">{r.label}</span>
           <Segno fonte={r.fonte} />
-          <span className="text-muted/30">—</span>
+          <span className="text-muted/60">—</span>
         </div>
       );
     }
@@ -117,27 +114,24 @@ export const LaresGrid: React.FC<Props> = ({ toolbox, percorsi, senzaPercorso, r
       <div key={r.key}>
         <button
           onClick={() => toggle(r.key)}
-          className="w-full flex items-baseline gap-3 px-2 py-1.5 text-left rounded-sm hover:bg-sidebar/50 transition-colors"
+          className="w-full flex items-baseline gap-2 px-1.5 py-[3px] text-left rounded-sm hover:bg-sidebar/40 transition-colors"
         >
-          <span className="font-serif text-[13px] text-ink/85 shrink-0 min-w-[10rem]">{r.label}</span>
-          <span className="shrink-0 text-xs font-sans text-muted/60">
+          <span className="font-serif text-[13px] shrink-0 text-ink">{r.label}</span>
+          <Segno fonte={r.fonte} />
+          <span className="flex-1 self-center border-b border-dotted border-border/70 mx-1" />
+          <span className="shrink-0 text-xs font-sans text-muted">
             {s.lemmata.length} {s.lemmata.length === 1 ? 'lemma' : 'lemmi'} · {atts(s.count)}
           </span>
           {nTesti > 0 && (
             <span
-              className="shrink-0 text-xs font-sans text-muted/50 tabular-nums"
+              className="shrink-0 text-xs font-sans text-muted/60 tabular-nums"
               title="passi nelle fonti letterarie, contati a parte"
             >
-              +{nTesti} nei testi
+              +{nTesti}
             </span>
           )}
-          <Segno fonte={r.fonte} />
-          <span className="flex-1" />
-          <ChevronRight
-            className={cn('shrink-0 h-3.5 w-3.5 text-muted/60 self-center transition-transform', open && 'rotate-90')}
-          />
         </button>
-        {open && <div className="pl-4 space-y-0.5">{s.lemmata.map(renderLemmaRow)}</div>}
+        {open && <div className="ml-4 pl-3 my-1 border-l border-border/40">{s.lemmata.map(renderLemmaRow)}</div>}
       </div>
     );
   };
@@ -145,14 +139,14 @@ export const LaresGrid: React.FC<Props> = ({ toolbox, percorsi, senzaPercorso, r
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between gap-3 -mt-1">
-        <p className="text-xs font-sans text-muted/70">
+        <p className="font-serif italic text-[13px] text-muted">
           Gli stessi lemmi per percorso dell'Analytical Toolbox LARES, non per famiglia.
         </p>
         <button
           onClick={() => setMostraVuoti(v => !v)}
           className={cn(
-            'shrink-0 px-2.5 py-1 rounded-md border text-[10px] font-sans font-bold uppercase tracking-widest transition-colors',
-            mostraVuoti ? 'border-accent/40 bg-accent/10 text-accent' : 'border-border/50 text-muted hover:text-ink',
+            'shrink-0 font-serif text-[13px] transition-colors',
+            mostraVuoti ? 'text-accent italic' : 'text-muted hover:text-ink',
           )}
         >
           rami vuoti
@@ -167,35 +161,30 @@ export const LaresGrid: React.FC<Props> = ({ toolbox, percorsi, senzaPercorso, r
         const totLemmi = conAtt.reduce((n, r) => n + (r.stats?.lemmata.length || 0), 0);
         return (
           <section key={item.id}>
-            <div className="flex items-baseline gap-2.5 mb-2 pb-1 border-b border-border/40">
-              <span className="h-2.5 w-2.5 rounded-sm shrink-0" style={{ backgroundColor: itemColor(item.id) }} />
-              <h3
-                className={cn(
-                  'text-sm font-sans font-bold uppercase tracking-[0.15em]',
-                  conAtt.length ? 'text-ink/90' : 'text-ink/40',
-                )}
-              >
+            <div className="flex items-baseline gap-2 mb-1.5 pb-1 border-b border-border/30">
+              <span className="h-2 w-2 rounded-[1px] shrink-0 self-center" style={{ backgroundColor: itemColor(item.id) }} />
+              <h3 className={cn('font-serif text-[15px]', conAtt.length ? 'text-ink' : 'text-muted')}>
                 {item.label}
               </h3>
-              <span className="text-xs font-sans text-muted/60">
+              <span className="font-sans text-[11px] text-muted/60">
                 {conAtt.length
                   ? `${totLemmi} ${totLemmi === 1 ? 'lemma' : 'lemmi'} · ${atts(totAtt)}`
                   : 'nessuna attestazione'}
               </span>
             </div>
-            <div className="space-y-0.5">{righe.map(renderRiga)}</div>
+            <div>{righe.map(renderRiga)}</div>
           </section>
         );
       })}
 
       {senzaPercorso.length > 0 && (
         <section>
-          <div className="flex items-baseline gap-2.5 mb-2 pb-1 border-b border-border/40">
-            <span className="h-2.5 w-2.5 rounded-sm shrink-0 bg-muted/30" />
-            <h3 className="text-sm font-sans font-bold uppercase tracking-[0.15em] text-ink/70">Senza percorso</h3>
-            <span className="text-xs font-sans text-muted/60">{senzaPercorso.length}</span>
+          <div className="flex items-baseline gap-2 mb-1.5 pb-1 border-b border-border/30">
+            <span className="h-2 w-2 rounded-[1px] shrink-0 self-center bg-muted/40" />
+            <h3 className="font-serif text-[15px] text-ink">Senza percorso</h3>
+            <span className="font-sans text-[11px] text-muted/60">{senzaPercorso.length}</span>
           </div>
-          <div className="space-y-0.5">{senzaPercorso.map(renderLemmaRow)}</div>
+          <div>{senzaPercorso.map(renderLemmaRow)}</div>
         </section>
       )}
     </div>

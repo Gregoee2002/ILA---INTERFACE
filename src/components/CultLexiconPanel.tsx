@@ -8,7 +8,6 @@ import { caricaVocabCondiviso } from '../lib/lessicoLaresStore';
 import { LemmaLetterario, PercorsoLetterario, lessicoLetterario, risolviTutte, toolboxLetterario } from '../lib/litSources';
 import { LaresGrid } from './LaresGrid';
 import { caricaLitDatasetCondiviso } from '../lib/litStore';
-import { Tags, ExternalLink, ChevronRight, ChevronDown, Search, ScrollText, Pencil } from 'lucide-react';
 
 interface Props {
   monumenti: Monumento[];
@@ -25,10 +24,15 @@ type GroupBy = 'family' | 'lemma' | 'lares';
 const foldForSearch = (s: string) =>
   (s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
 
-// Stessi stili dei campi di ricerca/tendina usati altrove nell'app (indice epiteti).
+// Controlli di filtro: un filetto sotto, niente cornice né incasso. La barra
+// non deve leggersi come la toolbar di un'applicazione.
 const FIELD_BASE =
-  'bg-[var(--card)] dark:bg-black/25 border border-[var(--border)]/50 dark:border-white/5 rounded-lg font-sans text-xs outline-none shadow-inner focus:border-accent/50 focus:ring-1 focus:ring-accent/30 hover:bg-[var(--sidebar)] dark:hover:bg-black/40 transition-all duration-300';
-const FIELD_STYLE = { backgroundColor: 'var(--card)', color: 'var(--ink)' } as const;
+  'bg-transparent border-0 border-b border-border/50 rounded-none font-sans text-xs text-ink outline-none ' +
+  'focus:border-accent/60 hover:border-border transition-colors';
+
+// Tre soli grigi in tutta la sezione: testo, secondario, terziario.
+const SEC = 'text-muted';
+const TER = 'text-muted/60';
 
 export const CultLexiconPanel: React.FC<Props> = ({ monumenti, onSelectMonumento, onVaiAllaFonte, canWrite, onApriVocabolario }) => {
   const [search, setSearch] = useState('');
@@ -94,84 +98,80 @@ export const CultLexiconPanel: React.FC<Props> = ({ monumenti, onSelectMonumento
   const schede = (n: number) => `${n} ${n === 1 ? 'scheda' : 'schede'}`;
   const atts = (n: number) => `${n} att.`;
 
-  // Riga = elenco, non grafico: lemma, conteggio, sotto-funzione, Logeion. La
-  // famiglia è un pallino, non il riempimento di una barra. Stesso impianto
-  // dell'indice epiteti e della bibliografia.
+  /** Rimando, in tondo minuto: sigla, forma, riga. Separati da virgola come in un indice. */
+  const renderRimandi = (nodes: React.ReactNode[]) =>
+    nodes.map((n, i) => (
+      <React.Fragment key={i}>
+        {i > 0 && <span className={TER}>, </span>}
+        {n}
+      </React.Fragment>
+    ));
+
+  // Voce di lemma, non riga di tabella: lemma, sotto-funzione tra parentesi,
+  // conteggio a destra. Nessun colore sul testo, nessuna icona, nessun chevron.
   const renderLemmaRow = (l: CultLemmaStats) => {
     const key = `${l.family}::${l.lemma}`;
     const open = expanded.has(key);
     const lett = letterario.get(l.lemma);
     return (
-      <div key={key} className="rounded-sm">
-        <button
-          onClick={() => toggle(key)}
-          className="w-full flex items-baseline gap-3 px-2 py-1.5 text-left rounded-sm hover:bg-sidebar/50 transition-colors"
-        >
-          <span
-            className="h-1.5 w-1.5 rounded-full shrink-0 self-center"
-            style={{ backgroundColor: vocab.familyColor(l.family) }}
-            title={cultFamilyShort(l.family)}
-          />
-
-          <span
-            className="font-greek text-ink/85 text-base shrink-0 w-[8rem] truncate"
-            lang="grc"
-            title={l.lemma}
+      <div key={key}>
+        <div className="group flex items-baseline gap-2 px-1.5 py-[3px] rounded-sm hover:bg-sidebar/40 transition-colors">
+          <button
+            onClick={() => toggle(key)}
+            className="flex-1 min-w-0 flex items-baseline gap-2 text-left"
           >
-            {l.lemma}
-          </span>
-
-          <span className="shrink-0 w-10 text-right text-xs font-sans text-muted/80 tabular-nums">
-            {l.count}
-          </span>
-
-          {/* Conteggio epigrafico e conteggio letterario, separati. */}
-          <span
-            className="shrink-0 w-9 text-right text-xs font-sans tabular-nums text-muted/60"
-            title={lett ? `${lett.occorrenze.length} nei testi letterari` : undefined}
-          >
-            {lett ? `+${lett.occorrenze.length}` : ''}
-          </span>
-
-          {l.subFunction && (
-            <span className="flex-1 hidden sm:block text-xs font-serif italic text-muted/70 truncate">
-              {l.subFunction}
+            <span
+              className={cn('font-greek text-base shrink-0 transition-colors', open ? 'text-accent' : 'text-ink')}
+              lang="grc"
+            >
+              {l.lemma}
             </span>
-          )}
-          <span className="flex-1 sm:hidden" />
+
+            {l.subFunction && (
+              <span className={cn('font-serif italic text-[13px] truncate', SEC)}>
+                ({l.subFunction})
+              </span>
+            )}
+
+            {/* filetto puntinato dell'indice a stampa: lega il lemma al suo numero */}
+            <span className="flex-1 self-center border-b border-dotted border-border/70 mx-1" />
+
+            <span className={cn('shrink-0 font-sans text-xs tabular-nums', SEC)}>{l.count}</span>
+            <span
+              className={cn('shrink-0 w-8 text-right font-sans text-xs tabular-nums', TER)}
+              title={lett ? `${lett.occorrenze.length} occorrenze nei testi letterari, contate a parte` : undefined}
+            >
+              {lett ? `+${lett.occorrenze.length}` : ''}
+            </span>
+          </button>
 
           {l.lemmaRef && (
             <a
               href={l.lemmaRef}
               target="_blank"
               rel="noreferrer"
-              onClick={e => e.stopPropagation()}
-              className="shrink-0 text-accent hover:opacity-70 self-center"
               title="Logeion"
+              className="shrink-0 font-serif text-[10px] align-super text-accent/70 opacity-0 group-hover:opacity-100 focus:opacity-100 hover:text-accent transition-opacity"
             >
-              <ExternalLink className="h-3 w-3" />
+              L
             </a>
           )}
-
-          <ChevronRight
-            className={cn('shrink-0 h-3.5 w-3.5 text-muted/60 self-center transition-transform', open && 'rotate-90')}
-          />
-        </button>
+          {!l.lemmaRef && <span className="shrink-0 w-[7px]" />}
+        </div>
 
         {open && (
-          <div className="ml-5 mt-0.5 mb-1.5 px-3 py-2 rounded-sm bg-sidebar/40 border border-border/30">
-            <div className="mb-1.5">
-              <span className="text-[10px] font-sans uppercase tracking-widest text-muted/50">
-                {schede(l.schedeCount)} · {atts(l.count)}
-              </span>
+          <div className="ml-4 pl-3 my-1 border-l border-border/40">
+            <p className={cn('font-sans text-[11px] mb-1', TER)}>
+              {schede(l.schedeCount)} · {atts(l.count)}
               {l.forms.length > 0 && (
-                <span className="ml-2 font-greek text-sm text-muted/80" lang="grc">
+                <span className={cn('ml-2 font-greek text-sm', SEC)} lang="grc">
                   {l.forms.join('  ·  ')}
                 </span>
               )}
-            </div>
-            <div className="flex flex-wrap gap-x-4 gap-y-1.5">
-              {l.refs.map((r, i) => {
+            </p>
+
+            <p className="text-xs leading-relaxed">
+              {renderRimandi(l.refs.map((r, i) => {
                 const m = byId.get(r.id);
                 return (
                   <button
@@ -179,55 +179,43 @@ export const CultLexiconPanel: React.FC<Props> = ({ monumenti, onSelectMonumento
                     disabled={!m}
                     onClick={() => m && onSelectMonumento(m)}
                     title={[r.scheda, r.regione, r.line ? `r. ${r.line}` : '', r.form].filter(Boolean).join(' · ')}
-                    className={cn(
-                      'text-xs font-sans inline-flex items-baseline gap-1 transition-colors',
-                      m ? 'text-muted/80 hover:text-accent' : 'text-muted/40',
-                    )}
+                    className={cn('font-sans inline items-baseline transition-colors', m ? `${SEC} hover:text-accent` : TER)}
                   >
-                    <span className="uppercase tracking-wide">{r.scheda}</span>
-                    {r.form && <span className="font-greek text-muted/60" lang="grc">{r.form}</span>}
-                    {r.line && <span className="text-muted/40">r.{r.line}</span>}
-                    {r.cert === 'low' && <span className="text-muted/60" title="forma integrata">[ ]</span>}
-                    {r.formula && <span className="text-muted/60" title="#formula">✦</span>}
+                    <span>{r.scheda}</span>
+                    {r.form && <span className={cn('ml-1 font-greek', TER)} lang="grc">{r.form}</span>}
+                    {r.line && <span className={cn('ml-1', TER)}>r.{r.line}</span>}
+                    {r.cert === 'low' && <span className={cn('ml-1', TER)} title="forma integrata">[ ]</span>}
+                    {r.formula && <span className={cn('ml-1', TER)} title="#formula">✦</span>}
                   </button>
                 );
-              })}
-            </div>
+              }))}
+            </p>
 
             {lett && (
-              <div className="mt-2.5 pt-2 border-t border-border/30">
-                <div className="flex items-baseline gap-1.5 mb-1">
-                  <ScrollText className="h-3 w-3 shrink-0 self-center text-muted/50" />
-                  <span className="text-[10px] font-sans uppercase tracking-widest text-muted/60">
-                    Nei testi
-                  </span>
-                  <span className="text-[10px] font-sans text-muted/50 tabular-nums">
-                    {lett.occorrenze.length}
-                  </span>
+              <div className="mt-2">
+                <p className={cn('font-serif italic text-[13px] mb-0.5', SEC)}>
+                  nei testi <span className={cn('font-sans not-italic text-[11px] tabular-nums', TER)}>{lett.occorrenze.length}</span>
                   {lett.forme.length > 0 && (
-                    <span className="ml-1.5 font-greek text-sm text-muted/70" lang={lett.occorrenze[0]?.lingua}>
+                    <span className={cn('ml-2 font-greek not-italic text-sm', SEC)} lang={lett.occorrenze[0]?.lingua}>
                       {lett.forme.join('  ·  ')}
                     </span>
                   )}
-                </div>
-                <div className="flex flex-wrap gap-x-4 gap-y-1.5">
-                  {lett.occorrenze.map((o, i) => (
+                </p>
+                <p className="text-xs leading-relaxed">
+                  {renderRimandi(lett.occorrenze.map((o, i) => (
                     <button
                       key={`${o.testimoniumId}-${i}`}
                       disabled={!onVaiAllaFonte}
                       onClick={() => onVaiAllaFonte?.(o.testimoniumId)}
                       title={[o.cita, o.forma].filter(Boolean).join(' · ')}
-                      className={cn(
-                        'text-xs font-sans inline-flex items-baseline gap-1 transition-colors',
-                        onVaiAllaFonte ? 'text-muted/80 hover:text-accent' : 'text-muted/40',
-                      )}
+                      className={cn('inline transition-colors', onVaiAllaFonte ? `${SEC} hover:text-accent` : TER)}
                     >
                       <span className="font-serif italic">{o.cita}</span>
-                      {o.forma && <span className="font-greek text-muted/60" lang={o.lingua}>{o.forma}</span>}
+                      {o.forma && <span className={cn('ml-1 font-greek', TER)} lang={o.lingua}>{o.forma}</span>}
                     </button>
-                  ))}
-                </div>
-                <p className="text-[10px] font-serif italic text-muted/50 mt-1.5 leading-snug">
+                  )))}
+                </p>
+                <p className={cn('font-serif italic text-[11px] mt-1 leading-snug', TER)}>
                   Occorrenze in un testo, fuori dal conteggio delle attestazioni.
                 </p>
               </div>
@@ -253,42 +241,31 @@ export const CultLexiconPanel: React.FC<Props> = ({ monumenti, onSelectMonumento
   const renderSoloNeiTesti = (lemmi: LemmaLetterario[]) => {
     if (lemmi.length === 0) return null;
     return (
-      <div className="mt-3 pt-2.5 border-t border-dashed border-border/50">
-        <div className="flex items-baseline gap-1.5 mb-1.5 pl-2">
-          <ScrollText className="h-3 w-3 shrink-0 self-center text-muted/50" />
-          <span className="text-[10px] font-sans font-bold uppercase tracking-widest text-muted/70">
-            Solo nei testi
-          </span>
-          <span className="text-[10px] font-sans text-muted/50 tabular-nums">{lemmi.length}</span>
-          <span className="text-[11px] font-serif italic text-muted/60 ml-1">
-            mai sulla pietra
-          </span>
-        </div>
-        <div className="space-y-0.5">
+      <div className="mt-3 pt-2 border-t border-dashed border-border/50">
+        <p className={cn('font-serif italic text-[13px] mb-1 pl-1.5', SEC)}>
+          solo nei testi, mai sulla pietra{' '}
+          <span className={cn('font-sans not-italic text-[11px] tabular-nums', TER)}>{lemmi.length}</span>
+        </p>
+        <div>
           {lemmi.map(l => (
-            <div key={`lit::${l.lemma}`} className="flex items-baseline gap-3 px-2 py-1">
-              <span className="h-1.5 w-1.5 rounded-full shrink-0 self-center bg-muted/40" />
-              <span className="font-greek text-base w-[8rem] shrink-0 truncate text-ink/70"
-                lang={l.occorrenze[0]?.lingua} title={l.lemma}>
+            <div key={`lit::${l.lemma}`} className="flex items-baseline gap-2 px-1.5 py-[3px]">
+              <span className="font-greek text-base shrink-0 text-ink/80" lang={l.occorrenze[0]?.lingua}>
                 {l.lemma}
               </span>
-              <div className="flex flex-wrap gap-x-4 gap-y-1 flex-1">
-                {l.occorrenze.map((o, i) => (
+              <span className="flex-1 text-xs leading-relaxed">
+                {renderRimandi(l.occorrenze.map((o, i) => (
                   <button
                     key={`${o.testimoniumId}-${i}`}
                     disabled={!onVaiAllaFonte}
                     onClick={() => onVaiAllaFonte?.(o.testimoniumId)}
                     title={[o.cita, o.forma].filter(Boolean).join(' · ')}
-                    className={cn(
-                      'text-xs font-sans inline-flex items-baseline gap-1 transition-colors',
-                      onVaiAllaFonte ? 'text-muted/80 hover:text-accent' : 'text-muted/40',
-                    )}
+                    className={cn('inline transition-colors', onVaiAllaFonte ? `${SEC} hover:text-accent` : TER)}
                   >
                     <span className="font-serif italic">{o.cita}</span>
-                    {o.forma && <span className="font-greek text-muted/60" lang={o.lingua}>{o.forma}</span>}
+                    {o.forma && <span className={cn('ml-1 font-greek', TER)} lang={o.lingua}>{o.forma}</span>}
                   </button>
-                ))}
-              </div>
+                )))}
+              </span>
             </div>
           ))}
         </div>
@@ -306,105 +283,86 @@ export const CultLexiconPanel: React.FC<Props> = ({ monumenti, onSelectMonumento
     .map(f => ({ ...f, lemmata: f.lemmata.filter(matchLemma) }))
     .filter(f => f.lemmata.length > 0 || soloNeiTesti.some(l => l.family === f.id));
 
+  /** I tre modi di leggere lo stesso materiale: link testuali, non pulsanti. */
+  const modo = (g: GroupBy, label: string) => (
+    <button
+      onClick={() => setGroupBy(g)}
+      className={cn(
+        'font-serif text-[13px] transition-colors',
+        groupBy === g ? 'text-accent italic' : `${SEC} hover:text-ink`,
+      )}
+    >
+      {label}
+    </button>
+  );
+
   return (
     <div className="flex-1 overflow-y-auto p-6 md:p-10 max-w-4xl mx-auto w-full">
-      <div className="mb-5 flex items-start justify-between gap-3">
-        <div>
-          <div className="text-xs font-sans font-bold uppercase tracking-[0.22em] text-accent/70 flex items-center gap-1.5">
-            <Tags className="h-3.5 w-3.5" /> Lessico cultuale
-          </div>
-          <p className="text-[13px] font-serif italic text-muted/75 mt-1.5 leading-relaxed">
-            {index.totalAttestations} attestazioni epigrafiche su {index.totalSchede} schede
-            {occorrenzeLetterarie > 0 && (
-              <>
-                {' · '}
-                {occorrenzeLetterarie} {occorrenzeLetterarie === 1 ? 'occorrenza' : 'occorrenze'} nei testi, contate a parte.
-              </>
-            )}
-          </p>
-        </div>
+      <div className="mb-4 pb-2 border-b border-border/40 flex items-baseline justify-between gap-4">
+        <h2 className="font-serif text-xl text-ink">
+          Lessico cultuale
+          <span className={cn('ml-3 font-sans text-[11px]', SEC)}>
+            {index.totalAttestations} attestazioni su {index.totalSchede} schede
+            {occorrenzeLetterarie > 0 && `, ${occorrenzeLetterarie} nei testi a parte`}
+          </span>
+        </h2>
         {canWrite && onApriVocabolario && (
           <button
             onClick={onApriVocabolario}
-            className="shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-accent/40 bg-accent/10 text-accent text-[10px] font-sans font-bold uppercase tracking-widest hover:bg-accent/20 transition-colors"
+            className={cn('shrink-0 font-serif italic text-[13px] hover:text-accent transition-colors', SEC)}
           >
-            <Pencil className="h-3 w-3" /> Modifica vocabolario
+            modifica vocabolario
           </button>
         )}
       </div>
 
       {/* Ricerca / filtri */}
-      <div className="flex flex-wrap gap-2 mb-6 items-center">
-        <div className="relative flex-1 min-w-[14rem]">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted/50 pointer-events-none" />
-          <input
-            type="text"
-            value={search}
-            onChange={e => setSearch(e.target.value)}
-            placeholder="Filtra lemma, forma, sotto-funzione…"
-            className={cn(FIELD_BASE, 'w-full pl-9 pr-3 py-2')}
-            style={FIELD_STYLE}
-          />
-        </div>
+      <div className="flex flex-wrap gap-x-5 gap-y-2 mb-5 items-baseline">
+        <input
+          type="text"
+          value={search}
+          onChange={e => setSearch(e.target.value)}
+          placeholder="filtra lemma, forma, sotto-funzione…"
+          className={cn(FIELD_BASE, 'flex-1 min-w-[14rem] py-1')}
+        />
 
         <div className="relative">
           <select
             value={regione}
             onChange={e => setRegione(e.target.value)}
-            className={cn(FIELD_BASE, 'pl-3 pr-8 py-2 cursor-pointer appearance-none')}
-            style={{ ...FIELD_STYLE, WebkitAppearance: 'none' as const, appearance: 'none' as const }}
+            className={cn(FIELD_BASE, 'pr-5 py-1 cursor-pointer appearance-none')}
+            style={{ WebkitAppearance: 'none' as const, appearance: 'none' as const }}
           >
-            <option value="">Tutte le regioni</option>
+            <option value="">tutte le regioni</option>
             {index.regioni.map(r => <option key={r} value={r}>{r}</option>)}
           </select>
-          <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted/50 pointer-events-none" />
+          <span className={cn('absolute right-1 top-1/2 -translate-y-1/2 text-[9px] pointer-events-none', TER)}>▾</span>
         </div>
 
         <div className="relative">
           <select
             value={familyFilter}
             onChange={e => setFamilyFilter(e.target.value)}
-            className={cn(FIELD_BASE, 'pl-3 pr-8 py-2 cursor-pointer appearance-none')}
-            style={{ ...FIELD_STYLE, WebkitAppearance: 'none' as const, appearance: 'none' as const }}
+            className={cn(FIELD_BASE, 'pr-5 py-1 cursor-pointer appearance-none')}
+            style={{ WebkitAppearance: 'none' as const, appearance: 'none' as const }}
           >
-            <option value="">Tutte le famiglie</option>
+            <option value="">tutte le famiglie</option>
             {vocab.families.filter(f => !f.deprecated).map(f => <option key={f.id} value={f.id}>{cultFamilyShort(f.label)}</option>)}
           </select>
-          <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted/50 pointer-events-none" />
+          <span className={cn('absolute right-1 top-1/2 -translate-y-1/2 text-[9px] pointer-events-none', TER)}>▾</span>
         </div>
 
-        {/* raggruppamento primario: due modi, come l'indice epiteti */}
-        <div className="inline-flex rounded-lg border border-[var(--border)]/50 dark:border-white/5 overflow-hidden text-[10px] font-sans font-bold uppercase tracking-widest shadow-inner">
-          {(['family', 'lemma'] as GroupBy[]).map(g => (
-            <button
-              key={g}
-              onClick={() => setGroupBy(g)}
-              className={cn(
-                'px-3 py-2 transition-colors',
-                groupBy === g ? 'bg-accent/10 text-accent' : 'text-muted hover:text-ink',
-              )}
-            >
-              {g === 'family' ? 'per famiglia' : 'per lemma'}
-            </button>
-          ))}
+        <div className="flex items-baseline gap-1.5">
+          {modo('family', 'per famiglia')}
+          <span className={TER}>·</span>
+          {modo('lemma', 'per lemma')}
+          <span className={TER}>·</span>
+          {modo('lares', 'griglia LARES')}
         </div>
-
-        {/* la griglia LARES è un'altra lettura, non un terzo raggruppamento: sta fuori */}
-        <button
-          onClick={() => setGroupBy(g => (g === 'lares' ? 'family' : 'lares'))}
-          className={cn(
-            'px-3 py-2 rounded-lg border text-[10px] font-sans font-bold uppercase tracking-widest transition-colors',
-            groupBy === 'lares'
-              ? 'border-accent/40 bg-accent/10 text-accent'
-              : 'border-border/50 text-muted hover:text-ink hover:bg-sidebar/60',
-          )}
-        >
-          griglia LARES
-        </button>
       </div>
 
       {filteredLemmata.length === 0 && soloNeiTesti.length === 0 ? (
-        <div className="text-sm italic text-muted/60 py-12 text-center">Nessuna attestazione per questi filtri.</div>
+        <div className={cn('font-serif italic text-sm py-12 text-center', SEC)}>Nessuna attestazione per questi filtri.</div>
       ) : groupBy === 'lares' ? (
         <LaresGrid
           toolbox={vocab.toolbox}
@@ -415,26 +373,27 @@ export const CultLexiconPanel: React.FC<Props> = ({ monumenti, onSelectMonumento
           atts={atts}
         />
       ) : groupBy === 'lemma' ? (
-        <div className="space-y-0.5">
+        <div>
           {[...filteredLemmata].sort((a, b) => b.count - a.count || a.lemma.localeCompare(b.lemma)).map(renderLemmaRow)}
           {renderSoloNeiTesti(soloNeiTesti)}
         </div>
       ) : (
-        <div className="space-y-7">
+        <div className="space-y-6">
           {familiesToRender.map(f => {
             const totAtt = f.lemmata.reduce((s, l) => s + l.count, 0);
             return (
               <section key={f.id}>
-                <div className="flex items-baseline gap-2.5 mb-2 pb-1 border-b border-border/40">
-                  <span className="h-2.5 w-2.5 rounded-sm shrink-0" style={{ backgroundColor: vocab.familyColor(f.id) }} />
-                  <h3 className="text-sm font-sans font-bold uppercase tracking-[0.15em] text-ink/90">
-                    {cultFamilyShort(f.label)}
-                  </h3>
-                  <span className="text-xs font-sans text-muted/60">
+                <div className="flex items-baseline gap-2 mb-1.5 pb-1 border-b border-border/30">
+                  <span
+                    className="h-2 w-2 rounded-[1px] shrink-0 self-center"
+                    style={{ backgroundColor: vocab.familyColor(f.id) }}
+                  />
+                  <h3 className="font-serif text-[15px] text-ink">{cultFamilyShort(f.label)}</h3>
+                  <span className={cn('font-sans text-[11px]', TER)}>
                     {f.lemmata.length} lemmi · {schede(f.schedeCount)} · {atts(totAtt)}
                   </span>
                 </div>
-                <div className="space-y-0.5">
+                <div>
                   {[...f.lemmata]
                     .sort((a, b) => b.count - a.count || a.lemma.localeCompare(b.lemma))
                     .map(renderLemmaRow)}
