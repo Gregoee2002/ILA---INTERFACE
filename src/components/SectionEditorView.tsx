@@ -106,12 +106,12 @@ const SECTION_FIELDS: Record<SectionId, (keyof Monumento)[]> = {
   title: ['titolo', 'textTypes'],
   publication: ['authority', 'tm', 'tmLink', 'phi', 'extRefs'],
   msIdentifier: ['luogo_cons', 'msIdnos'],
-  support: ['dim', 'materiale', 'materialRef', 'tipo', 'tipo_ref', 'dim_altezza', 'dim_larghezza', 'dim_profondita', 'dim_unita'],
+  support: ['materiale', 'materialRef', 'tipo', 'tipo_ref', 'dim_altezza', 'dim_larghezza', 'dim_profondita', 'dim_unita'],
   layout: ['layout_desc', 'scrittura', 'scrittura_ref'],
   hand: ['altezza_lettere', 'altezza_lettere_unita', 'scrittura_note'],
   origPlace: ['citta', 'luogo_moderno', 'regione', 'place_ref_ancient', 'place_ref_modern', 'origPlace_nota'],
   origDate: ['origDates', 'data', 'data_inizio', 'data_fine'],
-  provenance: ['luogo_rit', 'conserv'],
+  provenance: ['luogo_rit', 'vicende', 'conserv'],
   profile: ['epiteti', 'divinita', 'onomastica', 'imperatori', 'persone'],
   revisions: ['revisions', 'editorialStatus'],
   facsimile: ['facsimile_url', 'facsimile_desc'],
@@ -970,10 +970,6 @@ function renderSectionForm(
     case 'support':
       return (
         <div className="space-y-5 max-w-3xl">
-          <div>
-            <FieldLabel>Descrizione del supporto</FieldLabel>
-            <TextArea rows={3} value={m.dim || ''} onChange={e => set('dim', e.target.value)} />
-          </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             <div>
               <FieldLabel>Materiale</FieldLabel>
@@ -1136,6 +1132,10 @@ function renderSectionForm(
           <div>
             <FieldLabel>Luogo di ritrovamento</FieldLabel>
             <SuggestInput value={m.luogo_rit || ''} onChange={v => set('luogo_rit', v)} options={suggestions.luogo_rit} />
+          </div>
+          <div>
+            <FieldLabel>Vicende del monumento</FieldLabel>
+            <TextArea rows={3} value={m.vicende || ''} onChange={e => set('vicende', e.target.value)} placeholder="Trasferimenti, collezioni, perdita: ciò che accade al pezzo dopo il rinvenimento." />
           </div>
           <div>
             <FieldLabel>Osservazione autoptica</FieldLabel>

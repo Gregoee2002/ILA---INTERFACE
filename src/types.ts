@@ -138,8 +138,11 @@ export interface Monumento {
   citta: string;
   tipo: string;
   materiale: string;
-  dim: string;
   luogo_rit: string;
+  // Vicende del monumento fra il rinvenimento e oggi (trasferimenti, collezioni,
+  // perdita): <provenance type="transferred">. Non è il luogo di rinvenimento
+  // (`luogo_rit`) né l'autopsia (`conserv`).
+  vicende?: string;
   luogo_cons?: string;
   testo: string;
   // Testo piatto derivato da `testo`, pronto per l'indicizzazione full-text

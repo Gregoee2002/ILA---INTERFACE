@@ -4969,7 +4969,6 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
           materiale: m.materiale || '',
           materialRef: m.materialRef || '',
           // Dimensions
-          dim: m.dim || '',
           dim_altezza: m.dim_altezza || '',
           dim_larghezza: m.dim_larghezza || '',
           dim_profondita: m.dim_profondita || '',
@@ -4982,6 +4981,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
           place_ref_modern: m.place_ref_modern || '',
           origPlace_nota: m.origPlace_nota || '',
           conserv: m.conserv || '',
+          vicende: m.vicende || '',
           // Dates
           data_inizio: m.data_inizio !== undefined ? Number(m.data_inizio) : undefined,
           data_fine: m.data_fine !== undefined ? Number(m.data_fine) : undefined,
@@ -7497,7 +7497,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                                 </div>
                               )}
 
-                              {(selectedMonumento.dim_altezza || selectedMonumento.dim_larghezza || selectedMonumento.dim_profondita) ? (
+                              {(selectedMonumento.dim_altezza || selectedMonumento.dim_larghezza || selectedMonumento.dim_profondita) && (
                                 <div>
                                   <span className="text-muted uppercase font-bold text-[9px]">Dimensioni:</span>{' '}
                                   <span className="text-ink font-serif italic text-xs">
@@ -7508,8 +7508,6 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                                     ].filter(Boolean).join(' × ')} {labelUnit(selectedMonumento.dim_unita || 'cm')}
                                   </span>
                                 </div>
-                              ) : (
-                                selectedMonumento.dim && <div><span className="text-muted uppercase font-bold text-[9px]">Dati di Supporto (Dim):</span> <span className="text-ink font-serif text-xs">{stripXml(selectedMonumento.dim)}</span></div>
                               )}
                             </div>
                           </div>
@@ -7572,6 +7570,13 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                                       </li>
                                     ))}
                                   </ul>
+                                </div>
+                              )}
+
+                              {selectedMonumento.vicende && (
+                                <div className="border-t border-border/20 pt-3 text-[10px]">
+                                  <span className="text-muted uppercase font-bold text-[9px] block mb-1">Vicende del monumento</span>
+                                  <span className="font-serif text-xs text-ink/90 whitespace-pre-wrap">{selectedMonumento.vicende}</span>
                                 </div>
                               )}
 

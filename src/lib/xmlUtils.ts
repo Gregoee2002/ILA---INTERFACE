@@ -586,13 +586,6 @@ function parseTeiElement(teiString: string): Monumento {
     msIdnos = extractAllMatches(/<idno[^>]*>([\s\S]*?)<\/idno>/, msIdBlockMatch[1]).map(unescapeXml);
   }
 
-  // 9. Support description
-  let support_p = "";
-  const supportPMatch = teiString.match(/<supportDesc>[\s\S]*?<support[^>]*>[\s\S]*?<p>([\s\S]*?)<\/p>/);
-  if (supportPMatch) {
-    support_p = resolveXmlTextWithPtrs(supportPMatch[1].trim()).resolvedText;
-  }
-
   // 10. Material and tipo
   let materiale = "";
   let materialRef = "";
@@ -645,11 +638,10 @@ function parseTeiElement(teiString: string): Monumento {
     if (unitMatch) dim_unita = unitMatch[1];
   }
 
-  // Il ripiego sulle misure vale solo se una misura c'è davvero: con <support><p>
-  // vuoto e <height>/<width>/<depth> vuoti dava la stringa fantasma "x  x  cm",
-  // che poi il salvataggio successivo riscriveva dentro <p>.
-  const misure = [dim_altezza, dim_larghezza, dim_profondita].filter(Boolean);
-  let dim = support_p || (misure.length ? `${misure.join(" x ")} ${dim_unita}`.trim() : "");
+  // Le dimensioni sono solo <height>/<width>/<depth>: <support><p> non è più un
+  // campo del modello. La prosa che vi stava (descrizione + storia del
+  // rinvenimento) è stata smistata fra layout, misure strutturate e
+  // <provenance type="transferred"> nella migrazione del 2026-09-16.
 
   // 12. Layout description
   let layout_desc = "";
@@ -832,6 +824,15 @@ function parseTeiElement(teiString: string): Monumento {
     // Unwrap <p> if present
     const provP = provContent.match(/<p>([\s\S]*?)<\/p>/);
     luogo_rit = resolveXmlTextWithPtrs(provP ? provP[1].trim() : provContent).resolvedText;
+  }
+
+  // Vicende fra rinvenimento e oggi: trasferimenti, collezioni, perdita.
+  let vicende = "";
+  const transfProvMatch = teiString.match(/<provenance\s+type="transferred"[^>]*>([\s\S]*?)<\/provenance>/);
+  if (transfProvMatch) {
+    const trContent = transfProvMatch[1].trim();
+    const trP = trContent.match(/<p>([\s\S]*?)<\/p>/);
+    vicende = resolveXmlTextWithPtrs(trP ? trP[1].trim() : trContent).resolvedText;
   }
 
   let conserv = "";
@@ -1374,7 +1375,6 @@ function parseTeiElement(teiString: string): Monumento {
     titolo,
     luogo_cons,
     msIdnos,
-    dim,
     dim_altezza,
     dim_larghezza,
     dim_profondita,
@@ -1401,6 +1401,7 @@ function parseTeiElement(teiString: string): Monumento {
     data_inizio,
     data_fine,
     conserv,
+    vicende,
     facsimile_url,
     facsimile_desc,
     testo,
@@ -1557,7 +1558,6 @@ export function monumentiToXml(monumenti: Monumento[]): string {
     block += `                        <objectDesc>\n`;
     block += `                            <supportDesc>\n`;
     block += `                                <support>\n`;
-    block += `                                    <p>${escapeXml(m.dim || '')}</p>\n`;
     const mat_ref = m.materialRef || (m.materiale === "marmo" ? "https://www.eagle-network.eu/voc/material/lod/48.html" : "");
     block += `                                    <material${mat_ref ? ` ref="${escapeXml(mat_ref)}"` : ""}>${escapeXml(m.materiale)}</material>\n`;
     const type_ref = m.tipo_ref !== undefined ? m.tipo_ref : "";
@@ -1627,6 +1627,9 @@ export function monumentiToXml(monumenti: Monumento[]): string {
     }
     block += `                        </origin>\n`;
     block += `                        <provenance type="found">${escapeXml(m.luogo_rit || '')}</provenance>\n`;
+    if ((m.vicende || '').trim()) {
+      block += `                        <provenance type="transferred">${escapeXml(m.vicende!.trim())}</provenance>\n`;
+    }
     block += `                        <provenance type="observed" subtype="autopsied">${escapeXml(m.conserv || '')}</provenance>\n`;
     block += `                    </history>\n`;
     block += `                </msDesc>\n`;
