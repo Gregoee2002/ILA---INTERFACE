@@ -213,9 +213,17 @@ const formatBiblKey = (raw: string): string => {
 const DIAGONAL_ROW_H = 42;
 const DIAGONAL_BASE_X = 150;
 
-const DivinityDiagonalList = ({ items, onSelect, onActiveChange, onScrollProgress, searchTerm }: {
+const DivinityDiagonalList = ({ items, onSelect, onActiveChange, onScrollProgress, searchTerm, pinnedName }: {
   items: { name: string; count: number; epiteti: { name: string; count: number }[] }[];
+  // Click su una riga: blocca ("appunta") quella divinità nell'albero a
+  // destra, invece di aprire subito le attestazioni. Aprire le attestazioni
+  // resta un gesto esplicito sulla radice dell'albero ("vedi tutte"): con il
+  // vecchio comportamento bastava sfiorare e cliccare una riga di passaggio,
+  // mentre si andava verso l'epiteto, per finire in un'altra vista.
   onSelect: (name: string) => void;
+  // Divinità attualmente bloccata (o null): finché è valorizzata, hover e
+  // scroll della rubrica non cambiano più l'albero a destra.
+  pinnedName?: string | null;
   // Chiamata a ogni cambio di riga attiva durante lo scroll (non solo al
   // click) — alimenta l'anteprima ad albero in tempo reale accanto alla lista.
   onActiveChange?: (name: string) => void;
@@ -266,6 +274,10 @@ const DivinityDiagonalList = ({ items, onSelect, onActiveChange, onScrollProgres
   const debounceTimer = useRef<number | null>(null);
 
   const notifyActive = (name: string) => {
+    // Con una divinità bloccata l'albero a destra non deve più seguire né
+    // l'hover né lo scroll: è esattamente il momento in cui l'utente sposta
+    // il mouse verso gli epiteti, attraversando altre righe della rubrica.
+    if (pinnedName) return;
     if (lastNotified.current === name) return;
     lastNotified.current = name;
     onActiveChange?.(name);
@@ -300,6 +312,10 @@ const DivinityDiagonalList = ({ items, onSelect, onActiveChange, onScrollProgres
     rafPending.current = true;
     requestAnimationFrame(updateActive);
   };
+  useEffect(() => {
+    if (!pinnedName) lastNotified.current = null;
+  }, [pinnedName]);
+
   useLayoutEffect(() => {
     updateActive();
     // La prima voce va mostrata subito, senza attendere il debounce.
@@ -381,7 +397,12 @@ const DivinityDiagonalList = ({ items, onSelect, onActiveChange, onScrollProgres
             )}
             {sorted.map((d, i) => {
               const x = tickX(i);
-              const isActive = i === activeIndex;
+              const isPinned = pinnedName === d.name;
+              // Con una divinità bloccata l'evidenziazione resta su di lei:
+              // altrimenti la rubrica continuerebbe a "seguire" il mouse
+              // mostrando come attiva una voce che l'albero a destra non sta
+              // più mostrando.
+              const isActive = pinnedName ? isPinned : i === activeIndex;
               const match = isMatch(d);
               const dimmed = searchActive && !match;
               const epitetoHit = matchedEpiteto(d);
@@ -393,8 +414,8 @@ const DivinityDiagonalList = ({ items, onSelect, onActiveChange, onScrollProgres
               const proximity = Math.max(0, 1 - Math.abs(i - activeIndex) / FADE_RANGE_ROWS);
               const rowStyle: React.CSSProperties = {
                 top: i * DIAGONAL_ROW_H, height: DIAGONAL_ROW_H,
-                opacity: searchActive ? undefined : 0.4 + proximity * 0.6,
-                transform: searchActive ? undefined : `scale(${0.96 + proximity * 0.04})`,
+                opacity: searchActive || pinnedName ? undefined : 0.4 + proximity * 0.6,
+                transform: searchActive || pinnedName ? undefined : `scale(${0.96 + proximity * 0.04})`,
               };
               return (
                 <div
@@ -404,9 +425,11 @@ const DivinityDiagonalList = ({ items, onSelect, onActiveChange, onScrollProgres
                 >
                   <button
                     onClick={() => onSelect(d.name)}
-                    onMouseEnter={() => { setActiveIndex(i); onRowHover(d.name); }}
+                    onMouseEnter={() => { if (!pinnedName) setActiveIndex(i); onRowHover(d.name); }}
+                    title={isPinned ? 'Divinità bloccata — clicca per sbloccare la rubrica' : 'Blocca questa divinità nell’albero a destra'}
                     className={cn(
                       "group relative w-full h-full text-left hover:bg-accent/[0.04] active:bg-accent/10 transition-all duration-200",
+                      isPinned && "bg-accent/[0.06] rounded-lg ring-1 ring-accent/30",
                       dimmed && "opacity-30"
                     )}
                   >
@@ -926,6 +949,12 @@ function EpithetStats({ monumenti, onSelectMonumento, onVaiAllaFonte, initialTab
   // ad albero in tempo reale accanto alla lista, indipendentemente da
   // un'eventuale selezione già aperta sulle attestazioni.
   const [activeDivinityName, setActiveDivinityName] = useState<string | null>(initialDivinity || null);
+  // Divinità "bloccata" con un click sulla rubrica: finché è valorizzata,
+  // l'albero degli epiteti a destra resta fermo su di lei anche se il mouse
+  // attraversa altre voci della rubrica per raggiungere l'epiteto. Senza,
+  // il percorso del mouse verso destra cambiava l'albero sotto le dita (o
+  // apriva le attestazioni della voce di passaggio).
+  const [pinnedDivinity, setPinnedDivinity] = useState<string | null>(null);
   // Quanto si è scesi nella rubrica (0-1, satura dopo ~140px): rimpicciolisce
   // l'header di ricerca/filtro del pannello destro mentre si scorre, senza
   // farlo sparire — vedi onScrollProgress su DivinityDiagonalList.
@@ -997,9 +1026,14 @@ function EpithetStats({ monumenti, onSelectMonumento, onVaiAllaFonte, initialTab
   // lista filtrata (es. subito dopo aver applicato un filtro regione che
   // esclude la divinità in anteprima).
   const activeDivinityStats = useMemo(
-    () => filteredDivstats.find(d => d.name === activeDivinityName) || filteredDivstats[0] || null,
-    [filteredDivstats, activeDivinityName]
+    () => filteredDivstats.find(d => d.name === (pinnedDivinity || activeDivinityName))
+      || filteredDivstats[0] || null,
+    [filteredDivstats, activeDivinityName, pinnedDivinity]
   );
+
+  // Ricerca e filtro regione rimescolano la rubrica: un blocco precedente
+  // terrebbe l'albero su una divinità che magari non è più in lista.
+  useEffect(() => { setPinnedDivinity(null); }, [epithetSearch, divinitaRegionFilter]);
 
   // ── Monumenti per l'epiteto selezionato (nel contesto della divinità) ─────
   // ALL_EPITHETS (click sul nodo centrale del grafo) → tutte le iscrizioni
@@ -1172,7 +1206,8 @@ function EpithetStats({ monumenti, onSelectMonumento, onVaiAllaFonte, initialTab
                   </div>
                   <DivinityDiagonalList
                     items={filteredDivstats}
-                    onSelect={(name) => openAttestations(name, ALL_EPITHETS)}
+                    pinnedName={pinnedDivinity}
+                    onSelect={(name) => setPinnedDivinity(prev => prev === name ? null : name)}
                     onActiveChange={setActiveDivinityName}
                     onScrollProgress={setListScroll}
                     searchTerm={epithetSearch}
@@ -1185,10 +1220,28 @@ function EpithetStats({ monumenti, onSelectMonumento, onVaiAllaFonte, initialTab
                       destra. Il filtro regione è stato spostato nella colonna
                       sinistra, sotto la ricerca. */}
                   <div className="flex-1 min-h-0 flex flex-col rounded-2xl border border-border/70 bg-parchment shadow-[0_1px_3px_rgba(0,0,0,0.05)] overflow-hidden">
-                    <div className="shrink-0 flex items-center justify-between gap-4 px-7 py-4 border-b border-border/40 bg-sidebar/30">
-                      <span className="text-[10px] font-sans font-bold uppercase tracking-[0.3em] text-accent whitespace-nowrap">
-                        Epiteti co-occorrenti
-                      </span>
+                    {/* flex-wrap: con il pulsante di sblocco in più,
+                        etichetta e metadati non ci stanno su una riga sola a
+                        larghezze di finestra ordinarie e si sovrapporrebbero
+                        (entrambi i gruppi sono whitespace-nowrap). */}
+                    <div className="shrink-0 flex flex-wrap items-center justify-between gap-x-4 gap-y-2 px-7 py-4 border-b border-border/40 bg-sidebar/30">
+                      <div className="flex items-center gap-3 min-w-0">
+                        <span className="text-[10px] font-sans font-bold uppercase tracking-[0.3em] text-accent whitespace-nowrap">
+                          Epiteti co-occorrenti
+                        </span>
+                        {/* Stato del blocco: senza un comando esplicito di
+                            sblocco la rubrica sembrerebbe semplicemente
+                            "smessa di funzionare" dopo il primo click. */}
+                        {pinnedDivinity && (
+                          <button
+                            onClick={() => setPinnedDivinity(null)}
+                            className="shrink-0 flex items-center gap-1.5 text-[9px] font-sans font-bold uppercase tracking-widest text-accent border border-accent/40 bg-accent/10 rounded-sm px-2 py-0.5 hover:bg-accent hover:text-white transition-colors"
+                          >
+                            <X className="h-2.5 w-2.5" />
+                            Sblocca rubrica
+                          </button>
+                        )}
+                      </div>
                       <div className="flex items-center gap-3 text-[10px] font-sans font-bold uppercase tracking-widest text-muted min-w-0 text-right justify-end">
                         {activeDivinityStats ? (
                           <>
@@ -1225,7 +1278,7 @@ function EpithetStats({ monumenti, onSelectMonumento, onVaiAllaFonte, initialTab
                         </>
                       ) : (
                         <div className="flex-1 flex items-center justify-center text-center text-muted/40 text-sm italic px-8">
-                          Passa il mouse su una divinità della rubrica per vederne gli epiteti co-occorrenti.
+                          Passa il mouse su una divinità della rubrica per vederne gli epiteti co-occorrenti; cliccala per bloccarla qui.
                         </div>
                       )}
                     </div>
