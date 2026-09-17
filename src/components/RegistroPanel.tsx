@@ -1,5 +1,4 @@
 import { useMemo, useState } from 'react';
-import { NotebookPen, ChevronRight, Check, RotateCcw, Loader2 } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { EntryRegistro } from '../types';
 
@@ -40,25 +39,23 @@ export function RegistroPanel({ registri, loading, onResolve, onReopen, onSelect
     <div className="flex-1 overflow-y-auto">
       <div className="p-6 md:p-10 max-w-3xl mx-auto w-full">
       <div className="mb-6">
-        <div className="text-[10px] font-sans font-bold uppercase tracking-[0.22em] text-accent/70 mb-2 flex items-center gap-1.5">
-          <NotebookPen className="h-3 w-3" /> Registro collaboratori
-        </div>
-        <p className="text-xs font-serif italic text-muted leading-relaxed mb-4">
+        <h2 className="font-serif text-xl text-ink mb-2">Registro dei collaboratori</h2>
+        <p className="font-sans text-[11px] text-muted leading-relaxed mb-4">
           Lavorazioni in corso sulle singole schede del catalogo (vedi il pannello "Registro" nel dettaglio di
           ogni scheda). {registri.length} schede in registro, {openCount} ancora aperte.
         </p>
 
-        <div className="flex gap-1.5">
+        <div className="flex items-baseline gap-2.5">
           {(['open', 'resolved', 'all'] as const).map(f => (
             <button
               key={f}
               onClick={() => setFilter(f)}
               className={cn(
-                'px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest rounded-sm border transition-colors',
-                filter === f ? 'bg-accent text-white border-accent' : 'border-border text-muted hover:text-ink'
+                'font-serif text-[13px] transition-colors',
+                filter === f ? 'text-accent italic' : 'text-muted hover:text-ink'
               )}
             >
-              {f === 'open' ? 'Aperte' : f === 'resolved' ? 'Risolte' : 'Tutte'}
+              {f === 'open' ? 'aperte' : f === 'resolved' ? 'risolte' : 'tutte'}
             </button>
           ))}
         </div>
@@ -67,29 +64,29 @@ export function RegistroPanel({ registri, loading, onResolve, onReopen, onSelect
       {loading && <div className="text-xs text-muted italic">Caricamento…</div>}
 
       {!loading && filtered.length === 0 && (
-        <div className="text-sm italic text-muted/60 py-12 text-center">Nessuna scheda in questa vista.</div>
+        <div className="font-serif italic text-sm text-muted/60 py-12 text-center">Nessuna scheda in questa vista.</div>
       )}
 
       <ul className="space-y-3">
         {filtered.map(r => {
           const lastNote = [...r.notes].sort((a, b) => b.createdAt.localeCompare(a.createdAt))[0];
           return (
-            <li key={r.entryId} className={cn('rounded-lg border px-4 py-3', r.status === 'open' ? 'border-warning/25 bg-warning/10' : 'border-border/40 bg-border/10 opacity-70')}>
+            <li key={r.entryId} className={cn('border-l-2 pl-4 py-2', r.status === 'open' ? 'border-warning/40' : 'border-border/50 opacity-70')}>
               <div className="flex items-start justify-between gap-3">
                 <button
                   onClick={() => onSelectEntry(r.entryId)}
-                  className="flex items-center gap-1.5 text-xs font-sans font-bold uppercase tracking-widest text-accent hover:opacity-70 transition-opacity"
+                  className="font-serif italic text-[13px] text-accent hover:opacity-70 transition-opacity"
                 >
-                  {r.entryLabel || r.entryId} <ChevronRight className="h-3 w-3" />
+                  {r.entryLabel || r.entryId}
                 </button>
-                <span className="text-[9px] font-sans uppercase tracking-wide text-muted/70 shrink-0">
+                <span className="font-serif italic text-[12px] text-muted/60 shrink-0">
                   {r.notes.length} {r.notes.length === 1 ? 'nota' : 'note'}
                 </span>
               </div>
               {lastNote && (
                 <>
                   <p className="text-sm font-serif text-ink leading-relaxed mt-1.5 whitespace-pre-wrap">{lastNote.testo}</p>
-                  <span className="block text-[9px] font-sans uppercase tracking-wide text-muted/70 mt-1">
+                  <span className="block font-serif italic text-[12px] text-muted/60 mt-1">
                     {lastNote.author} · {new Date(lastNote.createdAt).toLocaleDateString('it-IT')}
                   </span>
                 </>
@@ -98,10 +95,9 @@ export function RegistroPanel({ registri, loading, onResolve, onReopen, onSelect
                 <button
                   onClick={() => toggleStatus(r)}
                   disabled={busyId === r.entryId}
-                  className="text-[10px] font-sans font-bold uppercase tracking-wide text-accent hover:opacity-70 transition-opacity flex items-center gap-1.5"
+                  className="font-serif italic text-[13px] text-accent hover:opacity-70 transition-opacity"
                 >
-                  {busyId === r.entryId ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : r.status === 'open' ? <Check className="h-3.5 w-3.5" /> : <RotateCcw className="h-3.5 w-3.5" />}
-                  {r.status === 'open' ? 'Segna come risolto' : 'Riapri'}
+                  {busyId === r.entryId ? 'in corso…' : r.status === 'open' ? 'Segna come risolto' : 'Riapri'}
                 </button>
               </div>
             </li>

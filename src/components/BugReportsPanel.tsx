@@ -1,5 +1,4 @@
 import React, { useMemo, useState } from 'react';
-import { Bug, Check, RotateCcw, Loader2 } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { BugReport } from '../types';
 
@@ -63,8 +62,8 @@ export function BugReportsPanel({ bugs, loading, knownAuthors, onCreate, onResol
     <div className="flex-1 overflow-y-auto">
       <div className="p-6 md:p-10 max-w-3xl mx-auto w-full">
       <div className="mb-6">
-        <div className="text-[10px] font-sans font-bold uppercase tracking-[0.22em] text-accent/70 mb-2 flex items-center gap-1.5">
-          <Bug className="h-3 w-3" /> Bug segnalati
+        <div className="font-serif text-xl text-ink mb-2">
+          Bug segnalati
         </div>
         <p className="text-xs font-serif italic text-muted leading-relaxed mb-4">
           Problemi di funzionamento dell'app segnalati dai collaboratori. {bugs.length} segnalazioni totali, {openCount} ancora aperte.
@@ -76,8 +75,8 @@ export function BugReportsPanel({ bugs, loading, knownAuthors, onCreate, onResol
               key={f}
               onClick={() => setFilter(f)}
               className={cn(
-                'px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest rounded-sm border transition-colors',
-                filter === f ? 'bg-accent text-white border-accent' : 'border-border text-muted hover:text-ink'
+                'font-serif text-[13px] transition-colors',
+                filter === f ? 'text-accent italic' : 'text-muted hover:text-ink'
               )}
             >
               {f === 'open' ? 'Aperti' : f === 'resolved' ? 'Risolti' : 'Tutti'}
@@ -88,14 +87,14 @@ export function BugReportsPanel({ bugs, loading, knownAuthors, onCreate, onResol
         {!showForm && (
           <button
             onClick={() => setShowForm(true)}
-            className="w-full py-2 border border-border text-muted hover:text-ink hover:border-accent/40 font-sans text-[9px] font-bold uppercase tracking-widest transition-colors flex items-center justify-center gap-1.5 rounded-sm"
+            className="w-full text-left font-serif italic text-[13px] text-muted hover:text-accent transition-colors"
           >
-            <Bug className="h-3 w-3" /> Segnala un bug
+            Segnala un bug
           </button>
         )}
 
         {showForm && (
-          <form onSubmit={handleSubmit} className="space-y-2 rounded-lg border border-border/40 p-3">
+          <form onSubmit={handleSubmit} className="space-y-2 border-l-2 border-border/50 pl-4 py-2">
             <input
               list="bug-authors"
               value={author}
@@ -118,14 +117,14 @@ export function BugReportsPanel({ bugs, loading, knownAuthors, onCreate, onResol
               <button
                 type="submit"
                 disabled={submitting || !note.trim() || !author.trim()}
-                className="flex-1 py-1.5 bg-accent hover:bg-accent/90 text-white font-sans text-[9px] font-bold uppercase tracking-widest transition-colors rounded-sm disabled:opacity-40 flex items-center justify-center gap-1.5"
+                className="font-serif italic text-[13px] text-accent hover:text-ink transition-colors disabled:opacity-40"
               >
-                {submitting ? <Loader2 className="h-3 w-3 animate-spin" /> : null} Invia
+                {submitting ? 'in corso…' : 'Invia'}
               </button>
               <button
                 type="button"
                 onClick={() => { setShowForm(false); setError(null); }}
-                className="px-3 py-1.5 text-muted hover:text-ink font-sans text-[9px] font-bold uppercase tracking-widest transition-colors rounded-sm"
+                className="font-serif italic text-[13px] text-muted hover:text-ink transition-colors"
               >
                 Annulla
               </button>
@@ -137,24 +136,23 @@ export function BugReportsPanel({ bugs, loading, knownAuthors, onCreate, onResol
       {loading && <div className="text-xs text-muted italic">Caricamento…</div>}
 
       {!loading && filtered.length === 0 && (
-        <div className="text-sm italic text-muted/60 py-12 text-center">Nessun bug in questa vista.</div>
+        <div className="font-serif italic text-sm text-muted/60 py-12 text-center">Nessun bug in questa vista.</div>
       )}
 
       <ul className="space-y-3">
         {filtered.map(b => (
-          <li key={b.id} className={cn('rounded-lg border px-4 py-3', b.status === 'open' ? 'border-warning/25 bg-warning/10' : 'border-border/40 bg-border/10 opacity-70')}>
+          <li key={b.id} className={cn('border-l-2 pl-4 py-2', b.status === 'open' ? 'border-warning/40' : 'border-border/50 opacity-70')}>
             <p className="text-sm font-serif text-ink leading-relaxed whitespace-pre-wrap">{b.testo}</p>
             <div className="flex items-center justify-between mt-1.5 gap-2">
-              <span className="text-[9px] font-sans uppercase tracking-wide text-muted/70">
+              <span className="font-serif italic text-[12px] text-muted/60">
                 {b.author} · {new Date(b.createdAt).toLocaleDateString('it-IT')}
               </span>
               <button
                 onClick={() => toggleStatus(b)}
                 disabled={busyId === b.id}
-                className="text-[10px] font-sans font-bold uppercase tracking-wide text-accent hover:opacity-70 transition-opacity flex items-center gap-1.5 shrink-0"
+                className="font-serif italic text-[13px] text-accent hover:opacity-70 transition-opacity shrink-0"
               >
-                {busyId === b.id ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : b.status === 'open' ? <Check className="h-3.5 w-3.5" /> : <RotateCcw className="h-3.5 w-3.5" />}
-                {b.status === 'open' ? 'Segna come risolto' : 'Riapri'}
+                {busyId === b.id ? 'in corso…' : b.status === 'open' ? 'Segna come risolto' : 'Riapri'}
               </button>
             </div>
           </li>

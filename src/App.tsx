@@ -1440,8 +1440,7 @@ function CorpusHealth({ monumenti, onSelectMonumento }: { monumenti: Monumento[]
   return (
     <div className="flex-1 flex flex-col overflow-hidden">
       <motion.div {...scrollReveal} className="mb-8">
-        <div className="text-[10px] font-sans font-bold uppercase tracking-[0.22em] text-accent/70 mb-2">Controllo qualità</div>
-        <h2 className="text-3xl md:text-4xl font-bold italic mb-2">Coerenza del Corpus</h2>
+        <h2 className="font-serif text-2xl text-ink mb-2">Coerenza del corpus</h2>
         <div className="ornament-rule !my-0 mb-3 max-w-[6rem] mx-0" />
         <p className="text-sm text-muted font-serif">
           Controllo automatico delle varianti grafiche e dei campi mancanti. Nessun dato viene modificato: le segnalazioni vanno verificate e corrette a mano.
@@ -1453,23 +1452,23 @@ function CorpusHealth({ monumenti, onSelectMonumento }: { monumenti: Monumento[]
         <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
           <div className="glass-card p-4">
             <div className="text-3xl font-bold">{totalConflicts}</div>
-            <div className="text-[10px] font-sans uppercase tracking-widest text-muted mt-1">Conflitti di grafia</div>
+            <div className="font-serif text-[13px] text-muted mt-1">Conflitti di grafia</div>
           </div>
           <div className="glass-card p-4">
             <div className="text-3xl font-bold">{auditTotal}</div>
-            <div className="text-[10px] font-sans uppercase tracking-widest text-muted mt-1">Classificazioni sospette</div>
+            <div className="font-serif text-[13px] text-muted mt-1">Classificazioni sospette</div>
           </div>
           <div className="glass-card p-4">
             <div className="text-3xl font-bold">{missing.escapedMarkup.length}</div>
-            <div className="text-[10px] font-sans uppercase tracking-widest text-muted mt-1">Markup non valido</div>
+            <div className="font-serif text-[13px] text-muted mt-1">Markup non valido</div>
           </div>
           <div className="glass-card p-4">
             <div className="text-3xl font-bold">{missing.noDivinita.length}</div>
-            <div className="text-[10px] font-sans uppercase tracking-widest text-muted mt-1">Senza divinità</div>
+            <div className="font-serif text-[13px] text-muted mt-1">Senza divinità</div>
           </div>
           <div className="glass-card p-4">
             <div className="text-3xl font-bold">{missing.noDate.length}</div>
-            <div className="text-[10px] font-sans uppercase tracking-widest text-muted mt-1">Senza datazione</div>
+            <div className="font-serif text-[13px] text-muted mt-1">Senza datazione</div>
           </div>
         </div>
 
@@ -1494,16 +1493,16 @@ function CorpusHealth({ monumenti, onSelectMonumento }: { monumenti: Monumento[]
         {/* Conflitti di grafia per campo */}
         {reports.filter(r => r.conflicts.length > 0).map(report => (
           <div key={report.label}>
-            <h3 className="font-bold text-sm mb-1">
+            <h3 className="font-serif text-[15px] text-ink mb-1">
               {report.label}
-              <span className="ml-2 text-[10px] font-sans font-normal text-muted uppercase tracking-widest">
+              <span className="ml-2 font-sans text-[11px] font-normal text-muted">
                 {report.distinctCount} valori distinti · {report.conflicts.length} conflitti
               </span>
             </h3>
             <div className="space-y-3 mt-3">
               {report.conflicts.map(conflict => (
-                <div key={conflict.key} className="rounded-xl border border-warning/25 bg-warning/10 backdrop-blur-md p-4 shadow-sm">
-                  <div className="text-[10px] font-sans uppercase tracking-widest text-warning mb-2">
+                <div key={conflict.key} className="border-l-2 border-warning/40 pl-4 py-1">
+                  <div className="font-serif italic text-[13px] text-warning mb-2">
                     Stessa forma, grafie diverse:
                   </div>
                   <div className="flex flex-wrap gap-2">
@@ -1530,20 +1529,20 @@ function CorpusHealth({ monumenti, onSelectMonumento }: { monumenti: Monumento[]
         {/* Audit di classificazione divinità / epiteti */}
         {(auditTotal > 0 || naPlain.length > 0) && (
           <div>
-            <h3 className="font-bold text-sm mb-1">
+            <h3 className="font-serif text-[15px] text-ink mb-1">
               Classificazione divinità / epiteti
-              <span className="ml-2 text-[10px] font-sans font-normal text-muted uppercase tracking-widest">
+              <span className="ml-2 font-sans text-[11px] font-normal text-muted">
                 da verificare sulle edizioni a stampa, poi correggere sullo XML
               </span>
             </h3>
 
             {naRelated.length > 0 && (
               <div className="space-y-3 mt-3">
-                <div className="text-[10px] font-sans uppercase tracking-widest text-muted/70">
+                <div className="font-serif italic text-[13px] text-muted/60">
                   Probabile stessa divinità in forma variante ({naRelated.length}) — mai attestata da sola e con token in comune con un teonimo co-presente
                 </div>
                 {naRelated.map(d => (
-                  <div key={d.name} className="rounded-xl border border-warning/25 bg-warning/10 backdrop-blur-md p-4 shadow-sm">
+                  <div key={d.name} className="border-l-2 border-warning/40 pl-4 py-1">
                     <div className="flex items-baseline gap-2 mb-2">
                       <span className="font-serif text-sm font-semibold">{d.name}</span>
                       <span className="text-[10px] text-muted">×{d.count} · confronta con: <span className="text-warning font-semibold">{d.relatedNames.join(', ')}</span></span>
@@ -1556,7 +1555,7 @@ function CorpusHealth({ monumenti, onSelectMonumento }: { monumenti: Monumento[]
 
             {naPlain.length > 0 && (
               <div className="mt-4">
-                <div className="text-[10px] font-sans uppercase tracking-widest text-muted/70 mb-2">
+                <div className="font-serif italic text-[13px] text-muted/60 mb-2">
                   Mai attestate da sole ({naPlain.length}) — informativo: in un corpus incentrato su Men è atteso anche per divinità reali
                 </div>
                 <div className="flex flex-wrap gap-2">
@@ -1571,18 +1570,18 @@ function CorpusHealth({ monumenti, onSelectMonumento }: { monumenti: Monumento[]
 
             {audit.divVsEpi.length > 0 && (
               <div className="space-y-3 mt-4">
-                <div className="text-[10px] font-sans uppercase tracking-widest text-muted/70">
+                <div className="font-serif italic text-[13px] text-muted/60">
                   Stessa forma usata sia come divinità sia come epiteto ({audit.divVsEpi.length})
                 </div>
                 {audit.divVsEpi.map(t => (
                   <div key={t.key} className="rounded-xl border border-warning/25 bg-warning/10 backdrop-blur-md p-4 shadow-sm space-y-2">
                     <div>
-                      <span className="text-[10px] font-sans uppercase tracking-widest text-warning">come divinità: </span>
+                      <span className="font-serif italic text-[13px] text-warning">come divinità: </span>
                       <span className="font-serif text-sm font-semibold">{t.asDivinita.form}</span>
                       <div className="mt-1"><IdChips ids={t.asDivinita.monumentIds} /></div>
                     </div>
                     <div>
-                      <span className="text-[10px] font-sans uppercase tracking-widest text-warning">come epiteto: </span>
+                      <span className="font-serif italic text-[13px] text-warning">come epiteto: </span>
                       <span className="font-serif text-sm font-semibold">{t.asEpiteto.form}</span>
                       <div className="mt-1"><IdChips ids={t.asEpiteto.monumentIds} /></div>
                     </div>
@@ -1595,9 +1594,9 @@ function CorpusHealth({ monumenti, onSelectMonumento }: { monumenti: Monumento[]
 
         {audit.sharedEpithets.length > 0 && (
           <div>
-            <h3 className="font-bold text-sm mb-1">
+            <h3 className="font-serif text-[15px] text-ink mb-1">
               Epiteti condivisi da più divinità
-              <span className="ml-2 text-[10px] font-sans font-normal text-muted uppercase tracking-widest">
+              <span className="ml-2 font-sans text-[11px] font-normal text-muted">
                 {audit.sharedEpithets.length} · informativo — genuinamente condivisi o contaminazione da co-occorrenza
               </span>
             </h3>
