@@ -1733,7 +1733,7 @@ const RAIL_ITEMS: { view: AppView; label: string; icon: React.ReactNode; adminOn
   { view: 'sources', label: 'Fonti letterarie', icon: <ScrollText className="h-4 w-4" /> },
   { view: 'map', label: 'Mappa', icon: <MapPin className="h-4 w-4" /> },
   { view: 'timeline', label: 'Cronologia', icon: <Clock className="h-4 w-4" /> },
-  { view: 'stats', label: 'Statistiche Epiteti', icon: <BarChart2 className="h-4 w-4" /> },
+  { view: 'stats', label: 'Statistiche epiteti', icon: <BarChart2 className="h-4 w-4" /> },
   { view: 'heatmap', label: 'Heatmap', icon: <Columns className="h-4 w-4" /> },
   { view: 'cult', label: 'Lessico cultuale', icon: <Tags className="h-4 w-4" /> },
   { view: 'health', label: 'Coerenza', icon: <Check className="h-4 w-4" />, adminOnly: true },
@@ -1806,7 +1806,7 @@ function IconRail({
                 />
               )}
               <span className="w-4 h-4 shrink-0 flex items-center justify-center">{item.icon}</span>
-              <span className="text-[8px] font-sans font-bold uppercase tracking-wide leading-none truncate max-w-[56px]">{item.label}</span>
+              <span className="text-[9px] font-sans leading-none truncate max-w-[56px]">{item.label}</span>
             </button>
           );
         })}
@@ -1821,7 +1821,7 @@ function IconRail({
           <span className="w-4 h-4 shrink-0 flex items-center justify-center">
             {isDarkModeActive ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
           </span>
-          <span className="text-[8px] font-sans font-bold uppercase tracking-wide leading-none">Tema</span>
+          <span className="text-[9px] font-sans leading-none">Tema</span>
         </button>
 
         <button
@@ -1830,7 +1830,7 @@ function IconRail({
           className={cn("flex flex-col items-center justify-center gap-1 shrink-0 w-16 h-full", showSettings ? "text-accent" : "text-muted")}
         >
           <span className="w-4 h-4 shrink-0 flex items-center justify-center"><Settings className="h-4 w-4" /></span>
-          <span className="text-[8px] font-sans font-bold uppercase tracking-wide leading-none">Impostaz.</span>
+          <span className="text-[9px] font-sans leading-none">Impostaz.</span>
         </button>
 
         {/* Sulla build statica non c'e' login Google: l'accesso in scrittura
@@ -1844,7 +1844,7 @@ function IconRail({
             <span className="w-4 h-4 shrink-0 flex items-center justify-center">
               {currentUser ? <LogOut className="h-4 w-4" /> : <LogIn className="h-4 w-4" />}
             </span>
-            <span className="text-[8px] font-sans font-bold uppercase tracking-wide leading-none">{currentUser ? 'Esci' : 'Accedi'}</span>
+            <span className="text-[9px] font-sans leading-none">{currentUser ? 'Esci' : 'Accedi'}</span>
           </button>
         )}
 
@@ -1859,7 +1859,7 @@ function IconRail({
             <span className="w-4 h-4 shrink-0 flex items-center justify-center">
               {editingUnlocked ? <Unlock className="h-4 w-4" /> : <KeyRound className="h-4 w-4" />}
             </span>
-            <span className="text-[8px] font-sans font-bold uppercase tracking-wide leading-none">{editingUnlocked ? 'Sbloccato' : 'Sblocca'}</span>
+            <span className="text-[9px] font-sans leading-none">{editingUnlocked ? 'Sbloccato' : 'Sblocca'}</span>
           </button>
         )}
       </nav>
@@ -2108,8 +2108,8 @@ function HomeView({ monumenti, onNavigate, onSearch, effectiveAdmin }: { monumen
   const allSections: { view: AppView; label: string; desc: string; icon: React.ReactNode; adminOnly?: boolean }[] = [
     { view: 'map', label: 'Mappa', desc: 'I siti di ritrovamento, geolocalizzati sul territorio antico.', icon: <MapPin className="h-5 w-5" /> },
     { view: 'timeline', label: 'Cronologia', desc: 'Le iscrizioni disposte lungo la sequenza temporale.', icon: <Clock className="h-5 w-5" /> },
-    { view: 'stats', label: 'Statistiche Epiteti', desc: 'Frequenza e distribuzione degli epiteti di Men.', icon: <BarChart2 className="h-5 w-5" /> },
-    { view: 'heatmap', label: 'Heatmap Co-occorrenze', desc: 'Quali epiteti e attributi ricorrono insieme.', icon: <Columns className="h-5 w-5" /> },
+    { view: 'stats', label: 'Statistiche epiteti', desc: 'Frequenza e distribuzione degli epiteti di Men.', icon: <BarChart2 className="h-5 w-5" /> },
+    { view: 'heatmap', label: 'Co-occorrenze', desc: 'Quali epiteti e attributi ricorrono insieme.', icon: <Columns className="h-5 w-5" /> },
     { view: 'cult', label: 'Lessico cultuale', desc: 'Il vocabolario delle funzioni cultuali marcato nelle edizioni, per lemma e famiglia.', icon: <Tags className="h-5 w-5" /> },
     { view: 'health', label: 'Coerenza', desc: "Controlli di qualità e coerenza sui dati del corpus.", icon: <Check className="h-5 w-5" />, adminOnly: true },
     { view: 'flags', label: 'Registro', desc: 'Lavorazioni in corso dei collaboratori sulle schede del catalogo.', icon: <NotebookPen className="h-5 w-5" />, adminOnly: true },
@@ -2135,16 +2135,14 @@ function HomeView({ monumenti, onNavigate, onSearch, effectiveAdmin }: { monumen
       {/* Hero: narrativa+ricerca a sinistra, wordmark a bilanciare lo spazio a destra */}
       <div className="grid grid-cols-1 lg:grid-cols-[1.3fr_1fr] gap-6 items-center mb-8">
         <div>
-          <div className="text-[10px] font-sans font-bold uppercase tracking-[0.22em] text-accent/70 mb-2">Benvenuto</div>
           <p className="text-base md:text-lg font-serif italic text-ink/85 leading-relaxed max-w-2xl mb-4">
             Il database raccoglie al momento {stats.totale} schede in {stats.citta} località del mondo antico.
           </p>
 
           <form
             onSubmit={(e) => { e.preventDefault(); if (homeQuery.trim()) onSearch(homeQuery.trim()); }}
-            className="glass-panel rounded-full flex items-center gap-3 pl-5 pr-2 py-1.5 shadow-inner focus-within:ring-1 focus-within:ring-accent/30 transition-all max-w-xl"
+            className="flex items-baseline gap-3 border-b border-border/50 focus-within:border-accent/60 transition-colors max-w-xl"
           >
-            <Search className="h-3.5 w-3.5 text-muted shrink-0" />
             <input
               type="text"
               value={homeQuery}
@@ -2155,7 +2153,7 @@ function HomeView({ monumenti, onNavigate, onSearch, effectiveAdmin }: { monumen
             <button
               type="submit"
               disabled={!homeQuery.trim()}
-              className="shrink-0 font-sans text-[9px] font-bold uppercase tracking-[0.1em] text-ink bg-accent px-4 py-2 rounded-full hover:bg-accent/90 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+              className="shrink-0 font-serif italic text-[13px] text-accent hover:text-ink disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
             >
               Cerca
             </button>
@@ -2170,7 +2168,7 @@ function HomeView({ monumenti, onNavigate, onSearch, effectiveAdmin }: { monumen
           >
             ILA
           </span>
-          <p className="text-sm font-sans font-bold uppercase tracking-[0.15em] text-muted/50">Database epigrafico</p>
+          <p className="font-serif italic text-sm text-muted/60">Database epigrafico</p>
         </div>
       </div>
 
@@ -2239,8 +2237,8 @@ function HomeView({ monumenti, onNavigate, onSearch, effectiveAdmin }: { monumen
             </motion.div>
 
             <div className="flex-1 min-w-0 flex flex-col justify-center pr-6">
-              <div className="text-[9px] md:text-[10px] font-sans font-bold uppercase tracking-[0.25em] text-white/60 mb-1.5">{hero.eyebrow}</div>
-              <div className="font-serif font-bold text-white text-2xl md:text-3xl mb-2 leading-tight tracking-tight">{hero.label}</div>
+              <div className="font-serif italic text-[13px] text-white/60 mb-1.5">{hero.eyebrow}</div>
+              <div className="font-serif text-white text-2xl md:text-3xl mb-2 leading-tight">{hero.label}</div>
               <p className="text-[13px] md:text-sm text-white/70 leading-relaxed">{hero.desc}</p>
             </div>
 
@@ -2262,9 +2260,9 @@ function HomeView({ monumenti, onNavigate, onSearch, effectiveAdmin }: { monumen
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
-        className="relative z-10 text-[10px] font-sans font-bold uppercase tracking-[0.22em] text-accent/70 mb-4"
+        className="relative z-10 font-serif text-[15px] text-ink mb-3 pb-1 border-b border-border/30"
       >
-        Strumenti database
+        Le altre sezioni
       </motion.div>
       <motion.div
         initial={{ opacity: 0, y: 12 }}
@@ -2319,7 +2317,7 @@ function HomeView({ monumenti, onNavigate, onSearch, effectiveAdmin }: { monumen
                   {s.icon}
                 </motion.div>
                 <div className="relative">
-                  <div className="font-serif font-bold text-ink text-sm mb-0.5">{s.label}</div>
+                  <div className="font-serif text-[15px] text-ink mb-0.5">{s.label}</div>
                   <p className="text-[11px] text-muted leading-snug min-h-[2.5em]">{s.desc}</p>
                 </div>
                 {/* Bordo accent che si dissolve dolcemente insieme alla luce */}

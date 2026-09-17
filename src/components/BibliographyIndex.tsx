@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { BookMarked, Loader2, Search, Wand2, Check, ChevronRight, AlertTriangle } from 'lucide-react';
+import { Loader2, AlertTriangle } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { Monumento } from '../types';
 import { PRINT_SOURCES } from '../lib/printSources';
@@ -213,10 +213,8 @@ export function BibliographyIndex({ monumenti, onApply, onSelectMonumento, progr
     <div className="flex-1 overflow-y-auto">
       <div className="p-6 md:p-10 max-w-4xl mx-auto w-full">
       <div className="mb-6">
-        <div className="text-[10px] font-sans font-bold uppercase tracking-[0.22em] text-accent/70 mb-2 flex items-center gap-1.5">
-          <BookMarked className="h-3 w-3" /> Bibliografia — censimento e modifica in blocco
-        </div>
-        <p className="text-xs font-serif italic text-muted leading-relaxed">
+        <h2 className="font-serif text-xl text-ink mb-1">Bibliografia</h2>
+        <p className="font-sans text-[11px] text-muted leading-relaxed">
           {inventory.size.toLocaleString('it')} diciture distinte su {totalBibl.toLocaleString('it')} riferimenti
           <span className="text-muted/60"> · {conflictGroups.length} gruppi con discrepanze di forma</span>
           <span className="text-muted/60"> · norme: </span>
@@ -246,10 +244,8 @@ export function BibliographyIndex({ monumenti, onApply, onSelectMonumento, progr
       )}
 
       {/* Normalizzazioni rapide */}
-      <div className="mb-6 rounded-lg border border-border/40 p-3">
-        <div className="text-[10px] font-sans font-bold uppercase tracking-wide text-muted/70 mb-2 flex items-center gap-1.5">
-          <Wand2 className="h-3 w-3" /> Normalizzazioni rapide
-        </div>
+      <div className="mb-6 border-t border-border/40 pt-3">
+        <div className="font-serif italic text-[13px] text-muted mb-2">Normalizzazioni rapide</div>
         <div className="space-y-2">
           {QUICK_RULES.map(rule => {
             const edits = ruleMatches[rule.id] || [];
@@ -263,10 +259,9 @@ export function BibliographyIndex({ monumenti, onApply, onSelectMonumento, progr
                 <button
                   disabled={busy || edits.length === 0}
                   onClick={() => runApply(edits, rule.id)}
-                  className="px-2.5 py-1 bg-accent hover:bg-accent/90 text-white font-sans text-[9px] font-bold uppercase tracking-widest transition-colors rounded-sm disabled:opacity-30 flex items-center gap-1.5 shrink-0"
+                  className="font-serif italic text-[13px] text-accent hover:text-ink transition-colors disabled:opacity-30 shrink-0"
                 >
-                  {ruleBusy === rule.id ? <Loader2 className="h-3 w-3 animate-spin" /> : <Check className="h-3 w-3" />}
-                  Applica
+                  {ruleBusy === rule.id ? 'in corso…' : 'Applica'}
                 </button>
               </div>
             );
@@ -276,28 +271,23 @@ export function BibliographyIndex({ monumenti, onApply, onSelectMonumento, progr
 
       {/* Ricerca / filtri */}
       <div className="flex gap-2 mb-3 items-center">
-        <div className="relative flex-1">
-          <Search className="h-3.5 w-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-muted/50" aria-hidden="true" />
-          <input
-            type="search"
-            aria-label="Filtra le diciture bibliografiche"
-            value={query}
-            onChange={e => setQuery(e.target.value)}
-            placeholder="Filtra le diciture…"
-            className="w-full text-xs font-sans rounded-sm border border-border bg-sidebar pl-8 pr-2.5 py-1.5 outline-none focus:border-accent transition-colors"
-          />
-        </div>
+        <input
+          type="search"
+          aria-label="Filtra le diciture bibliografiche"
+          value={query}
+          onChange={e => setQuery(e.target.value)}
+          placeholder="Filtra le diciture…"
+          className="flex-1 text-xs font-sans bg-transparent border-0 border-b border-border/50 rounded-none py-1 outline-none focus:border-accent/60 hover:border-border transition-colors"
+        />
         <button
           onClick={() => setOnlyConflicts(v => !v)}
           aria-pressed={onlyConflicts}
           className={cn(
-            'px-3 py-1.5 font-sans text-[9px] font-bold uppercase tracking-widest transition-colors rounded-sm border flex items-center gap-1.5',
-            onlyConflicts
-              ? 'border-warning/25 bg-warning/10 text-warning'
-              : 'border-border text-muted hover:text-ink hover:border-accent/40'
+            'font-serif text-[13px] transition-colors',
+            onlyConflicts ? 'text-warning italic' : 'text-muted hover:text-ink'
           )}
         >
-          <AlertTriangle className="h-3 w-3" /> Solo discrepanze
+          solo le discrepanze
         </button>
       </div>
 
@@ -317,9 +307,9 @@ export function BibliographyIndex({ monumenti, onApply, onSelectMonumento, progr
                     <button
                       key={m.entryId || m.id}
                       onClick={() => onSelectMonumento(m)}
-                      className="text-[9px] font-sans uppercase tracking-wide text-muted/70 hover:text-accent transition-colors"
+                      className="font-mono text-[11px] text-muted/60 hover:text-accent transition-colors tabular-nums"
                     >
-                      ILA-{String(m.id).padStart(3, '0')}
+                      {String(m.id).padStart(3, '0')}
                     </button>
                   ))}
                   {row.schede.length > 12 && (
@@ -331,30 +321,29 @@ export function BibliographyIndex({ monumenti, onApply, onSelectMonumento, progr
               <button
                 onClick={() => (editing === row.val ? setEditing(null) : startEdit(row.val))}
                 aria-expanded={editing === row.val}
-                className="text-[10px] font-sans font-bold uppercase tracking-wide text-accent hover:opacity-70 transition-opacity flex items-center gap-1 shrink-0 pt-0.5"
+                className="font-serif italic text-[13px] text-accent hover:text-ink transition-colors shrink-0 pt-0.5"
               >
-                Modifica <ChevronRight className={cn('h-3 w-3 transition-transform', editing === row.val && 'rotate-90')} aria-hidden="true" />
+                Modifica
               </button>
             </div>
 
             {editing === row.val && (
-              <div className="border-t border-border/40 px-3 py-2.5 space-y-2 bg-sidebar/40">
+              <div className="border-t border-border/40 px-3 py-2.5 space-y-2">
                 <textarea
                   value={draft}
                   onChange={e => setDraft(e.target.value)}
                   rows={2}
-                  className="w-full text-xs font-serif rounded-sm border border-border bg-sidebar px-2.5 py-2 outline-none focus:border-accent transition-colors resize-none"
+                  className="w-full text-xs font-serif rounded-none bg-transparent border-0 border-b border-border/50 py-1.5 outline-none focus:border-accent/60 transition-colors resize-none"
                 />
                 <div className="flex items-center gap-2">
                   <button
                     disabled={busy || draft.trim() === '' || draft === row.val}
                     onClick={() => runApply([{ from: row.val, to: draft.trim() }])}
-                    className="px-3 py-1.5 bg-accent hover:bg-accent/90 text-white font-sans text-[9px] font-bold uppercase tracking-widest transition-colors rounded-sm disabled:opacity-30 flex items-center gap-1.5"
+                    className="font-serif italic text-[13px] text-accent hover:text-ink transition-colors disabled:opacity-30"
                   >
-                    {applying ? <Loader2 className="h-3 w-3 animate-spin" /> : <Check className="h-3 w-3" />}
-                    Sostituisci in {row.schede.length} {row.schede.length === 1 ? 'scheda' : 'schede'}
+                    {applying ? 'in corso…' : `Sostituisci in ${row.schede.length} ${row.schede.length === 1 ? 'scheda' : 'schede'}`}
                   </button>
-                  <button onClick={() => setEditing(null)} className="px-3 py-1.5 text-muted hover:text-ink font-sans text-[9px] font-bold uppercase tracking-widest transition-colors rounded-sm">
+                  <button onClick={() => setEditing(null)} className="font-serif italic text-[13px] text-muted hover:text-ink transition-colors">
                     Annulla
                   </button>
                 </div>
@@ -363,7 +352,7 @@ export function BibliographyIndex({ monumenti, onApply, onSelectMonumento, progr
           </div>
         ))}
         {rows.length === 0 && (
-          <div className="text-sm italic text-muted/60 py-12 text-center">Nessuna dicitura corrisponde al filtro.</div>
+          <div className="font-serif italic text-sm text-muted/60 py-12 text-center">Nessuna dicitura corrisponde al filtro.</div>
         )}
       </div>
       </div>

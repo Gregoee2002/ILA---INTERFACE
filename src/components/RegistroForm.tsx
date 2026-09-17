@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { NotebookPen, Check, RotateCcw, Loader2 } from 'lucide-react';
 import { EntryRegistro } from '../types';
 
 /**
@@ -61,12 +60,10 @@ export function RegistroForm({ entryId, entryLabel, registro, effectiveAdmin, kn
 
   return (
     <section className="pt-6 border-t border-border/40 mt-6 space-y-3">
-      <h4 className="font-sans field-label opacity-85 pb-1 flex items-center justify-between gap-1.5">
-        <span className="flex items-center gap-1.5">
-          <NotebookPen className="h-3 w-3" /> Registro
-        </span>
+      <h4 className="field-label pb-1 flex items-baseline justify-between gap-1.5">
+        <span>Registro</span>
         {registro && (
-          <span className={`text-[9px] font-sans font-bold uppercase tracking-wide ${registro.status === 'open' ? 'text-accent' : 'text-muted/60'}`}>
+          <span className={`font-serif italic text-[12px] ${registro.status === 'open' ? 'text-accent' : 'text-muted/60'}`}>
             {registro.status === 'open' ? 'Aperto' : 'Risolto'}
           </span>
         )}
@@ -75,9 +72,9 @@ export function RegistroForm({ entryId, entryLabel, registro, effectiveAdmin, kn
       {notes.length > 0 && (
         <ul className="space-y-2">
           {notes.map(n => (
-            <li key={n.id} className="text-xs font-serif rounded-sm border border-border/40 bg-border/10 px-2.5 py-2">
+            <li key={n.id} className="text-xs font-serif border-l border-border/60 pl-2.5 py-0.5">
               <p className="text-ink leading-snug whitespace-pre-wrap">{n.testo}</p>
-              <span className="block text-[9px] font-sans uppercase tracking-wide text-muted/70 mt-1.5">
+              <span className="block font-serif italic text-[12px] text-muted/60 mt-1.5">
                 {n.author} · {new Date(n.createdAt).toLocaleDateString('it-IT')}
               </span>
             </li>
@@ -90,10 +87,9 @@ export function RegistroForm({ entryId, entryLabel, registro, effectiveAdmin, kn
           <button
             onClick={toggleStatus}
             disabled={busy}
-            className="text-[9px] font-sans font-bold uppercase tracking-wide text-accent hover:opacity-70 transition-opacity flex items-center gap-1 shrink-0"
+            className="font-serif italic text-[12px] text-accent hover:opacity-70 transition-opacity shrink-0"
           >
-            {busy ? <Loader2 className="h-3 w-3 animate-spin" /> : registro.status === 'open' ? <Check className="h-3 w-3" /> : <RotateCcw className="h-3 w-3" />}
-            {registro.status === 'open' ? 'Risolvi' : 'Riapri'}
+            {busy ? 'in corso…' : registro.status === 'open' ? 'Risolvi' : 'Riapri'}
           </button>
         </div>
       )}
@@ -101,9 +97,9 @@ export function RegistroForm({ entryId, entryLabel, registro, effectiveAdmin, kn
       {!showForm && (
         <button
           onClick={() => setShowForm(true)}
-          className="w-full py-2 border border-border text-muted hover:text-ink hover:border-accent/40 font-sans text-[9px] font-bold uppercase tracking-widest transition-colors flex items-center justify-center gap-1.5 rounded-sm"
+          className="w-full text-left font-serif italic text-[13px] text-muted hover:text-accent transition-colors"
         >
-          <NotebookPen className="h-3 w-3" /> Aggiungi nota
+          Aggiungi nota
         </button>
       )}
 
@@ -131,14 +127,14 @@ export function RegistroForm({ entryId, entryLabel, registro, effectiveAdmin, kn
             <button
               type="submit"
               disabled={submitting || !note.trim() || !author.trim()}
-              className="flex-1 py-1.5 bg-accent hover:bg-accent/90 text-white font-sans text-[9px] font-bold uppercase tracking-widest transition-colors rounded-sm disabled:opacity-40 flex items-center justify-center gap-1.5"
+              className="font-serif italic text-[13px] text-accent hover:text-ink transition-colors disabled:opacity-40"
             >
-              {submitting ? <Loader2 className="h-3 w-3 animate-spin" /> : null} Salva nota
+              {submitting ? 'in corso…' : 'Salva nota'}
             </button>
             <button
               type="button"
               onClick={() => { setShowForm(false); setError(null); }}
-              className="px-3 py-1.5 text-muted hover:text-ink font-sans text-[9px] font-bold uppercase tracking-widest transition-colors rounded-sm"
+              className="font-serif italic text-[13px] text-muted hover:text-ink transition-colors"
             >
               Annulla
             </button>
