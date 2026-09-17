@@ -6126,7 +6126,10 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
           {activeView === 'catalog' && (
             <>
                 {/* Record List */}
-                <div className="flex-1 flex flex-col overflow-hidden min-h-0">
+                {/* px-4 su schermo stretto: senza la cornice di prima, che
+                    portava il suo px-6, la colonna dei numeri e il sommario
+                    arrivavano a filo del vetro. */}
+                <div className="flex-1 flex flex-col overflow-hidden min-h-0 px-4 sm:px-0">
                   <div className="mb-1 pb-1.5 flex items-center justify-between border-b border-border/40 font-sans text-[11px] text-muted">
                     <span role="status" aria-live="polite">{filteredMonumenti.length} schede</span>
                     <div className="flex items-baseline gap-1.5">

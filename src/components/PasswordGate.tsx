@@ -161,7 +161,7 @@ export function PasswordGate() {
                 transition={{ delay: 0.9, duration: 0.6 }}
                 type="submit"
                 disabled={checking || !password}
-                className="font-sans text-xs font-bold uppercase tracking-[0.15em] text-parchment bg-accent px-9 py-4 rounded-full shadow-[0_8px_24px_rgba(31,131,119,0.25)] hover:bg-accent/90 hover:shadow-[0_10px_28px_rgba(31,131,119,0.32)] transition-all duration-300 mt-6 disabled:opacity-40"
+                className="font-serif text-[15px] text-parchment bg-accent px-9 py-3.5 rounded-full shadow-[0_8px_24px_rgba(31,131,119,0.25)] hover:bg-accent/90 hover:shadow-[0_10px_28px_rgba(31,131,119,0.32)] transition-all duration-300 mt-6 disabled:opacity-40"
               >
                 {checking ? 'Verifica…' : 'Entra'}
               </motion.button>
@@ -173,7 +173,7 @@ export function PasswordGate() {
               transition={{ duration: 0.6 }}
               onClick={() => setEntered(true)}
               disabled={!corpusReady}
-              className="font-sans text-xs font-bold uppercase tracking-[0.15em] text-parchment bg-accent px-9 py-4 rounded-full shadow-[0_8px_24px_rgba(31,131,119,0.25)] hover:bg-accent/90 hover:shadow-[0_10px_28px_rgba(31,131,119,0.32)] transition-all duration-300 disabled:opacity-40"
+              className="font-serif text-[15px] text-parchment bg-accent px-9 py-3.5 rounded-full shadow-[0_8px_24px_rgba(31,131,119,0.25)] hover:bg-accent/90 hover:shadow-[0_10px_28px_rgba(31,131,119,0.32)] transition-all duration-300 disabled:opacity-40"
             >
               {corpusReady ? 'Entra nel catalogo' : 'Caricamento…'}
             </motion.button>
