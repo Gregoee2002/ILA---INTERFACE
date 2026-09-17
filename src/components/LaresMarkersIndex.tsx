@@ -4,21 +4,19 @@ import {
   TestimoniumRisolto, toolboxLetterario, PercorsoLetterario, foldForSearch, citaBreve,
 } from '../lib/litSources';
 import {
-  LARES_TOOLBOX, LARES_GRID, AMBITO_CAMPO, AMBITO_LABELS, CAMPO_COLOR, LaresAmbito,
+  LARES_TOOLBOX, LARES_GRID, AMBITO_LABELS, CAMPO_COLOR, LaresAmbito,
   itemColor, toolboxItem, ToolboxFonte,
 } from '../lib/laresToolbox';
-import { ChevronDown, ChevronRight, Search } from 'lucide-react';
 import { Segno } from './LaresGrid';
 
 /**
  * LaresMarkersIndex — le due griglie LARES come strumento di ricerca.
  *
- * Prima erano due elenchi piatti di voci d'indice, uguali a quello delle opere
- * o dei luoghi: si leggeva che cosa era stato marcato, non che forma avesse lo
- * spoglio. Qui prendono la grafica della vista «Lessico cultuale» — sezioni,
- * barre in scala √ su scala comune, conteggio reale a fianco, riga che si apre
- * sui passi — perché è la stessa domanda: dove si addensa la marcatura, e che
- * cosa c'è esattamente sotto un ramo.
+ * Non sono elenchi di nomi come le altre rubriche — opere, luoghi, divinità —
+ * ma classificazioni: la riga porta il ramo, il conteggio dei passi e, aperta,
+ * i passi stessi. La veste è quella del «Lessico cultuale», cioè quella di un
+ * indice a stampa: filetto puntinato fra voce e numero, niente barre (il resto
+ * del database è fatto di elenchi navigabili, non di grafici) e niente icone.
  *
  * L'ordine di default è quello **della griglia**, non della frequenza: la
  * griglia è un discorso, e leggerla per frequenza la spezza. Il toggle
@@ -26,8 +24,12 @@ import { Segno } from './LaresGrid';
  */
 
 const FIELD_BASE =
-  'bg-[var(--card)] dark:bg-black/25 border border-[var(--border)]/50 dark:border-white/5 rounded-lg font-sans text-xs outline-none shadow-inner focus:border-accent/50 focus:ring-1 focus:ring-accent/30 hover:bg-[var(--sidebar)] dark:hover:bg-black/40 transition-all duration-300';
-const FIELD_STYLE = { backgroundColor: 'var(--card)', color: 'var(--ink)' } as const;
+  'bg-transparent border-0 border-b border-border/50 rounded-none font-sans text-xs text-ink outline-none ' +
+  'focus:border-accent/60 hover:border-border transition-colors';
+
+// Gli stessi tre grigi del Lessico cultuale.
+const SEC = 'text-muted';
+const TER = 'text-muted/60';
 
 type Ordine = 'griglia' | 'frequenza';
 
@@ -54,17 +56,16 @@ function fonteDelPercorso(key: string): ToolboxFonte | undefined {
   return sub?.fonte || cat?.fonte;
 }
 
-const Barra: React.FC<{ pct: number; color: string }> = ({ pct, color }) => (
-  <span className="flex-1 min-w-[3rem] max-w-[20rem] h-2.5 rounded-sm bg-border/30 overflow-hidden">
-    <span className="block h-full rounded-sm" style={{ width: `${pct}%`, backgroundColor: color }} />
-  </span>
+/** Filetto puntinato dell'indice a stampa: lega la voce al suo numero. */
+const Filetto: React.FC = () => (
+  <span className="flex-1 self-center border-b border-dotted border-border/70 mx-1" />
 );
 
 const Intestazione: React.FC<{ colore: string; titolo: string; nota: string }> = ({ colore, titolo, nota }) => (
-  <div className="flex items-baseline gap-2.5 mb-2 pb-1 border-b border-border/40">
-    <span className="h-2.5 w-2.5 rounded-sm shrink-0" style={{ backgroundColor: colore }} />
-    <h3 className="text-sm font-sans font-bold uppercase tracking-[0.15em] text-ink/90">{titolo}</h3>
-    <span className="text-xs font-sans text-muted/60">{nota}</span>
+  <div className="flex items-baseline gap-2 mb-1.5 pb-1 border-b border-border/30">
+    <span className="h-2 w-2 rounded-[1px] shrink-0 self-center" style={{ backgroundColor: colore }} />
+    <h3 className="font-serif text-[15px] text-ink">{titolo}</h3>
+    <span className={cn('font-sans text-[11px]', TER)}>{nota}</span>
   </div>
 );
 
@@ -93,7 +94,6 @@ export const ToolboxIndex: React.FC<{
     return tokens.some(t => hay.includes(t));
   };
   const visibili = percorsi.filter(passa);
-  const maxOcc = Math.max(1, ...visibili.map(p => p.occorrenze.length));
   const totale = visibili.reduce((n, p) => n + p.occorrenze.length, 0);
 
   const toggle = (k: string) => setAperti(prev => {
@@ -102,7 +102,6 @@ export const ToolboxIndex: React.FC<{
 
   const riga = (p: PercorsoLetterario) => {
     const aperto = aperti.has(p.key);
-    const colore = itemColor(p.marker.item);
     const parti = p.label.split(' → ');
     const coda = parti[parti.length - 1];
     const testa = parti.slice(1, -1).join(' → '); // l'item è già nell'intestazione di sezione
@@ -111,23 +110,20 @@ export const ToolboxIndex: React.FC<{
       <div key={p.key}>
         <button
           onClick={() => toggle(p.key)}
-          className="w-full flex items-center gap-3 px-2 py-1.5 text-left rounded-sm hover:bg-sidebar/50 transition-colors"
+          className="w-full flex items-baseline gap-2 px-1.5 py-[3px] text-left rounded-sm hover:bg-sidebar/40 transition-colors"
         >
-          <span className="w-[11rem] shrink-0 text-right truncate text-[13px] font-serif" title={p.label}>
-            {testa && <span className="text-muted/50">{testa} → </span>}
-            <span className="text-ink/85">{coda}</span>
-          </span>
-          <Barra pct={Math.max(2, (Math.sqrt(p.occorrenze.length) / Math.sqrt(maxOcc)) * 100)} color={colore} />
-          <span className="shrink-0 w-8 text-right text-xs font-sans text-muted/80 tabular-nums">
-            {p.occorrenze.length}
+          <span className="shrink-0 truncate text-[13px] font-serif" title={p.label}>
+            {testa && <span className={TER}>{testa} → </span>}
+            <span className={cn('transition-colors', aperto ? 'text-accent' : 'text-ink')}>{coda}</span>
           </span>
           <Segno fonte={fonte} />
-          <span className="shrink-0 text-muted/40">
-            {aperto ? <ChevronDown className="h-3.5 w-3.5" /> : <ChevronRight className="h-3.5 w-3.5" />}
+          <Filetto />
+          <span className={cn('shrink-0 w-8 text-right text-xs font-sans tabular-nums', SEC)}>
+            {p.occorrenze.length}
           </span>
         </button>
         {aperto && (
-          <div className="pl-[11.75rem] pr-2 pb-2 space-y-1">
+          <div className="ml-4 pl-3 my-1 border-l border-border/40 space-y-1">
             {p.occorrenze.map((o, i) => (
               <button
                 key={`${o.testimoniumId}-${i}`}
@@ -135,11 +131,11 @@ export const ToolboxIndex: React.FC<{
                 className="w-full text-left flex items-baseline gap-2 group"
                 title={`Vai a ${o.cita}`}
               >
-                <span className="text-[11px] font-serif italic text-muted/70 group-hover:text-accent shrink-0">
+                <span className={cn('text-[11px] font-serif italic shrink-0 group-hover:text-accent', SEC)}>
                   {o.cita}
                 </span>
                 <span
-                  className={cn('text-[13px] truncate', o.lingua === 'grc' ? 'font-greek' : 'font-serif italic')}
+                  className={cn('text-[13px] truncate', TER, o.lingua === 'grc' ? 'font-greek' : 'font-serif italic')}
                   lang={o.lingua}
                 >
                   {o.testo}
@@ -154,46 +150,45 @@ export const ToolboxIndex: React.FC<{
 
   if (percorsi.length === 0) {
     return (
-      <p className="text-sm italic text-muted/60 py-10 text-center">
-        Nessun segmento marcato col toolbox. La griglia si riempie marcando il testo, non compilando un campo.
+      <p className={cn('font-serif italic text-sm py-10 text-center', SEC)}>
+        Nessun segmento marcato col toolbox: la griglia si riempie marcando il testo, non compilando un campo.
       </p>
     );
   }
 
   return (
     <>
-      <p className="text-[13px] font-serif italic text-muted/70 leading-relaxed mb-4">
-        {visibili.length} rami della griglia · {passi(totale)} marcati. L'ordine è quello del documento
-        LARES: la griglia è un discorso, leggerla per frequenza lo spezza — ma il toggle c'è.
-      </p>
-
-      <div className="flex flex-wrap gap-2 mb-6 items-center">
-        <div className="relative flex-1 min-w-[14rem]">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted/50 pointer-events-none" />
-          <input
-            type="text" value={search} onChange={e => setSearch(e.target.value)}
-            placeholder="Filtra ramo, passo, testo marcato…"
-            className={cn(FIELD_BASE, 'w-full pl-9 pr-3 py-2')} style={FIELD_STYLE}
-          />
-        </div>
-        <div className="inline-flex rounded-lg border border-[var(--border)]/50 dark:border-white/5 overflow-hidden text-[10px] font-sans font-bold uppercase tracking-widest shadow-inner">
-          {(['griglia', 'frequenza'] as Ordine[]).map(o => (
-            <button key={o} onClick={() => setOrdine(o)}
-              className={cn('px-3 py-2 transition-colors', ordine === o ? 'bg-accent/10 text-accent' : 'text-muted hover:text-ink')}>
-              {o === 'griglia' ? 'per griglia' : 'per frequenza'}
-            </button>
+      <div className="flex flex-wrap gap-x-5 gap-y-2 mb-5 items-baseline">
+        <input
+          type="text" value={search} onChange={e => setSearch(e.target.value)}
+          placeholder="filtra ramo, passo, testo marcato…"
+          className={cn(FIELD_BASE, 'flex-1 min-w-[14rem] py-1')}
+        />
+        <div className="flex items-baseline gap-1.5">
+          {(['griglia', 'frequenza'] as Ordine[]).map((o, i) => (
+            <React.Fragment key={o}>
+              {i > 0 && <span className={TER}>·</span>}
+              <button onClick={() => setOrdine(o)}
+                title={o === 'griglia' ? "l'ordine del documento LARES: la griglia è un discorso" : 'che cosa è più marcato'}
+                className={cn('font-serif text-[13px] transition-colors', ordine === o ? 'text-accent italic' : `${SEC} hover:text-ink`)}>
+                {o === 'griglia' ? 'per griglia' : 'per frequenza'}
+              </button>
+            </React.Fragment>
           ))}
         </div>
+        <span className={cn('font-sans text-[11px]', TER)}>
+          {visibili.length} rami · {passi(totale)}
+        </span>
       </div>
 
       {visibili.length === 0 ? (
-        <p className="text-sm italic text-muted/60 py-10 text-center">Nessun ramo per questo filtro.</p>
+        <p className={cn('font-serif italic text-sm py-10 text-center', SEC)}>Nessun ramo per questo filtro.</p>
       ) : ordine === 'frequenza' ? (
         <div className="space-y-0.5">
           {[...visibili].sort((a, b) => b.occorrenze.length - a.occorrenze.length || a.label.localeCompare(b.label)).map(riga)}
         </div>
       ) : (
-        <div className="space-y-7">
+        <div className="space-y-6">
           {LARES_TOOLBOX.map(item => {
             const suoi = visibili.filter(p => p.marker.item === item.id);
             if (suoi.length === 0) return null;
@@ -235,12 +230,11 @@ export const AmbitiIndex: React.FC<{
     return m;
   }, [testimonia]);
 
-  const max = Math.max(1, ...[...perAmbito.values()].map(v => v.length));
   const totale = [...perAmbito.values()].reduce((n, v) => n + v.length, 0);
 
   if (totale === 0) {
     return (
-      <p className="text-sm italic text-muted/60 py-10 text-center">
+      <p className={cn('font-serif italic text-sm py-10 text-center', SEC)}>
         Nessun marcatore concettuale assegnato.
       </p>
     );
@@ -252,12 +246,11 @@ export const AmbitiIndex: React.FC<{
 
   return (
     <>
-      <p className="text-[13px] font-serif italic text-muted/70 leading-relaxed mb-5">
-        I nove marcatori qualificano la <b>testimonianza intera</b>, non un segmento: sono l'altro
-        livello di LARES, e una stessa testimonianza può stare sotto più ambiti. Le barre contano
-        passi, non parole.
+      <p className={cn('font-serif italic text-[13px] leading-relaxed mb-5', SEC)}>
+        I nove marcatori qualificano la testimonianza intera, non un segmento: sono l'altro livello
+        di LARES, e una stessa testimonianza può stare sotto più ambiti.
       </p>
-      <div className="space-y-7">
+      <div className="space-y-6">
         {LARES_GRID.map(campo => {
           const righe = campo.ambiti.filter(a => (perAmbito.get(a.id) || []).length > 0);
           if (righe.length === 0) return null;
@@ -276,25 +269,23 @@ export const AmbitiIndex: React.FC<{
                   return (
                     <div key={a.id}>
                       <button onClick={() => toggle(a.id)}
-                        className="w-full flex items-center gap-3 px-2 py-1.5 text-left rounded-sm hover:bg-sidebar/50 transition-colors">
-                        <span className="w-[11rem] shrink-0 text-right truncate text-[13px] font-serif text-ink/85">
-                          {AMBITO_LABELS[a.id]}
-                          <span className="text-muted/45 italic"> · {a.en}</span>
+                        className="w-full flex items-baseline gap-2 px-1.5 py-[3px] text-left rounded-sm hover:bg-sidebar/40 transition-colors">
+                        <span className="shrink-0 truncate text-[13px] font-serif">
+                          <span className={cn('transition-colors', aperto ? 'text-accent' : 'text-ink')}>
+                            {AMBITO_LABELS[a.id]}
+                          </span>
+                          <span className={cn('italic', TER)}> · {a.en}</span>
                         </span>
-                        <Barra pct={Math.max(2, (Math.sqrt(refs.length) / Math.sqrt(max)) * 100)}
-                          color={CAMPO_COLOR[AMBITO_CAMPO[a.id]]} />
-                        <span className="shrink-0 w-8 text-right text-xs font-sans text-muted/80 tabular-nums">
+                        <Filetto />
+                        <span className={cn('shrink-0 w-8 text-right text-xs font-sans tabular-nums', SEC)}>
                           {refs.length}
-                        </span>
-                        <span className="shrink-0 text-muted/40">
-                          {aperto ? <ChevronDown className="h-3.5 w-3.5" /> : <ChevronRight className="h-3.5 w-3.5" />}
                         </span>
                       </button>
                       {aperto && (
-                        <div className="pl-[11.75rem] pr-2 pb-2 flex flex-wrap gap-x-4 gap-y-1">
+                        <div className="ml-4 pl-3 my-1 border-l border-border/40 flex flex-wrap gap-x-3 gap-y-1">
                           {refs.map(r => (
                             <button key={r.id} onClick={() => onGo(r.id)}
-                              className="text-[11px] font-serif italic text-muted/70 hover:text-accent">
+                              className={cn('text-[11px] font-serif italic hover:text-accent', SEC)}>
                               {r.cita}
                             </button>
                           ))}
