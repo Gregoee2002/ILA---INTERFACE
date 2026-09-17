@@ -1,5 +1,5 @@
 import React, { useMemo, useState, useEffect, useCallback } from 'react';
-import { X, Loader2 } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 import { cn } from '../lib/utils';
 import {
   LitDataset, Opera, Saggio, TestimoniumRisolto, Genere, LaresCampo, IndexEntry, IndiceKey,
@@ -140,8 +140,8 @@ const SchedaTestimonium: React.FC<{
           <div className="w-full md:w-56 bg-sidebar border-b md:border-b-0 md:border-r border-border p-5 md:p-6 flex flex-col shrink-0 md:overflow-y-auto custom-scrollbar">
             <div className="mb-10">
               <button onClick={onClose}
-                className="text-[10px] font-sans font-bold uppercase tracking-[0.2em] text-muted flex items-center gap-2 hover:text-accent transition-colors">
-                <X className="h-4 w-4" /> Torna all'elenco
+                className={cn('font-serif italic text-[13px] transition-colors', SEC, 'hover:text-accent')}>
+                ‹ Torna all'elenco
               </button>
             </div>
 
@@ -155,8 +155,8 @@ const SchedaTestimonium: React.FC<{
                 {SCHEDA_SECTIONS.map(({ id, label }) => (
                   <button key={id} onClick={() => setSezione(id)}
                     className={cn(
-                      'w-full text-left px-3.5 py-2.5 font-sans text-[11px] font-bold uppercase tracking-wider rounded-xl transition-all duration-200',
-                      sezione === id ? 'nav-pill-active text-accent' : 'text-muted hover:text-ink',
+                      'w-full text-left px-1.5 py-1 font-serif text-[14px] transition-colors',
+                      sezione === id ? 'text-accent italic' : `${SEC} hover:text-ink`,
                     )}>
                     {label}
                   </button>
@@ -168,14 +168,14 @@ const SchedaTestimonium: React.FC<{
                 <dl className="space-y-3">
                   {dettagli.map(d => (
                     <div key={d.label}>
-                      <dt className="text-[9px] font-sans font-bold uppercase text-muted tracking-tighter">{d.label}</dt>
+                      <dt className={cn('font-serif italic text-[12px]', TER)}>{d.label}</dt>
                       {d.onClick ? (
                         <button onClick={d.onClick}
-                          className="text-xs font-semibold text-ink mt-0.5 font-serif hover:text-accent transition-colors block text-left">
+                          className="text-[14px] text-ink mt-0.5 font-serif hover:text-accent transition-colors block text-left">
                           {d.value}
                         </button>
                       ) : (
-                        <dd className="text-xs font-semibold text-ink mt-0.5 font-serif">{d.value}</dd>
+                        <dd className="text-[14px] text-ink mt-0.5 font-serif">{d.value}</dd>
                       )}
                     </div>
                   ))}
@@ -206,7 +206,7 @@ const SchedaTestimonium: React.FC<{
               <div className="text-[10px] font-sans font-bold tracking-[0.3em] mb-2" style={{ color: 'var(--lit)' }}>
                 {nucleoTitolo || 'Testimonianza'}
               </div>
-              <h2 className="font-serif font-bold text-ink text-2xl md:text-3xl leading-tight mb-1">
+              <h2 className="font-serif text-ink text-2xl md:text-3xl leading-tight mb-1">
                 {t.autore}, <span className="italic">{t.opera}</span> {t.locus}
               </h2>
               <p className="text-xs font-sans text-muted mb-8">
@@ -332,7 +332,7 @@ const SchedaTestimonium: React.FC<{
                         ] as const).map(([k, label]) =>
                           (t[k] || []).length > 0 ? (
                             <div key={k} className="flex flex-wrap items-baseline gap-2">
-                              <dt className="text-[9px] font-sans font-bold uppercase text-muted tracking-tighter w-28 shrink-0">{label}</dt>
+                              <dt className={cn('font-serif italic text-[12px] w-28 shrink-0', TER)}>{label}</dt>
                               <dd className="text-[14px] font-serif text-ink/85">{(t[k] || []).join(' · ')}</dd>
                             </div>
                           ) : null,

@@ -468,7 +468,7 @@ const DivinityDiagonalList = ({ items, onSelect, onActiveChange, onScrollProgres
                         {d.count}×
                       </span>
                       {epitetoHit && (
-                        <span className="text-[10px] font-sans font-bold uppercase tracking-widest text-accent/70 bg-accent/10 px-1.5 py-0.5 rounded-sm truncate">
+                        <span className="font-serif italic text-[12px] text-accent/80 truncate">
                           {epitetoHit}
                         </span>
                       )}
@@ -1934,7 +1934,7 @@ function IconRail({
                       animate={{ opacity: 1, x: 0 }}
                       exit={{ opacity: 0, x: -6 }}
                       transition={{ duration: 0.15 }}
-                      className="text-[11px] font-sans font-bold uppercase tracking-widest whitespace-nowrap"
+                      className="font-serif text-[14px] whitespace-nowrap"
                     >
                       {item.label}
                     </motion.span>
@@ -1959,7 +1959,7 @@ function IconRail({
               {expanded && (
                 <motion.span
                   initial={{ opacity: 0, x: -6 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -6 }} transition={{ duration: 0.15 }}
-                  className="text-[11px] font-sans font-bold uppercase tracking-widest whitespace-nowrap"
+                  className="font-serif text-[14px] whitespace-nowrap"
                 >
                   {isDarkModeActive ? "Modalità Giorno" : "Modalità Notte"}
                 </motion.span>
@@ -1977,7 +1977,7 @@ function IconRail({
               {expanded && (
                 <motion.span
                   initial={{ opacity: 0, x: -6 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -6 }} transition={{ duration: 0.15 }}
-                  className="text-[11px] font-sans font-bold uppercase tracking-widest whitespace-nowrap"
+                  className="font-serif text-[14px] whitespace-nowrap"
                 >
                   Impostazioni
                 </motion.span>
@@ -2000,7 +2000,7 @@ function IconRail({
                 {expanded && (
                   <motion.span
                     initial={{ opacity: 0, x: -6 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -6 }} transition={{ duration: 0.15 }}
-                    className="text-[11px] font-sans font-bold uppercase tracking-widest whitespace-nowrap truncate"
+                    className="font-serif text-[14px] whitespace-nowrap truncate"
                   >
                     {currentUser ? (currentUser.email === ADMIN_EMAIL ? 'Admin' : currentUser.email) : 'Accedi'}
                   </motion.span>
@@ -2022,7 +2022,7 @@ function IconRail({
                 {expanded && (
                   <motion.span
                     initial={{ opacity: 0, x: -6 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -6 }} transition={{ duration: 0.15 }}
-                    className="text-[11px] font-sans font-bold uppercase tracking-widest whitespace-nowrap truncate"
+                    className="font-serif text-[14px] whitespace-nowrap truncate"
                   >
                     {editingUnlocked ? 'Modifica sbloccata' : 'Sblocca modifica'}
                   </motion.span>
@@ -2046,8 +2046,8 @@ function IconRail({
                 transition={{ duration: 0.15 }}
                 className="min-w-0"
               >
-                <div className="text-[9px] font-sans font-bold uppercase tracking-widest text-muted/70 whitespace-nowrap">{moon.name}</div>
-                <div className="text-[8px] font-sans text-muted/50 whitespace-nowrap">Mensis dies {moon.day}</div>
+                <div className="font-serif italic text-[12px] text-muted whitespace-nowrap">{moon.name}</div>
+                <div className="font-serif text-[11px] text-muted/60 whitespace-nowrap">Mensis dies {moon.day}</div>
               </motion.div>
             )}
           </AnimatePresence>
@@ -3158,7 +3158,7 @@ const EpiDocRenderer = ({ xml, query, onTermClick, divinityIndex, onomasticaInde
             return (
               <div key={key} className={isColumn ? '' : 'mb-8'}>
                 <div
-                  className="text-[9px] font-bold uppercase tracking-widest text-accent mb-3"
+                  className="font-serif italic text-[13px] text-accent mb-3"
                   style={{ fontFamily: 'monospace', fontStyle: 'normal' }}
                 >{isColumn ? `col. ${nAttr}` : nAttr}</div>
                 {Array.from(node.childNodes).map((child: any, i) => renderNode(child, key + '-' + i))}
@@ -4013,7 +4013,7 @@ const FacsimileImage: React.FC<{ url: string; desc?: string }> = ({ url, desc })
   const [failed, setFailed] = useState(false);
   if (failed) {
     return (
-      <div className="text-center p-6 text-xs text-muted font-sans uppercase tracking-widest">
+      <div className="text-center p-6 font-serif italic text-[13px] text-muted">
         <span className="italic text-accent block mb-2">[Squeeze Grafico: {url}]</span>
         {desc || ''}
       </div>
@@ -5465,7 +5465,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
       <div className="h-dvh w-full flex flex-col items-center justify-center bg-parchment gap-10 px-6">
         <div className="flex flex-col items-center gap-3">
           <span className="text-3xl font-bold tracking-[0.15em] text-accent/40" style={{ fontFamily: '"Cinzel", serif' }}>ILA</span>
-          <div className="flex items-center gap-2 text-[10px] font-sans font-bold uppercase tracking-widest text-muted/60">
+          <div className="flex items-center gap-2 font-sans text-[11px] text-muted/60">
             <Loader2 className="h-3 w-3 animate-spin text-accent" /> Caricamento del corpus…
           </div>
         </div>
@@ -5497,7 +5497,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
           <p className="text-xs text-muted leading-relaxed">{loadError}</p>
           <button
             onClick={() => window.location.reload()}
-            className="mt-2 px-4 py-1.5 text-xs font-sans font-bold uppercase tracking-widest bg-accent text-white rounded-sm"
+            className="mt-2 font-serif italic text-[13px] text-accent hover:text-ink transition-colors"
           >
             Riprova
           </button>
@@ -5593,7 +5593,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.9, duration: 0.6 }}
                 onClick={() => setShowLanding(false)}
-                className="font-sans text-xs font-bold uppercase tracking-[0.15em] text-parchment bg-accent px-9 py-4 rounded-full shadow-[0_8px_24px_rgba(31,131,119,0.25)] hover:bg-accent/90 hover:shadow-[0_10px_28px_rgba(31,131,119,0.32)] transition-all duration-300"
+                className="font-serif text-[15px] text-parchment bg-accent px-9 py-3.5 rounded-full shadow-[0_8px_24px_rgba(31,131,119,0.25)] hover:bg-accent/90 hover:shadow-[0_10px_28px_rgba(31,131,119,0.32)] transition-all duration-300"
               >
                 Entra nel catalogo
               </motion.button>
@@ -5631,7 +5631,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
           </div>
           <div className="mt-2 lg:mt-4 flex flex-col items-start">
             <p className="text-lg md:text-xl italic text-muted font-serif text-ink/70 leading-tight">Index lunae antiquae</p>
-            <p className="text-[11px] md:text-[12px] font-sans font-bold uppercase tracking-[0.15em] text-muted/60 leading-none mt-2 whitespace-nowrap">Database epigrafico</p>
+            <p className="font-serif italic text-[13px] text-muted/60 leading-none mt-2 whitespace-nowrap">Database epigrafico</p>
           </div>
         </div>
         )}
@@ -5817,7 +5817,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                       </button>
                       {importStatus.type !== 'idle' && (
                         <div className={cn(
-                          "text-[9px] font-bold uppercase tracking-widest pl-0.5",
+                          "font-serif italic text-[13px] pl-0.5",
                           importStatus.type === 'loading' && "text-accent",
                           importStatus.type === 'success' && "text-success",
                           importStatus.type === 'error' && "text-danger"
@@ -7368,13 +7368,13 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                                <span className="font-serif italic text-[13px] text-danger whitespace-nowrap">Sicuro di voler eliminare?</span>
                                <button
                                  onClick={() => handleDelete()}
-                                 className="px-4 py-1.5 bg-danger text-white font-sans text-[9px] font-bold uppercase tracking-widest hover:bg-danger/90 transition-colors"
+                                 className="font-serif italic text-[13px] text-danger hover:opacity-70 transition-opacity"
                                >
                                  Conferma
                                </button>
                                <button 
                                  onClick={() => setShowDeleteConfirm(false)}
-                                 className="px-4 py-1.5 border border-border text-muted font-sans text-[9px] font-bold uppercase tracking-widest hover:bg-sidebar transition-colors"
+                                 className="font-serif italic text-[13px] text-muted hover:text-ink transition-colors"
                                >
                                  Annulla
                                </button>
@@ -7389,7 +7389,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                       <div className="space-y-5 mt-1">
                         {selectedMonumento.facsimile_url && (
                           <div className="bg-sidebar/40 p-6 border border-border/60 rounded-sm">
-                            <span className="text-[10px] font-sans font-bold uppercase tracking-[0.2em] text-accent block mb-3">Facsimile / Squeeze Image</span>
+                            <span className="font-serif italic text-[13px] text-muted block mb-3">Facsimile</span>
                             <div className="relative aspect-video max-w-full md:max-w-2xl overflow-hidden bg-zinc-950 border border-border flex items-center justify-center rounded-sm shadow-inner group">
                               <FacsimileImage url={selectedMonumento.facsimile_url} desc={selectedMonumento.facsimile_desc} />
                             </div>
@@ -7494,7 +7494,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                                       <li key={i} className="leading-snug">
                                         {od.prefix && (
                                           <span
-                                            className="font-mono font-bold text-accent/60 text-[9px] uppercase tracking-wider mr-2 not-italic"
+                                            className="font-mono text-accent/60 text-[11px] mr-2 not-italic"
                                             style={{ fontStyle: 'normal' }}
                                           >
                                             {od.prefix}
@@ -7507,7 +7507,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                                           </span>
                                         )}
                                         {od.evidence && (
-                                          <span className="text-[8px] font-sans font-bold uppercase tracking-widest text-muted/50 ml-1 border border-border/40 px-1 rounded-sm">
+                                          <span className="font-serif italic text-[11px] text-muted/60 ml-1">
                                             {labelEvidence(od.evidence)}
                                           </span>
                                         )}
@@ -7801,7 +7801,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                 <h3 className="text-xl font-bold italic tracking-tight">Matrice di Confronto Monumenti</h3>
               </div>
               <div className="flex items-center gap-6">
-                 <button onClick={() => setCompareList([])} className="text-[10px] font-bold uppercase text-muted hover:text-accent tracking-widest">Svuota il confronto</button>
+                 <button onClick={() => setCompareList([])} className="font-serif italic text-[13px] text-muted hover:text-accent">Svuota il confronto</button>
                  <button onClick={() => setCompareList([])} className="p-2 border border-border hover:border-accent"><X className="h-4 w-4" /></button>
               </div>
             </div>
@@ -7817,12 +7817,12 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                   </button>
                   <div className="mb-6">
                     <h4 className="text-2xl font-bold">{m.citta}</h4>
-                    <span className="text-xs text-muted font-sans uppercase font-bold tracking-tighter">{formatIlaLabel(m.id)} • {m.regione}</span>
+                    <span className="font-serif text-[13px] text-muted">{formatIlaLabel(m.id)} • {m.regione}</span>
                   </div>
 
                   <div className="space-y-8">
                     <section>
-                      <h5 className="text-[9px] font-bold uppercase text-muted underline underline-offset-4 mb-3 font-sans">Trascrizione</h5>
+                      <h5 className="font-serif italic text-[13px] text-muted mb-3">Trascrizione</h5>
                       <div className="text-sm bg-sidebar/50 p-4 border border-border/40"
                            style={{ fontFamily: 'var(--font-greek)', lineHeight: '1.9' }}>
                         {m.testo ? (
@@ -7839,7 +7839,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                       </div>
                     </section>
                     <section>
-                      <h5 className="text-[9px] font-bold uppercase text-muted underline underline-offset-4 mb-3 font-sans">Traduzione italiana</h5>
+                      <h5 className="font-serif italic text-[13px] text-muted mb-3">Traduzione italiana</h5>
                       <p className="text-sm leading-relaxed text-ink/70">
                         {m.traduzioni?.find(t => { const l = t.lang?.toLowerCase() || ''; return l === 'it' || l.startsWith('it ('); })?.testo ? (
                           <Highlight text={stripXml(m.traduzioni.find(t => { const l = t.lang?.toLowerCase() || ''; return l === 'it' || l.startsWith('it ('); })?.testo)} query={filters.searchText} />
@@ -7848,7 +7848,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                     </section>
                     {hasApparatusContent(m.apparatus) && (
                       <section>
-                        <h5 className="text-[9px] font-bold uppercase text-muted underline underline-offset-4 mb-3 font-sans">Apparato critico</h5>
+                        <h5 className="font-serif italic text-[13px] text-muted mb-3">Apparato critico</h5>
                         <ApparatusNotes
                           className="text-xs leading-relaxed text-muted"
                           value={m.apparatus}
@@ -7857,7 +7857,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                       </section>
                     )}
                     <section>
-                      <h5 className="text-[9px] font-bold uppercase text-muted underline underline-offset-4 mb-3 font-sans">Note</h5>
+                      <h5 className="font-serif italic text-[13px] text-muted mb-3">Note</h5>
                       <p className="text-xs leading-relaxed text-muted italic whitespace-pre-wrap">
                         {m.note_interne ? (
                           <NoteWithTags 
@@ -7875,15 +7875,15 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                       </p>
                     </section>
                     <section>
-                      <h5 className="text-[9px] font-bold uppercase text-muted underline underline-offset-4 mb-3 font-sans">Specifiche</h5>
-                      <div className="grid grid-cols-2 gap-4 text-[10px] font-sans font-bold uppercase">
+                      <h5 className="font-serif italic text-[13px] text-muted mb-3">Specifiche</h5>
+                      <div className="grid grid-cols-2 gap-4 font-serif text-[13px]">
                         <div><span className="text-muted block text-[8px] tracking-widest">Tipologia</span> {labelType(m.tipo)}</div>
                         <div><span className="text-muted block text-[8px] tracking-widest">Datazione</span> {m.data}</div>
                         <div><span className="text-muted block text-[8px] tracking-widest">Materiale</span> {labelMaterial(m.materiale)}</div>
                       </div>
                     </section>
                     <section>
-                      <h5 className="text-[9px] font-bold uppercase text-muted underline underline-offset-4 mb-3 font-sans">Attributi</h5>
+                      <h5 className="font-serif italic text-[13px] text-muted mb-3">Attributi</h5>
                       <div className="flex flex-wrap gap-1">
                         {m.epiteti?.map(e => <span key={e} className="text-[9px] border border-border px-2 py-0.5 rounded-sm">{e}</span>)}
                       </div>
