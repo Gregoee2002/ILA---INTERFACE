@@ -161,7 +161,7 @@ export const ToolboxIndex: React.FC<{
       <div className="flex flex-wrap gap-x-5 gap-y-2 mb-5 items-baseline">
         <input
           type="text" value={search} onChange={e => setSearch(e.target.value)}
-          placeholder="filtra ramo, passo, testo marcato…"
+          placeholder="Filtra ramo, passo, testo marcato…"
           className={cn(FIELD_BASE, 'flex-1 min-w-[14rem] py-1')}
         />
         <div className="flex items-baseline gap-1.5">

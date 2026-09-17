@@ -30,6 +30,10 @@ const FIELD_BASE =
   'bg-transparent border-0 border-b border-border/50 rounded-none font-sans text-xs text-ink outline-none ' +
   'focus:border-accent/60 hover:border-border transition-colors';
 
+// Maiuscola iniziale a ciò che dà un nome — viste, comandi, opzioni di menu,
+// intestazioni, placeholder imperativi; minuscolo a ciò che continua una frase,
+// come i complementi «per famiglia / per lemma» o le didascalie.
+
 // Tre soli grigi in tutta la sezione: testo, secondario, terziario.
 const SEC = 'text-muted';
 const TER = 'text-muted/60';
@@ -312,7 +316,7 @@ export const CultLexiconPanel: React.FC<Props> = ({ monumenti, onSelectMonumento
             onClick={onApriVocabolario}
             className={cn('shrink-0 font-serif italic text-[13px] hover:text-accent transition-colors', SEC)}
           >
-            modifica vocabolario
+            Modifica vocabolario
           </button>
         )}
       </div>
@@ -323,7 +327,7 @@ export const CultLexiconPanel: React.FC<Props> = ({ monumenti, onSelectMonumento
           type="text"
           value={search}
           onChange={e => setSearch(e.target.value)}
-          placeholder="filtra lemma, forma, sotto-funzione…"
+          placeholder="Filtra lemma, forma, sotto-funzione…"
           className={cn(FIELD_BASE, 'flex-1 min-w-[14rem] py-1')}
         />
 
@@ -334,7 +338,7 @@ export const CultLexiconPanel: React.FC<Props> = ({ monumenti, onSelectMonumento
             className={cn(FIELD_BASE, 'pr-5 py-1 cursor-pointer appearance-none')}
             style={{ WebkitAppearance: 'none' as const, appearance: 'none' as const }}
           >
-            <option value="">tutte le regioni</option>
+            <option value="">Tutte le regioni</option>
             {index.regioni.map(r => <option key={r} value={r}>{r}</option>)}
           </select>
           <span className={cn('absolute right-1 top-1/2 -translate-y-1/2 text-[9px] pointer-events-none', TER)}>▾</span>
@@ -347,7 +351,7 @@ export const CultLexiconPanel: React.FC<Props> = ({ monumenti, onSelectMonumento
             className={cn(FIELD_BASE, 'pr-5 py-1 cursor-pointer appearance-none')}
             style={{ WebkitAppearance: 'none' as const, appearance: 'none' as const }}
           >
-            <option value="">tutte le famiglie</option>
+            <option value="">Tutte le famiglie</option>
             {vocab.families.filter(f => !f.deprecated).map(f => <option key={f.id} value={f.id}>{cultFamilyShort(f.label)}</option>)}
           </select>
           <span className={cn('absolute right-1 top-1/2 -translate-y-1/2 text-[9px] pointer-events-none', TER)}>▾</span>
@@ -358,7 +362,7 @@ export const CultLexiconPanel: React.FC<Props> = ({ monumenti, onSelectMonumento
           <span className={TER}>·</span>
           {modo('lemma', 'per lemma')}
           <span className={TER}>·</span>
-          {modo('lares', 'griglia LARES')}
+          {modo('lares', 'Griglia LARES')}
         </div>
       </div>
 

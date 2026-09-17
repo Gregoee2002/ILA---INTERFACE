@@ -48,6 +48,10 @@ const FIELD_BASE =
   'bg-transparent border-0 border-b border-border/50 rounded-none font-sans text-xs text-ink outline-none ' +
   'focus:border-accent/60 hover:border-border transition-colors';
 
+// Maiuscola iniziale a ciò che dà un nome — viste, comandi, opzioni di menu,
+// intestazioni di colonna, placeholder imperativi; minuscolo a ciò che continua
+// una frase: i complementi («ordina per · cronologia»), le didascalie, i conteggi.
+
 // Tre soli grigi in tutta la sezione: testo, secondario, terziario.
 const SEC = 'text-muted';
 const TER = 'text-muted/60';
@@ -468,9 +472,9 @@ const SaggioView: React.FC<{
   };
 
   const VISTE: { id: VistaSaggio; label: string }[] = [
-    { id: 'lettura', label: 'lettura' },
-    { id: 'elenco', label: 'elenco' },
-    { id: 'indici', label: 'indici' },
+    { id: 'lettura', label: 'Lettura' },
+    { id: 'elenco', label: 'Elenco' },
+    { id: 'indici', label: 'Indici' },
   ];
 
   return (
@@ -479,7 +483,7 @@ const SaggioView: React.FC<{
         <div className="max-w-6xl mx-auto w-full">
           <button onClick={onChiudi}
             className={cn('font-serif italic text-[13px] mb-1.5 md:mb-2 transition-colors', SEC, 'hover:text-accent')}>
-            ‹ torna ai saggi
+            ‹ Torna ai saggi
           </button>
 
           <div className="flex flex-wrap items-end justify-between gap-x-4 gap-y-2">
@@ -506,7 +510,7 @@ const SaggioView: React.FC<{
               <button onClick={exportTei}
                 title="Esporta il saggio in TEI EpiDoc (impianto compatibile con il lessico LARES)"
                 className={cn('font-serif text-[13px] transition-colors', SEC, 'hover:text-accent')}>
-                esporta TEI
+                Esporta TEI
               </button>
             </div>
           </div>
@@ -900,10 +904,10 @@ export const LiterarySourcesPanel: React.FC<Props> = ({ editingUnlocked, apriTes
   }
 
   const VISTE: { id: Vista; label: string }[] = [
-    { id: 'opere', label: 'opere' },
-    { id: 'testimonianze', label: 'testimonianze' },
-    { id: 'indici', label: 'indici' },
-    { id: 'saggi', label: 'saggi' },
+    { id: 'opere', label: 'Opere' },
+    { id: 'testimonianze', label: 'Testimonianze' },
+    { id: 'indici', label: 'Indici' },
+    { id: 'saggi', label: 'Saggi' },
   ];
 
   return (
@@ -933,7 +937,7 @@ export const LiterarySourcesPanel: React.FC<Props> = ({ editingUnlocked, apriTes
                     onClick={() => { setBozza(clonaDataset(dataset)); setEditorAperto(true); }}
                     title="Apri la redazione delle fonti letterarie"
                     className={cn('font-serif italic text-[13px] transition-colors', SEC, 'hover:text-accent')}>
-                    redigi
+                    Redigi
                   </button>
                 </>
               )}
@@ -945,14 +949,14 @@ export const LiterarySourcesPanel: React.FC<Props> = ({ editingUnlocked, apriTes
             <div className="flex items-center gap-2 mt-3 md:mt-4">
               <div className="flex-1 min-w-0 flex flex-nowrap md:flex-wrap items-center gap-2 overflow-x-auto md:overflow-visible custom-scrollbar pb-1 md:pb-0">
                 <input type="text" value={search} onChange={e => setSearch(e.target.value)}
-                  placeholder="filtra autore, testo, termine, commento…"
+                  placeholder="Filtra autore, testo, termine, commento…"
                   className={cn(FIELD_BASE, 'w-52 shrink-0 md:flex-1 md:w-auto md:min-w-[14rem] md:max-w-md py-1')} />
 
                 <div className="relative shrink-0">
                   <select value={operaFilter} onChange={e => setOperaFilter(e.target.value)}
                     className={cn(FIELD_BASE, 'pr-5 py-1 cursor-pointer appearance-none max-w-[16rem]')}
                     style={{ WebkitAppearance: 'none' as const, appearance: 'none' as const }}>
-                    <option value="">tutte le opere</option>
+                    <option value="">Tutte le opere</option>
                     {opere.map(({ opera }) => <option key={opera.id} value={opera.id}>{opera.autore}, {opera.titolo}</option>)}
                   </select>
                   <span className={cn('absolute right-1 top-1/2 -translate-y-1/2 text-[9px] pointer-events-none', TER)}>▾</span>
@@ -962,7 +966,7 @@ export const LiterarySourcesPanel: React.FC<Props> = ({ editingUnlocked, apriTes
                   <select value={genereFilter} onChange={e => setGenereFilter(e.target.value as Genere | '')}
                     className={cn(FIELD_BASE, 'pr-5 py-1 cursor-pointer appearance-none')}
                     style={{ WebkitAppearance: 'none' as const, appearance: 'none' as const }}>
-                    <option value="">tutti i generi</option>
+                    <option value="">Tutti i generi</option>
                     {generiPresenti.map(g => <option key={g} value={g}>{GENERE_LABELS[g]}</option>)}
                   </select>
                   <span className={cn('absolute right-1 top-1/2 -translate-y-1/2 text-[9px] pointer-events-none', TER)}>▾</span>
@@ -984,7 +988,7 @@ export const LiterarySourcesPanel: React.FC<Props> = ({ editingUnlocked, apriTes
                 {filtriAttivi && (
                   <button onClick={resetFiltri}
                     className={cn('shrink-0 font-serif italic text-[13px] transition-colors', TER, 'hover:text-accent')}>
-                    azzera
+                    Azzera
                   </button>
                 )}
               </div>
@@ -1003,12 +1007,12 @@ export const LiterarySourcesPanel: React.FC<Props> = ({ editingUnlocked, apriTes
               <span>{opere.length} opere spogliate</span>
               <span className={cn('font-serif italic', TER)}>in ordine cronologico</span>
             </div>
-            <div className="flex-1 overflow-y-auto custom-scrollbar">
+            <div className="flex-1 overflow-y-auto custom-scrollbar pr-3">
               <div className={cn('hidden md:grid', GRID_OPERE, 'border-b border-border/50 py-2 font-sans text-[11px] sticky top-0 bg-parchment z-10', TER)}>
-                <div>autore e opera</div>
-                <div>datazione</div>
-                <div>genere</div>
-                <div className="text-right">passi</div>
+                <div>Autore e opera</div>
+                <div>Datazione</div>
+                <div>Genere</div>
+                <div className="text-right">Passi</div>
               </div>
               {opere.map(({ opera, stats }) => (
                 <div key={opera.id}
@@ -1053,12 +1057,12 @@ export const LiterarySourcesPanel: React.FC<Props> = ({ editingUnlocked, apriTes
               </div>
             </div>
 
-            <div className="flex-1 overflow-y-auto custom-scrollbar">
+            <div className="flex-1 overflow-y-auto custom-scrollbar pr-3">
               <div className={cn('hidden md:grid', GRID, 'border-b border-border/50 py-2 font-sans text-[11px] sticky top-0 bg-parchment z-10', TER)}>
-                <div>fonte</div>
-                <div>datazione</div>
-                <div>genere</div>
-                <div className="hidden xl:block">testo</div>
+                <div>Fonte</div>
+                <div>Datazione</div>
+                <div>Genere</div>
+                <div className="hidden xl:block">Testo</div>
               </div>
 
               {filtrate.length === 0 ? (

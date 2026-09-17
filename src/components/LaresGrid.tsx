@@ -149,7 +149,7 @@ export const LaresGrid: React.FC<Props> = ({ toolbox, percorsi, senzaPercorso, r
             mostraVuoti ? 'text-accent italic' : 'text-muted hover:text-ink',
           )}
         >
-          rami vuoti
+          Rami vuoti
         </button>
       </div>
 
