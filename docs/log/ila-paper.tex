@@ -240,6 +240,23 @@ automaticamente al momento della lettura, isolando la sequenza di nomi
 propri che tipicamente chiude la nota dal resto del commento, così da
 non richiedere una revisione sistematica del corpus pregresso.
 
+Un terzo intervento della stessa natura ha riguardato la descrizione del
+supporto materiale, che in una prima stesura della codifica racchiudeva
+in un unico campo di prosa libera due informazioni di natura diversa:
+la caratterizzazione fisica del monumento --- già altrimenti tradotta,
+per la parte quantitativa, nelle misure strutturate di altezza,
+larghezza e profondità --- e le vicende del pezzo fra il momento del
+rinvenimento e la sua condizione attuale, quali trasferimenti, passaggi
+di collezione o perdita. Si è scelto di eliminare il campo di prosa
+libera, che duplicava informazioni già codificate altrove senza
+aggiungerne di proprie, e di isolare le vicende del monumento in un
+attributo dedicato, distinto sia dal luogo di rinvenimento sia
+dall'osservazione autoptica che già lo affiancavano nella scheda: una
+distinzione che rispecchia, sul piano dei dati, quella già evidente sul
+piano concettuale fra il luogo in cui un'epigrafe è stata trovata, ciò
+che le è accaduto in seguito, e lo stato in cui si presenta a chi la
+esamina oggi.
+
 \screenshotplaceholder{8cm}{Esempio di scheda epigrafica nell'interfaccia di consultazione}
 
 \section{Il sistema di marcatura filologica}
@@ -855,9 +872,13 @@ una linea diagonale che attraversa la pagina, con le voci più recenti
 progressivamente sfalsate verso destra --- una soluzione visiva debitrice
 del linguaggio grafico dei manifesti o delle locandine espositive,
 piuttosto che di quello, più severo, dei repertori scientifici
-tradizionali. Ogni voce, selezionata mediante scorrimento continuo della
-pagina, apre l'elenco delle epigrafi in cui quel nome, o quel
-particolare epiteto, è attestato. La seconda vista riguarda invece il
+tradizionali. Ogni voce, sfiorata durante lo scorrimento continuo della
+pagina, aggiorna in tempo reale, come si dirà più diffusamente più
+sotto, l'anteprima dei rispettivi epiteti nella colonna adiacente; un
+click sulla stessa voce la fissa stabilmente in quell'anteprima, mentre
+l'elenco delle epigrafi in cui il nome, o un particolare epiteto, è
+attestato resta un passaggio volutamente distinto. La seconda vista
+riguarda invece il
 registro onomastico più ampio (nomi propri, patronimici, cariche),
 organizzato secondo il modello, familiare a chi ha consuetudine con
 repertori e indici editoriali a stampa, della rubrica alfabetica
@@ -887,6 +908,28 @@ lasciare che sia l'utente a scorrere manualmente l'elenco per
 raggiungerla: un piccolo accorgimento, ma coerente con l'idea generale
 che guida l'intera sezione, ossia che orientarsi nell'onomastica del
 corpus debba costare all'utente il minor numero di passaggi possibile.
+
+Lo scorrimento a sfioramento, per quanto efficace in una prima
+ricognizione della rubrica, si scontrava con un problema pratico non
+appena l'utente, individuata la divinità di interesse, dirigeva il
+cursore verso la colonna di destra per raggiungere uno specifico
+epiteto: il percorso del mouse attraversa inevitabilmente le voci
+contigue della rubrica, e ciascuna di esse, aggiornando a sua volta
+l'anteprima a ogni sfioramento, rischiava di sostituire la divinità
+appena scelta con quella semplicemente attraversata di passaggio. Per
+questo motivo il click su una voce della rubrica non segnala più un
+interesse temporaneo, ma blocca stabilmente quella divinità
+nell'anteprima, rendendo scorrimento e sfioramento successivi inerti
+finché il blocco non viene rimosso --- con un nuovo click sulla stessa
+voce, oppure con l'apposito comando di sblocco reso disponibile
+nell'intestazione del pannello di anteprima; una nuova ricerca o un
+cambio del filtro regionale annullano automaticamente il blocco,
+poiché potrebbero escludere dalla rubrica la stessa divinità che era
+stata fissata. L'elenco completo delle epigrafi resta raggiungibile
+con un gesto distinto sulla radice dell'anteprima ad albero, cosicché
+il passaggio dalla ricognizione d'insieme alla consultazione di una
+singola epigrafe resti sempre una scelta intenzionale di chi consulta,
+e non l'effetto collaterale di un movimento del mouse.
 
 \screenshotplaceholder{8cm}{Elenco diagonale delle divinità ed epiteti, in stile locandina}
 
