@@ -5650,10 +5650,8 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
           <div className="flex items-center gap-2 shrink-0">
           <div
             className={cn(
-              "flex items-center gap-2.5 pl-4 pr-3 py-2 rounded-full border transition-all duration-300 shrink-0 min-w-[180px] lg:min-w-[240px]",
-              showFilterPanel
-                ? "border-accent/50 bg-[var(--card)] ring-1 ring-accent/30 shadow-inner"
-                : "border-[var(--border)]/50 bg-[var(--card)]/80 hover:bg-[var(--card)] shadow-inner"
+              "flex items-center gap-2.5 py-1 border-b transition-colors shrink-0 min-w-[180px] lg:min-w-[240px]",
+              showFilterPanel ? "border-accent/60" : "border-border/50 hover:border-border"
             )}
           >
             <Search className="h-3.5 w-3.5 text-muted/50 shrink-0" aria-hidden="true" />
@@ -5666,7 +5664,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
               placeholder="Cerca testo, luoghi, tipi…"
               className={cn(
                 "flex-1 min-w-0 bg-transparent outline-none text-xs placeholder:text-muted/60 placeholder:italic placeholder:font-serif",
-                filters.searchText ? "text-ink font-sans font-bold" : "font-serif"
+                filters.searchText ? "text-ink font-sans" : "font-serif"
               )}
             />
             <button
@@ -5696,10 +5694,10 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                 transition={{ duration: 0.15 }}
                 onClick={() => setFilters(DEFAULT_FILTERS)}
                 title="Rimuovi tutti i filtri"
-                className="flex items-center gap-1.5 pl-3 pr-3.5 py-2 rounded-full border border-accent/40 bg-accent/5 text-accent text-[9px] font-sans font-bold uppercase tracking-widest hover:bg-accent hover:text-white transition-all duration-300 shrink-0"
+                className="font-serif italic text-[13px] text-muted hover:text-accent transition-colors shrink-0"
               >
-                <X className="h-3 w-3 shrink-0" />
-                <span className="hidden sm:inline">Azzera filtri</span>
+                <span className="hidden sm:inline">Azzera i filtri</span>
+                <span className="sm:hidden">Azzera</span>
               </motion.button>
             )}
           </AnimatePresence>
@@ -5719,15 +5717,15 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
               className="glass-panel absolute right-0 top-0 bottom-0 w-[85vw] sm:w-80 p-6 sm:p-10 border-t-0 border-r-0 border-b-0 z-40 shadow-2xl flex flex-col"
             >
               <div className="flex items-center justify-between mb-12">
-                <h3 className="font-sans text-[11px] font-bold uppercase tracking-[0.25em] text-muted">Gestione dei dati</h3>
+                <h3 className="font-serif text-xl text-ink">Gestione dei dati</h3>
                 <button onClick={() => setShowSettings(false)}><X className="h-4 w-4" /></button>
               </div>
 
               <div className="space-y-10">
                 <section>
-                  <h4 className="text-[10px] font-bold uppercase text-muted mb-4 tracking-widest">Personalizzazione</h4>
+                  <h4 className="font-serif italic text-[13px] text-muted mb-4">Personalizzazione</h4>
                   <div className="space-y-2">
-                    <span className="text-[10px] text-muted-foreground uppercase font-bold tracking-tighter mb-2 block">Tema predefinito</span>
+                    <span className="font-serif italic text-[12px] text-muted/60 mb-2 block">Tema predefinito</span>
                     <div className="grid grid-cols-3 gap-2">
                       <button 
                         onClick={() => setTheme('light')}
@@ -5737,7 +5735,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                         )}
                       >
                         <Sun className="h-4 w-4" />
-                        <span className="text-[9px] font-bold uppercase">Giorno</span>
+                        <span className="font-serif text-[12px]">Giorno</span>
                       </button>
                       <button 
                         onClick={() => setTheme('dark')}
@@ -5747,7 +5745,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                         )}
                       >
                         <Moon className="h-4 w-4" />
-                        <span className="text-[9px] font-bold uppercase">Notte</span>
+                        <span className="font-serif text-[12px]">Notte</span>
                       </button>
                       <button 
                         onClick={() => setTheme('system')}
@@ -5757,7 +5755,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                         )}
                       >
                         <Monitor className="h-4 w-4" />
-                        <span className="text-[9px] font-bold uppercase">Sistema</span>
+                        <span className="font-serif text-[12px]">Sistema</span>
                       </button>
                     </div>
                   </div>
@@ -5765,7 +5763,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
 
                 {effectiveAdmin && (
                   <section>
-                    <h4 className="text-[10px] font-bold uppercase text-muted mb-4 tracking-widest">Gestione locale</h4>
+                    <h4 className="font-serif italic text-[13px] text-muted mb-4">Gestione locale</h4>
                     <div className="space-y-4">
                       <button
                         onClick={() => { setIsImportModalOpen(true); setShowSettings(false); }}
@@ -5791,7 +5789,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
 
                 {effectiveAdmin && (
                   <section>
-                    <h4 className="text-[10px] font-bold uppercase text-muted mb-4 tracking-widest">Amministrazione</h4>
+                    <h4 className="font-serif italic text-[13px] text-muted mb-4">Amministrazione</h4>
                     <div className="space-y-4">
                       <button
                         onClick={() => { setIsImportModalOpen(true); setShowSettings(false); }}
@@ -5833,7 +5831,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                 )}
 
                 <section>
-                   <h4 className="text-[10px] font-bold uppercase text-muted mb-4 tracking-widest">Informazioni di sistema</h4>
+                   <h4 className="font-serif italic text-[13px] text-muted mb-4">Informazioni di sistema</h4>
                    <div className="flex items-center gap-2 text-xs opacity-60">
                       <Info className="h-3 w-3" />
                       <span>Versione 2.1.0-beta</span>
@@ -6389,8 +6387,8 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
 
                     {/* Pagination Controls */}
                     {totalPages > 1 && (
-                      <nav className="mt-8 mb-6 flex items-center justify-between border-t border-border/20 pt-6 px-6" aria-label="Paginazione catalogo">
-                        <div className="text-[10px] font-sans font-bold uppercase tracking-widest text-muted">
+                      <nav className="mt-8 mb-6 flex items-center justify-between border-t border-border/20 pt-4" aria-label="Paginazione catalogo">
+                        <div className="font-sans text-[11px] text-muted">
                           Pagina {currentPage} di {totalPages}
                         </div>
                         <div className="flex items-center gap-2">
@@ -6398,9 +6396,9 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                             disabled={currentPage === 1}
                             onClick={() => setCurrentPage(prev => prev - 1)}
                             aria-label="Pagina precedente"
-                            className="p-2 border border-border/40 rounded-sm hover:bg-accent/10 disabled:opacity-20 transition-colors"
+                            className="px-1 text-muted hover:text-accent disabled:opacity-20 transition-colors font-serif text-lg leading-none"
                           >
-                            <ChevronLeft className="h-4 w-4" aria-hidden="true" />
+                            ‹
                           </button>
                           
                           <div className="flex items-center gap-1 mx-2">
@@ -6418,10 +6416,8 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                                   aria-label={`Pagina ${pageNum}`}
                                   aria-current={currentPage === pageNum ? 'page' : undefined}
                                   className={cn(
-                                    "w-7 h-7 flex items-center justify-center text-[10px] font-bold rounded-sm border transition-all",
-                                    currentPage === pageNum
-                                       ? "bg-accent border-accent text-white"
-                                       : "border-border/40 hover:border-accent text-muted"
+                                    "w-7 h-7 flex items-center justify-center font-sans text-[12px] tabular-nums transition-colors",
+                                    currentPage === pageNum ? "text-accent" : "text-muted hover:text-ink"
                                   )}
                                 >
                                   {pageNum}
@@ -6434,9 +6430,9 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                             disabled={currentPage === totalPages}
                             onClick={() => setCurrentPage(prev => prev + 1)}
                             aria-label="Pagina successiva"
-                            className="p-2 border border-border/40 rounded-sm hover:bg-accent/10 disabled:opacity-20 transition-colors"
+                            className="px-1 text-muted hover:text-accent disabled:opacity-20 transition-colors font-serif text-lg leading-none"
                           >
-                            <ChevronRight className="h-4 w-4" aria-hidden="true" />
+                            ›
                           </button>
                         </div>
                       </nav>
@@ -6470,50 +6466,28 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                             </span>
                             <button
                               onClick={deselectAll}
-                              className="text-[9px] font-sans font-bold uppercase tracking-widest text-muted hover:text-ink transition-colors flex items-center gap-1"
+                              className="font-serif italic text-[13px] text-muted hover:text-ink transition-colors"
                             >
-                              <X className="h-3 w-3" /> Deseleziona
+                              Deseleziona
                             </button>
                           </div>
                           <div className="flex items-center gap-2">
                             <button
                               onClick={() => { exportFilteredData(); flashExport('xml'); }}
-                              className="flex items-center gap-1.5 px-4 py-1.5 bg-accent text-white text-[9px] font-sans font-bold uppercase tracking-widest hover:bg-accent/90 transition-colors rounded-sm"
+                              className="font-serif italic text-[13px] text-accent hover:text-ink transition-colors"
                             >
-                              <AnimatePresence mode="wait" initial={false}>
-                                {exportFlash === 'xml' ? (
-                                  <motion.span key="ok" initial={{ scale: 0 }} animate={{ scale: 1 }} exit={{ scale: 0 }} transition={SPRING_SNAPPY}>
-                                    <Check className="h-3 w-3" />
-                                  </motion.span>
-                                ) : (
-                                  <motion.span key="icon" initial={{ scale: 0 }} animate={{ scale: 1 }} exit={{ scale: 0 }} transition={SPRING_SNAPPY}>
-                                    <Download className="h-3 w-3" />
-                                  </motion.span>
-                                )}
-                              </AnimatePresence>
                               {exportFlash === 'xml' ? 'Esportato' : 'Esporta XML'}
                             </button>
                             <button
                               onClick={() => { exportToPDF(); flashExport('pdf'); }}
-                              className="flex items-center gap-1.5 px-4 py-1.5 border border-accent text-accent text-[9px] font-sans font-bold uppercase tracking-widest hover:bg-accent/5 transition-colors rounded-sm"
+                              className="font-serif italic text-[13px] text-muted hover:text-accent transition-colors"
                             >
-                              <AnimatePresence mode="wait" initial={false}>
-                                {exportFlash === 'pdf' ? (
-                                  <motion.span key="ok" initial={{ scale: 0 }} animate={{ scale: 1 }} exit={{ scale: 0 }} transition={SPRING_SNAPPY}>
-                                    <Check className="h-3 w-3" />
-                                  </motion.span>
-                                ) : (
-                                  <motion.span key="icon" initial={{ scale: 0 }} animate={{ scale: 1 }} exit={{ scale: 0 }} transition={SPRING_SNAPPY}>
-                                    <FileText className="h-3 w-3" />
-                                  </motion.span>
-                                )}
-                              </AnimatePresence>
                               {exportFlash === 'pdf' ? 'Esportato' : 'Esporta PDF'}
                             </button>
                           </div>
                           <div aria-live="polite" role="status" className="w-full text-right">
                             {exportError
-                              ? <span className="text-[9px] font-sans font-bold uppercase tracking-widest text-danger">{exportError}</span>
+                              ? <span className="font-serif italic text-[13px] text-danger">{exportError}</span>
                               : exportFlash
                                 ? <span className="sr-only">Esportazione {exportFlash.toUpperCase()} completata</span>
                                 : null}
