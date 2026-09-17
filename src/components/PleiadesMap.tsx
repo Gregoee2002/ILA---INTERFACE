@@ -62,7 +62,7 @@ export const PleiadesMap: React.FC<PleiadesMapProps> = ({ pleiadesUri, cityName 
 
   return (
     <div className="w-full flex flex-col gap-1.5 mt-2">
-      <div className="text-[10px] font-bold uppercase tracking-widest text-muted">
+      <div className="font-serif italic text-[12px] text-muted/60">
         Mappa (Pleiades)
       </div>
       
