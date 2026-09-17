@@ -2669,12 +2669,11 @@ function Timeline({ monumenti, onSelect, paused = false }: { monumenti: Monument
             <button
               onClick={() => setShowUndated(v => !v)}
               aria-expanded={showUndated}
-              className={`h-8 px-3 rounded-full flex items-center gap-1.5 text-[10px] font-sans font-bold border shadow-sm backdrop-blur-sm transition-colors ${showUndated ? 'text-accent bg-accent/15 border-accent/40' : 'text-muted bg-parchment/90 border-border/60 hover:bg-accent/10 hover:text-accent hover:border-accent/30'}`}
+              className={`h-8 px-3 rounded-sm flex items-baseline gap-1.5 font-serif text-[13px] bg-parchment/90 backdrop-blur-sm transition-colors ${showUndated ? 'text-accent' : 'text-muted hover:text-accent'}`}
               title={`Solo le schede con una datazione numerica (notBefore/notAfter) compaiono nella cronologia. Clicca per vedere quali sono le ${monumenti.length - sorted.length} schede senza estremi cronologici.`}
             >
-              <Clock className={`h-3.5 w-3.5 ${showUndated ? 'text-accent' : 'text-muted/70'}`} />
-              <span className={`tabular-nums ${showUndated ? 'text-accent' : 'text-ink'}`}>{sorted.length}</span>
-              <span className="uppercase tracking-wide">di {monumenti.length} schede datate</span>
+              <span className="tabular-nums">{sorted.length}</span>
+              <span>di {monumenti.length} schede datate</span>
             </button>
             {/* Elenco esplicito delle schede escluse: risponde alla domanda "perche' la
                 scheda X non compare nella cronologia?" senza dover aprire l'XML. Ogni voce
@@ -2682,16 +2681,15 @@ function Timeline({ monumenti, onSelect, paused = false }: { monumenti: Monument
             {showUndated && (
               <div className="mt-2 w-80 max-w-[85vw] rounded-lg border border-border bg-parchment/95 shadow-lg backdrop-blur-sm overflow-hidden">
                 <div className="px-3 pt-3 pb-2 border-b border-border/60">
-                  <div className="text-[10px] font-sans font-bold uppercase tracking-wide text-muted mb-2">
+                  <div className="font-sans text-[11px] text-muted mb-2">
                     {undated.length} schede senza datazione
                   </div>
                   <div className="relative">
-                    <Search className="absolute left-2 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted/60 pointer-events-none" />
                     <input
                       value={undatedFilter}
                       onChange={e => setUndatedFilter(e.target.value)}
-                      placeholder="Filtra per numero, luogo, titolo..."
-                      className="w-full h-8 pl-7 pr-2 rounded-md bg-card border border-border/60 text-[11px] font-sans text-ink placeholder:text-muted/60 focus:outline-none focus:border-accent/50"
+                      placeholder="Filtra per numero, luogo, titolo…"
+                      className="w-full h-7 bg-transparent border-0 border-b border-border/50 rounded-none text-[11px] font-sans text-ink placeholder:text-muted/60 focus:outline-none focus:border-accent/60"
                     />
                   </div>
                 </div>
@@ -2717,17 +2715,16 @@ function Timeline({ monumenti, onSelect, paused = false }: { monumenti: Monument
         <div className="absolute top-3 right-3 z-20 flex items-center gap-2">
           <button
             onClick={handleZoomReset}
-            className="h-8 pl-3 pr-3.5 rounded-full flex items-center gap-1.5 text-[10px] font-sans font-bold uppercase tracking-wide text-accent bg-parchment/90 hover:bg-accent/15 border border-accent/30 shadow-sm backdrop-blur-sm transition-colors"
+            className="h-8 px-2 rounded-sm font-serif italic text-[13px] text-muted hover:text-accent bg-parchment/90 backdrop-blur-sm transition-colors"
             title="Vista d'insieme (adatta alla finestra) — anche tasto Esc"
           >
-            <RotateCcw className="h-3.5 w-3.5" />
             Vista d'insieme
           </button>
-          <div className="flex items-center gap-0.5 bg-parchment/90 backdrop-blur-sm border border-border/60 rounded-full p-1 shadow-sm">
+          <div className="flex items-center gap-0.5 bg-parchment/90 backdrop-blur-sm border border-border/50 rounded-sm p-0.5">
             <button
               onClick={handleZoomOut}
               disabled={zoom <= minZoomRef.current + 0.001}
-              className="h-8 w-8 rounded-full flex items-center justify-center text-muted/70 hover:bg-accent/10 hover:text-accent disabled:opacity-25 disabled:hover:bg-transparent transition-colors"
+              className="h-7 w-7 rounded-sm flex items-center justify-center text-muted/60 hover:text-accent disabled:opacity-25 transition-colors"
               title="Riduci zoom"
             >
               <ZoomOut className="h-4 w-4" />
@@ -2735,7 +2732,7 @@ function Timeline({ monumenti, onSelect, paused = false }: { monumenti: Monument
             <button
               onClick={handleZoomIn}
               disabled={zoom >= ZOOM_MAX - 0.001}
-              className="h-8 w-8 rounded-full flex items-center justify-center text-muted/70 hover:bg-accent/10 hover:text-accent disabled:opacity-25 disabled:hover:bg-transparent transition-colors"
+              className="h-7 w-7 rounded-sm flex items-center justify-center text-muted/60 hover:text-accent disabled:opacity-25 transition-colors"
               title="Aumenta zoom"
             >
               <ZoomIn className="h-4 w-4" />
@@ -2747,7 +2744,7 @@ function Timeline({ monumenti, onSelect, paused = false }: { monumenti: Monument
           piatto "staccato" dal resto. Il bordo e l'ombra bastano a delimitarlo, lasciando la
           texture della pagina continuare sotto (è fissa rispetto al viewport, quindi resta
           coerente qualunque sia lo zoom o lo scroll del contenuto sopra). */}
-      <div ref={scrollRef} className="h-full overflow-x-auto overflow-y-auto relative custom-scrollbar min-h-0 border border-border rounded-lg shadow-sm" style={{ minHeight: 0, overflowX: 'auto' }}>
+      <div ref={scrollRef} className="h-full overflow-x-auto overflow-y-auto relative custom-scrollbar min-h-0 border-t border-border/50" style={{ minHeight: 0, overflowX: 'auto' }}>
             <motion.div
                  initial={{ opacity: 0 }}
                  animate={{ opacity: 1 }}
@@ -2836,14 +2833,14 @@ function Timeline({ monumenti, onSelect, paused = false }: { monumenti: Monument
                           style={{ left: 6, top: labelTopPx, transform: isOverview ? `scale(${overviewScale})` : undefined, transformOrigin: 'left top' }}
                         >
                           <div className={`bg-accent rounded-full shrink-0 ${isOverview ? 'w-1 h-3' : 'w-1 h-5'}`} />
-                          <span className={`font-sans font-extrabold uppercase tracking-wide leading-none whitespace-nowrap ${isOverview ? 'text-[10px] text-ink/65' : 'text-[10px] text-ink/75'}`}>{label}</span>
+                          <span className={`font-serif leading-none whitespace-nowrap ${isOverview ? 'text-[12px] text-ink/65' : 'text-[12px] text-ink/75'}`}>{label}</span>
                         </div>
                       )}
                       <div className="absolute border-l border-dashed border-border" style={{ left: 0, top: ruleTopPx, bottom: 0 }} />
                       {isOverview && count > 0 && bandWidth * zoom > 40 && (
                         <div className="absolute" style={{ left: '50%', top: countTopPx, transform: 'translateX(-50%)' }}>
                           <div
-                            className="rounded-full bg-accent/12 border border-accent/40 text-accent text-[11px] font-sans font-bold flex items-center justify-center"
+                            className="text-accent text-[11px] font-sans tabular-nums flex items-center justify-center"
                             style={{ minWidth: 22, height: 22, padding: '0 6px', transform: `scale(${overviewScale})`, transformOrigin: 'top center' }}
                           >
                             {count}

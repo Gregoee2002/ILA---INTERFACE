@@ -225,7 +225,7 @@ const EntityDropdown: React.FC<{
         {selected && (
           <button
             onClick={() => { onSelect(null); setOpen(false); }}
-            className="text-[9px] text-accent hover:underline uppercase"
+            className="font-serif text-[12px] text-accent hover:underline"
           >
             Reset
           </button>
@@ -235,7 +235,7 @@ const EntityDropdown: React.FC<{
         type="button"
         onClick={() => setOpen(o => !o)}
         className={cn(
-          "w-full flex items-center justify-between gap-2 bg-[var(--card)] dark:bg-black/25 border rounded-xl pl-3 pr-2.5 py-2.5 text-left transition-all duration-200 shadow-inner",
+          "w-full flex items-center justify-between gap-2 bg-transparent border-b rounded-none py-1.5 text-left transition-colors",
           selected ? "border-accent/60 ring-1 ring-accent/25" : "border-[var(--border)]/70 dark:border-white/10 hover:bg-[var(--sidebar)] dark:hover:bg-black/40"
         )}
       >
@@ -246,7 +246,7 @@ const EntityDropdown: React.FC<{
       </button>
 
       {open && (
-        <div className="absolute z-[1100] mt-1.5 w-full rounded-xl border border-[var(--border)] bg-[var(--card)] shadow-[0_12px_32px_-8px_rgba(var(--shadow-color),0.35)] overflow-hidden">
+        <div className="absolute z-[1100] mt-1.5 w-full rounded-sm border border-border bg-parchment shadow-[0_8px_20px_-8px_rgba(var(--shadow-color),0.3)] overflow-hidden">
           <div className="relative p-2 border-b border-border/50">
             <Search className="absolute left-4.5 top-4.5 h-3.5 w-3.5 text-muted pointer-events-none" />
             <input
@@ -304,10 +304,10 @@ const InscriptionDrilldown: React.FC<{
 }> = ({ label, monumenti, resolvable, onGoTo }) => {
   if (monumenti.length === 0) return null;
   return (
-    <div className="mt-2 rounded-xl border border-[var(--border)]/70 bg-[var(--sidebar)]/60 dark:bg-black/20 overflow-hidden">
+    <div className="mt-2 border-t border-border/50 overflow-hidden">
       <div className="px-3 py-2 border-b border-border/50 flex items-center gap-1.5">
         <MapPinned className="h-3 w-3 text-accent shrink-0" />
-        <span className="text-[10px] uppercase tracking-widest font-sans font-bold text-ink/70">
+        <span className="font-serif italic text-[13px] text-muted">
           Iscrizioni con «{label}» ({monumenti.length})
         </span>
       </div>
@@ -507,7 +507,7 @@ export const MapView: React.FC<MapViewProps> = ({ monumenti, onSelectMonumento }
   return (
     <div className="flex h-full w-full bg-parchment overflow-hidden">
       {/* Sidebar */}
-      <div className="w-full max-w-[20rem] md:w-80 shrink-0 m-2 md:m-4 md:mr-3 p-4 md:p-5 flex flex-col gap-6 overflow-y-auto glass-panel rounded-2xl">
+      <div className="w-full max-w-[20rem] md:w-80 shrink-0 m-2 md:m-4 md:mr-3 p-4 md:p-5 flex flex-col gap-6 overflow-y-auto bg-parchment border border-border/60 rounded-sm">
         <div>
           <h2 className="font-serif text-xl text-ink font-bold pb-3 border-b border-border/60">Filtri Mappa</h2>
         </div>
@@ -572,7 +572,7 @@ export const MapView: React.FC<MapViewProps> = ({ monumenti, onSelectMonumento }
           </h3>
           <div className="flex flex-col gap-4">
             <div className="flex flex-col gap-1">
-              <label className="text-[10px] text-muted uppercase">Dal: {dateRange[0]}</label>
+              <label className="font-serif italic text-[12px] text-muted">dal {dateRange[0]}</label>
               <input 
                 type="range" 
                 min="-500" 
@@ -587,7 +587,7 @@ export const MapView: React.FC<MapViewProps> = ({ monumenti, onSelectMonumento }
               />
             </div>
             <div className="flex flex-col gap-1">
-              <label className="text-[10px] text-muted uppercase">Al: {dateRange[1]}</label>
+              <label className="font-serif italic text-[12px] text-muted">al {dateRange[1]}</label>
               <input 
                 type="range" 
                 min="-500" 
@@ -606,7 +606,7 @@ export const MapView: React.FC<MapViewProps> = ({ monumenti, onSelectMonumento }
       </div>
 
       {/* Map Area */}
-      <div className="flex-1 relative z-0 m-4 ml-0 rounded-2xl overflow-hidden border border-[var(--border)] shadow-[0_12px_32px_-12px_rgba(var(--shadow-color),0.16)]">
+      <div className="flex-1 relative z-0 m-4 ml-0 rounded-sm overflow-hidden border border-border/60">
         <MapContainer
           center={[38.5, 27.0]} // fallback: Egeo/Asia Minor, area centrale del corpus
           zoom={5}
@@ -683,7 +683,7 @@ export const MapView: React.FC<MapViewProps> = ({ monumenti, onSelectMonumento }
                     // 9px su sfondo accent/10, poco leggibili. Qui restano a
                     // colpo d'occhio, con contrasto pieno.
                     <Tooltip direction="top" offset={[0, -radius]} opacity={0.97} className="site-epiteti-tooltip">
-                      <div className="flex flex-wrap gap-1 max-w-[14rem] font-sans font-semibold uppercase tracking-wide text-[10px]">
+                      <div className="flex flex-wrap gap-1 max-w-[14rem] font-serif text-[12px]">
                         {siteEpiteti.map(e => (
                           <span key={e} className="bg-accent text-white px-1.5 py-0.5 rounded-full">{e}</span>
                         ))}
@@ -693,7 +693,7 @@ export const MapView: React.FC<MapViewProps> = ({ monumenti, onSelectMonumento }
                   <Popup className="custom-popup">
                     <div className="max-h-64 overflow-y-auto pr-3 flex flex-col gap-4 w-64 custom-scrollbar">
                       <div className="sticky top-0 bg-[var(--card)] pb-2 border-b border-border/30 z-10">
-                        <span className="text-[10px] uppercase font-bold text-muted">
+                        <span className="font-serif italic text-[12px] text-muted">
                           {site.activeCount} / {site.totalCount} iscrizioni visibili
                         </span>
                       </div>
@@ -713,29 +713,29 @@ export const MapView: React.FC<MapViewProps> = ({ monumenti, onSelectMonumento }
                             </h4>
                             <div className="text-xs text-muted flex justify-between items-start">
                               <span>{m.citta} {m.luogo_moderno ? `(${m.luogo_moderno})` : ''}</span>
-                              <a href={site.id} target="_blank" rel="noopener noreferrer" className="text-[9px] text-accent hover:underline uppercase shrink-0">
+                              <a href={site.id} target="_blank" rel="noopener noreferrer" className="font-serif text-[12px] text-accent hover:underline shrink-0">
                                 Pleiades
                               </a>
                             </div>
                             {m.epiteti && m.epiteti.length > 0 && (
                               <div className="flex flex-wrap gap-1 mt-1">
                                 {m.epiteti.map(e => (
-                                  <span key={e} className="bg-accent text-white text-[10px] px-1.5 py-0.5 rounded-full uppercase tracking-wider font-sans font-semibold">
+                                  <span key={e} className="font-serif text-[12px] text-accent">
                                     {e}
                                   </span>
                                 ))}
                               </div>
                             )}
                             <div className="text-xs text-ink/80 mt-1">
-                              <span className="font-semibold text-muted text-[10px] uppercase mr-1">Data:</span>
+                              <span className="font-serif italic text-[12px] text-muted mr-1">Data:</span>
                               {m.data || 'Ignota'}
                             </div>
                             <div className="text-xs text-ink/80">
-                              <span className="font-semibold text-muted text-[10px] uppercase mr-1">Secolo:</span>
+                              <span className="font-serif italic text-[12px] text-muted mr-1">Secolo:</span>
                               {formatSecoliAttestazione(m.data_inizio, m.data_fine)}
                             </div>
                             <div className="text-xs text-ink/80 italic">
-                              <span className="font-semibold text-muted text-[10px] uppercase mr-1 not-italic">Tipo:</span>
+                              <span className="font-serif italic text-[12px] text-muted mr-1">Tipo:</span>
                               {m.tipo || 'Ignoto'}
                             </div>
                           </div>
@@ -750,7 +750,7 @@ export const MapView: React.FC<MapViewProps> = ({ monumenti, onSelectMonumento }
         </MapContainer>
         
         {/* Legend */}
-        <div className="absolute bottom-6 right-6 glass-panel p-4 z-[1000] rounded-2xl text-xs pointer-events-none w-48">
+        <div className="absolute bottom-6 right-6 bg-parchment border border-border/60 p-4 z-[1000] rounded-sm text-xs pointer-events-none w-48">
           {hasActiveFilter ? (
             <>
               <h4 className="field-label mb-3">Filtro attivo</h4>
@@ -766,7 +766,7 @@ export const MapView: React.FC<MapViewProps> = ({ monumenti, onSelectMonumento }
                 className="h-2.5 w-full rounded-full mb-1.5"
                 style={{ background: `linear-gradient(to right, ${DENSITY_SCALE.join(', ')})` }}
               ></div>
-              <div className="flex justify-between text-[9px] text-muted uppercase tracking-wide mb-4">
+              <div className="flex justify-between font-sans text-[11px] text-muted mb-4">
                 <span>Poche</span>
                 <span>Molte</span>
               </div>
