@@ -3,6 +3,7 @@ import { Monumento } from '../types';
 import { ICONOGRAPHY_LABELS } from '../lib/iconographyLabels';
 import { cn } from '../lib/utils';
 import { getSecoliAttestazione } from '../lib/chronology';
+import { Grid3X3, ArrowLeftRight, Orbit } from 'lucide-react';
 
 // "epiteti", "divinita", "onomastica", "imperatori", "materiale", "tipo" e
 // "regione" vengono estratti direttamente dal testo dell'edizione (persName,
@@ -287,27 +288,26 @@ export const CooccurrenceHeatmap: React.FC<CooccurrenceHeatmapProps> = ({ monume
           </p>
         </div>
 
-        <div className="flex items-baseline gap-1.5 shrink-0" role="group" aria-label="Modalità heatmap">
+        <div className="flex rounded-md border border-border/50 bg-white overflow-hidden shrink-0" role="group" aria-label="Modalità heatmap">
           <button
             type="button"
             onClick={() => setMode('pair')}
             className={cn(
-              "font-serif text-[13px] transition-colors",
-              mode === 'pair' ? "text-accent italic" : "text-muted hover:text-ink"
+              "flex items-center gap-1.5 px-2.5 py-1.5 text-[11px] font-bold uppercase tracking-wide transition-colors",
+              mode === 'pair' ? "bg-accent text-white" : "text-muted hover:text-ink"
             )}
           >
-            coppia
+            <Grid3X3 className="w-3.5 h-3.5" /> Coppia
           </button>
-          <span className="text-muted/60">·</span>
           <button
             type="button"
             onClick={() => setMode('multi')}
             className={cn(
-              "font-serif text-[13px] transition-colors",
-              mode === 'multi' ? "text-accent italic" : "text-muted hover:text-ink"
+              "flex items-center gap-1.5 px-2.5 py-1.5 text-[11px] font-bold uppercase tracking-wide transition-colors border-l border-border/50",
+              mode === 'multi' ? "bg-accent text-white" : "text-muted hover:text-ink"
             )}
           >
-            costellazione
+            <Orbit className="w-3.5 h-3.5" /> Costellazione
           </button>
         </div>
       </div>
@@ -315,12 +315,11 @@ export const CooccurrenceHeatmap: React.FC<CooccurrenceHeatmapProps> = ({ monume
       <div className="flex flex-wrap gap-4 items-start mb-4 shrink-0">
         <div className="flex gap-4 items-end">
           <div className="flex flex-col gap-1">
-            <label className="font-serif italic text-[13px] text-muted">Asse delle righe</label>
+            <label className="text-[10px] font-bold uppercase tracking-widest text-muted">Asse Righe</label>
             <select
               value={rowAxis}
               onChange={e => setRowAxis(e.target.value as AxisType)}
-              className="bg-transparent border-0 border-b border-border/50 rounded-none text-xs text-ink py-1 pr-4 outline-none focus:border-accent/60 hover:border-border transition-colors appearance-none cursor-pointer"
-              style={{ WebkitAppearance: 'none', appearance: 'none' }}
+              className="border border-border/50 bg-white text-xs p-1.5 rounded outline-none focus:border-accent"
             >
               {(Object.entries(AXIS_LABELS) as [AxisType, string][]).map(([k, v]) => (
                 <option key={k} value={k}>{v}</option>
@@ -331,17 +330,16 @@ export const CooccurrenceHeatmap: React.FC<CooccurrenceHeatmapProps> = ({ monume
             type="button"
             onClick={() => { setRowAxis(colAxis); setColAxis(rowAxis); }}
             title="Scambia righe e colonne"
-            className="mb-1 font-serif italic text-[13px] text-muted hover:text-accent transition-colors"
+            className="mb-1.5 p-1.5 rounded border border-border/50 bg-white text-muted hover:text-accent hover:border-accent transition-colors"
           >
-            scambia
+            <ArrowLeftRight className="w-3.5 h-3.5" />
           </button>
           <div className="flex flex-col gap-1">
-            <label className="font-serif italic text-[13px] text-muted">Asse delle colonne</label>
+            <label className="text-[10px] font-bold uppercase tracking-widest text-muted">Asse Colonne</label>
             <select
               value={colAxis}
               onChange={e => setColAxis(e.target.value as AxisType)}
-              className="bg-transparent border-0 border-b border-border/50 rounded-none text-xs text-ink py-1 pr-4 outline-none focus:border-accent/60 hover:border-border transition-colors appearance-none cursor-pointer"
-              style={{ WebkitAppearance: 'none', appearance: 'none' }}
+              className="border border-border/50 bg-white text-xs p-1.5 rounded outline-none focus:border-accent"
             >
               {(Object.entries(AXIS_LABELS) as [AxisType, string][]).map(([k, v]) => (
                 <option key={k} value={k}>{v}</option>
@@ -352,7 +350,7 @@ export const CooccurrenceHeatmap: React.FC<CooccurrenceHeatmapProps> = ({ monume
 
         {mode === 'multi' && (
           <div className="flex flex-col gap-1">
-            <label className="font-serif italic text-[13px] text-muted">
+            <label className="text-[10px] font-bold uppercase tracking-widest text-muted">
               + Combina con (max {MAX_EXTRA_AXES})
             </label>
             <div className="flex flex-wrap gap-1.5 max-w-md">
@@ -384,7 +382,7 @@ export const CooccurrenceHeatmap: React.FC<CooccurrenceHeatmapProps> = ({ monume
         )}
       </div>
 
-      <div className="flex items-center gap-6 mb-2 font-sans text-[11px] text-muted flex-wrap shrink-0">
+      <div className="flex items-center gap-6 mb-2 text-[10px] text-muted uppercase tracking-wider font-bold flex-wrap shrink-0">
         <div className="flex items-center gap-2">
           <span>PMI:</span>
           <div className="flex w-32 h-2.5 rounded bg-gradient-to-r from-blue-500 via-white to-amber-500 border border-border/50"></div>
@@ -406,7 +404,7 @@ export const CooccurrenceHeatmap: React.FC<CooccurrenceHeatmapProps> = ({ monume
             <div className="flex border-b border-border/40">
               {colTuples.map(tuple => (
                 <div key={tuple.join('::')} className="w-8 shrink-0 h-32 relative group">
-                  <span className="absolute bottom-2 left-1/2 origin-bottom-left -rotate-45 font-serif text-[11px] whitespace-nowrap text-muted group-hover:text-ink transition-colors">
+                  <span className="absolute bottom-2 left-1/2 origin-bottom-left -rotate-45 text-[9px] whitespace-nowrap text-muted uppercase tracking-widest font-medium group-hover:text-ink transition-colors">
                     {colLabel(tuple)}
                   </span>
                 </div>
@@ -417,7 +415,7 @@ export const CooccurrenceHeatmap: React.FC<CooccurrenceHeatmapProps> = ({ monume
           {rowValues.map(r => (
             <div key={r} className="flex">
               <div className="w-48 shrink-0 flex items-center justify-end pr-3 border-r border-border/40 group">
-                <span className="font-serif text-[12px] text-muted group-hover:text-ink text-right truncate transition-colors">
+                <span className="text-[10px] text-muted group-hover:text-ink text-right truncate font-medium uppercase tracking-widest transition-colors">
                   {translateValue(r, rowAxis)}
                 </span>
               </div>

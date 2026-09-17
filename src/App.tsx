@@ -8,8 +8,10 @@ import {
   ChevronDown,
   X,
   Trash2,
+  Edit2,
   LogIn,
   LogOut,
+  Sparkles,
   Loader2,
   BarChart2,
   Clock,
@@ -36,7 +38,9 @@ import {
   Unlock,
   NotebookPen,
   Bug,
+  ExternalLink,
   BookMarked,
+  Type,
   Tags,
   ScrollText
 } from 'lucide-react';
@@ -468,7 +472,7 @@ const DivinityDiagonalList = ({ items, onSelect, onActiveChange, onScrollProgres
                         {d.count}×
                       </span>
                       {epitetoHit && (
-                        <span className="font-serif italic text-[12px] text-accent/80 truncate">
+                        <span className="text-[10px] font-sans font-bold uppercase tracking-widest text-accent/70 bg-accent/10 px-1.5 py-0.5 rounded-sm truncate">
                           {epitetoHit}
                         </span>
                       )}
@@ -597,12 +601,12 @@ const EpithetTree = ({ divinity, epithets, onSelectEpithet, onSelectAll, preview
             ) : (
               <motion.span
                 layoutId={`divname-${divinity.name}`}
-                className="block text-2xl italic text-accent font-serif leading-tight group-hover:opacity-80 transition-opacity"
+                className="block text-2xl italic font-bold text-accent font-serif leading-tight group-hover:opacity-80 transition-opacity"
               >
                 {divinity.name}
               </motion.span>
             )}
-            <span className="block font-serif italic text-[13px] text-muted mt-1">
+            <span className="block text-xs font-sans font-bold text-muted mt-1">
               {divinity.count} <span className="text-border">·</span> vedi tutte
             </span>
           </button>
@@ -681,20 +685,20 @@ const AttestationList = ({
 }) => (
   <motion.div {...fadeSwap} className="flex-1 flex flex-col overflow-hidden">
     <div className="mb-6 border-b border-border pb-2">
-      <div className="font-serif italic text-[13px] text-muted mb-1.5">
-        {context ? <>{context} · elenco dei monumenti</> : 'Elenco dei monumenti'}
+      <div className="text-[10px] font-sans font-bold uppercase tracking-[0.22em] text-accent/70 mb-1.5">
+        {context ? <>{context} <ChevronRight className="inline h-3 w-3 -mt-0.5 mx-0.5" /> Elenco monumenti</> : 'Elenco monumenti'}
       </div>
       <h3 className="text-2xl font-serif italic text-accent">
         {variant === 'all' ? <>Tutte le attestazioni di &quot;{label}&quot;</> : <>Attestazioni per: &quot;{label}&quot;</>}
       </h3>
     </div>
-    <div className="font-sans text-[11px] text-muted/60 mb-2">
+    <div className="text-[10px] font-sans text-muted/60 mb-2 uppercase tracking-widest">
       {items.length} {items.length === 1 ? 'attestazione' : 'attestazioni'}
     </div>
     <div className="flex-1 overflow-y-auto pr-4 custom-scrollbar">
-      <div>
-        <div className="hidden md:grid grid-cols-[4.5rem_2fr_6rem_6rem_1.25rem] gap-3 py-2 border-b border-border/50 font-sans text-[11px] text-muted/60">
-          <span>ILA</span>
+      <div className="border border-border/60 rounded-sm bg-parchment/40 overflow-hidden">
+        <div className="hidden md:grid grid-cols-[4.5rem_2fr_6rem_6rem_1.25rem] gap-3 px-3 py-2 border-b border-border/60 text-[9px] font-sans font-bold uppercase tracking-widest text-muted/60">
+          <span>Id</span>
           <span>Testo</span>
           <span>Regione</span>
           <span>Località</span>
@@ -708,24 +712,24 @@ const AttestationList = ({
               animate={{ opacity: 1 }}
               transition={{ duration: 0.25, delay: Math.min(i, 20) * 0.015, ease: EASE_OUT }}
               onClick={() => onSelectMonumento(m)}
-              className="group grid grid-cols-[4.5rem_2fr_6rem_6rem_1.25rem] items-center gap-3 py-2.5 cursor-pointer hover:bg-sidebar/40 transition-colors"
+              className="group grid grid-cols-[4.5rem_2fr_6rem_6rem_1.25rem] items-center gap-3 px-3 py-3.5 cursor-pointer hover:bg-accent/5 transition-colors"
             >
-              <span className="shrink-0 font-mono text-[11px] text-accent/85 group-hover:text-accent transition-colors truncate tabular-nums">
-                {m.id.toString().padStart(3, '0')}
+              <span className="shrink-0 text-[11px] font-mono font-bold text-accent/80 group-hover:text-accent transition-colors truncate">
+                ILA-{m.id.toString().padStart(3, '0')}
               </span>
               <div className="min-w-0 flex flex-col gap-0.5">
-                <span className="font-serif text-[15px] text-ink group-hover:text-accent transition-colors truncate">{getDisplayTitle(m)}</span>
-                <span className="font-serif italic text-[12px] text-muted/60 truncate">{stripXml(m.testo) || '[Anepigrafe]'}</span>
+                <span className="text-sm font-bold font-serif text-ink group-hover:text-accent transition-colors truncate">{getDisplayTitle(m)}</span>
+                <span className="text-xs italic text-muted/70 truncate">"{stripXml(m.testo) || '[Anepigrafe]'}"</span>
               </div>
-              <span className="font-serif text-[13px] text-muted truncate">{m.regione || '—'}</span>
-              <span className="font-serif text-[13px] text-muted truncate">{m.citta || '—'}</span>
-              <span />
+              <span className="text-[10px] font-sans font-bold text-accent uppercase tracking-widest truncate">{m.regione || '—'}</span>
+              <span className="text-[10px] font-sans font-bold text-muted/70 uppercase tracking-widest truncate">{m.citta || '—'}</span>
+              <ChevronRight className="h-3.5 w-3.5 text-border group-hover:text-accent group-hover:translate-x-0.5 transition-all shrink-0 justify-self-end" />
             </motion.div>
           ))}
         </div>
       </div>
       {items.length === 0 && (
-        <div className="text-center py-12 font-serif italic text-sm text-muted/60">Nessuna attestazione trovata.</div>
+        <div className="text-center py-12 text-muted/40 text-sm italic">Nessuna attestazione trovata.</div>
       )}
     </div>
   </motion.div>
@@ -1085,9 +1089,9 @@ function EpithetStats({ monumenti, onSelectMonumento, onVaiAllaFonte, initialTab
         >
           <button
             onClick={goBack}
-            className="font-serif italic text-[13px] text-muted hover:text-accent transition-colors"
+            className="text-[10px] font-sans font-bold uppercase tracking-widest text-accent border border-accent px-4 py-2 hover:bg-accent hover:text-white transition-all"
           >
-            ‹ Indietro
+            ← Indietro
           </button>
         </motion.div>
       )}
@@ -1098,24 +1102,31 @@ function EpithetStats({ monumenti, onSelectMonumento, onVaiAllaFonte, initialTab
           <button
             onClick={() => setActiveTab('divinita')}
             className={cn(
-              "pb-1.5 pr-5 font-serif text-[15px] transition-colors",
-              activeTab === 'divinita' ? "text-accent italic" : "text-muted hover:text-ink"
+              "px-6 py-3 text-[11px] font-sans font-bold uppercase tracking-widest border-b-2 transition-all",
+              activeTab === 'divinita'
+                ? "border-accent text-accent"
+                : "border-transparent text-muted hover:text-ink"
             )}
           >
             Divinità
-            <span className="ml-1.5 font-sans text-[11px] text-muted/60 tabular-nums not-italic">
-              {totalDivinita} · {totalEpiteti} epiteti
+            <span className="ml-2 text-[9px] bg-accent/10 text-accent px-1.5 py-0.5 rounded-sm font-bold">
+              {totalDivinita}
+            </span>
+            <span className="ml-1.5 text-[9px] text-muted/50 font-sans font-normal normal-case tracking-normal">
+              {totalEpiteti} epiteti
             </span>
           </button>
           <button
             onClick={() => setActiveTab('onomastica')}
             className={cn(
-              "pb-1.5 pr-5 font-serif text-[15px] transition-colors",
-              activeTab === 'onomastica' ? "text-accent italic" : "text-muted hover:text-ink"
+              "px-6 py-3 text-[11px] font-sans font-bold uppercase tracking-widest border-b-2 transition-all",
+              activeTab === 'onomastica'
+                ? "border-accent text-accent"
+                : "border-transparent text-muted hover:text-ink"
             )}
           >
             Onomastica
-            <span className="ml-1.5 font-sans text-[11px] text-muted/60 tabular-nums not-italic">
+            <span className="ml-2 text-[9px] bg-accent/10 text-accent px-1.5 py-0.5 rounded-sm font-bold">
               {totalOnomastica}
             </span>
           </button>
@@ -1153,13 +1164,14 @@ function EpithetStats({ monumenti, onSelectMonumento, onVaiAllaFonte, initialTab
                     style={{ transform: `scale(${1 - listScroll * 0.22})`, transformOrigin: 'left center' }}
                   >
                     <div className="relative w-full">
+                      <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted/50 pointer-events-none" />
                       <input
                         type="text"
                         value={epithetSearch}
                         onChange={(e) => setEpithetSearch(e.target.value)}
                         placeholder="Cerca epiteto o divinità…"
-                        className="w-full bg-transparent border-0 border-b border-border/50 rounded-none pr-6 py-1 font-sans text-xs text-ink outline-none focus:border-accent/60 hover:border-border transition-colors"
-                        style={{ color: 'var(--ink)' }}
+                        className="w-full bg-[var(--card)] dark:bg-black/25 border border-[var(--border)]/50 dark:border-white/5 rounded-lg pl-9 pr-8 py-2 font-sans text-xs outline-none shadow-inner focus:border-accent/50 focus:ring-1 focus:ring-accent/30 hover:bg-[var(--sidebar)] dark:hover:bg-black/40 transition-all duration-300"
+                        style={{ backgroundColor: 'var(--card)', color: 'var(--ink)' }}
                       />
                       {epithetSearch && (
                         <button
@@ -1181,15 +1193,15 @@ function EpithetStats({ monumenti, onSelectMonumento, onVaiAllaFonte, initialTab
                   >
                     <div className="relative w-full">
                       <select
-                        className="w-full bg-transparent border-0 border-b border-border/50 rounded-none pr-6 py-1 font-sans text-xs text-ink outline-none focus:border-accent/60 hover:border-border cursor-pointer appearance-none transition-colors"
-                        style={{ color: 'var(--ink)', WebkitAppearance: 'none' as const, appearance: 'none' as const }}
+                        className="w-full bg-[var(--card)] dark:bg-black/25 border border-[var(--border)]/50 dark:border-white/5 rounded-lg pl-3 pr-8 py-2 font-sans text-xs outline-none shadow-inner focus:border-accent/50 focus:ring-1 focus:ring-accent/30 hover:bg-[var(--sidebar)] dark:hover:bg-black/40 cursor-pointer appearance-none transition-all duration-300"
+                        style={{ backgroundColor: 'var(--card)', color: 'var(--ink)', WebkitAppearance: 'none' as const, appearance: 'none' as const }}
                         value={divinitaRegionFilter}
                         onChange={(e) => setDivinitaRegionFilter(e.target.value)}
                       >
-                        <option value="" className="bg-parchment dark:bg-sidebar text-ink">Tutte le regioni</option>
+                        <option value="" className="bg-parchment dark:bg-sidebar text-ink">Tutte le Regioni</option>
                         {divinitaRegions.map(r => <option key={r} value={r} className="bg-parchment dark:bg-sidebar text-ink">{r}</option>)}
                       </select>
-                      <span className="absolute right-1 top-1/2 -translate-y-1/2 text-[9px] text-muted/60 pointer-events-none">▾</span>
+                      <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted/50 pointer-events-none" />
                     </div>
                   </div>
                   <DivinityDiagonalList
@@ -1202,18 +1214,19 @@ function EpithetStats({ monumenti, onSelectMonumento, onVaiAllaFonte, initialTab
                   />
                 </div>
                 <div className="flex-1 flex flex-col overflow-hidden pl-8">
-                  {/* Finestra di analisi degli epiteti: non una scheda che
-                      galleggia, ma la metà destra della pagina, separata da un
-                      filetto. Il filtro regione sta nella colonna sinistra,
-                      sotto la ricerca. */}
-                  <div className="flex-1 min-h-0 flex flex-col border-l border-border/40 pl-7 overflow-hidden">
+                  {/* Finestra di analisi degli epiteti: stessa identità visiva
+                      delle schede del catalogo — cornice in pergamena, bordo
+                      morbido, intestazione con etichetta accent e metadati a
+                      destra. Il filtro regione è stato spostato nella colonna
+                      sinistra, sotto la ricerca. */}
+                  <div className="flex-1 min-h-0 flex flex-col rounded-2xl border border-border/70 bg-parchment shadow-[0_1px_3px_rgba(0,0,0,0.05)] overflow-hidden">
                     {/* flex-wrap: con il pulsante di sblocco in più,
                         etichetta e metadati non ci stanno su una riga sola a
                         larghezze di finestra ordinarie e si sovrapporrebbero
                         (entrambi i gruppi sono whitespace-nowrap). */}
-                    <div className="shrink-0 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2 pr-2 pb-2 border-b border-border/40">
+                    <div className="shrink-0 flex flex-wrap items-center justify-between gap-x-4 gap-y-2 px-7 py-4 border-b border-border/40 bg-sidebar/30">
                       <div className="flex items-center gap-3 min-w-0">
-                        <span className="font-serif text-[15px] text-ink whitespace-nowrap">
+                        <span className="text-[10px] font-sans font-bold uppercase tracking-[0.3em] text-accent whitespace-nowrap">
                           Epiteti co-occorrenti
                         </span>
                         {/* Stato del blocco: senza un comando esplicito di
@@ -1222,13 +1235,14 @@ function EpithetStats({ monumenti, onSelectMonumento, onVaiAllaFonte, initialTab
                         {pinnedDivinity && (
                           <button
                             onClick={() => setPinnedDivinity(null)}
-                            className="shrink-0 font-serif italic text-[13px] text-accent hover:text-ink transition-colors"
+                            className="shrink-0 flex items-center gap-1.5 text-[9px] font-sans font-bold uppercase tracking-widest text-accent border border-accent/40 bg-accent/10 rounded-sm px-2 py-0.5 hover:bg-accent hover:text-white transition-colors"
                           >
-                            sblocca la rubrica
+                            <X className="h-2.5 w-2.5" />
+                            Sblocca rubrica
                           </button>
                         )}
                       </div>
-                      <div className="flex items-baseline gap-2 font-sans text-[11px] text-muted min-w-0 text-right justify-end">
+                      <div className="flex items-center gap-3 text-[10px] font-sans font-bold uppercase tracking-widest text-muted min-w-0 text-right justify-end">
                         {activeDivinityStats ? (
                           <>
                             <span className="whitespace-nowrap">{activeDivinityStats.count} occorrenze</span>
@@ -1238,7 +1252,7 @@ function EpithetStats({ monumenti, onSelectMonumento, onVaiAllaFonte, initialTab
                             <span className="whitespace-nowrap">{activeDivinityStats.epiteti.length} {activeDivinityStats.epiteti.length === 1 ? 'epiteto' : 'epiteti'}</span>
                           </>
                         ) : (
-                          <span className="font-serif italic text-muted/60">Nessuna divinità per questo filtro</span>
+                          <span className="normal-case font-normal italic text-muted/50">Nessuna divinità per questo filtro</span>
                         )}
                       </div>
                     </div>
@@ -1302,15 +1316,15 @@ function EpithetStats({ monumenti, onSelectMonumento, onVaiAllaFonte, initialTab
             <div className="mb-4 flex items-center justify-end animate-in fade-in slide-in-from-left-2 duration-300">
               <div className="relative w-56">
                 <select
-                  className="w-full bg-transparent border-0 border-b border-border/50 rounded-none pr-6 py-1 font-sans text-xs text-ink outline-none focus:border-accent/60 hover:border-border cursor-pointer appearance-none transition-colors"
-                  style={{ color: 'var(--ink)', WebkitAppearance: 'none' as const, appearance: 'none' as const }}
+                  className="w-full bg-[var(--card)] dark:bg-black/25 border border-[var(--border)]/50 dark:border-white/5 rounded-xl pl-3 pr-8 py-2 font-sans text-xs outline-none shadow-inner focus:border-accent/50 focus:ring-1 focus:ring-accent/30 hover:bg-[var(--sidebar)] dark:hover:bg-black/40 cursor-pointer appearance-none transition-all duration-300"
+                  style={{ backgroundColor: 'var(--card)', color: 'var(--ink)', WebkitAppearance: 'none' as const, appearance: 'none' as const }}
                   value={onomasticaRegionFilter}
                   onChange={(e) => setOnomasticaRegionFilter(e.target.value)}
                 >
-                  <option value="" className="bg-parchment dark:bg-sidebar text-ink">Tutte le regioni</option>
+                  <option value="" className="bg-parchment dark:bg-sidebar text-ink">Tutte le Regioni</option>
                   {onomasticaRegions.map(r => <option key={r} value={r} className="bg-parchment dark:bg-sidebar text-ink">{r}</option>)}
                 </select>
-                <span className="absolute right-1 top-1/2 -translate-y-1/2 text-[9px] text-muted/60 pointer-events-none">▾</span>
+                <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted/50 pointer-events-none" />
               </div>
             </div>
             {onostats.length === 0 ? (
@@ -1440,7 +1454,8 @@ function CorpusHealth({ monumenti, onSelectMonumento }: { monumenti: Monumento[]
   return (
     <div className="flex-1 flex flex-col overflow-hidden">
       <motion.div {...scrollReveal} className="mb-8">
-        <h2 className="font-serif text-2xl text-ink mb-2">Coerenza del corpus</h2>
+        <div className="text-[10px] font-sans font-bold uppercase tracking-[0.22em] text-accent/70 mb-2">Controllo qualità</div>
+        <h2 className="text-3xl md:text-4xl font-bold italic mb-2">Coerenza del Corpus</h2>
         <div className="ornament-rule !my-0 mb-3 max-w-[6rem] mx-0" />
         <p className="text-sm text-muted font-serif">
           Controllo automatico delle varianti grafiche e dei campi mancanti. Nessun dato viene modificato: le segnalazioni vanno verificate e corrette a mano.
@@ -1452,23 +1467,23 @@ function CorpusHealth({ monumenti, onSelectMonumento }: { monumenti: Monumento[]
         <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
           <div className="glass-card p-4">
             <div className="text-3xl font-bold">{totalConflicts}</div>
-            <div className="font-serif text-[13px] text-muted mt-1">Conflitti di grafia</div>
+            <div className="text-[10px] font-sans uppercase tracking-widest text-muted mt-1">Conflitti di grafia</div>
           </div>
           <div className="glass-card p-4">
             <div className="text-3xl font-bold">{auditTotal}</div>
-            <div className="font-serif text-[13px] text-muted mt-1">Classificazioni sospette</div>
+            <div className="text-[10px] font-sans uppercase tracking-widest text-muted mt-1">Classificazioni sospette</div>
           </div>
           <div className="glass-card p-4">
             <div className="text-3xl font-bold">{missing.escapedMarkup.length}</div>
-            <div className="font-serif text-[13px] text-muted mt-1">Markup non valido</div>
+            <div className="text-[10px] font-sans uppercase tracking-widest text-muted mt-1">Markup non valido</div>
           </div>
           <div className="glass-card p-4">
             <div className="text-3xl font-bold">{missing.noDivinita.length}</div>
-            <div className="font-serif text-[13px] text-muted mt-1">Senza divinità</div>
+            <div className="text-[10px] font-sans uppercase tracking-widest text-muted mt-1">Senza divinità</div>
           </div>
           <div className="glass-card p-4">
             <div className="text-3xl font-bold">{missing.noDate.length}</div>
-            <div className="font-serif text-[13px] text-muted mt-1">Senza datazione</div>
+            <div className="text-[10px] font-sans uppercase tracking-widest text-muted mt-1">Senza datazione</div>
           </div>
         </div>
 
@@ -1493,16 +1508,16 @@ function CorpusHealth({ monumenti, onSelectMonumento }: { monumenti: Monumento[]
         {/* Conflitti di grafia per campo */}
         {reports.filter(r => r.conflicts.length > 0).map(report => (
           <div key={report.label}>
-            <h3 className="font-serif text-[15px] text-ink mb-1">
+            <h3 className="font-bold text-sm mb-1">
               {report.label}
-              <span className="ml-2 font-sans text-[11px] font-normal text-muted">
+              <span className="ml-2 text-[10px] font-sans font-normal text-muted uppercase tracking-widest">
                 {report.distinctCount} valori distinti · {report.conflicts.length} conflitti
               </span>
             </h3>
             <div className="space-y-3 mt-3">
               {report.conflicts.map(conflict => (
-                <div key={conflict.key} className="border-l-2 border-warning/40 pl-4 py-1">
-                  <div className="font-serif italic text-[13px] text-warning mb-2">
+                <div key={conflict.key} className="rounded-xl border border-warning/25 bg-warning/10 backdrop-blur-md p-4 shadow-sm">
+                  <div className="text-[10px] font-sans uppercase tracking-widest text-warning mb-2">
                     Stessa forma, grafie diverse:
                   </div>
                   <div className="flex flex-wrap gap-2">
@@ -1529,20 +1544,20 @@ function CorpusHealth({ monumenti, onSelectMonumento }: { monumenti: Monumento[]
         {/* Audit di classificazione divinità / epiteti */}
         {(auditTotal > 0 || naPlain.length > 0) && (
           <div>
-            <h3 className="font-serif text-[15px] text-ink mb-1">
+            <h3 className="font-bold text-sm mb-1">
               Classificazione divinità / epiteti
-              <span className="ml-2 font-sans text-[11px] font-normal text-muted">
+              <span className="ml-2 text-[10px] font-sans font-normal text-muted uppercase tracking-widest">
                 da verificare sulle edizioni a stampa, poi correggere sullo XML
               </span>
             </h3>
 
             {naRelated.length > 0 && (
               <div className="space-y-3 mt-3">
-                <div className="font-serif italic text-[13px] text-muted/60">
+                <div className="text-[10px] font-sans uppercase tracking-widest text-muted/70">
                   Probabile stessa divinità in forma variante ({naRelated.length}) — mai attestata da sola e con token in comune con un teonimo co-presente
                 </div>
                 {naRelated.map(d => (
-                  <div key={d.name} className="border-l-2 border-warning/40 pl-4 py-1">
+                  <div key={d.name} className="rounded-xl border border-warning/25 bg-warning/10 backdrop-blur-md p-4 shadow-sm">
                     <div className="flex items-baseline gap-2 mb-2">
                       <span className="font-serif text-sm font-semibold">{d.name}</span>
                       <span className="text-[10px] text-muted">×{d.count} · confronta con: <span className="text-warning font-semibold">{d.relatedNames.join(', ')}</span></span>
@@ -1555,7 +1570,7 @@ function CorpusHealth({ monumenti, onSelectMonumento }: { monumenti: Monumento[]
 
             {naPlain.length > 0 && (
               <div className="mt-4">
-                <div className="font-serif italic text-[13px] text-muted/60 mb-2">
+                <div className="text-[10px] font-sans uppercase tracking-widest text-muted/70 mb-2">
                   Mai attestate da sole ({naPlain.length}) — informativo: in un corpus incentrato su Men è atteso anche per divinità reali
                 </div>
                 <div className="flex flex-wrap gap-2">
@@ -1570,18 +1585,18 @@ function CorpusHealth({ monumenti, onSelectMonumento }: { monumenti: Monumento[]
 
             {audit.divVsEpi.length > 0 && (
               <div className="space-y-3 mt-4">
-                <div className="font-serif italic text-[13px] text-muted/60">
+                <div className="text-[10px] font-sans uppercase tracking-widest text-muted/70">
                   Stessa forma usata sia come divinità sia come epiteto ({audit.divVsEpi.length})
                 </div>
                 {audit.divVsEpi.map(t => (
                   <div key={t.key} className="rounded-xl border border-warning/25 bg-warning/10 backdrop-blur-md p-4 shadow-sm space-y-2">
                     <div>
-                      <span className="font-serif italic text-[13px] text-warning">come divinità: </span>
+                      <span className="text-[10px] font-sans uppercase tracking-widest text-warning">come divinità: </span>
                       <span className="font-serif text-sm font-semibold">{t.asDivinita.form}</span>
                       <div className="mt-1"><IdChips ids={t.asDivinita.monumentIds} /></div>
                     </div>
                     <div>
-                      <span className="font-serif italic text-[13px] text-warning">come epiteto: </span>
+                      <span className="text-[10px] font-sans uppercase tracking-widest text-warning">come epiteto: </span>
                       <span className="font-serif text-sm font-semibold">{t.asEpiteto.form}</span>
                       <div className="mt-1"><IdChips ids={t.asEpiteto.monumentIds} /></div>
                     </div>
@@ -1594,9 +1609,9 @@ function CorpusHealth({ monumenti, onSelectMonumento }: { monumenti: Monumento[]
 
         {audit.sharedEpithets.length > 0 && (
           <div>
-            <h3 className="font-serif text-[15px] text-ink mb-1">
+            <h3 className="font-bold text-sm mb-1">
               Epiteti condivisi da più divinità
-              <span className="ml-2 font-sans text-[11px] font-normal text-muted">
+              <span className="ml-2 text-[10px] font-sans font-normal text-muted uppercase tracking-widest">
                 {audit.sharedEpithets.length} · informativo — genuinamente condivisi o contaminazione da co-occorrenza
               </span>
             </h3>
@@ -1655,9 +1670,12 @@ function LegendaDropdown() {
     <div className="relative px-1">
       <button
         onClick={() => setOpen(o => !o)}
-        className="font-serif italic text-[13px] text-muted/60 hover:text-muted transition-colors"
+        className="flex items-center gap-1.5 text-[10px] font-sans font-bold uppercase tracking-widest text-muted/50 hover:text-muted/80 transition-colors"
       >
         Legenda
+        <motion.span animate={{ rotate: open ? 180 : 0 }} transition={{ duration: 0.2 }}>
+          <ChevronDown className="h-3 w-3" />
+        </motion.span>
       </button>
       <AnimatePresence>
         {open && (
@@ -1668,7 +1686,7 @@ function LegendaDropdown() {
             transition={{ duration: 0.22, ease: EASE_OUT }}
             className="overflow-hidden"
           >
-            <div className="flex flex-wrap items-center gap-x-5 gap-y-2 font-serif text-[12px] text-muted w-fit">
+            <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-[10px] font-sans text-muted bg-sidebar/40 border border-border/30 rounded-md px-3 py-2.5 w-fit">
               {items.map((it, i) => (
                 <span key={i} className="flex items-center gap-1.5">{it.sample} {it.label}</span>
               ))}
@@ -1732,7 +1750,7 @@ const RAIL_ITEMS: { view: AppView; label: string; icon: React.ReactNode; adminOn
   { view: 'sources', label: 'Fonti letterarie', icon: <ScrollText className="h-4 w-4" /> },
   { view: 'map', label: 'Mappa', icon: <MapPin className="h-4 w-4" /> },
   { view: 'timeline', label: 'Cronologia', icon: <Clock className="h-4 w-4" /> },
-  { view: 'stats', label: 'Statistiche epiteti', icon: <BarChart2 className="h-4 w-4" /> },
+  { view: 'stats', label: 'Statistiche Epiteti', icon: <BarChart2 className="h-4 w-4" /> },
   { view: 'heatmap', label: 'Heatmap', icon: <Columns className="h-4 w-4" /> },
   { view: 'cult', label: 'Lessico cultuale', icon: <Tags className="h-4 w-4" /> },
   { view: 'health', label: 'Coerenza', icon: <Check className="h-4 w-4" />, adminOnly: true },
@@ -1805,7 +1823,7 @@ function IconRail({
                 />
               )}
               <span className="w-4 h-4 shrink-0 flex items-center justify-center">{item.icon}</span>
-              <span className="text-[9px] font-sans leading-none truncate max-w-[56px]">{item.label}</span>
+              <span className="text-[8px] font-sans font-bold uppercase tracking-wide leading-none truncate max-w-[56px]">{item.label}</span>
             </button>
           );
         })}
@@ -1820,7 +1838,7 @@ function IconRail({
           <span className="w-4 h-4 shrink-0 flex items-center justify-center">
             {isDarkModeActive ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
           </span>
-          <span className="text-[9px] font-sans leading-none">Tema</span>
+          <span className="text-[8px] font-sans font-bold uppercase tracking-wide leading-none">Tema</span>
         </button>
 
         <button
@@ -1829,7 +1847,7 @@ function IconRail({
           className={cn("flex flex-col items-center justify-center gap-1 shrink-0 w-16 h-full", showSettings ? "text-accent" : "text-muted")}
         >
           <span className="w-4 h-4 shrink-0 flex items-center justify-center"><Settings className="h-4 w-4" /></span>
-          <span className="text-[9px] font-sans leading-none">Impostaz.</span>
+          <span className="text-[8px] font-sans font-bold uppercase tracking-wide leading-none">Impostaz.</span>
         </button>
 
         {/* Sulla build statica non c'e' login Google: l'accesso in scrittura
@@ -1843,7 +1861,7 @@ function IconRail({
             <span className="w-4 h-4 shrink-0 flex items-center justify-center">
               {currentUser ? <LogOut className="h-4 w-4" /> : <LogIn className="h-4 w-4" />}
             </span>
-            <span className="text-[9px] font-sans leading-none">{currentUser ? 'Esci' : 'Accedi'}</span>
+            <span className="text-[8px] font-sans font-bold uppercase tracking-wide leading-none">{currentUser ? 'Esci' : 'Accedi'}</span>
           </button>
         )}
 
@@ -1858,7 +1876,7 @@ function IconRail({
             <span className="w-4 h-4 shrink-0 flex items-center justify-center">
               {editingUnlocked ? <Unlock className="h-4 w-4" /> : <KeyRound className="h-4 w-4" />}
             </span>
-            <span className="text-[9px] font-sans leading-none">{editingUnlocked ? 'Sbloccato' : 'Sblocca'}</span>
+            <span className="text-[8px] font-sans font-bold uppercase tracking-wide leading-none">{editingUnlocked ? 'Sbloccato' : 'Sblocca'}</span>
           </button>
         )}
       </nav>
@@ -1934,7 +1952,7 @@ function IconRail({
                       animate={{ opacity: 1, x: 0 }}
                       exit={{ opacity: 0, x: -6 }}
                       transition={{ duration: 0.15 }}
-                      className="font-serif text-[14px] whitespace-nowrap"
+                      className="text-[11px] font-sans font-bold uppercase tracking-widest whitespace-nowrap"
                     >
                       {item.label}
                     </motion.span>
@@ -1959,7 +1977,7 @@ function IconRail({
               {expanded && (
                 <motion.span
                   initial={{ opacity: 0, x: -6 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -6 }} transition={{ duration: 0.15 }}
-                  className="font-serif text-[14px] whitespace-nowrap"
+                  className="text-[11px] font-sans font-bold uppercase tracking-widest whitespace-nowrap"
                 >
                   {isDarkModeActive ? "Modalità Giorno" : "Modalità Notte"}
                 </motion.span>
@@ -1977,7 +1995,7 @@ function IconRail({
               {expanded && (
                 <motion.span
                   initial={{ opacity: 0, x: -6 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -6 }} transition={{ duration: 0.15 }}
-                  className="font-serif text-[14px] whitespace-nowrap"
+                  className="text-[11px] font-sans font-bold uppercase tracking-widest whitespace-nowrap"
                 >
                   Impostazioni
                 </motion.span>
@@ -2000,7 +2018,7 @@ function IconRail({
                 {expanded && (
                   <motion.span
                     initial={{ opacity: 0, x: -6 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -6 }} transition={{ duration: 0.15 }}
-                    className="font-serif text-[14px] whitespace-nowrap truncate"
+                    className="text-[11px] font-sans font-bold uppercase tracking-widest whitespace-nowrap truncate"
                   >
                     {currentUser ? (currentUser.email === ADMIN_EMAIL ? 'Admin' : currentUser.email) : 'Accedi'}
                   </motion.span>
@@ -2022,7 +2040,7 @@ function IconRail({
                 {expanded && (
                   <motion.span
                     initial={{ opacity: 0, x: -6 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -6 }} transition={{ duration: 0.15 }}
-                    className="font-serif text-[14px] whitespace-nowrap truncate"
+                    className="text-[11px] font-sans font-bold uppercase tracking-widest whitespace-nowrap truncate"
                   >
                     {editingUnlocked ? 'Modifica sbloccata' : 'Sblocca modifica'}
                   </motion.span>
@@ -2046,8 +2064,8 @@ function IconRail({
                 transition={{ duration: 0.15 }}
                 className="min-w-0"
               >
-                <div className="font-serif italic text-[12px] text-muted whitespace-nowrap">{moon.name}</div>
-                <div className="font-serif text-[11px] text-muted/60 whitespace-nowrap">Mensis dies {moon.day}</div>
+                <div className="text-[9px] font-sans font-bold uppercase tracking-widest text-muted/70 whitespace-nowrap">{moon.name}</div>
+                <div className="text-[8px] font-sans text-muted/50 whitespace-nowrap">Mensis dies {moon.day}</div>
               </motion.div>
             )}
           </AnimatePresence>
@@ -2107,8 +2125,8 @@ function HomeView({ monumenti, onNavigate, onSearch, effectiveAdmin }: { monumen
   const allSections: { view: AppView; label: string; desc: string; icon: React.ReactNode; adminOnly?: boolean }[] = [
     { view: 'map', label: 'Mappa', desc: 'I siti di ritrovamento, geolocalizzati sul territorio antico.', icon: <MapPin className="h-5 w-5" /> },
     { view: 'timeline', label: 'Cronologia', desc: 'Le iscrizioni disposte lungo la sequenza temporale.', icon: <Clock className="h-5 w-5" /> },
-    { view: 'stats', label: 'Statistiche epiteti', desc: 'Frequenza e distribuzione degli epiteti di Men.', icon: <BarChart2 className="h-5 w-5" /> },
-    { view: 'heatmap', label: 'Co-occorrenze', desc: 'Quali epiteti e attributi ricorrono insieme.', icon: <Columns className="h-5 w-5" /> },
+    { view: 'stats', label: 'Statistiche Epiteti', desc: 'Frequenza e distribuzione degli epiteti di Men.', icon: <BarChart2 className="h-5 w-5" /> },
+    { view: 'heatmap', label: 'Heatmap Co-occorrenze', desc: 'Quali epiteti e attributi ricorrono insieme.', icon: <Columns className="h-5 w-5" /> },
     { view: 'cult', label: 'Lessico cultuale', desc: 'Il vocabolario delle funzioni cultuali marcato nelle edizioni, per lemma e famiglia.', icon: <Tags className="h-5 w-5" /> },
     { view: 'health', label: 'Coerenza', desc: "Controlli di qualità e coerenza sui dati del corpus.", icon: <Check className="h-5 w-5" />, adminOnly: true },
     { view: 'flags', label: 'Registro', desc: 'Lavorazioni in corso dei collaboratori sulle schede del catalogo.', icon: <NotebookPen className="h-5 w-5" />, adminOnly: true },
@@ -2134,14 +2152,16 @@ function HomeView({ monumenti, onNavigate, onSearch, effectiveAdmin }: { monumen
       {/* Hero: narrativa+ricerca a sinistra, wordmark a bilanciare lo spazio a destra */}
       <div className="grid grid-cols-1 lg:grid-cols-[1.3fr_1fr] gap-6 items-center mb-8">
         <div>
+          <div className="text-[10px] font-sans font-bold uppercase tracking-[0.22em] text-accent/70 mb-2">Benvenuto</div>
           <p className="text-base md:text-lg font-serif italic text-ink/85 leading-relaxed max-w-2xl mb-4">
             Il database raccoglie al momento {stats.totale} schede in {stats.citta} località del mondo antico.
           </p>
 
           <form
             onSubmit={(e) => { e.preventDefault(); if (homeQuery.trim()) onSearch(homeQuery.trim()); }}
-            className="flex items-baseline gap-3 border-b border-border/50 focus-within:border-accent/60 transition-colors max-w-xl"
+            className="glass-panel rounded-full flex items-center gap-3 pl-5 pr-2 py-1.5 shadow-inner focus-within:ring-1 focus-within:ring-accent/30 transition-all max-w-xl"
           >
+            <Search className="h-3.5 w-3.5 text-muted shrink-0" />
             <input
               type="text"
               value={homeQuery}
@@ -2152,7 +2172,7 @@ function HomeView({ monumenti, onNavigate, onSearch, effectiveAdmin }: { monumen
             <button
               type="submit"
               disabled={!homeQuery.trim()}
-              className="shrink-0 font-serif italic text-[13px] text-accent hover:text-ink disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+              className="shrink-0 font-sans text-[9px] font-bold uppercase tracking-[0.1em] text-ink bg-accent px-4 py-2 rounded-full hover:bg-accent/90 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
             >
               Cerca
             </button>
@@ -2167,7 +2187,7 @@ function HomeView({ monumenti, onNavigate, onSearch, effectiveAdmin }: { monumen
           >
             ILA
           </span>
-          <p className="font-serif italic text-sm text-muted/60">Database epigrafico</p>
+          <p className="text-sm font-sans font-bold uppercase tracking-[0.15em] text-muted/50">Database Epigrafico</p>
         </div>
       </div>
 
@@ -2236,8 +2256,8 @@ function HomeView({ monumenti, onNavigate, onSearch, effectiveAdmin }: { monumen
             </motion.div>
 
             <div className="flex-1 min-w-0 flex flex-col justify-center pr-6">
-              <div className="font-serif italic text-[13px] text-white/60 mb-1.5">{hero.eyebrow}</div>
-              <div className="font-serif text-white text-2xl md:text-3xl mb-2 leading-tight">{hero.label}</div>
+              <div className="text-[9px] md:text-[10px] font-sans font-bold uppercase tracking-[0.25em] text-white/60 mb-1.5">{hero.eyebrow}</div>
+              <div className="font-serif font-bold text-white text-2xl md:text-3xl mb-2 leading-tight tracking-tight">{hero.label}</div>
               <p className="text-[13px] md:text-sm text-white/70 leading-relaxed">{hero.desc}</p>
             </div>
 
@@ -2259,9 +2279,9 @@ function HomeView({ monumenti, onNavigate, onSearch, effectiveAdmin }: { monumen
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
-        className="relative z-10 font-serif text-[15px] text-ink mb-3 pb-1 border-b border-border/30"
+        className="relative z-10 text-[10px] font-sans font-bold uppercase tracking-[0.22em] text-accent/70 mb-4"
       >
-        Le altre sezioni
+        Strumenti database
       </motion.div>
       <motion.div
         initial={{ opacity: 0, y: 12 }}
@@ -2316,7 +2336,7 @@ function HomeView({ monumenti, onNavigate, onSearch, effectiveAdmin }: { monumen
                   {s.icon}
                 </motion.div>
                 <div className="relative">
-                  <div className="font-serif text-[15px] text-ink mb-0.5">{s.label}</div>
+                  <div className="font-serif font-bold text-ink text-sm mb-0.5">{s.label}</div>
                   <p className="text-[11px] text-muted leading-snug min-h-[2.5em]">{s.desc}</p>
                 </div>
                 {/* Bordo accent che si dissolve dolcemente insieme alla luce */}
@@ -2666,11 +2686,12 @@ function Timeline({ monumenti, onSelect, paused = false }: { monumenti: Monument
             <button
               onClick={() => setShowUndated(v => !v)}
               aria-expanded={showUndated}
-              className={`h-8 px-3 rounded-sm flex items-baseline gap-1.5 font-serif text-[13px] bg-parchment/90 backdrop-blur-sm transition-colors ${showUndated ? 'text-accent' : 'text-muted hover:text-accent'}`}
+              className={`h-8 px-3 rounded-full flex items-center gap-1.5 text-[10px] font-sans font-bold border shadow-sm backdrop-blur-sm transition-colors ${showUndated ? 'text-accent bg-accent/15 border-accent/40' : 'text-muted bg-parchment/90 border-border/60 hover:bg-accent/10 hover:text-accent hover:border-accent/30'}`}
               title={`Solo le schede con una datazione numerica (notBefore/notAfter) compaiono nella cronologia. Clicca per vedere quali sono le ${monumenti.length - sorted.length} schede senza estremi cronologici.`}
             >
-              <span className="tabular-nums">{sorted.length}</span>
-              <span>di {monumenti.length} schede datate</span>
+              <Clock className={`h-3.5 w-3.5 ${showUndated ? 'text-accent' : 'text-muted/70'}`} />
+              <span className={`tabular-nums ${showUndated ? 'text-accent' : 'text-ink'}`}>{sorted.length}</span>
+              <span className="uppercase tracking-wide">di {monumenti.length} schede datate</span>
             </button>
             {/* Elenco esplicito delle schede escluse: risponde alla domanda "perche' la
                 scheda X non compare nella cronologia?" senza dover aprire l'XML. Ogni voce
@@ -2678,15 +2699,16 @@ function Timeline({ monumenti, onSelect, paused = false }: { monumenti: Monument
             {showUndated && (
               <div className="mt-2 w-80 max-w-[85vw] rounded-lg border border-border bg-parchment/95 shadow-lg backdrop-blur-sm overflow-hidden">
                 <div className="px-3 pt-3 pb-2 border-b border-border/60">
-                  <div className="font-sans text-[11px] text-muted mb-2">
+                  <div className="text-[10px] font-sans font-bold uppercase tracking-wide text-muted mb-2">
                     {undated.length} schede senza datazione
                   </div>
                   <div className="relative">
+                    <Search className="absolute left-2 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted/60 pointer-events-none" />
                     <input
                       value={undatedFilter}
                       onChange={e => setUndatedFilter(e.target.value)}
-                      placeholder="Filtra per numero, luogo, titolo…"
-                      className="w-full h-7 bg-transparent border-0 border-b border-border/50 rounded-none text-[11px] font-sans text-ink placeholder:text-muted/60 focus:outline-none focus:border-accent/60"
+                      placeholder="Filtra per numero, luogo, titolo..."
+                      className="w-full h-8 pl-7 pr-2 rounded-md bg-card border border-border/60 text-[11px] font-sans text-ink placeholder:text-muted/60 focus:outline-none focus:border-accent/50"
                     />
                   </div>
                 </div>
@@ -2712,16 +2734,17 @@ function Timeline({ monumenti, onSelect, paused = false }: { monumenti: Monument
         <div className="absolute top-3 right-3 z-20 flex items-center gap-2">
           <button
             onClick={handleZoomReset}
-            className="h-8 px-2 rounded-sm font-serif italic text-[13px] text-muted hover:text-accent bg-parchment/90 backdrop-blur-sm transition-colors"
+            className="h-8 pl-3 pr-3.5 rounded-full flex items-center gap-1.5 text-[10px] font-sans font-bold uppercase tracking-wide text-accent bg-parchment/90 hover:bg-accent/15 border border-accent/30 shadow-sm backdrop-blur-sm transition-colors"
             title="Vista d'insieme (adatta alla finestra) — anche tasto Esc"
           >
+            <RotateCcw className="h-3.5 w-3.5" />
             Vista d'insieme
           </button>
-          <div className="flex items-center gap-0.5 bg-parchment/90 backdrop-blur-sm border border-border/50 rounded-sm p-0.5">
+          <div className="flex items-center gap-0.5 bg-parchment/90 backdrop-blur-sm border border-border/60 rounded-full p-1 shadow-sm">
             <button
               onClick={handleZoomOut}
               disabled={zoom <= minZoomRef.current + 0.001}
-              className="h-7 w-7 rounded-sm flex items-center justify-center text-muted/60 hover:text-accent disabled:opacity-25 transition-colors"
+              className="h-8 w-8 rounded-full flex items-center justify-center text-muted/70 hover:bg-accent/10 hover:text-accent disabled:opacity-25 disabled:hover:bg-transparent transition-colors"
               title="Riduci zoom"
             >
               <ZoomOut className="h-4 w-4" />
@@ -2729,7 +2752,7 @@ function Timeline({ monumenti, onSelect, paused = false }: { monumenti: Monument
             <button
               onClick={handleZoomIn}
               disabled={zoom >= ZOOM_MAX - 0.001}
-              className="h-7 w-7 rounded-sm flex items-center justify-center text-muted/60 hover:text-accent disabled:opacity-25 transition-colors"
+              className="h-8 w-8 rounded-full flex items-center justify-center text-muted/70 hover:bg-accent/10 hover:text-accent disabled:opacity-25 disabled:hover:bg-transparent transition-colors"
               title="Aumenta zoom"
             >
               <ZoomIn className="h-4 w-4" />
@@ -2741,7 +2764,7 @@ function Timeline({ monumenti, onSelect, paused = false }: { monumenti: Monument
           piatto "staccato" dal resto. Il bordo e l'ombra bastano a delimitarlo, lasciando la
           texture della pagina continuare sotto (è fissa rispetto al viewport, quindi resta
           coerente qualunque sia lo zoom o lo scroll del contenuto sopra). */}
-      <div ref={scrollRef} className="h-full overflow-x-auto overflow-y-auto relative custom-scrollbar min-h-0 border-t border-border/50" style={{ minHeight: 0, overflowX: 'auto' }}>
+      <div ref={scrollRef} className="h-full overflow-x-auto overflow-y-auto relative custom-scrollbar min-h-0 border border-border rounded-lg shadow-sm" style={{ minHeight: 0, overflowX: 'auto' }}>
             <motion.div
                  initial={{ opacity: 0 }}
                  animate={{ opacity: 1 }}
@@ -2830,14 +2853,14 @@ function Timeline({ monumenti, onSelect, paused = false }: { monumenti: Monument
                           style={{ left: 6, top: labelTopPx, transform: isOverview ? `scale(${overviewScale})` : undefined, transformOrigin: 'left top' }}
                         >
                           <div className={`bg-accent rounded-full shrink-0 ${isOverview ? 'w-1 h-3' : 'w-1 h-5'}`} />
-                          <span className={`font-serif leading-none whitespace-nowrap ${isOverview ? 'text-[12px] text-ink/65' : 'text-[12px] text-ink/75'}`}>{label}</span>
+                          <span className={`font-sans font-extrabold uppercase tracking-wide leading-none whitespace-nowrap ${isOverview ? 'text-[10px] text-ink/65' : 'text-[10px] text-ink/75'}`}>{label}</span>
                         </div>
                       )}
                       <div className="absolute border-l border-dashed border-border" style={{ left: 0, top: ruleTopPx, bottom: 0 }} />
                       {isOverview && count > 0 && bandWidth * zoom > 40 && (
                         <div className="absolute" style={{ left: '50%', top: countTopPx, transform: 'translateX(-50%)' }}>
                           <div
-                            className="text-accent text-[11px] font-sans tabular-nums flex items-center justify-center"
+                            className="rounded-full bg-accent/12 border border-accent/40 text-accent text-[11px] font-sans font-bold flex items-center justify-center"
                             style={{ minWidth: 22, height: 22, padding: '0 6px', transform: `scale(${overviewScale})`, transformOrigin: 'top center' }}
                           >
                             {count}
@@ -3158,7 +3181,7 @@ const EpiDocRenderer = ({ xml, query, onTermClick, divinityIndex, onomasticaInde
             return (
               <div key={key} className={isColumn ? '' : 'mb-8'}>
                 <div
-                  className="font-serif italic text-[13px] text-accent mb-3"
+                  className="text-[9px] font-bold uppercase tracking-widest text-accent mb-3"
                   style={{ fontFamily: 'monospace', fontStyle: 'normal' }}
                 >{isColumn ? `col. ${nAttr}` : nAttr}</div>
                 {Array.from(node.childNodes).map((child: any, i) => renderNode(child, key + '-' + i))}
@@ -4013,7 +4036,7 @@ const FacsimileImage: React.FC<{ url: string; desc?: string }> = ({ url, desc })
   const [failed, setFailed] = useState(false);
   if (failed) {
     return (
-      <div className="text-center p-6 font-serif italic text-[13px] text-muted">
+      <div className="text-center p-6 text-xs text-muted font-sans uppercase tracking-widest">
         <span className="italic text-accent block mb-2">[Squeeze Grafico: {url}]</span>
         {desc || ''}
       </div>
@@ -4251,7 +4274,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
   // "Iscrizione" fonde trascrizione+commento; "Iconografia" raccoglie anche
   // gli indici (divinità/epiteti/onomastica/imperatori); "Bibliografia" a parte. ---
   const RECORD_SECTIONS: { id: string; label: string }[] = [
-    { id: 'supporto', label: 'Supporto epigrafico' },
+    { id: 'supporto', label: 'Supporto Epigrafico' },
     { id: 'iscrizione', label: 'Iscrizione' },
     { id: 'iconografia', label: 'Iconografia' },
     { id: 'bibliografia', label: 'Bibliografia' },
@@ -5465,7 +5488,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
       <div className="h-dvh w-full flex flex-col items-center justify-center bg-parchment gap-10 px-6">
         <div className="flex flex-col items-center gap-3">
           <span className="text-3xl font-bold tracking-[0.15em] text-accent/40" style={{ fontFamily: '"Cinzel", serif' }}>ILA</span>
-          <div className="flex items-center gap-2 font-sans text-[11px] text-muted/60">
+          <div className="flex items-center gap-2 text-[10px] font-sans font-bold uppercase tracking-widest text-muted/60">
             <Loader2 className="h-3 w-3 animate-spin text-accent" /> Caricamento del corpus…
           </div>
         </div>
@@ -5497,7 +5520,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
           <p className="text-xs text-muted leading-relaxed">{loadError}</p>
           <button
             onClick={() => window.location.reload()}
-            className="mt-2 font-serif italic text-[13px] text-accent hover:text-ink transition-colors"
+            className="mt-2 px-4 py-1.5 text-xs font-sans font-bold uppercase tracking-widest bg-accent text-white rounded-sm"
           >
             Riprova
           </button>
@@ -5593,7 +5616,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.9, duration: 0.6 }}
                 onClick={() => setShowLanding(false)}
-                className="font-serif text-[15px] text-parchment bg-accent px-9 py-3.5 rounded-full shadow-[0_8px_24px_rgba(31,131,119,0.25)] hover:bg-accent/90 hover:shadow-[0_10px_28px_rgba(31,131,119,0.32)] transition-all duration-300"
+                className="font-sans text-xs font-bold uppercase tracking-[0.15em] text-parchment bg-accent px-9 py-4 rounded-full shadow-[0_8px_24px_rgba(31,131,119,0.25)] hover:bg-accent/90 hover:shadow-[0_10px_28px_rgba(31,131,119,0.32)] transition-all duration-300"
               >
                 Entra nel catalogo
               </motion.button>
@@ -5631,7 +5654,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
           </div>
           <div className="mt-2 lg:mt-4 flex flex-col items-start">
             <p className="text-lg md:text-xl italic text-muted font-serif text-ink/70 leading-tight">Index lunae antiquae</p>
-            <p className="font-serif italic text-[13px] text-muted/60 leading-none mt-2 whitespace-nowrap">Database epigrafico</p>
+            <p className="text-[11px] md:text-[12px] font-sans font-bold uppercase tracking-[0.15em] text-muted/60 leading-none mt-2 whitespace-nowrap">Database Epigrafico</p>
           </div>
         </div>
         )}
@@ -5649,8 +5672,10 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
           <div className="flex items-center gap-2 shrink-0">
           <div
             className={cn(
-              "flex items-center gap-2.5 py-1 border-b transition-colors shrink-0 min-w-[180px] lg:min-w-[240px]",
-              showFilterPanel ? "border-accent/60" : "border-border/50 hover:border-border"
+              "flex items-center gap-2.5 pl-4 pr-3 py-2 rounded-full border transition-all duration-300 shrink-0 min-w-[180px] lg:min-w-[240px]",
+              showFilterPanel
+                ? "border-accent/50 bg-[var(--card)] ring-1 ring-accent/30 shadow-inner"
+                : "border-[var(--border)]/50 bg-[var(--card)]/80 hover:bg-[var(--card)] shadow-inner"
             )}
           >
             <Search className="h-3.5 w-3.5 text-muted/50 shrink-0" aria-hidden="true" />
@@ -5663,7 +5688,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
               placeholder="Cerca testo, luoghi, tipi…"
               className={cn(
                 "flex-1 min-w-0 bg-transparent outline-none text-xs placeholder:text-muted/60 placeholder:italic placeholder:font-serif",
-                filters.searchText ? "text-ink font-sans" : "font-serif"
+                filters.searchText ? "text-ink font-sans font-bold" : "font-serif"
               )}
             />
             <button
@@ -5693,10 +5718,10 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                 transition={{ duration: 0.15 }}
                 onClick={() => setFilters(DEFAULT_FILTERS)}
                 title="Rimuovi tutti i filtri"
-                className="font-serif italic text-[13px] text-muted hover:text-accent transition-colors shrink-0"
+                className="flex items-center gap-1.5 pl-3 pr-3.5 py-2 rounded-full border border-accent/40 bg-accent/5 text-accent text-[9px] font-sans font-bold uppercase tracking-widest hover:bg-accent hover:text-white transition-all duration-300 shrink-0"
               >
-                <span className="hidden sm:inline">Azzera i filtri</span>
-                <span className="sm:hidden">Azzera</span>
+                <X className="h-3 w-3 shrink-0" />
+                <span className="hidden sm:inline">Azzera filtri</span>
               </motion.button>
             )}
           </AnimatePresence>
@@ -5716,15 +5741,15 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
               className="glass-panel absolute right-0 top-0 bottom-0 w-[85vw] sm:w-80 p-6 sm:p-10 border-t-0 border-r-0 border-b-0 z-40 shadow-2xl flex flex-col"
             >
               <div className="flex items-center justify-between mb-12">
-                <h3 className="font-serif text-xl text-ink">Gestione dei dati</h3>
+                <h3 className="font-sans text-[11px] font-bold uppercase tracking-[0.25em] text-muted">Gestione Dati</h3>
                 <button onClick={() => setShowSettings(false)}><X className="h-4 w-4" /></button>
               </div>
 
               <div className="space-y-10">
                 <section>
-                  <h4 className="font-serif italic text-[13px] text-muted mb-4">Personalizzazione</h4>
+                  <h4 className="text-[10px] font-bold uppercase text-muted mb-4 tracking-widest">Personalizzazione</h4>
                   <div className="space-y-2">
-                    <span className="font-serif italic text-[12px] text-muted/60 mb-2 block">Tema predefinito</span>
+                    <span className="text-[10px] text-muted-foreground uppercase font-bold tracking-tighter mb-2 block">Tema Predefinito</span>
                     <div className="grid grid-cols-3 gap-2">
                       <button 
                         onClick={() => setTheme('light')}
@@ -5734,7 +5759,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                         )}
                       >
                         <Sun className="h-4 w-4" />
-                        <span className="font-serif text-[12px]">Giorno</span>
+                        <span className="text-[9px] font-bold uppercase">Giorno</span>
                       </button>
                       <button 
                         onClick={() => setTheme('dark')}
@@ -5744,7 +5769,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                         )}
                       >
                         <Moon className="h-4 w-4" />
-                        <span className="font-serif text-[12px]">Notte</span>
+                        <span className="text-[9px] font-bold uppercase">Notte</span>
                       </button>
                       <button 
                         onClick={() => setTheme('system')}
@@ -5754,7 +5779,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                         )}
                       >
                         <Monitor className="h-4 w-4" />
-                        <span className="font-serif text-[12px]">Sistema</span>
+                        <span className="text-[9px] font-bold uppercase">Sistema</span>
                       </button>
                     </div>
                   </div>
@@ -5762,7 +5787,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
 
                 {effectiveAdmin && (
                   <section>
-                    <h4 className="font-serif italic text-[13px] text-muted mb-4">Gestione locale</h4>
+                    <h4 className="text-[10px] font-bold uppercase text-muted mb-4 tracking-widest">Gestione Locale</h4>
                     <div className="space-y-4">
                       <button
                         onClick={() => { setIsImportModalOpen(true); setShowSettings(false); }}
@@ -5788,7 +5813,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
 
                 {effectiveAdmin && (
                   <section>
-                    <h4 className="font-serif italic text-[13px] text-muted mb-4">Amministrazione</h4>
+                    <h4 className="text-[10px] font-bold uppercase text-muted mb-4 tracking-widest">Amministrazione</h4>
                     <div className="space-y-4">
                       <button
                         onClick={() => { setIsImportModalOpen(true); setShowSettings(false); }}
@@ -5817,7 +5842,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                       </button>
                       {importStatus.type !== 'idle' && (
                         <div className={cn(
-                          "font-serif italic text-[13px] pl-0.5",
+                          "text-[9px] font-bold uppercase tracking-widest pl-0.5",
                           importStatus.type === 'loading' && "text-accent",
                           importStatus.type === 'success' && "text-success",
                           importStatus.type === 'error' && "text-danger"
@@ -5830,7 +5855,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                 )}
 
                 <section>
-                   <h4 className="font-serif italic text-[13px] text-muted mb-4">Informazioni di sistema</h4>
+                   <h4 className="text-[10px] font-bold uppercase text-muted mb-4 tracking-widest">Informazioni Sistema</h4>
                    <div className="flex items-center gap-2 text-xs opacity-60">
                       <Info className="h-3 w-3" />
                       <span>Versione 2.1.0-beta</span>
@@ -5862,70 +5887,70 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: -10, scale: 0.98 }}
                 transition={SPRING_SOFT}
-                className="flex absolute z-30 top-14 md:top-2 left-2 right-2 md:left-5 lg:left-6 md:right-auto flex-col md:w-80 lg:w-96 max-h-[calc(100%-4rem)] md:max-h-[calc(100%-1rem)] p-6 md:p-8 rounded-sm bg-parchment border border-border/60 shadow-[0_8px_24px_-8px_rgba(var(--shadow-color),0.18)] dark:shadow-[0_8px_24px_-8px_rgba(0,0,0,0.5)] overflow-y-auto custom-scrollbar"
+                className="flex absolute z-30 top-14 md:top-2 left-2 right-2 md:left-5 lg:left-6 md:right-auto flex-col md:w-80 lg:w-96 max-h-[calc(100%-4rem)] md:max-h-[calc(100%-1rem)] p-6 md:p-8 rounded-2xl bg-[var(--card)]/95 dark:bg-[var(--card)]/90 backdrop-blur-xl border border-[var(--border)]/60 dark:border-[var(--border)]/50 shadow-[0_20px_50px_-12px_rgba(var(--shadow-color),0.28)] dark:shadow-[0_20px_50px_-12px_rgba(0,0,0,0.6)] overflow-y-auto custom-scrollbar"
               >
             {/* Soft bottom glow/blur to match the header relief effect */}
             <div className="absolute -bottom-4 inset-x-12 h-8 bg-accent/5 dark:bg-accent/2 blur-2xl rounded-full opacity-40 pointer-events-none -z-10" />
 
             <div className="flex flex-col h-full">
-                <h2 id="catalog-sidebar-title" className="mb-2 font-serif text-lg text-ink">
-                   Ricerca nel catalogo
+                <h2 id="catalog-sidebar-title" className="mb-2 font-sans text-[11px] font-bold uppercase tracking-[0.25em] text-muted flex items-center gap-2">
+                   Ricerca Catalogo
                 </h2>
                 <div className="ornament-rule !my-0 mb-6 max-w-[4rem] mx-0" />
                 
                 <div className="space-y-7 flex-1">
               <div className="relative group animate-in fade-in slide-in-from-left-2 duration-300">
                 <div className="flex items-center justify-between mb-2">
-                  <label className="block field-label">Ricerca nel testo</label>
-                  <div className="flex items-baseline gap-1.5">
-                    <button
+                  <label className="block field-label">Ricerca Intelligente</label>
+                  <div className="flex bg-sidebar border border-border p-0.5 rounded-sm">
+                    <button 
                       onClick={() => setFilters(f => ({ ...f, searchMode: 'AND' }))}
-                      className={cn("font-serif text-[13px] transition-colors", filters.searchMode === 'AND' ? "text-accent italic" : "text-muted hover:text-ink")}
+                      className={cn("px-2 py-0.5 text-[8px] font-bold transition-all", filters.searchMode === 'AND' ? "bg-accent text-white" : "text-muted hover:text-ink")}
                       title="Tutti i termini devono comparire"
                     >
-                      tutti i termini
+                      AND
                     </button>
-                    <span className="text-muted/60">·</span>
-                    <button
+                    <button 
                       onClick={() => setFilters(f => ({ ...f, searchMode: 'OR' }))}
-                      className={cn("font-serif text-[13px] transition-colors", filters.searchMode === 'OR' ? "text-accent italic" : "text-muted hover:text-ink")}
+                      className={cn("px-2 py-0.5 text-[8px] font-bold transition-all", filters.searchMode === 'OR' ? "bg-accent text-white" : "text-muted hover:text-ink")}
                       title="Basta che compaia almeno un termine"
                     >
-                      uno qualsiasi
+                      OR
                     </button>
                   </div>
                 </div>
                 
-                <div className="relative border-b border-border/50 focus-within:border-accent/60 hover:border-border transition-colors flex items-center">
+                <div className="relative bg-[var(--card)]/80 dark:bg-[var(--card)]/60 backdrop-blur-md border border-[var(--border)]/50 dark:border-[var(--border)]/40 rounded-xl px-3.5 py-2 shadow-inner group-focus-within:border-accent/50 group-focus-within:ring-1 group-focus-within:ring-accent/30 transition-all duration-300 hover:bg-[var(--card)] dark:hover:bg-[var(--card)]/80 flex items-center min-h-[42px]">
+                  <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted/50" aria-hidden="true" />
                   <input
                     type="search"
                     aria-label="Ricerca intelligente nel catalogo"
-                    placeholder="Cerca testo, luoghi, tipi…"
-                    className="w-full bg-transparent py-1 pr-6 font-sans text-xs text-ink outline-none transition-colors placeholder:opacity-50"
+                    placeholder="Cerca testo, luoghi, tipi..."
+                    className="w-full bg-transparent py-1 pl-6 pr-6 font-sans text-xs outline-none transition-colors placeholder:opacity-50"
                     value={filters.searchText}
                     onChange={(e) => setFilters(f => ({ ...f, searchText: e.target.value }))}
                   />
                   {isSearching && (
-                    <Loader2 className="absolute right-0 top-1/2 -translate-y-1/2 h-3 w-3 text-accent/60 animate-spin" />
+                    <Loader2 className="absolute right-3.5 top-1/2 -translate-y-1/2 h-3 w-3 text-accent/60 animate-spin" />
                   )}
                 </div>
               </div>
 
               <div className="animate-in fade-in slide-in-from-left-2 duration-300">
-                 <label className="mb-2 block field-label">Arco cronologico</label>
+                 <label className="mb-2 block field-label">Range Cronologico</label>
                  <div className="flex items-center gap-3">
                     <input 
                       type="number" 
-                      className="w-20 bg-transparent border-0 border-b border-border/50 rounded-none text-xs font-sans text-ink px-0 py-1 outline-none focus:border-accent/60 hover:border-border transition-colors tabular-nums"
-                      style={{ color: 'var(--ink)' }}
+                      className="w-24 bg-[var(--card)] dark:bg-black/25 border border-[var(--border)]/50 dark:border-white/5 text-xs font-sans rounded-xl px-3 py-2.5 outline-none shadow-inner focus:border-accent/50 focus:ring-1 focus:ring-accent/30 transition-all duration-300 hover:bg-[var(--sidebar)] dark:hover:bg-black/40"
+                      style={{ backgroundColor: 'var(--card)', color: 'var(--ink)' }}
                       value={filters.dateRange[0]}
                       onChange={e => setFilters(f => ({ ...f, dateRange: [parseInt(e.target.value) || 0, f.dateRange[1]] }))}
                     />
-                    <span className="font-serif text-[13px] text-muted">al</span>
+                    <span className="text-muted text-[10px] font-sans font-bold uppercase tracking-wider">al</span>
                     <input 
                       type="number" 
-                      className="w-20 bg-transparent border-0 border-b border-border/50 rounded-none text-xs font-sans text-ink px-0 py-1 outline-none focus:border-accent/60 hover:border-border transition-colors tabular-nums"
-                      style={{ color: 'var(--ink)' }}
+                      className="w-24 bg-[var(--card)] dark:bg-black/25 border border-[var(--border)]/50 dark:border-white/5 text-xs font-sans rounded-xl px-3 py-2.5 outline-none shadow-inner focus:border-accent/50 focus:ring-1 focus:ring-accent/30 transition-all duration-300 hover:bg-[var(--sidebar)] dark:hover:bg-black/40"
+                      style={{ backgroundColor: 'var(--card)', color: 'var(--ink)' }}
                       value={filters.dateRange[1]}
                       onChange={e => setFilters(f => ({ ...f, dateRange: [f.dateRange[0], parseInt(e.target.value) || 0] }))}
                     />
@@ -5933,18 +5958,18 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
               </div>
 
               <div className="animate-in fade-in slide-in-from-left-2 duration-300">
-                <label className="mb-2 block field-label">Regione</label>
+                <label className="mb-2 block field-label">Regione Geografica</label>
                 <div className="relative">
                   <select 
-                    className="w-full bg-transparent border-0 border-b border-border/50 rounded-none pr-6 py-1 font-sans text-xs text-ink outline-none focus:border-accent/60 hover:border-border cursor-pointer appearance-none transition-colors"
-                    style={{ color: 'var(--ink)', WebkitAppearance: 'none' as const, appearance: 'none' as const }}
+                    className="w-full bg-[var(--card)] dark:bg-black/25 border border-[var(--border)]/50 dark:border-white/5 rounded-xl pl-3 pr-8 py-2.5 font-sans text-xs outline-none shadow-inner focus:border-accent/50 focus:ring-1 focus:ring-accent/30 hover:bg-[var(--sidebar)] dark:hover:bg-black/40 cursor-pointer appearance-none transition-all duration-300"
+                    style={{ backgroundColor: 'var(--card)', color: 'var(--ink)', WebkitAppearance: 'none' as const, appearance: 'none' as const }}
                     value={filters.regione}
                     onChange={(e) => setFilters(f => ({ ...f, regione: e.target.value }))}
                   >
-                    <option value="" className="bg-parchment dark:bg-sidebar text-ink">Tutte le regioni</option>
+                    <option value="" className="bg-parchment dark:bg-sidebar text-ink">Tutte le Regioni</option>
                     {regions.map(r => <option key={r} value={r} className="bg-parchment dark:bg-sidebar text-ink">{r}</option>)}
                   </select>
-                  <span className="absolute right-1 top-1/2 -translate-y-1/2 text-[9px] text-muted/60 pointer-events-none">▾</span>
+                  <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted/50 pointer-events-none" />
                 </div>
               </div>
 
@@ -5952,31 +5977,31 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                 <label className="mb-2 block field-label">Città / Località</label>
                 <div className="relative">
                   <select 
-                    className="w-full bg-transparent border-0 border-b border-border/50 rounded-none pr-6 py-1 font-sans text-xs text-ink outline-none focus:border-accent/60 hover:border-border cursor-pointer appearance-none transition-colors"
-                    style={{ color: 'var(--ink)', WebkitAppearance: 'none' as const, appearance: 'none' as const }}
+                    className="w-full bg-[var(--card)] dark:bg-black/25 border border-[var(--border)]/50 dark:border-white/5 rounded-xl pl-3 pr-8 py-2.5 font-sans text-xs outline-none shadow-inner focus:border-accent/50 focus:ring-1 focus:ring-accent/30 hover:bg-[var(--sidebar)] dark:hover:bg-black/40 cursor-pointer appearance-none transition-all duration-300"
+                    style={{ backgroundColor: 'var(--card)', color: 'var(--ink)', WebkitAppearance: 'none' as const, appearance: 'none' as const }}
                     value={filters.citta}
                     onChange={(e) => setFilters(f => ({ ...f, citta: e.target.value }))}
                   >
-                    <option value="" className="bg-parchment dark:bg-sidebar text-ink">Tutte le città</option>
+                    <option value="" className="bg-parchment dark:bg-sidebar text-ink">Tutte le Città</option>
                     {cities.map(c => <option key={c} value={c} className="bg-parchment dark:bg-sidebar text-ink">{c}</option>)}
                   </select>
-                  <span className="absolute right-1 top-1/2 -translate-y-1/2 text-[9px] text-muted/60 pointer-events-none">▾</span>
+                  <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted/50 pointer-events-none" />
                 </div>
               </div>
 
               <div className="animate-in fade-in slide-in-from-left-2 duration-300">
-                <label className="mb-2 block field-label">Tipologia</label>
+                <label className="mb-2 block field-label">Tipologia Monumento</label>
                 <div className="relative">
                   <select 
-                    className="w-full bg-transparent border-0 border-b border-border/50 rounded-none pr-6 py-1 font-sans text-xs text-ink outline-none focus:border-accent/60 hover:border-border cursor-pointer appearance-none transition-colors"
-                    style={{ color: 'var(--ink)', WebkitAppearance: 'none' as const, appearance: 'none' as const }}
+                    className="w-full bg-[var(--card)] dark:bg-black/25 border border-[var(--border)]/50 dark:border-white/5 rounded-xl pl-3 pr-8 py-2.5 font-sans text-xs outline-none shadow-inner focus:border-accent/50 focus:ring-1 focus:ring-accent/30 hover:bg-[var(--sidebar)] dark:hover:bg-black/40 cursor-pointer appearance-none transition-all duration-300"
+                    style={{ backgroundColor: 'var(--card)', color: 'var(--ink)', WebkitAppearance: 'none' as const, appearance: 'none' as const }}
                     value={filters.tipo}
                     onChange={(e) => setFilters(f => ({ ...f, tipo: e.target.value }))}
                   >
-                    <option value="" className="bg-parchment dark:bg-sidebar text-ink">Tutte le tipologie</option>
+                    <option value="" className="bg-parchment dark:bg-sidebar text-ink">Tutte le Tipologie</option>
                     {types.map(t => <option key={t} value={t} className="bg-parchment dark:bg-sidebar text-ink">{labelType(t)}</option>)}
                   </select>
-                  <span className="absolute right-1 top-1/2 -translate-y-1/2 text-[9px] text-muted/60 pointer-events-none">▾</span>
+                  <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted/50 pointer-events-none" />
                 </div>
               </div>
 
@@ -5984,74 +6009,74 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                 <label className="mb-2 block field-label">Materiale</label>
                 <div className="relative">
                   <select 
-                    className="w-full bg-transparent border-0 border-b border-border/50 rounded-none pr-6 py-1 font-sans text-xs text-ink outline-none focus:border-accent/60 hover:border-border cursor-pointer appearance-none transition-colors"
-                    style={{ color: 'var(--ink)', WebkitAppearance: 'none' as const, appearance: 'none' as const }}
+                    className="w-full bg-[var(--card)] dark:bg-black/25 border border-[var(--border)]/50 dark:border-white/5 rounded-xl pl-3 pr-8 py-2.5 font-sans text-xs outline-none shadow-inner focus:border-accent/50 focus:ring-1 focus:ring-accent/30 hover:bg-[var(--sidebar)] dark:hover:bg-black/40 cursor-pointer appearance-none transition-all duration-300"
+                    style={{ backgroundColor: 'var(--card)', color: 'var(--ink)', WebkitAppearance: 'none' as const, appearance: 'none' as const }}
                     value={filters.materiale}
                     onChange={(e) => setFilters(f => ({ ...f, materiale: e.target.value }))}
                   >
-                    <option value="" className="bg-parchment dark:bg-sidebar text-ink">Tutti i materiali</option>
+                    <option value="" className="bg-parchment dark:bg-sidebar text-ink">Tutti i Materiali</option>
                     {materials.map(m => <option key={m} value={m} className="bg-parchment dark:bg-sidebar text-ink">{labelMaterial(m)}</option>)}
                   </select>
-                  <span className="absolute right-1 top-1/2 -translate-y-1/2 text-[9px] text-muted/60 pointer-events-none">▾</span>
+                  <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted/50 pointer-events-none" />
                 </div>
               </div>
 
               {iconFunzioni.length > 0 && (
                 <div className="animate-in fade-in slide-in-from-left-2 duration-300">
-                  <label className="mb-2 block field-label">Funzione iconografica</label>
+                  <label className="mb-2 block field-label">Funzione Iconografica</label>
                   <div className="relative">
                     <select
-                      className="w-full bg-transparent border-0 border-b border-border/50 rounded-none pr-6 py-1 font-sans text-xs text-ink outline-none focus:border-accent/60 hover:border-border cursor-pointer appearance-none transition-colors"
-                      style={{ color: 'var(--ink)', WebkitAppearance: 'none' as const, appearance: 'none' as const }}
+                      className="w-full bg-[var(--card)] dark:bg-black/25 border border-[var(--border)]/50 dark:border-white/5 rounded-xl pl-3 pr-8 py-2.5 font-sans text-xs outline-none shadow-inner focus:border-accent/50 focus:ring-1 focus:ring-accent/30 hover:bg-[var(--sidebar)] dark:hover:bg-black/40 cursor-pointer appearance-none transition-all duration-300"
+                      style={{ backgroundColor: 'var(--card)', color: 'var(--ink)', WebkitAppearance: 'none' as const, appearance: 'none' as const }}
                       value={filters.iconFunzione}
                       onChange={(e) => setFilters(f => ({ ...f, iconFunzione: e.target.value }))}
                     >
-                      <option value="" className="bg-parchment dark:bg-sidebar text-ink">Tutte le funzioni</option>
+                      <option value="" className="bg-parchment dark:bg-sidebar text-ink">Tutte le Funzioni</option>
                       {iconFunzioni.map(v => <option key={v} value={v} className="bg-parchment dark:bg-sidebar text-ink">{ICONOGRAPHY_LABELS[v] || v}</option>)}
                     </select>
-                    <span className="absolute right-1 top-1/2 -translate-y-1/2 text-[9px] text-muted/60 pointer-events-none">▾</span>
+                    <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted/50 pointer-events-none" />
                   </div>
                 </div>
               )}
 
               {iconAttributi.length > 0 && (
                 <div className="animate-in fade-in slide-in-from-left-2 duration-300">
-                  <label className="mb-2 block field-label">Attributo iconografico</label>
+                  <label className="mb-2 block field-label">Attributo Iconografico</label>
                   <div className="relative">
                     <select
-                      className="w-full bg-transparent border-0 border-b border-border/50 rounded-none pr-6 py-1 font-sans text-xs text-ink outline-none focus:border-accent/60 hover:border-border cursor-pointer appearance-none transition-colors"
-                      style={{ color: 'var(--ink)', WebkitAppearance: 'none' as const, appearance: 'none' as const }}
+                      className="w-full bg-[var(--card)] dark:bg-black/25 border border-[var(--border)]/50 dark:border-white/5 rounded-xl pl-3 pr-8 py-2.5 font-sans text-xs outline-none shadow-inner focus:border-accent/50 focus:ring-1 focus:ring-accent/30 hover:bg-[var(--sidebar)] dark:hover:bg-black/40 cursor-pointer appearance-none transition-all duration-300"
+                      style={{ backgroundColor: 'var(--card)', color: 'var(--ink)', WebkitAppearance: 'none' as const, appearance: 'none' as const }}
                       value={filters.iconAttributo}
                       onChange={(e) => setFilters(f => ({ ...f, iconAttributo: e.target.value }))}
                     >
-                      <option value="" className="bg-parchment dark:bg-sidebar text-ink">Tutti gli attributi</option>
+                      <option value="" className="bg-parchment dark:bg-sidebar text-ink">Tutti gli Attributi</option>
                       {iconAttributi.map(v => <option key={v} value={v} className="bg-parchment dark:bg-sidebar text-ink">{ICONOGRAPHY_LABELS[v] || v}</option>)}
                     </select>
-                    <span className="absolute right-1 top-1/2 -translate-y-1/2 text-[9px] text-muted/60 pointer-events-none">▾</span>
+                    <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted/50 pointer-events-none" />
                   </div>
                 </div>
               )}
 
               {iconPosizioni.length > 0 && (
                 <div className="animate-in fade-in slide-in-from-left-2 duration-300">
-                  <label className="mb-2 block field-label">Posizione nella composizione</label>
+                  <label className="mb-2 block field-label">Posizione Composizione</label>
                   <div className="relative">
                     <select
-                      className="w-full bg-transparent border-0 border-b border-border/50 rounded-none pr-6 py-1 font-sans text-xs text-ink outline-none focus:border-accent/60 hover:border-border cursor-pointer appearance-none transition-colors"
-                      style={{ color: 'var(--ink)', WebkitAppearance: 'none' as const, appearance: 'none' as const }}
+                      className="w-full bg-[var(--card)] dark:bg-black/25 border border-[var(--border)]/50 dark:border-white/5 rounded-xl pl-3 pr-8 py-2.5 font-sans text-xs outline-none shadow-inner focus:border-accent/50 focus:ring-1 focus:ring-accent/30 hover:bg-[var(--sidebar)] dark:hover:bg-black/40 cursor-pointer appearance-none transition-all duration-300"
+                      style={{ backgroundColor: 'var(--card)', color: 'var(--ink)', WebkitAppearance: 'none' as const, appearance: 'none' as const }}
                       value={filters.iconPosizione}
                       onChange={(e) => setFilters(f => ({ ...f, iconPosizione: e.target.value }))}
                     >
-                      <option value="" className="bg-parchment dark:bg-sidebar text-ink">Tutte le posizioni</option>
+                      <option value="" className="bg-parchment dark:bg-sidebar text-ink">Tutte le Posizioni</option>
                       {iconPosizioni.map(v => <option key={v} value={v} className="bg-parchment dark:bg-sidebar text-ink">{ICONOGRAPHY_LABELS[v] || v}</option>)}
                     </select>
-                    <span className="absolute right-1 top-1/2 -translate-y-1/2 text-[9px] text-muted/60 pointer-events-none">▾</span>
+                    <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted/50 pointer-events-none" />
                   </div>
                 </div>
               )}
 
               <div className="animate-in fade-in slide-in-from-left-2 duration-300">
-                <label className="block field-label mb-3">Traduzione</label>
+                <label className="block field-label mb-3">Gestione Traduzioni</label>
                 <div className="flex flex-col gap-3">
                   <label className="flex items-center gap-2 cursor-pointer group">
                     <input
@@ -6060,7 +6085,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                       checked={filters.onlyHasTrad}
                       onChange={() => setFilters(f => ({ ...f, onlyHasTrad: !f.onlyHasTrad, onlyNoTrad: false }))}
                     />
-                    <span className="font-serif text-[13px] text-ink/85">Con traduzione</span>
+                    <span className="text-[10px] uppercase font-sans font-bold">Con Traduzione</span>
                   </label>
                   <label className="flex items-center gap-2 cursor-pointer group">
                     <input
@@ -6069,7 +6094,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                       checked={filters.onlyNoTrad}
                       onChange={() => setFilters(f => ({ ...f, onlyNoTrad: !f.onlyNoTrad, onlyHasTrad: false }))}
                     />
-                    <span className="font-serif text-[13px] text-ink/85">Senza traduzione</span>
+                    <span className="text-[10px] uppercase font-sans font-bold">Senza Traduzione</span>
                   </label>
                 </div>
               </div>
@@ -6079,9 +6104,9 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                   id="reset-filters-btn"
                   onClick={() => setFilters(DEFAULT_FILTERS)}
                   disabled={!hasActiveFilters}
-                  className="font-serif italic text-[13px] text-muted hover:text-accent transition-colors disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:text-muted"
+                  className="w-full border border-accent py-3 font-sans text-[9px] font-bold uppercase tracking-widest text-accent hover:bg-accent hover:text-white transition-all flex items-center justify-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-accent"
                 >
-                  Azzera i filtri
+                  <Trash2 className="h-3 w-3" /> Reset Filtri
                 </button>
               </div>
             </div>
@@ -6126,22 +6151,18 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
           {activeView === 'catalog' && (
             <>
                 {/* Record List */}
-                {/* px-4 su schermo stretto: senza la cornice di prima, che
-                    portava il suo px-6, la colonna dei numeri e il sommario
-                    arrivavano a filo del vetro. */}
-                <div className="flex-1 flex flex-col overflow-hidden min-h-0 px-4 sm:px-0">
-                  <div className="mb-1 pb-1.5 flex items-center justify-between border-b border-border/40 font-sans text-[11px] text-muted">
-                    <span role="status" aria-live="polite">{filteredMonumenti.length} schede</span>
-                    <div className="flex items-baseline gap-1.5">
-                      <span className="text-muted/60">ordina per</span>
-                      <button onClick={() => toggleSort('id')} className={cn("font-serif text-[13px] transition-colors", sortField === 'id' ? "text-accent italic" : "text-muted hover:text-ink")}>numero</button>
-                      <span className="text-muted/60">·</span>
-                      <button onClick={() => toggleSort('citta')} className={cn("font-serif text-[13px] transition-colors", (sortField === 'citta' || sortField === 'regione') ? "text-accent italic" : "text-muted hover:text-ink")}>località</button>
+                <div className="flex-1 flex flex-col overflow-hidden min-h-0 glass-panel glass-panel-elevated rounded-2xl">
+                  <div className="px-6 pt-6 mb-2 flex items-center justify-between border-b border-border/20 pb-3 font-sans text-[10px] font-bold uppercase tracking-[0.2em] text-muted">
+                    <span role="status" aria-live="polite">Visualizzazione di {filteredMonumenti.length} schede</span>
+                    <div className="flex items-center gap-4">
+                      <span className="opacity-30 lowercase">Ordina per:</span>
+                      <button onClick={() => toggleSort('id')} className={cn("hover:text-accent transition-colors", sortField === 'id' && "text-accent")}>ID</button>
+                      <button onClick={() => toggleSort('citta')} className={cn("hover:text-accent transition-colors", (sortField === 'citta' || sortField === 'regione') && "text-accent")}>Località</button>
                     </div>
                   </div>
   
-                  <div className="flex-1 overflow-y-auto custom-scrollbar pr-3">
-                    <div className="hidden md:grid md:grid-cols-[1.5rem_1.5fr_4fr_2fr_2fr_1.5rem] lg:grid-cols-[1.5rem_1.5fr_4fr_2fr_2fr_1.5rem] xl:grid-cols-[1.5rem_0.8fr_2.7fr_1.5fr_1fr_3fr_1.5rem] gap-2 border-b border-border/50 py-2 font-sans text-[11px] text-muted/60 sticky top-0 bg-parchment z-10" >
+                  <div className="flex-1 overflow-y-auto custom-scrollbar px-6">
+                    <div className="hidden md:grid md:grid-cols-[1.5rem_1.5fr_4fr_2fr_2fr_1.5rem] lg:grid-cols-[1.5rem_1.5fr_4fr_2fr_2fr_1.5rem] xl:grid-cols-[1.5rem_0.8fr_2.7fr_1.5fr_1fr_3fr_1.5rem] gap-2 border-b border-border py-4 text-[10px] font-bold uppercase tracking-tighter text-muted/60 sticky top-0 bg-[var(--card)]/95 backdrop-blur-md z-10 px-2 lg:px-0" >
                       <div className="flex items-center justify-center">
                         <button
                           onClick={() => selectedIds.size === filteredMonumenti.length ? deselectAll() : selectAll()}
@@ -6249,22 +6270,22 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                               <div className="flex-1 min-w-0 flex flex-col gap-1.5">
                                 <div className="flex justify-between items-center gap-2">
                                   <div className="flex items-center gap-1 flex-wrap">
-                                    <span className="font-mono text-[11px] text-accent tabular-nums">{m.id.toString().padStart(3, '0')}</span>
+                                    <span className="font-mono text-[10px] font-bold text-accent bg-accent/5 px-1.5 py-0.5 rounded-sm border border-accent/10 tabular-nums">#{m.id.toString().padStart(3, '0')}</span>
                                     {searchResultIds?.has(m.id) && matchInSuppliedById.get(m.id) && (
-                                      <span className="font-serif italic text-[11px] text-warning">ricostr.</span>
+                                      <span className="font-mono text-[8px] font-bold text-warning bg-warning/10 px-1 py-0.5 rounded-sm border border-warning/25">RICOSTR.</span>
                                     )}
                                   </div>
-                                  <span className="font-sans text-[12px] text-muted tabular-nums shrink-0">{formatDateRange(m.data_inizio, m.data_fine)}</span>
+                                  <span className="text-[10px] font-bold text-ink/75 tabular-nums shrink-0">{formatDateRange(m.data_inizio, m.data_fine)}</span>
                                 </div>
                                 
-                                <div className="font-serif text-[15px] text-ink leading-tight line-clamp-2">{getDisplayTitle(m)}</div>
+                                <div className="text-sm font-bold text-ink leading-tight line-clamp-2">{getDisplayTitle(m)}</div>
                                 
                                 <div className="flex flex-wrap items-center gap-x-2 gap-y-1 mt-0.5">
-                                  <span className="font-serif text-[12px] text-muted">{labelType(m.tipo)}</span>
+                                  <span className="text-[9px] font-bold uppercase text-muted tracking-tighter">{labelType(m.tipo)}</span>
                                   {m.regione && (
                                     <button
                                       onClick={(e) => { e.stopPropagation(); setFilters(f => ({ ...f, regione: m.regione })); }}
-                                      className="font-serif text-[12px] text-accent/85 hover:text-accent transition-colors"
+                                      className="text-[7px] font-sans text-accent font-bold uppercase tracking-wider bg-accent/5 px-1 rounded-xs border border-accent/10 hover:bg-accent hover:text-white transition-all"
                                     >
                                       {m.regione}
                                     </button>
@@ -6272,8 +6293,9 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                                   {m.citta && (
                                      <button
                                        onClick={(e) => { e.stopPropagation(); setFilters(f => ({ ...f, citta: m.citta })); }}
-                                       className="font-serif text-[12px] text-muted hover:text-accent transition-colors"
+                                       className="flex items-center gap-0.5 text-[8px] font-sans text-muted uppercase tracking-tighter hover:text-accent transition-colors"
                                      >
+                                       <MapPin className="h-1.5 w-1.5 opacity-50" />
                                        {m.citta}
                                      </button>
                                   )}
@@ -6313,23 +6335,23 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                               </motion.div>
                             </div>
                               <div className="flex items-center gap-1">
-                                <span className="font-mono text-[11px] text-accent tabular-nums">{m.id.toString().padStart(3, '0')}</span>
+                                <span className="font-mono text-[10px] font-bold text-accent bg-accent/5 px-1.5 py-0.5 rounded-sm border border-accent/10 tabular-nums">#{m.id.toString().padStart(3, '0')}</span>
                                 {searchResultIds?.has(m.id) && matchInSuppliedById.get(m.id) && (
                                   <span
-                                    className="font-serif italic text-[11px] text-warning whitespace-nowrap"
+                                    className="font-mono text-[8px] font-bold text-warning bg-warning/10 px-1 py-0.5 rounded-sm border border-warning/25 whitespace-nowrap"
                                     title="Il termine cercato compare in una parte ricostruita editorialmente (supplied), non attestata sulla pietra"
                                   >
-                                    ricostr.
+                                    RICOSTR.
                                   </span>
                                 )}
                               </div>
                               <div>
-                                <div className="font-serif text-[15px] text-ink line-clamp-1 group-hover:text-accent transition-colors">{getDisplayTitle(m)}</div>
+                                <div className="text-sm font-bold text-ink line-clamp-1 group-hover:text-accent transition-colors">{getDisplayTitle(m)}</div>
                                 <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 mt-1">
                                   {m.regione && (
                                     <button
                                       onClick={(e) => { e.stopPropagation(); setFilters(f => ({ ...f, regione: m.regione })); }}
-                                      className="font-serif text-[12px] text-accent/85 hover:text-accent transition-colors cursor-pointer"
+                                      className="text-[7px] font-sans text-accent font-bold uppercase tracking-wider bg-accent/5 px-1 rounded-xs border border-accent/10 hover:bg-accent hover:text-white transition-all cursor-pointer"
                                     >
                                       {m.regione}
                                     </button>
@@ -6337,20 +6359,21 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                                   {m.citta && (
                                     <button
                                       onClick={(e) => { e.stopPropagation(); setFilters(f => ({ ...f, citta: m.citta })); }}
-                                      className="font-serif text-[12px] text-muted hover:text-accent transition-colors cursor-pointer"
+                                      className="flex items-center gap-1 opacity-70 hover:opacity-100 hover:text-accent transition-all cursor-pointer"
                                     >
-                                      {m.citta}
+                                      <MapPin className="h-1.5 w-1.5 text-muted/50" />
+                                      <span className="text-[8px] font-sans text-muted uppercase tracking-tighter">{m.citta}</span>
                                     </button>
                                   )}
                                 </div>
                               </div>
                               <div>
-                                 <span className="font-sans text-[12px] text-muted tabular-nums whitespace-nowrap block text-right">{formatDateRange(m.data_inizio, m.data_fine)}</span>
+                                 <span className="text-[10px] font-bold text-ink/75 tabular-nums whitespace-nowrap block text-right">{formatDateRange(m.data_inizio, m.data_fine)}</span>
                               </div>
                               <div className="flex flex-col gap-1">
                                  <button
                                    onClick={(e) => { e.stopPropagation(); setFilters(f => ({ ...f, tipo: m.tipo })); }}
-                                   className="font-serif text-[13px] text-muted line-clamp-1 hover:text-accent transition-colors cursor-pointer text-left"
+                                   className="text-[9px] font-bold uppercase text-muted tracking-tighter line-clamp-1 opacity-70 hover:text-accent transition-colors cursor-pointer text-left"
                                  >
                                    {labelType(m.tipo)}
                                  </button>
@@ -6363,7 +6386,9 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                                   {stripXml(m.testo) || '[Anepigrafe]'}
                                 </div>
                               </div>
-                              <div />
+                              <div className="text-right flex justify-end items-center">
+                                <ChevronRight className="h-4 w-4 text-border group-hover:text-accent group-hover:translate-x-1 transition-all" />
+                              </div>
                             </div>
                           </motion.div>
                           );
@@ -6377,7 +6402,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                             <div className="mt-3">
                               <button
                                 onClick={() => setFilters(DEFAULT_FILTERS)}
-                                className="font-serif text-[13px] text-accent hover:underline not-italic"
+                                className="text-[10px] font-sans font-bold uppercase tracking-widest text-accent hover:underline not-italic"
                               >
                                 Azzera i filtri
                               </button>
@@ -6389,8 +6414,8 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
 
                     {/* Pagination Controls */}
                     {totalPages > 1 && (
-                      <nav className="mt-8 mb-6 flex items-center justify-between border-t border-border/20 pt-4" aria-label="Paginazione catalogo">
-                        <div className="font-sans text-[11px] text-muted">
+                      <nav className="mt-8 mb-6 flex items-center justify-between border-t border-border/20 pt-6 px-6" aria-label="Paginazione catalogo">
+                        <div className="text-[10px] font-sans font-bold uppercase tracking-widest text-muted">
                           Pagina {currentPage} di {totalPages}
                         </div>
                         <div className="flex items-center gap-2">
@@ -6398,9 +6423,9 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                             disabled={currentPage === 1}
                             onClick={() => setCurrentPage(prev => prev - 1)}
                             aria-label="Pagina precedente"
-                            className="px-1 text-muted hover:text-accent disabled:opacity-20 transition-colors font-serif text-lg leading-none"
+                            className="p-2 border border-border/40 rounded-sm hover:bg-accent/10 disabled:opacity-20 transition-colors"
                           >
-                            ‹
+                            <ChevronLeft className="h-4 w-4" aria-hidden="true" />
                           </button>
                           
                           <div className="flex items-center gap-1 mx-2">
@@ -6418,8 +6443,10 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                                   aria-label={`Pagina ${pageNum}`}
                                   aria-current={currentPage === pageNum ? 'page' : undefined}
                                   className={cn(
-                                    "w-7 h-7 flex items-center justify-center font-sans text-[12px] tabular-nums transition-colors",
-                                    currentPage === pageNum ? "text-accent" : "text-muted hover:text-ink"
+                                    "w-7 h-7 flex items-center justify-center text-[10px] font-bold rounded-sm border transition-all",
+                                    currentPage === pageNum
+                                       ? "bg-accent border-accent text-white"
+                                       : "border-border/40 hover:border-accent text-muted"
                                   )}
                                 >
                                   {pageNum}
@@ -6432,9 +6459,9 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                             disabled={currentPage === totalPages}
                             onClick={() => setCurrentPage(prev => prev + 1)}
                             aria-label="Pagina successiva"
-                            className="px-1 text-muted hover:text-accent disabled:opacity-20 transition-colors font-serif text-lg leading-none"
+                            className="p-2 border border-border/40 rounded-sm hover:bg-accent/10 disabled:opacity-20 transition-colors"
                           >
-                            ›
+                            <ChevronRight className="h-4 w-4" aria-hidden="true" />
                           </button>
                         </div>
                       </nav>
@@ -6468,28 +6495,50 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                             </span>
                             <button
                               onClick={deselectAll}
-                              className="font-serif italic text-[13px] text-muted hover:text-ink transition-colors"
+                              className="text-[9px] font-sans font-bold uppercase tracking-widest text-muted hover:text-ink transition-colors flex items-center gap-1"
                             >
-                              Deseleziona
+                              <X className="h-3 w-3" /> Deseleziona
                             </button>
                           </div>
                           <div className="flex items-center gap-2">
                             <button
                               onClick={() => { exportFilteredData(); flashExport('xml'); }}
-                              className="font-serif italic text-[13px] text-accent hover:text-ink transition-colors"
+                              className="flex items-center gap-1.5 px-4 py-1.5 bg-accent text-white text-[9px] font-sans font-bold uppercase tracking-widest hover:bg-accent/90 transition-colors rounded-sm"
                             >
+                              <AnimatePresence mode="wait" initial={false}>
+                                {exportFlash === 'xml' ? (
+                                  <motion.span key="ok" initial={{ scale: 0 }} animate={{ scale: 1 }} exit={{ scale: 0 }} transition={SPRING_SNAPPY}>
+                                    <Check className="h-3 w-3" />
+                                  </motion.span>
+                                ) : (
+                                  <motion.span key="icon" initial={{ scale: 0 }} animate={{ scale: 1 }} exit={{ scale: 0 }} transition={SPRING_SNAPPY}>
+                                    <Download className="h-3 w-3" />
+                                  </motion.span>
+                                )}
+                              </AnimatePresence>
                               {exportFlash === 'xml' ? 'Esportato' : 'Esporta XML'}
                             </button>
                             <button
                               onClick={() => { exportToPDF(); flashExport('pdf'); }}
-                              className="font-serif italic text-[13px] text-muted hover:text-accent transition-colors"
+                              className="flex items-center gap-1.5 px-4 py-1.5 border border-accent text-accent text-[9px] font-sans font-bold uppercase tracking-widest hover:bg-accent/5 transition-colors rounded-sm"
                             >
+                              <AnimatePresence mode="wait" initial={false}>
+                                {exportFlash === 'pdf' ? (
+                                  <motion.span key="ok" initial={{ scale: 0 }} animate={{ scale: 1 }} exit={{ scale: 0 }} transition={SPRING_SNAPPY}>
+                                    <Check className="h-3 w-3" />
+                                  </motion.span>
+                                ) : (
+                                  <motion.span key="icon" initial={{ scale: 0 }} animate={{ scale: 1 }} exit={{ scale: 0 }} transition={SPRING_SNAPPY}>
+                                    <FileText className="h-3 w-3" />
+                                  </motion.span>
+                                )}
+                              </AnimatePresence>
                               {exportFlash === 'pdf' ? 'Esportato' : 'Esporta PDF'}
                             </button>
                           </div>
                           <div aria-live="polite" role="status" className="w-full text-right">
                             {exportError
-                              ? <span className="font-serif italic text-[13px] text-danger">{exportError}</span>
+                              ? <span className="text-[9px] font-sans font-bold uppercase tracking-widest text-danger">{exportError}</span>
                               : exportFlash
                                 ? <span className="sr-only">Esportazione {exportFlash.toUpperCase()} completata</span>
                                 : null}
@@ -6745,7 +6794,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                   <div className="flex items-center gap-3">
                     <Upload className="h-5 w-5 text-accent" />
                     <div>
-                      <h3 className="font-serif text-lg font-bold">Importazione avanzata</h3>
+                      <h3 className="font-serif text-lg font-bold">Importazione Avanzata</h3>
                       <p className="text-[10px] font-sans font-bold uppercase tracking-widest text-muted mt-0.5">Tei XML &amp; Nativo JSON</p>
                     </div>
                   </div>
@@ -6952,7 +7001,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                         </div>
                         <div className="text-right">
                           <div className="text-lg font-serif italic text-accent font-bold leading-none">{parsedMonuments.length}</div>
-                          <div className="text-[9px] uppercase tracking-widest text-muted font-bold mt-1">Schede rilevate</div>
+                          <div className="text-[9px] uppercase tracking-widest text-muted font-bold mt-1">Schede Rilevate</div>
                         </div>
                       </div>
 
@@ -7006,7 +7055,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                       </div>
 
                       <div className="space-y-1">
-                        <label className="text-[10px] font-sans font-bold uppercase tracking-widest text-muted block">Anteprima delle schede riconosciute</label>
+                        <label className="text-[10px] font-sans font-bold uppercase tracking-widest text-muted block">Anteprima Record Identificati</label>
                         <div className="border border-border rounded-sm overflow-hidden text-xs max-h-32 overflow-y-auto custom-scrollbar font-serif">
                           <table className="w-full text-left border-collapse bg-sidebar">
                             <thead>
@@ -7134,14 +7183,16 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                     <div className="mb-10 flex items-center justify-between gap-3">
                       <button
                         onClick={() => setSelectedMonumento(null)}
-                        className="font-serif italic text-[13px] text-muted hover:text-accent transition-colors"
+                        className="text-[10px] font-sans font-bold uppercase tracking-[0.2em] text-muted flex items-center gap-2 hover:text-accent transition-colors"
                       >
-                        ‹ Torna al catalogo
+                        <X className="h-4 w-4" /> Torna al Catalogo
                       </button>
                       <span
                         className={cn(
-                          "font-serif italic text-[12px] shrink-0",
-                          effectiveAdmin ? "text-accent" : "text-muted/60"
+                          "text-[8px] font-sans font-bold uppercase tracking-[0.15em] px-2 py-0.5 rounded-full border shrink-0",
+                          effectiveAdmin
+                            ? "border-accent/50 text-accent bg-accent/10"
+                            : "border-border text-muted"
                         )}
                       >
                         {effectiveAdmin ? 'Modifica sbloccata' : 'Sola lettura'}
@@ -7152,9 +7203,9 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
 
                     <div className="space-y-8">
                       <div className="border-l-2 border-accent pl-4">
-                         <span className="text-3xl font-light italic leading-none">{ selectedMonumento.id?.toString().padStart(3, '0') }</span>
-                         <span className="block mt-2 field-label">
-                           {selectedMonumento.id ? `scheda ${selectedMonumento.id}` : 'nuova scheda'}
+                         <span className="text-3xl font-light italic leading-none">#{ selectedMonumento.id?.toString().padStart(3, '0') }</span>
+                         <span className="block mt-2 font-sans field-label">
+                           {selectedMonumento.id ? `Record #${selectedMonumento.id}` : 'Nuovo Record'}
                          </span>
                       </div>
 
@@ -7167,8 +7218,10 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                               key={id}
                               onClick={() => goToRecordSection(id)}
                               className={cn(
-                                "w-full text-left px-1.5 py-1 font-serif text-[14px] transition-colors",
-                                active ? "text-accent italic" : "text-muted hover:text-ink"
+                                "w-full text-left px-3.5 py-2.5 font-sans text-[11px] font-bold uppercase tracking-wider rounded-xl transition-all duration-200",
+                                active
+                                  ? "nav-pill-active text-accent"
+                                  : "text-muted hover:text-ink"
                               )}
                             >
                               {label}
@@ -7188,16 +7241,16 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                             { label: 'Materiale', value: selectedMonumento.materiale, display: labelMaterial(selectedMonumento.materiale || ''), type: '' }
                           ].filter(item => item.value && item.value !== '-').map(item => (
                             <div key={item.label}>
-                              <dt className="font-serif italic text-[12px] text-muted/60">{item.label}</dt>
+                              <dt className="text-[9px] font-sans font-bold uppercase text-muted/80 tracking-tighter">{item.label}</dt>
                               {item.type ? (
                                 <button
                                   onClick={() => { setFilters(f => ({ ...f, [item.type]: item.value })); setSelectedMonumento(null); }}
-                                  className="text-[14px] text-ink mt-0.5 font-serif hover:text-accent transition-colors block text-left capitalize"
+                                  className="text-xs font-semibold text-ink mt-0.5 font-serif hover:text-accent transition-colors block text-left capitalize"
                                 >
                                   {item.display}
                                 </button>
                               ) : (
-                                <dd className="text-[14px] text-ink mt-0.5 font-serif capitalize">{item.display}</dd>
+                                <dd className="text-xs font-semibold text-ink mt-0.5 font-serif capitalize">{item.display}</dd>
                               )}
                             </div>
                           ))}
@@ -7212,9 +7265,9 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                               setSelectedMonumento(null);
                               setActiveView('editor');
                             }}
-                            className="w-full text-left font-serif italic text-[13px] text-muted hover:text-accent transition-colors"
+                            className="w-full py-2 bg-accent hover:bg-accent/90 text-white font-sans text-[9px] font-bold uppercase tracking-widest transition-colors flex items-center justify-center gap-1.5 shadow-sm rounded-sm"
                           >
-                            Modifica nell'editor a sezioni
+                            <Edit2 className="h-3 w-3" /> Modifica nell'Editor a Sezioni
                           </button>
                         </section>
                       )}
@@ -7242,7 +7295,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                         {(selectedMonumento.regione || selectedMonumento.citta) && (
                           <div className="flex flex-col gap-1 mb-2">
                             {selectedMonumento.regione && (
-                              <div className="font-serif text-[15px] text-accent">
+                              <div className="text-[10px] md:text-xs font-sans font-bold uppercase tracking-[0.3em] text-accent">
                                  {selectedMonumento.regione}
                               </div>
                             )}
@@ -7255,7 +7308,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                         )}
                           <div>
                             <div className="flex flex-wrap items-center gap-2 mb-2">
-                              <span className="font-serif text-[13px] text-accent">
+                              <span className="bg-accent/10 text-accent text-[10px] font-bold px-2 py-0.5 rounded-sm uppercase tracking-tighter">
                                 {formatIlaLabel(selectedMonumento.id)}
                               </span>
                               {selectedMonumento.tm && (
@@ -7264,13 +7317,13 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                                     href={selectedMonumento.tmLink}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="font-serif text-[13px] text-muted hover:text-accent transition-colors"
+                                    className="inline-flex items-center gap-1 bg-sidebar text-muted hover:text-accent text-[10px] font-bold px-2 py-0.5 rounded-sm uppercase tracking-tighter shadow-sm transition-colors"
                                     title="Apri la scheda su Trismegistos"
                                   >
-                                    TM {selectedMonumento.tm}
+                                    TM {selectedMonumento.tm} <ExternalLink className="h-2.5 w-2.5" />
                                   </a>
                                 ) : (
-                                  <span className="font-serif text-[13px] text-muted">
+                                  <span className="bg-sidebar text-muted text-[10px] font-bold px-2 py-0.5 rounded-sm uppercase tracking-tighter">
                                     TM {selectedMonumento.tm}
                                   </span>
                                 )
@@ -7284,13 +7337,13 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                                     href={url}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="font-serif text-[13px] text-muted hover:text-accent transition-colors"
+                                    className="inline-flex items-center gap-1 bg-sidebar text-muted hover:text-accent text-[10px] font-bold px-2 py-0.5 rounded-sm uppercase tracking-tighter shadow-sm transition-colors"
                                     title="Apri la scheda su PHI Greek Inscriptions"
                                   >
-                                    PHI {v}
+                                    PHI {v} <ExternalLink className="h-2.5 w-2.5" />
                                   </a>
                                 ) : (
-                                  <span key={`phi-${idx}`} className="font-serif text-[13px] text-muted">
+                                  <span key={`phi-${idx}`} className="bg-sidebar text-muted text-[10px] font-bold px-2 py-0.5 rounded-sm uppercase tracking-tighter">
                                     PHI {v}
                                   </span>
                                 );
@@ -7303,13 +7356,13 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                                     href={r.url}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="font-serif text-[13px] text-muted hover:text-accent transition-colors"
+                                    className="inline-flex items-center gap-1 bg-sidebar text-muted hover:text-accent text-[10px] font-bold px-2 py-0.5 rounded-sm uppercase tracking-tighter shadow-sm transition-colors"
                                     title={`Apri la scheda su ${r.type}`}
                                   >
-                                    {r.type} {r.value}
+                                    {r.type} {r.value} <ExternalLink className="h-2.5 w-2.5" />
                                   </a>
                                 ) : (
-                                  <span key={idx} className="font-serif text-[13px] text-muted">
+                                  <span key={idx} className="bg-sidebar text-muted text-[10px] font-bold px-2 py-0.5 rounded-sm uppercase tracking-tighter">
                                     {r.type} {r.value}
                                   </span>
                                 )
@@ -7317,10 +7370,10 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                               {selectedMonumento.editorialStatus && (
                                 <span
                                   className={cn(
-                                    "font-serif italic text-[13px]",
-                                    selectedMonumento.editorialStatus === 'under-revision' && "text-warning",
-                                    selectedMonumento.editorialStatus === 'draft' && "text-muted",
-                                    (selectedMonumento.editorialStatus === 'published' || selectedMonumento.editorialStatus === 'diplomatic-edition') && "text-success"
+                                    "text-[10px] font-bold px-2 py-0.5 rounded-sm uppercase tracking-tighter shadow-sm",
+                                    selectedMonumento.editorialStatus === 'under-revision' && "bg-warning/10 text-warning",
+                                    selectedMonumento.editorialStatus === 'draft' && "bg-sidebar text-muted",
+                                    (selectedMonumento.editorialStatus === 'published' || selectedMonumento.editorialStatus === 'diplomatic-edition') && "bg-success/10 text-success"
                                   )}
                                   title="Stato editoriale (TEI revisionDesc/@status)"
                                 >
@@ -7328,18 +7381,18 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                                 </span>
                               )}
                               {selectedMonumento.textTypes?.map((tt, idx) => (
-                                <span key={idx} className="font-serif italic text-[13px] text-success">
+                                <span key={idx} className="bg-success/10 text-success text-[10px] font-bold px-2 py-0.5 rounded-sm uppercase tracking-tighter shadow-sm">
                                   {labelInscriptionType(tt)}
                                 </span>
                               ))}
                               <button
                                 onClick={() => setCompareList(prev => prev.some(m => m.entryId === selectedMonumento.entryId) ? prev : [...prev, selectedMonumento])}
-                                className="font-serif italic text-[13px] text-muted hover:text-accent transition-colors ml-1"
+                                className="text-[9px] font-bold uppercase hover:text-accent transition-colors underline underline-offset-2 ml-1"
                               >
-                                Confronta
+                                + Confronta
                               </button>
                             </div>
-                            <h2 id="record-dialog-title" className="text-3xl sm:text-4xl md:text-5xl text-ink leading-tight font-serif">
+                            <h2 id="record-dialog-title" className="text-3xl sm:text-4xl md:text-5xl font-bold text-ink leading-tight font-serif">
                               {getDisplayTitle(selectedMonumento)}
                             </h2>
                             <div className="ornament-rule !my-0 mt-2 max-w-[6rem] mx-0" />
@@ -7353,10 +7406,10 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                              <>
                                <button 
                                  onClick={() => exportSingleRecord(selectedMonumento)}
-                                 className="font-serif italic text-[13px] text-muted hover:text-accent transition-colors"
-                                 title="Esporta la scheda in XML"
+                                 className="flex items-center gap-1.5 px-3 py-1.5 bg-accent text-white font-sans text-[10px] font-bold uppercase tracking-widest hover:bg-accent/90 transition-all rounded-sm shadow-sm"
+                                 title="Esporta XML"
                                >
-                                 Esporta XML
+                                 <Download className="h-3.5 w-3.5" /> Esporta XML
                                </button>
                                <button 
                                  onClick={() => setShowDeleteConfirm(true)}
@@ -7368,16 +7421,16 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                              </>
                            ) : (
                              <div className="flex items-center gap-3 animate-in fade-in zoom-in-95 duration-200">
-                               <span className="font-serif italic text-[13px] text-danger whitespace-nowrap">Sicuro di voler eliminare?</span>
+                               <span className="text-[10px] font-bold uppercase text-danger tracking-widest whitespace-nowrap">Sicuro di voler eliminare?</span>
                                <button
                                  onClick={() => handleDelete()}
-                                 className="font-serif italic text-[13px] text-danger hover:opacity-70 transition-opacity"
+                                 className="px-4 py-1.5 bg-danger text-white font-sans text-[9px] font-bold uppercase tracking-widest hover:bg-danger/90 transition-colors"
                                >
                                  Conferma
                                </button>
                                <button 
                                  onClick={() => setShowDeleteConfirm(false)}
-                                 className="font-serif italic text-[13px] text-muted hover:text-ink transition-colors"
+                                 className="px-4 py-1.5 border border-border text-muted font-sans text-[9px] font-bold uppercase tracking-widest hover:bg-sidebar transition-colors"
                                >
                                  Annulla
                                </button>
@@ -7392,7 +7445,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                       <div className="space-y-5 mt-1">
                         {selectedMonumento.facsimile_url && (
                           <div className="bg-sidebar/40 p-6 border border-border/60 rounded-sm">
-                            <span className="font-serif italic text-[13px] text-muted block mb-3">Facsimile</span>
+                            <span className="text-[10px] font-sans font-bold uppercase tracking-[0.2em] text-accent block mb-3">Facsimile / Squeeze Image</span>
                             <div className="relative aspect-video max-w-full md:max-w-2xl overflow-hidden bg-zinc-950 border border-border flex items-center justify-center rounded-sm shadow-inner group">
                               <FacsimileImage url={selectedMonumento.facsimile_url} desc={selectedMonumento.facsimile_desc} />
                             </div>
@@ -7401,32 +7454,32 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
 
                         <div className="grid md:grid-cols-2 gap-6 border border-border/40 bg-sidebar/20 p-5 md:p-6 rounded-sm font-serif text-xs leading-relaxed text-ink/80">
                           <div>
-                            <h3 className="font-serif text-[15px] text-ink mb-3 pb-1 border-b border-border/30">Layout e supporto materiale</h3>
+                            <h3 className="text-[10px] font-sans font-bold uppercase tracking-widest text-accent mb-3 pb-1 border-b border-border/30">Layout & Supporto Materiale</h3>
                             {selectedMonumento.layout_desc && (
                               <p className="mb-3 text-ink-70 select-text font-serif leading-relaxed">{selectedMonumento.layout_desc}</p>
                             )}
                             <div className="space-y-1.5 text-[10px] font-sans border-t border-border/20 pt-2.5">
                               {selectedMonumento.scrittura && (
                                 <div>
-                                  <span className="font-serif italic text-[12px] text-muted/60">Scrittura:</span>{' '}
+                                  <span className="text-muted uppercase font-bold text-[9px]">Scrittura:</span>{' '}
                                   <span className="text-ink font-serif italic text-xs">{selectedMonumento.scrittura}</span>
                                   {isFilled(selectedMonumento.scrittura_ref) && (
-                                    <a href={selectedMonumento.scrittura_ref} target="_blank" rel="noopener noreferrer" className="font-serif text-[12px] text-accent hover:underline ml-2 align-middle">
-                                      EAGLE, scrittura
+                                    <a href={selectedMonumento.scrittura_ref} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-[9px] text-accent hover:underline ml-2 align-middle font-mono">
+                                      EAGLE Writing Link ↗
                                     </a>
                                   )}
                                 </div>
                               )}
-                              {isFilled(selectedMonumento.altezza_lettere) && <div><span className="font-serif italic text-[12px] text-muted/60">Altezza delle lettere:</span> <span className="text-ink font-serif text-xs">{selectedMonumento.altezza_lettere} {selectedMonumento.altezza_lettere_unita || 'cm'}</span></div>}
-                              {isFilled(selectedMonumento.scrittura_note) && <div><span className="font-serif italic text-[12px] text-muted/60">Note paleografiche:</span> <span className="text-ink font-serif text-xs">{selectedMonumento.scrittura_note}</span></div>}
+                              {isFilled(selectedMonumento.altezza_lettere) && <div><span className="text-muted uppercase font-bold text-[9px]">Altezza delle lettere:</span> <span className="text-ink font-serif text-xs">{selectedMonumento.altezza_lettere} {selectedMonumento.altezza_lettere_unita || 'cm'}</span></div>}
+                              {isFilled(selectedMonumento.scrittura_note) && <div><span className="text-muted uppercase font-bold text-[9px]">Note paleografiche:</span> <span className="text-ink font-serif text-xs">{selectedMonumento.scrittura_note}</span></div>}
 
                               {selectedMonumento.tipo && (
                                 <div>
-                                  <span className="font-serif italic text-[12px] text-muted/60">Tipo oggetto:</span>{' '}
+                                  <span className="text-muted uppercase font-bold text-[9px]">Tipo oggetto:</span>{' '}
                                   <span className="text-ink font-serif italic text-xs capitalize">{labelType(selectedMonumento.tipo)}</span>
                                   {isFilled(selectedMonumento.tipo_ref) && (
-                                    <a href={selectedMonumento.tipo_ref} target="_blank" rel="noopener noreferrer" className="font-serif text-[12px] text-accent hover:underline ml-2 align-middle">
-                                      EAGLE, oggetto
+                                    <a href={selectedMonumento.tipo_ref} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-[9px] text-accent hover:underline ml-2 align-middle font-mono">
+                                      EAGLE Object Link ↗
                                     </a>
                                   )}
                                 </div>
@@ -7434,11 +7487,11 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
 
                               {selectedMonumento.materiale && (
                                 <div>
-                                  <span className="font-serif italic text-[12px] text-muted/60">Materiale:</span>{' '}
+                                  <span className="text-muted uppercase font-bold text-[9px]">Materiale:</span>{' '}
                                   <span className="text-ink font-serif italic text-xs capitalize">{labelMaterial(selectedMonumento.materiale)}</span>
                                   {isFilled(selectedMonumento.materialRef) && (
-                                    <a href={selectedMonumento.materialRef} target="_blank" rel="noopener noreferrer" className="font-serif text-[12px] text-accent hover:underline ml-2 align-middle">
-                                      EAGLE, materiale
+                                    <a href={selectedMonumento.materialRef} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-[9px] text-accent hover:underline ml-2 align-middle font-mono">
+                                      EAGLE Material Link ↗
                                     </a>
                                   )}
                                 </div>
@@ -7446,7 +7499,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
 
                               {(selectedMonumento.dim_altezza || selectedMonumento.dim_larghezza || selectedMonumento.dim_profondita) && (
                                 <div>
-                                  <span className="font-serif italic text-[12px] text-muted/60">Dimensioni:</span>{' '}
+                                  <span className="text-muted uppercase font-bold text-[9px]">Dimensioni:</span>{' '}
                                   <span className="text-ink font-serif italic text-xs">
                                     {[
                                       selectedMonumento.dim_altezza && `h ${selectedMonumento.dim_altezza}`,
@@ -7459,13 +7512,13 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                             </div>
                           </div>
                           <div>
-                            <h3 className="font-serif text-[15px] text-ink mb-3 pb-1 border-b border-border/30">Georeferenziazione e date storiche</h3>
+                            <h3 className="text-[10px] font-sans font-bold uppercase tracking-widest text-accent mb-3 pb-1 border-b border-border/30">Georeferenziazione & Date Storiche</h3>
                             <div className="space-y-3">
                               {(selectedMonumento.citta || selectedMonumento.luogo_rit) && (
                                 <div className="grid grid-cols-2 gap-2">
                                   {selectedMonumento.citta && (
                                     <div>
-                                      <span className="font-serif italic text-[12px] text-muted/60 block">Città antica (Pleiades)</span>
+                                      <span className="text-muted uppercase font-bold text-[9px] block">Città Antica (Pleiades)</span>
                                       <span className="font-serif font-semibold text-ink text-xs block truncate" title={selectedMonumento.citta}>{selectedMonumento.citta}</span>
                                       {isFilled(selectedMonumento.place_ref_ancient) && (
                                         <a href={selectedMonumento.place_ref_ancient} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-[9px] text-accent hover:underline font-mono truncate max-w-full mt-1">
@@ -7476,7 +7529,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                                   )}
                                   {selectedMonumento.luogo_rit && (
                                     <div>
-                                      <span className="font-serif italic text-[12px] text-muted/60 block">Rinvenimento moderno</span>
+                                      <span className="text-muted uppercase font-bold text-[9px] block">Rinvenimento Moderno</span>
                                       <span className="font-serif font-semibold text-ink text-xs block truncate" title={selectedMonumento.luogo_rit}>{selectedMonumento.luogo_rit}</span>
                                       {isFilled(selectedMonumento.place_ref_modern) && (
                                         <a href={selectedMonumento.place_ref_modern} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-[9px] text-accent hover:underline font-mono truncate max-w-full mt-1">
@@ -7491,13 +7544,13 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
 
                               {selectedMonumento.origDates && selectedMonumento.origDates.length > 0 && (
                                 <div className="border-t border-border/20 pt-3">
-                                  <span className="font-serif italic text-[12px] text-muted/60 block mb-2">Datazione del monumento</span>
+                                  <span className="text-muted uppercase font-bold text-[9px] block mb-2">Datazione del monumento</span>
                                   <ul className="space-y-3 font-serif text-[11px] list-disc list-inside text-ink/90 pl-1">
                                     {selectedMonumento.origDates.map((od, i) => (
                                       <li key={i} className="leading-snug">
                                         {od.prefix && (
                                           <span
-                                            className="font-mono text-accent/60 text-[11px] mr-2 not-italic"
+                                            className="font-mono font-bold text-accent/60 text-[9px] uppercase tracking-wider mr-2 not-italic"
                                             style={{ fontStyle: 'normal' }}
                                           >
                                             {od.prefix}
@@ -7510,7 +7563,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                                           </span>
                                         )}
                                         {od.evidence && (
-                                          <span className="font-serif italic text-[11px] text-muted/60 ml-1">
+                                          <span className="text-[8px] font-sans font-bold uppercase tracking-widest text-muted/50 ml-1 border border-border/40 px-1 rounded-sm">
                                             {labelEvidence(od.evidence)}
                                           </span>
                                         )}
@@ -7522,14 +7575,14 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
 
                               {selectedMonumento.vicende && (
                                 <div className="border-t border-border/20 pt-3 text-[10px]">
-                                  <span className="font-serif italic text-[12px] text-muted/60 block mb-1">Vicende del monumento</span>
+                                  <span className="text-muted uppercase font-bold text-[9px] block mb-1">Vicende del monumento</span>
                                   <span className="font-serif text-xs text-ink/90 whitespace-pre-wrap">{selectedMonumento.vicende}</span>
                                 </div>
                               )}
 
                               {selectedMonumento.conserv && (
                                 <div className="border-t border-border/20 pt-3 text-[10px]">
-                                  <span className="font-serif italic text-[12px] text-muted/60 block mb-1">Stato di conservazione</span>
+                                  <span className="text-muted uppercase font-bold text-[9px] block mb-1">Stato di Conservazione</span>
                                   <span className="font-serif italic text-xs text-ink/90 whitespace-pre-wrap">{selectedMonumento.conserv}</span>
                                 </div>
                               )}
@@ -7542,22 +7595,27 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                   {activeRecordSection === 'iscrizione' && (
                     <div className="space-y-14 animate-in fade-in duration-200 max-w-[70ch] mx-auto">
                       <section>
-                         <h3 className="font-serif text-xl text-ink mb-6 pb-1 border-b border-border/30 flex items-baseline gap-4">
-                           Trascrizione
-                           <span className="flex-1" />
+                         <h3 className="text-2xl font-bold mb-6 italic flex items-center gap-4">
+                           <div className="flex items-center gap-4 shrink-0">
+                             <div className="h-[1px] w-8 bg-border/40" />
+                             <div className="w-1.5 h-1.5 rotate-45 border border-accent/40" />
+                           </div>
+                           Trascrizione Testuale
+                           <div className="flex-1 h-[1px] bg-border/20" />
                            {!isStaticBuild && effectiveAdmin && selectedMonumento.testo && (
                              <button
                                onClick={handleTranslate}
                                disabled={translating}
-                               className="font-serif italic text-[13px] text-accent hover:underline disabled:opacity-50"
+                               className="flex items-center gap-2 font-sans text-[10px] font-bold uppercase tracking-widest text-accent hover:underline disabled:opacity-50"
                              >
-                               {translating ? 'Traduzione in corso…' : 'Traduci con l\'IA'}
+                               {translating ? <Loader2 className="h-3 w-3 animate-spin" /> : <Sparkles className="h-3 w-3" />}
+                               Traduzione AI (Italiano)
                              </button>
                            )}
                          </h3>
                            <div className="space-y-8">
                              <LegendaDropdown />
-                             <div className="border-l border-border/60 pl-6 md:pl-10 py-2 text-lg md:text-2xl text-ink/90 relative"
+                             <div className="bg-sidebar/50 border border-border p-8 md:p-12 text-lg md:text-2xl text-ink/90 shadow-inner relative"
                      style={{ fontFamily: 'var(--font-greek)', lineHeight: '2' }}>
                                 {selectedMonumento.testo && (
                                   <button
@@ -7567,9 +7625,11 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                                     title={plainTranscription
                                       ? 'Mostra il testo con il markup diacritico (parentesi, colori, note)'
                                       : 'Mostra la trascrizione pura, senza markup'}
-                                    className="absolute top-0 right-0 z-20 font-serif italic text-[13px] text-muted/60 transition-colors hover:text-accent"
+                                    className="absolute top-3 right-3 z-20 flex items-center gap-1.5 rounded-sm border border-border/60 bg-background/80 backdrop-blur px-2 py-1 font-sans text-[9px] font-bold uppercase tracking-widest text-muted transition-colors hover:text-accent hover:border-accent/40"
                                   >
-                                    {plainTranscription ? 'Con markup' : 'Trascrizione pura'}
+                                    {plainTranscription
+                                      ? <><Tags className="h-3 w-3" /> Con markup</>
+                                      : <><Type className="h-3 w-3" /> Trascrizione pura</>}
                                   </button>
                                 )}
                                 <div className="relative z-10 max-w-[62ch] mx-auto pl-10 border-l-2 border-border/40 max-h-[52vh] overflow-y-auto custom-scrollbar pr-4 pt-10">
@@ -7603,9 +7663,9 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                                });
                                const active = sorted.find(t => t.lang === activeTranslationLang) ?? sorted[0];
                                return (
-                                 <div className="border-l border-accent/50 pl-6 py-1 font-serif text-lg italic leading-relaxed text-ink/80 mb-6">
+                                 <div className="bg-sidebar/30 border-l-4 border-accent p-8 font-serif text-lg italic leading-relaxed text-ink/80 mb-6">
                                    <div className="flex items-center justify-between gap-4 mb-2 not-italic">
-                                     <span className="font-serif italic text-[13px] text-muted">Traduzione</span>
+                                     <span className="text-[9px] font-sans font-bold uppercase tracking-widest text-muted">Traduzione</span>
                                      {sorted.length > 1 && (
                                        <div className="flex items-center gap-1">
                                          {sorted.map((t, i) => (
@@ -7613,25 +7673,25 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                                              key={`${t.lang}-${i}`}
                                              onClick={() => setActiveTranslationLang(t.lang ?? null)}
                                              className={cn(
-                                               "font-serif text-[13px] transition-colors",
-                                               t === active ? "text-accent italic" : "text-muted hover:text-accent"
+                                               "px-1.5 py-0.5 text-[8px] font-sans font-bold uppercase tracking-wider rounded-sm transition-colors",
+                                               t === active ? "bg-accent text-white" : "text-muted/70 hover:text-accent"
                                              )}
                                              title={t.lang}
                                            >
-                                             {(t.lang || '?').slice(0, 2)}
+                                             {(t.lang || '?').slice(0, 2).toUpperCase()}
                                            </button>
                                          ))}
                                        </div>
                                      )}
                                    </div>
                                    <Highlight text={stripXml(active?.testo)} query={filters.searchText} />
-                                   {active?.note && <p className="font-serif not-italic text-[12px] text-muted/60 mt-3">{active.note}</p>}
+                                   {active?.note && <p className="text-[10px] font-sans not-italic text-muted mt-3">Note: {active.note}</p>}
                                  </div>
                                );
                              })()}
                              {hasApparatusContent(selectedMonumento.apparatus) && (
-                               <div className="font-sans text-xs leading-relaxed text-muted block">
-                                 <div className="font-serif italic text-[13px] text-muted mb-3">Apparato critico</div>
+                               <div className="bg-sidebar/20 border border-border/40 p-6 rounded-sm font-sans text-xs leading-relaxed text-muted block">
+                                 <div className="text-[9px] font-sans font-bold uppercase tracking-widest text-muted mb-3 font-semibold">Apparatus Critico</div>
                                  <ApparatusNotes
                                    value={selectedMonumento.apparatus}
                                    render={t => <Highlight text={t} query={filters.searchText} />}
@@ -7643,7 +7703,14 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
 
                       {isFilled(selectedMonumento.note_interne) && (
                         <section>
-                           <h3 className="font-serif text-xl text-ink mb-6 pb-1 border-b border-border/30">Commento</h3>
+                           <h3 className="text-2xl font-bold mb-6 italic flex items-center gap-4">
+                             <div className="flex items-center gap-4 shrink-0">
+                               <div className="h-[1px] w-8 bg-border/40" />
+                               <div className="w-1.5 h-1.5 rotate-45 border border-accent/40" />
+                             </div>
+                             Commento
+                             <div className="flex-1 h-[1px] bg-border/20" />
+                           </h3>
                            <p className="text-sm leading-relaxed text-ink/80 font-serif whitespace-pre-wrap">
                               <NoteWithTags
                                 text={selectedMonumento.note_interne}
@@ -7664,91 +7731,88 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                   {activeRecordSection === 'iconografia' && (
                     <div className="space-y-14 animate-in fade-in duration-200">
                       <section>
-                         <h3 className="font-serif text-xl text-ink mb-6 pb-1 border-b border-border/30">Indici</h3>
+                         <h3 className="text-2xl font-bold mb-6 italic flex items-center gap-4">
+                           <div className="flex items-center gap-4 shrink-0">
+                             <div className="h-[1px] w-8 bg-border/40" />
+                             <div className="w-1.5 h-1.5 rotate-45 border border-accent/40" />
+                           </div>
+                           Indici
+                           <div className="flex-1 h-[1px] bg-border/20" />
+                         </h3>
                          {(selectedMonumento.divinita?.length || selectedMonumento.epiteti?.length || selectedMonumento.onomastica?.length || selectedMonumento.imperatori?.length) ? (
                            <div className="grid sm:grid-cols-2 gap-x-10 gap-y-6">
                             {selectedMonumento.divinita && selectedMonumento.divinita.length > 0 && (
                               <div>
-                                <h4 className="font-serif italic text-[13px] text-muted mb-2">Divinità</h4>
-                                <p className="font-serif text-[15px] text-ink leading-relaxed">
-                                  {selectedMonumento.divinita.map((d, i) => (
-                                    <React.Fragment key={d}>
-                                      {i > 0 && <span className="text-muted/60">, </span>}
-                                      <button
-                                        onClick={() => { setFilters(f => ({ ...f, searchText: d })); setSelectedMonumento(null); }}
-                                        className="hover:text-accent transition-colors cursor-pointer"
-                                      >
-                                        {d}
-                                      </button>
-                                    </React.Fragment>
+                                <h4 className="text-xs font-bold uppercase text-muted tracking-widest mb-2">Divinità</h4>
+                                <div className="flex flex-wrap gap-2">
+                                  {selectedMonumento.divinita.map(d => (
+                                    <button
+                                      key={d}
+                                      onClick={() => { setFilters(f => ({ ...f, searchText: d })); setSelectedMonumento(null); }}
+                                      className="border border-accent bg-accent/10 text-accent px-3 py-1 text-xs font-bold rounded-full font-serif hover:bg-accent hover:text-white transition-all cursor-pointer"
+                                    >
+                                      {d}
+                                    </button>
                                   ))}
-                                </p>
+                                </div>
                               </div>
                             )}
                             {selectedMonumento.epiteti && selectedMonumento.epiteti.length > 0 && (
                               <div>
-                                <h4 className="font-serif italic text-[13px] text-muted mb-2">Epiteti</h4>
-                                <p className="font-serif italic text-[15px] text-ink leading-relaxed mb-2">
-                                  {selectedMonumento.epiteti.map((e, i) => (
-                                    <React.Fragment key={e}>
-                                      {i > 0 && <span className="not-italic text-muted/60">, </span>}
-                                      <button
-                                        onClick={() => { setFilters(f => ({ ...f, searchText: e })); setSelectedMonumento(null); }}
-                                        className="hover:text-accent transition-colors cursor-pointer"
-                                      >
-                                        {e}
-                                      </button>
-                                    </React.Fragment>
+                                <h4 className="text-xs font-bold uppercase text-muted tracking-widest mb-2">Epiteti</h4>
+                                <div className="flex flex-wrap gap-2 mb-2">
+                                  {selectedMonumento.epiteti.map(e => (
+                                    <button
+                                      key={e}
+                                      onClick={() => { setFilters(f => ({ ...f, searchText: e })); setSelectedMonumento(null); }}
+                                      className="border border-accent/20 bg-accent/5 text-accent px-3 py-1 text-xs italic rounded-full font-serif hover:bg-accent hover:text-white transition-all cursor-pointer"
+                                    >
+                                      {e}
+                                    </button>
                                   ))}
-                                </p>
+                                </div>
                               </div>
                             )}
                             {selectedMonumento.onomastica && selectedMonumento.onomastica.length > 0 && (
                               <div>
-                                <h4 className="font-serif italic text-[13px] text-muted mb-2">Onomastica</h4>
-                                <p className="font-serif text-[15px] text-ink/85 leading-relaxed">
-                                  {selectedMonumento.onomastica.map((o, i) => (
-                                    <React.Fragment key={o}>
-                                      {i > 0 && <span className="text-muted/60">, </span>}
-                                      <button
-                                        onClick={() => { setFilters(f => ({ ...f, searchText: o })); setSelectedMonumento(null); }}
-                                        className="hover:text-accent transition-colors cursor-pointer"
-                                      >{o}</button>
-                                    </React.Fragment>
+                                <h4 className="text-xs font-bold uppercase text-muted tracking-widest mb-2 font-sans">Onomastica</h4>
+                                <div className="flex flex-wrap gap-2">
+                                  {selectedMonumento.onomastica.map(o => (
+                                    <button key={o}
+                                      onClick={() => { setFilters(f => ({ ...f, searchText: o })); setSelectedMonumento(null); }}
+                                      className="border border-border text-ink/70 px-3 py-1 text-xs font-serif hover:border-accent hover:text-accent transition-all cursor-pointer rounded-full"
+                                    >{o}</button>
                                   ))}
-                                </p>
+                                </div>
                               </div>
                             )}
                             {selectedMonumento.imperatori && selectedMonumento.imperatori.length > 0 && (
                               <div>
-                                <h4 className="font-serif italic text-[13px] text-muted mb-2">Imperatori</h4>
-                                <p className="font-serif text-[15px] text-ink/85 leading-relaxed">
-                                  {selectedMonumento.imperatori.map((imp: string, i: number) => (
-                                    <React.Fragment key={imp}>
-                                      {i > 0 && <span className="text-muted/60">, </span>}
-                                      <button
-                                        onClick={() => { setFilters(f => ({ ...f, searchText: imp })); setSelectedMonumento(null); }}
-                                        className="hover:text-accent transition-colors cursor-pointer"
-                                      >{imp}</button>
-                                    </React.Fragment>
+                                <h4 className="text-xs font-bold uppercase text-muted tracking-widest mb-2">Imperatori</h4>
+                                <div className="flex flex-wrap gap-2">
+                                  {selectedMonumento.imperatori.map((imp: string) => (
+                                    <button key={imp}
+                                      onClick={() => { setFilters(f => ({ ...f, searchText: imp })); setSelectedMonumento(null); }}
+                                      className="border border-accent/40 text-accent/70 px-3 py-1 text-xs font-serif hover:border-accent hover:text-accent transition-all cursor-pointer rounded-full"
+                                    >{imp}</button>
                                   ))}
-                                </p>
+                                </div>
                               </div>
                             )}
                            </div>
                          ) : (
-                           <p className="font-serif italic text-[13px] text-muted/60">Nessun indice registrato.</p>
+                           <p className="text-xs font-serif text-muted italic">Nessun indice registrato.</p>
                          )}
                       </section>
 
                       <section>
-                        <h3 className="font-serif italic text-[13px] text-muted mb-3">Commento iconografico</h3>
+                        <h3 className="text-xs font-bold uppercase text-muted tracking-widest mb-3">Commento Iconografico</h3>
                         {selectedMonumento.iconografia?.note ? (
                           <p className="text-xs leading-relaxed text-ink/80 italic font-serif whitespace-pre-wrap border-l-2 border-accent/40 pl-4">
                             {selectedMonumento.iconografia.note}
                           </p>
                         ) : (
-                          <p className="font-serif italic text-[13px] text-muted/60">Nessun commento registrato.</p>
+                          <p className="text-xs font-serif text-muted italic">Nessun commento registrato.</p>
                         )}
                       </section>
 
@@ -7760,18 +7824,21 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                     <div className="animate-in fade-in duration-200 max-w-[70ch]">
                       {selectedMonumento.bibliografia && selectedMonumento.bibliografia.length > 0 ? (
                       <section>
-                         <h3 className="font-serif text-xl text-ink mb-6 pb-1 border-b border-border/30">Bibliografia</h3>
+                         <h3 className="text-xl font-bold mb-6 italic flex items-center gap-3">
+                           <div className="h-px w-8 bg-border" /> Bibliografia
+                         </h3>
                             <>
                               {selectedMonumento.bibliografia.length === 1 && selectedMonumento.bibliografia[0].titolo.length > 60 ? (
-                                <p className="font-serif text-[14px] text-ink/85 leading-relaxed">
+                                <p className="text-xs font-serif text-ink/80 leading-relaxed">
                                   {selectedMonumento.bibliografia[0].titolo}
                                 </p>
                               ) : (
-                                <ul className="space-y-1.5">
+                                <ul className="space-y-3">
                                   {selectedMonumento.bibliografia.map((b, i) => (
-                                    <li key={i} className="font-serif text-[14px] leading-snug text-ink/85 pl-4 -indent-4">
-                                      {formatBiblKey(b.titolo)}
-                                      {b.punti_rif && <span className="text-muted"> ({b.punti_rif})</span>}
+                                    <li key={i} className="text-xs flex gap-2 font-serif">
+                                      <Book className="h-3 w-3 text-muted shrink-0 mt-0.5" />
+                                      <span className="font-semibold text-ink">{formatBiblKey(b.titolo)}</span>
+                                      {b.punti_rif && <span className="text-muted">({b.punti_rif})</span>}
                                     </li>
                                   ))}
                                 </ul>
@@ -7779,7 +7846,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                             </>
                       </section>
                       ) : (
-                        <p className="font-serif italic text-[13px] text-muted/60">Nessun riferimento bibliografico registrato.</p>
+                        <p className="text-xs font-serif text-muted italic">Nessun riferimento bibliografico registrato.</p>
                       )}
                     </div>
                   )}
@@ -7804,7 +7871,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                 <h3 className="text-xl font-bold italic tracking-tight">Matrice di Confronto Monumenti</h3>
               </div>
               <div className="flex items-center gap-6">
-                 <button onClick={() => setCompareList([])} className="font-serif italic text-[13px] text-muted hover:text-accent">Svuota il confronto</button>
+                 <button onClick={() => setCompareList([])} className="text-[10px] font-bold uppercase text-muted hover:text-accent tracking-widest">Svuota Matrice</button>
                  <button onClick={() => setCompareList([])} className="p-2 border border-border hover:border-accent"><X className="h-4 w-4" /></button>
               </div>
             </div>
@@ -7820,12 +7887,12 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                   </button>
                   <div className="mb-6">
                     <h4 className="text-2xl font-bold">{m.citta}</h4>
-                    <span className="font-serif text-[13px] text-muted">{formatIlaLabel(m.id)} • {m.regione}</span>
+                    <span className="text-xs text-muted font-sans uppercase font-bold tracking-tighter">{formatIlaLabel(m.id)} • {m.regione}</span>
                   </div>
 
                   <div className="space-y-8">
                     <section>
-                      <h5 className="font-serif italic text-[13px] text-muted mb-3">Trascrizione</h5>
+                      <h5 className="text-[9px] font-bold uppercase text-muted underline underline-offset-4 mb-3 font-sans">Trascrizione</h5>
                       <div className="text-sm bg-sidebar/50 p-4 border border-border/40"
                            style={{ fontFamily: 'var(--font-greek)', lineHeight: '1.9' }}>
                         {m.testo ? (
@@ -7842,7 +7909,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                       </div>
                     </section>
                     <section>
-                      <h5 className="font-serif italic text-[13px] text-muted mb-3">Traduzione italiana</h5>
+                      <h5 className="text-[9px] font-bold uppercase text-muted underline underline-offset-4 mb-3 font-sans">Traduzione Italiana</h5>
                       <p className="text-sm leading-relaxed text-ink/70">
                         {m.traduzioni?.find(t => { const l = t.lang?.toLowerCase() || ''; return l === 'it' || l.startsWith('it ('); })?.testo ? (
                           <Highlight text={stripXml(m.traduzioni.find(t => { const l = t.lang?.toLowerCase() || ''; return l === 'it' || l.startsWith('it ('); })?.testo)} query={filters.searchText} />
@@ -7851,7 +7918,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                     </section>
                     {hasApparatusContent(m.apparatus) && (
                       <section>
-                        <h5 className="font-serif italic text-[13px] text-muted mb-3">Apparato critico</h5>
+                        <h5 className="text-[9px] font-bold uppercase text-muted underline underline-offset-4 mb-3 font-sans">Apparatus Critico</h5>
                         <ApparatusNotes
                           className="text-xs leading-relaxed text-muted"
                           value={m.apparatus}
@@ -7860,7 +7927,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                       </section>
                     )}
                     <section>
-                      <h5 className="font-serif italic text-[13px] text-muted mb-3">Note</h5>
+                      <h5 className="text-[9px] font-bold uppercase text-muted underline underline-offset-4 mb-3 font-sans">Note Scientifiche</h5>
                       <p className="text-xs leading-relaxed text-muted italic whitespace-pre-wrap">
                         {m.note_interne ? (
                           <NoteWithTags 
@@ -7878,15 +7945,15 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                       </p>
                     </section>
                     <section>
-                      <h5 className="font-serif italic text-[13px] text-muted mb-3">Specifiche</h5>
-                      <div className="grid grid-cols-2 gap-4 font-serif text-[13px]">
+                      <h5 className="text-[9px] font-bold uppercase text-muted underline underline-offset-4 mb-3 font-sans">Specifiche</h5>
+                      <div className="grid grid-cols-2 gap-4 text-[10px] font-sans font-bold uppercase">
                         <div><span className="text-muted block text-[8px] tracking-widest">Tipologia</span> {labelType(m.tipo)}</div>
                         <div><span className="text-muted block text-[8px] tracking-widest">Datazione</span> {m.data}</div>
                         <div><span className="text-muted block text-[8px] tracking-widest">Materiale</span> {labelMaterial(m.materiale)}</div>
                       </div>
                     </section>
                     <section>
-                      <h5 className="font-serif italic text-[13px] text-muted mb-3">Attributi</h5>
+                      <h5 className="text-[9px] font-bold uppercase text-muted underline underline-offset-4 mb-3 font-sans">Attributi</h5>
                       <div className="flex flex-wrap gap-1">
                         {m.epiteti?.map(e => <span key={e} className="text-[9px] border border-border px-2 py-0.5 rounded-sm">{e}</span>)}
                       </div>

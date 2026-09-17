@@ -76,7 +76,7 @@ export function DraftReviewPanel() {
     <div className="flex-1 overflow-hidden flex flex-col md:flex-row">
       {/* Colonna elenco */}
       <div className="w-full md:w-80 shrink-0 border-b md:border-b-0 md:border-r border-border overflow-y-auto p-4">
-        <div className="font-serif text-xl text-ink mb-2">
+        <div className="text-[10px] font-sans font-bold uppercase tracking-[0.22em] text-accent/70 mb-2">
           Revisione estrazioni draft
         </div>
         <p className="text-xs font-serif italic text-muted leading-relaxed mb-4">
@@ -90,8 +90,8 @@ export function DraftReviewPanel() {
               key={f}
               onClick={() => setFilter(f)}
               className={cn(
-                'font-serif text-[13px] transition-colors',
-                filter === f ? 'text-accent italic' : 'text-muted hover:text-ink'
+                'px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest rounded-sm border transition-colors',
+                filter === f ? 'bg-accent text-white border-accent' : 'border-border text-muted hover:text-ink'
               )}
             >
               {f === 'pending' ? 'Da revisionare' : f === 'reviewed' ? 'Già in corpus' : 'Tutte'}

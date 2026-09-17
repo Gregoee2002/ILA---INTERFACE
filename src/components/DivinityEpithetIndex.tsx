@@ -119,40 +119,40 @@ export const DivinityEpithetIndex: React.FC<DivinityEpithetIndexProps> = ({
       </svg>
 
       <div className="relative z-10 space-y-1.5">
-        <p className="font-serif italic text-[13px] text-muted mb-2">Divinità</p>
+        <p className="text-[10px] font-sans font-semibold uppercase tracking-[0.1em] text-muted/70 mb-2">Divinità</p>
         {leftItems.length > 0 ? leftItems.map((v, i) => (
           <div
             key={v}
             ref={el => { leftRefs.current[i] = el; }}
             onMouseEnter={() => setHover({ side: 'left', index: i })}
             onMouseLeave={() => setHover(null)}
-            className="px-1 py-1 text-[15px] font-serif text-ink transition-opacity duration-150"
+            className="rounded-lg border border-border bg-card/60 backdrop-blur-md px-3 py-1.5 text-sm font-serif text-ink transition-opacity duration-150"
             style={{ opacity: isDim('left', i) ? 0.35 : 1 }}
           >
             {v}
           </div>
         )) : (
-          <p className="font-serif italic text-[13px] text-muted/60">{emptyDivinita}</p>
+          <p className="text-xs text-muted/50 italic">{emptyDivinita}</p>
         )}
       </div>
 
       <div className="relative z-10" />
 
       <div className="relative z-10 space-y-1.5">
-        <p className="font-serif italic text-[13px] text-muted mb-2">Epiteti</p>
+        <p className="text-[10px] font-sans font-semibold uppercase tracking-[0.1em] text-muted/70 mb-2">Epiteti</p>
         {rightItems.length > 0 ? rightItems.map((v, i) => (
           <div
             key={v}
             ref={el => { rightRefs.current[i] = el; }}
             onMouseEnter={() => setHover({ side: 'right', index: i })}
             onMouseLeave={() => setHover(null)}
-            className="px-1 py-1 text-[15px] font-serif text-ink transition-opacity duration-150"
+            className="rounded-lg border border-border bg-card/60 backdrop-blur-md px-3 py-1.5 text-sm font-serif text-ink transition-opacity duration-150"
             style={{ opacity: isDim('right', i) ? 0.35 : 1 }}
           >
             {v}
           </div>
         )) : (
-          <p className="font-serif italic text-[13px] text-muted/60">{emptyEpiteti}</p>
+          <p className="text-xs text-muted/50 italic">{emptyEpiteti}</p>
         )}
       </div>
     </div>

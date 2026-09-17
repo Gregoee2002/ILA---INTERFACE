@@ -31,7 +31,7 @@ export const ApparatusNotes: React.FC<Props> = ({ value, render, className }) =>
           key={i}
           className="grid grid-cols-[3.5rem_1fr] gap-x-4 items-baseline py-1.5 border-t border-border/25 first:border-t-0 first:pt-0 last:pb-0"
         >
-          <dt className="text-[11px] font-sans text-muted/60 tabular-nums text-right">
+          <dt className="text-[10px] font-sans uppercase tracking-[0.12em] text-muted/60 tabular-nums text-right">
             {r.loc}
           </dt>
           <dd className="text-ink/75 leading-relaxed">
