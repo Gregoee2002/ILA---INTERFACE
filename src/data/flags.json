@@ -77,5 +77,19 @@
         "createdAt": "2026-08-22T21:25:05.322Z"
       }
     ]
+  },
+  {
+    "entryId": "gen-1786984905702-7q-c2fplh",
+    "entryLabel": "ILA 289",
+    "status": "open",
+    "createdAt": "2026-09-01T18:06:50.696Z",
+    "notes": [
+      {
+        "id": "b40bcc76-5e4c-403c-add7-303d917bb8e0",
+        "author": "Gabriele",
+        "testo": "L'epigrafe presenta un'andamento  stoichedico. Il supporto epigrafico è ampiamente danneggiato, la lettura di IG XIV, va aggiunta in commento?",
+        "createdAt": "2026-09-01T18:06:50.696Z"
+      }
+    ]
   }
 ]

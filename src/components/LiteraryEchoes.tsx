@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { ScrollText, ChevronRight } from 'lucide-react';
 import { cn } from '../lib/utils';
 import {
   TestimoniumRisolto, PonteLetterario, costruisciPonte, risolviTutte,
@@ -32,7 +31,7 @@ const Rappresentazione: React.FC<{ t: TestimoniumRisolto }> = ({ t }) => {
   if (ambiti.length === 0) return null;
   return (
     <span
-      className="text-[10px] font-sans uppercase tracking-[0.1em] shrink-0 opacity-75"
+      className="font-serif italic text-[12px] shrink-0 opacity-85"
       style={{ color: CAMPO_COLOR.rappresentazione }}
       title="Rapporto del passo con il fatto (griglia LARES)"
     >
@@ -70,13 +69,12 @@ export const LiteraryEchoes: React.FC<Props> = ({ divinita, epiteto, onApri, cla
   if (trovate.length === 0) return null;
 
   return (
-    <section className={cn('rounded-xl border border-border/50 bg-[var(--card)]/50 px-4 py-3', className)}>
-      <div className="flex items-center gap-1.5 mb-2">
-        <ScrollText className="h-3 w-3 shrink-0" style={{ color: 'var(--lit)' }} />
-        <span className="text-[10px] font-sans font-bold uppercase tracking-[0.2em]" style={{ color: 'var(--lit)' }}>
+    <section className={cn('border-t border-border/40 pt-2', className)}>
+      <div className="flex items-baseline gap-2 mb-1.5">
+        <span className="font-serif italic text-[13px]" style={{ color: 'var(--lit)' }}>
           Nelle fonti letterarie
         </span>
-        <span className="text-[10px] font-sans text-muted/50 tabular-nums">{trovate.length}</span>
+        <span className="font-sans text-[11px] text-muted/60 tabular-nums">{trovate.length}</span>
       </div>
 
       <ul className="space-y-1">
@@ -95,14 +93,13 @@ export const LiteraryEchoes: React.FC<Props> = ({ divinita, epiteto, onApri, cla
                 {t.autore}, <span className="italic">{t.opera}</span> {t.locus}
               </span>
               <Rappresentazione t={t} />
-              <span className="text-[10px] font-sans text-muted/50 shrink-0 hidden sm:inline">{t.datazione}</span>
-              {onApri && <ChevronRight className="h-3 w-3 text-muted/25 group-hover:text-accent shrink-0 ml-auto" />}
+              <span className="font-sans text-[11px] text-muted/60 shrink-0 hidden sm:inline ml-auto">{t.datazione}</span>
             </button>
           </li>
         ))}
       </ul>
 
-      <p className="text-[10px] font-serif italic text-muted/50 mt-2 leading-snug">
+      <p className="font-serif italic text-[12px] text-muted/60 mt-2 leading-snug">
         Menzioni nei testi, non attestazioni di culto: restano fuori dai conteggi epigrafici.
       </p>
     </section>

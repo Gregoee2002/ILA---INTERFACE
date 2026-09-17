@@ -597,12 +597,12 @@ const EpithetTree = ({ divinity, epithets, onSelectEpithet, onSelectAll, preview
             ) : (
               <motion.span
                 layoutId={`divname-${divinity.name}`}
-                className="block text-2xl italic font-bold text-accent font-serif leading-tight group-hover:opacity-80 transition-opacity"
+                className="block text-2xl italic text-accent font-serif leading-tight group-hover:opacity-80 transition-opacity"
               >
                 {divinity.name}
               </motion.span>
             )}
-            <span className="block text-xs font-sans font-bold text-muted mt-1">
+            <span className="block font-serif italic text-[13px] text-muted mt-1">
               {divinity.count} <span className="text-border">·</span> vedi tutte
             </span>
           </button>
@@ -681,20 +681,20 @@ const AttestationList = ({
 }) => (
   <motion.div {...fadeSwap} className="flex-1 flex flex-col overflow-hidden">
     <div className="mb-6 border-b border-border pb-2">
-      <div className="text-[10px] font-sans font-bold uppercase tracking-[0.22em] text-accent/70 mb-1.5">
-        {context ? <>{context} <ChevronRight className="inline h-3 w-3 -mt-0.5 mx-0.5" /> Elenco monumenti</> : 'Elenco monumenti'}
+      <div className="font-serif italic text-[13px] text-muted mb-1.5">
+        {context ? <>{context} · elenco dei monumenti</> : 'Elenco dei monumenti'}
       </div>
       <h3 className="text-2xl font-serif italic text-accent">
         {variant === 'all' ? <>Tutte le attestazioni di &quot;{label}&quot;</> : <>Attestazioni per: &quot;{label}&quot;</>}
       </h3>
     </div>
-    <div className="text-[10px] font-sans text-muted/60 mb-2 uppercase tracking-widest">
+    <div className="font-sans text-[11px] text-muted/60 mb-2">
       {items.length} {items.length === 1 ? 'attestazione' : 'attestazioni'}
     </div>
     <div className="flex-1 overflow-y-auto pr-4 custom-scrollbar">
-      <div className="border border-border/60 rounded-sm bg-parchment/40 overflow-hidden">
-        <div className="hidden md:grid grid-cols-[4.5rem_2fr_6rem_6rem_1.25rem] gap-3 px-3 py-2 border-b border-border/60 text-[9px] font-sans font-bold uppercase tracking-widest text-muted/60">
-          <span>Id</span>
+      <div>
+        <div className="hidden md:grid grid-cols-[4.5rem_2fr_6rem_6rem_1.25rem] gap-3 py-2 border-b border-border/50 font-sans text-[11px] text-muted/60">
+          <span>ILA</span>
           <span>Testo</span>
           <span>Regione</span>
           <span>Località</span>
@@ -708,24 +708,24 @@ const AttestationList = ({
               animate={{ opacity: 1 }}
               transition={{ duration: 0.25, delay: Math.min(i, 20) * 0.015, ease: EASE_OUT }}
               onClick={() => onSelectMonumento(m)}
-              className="group grid grid-cols-[4.5rem_2fr_6rem_6rem_1.25rem] items-center gap-3 px-3 py-3.5 cursor-pointer hover:bg-accent/5 transition-colors"
+              className="group grid grid-cols-[4.5rem_2fr_6rem_6rem_1.25rem] items-center gap-3 py-2.5 cursor-pointer hover:bg-sidebar/40 transition-colors"
             >
-              <span className="shrink-0 text-[11px] font-mono font-bold text-accent/80 group-hover:text-accent transition-colors truncate">
-                ILA-{m.id.toString().padStart(3, '0')}
+              <span className="shrink-0 font-mono text-[11px] text-accent/85 group-hover:text-accent transition-colors truncate tabular-nums">
+                {m.id.toString().padStart(3, '0')}
               </span>
               <div className="min-w-0 flex flex-col gap-0.5">
-                <span className="text-sm font-bold font-serif text-ink group-hover:text-accent transition-colors truncate">{getDisplayTitle(m)}</span>
-                <span className="text-xs italic text-muted/70 truncate">"{stripXml(m.testo) || '[Anepigrafe]'}"</span>
+                <span className="font-serif text-[15px] text-ink group-hover:text-accent transition-colors truncate">{getDisplayTitle(m)}</span>
+                <span className="font-serif italic text-[12px] text-muted/60 truncate">{stripXml(m.testo) || '[Anepigrafe]'}</span>
               </div>
-              <span className="text-[10px] font-sans font-bold text-accent uppercase tracking-widest truncate">{m.regione || '—'}</span>
-              <span className="text-[10px] font-sans font-bold text-muted/70 uppercase tracking-widest truncate">{m.citta || '—'}</span>
-              <ChevronRight className="h-3.5 w-3.5 text-border group-hover:text-accent group-hover:translate-x-0.5 transition-all shrink-0 justify-self-end" />
+              <span className="font-serif text-[13px] text-muted truncate">{m.regione || '—'}</span>
+              <span className="font-serif text-[13px] text-muted truncate">{m.citta || '—'}</span>
+              <span />
             </motion.div>
           ))}
         </div>
       </div>
       {items.length === 0 && (
-        <div className="text-center py-12 text-muted/40 text-sm italic">Nessuna attestazione trovata.</div>
+        <div className="text-center py-12 font-serif italic text-sm text-muted/60">Nessuna attestazione trovata.</div>
       )}
     </div>
   </motion.div>
@@ -1085,9 +1085,9 @@ function EpithetStats({ monumenti, onSelectMonumento, onVaiAllaFonte, initialTab
         >
           <button
             onClick={goBack}
-            className="text-[10px] font-sans font-bold uppercase tracking-widest text-accent border border-accent px-4 py-2 hover:bg-accent hover:text-white transition-all"
+            className="font-serif italic text-[13px] text-muted hover:text-accent transition-colors"
           >
-            ← Indietro
+            ‹ Indietro
           </button>
         </motion.div>
       )}
@@ -1098,31 +1098,24 @@ function EpithetStats({ monumenti, onSelectMonumento, onVaiAllaFonte, initialTab
           <button
             onClick={() => setActiveTab('divinita')}
             className={cn(
-              "px-6 py-3 text-[11px] font-sans font-bold uppercase tracking-widest border-b-2 transition-all",
-              activeTab === 'divinita'
-                ? "border-accent text-accent"
-                : "border-transparent text-muted hover:text-ink"
+              "pb-1.5 pr-5 font-serif text-[15px] transition-colors",
+              activeTab === 'divinita' ? "text-accent italic" : "text-muted hover:text-ink"
             )}
           >
             Divinità
-            <span className="ml-2 text-[9px] bg-accent/10 text-accent px-1.5 py-0.5 rounded-sm font-bold">
-              {totalDivinita}
-            </span>
-            <span className="ml-1.5 text-[9px] text-muted/50 font-sans font-normal normal-case tracking-normal">
-              {totalEpiteti} epiteti
+            <span className="ml-1.5 font-sans text-[11px] text-muted/60 tabular-nums not-italic">
+              {totalDivinita} · {totalEpiteti} epiteti
             </span>
           </button>
           <button
             onClick={() => setActiveTab('onomastica')}
             className={cn(
-              "px-6 py-3 text-[11px] font-sans font-bold uppercase tracking-widest border-b-2 transition-all",
-              activeTab === 'onomastica'
-                ? "border-accent text-accent"
-                : "border-transparent text-muted hover:text-ink"
+              "pb-1.5 pr-5 font-serif text-[15px] transition-colors",
+              activeTab === 'onomastica' ? "text-accent italic" : "text-muted hover:text-ink"
             )}
           >
             Onomastica
-            <span className="ml-2 text-[9px] bg-accent/10 text-accent px-1.5 py-0.5 rounded-sm font-bold">
+            <span className="ml-1.5 font-sans text-[11px] text-muted/60 tabular-nums not-italic">
               {totalOnomastica}
             </span>
           </button>
@@ -1160,13 +1153,12 @@ function EpithetStats({ monumenti, onSelectMonumento, onVaiAllaFonte, initialTab
                     style={{ transform: `scale(${1 - listScroll * 0.22})`, transformOrigin: 'left center' }}
                   >
                     <div className="relative w-full">
-                      <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted/50 pointer-events-none" />
                       <input
                         type="text"
                         value={epithetSearch}
                         onChange={(e) => setEpithetSearch(e.target.value)}
                         placeholder="Cerca epiteto o divinità…"
-                        className="w-full bg-[var(--card)] dark:bg-black/25 border border-[var(--border)]/50 dark:border-white/5 rounded-lg pl-9 pr-8 py-2 font-sans text-xs outline-none shadow-inner focus:border-accent/50 focus:ring-1 focus:ring-accent/30 hover:bg-[var(--sidebar)] dark:hover:bg-black/40 transition-all duration-300"
+                        className="w-full bg-transparent border-0 border-b border-border/50 rounded-none pr-6 py-1 font-sans text-xs text-ink outline-none focus:border-accent/60 hover:border-border transition-colors"
                         style={{ color: 'var(--ink)' }}
                       />
                       {epithetSearch && (
@@ -1189,7 +1181,7 @@ function EpithetStats({ monumenti, onSelectMonumento, onVaiAllaFonte, initialTab
                   >
                     <div className="relative w-full">
                       <select
-                        className="w-full bg-[var(--card)] dark:bg-black/25 border border-[var(--border)]/50 dark:border-white/5 rounded-lg pl-3 pr-8 py-2 font-sans text-xs outline-none shadow-inner focus:border-accent/50 focus:ring-1 focus:ring-accent/30 hover:bg-[var(--sidebar)] dark:hover:bg-black/40 cursor-pointer appearance-none transition-all duration-300"
+                        className="w-full bg-transparent border-0 border-b border-border/50 rounded-none pr-6 py-1 font-sans text-xs text-ink outline-none focus:border-accent/60 hover:border-border cursor-pointer appearance-none transition-colors"
                         style={{ color: 'var(--ink)', WebkitAppearance: 'none' as const, appearance: 'none' as const }}
                         value={divinitaRegionFilter}
                         onChange={(e) => setDivinitaRegionFilter(e.target.value)}
@@ -1210,19 +1202,18 @@ function EpithetStats({ monumenti, onSelectMonumento, onVaiAllaFonte, initialTab
                   />
                 </div>
                 <div className="flex-1 flex flex-col overflow-hidden pl-8">
-                  {/* Finestra di analisi degli epiteti: stessa identità visiva
-                      delle schede del catalogo — cornice in pergamena, bordo
-                      morbido, intestazione con etichetta accent e metadati a
-                      destra. Il filtro regione è stato spostato nella colonna
-                      sinistra, sotto la ricerca. */}
-                  <div className="flex-1 min-h-0 flex flex-col rounded-2xl border border-border/70 bg-parchment shadow-[0_1px_3px_rgba(0,0,0,0.05)] overflow-hidden">
+                  {/* Finestra di analisi degli epiteti: non una scheda che
+                      galleggia, ma la metà destra della pagina, separata da un
+                      filetto. Il filtro regione sta nella colonna sinistra,
+                      sotto la ricerca. */}
+                  <div className="flex-1 min-h-0 flex flex-col border-l border-border/40 pl-7 overflow-hidden">
                     {/* flex-wrap: con il pulsante di sblocco in più,
                         etichetta e metadati non ci stanno su una riga sola a
                         larghezze di finestra ordinarie e si sovrapporrebbero
                         (entrambi i gruppi sono whitespace-nowrap). */}
-                    <div className="shrink-0 flex flex-wrap items-center justify-between gap-x-4 gap-y-2 px-7 py-4 border-b border-border/40 bg-sidebar/30">
+                    <div className="shrink-0 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2 pr-2 pb-2 border-b border-border/40">
                       <div className="flex items-center gap-3 min-w-0">
-                        <span className="text-[10px] font-sans font-bold uppercase tracking-[0.3em] text-accent whitespace-nowrap">
+                        <span className="font-serif text-[15px] text-ink whitespace-nowrap">
                           Epiteti co-occorrenti
                         </span>
                         {/* Stato del blocco: senza un comando esplicito di
@@ -1231,14 +1222,13 @@ function EpithetStats({ monumenti, onSelectMonumento, onVaiAllaFonte, initialTab
                         {pinnedDivinity && (
                           <button
                             onClick={() => setPinnedDivinity(null)}
-                            className="shrink-0 flex items-center gap-1.5 text-[9px] font-sans font-bold uppercase tracking-widest text-accent border border-accent/40 bg-accent/10 rounded-sm px-2 py-0.5 hover:bg-accent hover:text-white transition-colors"
+                            className="shrink-0 font-serif italic text-[13px] text-accent hover:text-ink transition-colors"
                           >
-                            <X className="h-2.5 w-2.5" />
-                            Sblocca rubrica
+                            sblocca la rubrica
                           </button>
                         )}
                       </div>
-                      <div className="flex items-center gap-3 text-[10px] font-sans font-bold uppercase tracking-widest text-muted min-w-0 text-right justify-end">
+                      <div className="flex items-baseline gap-2 font-sans text-[11px] text-muted min-w-0 text-right justify-end">
                         {activeDivinityStats ? (
                           <>
                             <span className="whitespace-nowrap">{activeDivinityStats.count} occorrenze</span>
@@ -1248,7 +1238,7 @@ function EpithetStats({ monumenti, onSelectMonumento, onVaiAllaFonte, initialTab
                             <span className="whitespace-nowrap">{activeDivinityStats.epiteti.length} {activeDivinityStats.epiteti.length === 1 ? 'epiteto' : 'epiteti'}</span>
                           </>
                         ) : (
-                          <span className="normal-case font-normal italic text-muted/50">Nessuna divinità per questo filtro</span>
+                          <span className="font-serif italic text-muted/60">Nessuna divinità per questo filtro</span>
                         )}
                       </div>
                     </div>
@@ -1312,7 +1302,7 @@ function EpithetStats({ monumenti, onSelectMonumento, onVaiAllaFonte, initialTab
             <div className="mb-4 flex items-center justify-end animate-in fade-in slide-in-from-left-2 duration-300">
               <div className="relative w-56">
                 <select
-                  className="w-full bg-[var(--card)] dark:bg-black/25 border border-[var(--border)]/50 dark:border-white/5 rounded-xl pl-3 pr-8 py-2 font-sans text-xs outline-none shadow-inner focus:border-accent/50 focus:ring-1 focus:ring-accent/30 hover:bg-[var(--sidebar)] dark:hover:bg-black/40 cursor-pointer appearance-none transition-all duration-300"
+                  className="w-full bg-transparent border-0 border-b border-border/50 rounded-none pr-6 py-1 font-sans text-xs text-ink outline-none focus:border-accent/60 hover:border-border cursor-pointer appearance-none transition-colors"
                   style={{ color: 'var(--ink)', WebkitAppearance: 'none' as const, appearance: 'none' as const }}
                   value={onomasticaRegionFilter}
                   onChange={(e) => setOnomasticaRegionFilter(e.target.value)}
@@ -7642,7 +7632,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                                });
                                const active = sorted.find(t => t.lang === activeTranslationLang) ?? sorted[0];
                                return (
-                                 <div className="bg-sidebar/30 border-l-4 border-accent p-8 font-serif text-lg italic leading-relaxed text-ink/80 mb-6">
+                                 <div className="border-l border-accent/50 pl-6 py-1 font-serif text-lg italic leading-relaxed text-ink/80 mb-6">
                                    <div className="flex items-center justify-between gap-4 mb-2 not-italic">
                                      <span className="font-serif italic text-[13px] text-muted">Traduzione</span>
                                      {sorted.length > 1 && (
@@ -7652,24 +7642,24 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                                              key={`${t.lang}-${i}`}
                                              onClick={() => setActiveTranslationLang(t.lang ?? null)}
                                              className={cn(
-                                               "px-1.5 py-0.5 text-[8px] font-sans font-bold uppercase tracking-wider rounded-sm transition-colors",
-                                               t === active ? "bg-accent text-white" : "text-muted/70 hover:text-accent"
+                                               "font-serif text-[13px] transition-colors",
+                                               t === active ? "text-accent italic" : "text-muted hover:text-accent"
                                              )}
                                              title={t.lang}
                                            >
-                                             {(t.lang || '?').slice(0, 2).toUpperCase()}
+                                             {(t.lang || '?').slice(0, 2)}
                                            </button>
                                          ))}
                                        </div>
                                      )}
                                    </div>
                                    <Highlight text={stripXml(active?.testo)} query={filters.searchText} />
-                                   {active?.note && <p className="text-[10px] font-sans not-italic text-muted mt-3">Note: {active.note}</p>}
+                                   {active?.note && <p className="font-serif not-italic text-[12px] text-muted/60 mt-3">{active.note}</p>}
                                  </div>
                                );
                              })()}
                              {hasApparatusContent(selectedMonumento.apparatus) && (
-                               <div className="bg-sidebar/20 border border-border/40 p-6 rounded-sm font-sans text-xs leading-relaxed text-muted block">
+                               <div className="font-sans text-xs leading-relaxed text-muted block">
                                  <div className="font-serif italic text-[13px] text-muted mb-3">Apparato critico</div>
                                  <ApparatusNotes
                                    value={selectedMonumento.apparatus}
@@ -7682,14 +7672,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
 
                       {isFilled(selectedMonumento.note_interne) && (
                         <section>
-                           <h3 className="text-2xl font-bold mb-6 italic flex items-center gap-4">
-                             <div className="flex items-center gap-4 shrink-0">
-                               <div className="h-[1px] w-8 bg-border/40" />
-                               <div className="w-1.5 h-1.5 rotate-45 border border-accent/40" />
-                             </div>
-                             Commento
-                             <div className="flex-1 h-[1px] bg-border/20" />
-                           </h3>
+                           <h3 className="font-serif text-xl text-ink mb-6 pb-1 border-b border-border/30">Commento</h3>
                            <p className="text-sm leading-relaxed text-ink/80 font-serif whitespace-pre-wrap">
                               <NoteWithTags
                                 text={selectedMonumento.note_interne}
@@ -7710,88 +7693,91 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                   {activeRecordSection === 'iconografia' && (
                     <div className="space-y-14 animate-in fade-in duration-200">
                       <section>
-                         <h3 className="text-2xl font-bold mb-6 italic flex items-center gap-4">
-                           <div className="flex items-center gap-4 shrink-0">
-                             <div className="h-[1px] w-8 bg-border/40" />
-                             <div className="w-1.5 h-1.5 rotate-45 border border-accent/40" />
-                           </div>
-                           Indici
-                           <div className="flex-1 h-[1px] bg-border/20" />
-                         </h3>
+                         <h3 className="font-serif text-xl text-ink mb-6 pb-1 border-b border-border/30">Indici</h3>
                          {(selectedMonumento.divinita?.length || selectedMonumento.epiteti?.length || selectedMonumento.onomastica?.length || selectedMonumento.imperatori?.length) ? (
                            <div className="grid sm:grid-cols-2 gap-x-10 gap-y-6">
                             {selectedMonumento.divinita && selectedMonumento.divinita.length > 0 && (
                               <div>
-                                <h4 className="text-xs font-bold uppercase text-muted tracking-widest mb-2">Divinità</h4>
-                                <div className="flex flex-wrap gap-2">
-                                  {selectedMonumento.divinita.map(d => (
-                                    <button
-                                      key={d}
-                                      onClick={() => { setFilters(f => ({ ...f, searchText: d })); setSelectedMonumento(null); }}
-                                      className="border border-accent bg-accent/10 text-accent px-3 py-1 text-xs font-bold rounded-full font-serif hover:bg-accent hover:text-white transition-all cursor-pointer"
-                                    >
-                                      {d}
-                                    </button>
+                                <h4 className="font-serif italic text-[13px] text-muted mb-2">Divinità</h4>
+                                <p className="font-serif text-[15px] text-ink leading-relaxed">
+                                  {selectedMonumento.divinita.map((d, i) => (
+                                    <React.Fragment key={d}>
+                                      {i > 0 && <span className="text-muted/60">, </span>}
+                                      <button
+                                        onClick={() => { setFilters(f => ({ ...f, searchText: d })); setSelectedMonumento(null); }}
+                                        className="hover:text-accent transition-colors cursor-pointer"
+                                      >
+                                        {d}
+                                      </button>
+                                    </React.Fragment>
                                   ))}
-                                </div>
+                                </p>
                               </div>
                             )}
                             {selectedMonumento.epiteti && selectedMonumento.epiteti.length > 0 && (
                               <div>
-                                <h4 className="text-xs font-bold uppercase text-muted tracking-widest mb-2">Epiteti</h4>
-                                <div className="flex flex-wrap gap-2 mb-2">
-                                  {selectedMonumento.epiteti.map(e => (
-                                    <button
-                                      key={e}
-                                      onClick={() => { setFilters(f => ({ ...f, searchText: e })); setSelectedMonumento(null); }}
-                                      className="border border-accent/20 bg-accent/5 text-accent px-3 py-1 text-xs italic rounded-full font-serif hover:bg-accent hover:text-white transition-all cursor-pointer"
-                                    >
-                                      {e}
-                                    </button>
+                                <h4 className="font-serif italic text-[13px] text-muted mb-2">Epiteti</h4>
+                                <p className="font-serif italic text-[15px] text-ink leading-relaxed mb-2">
+                                  {selectedMonumento.epiteti.map((e, i) => (
+                                    <React.Fragment key={e}>
+                                      {i > 0 && <span className="not-italic text-muted/60">, </span>}
+                                      <button
+                                        onClick={() => { setFilters(f => ({ ...f, searchText: e })); setSelectedMonumento(null); }}
+                                        className="hover:text-accent transition-colors cursor-pointer"
+                                      >
+                                        {e}
+                                      </button>
+                                    </React.Fragment>
                                   ))}
-                                </div>
+                                </p>
                               </div>
                             )}
                             {selectedMonumento.onomastica && selectedMonumento.onomastica.length > 0 && (
                               <div>
-                                <h4 className="text-xs font-bold uppercase text-muted tracking-widest mb-2 font-sans">Onomastica</h4>
-                                <div className="flex flex-wrap gap-2">
-                                  {selectedMonumento.onomastica.map(o => (
-                                    <button key={o}
-                                      onClick={() => { setFilters(f => ({ ...f, searchText: o })); setSelectedMonumento(null); }}
-                                      className="border border-border text-ink/70 px-3 py-1 text-xs font-serif hover:border-accent hover:text-accent transition-all cursor-pointer rounded-full"
-                                    >{o}</button>
+                                <h4 className="font-serif italic text-[13px] text-muted mb-2">Onomastica</h4>
+                                <p className="font-serif text-[15px] text-ink/85 leading-relaxed">
+                                  {selectedMonumento.onomastica.map((o, i) => (
+                                    <React.Fragment key={o}>
+                                      {i > 0 && <span className="text-muted/60">, </span>}
+                                      <button
+                                        onClick={() => { setFilters(f => ({ ...f, searchText: o })); setSelectedMonumento(null); }}
+                                        className="hover:text-accent transition-colors cursor-pointer"
+                                      >{o}</button>
+                                    </React.Fragment>
                                   ))}
-                                </div>
+                                </p>
                               </div>
                             )}
                             {selectedMonumento.imperatori && selectedMonumento.imperatori.length > 0 && (
                               <div>
-                                <h4 className="text-xs font-bold uppercase text-muted tracking-widest mb-2">Imperatori</h4>
-                                <div className="flex flex-wrap gap-2">
-                                  {selectedMonumento.imperatori.map((imp: string) => (
-                                    <button key={imp}
-                                      onClick={() => { setFilters(f => ({ ...f, searchText: imp })); setSelectedMonumento(null); }}
-                                      className="border border-accent/40 text-accent/70 px-3 py-1 text-xs font-serif hover:border-accent hover:text-accent transition-all cursor-pointer rounded-full"
-                                    >{imp}</button>
+                                <h4 className="font-serif italic text-[13px] text-muted mb-2">Imperatori</h4>
+                                <p className="font-serif text-[15px] text-ink/85 leading-relaxed">
+                                  {selectedMonumento.imperatori.map((imp: string, i: number) => (
+                                    <React.Fragment key={imp}>
+                                      {i > 0 && <span className="text-muted/60">, </span>}
+                                      <button
+                                        onClick={() => { setFilters(f => ({ ...f, searchText: imp })); setSelectedMonumento(null); }}
+                                        className="hover:text-accent transition-colors cursor-pointer"
+                                      >{imp}</button>
+                                    </React.Fragment>
                                   ))}
-                                </div>
+                                </p>
                               </div>
                             )}
                            </div>
                          ) : (
-                           <p className="text-xs font-serif text-muted italic">Nessun indice registrato.</p>
+                           <p className="font-serif italic text-[13px] text-muted/60">Nessun indice registrato.</p>
                          )}
                       </section>
 
                       <section>
-                        <h3 className="text-xs font-bold uppercase text-muted tracking-widest mb-3">Commento Iconografico</h3>
+                        <h3 className="font-serif italic text-[13px] text-muted mb-3">Commento iconografico</h3>
                         {selectedMonumento.iconografia?.note ? (
                           <p className="text-xs leading-relaxed text-ink/80 italic font-serif whitespace-pre-wrap border-l-2 border-accent/40 pl-4">
                             {selectedMonumento.iconografia.note}
                           </p>
                         ) : (
-                          <p className="text-xs font-serif text-muted italic">Nessun commento registrato.</p>
+                          <p className="font-serif italic text-[13px] text-muted/60">Nessun commento registrato.</p>
                         )}
                       </section>
 
@@ -7803,21 +7789,18 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                     <div className="animate-in fade-in duration-200 max-w-[70ch]">
                       {selectedMonumento.bibliografia && selectedMonumento.bibliografia.length > 0 ? (
                       <section>
-                         <h3 className="text-xl font-bold mb-6 italic flex items-center gap-3">
-                           <div className="h-px w-8 bg-border" /> Bibliografia
-                         </h3>
+                         <h3 className="font-serif text-xl text-ink mb-6 pb-1 border-b border-border/30">Bibliografia</h3>
                             <>
                               {selectedMonumento.bibliografia.length === 1 && selectedMonumento.bibliografia[0].titolo.length > 60 ? (
-                                <p className="text-xs font-serif text-ink/80 leading-relaxed">
+                                <p className="font-serif text-[14px] text-ink/85 leading-relaxed">
                                   {selectedMonumento.bibliografia[0].titolo}
                                 </p>
                               ) : (
-                                <ul className="space-y-3">
+                                <ul className="space-y-1.5">
                                   {selectedMonumento.bibliografia.map((b, i) => (
-                                    <li key={i} className="text-xs flex gap-2 font-serif">
-                                      <Book className="h-3 w-3 text-muted shrink-0 mt-0.5" />
-                                      <span className="font-semibold text-ink">{formatBiblKey(b.titolo)}</span>
-                                      {b.punti_rif && <span className="text-muted">({b.punti_rif})</span>}
+                                    <li key={i} className="font-serif text-[14px] leading-snug text-ink/85 pl-4 -indent-4">
+                                      {formatBiblKey(b.titolo)}
+                                      {b.punti_rif && <span className="text-muted"> ({b.punti_rif})</span>}
                                     </li>
                                   ))}
                                 </ul>
@@ -7825,7 +7808,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                             </>
                       </section>
                       ) : (
-                        <p className="text-xs font-serif text-muted italic">Nessun riferimento bibliografico registrato.</p>
+                        <p className="font-serif italic text-[13px] text-muted/60">Nessun riferimento bibliografico registrato.</p>
                       )}
                     </div>
                   )}
