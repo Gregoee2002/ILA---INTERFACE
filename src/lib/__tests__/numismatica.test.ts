@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { XMLValidator } from 'fast-xml-parser';
-import { xmlToMonumenti, monumentiToXml, renderXenoData } from '../xmlUtils';
+import { xmlToMonumenti, monumentiToXml, renderXenoData, renderEditionFaces } from '../xmlUtils';
 import { formatMisura, nomismaRef, numLabel, metalSigla } from '../numismaticVocab';
 import type { Monumento } from '../../types';
 
@@ -83,6 +83,96 @@ describe('numismatica: nessuna regressione sull\'epigrafia', () => {
     const m = { ...base(), iconografia: { figures: [{ n: 1, type: 'deity', key: 'Men', place: 'top_centre', traits: [] }] } } as Monumento;
     expect(monumentiToXml([m])).not.toContain('ica:side');
     expect(giroCompleto(m).iconografia?.figures[0].place).toBe('top_centre');
+  });
+});
+
+describe('facce dell\'edizione (N4)', () => {
+  const conFacce = (): Monumento => ({
+    ...base(),
+    testo: renderEditionFaces([
+      { n: 'obv', testo: '<lb n="1"/>Αὐτ. Κ. Ἀντωνῖνος Αὐγ.', lang: 'grc', anepigr: false },
+      { n: 'rev', testo: '', lang: 'grc', anepigr: true },
+    ]),
+    traduzioni: [
+      { lang: 'it', testo: 'Imperatore Antonino Augusto', note: '', face: 'obv' },
+      { lang: 'en', testo: 'Emperor Antoninus Augustus', note: '', face: 'obv' },
+    ],
+  } as Monumento);
+
+  it('legge le due facce dall\'edizione', () => {
+    const back = giroCompleto(conFacce());
+    expect(back.facce?.map(f => f.n)).toEqual(['obv', 'rev']);
+    expect(back.facce?.[0].testo).toContain('Ἀντωνῖνος');
+    expect(back.facce?.[0].lang).toBe('grc');
+  });
+
+  it('riconosce la faccia muta e non le inventa un testo', () => {
+    const back = giroCompleto(conFacce());
+    expect(back.facce?.[1].anepigr).toBe(true);
+    expect(back.facce?.[1].testo).toBe('<space unit="side"/>');
+    expect(monumentiToXml([conFacce()])).not.toContain('<ab></ab>');
+  });
+
+  it('è anepigrafe solo se lo sono tutte le facce', () => {
+    const back = giroCompleto(conFacce());
+    expect(back.anepigr).toBe(false);
+    const mute = {
+      ...base(),
+      testo: renderEditionFaces([
+        { n: 'obv', testo: '', anepigr: true },
+        { n: 'rev', testo: '', anepigr: true },
+      ]),
+    } as Monumento;
+    expect(giroCompleto(mute).anepigr).toBe(true);
+  });
+
+  it('le traduzioni per faccia sopravvivono al giro, raggruppate per lingua', () => {
+    const xml = monumentiToXml([conFacce()]);
+    expect(xml.match(/<div type="translation"/g)).toHaveLength(2); // it, en
+    const back = giroCompleto(conFacce());
+    expect(back.traduzioni?.map(t => [t.lang, t.face])).toEqual([['it', 'obv'], ['en', 'obv']]);
+  });
+
+  it('una scheda a una faccia sola non guadagna né facce né textpart', () => {
+    const m = { ...base(), testo: 'Μηνὶ Τυράννῳ' } as Monumento;
+    expect(monumentiToXml([m])).not.toContain('subtype="face"');
+    expect(giroCompleto(m).facce).toBeUndefined();
+  });
+});
+
+describe('facsimile per faccia (N5)', () => {
+  const conImmagini = (): Monumento => ({
+    ...base(),
+    facsimili: [
+      { url: 'https://rpc.ashmus.ox.ac.uk/obv/297414', desc: 'Dritto', surface: 'obv' },
+      { url: 'https://rpc.ashmus.ox.ac.uk/rev/297414', desc: 'Rovescio', surface: 'rev' },
+      { url: 'https://example.org/tav.jpg', desc: 'Tav. I' },
+    ],
+  } as Monumento);
+
+  it('scrive i <surface> nell\'ordine dritto-rovescio e li rilegge', () => {
+    const xml = monumentiToXml([conImmagini()]);
+    expect(xml.indexOf('type="obverse"')).toBeLessThan(xml.indexOf('type="reverse"'));
+    expect(giroCompleto(conImmagini()).facsimili).toEqual(conImmagini().facsimili);
+  });
+
+  it('le immagini senza faccia restano fuori da ogni <surface>', () => {
+    const back = giroCompleto(conImmagini());
+    expect(back.facsimili?.[2]).toEqual({ url: 'https://example.org/tav.jpg', desc: 'Tav. I', surface: undefined });
+  });
+
+  it('i campi singoli restano il riflesso della prima immagine', () => {
+    const back = giroCompleto(conImmagini());
+    expect(back.facsimile_url).toBe('https://rpc.ashmus.ox.ac.uk/obv/297414');
+    expect(back.facsimile_desc).toBe('Dritto');
+  });
+
+  it('una scheda con i soli campi singoli continua a serializzarsi come prima', () => {
+    const m = { ...base(), facsimile_url: 'https://example.org/a.jpg', facsimile_desc: 'Tav. II' } as Monumento;
+    const xml = monumentiToXml([m]);
+    expect(xml).toContain('<graphic url="https://example.org/a.jpg">');
+    expect(xml).not.toContain('<surface');
+    expect(giroCompleto(m).facsimile_desc).toBe('Tav. II');
   });
 });
 

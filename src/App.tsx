@@ -47,7 +47,7 @@ import {
 import { cn, EASE_OUT, EASE_IN, SPRING_SNAPPY, SPRING_SOFT, gapGlyph } from './lib/utils';
 import { ICONOGRAPHY_LABELS } from './lib/iconographyLabels';
 import { labelEvidence, labelUnit, labelType, labelMaterial, labelInscriptionType } from './lib/vocabLabels';
-import { Monumento, FilterState, SortField, Bibliografia, EntryRegistro, BugReport, EDITORIAL_STATUS_LABELS } from './types';
+import { Monumento, FilterState, SortField, Bibliografia, EntryRegistro, BugReport, COIN_FACE_LABELS, EDITORIAL_STATUS_LABELS } from './types';
 import { monumentiToXml, xmlToMonumenti, formatIlaLabel, splitDivineKey } from './lib/xmlUtils';
 import { buildPhiUrl } from './lib/extRefs';
 import { buildDivinityIndex, buildOnomasticaIndex, buildClassificationAudit, DivinityStats, OnomasticaStats } from './lib/epithetIndex';
@@ -4467,7 +4467,11 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
   }, []);
 
   const [translating, setTranslating] = useState(false);
+  // Chiave della traduzione mostrata: lingua PIÙ faccia, perché su un oggetto a
+  // due facce le due traduzioni hanno la stessa lingua e la sola lingua non le
+  // distingue.
   const [activeTranslationLang, setActiveTranslationLang] = useState<string | null>(null);
+  const translationKey = (t: { lang?: string; face?: string }) => `${t.lang ?? ''}|${t.face ?? ''}`;
   // Finestra epigrafica: alterna testo con markup diacritico (default) e
   // trascrizione pura. Preferenza di lettura, resta impostata fra una scheda e l'altra.
   const [plainTranscription, setPlainTranscription] = useState(false);
@@ -7452,14 +7456,35 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                     </div>
                     
                       <div className="space-y-5 mt-1">
-                        {selectedMonumento.facsimile_url && (
-                          <div className="bg-sidebar/40 p-6 border border-border/60 rounded-sm">
-                            <span className="text-[10px] font-sans font-bold uppercase tracking-[0.2em] text-accent block mb-3">Facsimile / Squeeze Image</span>
-                            <div className="relative aspect-video max-w-full md:max-w-2xl overflow-hidden bg-zinc-950 border border-border flex items-center justify-center rounded-sm shadow-inner group">
-                              <FacsimileImage url={selectedMonumento.facsimile_url} desc={selectedMonumento.facsimile_desc} />
+                        {(() => {
+                          // La lista, quando c'è, vince sui due campi singoli: le
+                          // monete hanno un'immagine per faccia, i monumenti una sola.
+                          const immagini = (selectedMonumento.facsimili?.length
+                            ? selectedMonumento.facsimili
+                            : selectedMonumento.facsimile_url
+                              ? [{ url: selectedMonumento.facsimile_url, desc: selectedMonumento.facsimile_desc, surface: undefined }]
+                              : []) as { url: string; desc?: string; surface?: 'obv' | 'rev' }[];
+                          if (immagini.length === 0) return null;
+                          return (
+                            <div className="bg-sidebar/40 p-6 border border-border/60 rounded-sm">
+                              <span className="text-[10px] font-sans font-bold uppercase tracking-[0.2em] text-accent block mb-3">Facsimile / Squeeze Image</span>
+                              <div className={cn('grid gap-4', immagini.length > 1 && 'md:grid-cols-2')}>
+                                {immagini.map((img, i) => (
+                                  <div key={i}>
+                                    {img.surface && (
+                                      <span className="text-[9px] font-sans font-bold uppercase tracking-[0.2em] text-num block mb-2">
+                                        {COIN_FACE_LABELS[img.surface]}
+                                      </span>
+                                    )}
+                                    <div className="relative aspect-video max-w-full overflow-hidden bg-zinc-950 border border-border flex items-center justify-center rounded-sm shadow-inner group">
+                                      <FacsimileImage url={img.url} desc={img.desc} />
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
                             </div>
-                          </div>
-                        )}
+                          );
+                        })()}
 
                         <div className="grid md:grid-cols-2 gap-6 border border-border/40 bg-sidebar/20 p-5 md:p-6 rounded-sm font-serif text-xs leading-relaxed text-ink/80">
                           <div>
@@ -7642,7 +7667,37 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                                   </button>
                                 )}
                                 <div className="relative z-10 max-w-[62ch] mx-auto pl-10 border-l-2 border-border/40 max-h-[52vh] overflow-y-auto custom-scrollbar pr-4 pt-10">
-                                  {selectedMonumento.testo ? (
+                                  {/* Su un oggetto a due facce la legenda si legge una
+                                      faccia per volta: incollarle di seguito le farebbe
+                                      passare per un testo solo. */}
+                                  {selectedMonumento.facce && selectedMonumento.facce.length > 0 ? (
+                                    <div className="space-y-6">
+                                      {selectedMonumento.facce.map(f => (
+                                        <div key={f.n}>
+                                          <span className="text-[9px] font-sans font-bold uppercase tracking-[0.2em] text-num block mb-2">
+                                            {COIN_FACE_LABELS[f.n]}
+                                          </span>
+                                          {f.anepigr ? (
+                                            <span className="opacity-40 italic text-base">[Faccia anepigrafe]</span>
+                                          ) : (
+                                            <ErrorBoundary
+                                              resetKeys={[(selectedMonumento.entryId ?? selectedMonumento.id) + f.n]}
+                                              fallback={<pre className="whitespace-pre-wrap font-mono text-sm text-muted/80">{f.testo}</pre>}
+                                            >
+                                              <EpiDocRenderer
+                                                xml={`<ab>${f.testo}</ab>`}
+                                                query={filters.searchText}
+                                                onTermClick={handleTermClick}
+                                                divinityIndex={divinityIndex}
+                                                onomasticaIndex={onomasticaIndex}
+                                                plain={plainTranscription}
+                                              />
+                                            </ErrorBoundary>
+                                          )}
+                                        </div>
+                                      ))}
+                                    </div>
+                                  ) : selectedMonumento.testo ? (
                                     <ErrorBoundary
                                       resetKeys={[selectedMonumento.entryId ?? selectedMonumento.id]}
                                       fallback={
@@ -7670,7 +7725,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                                  const bIt = isIt(b.lang?.toLowerCase() || '') ? 0 : 1;
                                  return aIt - bIt;
                                });
-                               const active = sorted.find(t => t.lang === activeTranslationLang) ?? sorted[0];
+                               const active = sorted.find(t => translationKey(t) === activeTranslationLang) ?? sorted[0];
                                return (
                                  <div className="bg-sidebar/30 border-l-4 border-accent p-8 font-serif text-lg italic leading-relaxed text-ink/80 mb-6">
                                    <div className="flex items-center justify-between gap-4 mb-2 not-italic">
@@ -7680,14 +7735,15 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                                          {sorted.map((t, i) => (
                                            <button
                                              key={`${t.lang}-${i}`}
-                                             onClick={() => setActiveTranslationLang(t.lang ?? null)}
+                                             onClick={() => setActiveTranslationLang(translationKey(t))}
                                              className={cn(
                                                "px-1.5 py-0.5 text-[8px] font-sans font-bold uppercase tracking-wider rounded-sm transition-colors",
                                                t === active ? "bg-accent text-white" : "text-muted/70 hover:text-accent"
                                              )}
-                                             title={t.lang}
+                                             title={t.face ? `${t.lang} · ${COIN_FACE_LABELS[t.face]}` : t.lang}
                                            >
                                              {(t.lang || '?').slice(0, 2).toUpperCase()}
+                                             {t.face && <span className="ml-1 opacity-70">{t.face}</span>}
                                            </button>
                                          ))}
                                        </div>

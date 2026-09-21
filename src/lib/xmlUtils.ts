@@ -1,5 +1,5 @@
 import { apparatusEntryToText } from './apparatus';
-import { Monumento, Traduzione, Bibliografia, OrigDate, IconographyData, NumismaticData, NumMeasure, NumSpecimen, CultAttestation, CoinFace } from "../types";
+import { Monumento, Traduzione, Bibliografia, OrigDate, IconographyData, NumismaticData, NumMeasure, NumSpecimen, CultAttestation, CoinFace, EditionFace, Facsimile } from "../types";
 import { canonicalDivinityName } from "./divinityAliases";
 import { canonicalEpithet } from "./epithetAliases";
 import { CULT_FAMILY_IDS, lookupCultLemma, toolboxForLemma } from "./cultLexicon";
@@ -429,6 +429,106 @@ function extractIconography(teiString: string): any {
     note,
     sideNotes: Object.keys(sideNotes).length ? sideNotes : undefined,
   };
+}
+
+const SURFACE_TO_FACE: Record<string, CoinFace> = { obverse: "obv", reverse: "rev" };
+
+/**
+ * Legge `<facsimile>`: una lista di immagini, ognuna legata alla sua faccia
+ * quando sta dentro un `<surface type="obverse|reverse">` (è la forma che usa
+ * RPC). Sui monumenti epigrafici i `<graphic>` stanno direttamente sotto
+ * `<facsimile>` e `surface` resta assente.
+ */
+function extractFacsimili(teiString: string): Facsimile[] {
+  const blocco = teiString.match(/<facsimile[^>]*>([\s\S]*?)<\/facsimile>/);
+  if (!blocco) return [];
+
+  const leggiGraphic = (dove: string, surface?: CoinFace): Facsimile[] => {
+    const out: Facsimile[] = [];
+    const re = /<graphic([^>]*?)(?:\/>|>([\s\S]*?)<\/graphic>)/g;
+    let m;
+    while ((m = re.exec(dove)) !== null) {
+      const url = m[1].match(/url="([^"]*)"/);
+      if (!url) continue;
+      const descM = (m[2] || '').match(/<desc>([\s\S]*?)<\/desc>/);
+      out.push({
+        url: unescapeXml(url[1]),
+        desc: descM ? unescapeXml(descM[1].replace(/<[^>]+>/g, '').trim()) || undefined : undefined,
+        surface,
+      });
+    }
+    return out;
+  };
+
+  const dentro = blocco[1];
+  const out: Facsimile[] = [];
+  const surfaceRe = /<surface([^>]*)>([\s\S]*?)<\/surface>/g;
+  let sm;
+  let restante = dentro;
+  while ((sm = surfaceRe.exec(dentro)) !== null) {
+    const tipo = sm[1].match(/type="([^"]*)"/);
+    out.push(...leggiGraphic(sm[2], tipo ? SURFACE_TO_FACE[tipo[1]] : undefined));
+    restante = restante.replace(sm[0], '');
+  }
+  // I <graphic> rimasti fuori da ogni <surface>: il facsimile dell'oggetto.
+  out.push(...leggiGraphic(restante));
+  return out;
+}
+
+/**
+ * Legge le facce dell'edizione dai `<div type="textpart" subtype="face">`.
+ * Ritorna una lista vuota per i monumenti a una faccia: è così che tutto il
+ * resto del codice continua a non sapere nulla di dritti e rovesci.
+ */
+function extractEditionFaces(edizione: string): EditionFace[] {
+  const out: EditionFace[] = [];
+  const re = /<div\s+([^>]*subtype="face"[^>]*)>([\s\S]*?)<\/div>/g;
+  let m;
+  while ((m = re.exec(edizione)) !== null) {
+    const nAttr = m[1].match(/\bn="([^"]*)"/);
+    if (!nAttr) continue;
+    const n = nAttr[1] as CoinFace;
+    if (n !== "obv" && n !== "rev") continue;
+    const langAttr = m[1].match(/xml:lang="([^"]*)"/);
+    const ab = m[2].match(/<ab[^>]*>([\s\S]*?)<\/ab>/);
+    const dentro = (ab ? ab[1] : m[2]).trim();
+    // Faccia muta: <space unit="side"/>, oppure un <ab> che non porta testo.
+    const soloMarcatori = dentro.replace(/<[^>]+>/g, '').trim() === '';
+    out.push({
+      n,
+      testo: dentro,
+      lang: langAttr ? langAttr[1] : undefined,
+      anepigr: /<space[^>]*unit="side"/.test(dentro) || soloMarcatori,
+    });
+  }
+  return out;
+}
+
+/**
+ * Serializza l'edizione a partire dalle facce: è il percorso di scrittura che
+ * l'editor usa per rigenerare `Monumento.testo`, così il testo per faccia e
+ * l'XML dell'edizione non possono divergere.
+ */
+export function renderEditionFaces(facce: EditionFace[], indent = "                "): string {
+  const i1 = indent + "    ", i2 = i1 + "    ";
+  const ordine: CoinFace[] = ["obv", "rev"];
+  return ordine
+    .map(n => facce.find(f => f.n === n))
+    .filter((f): f is EditionFace => !!f)
+    .map(f => {
+      const lang = f.lang ? ` xml:lang="${escapeXml(f.lang)}"` : "";
+      const corpo = f.anepigr && !f.testo.trim()
+        ? `${i2}<space unit="side"/>`
+        : f.testo.split("\n").map(r => `${i2}${r.trim()}`).join("\n");
+      return [
+        `${indent}<div type="textpart" subtype="face" n="${f.n}" rend="linear"${lang}>`,
+        `${i1}<ab>`,
+        corpo,
+        `${i1}</ab>`,
+        `${indent}</div>`,
+      ].join("\n");
+    })
+    .join("\n");
 }
 
 /**
@@ -1019,20 +1119,10 @@ function parseTeiElement(teiString: string): Monumento {
     }
   }
 
-  // 18. Facsimile image
-  let facsimile_url = "";
-  let facsimile_desc = "";
-  const graphicMatch = teiString.match(/<graphic\s+url="([^"]*)"([^>]*)>([\s\S]*?)<\/graphic>/);
-  if (graphicMatch) {
-    facsimile_url = unescapeXml(graphicMatch[1]);
-    const descM = graphicMatch[3].match(/<desc>([\s\S]*?)<\/desc>/);
-    if (descM) facsimile_desc = unescapeXml(descM[1]);
-  } else {
-    const graphicSelfCloseMatch = teiString.match(/<graphic\s+url="([^"]*)"\s*\/?>/);
-    if (graphicSelfCloseMatch) {
-      facsimile_url = unescapeXml(graphicSelfCloseMatch[1]);
-    }
-  }
+  // 18. Facsimile — lista, eventualmente per faccia (<surface type="obverse">)
+  const facsimili = extractFacsimili(teiString);
+  const facsimile_url = facsimili[0]?.url || "";
+  const facsimile_desc = facsimili[0]?.desc || "";
 
   // 19. Edition xml text body
   let testo = "";
@@ -1040,6 +1130,10 @@ function parseTeiElement(teiString: string): Monumento {
   if (editionMatch) {
     testo = unescapeXml(editionMatch[1].trim());
   }
+
+  // 19a. Lettura per faccia dell'edizione. `testo` resta l'XML completo e la
+  // sola cosa scritta: questa è una vista, non una seconda fonte.
+  const facce = extractEditionFaces(testo);
 
   // 19b. Testo indicizzabile per la ricerca full-text (MiniSearch) — derivato
   // da `testo` (già unescaped, con i tag XML EpiDoc ancora dentro). Rispetta
@@ -1370,32 +1464,53 @@ function parseTeiElement(teiString: string): Monumento {
   }
 
   // 22. Traduzioni
+  // Il blocco di una traduzione può contenere <div type="textpart"
+  // subtype="face">: fermarsi al primo </div> taglierebbe via tutto tranne la
+  // prima faccia. Il confine è il div fratello successivo, o </body>.
   const traduzioni: Traduzione[] = [];
-  const transRegex = /<div type="translation" xml:lang="([^"]+)"[^>\/]*>([\s\S]*?)<\/div>/g;
+  const transRegex = /<div type="translation" xml:lang="([^"]+)"[^>\/]*>([\s\S]*?)(?=<div type="(?:translation|apparatus|commentary|bibliography)"|<\/body>|$)/g;
   let traMatch;
   while ((traMatch = transRegex.exec(teiString)) !== null) {
     const lang = traMatch[1];
-    const divContent = traMatch[2];
-    
-    const pRegex = /<p>([\s\S]*?)<\/p>/g;
-    const pTexts: string[] = [];
-    let pMatch;
-    while ((pMatch = pRegex.exec(divContent)) !== null) {
-      pTexts.push(unescapeXml(pMatch[1].trim()));
+    const blocco = traMatch[2];
+
+    /** Testo e nota di un frammento di traduzione. */
+    const leggi = (frammento: string) => {
+      const pRegex = /<(?:p|ab)[^>]*>([\s\S]*?)<\/(?:p|ab)>/g;
+      const pTexts: string[] = [];
+      let pMatch;
+      while ((pMatch = pRegex.exec(frammento)) !== null) {
+        const v = unescapeXml(pMatch[1].trim());
+        if (v) pTexts.push(v);
+      }
+      const raw = pTexts.length > 0 ? pTexts.join("\n") : unescapeXml(frammento.replace(/<\/?div[^>]*>/g, '').trim());
+      const testo = isPlaceholder(raw) ? '' : raw;
+      const noteMatch = frammento.match(/<note>([\s\S]*?)<\/note>/);
+      let note = noteMatch ? unescapeXml(noteMatch[1].trim()) : "";
+      if (isPlaceholder(note)) note = "";
+      return { testo, note };
+    };
+
+    const facceTr: { n: CoinFace; frammento: string }[] = [];
+    const faceRe = /<div\s+([^>]*subtype="face"[^>]*)>([\s\S]*?)<\/div>/g;
+    let fm;
+    while ((fm = faceRe.exec(blocco)) !== null) {
+      const nAttr = fm[1].match(/\bn="([^"]*)"/);
+      const n = nAttr?.[1] as CoinFace | undefined;
+      if (n === "obv" || n === "rev") facceTr.push({ n, frammento: fm[2] });
     }
-    const testoTrRaw = pTexts.length > 0 ? pTexts.join("\n") : unescapeXml(divContent.trim());
-    const testoTr = isPlaceholder(testoTrRaw) ? '' : testoTrRaw;
-    
-    const noteMatch = divContent.match(/<note>([\s\S]*?)<\/note>/);
-    let noteTr = noteMatch ? noteMatch[1].trim() : "";
-    noteTr = unescapeXml(noteTr);
-    if (isPlaceholder(noteTr)) noteTr = "";
-    
-    traduzioni.push({
-      lang,
-      testo: testoTr,
-      note: noteTr
-    });
+
+    if (facceTr.length > 0) {
+      // Una traduzione per faccia. Le facce mute non producono una voce vuota.
+      for (const f of facceTr) {
+        const { testo, note } = leggi(f.frammento);
+        if (!testo && !note) continue;
+        traduzioni.push({ lang, testo, note, face: f.n });
+      }
+    } else {
+      const { testo, note } = leggi(blocco);
+      traduzioni.push({ lang, testo, note });
+    }
   }
 
   // 23. Commentary (note_interne)
@@ -1527,6 +1642,7 @@ function parseTeiElement(teiString: string): Monumento {
     vicende,
     facsimile_url,
     facsimile_desc,
+    facsimili: facsimili.length > 0 ? facsimili : undefined,
     testo,
     testo_searchable,
     supplied_ranges,
@@ -1549,7 +1665,9 @@ function parseTeiElement(teiString: string): Monumento {
     responsabili,
     textTypes,
     iscrizione,
-    anepigr,
+    // Su un oggetto a due facce è anepigrafe solo se lo sono tutte e due.
+    anepigr: facce.length > 0 ? facce.every(f => f.anepigr) : anepigr,
+    facce: facce.length > 0 ? facce : undefined,
     iconografia: extractIconography(teiString),
     numismatica: extractNumismatics(teiString),
   } as Monumento;
@@ -1955,11 +2073,31 @@ export function monumentiToXml(monumenti: Monumento[]): string {
     }
     block += `    </teiHeader>\n`;
     
-    if (m.facsimile_url) {
+    // Se c'è la lista è lei a essere scritta; i due campi singoli restano il
+    // ripiego per le schede che non sono ancora passate dalla lista.
+    const immagini: { url: string; desc?: string; surface?: CoinFace }[] =
+      (m.facsimili && m.facsimili.length > 0)
+        ? m.facsimili.filter(f => f.url)
+        : (m.facsimile_url ? [{ url: m.facsimile_url, desc: m.facsimile_desc }] : []);
+    if (immagini.length > 0) {
+      const graphic = (f: { url: string; desc?: string }, ind: string) => {
+        let out = `${ind}<graphic url="${escapeXml(f.url)}">\n`;
+        if (f.desc) out += `${ind}    <desc>${escapeXml(f.desc)}</desc>\n`;
+        out += `${ind}</graphic>\n`;
+        return out;
+      };
       block += `    <facsimile>\n`;
-      block += `        <graphic url="${escapeXml(m.facsimile_url)}">\n`;
-      if (m.facsimile_desc) block += `            <desc>${escapeXml(m.facsimile_desc)}</desc>\n`;
-      block += `        </graphic>\n`;
+      // Le immagini legate a una faccia stanno in <surface type="obverse|reverse">,
+      // nell'ordine dritto-rovescio; le altre restano sotto <facsimile>.
+      (["obv", "rev"] as CoinFace[]).forEach(faccia => {
+        const diQuestaFaccia = immagini.filter(f => f.surface === faccia);
+        if (diQuestaFaccia.length === 0) return;
+        const tipo = faccia === "obv" ? "obverse" : "reverse";
+        block += `        <surface type="${tipo}">\n`;
+        diQuestaFaccia.forEach(f => { block += graphic(f, '            '); });
+        block += `        </surface>\n`;
+      });
+      immagini.filter(f => !f.surface).forEach(f => { block += graphic(f, '        '); });
       block += `    </facsimile>\n`;
     }
     
@@ -2009,16 +2147,33 @@ export function monumentiToXml(monumenti: Monumento[]): string {
     }
     
     if (m.traduzioni && m.traduzioni.length > 0) {
-      for (const t of m.traduzioni) {
-        if (!t.testo || !t.testo.trim()) continue;
-        block += `            <div type="translation" xml:lang="${escapeXml(t.lang)}">\n`;
-        if (t.testo.includes("<")) {
-          block += `${t.testo}\n`;
+      const conTesto = m.traduzioni.filter(t => t.testo && t.testo.trim());
+      // Le traduzioni per faccia di una stessa lingua stanno in UN solo
+      // <div type="translation">, con un textpart per faccia: è la forma che
+      // rispecchia l'edizione, e quella che RPC usa.
+      const lingue = [...new Set(conTesto.map(t => t.lang))];
+      const corpo = (t: Traduzione, ind: string) => {
+        let out = '';
+        if (t.testo.includes("<")) out += `${t.testo}\n`;
+        else out += t.testo.split('\n').map(p => `${ind}<p>${escapeXml(p)}</p>`).join('\n') + '\n';
+        if (t.note) out += `${ind}<note>${escapeXml(t.note)}</note>\n`;
+        return out;
+      };
+      for (const lang of lingue) {
+        const diQuestaLingua = conTesto.filter(t => t.lang === lang);
+        block += `            <div type="translation" xml:lang="${escapeXml(lang)}">\n`;
+        const perFaccia = diQuestaLingua.filter(t => t.face);
+        if (perFaccia.length > 0) {
+          (["obv", "rev"] as CoinFace[]).forEach(faccia => {
+            const t = perFaccia.find(x => x.face === faccia);
+            if (!t) return;
+            block += `                <div type="textpart" subtype="face" n="${faccia}">\n`;
+            block += corpo(t, '                    ');
+            block += `                </div>\n`;
+          });
+          diQuestaLingua.filter(t => !t.face).forEach(t => { block += corpo(t, '                '); });
         } else {
-          block += t.testo.split('\n').map(p => `                <p>${escapeXml(p)}</p>`).join('\n') + '\n';
-        }
-        if (t.note) {
-          block += `                <note>${escapeXml(t.note)}</note>\n`;
+          diQuestaLingua.forEach(t => { block += corpo(t, '                '); });
         }
         block += `            </div>\n`;
       }

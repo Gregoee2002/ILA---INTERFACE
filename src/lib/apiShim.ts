@@ -148,12 +148,28 @@ function validateMonumentoShape(m: any): string | null {
     if (Array.isArray(num.specimens) && num.specimens.length > 200) return "numismatica.specimens supera 200 elementi";
     return null;
   };
+  const facceCap = (): string | null => {
+    if (Array.isArray(m.facce)) {
+      if (m.facce.length > 2) return "facce supera 2 elementi";
+      for (const f of m.facce) {
+        if (f?.testo !== undefined && String(f.testo).length > 50000) return "facce[].testo supera 50000 caratteri";
+      }
+    }
+    if (Array.isArray(m.facsimili)) {
+      if (m.facsimili.length > 50) return "facsimili supera 50 elementi";
+      for (const f of m.facsimili) {
+        if (String(f?.url || "").length > 2000) return "facsimili[].url supera 2000 caratteri";
+        if (f?.desc !== undefined && String(f.desc).length > 1000) return "facsimili[].desc supera 1000 caratteri";
+      }
+    }
+    return null;
+  };
   const checks = [
     strCap("regione", 200), strCap("citta", 200), strCap("tipo", 200), strCap("materiale", 200),
     strCap("testo", 50000), strCap("note_interne", 10000), strCap("note_interne_rawXml", 10000),
     arrCap("epiteti", 50), arrCap("divinita", 50), arrCap("onomastica", 50), arrCap("textTypes", 50),
     arrCap("imperatori", 50), arrCap("persone", 100), arrCap("traduzioni", 50), arrCap("bibliografia", 50),
-    arrCap("revisions", 100), arrCap("cultAttestations", 500), iconCap(), numCap(),
+    arrCap("revisions", 100), arrCap("cultAttestations", 500), iconCap(), numCap(), facceCap(),
   ];
   return checks.find(c => c !== null) ?? null;
 }

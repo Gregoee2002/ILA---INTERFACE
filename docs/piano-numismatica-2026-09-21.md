@@ -298,12 +298,19 @@ Nessuna di queste fasi popola dati: il corpus numismatico resta vuoto.
   per i due blocchi (`renderXenoData`), limiti di validazione anche nella via
   statica (`apiShim.ts`). Pannello di lettura `NumismaticsPanel.tsx` e sezione
   «Numismatica» nell'editor a sezioni.
-- **N4 — faccia come dimensione del modello.** Parziale: l'iconografia è per
-  faccia, l'edizione no. I `<div type="textpart" subtype="face">` si leggono
-  già ma `Monumento.testo` resta una stringa sola, e `anepigr` resta di scheda.
-  **Da fare.**
-- **N5 — `facsimile`.** Da fare: immagini D/R, con ricaduta anche
-  sull'epigrafia.
+- **N4 — faccia come dimensione del modello.** ✅ `EditionFace` letta dai
+  `<div type="textpart" subtype="face">`, `anepigr` per faccia (e di scheda solo
+  se sono mute tutte e due), `Traduzione.face` con le traduzioni di una stessa
+  lingua raccolte in un solo `<div type="translation">`. `Monumento.testo` resta
+  l'XML completo e la sola cosa scritta: `facce` ne è la lettura, e chi la
+  modifica rigenera il testo con `renderEditionFaces` — un solo scrittore, due
+  viste che non possono divergere. Nella scheda le due legende si leggono
+  separate; nell'editor si dividono e si riuniscono con un comando.
+- **N5 — `facsimile`.** ✅ `Facsimile[]` con `surface`, scritto in
+  `<surface type="obverse|reverse">`. I due campi singoli storici restano il
+  riflesso della prima immagine, così i punti che ne leggono uno solo
+  continuano a funzionare. Ricaduta sull'epigrafia: la scheda accetta ora più
+  immagini, non più una sola.
 - **N6 — fonti nel registro.** ✅ `printSources.ts`: **CMRDM II** (con
   l'identificatore «zecca + numero» e le note di collazione sul PDF) e **RPC**.
 - **N7 — mappatura assistita della prosa dei tipi.** ✅ come skill:

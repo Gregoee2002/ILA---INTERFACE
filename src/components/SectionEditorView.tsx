@@ -6,9 +6,9 @@ import {
   ChevronRight, ChevronUp, ChevronDown, FileText, Search, Download, Sparkles, LogIn, ShieldCheck, Users, ExternalLink
 } from 'lucide-react';
 import { cn, stripAccents } from '../lib/utils';
-import { Monumento, OrigDate, Traduzione, Bibliografia, Revision, Responsabile, ExternalRef, IconographicFigure, IconographicTrait, NumismaticData, NumMeasure, NumSpecimen, CoinFace, COIN_FACE_LABELS, EDITORIAL_STATUS_LABELS } from '../types';
+import { Monumento, OrigDate, Traduzione, Bibliografia, Revision, Responsabile, ExternalRef, IconographicFigure, IconographicTrait, NumismaticData, NumMeasure, NumSpecimen, CoinFace, COIN_FACE_LABELS, EditionFace, Facsimile, EDITORIAL_STATUS_LABELS } from '../types';
 import { DENOMINATIONS, MANUFACTURES, METALS, MINTS, nomismaRef, numLabel } from '../lib/numismaticVocab';
-import { xmlToMonumenti, formatIlaLabel } from '../lib/xmlUtils';
+import { xmlToMonumenti, formatIlaLabel, renderEditionFaces } from '../lib/xmlUtils';
 import { EditionMarkupEditor } from './EditionMarkupEditor';
 import { DivinityEpithetIndex } from './DivinityEpithetIndex';
 import { ICONOGRAPHY_LABELS } from '../lib/iconographyLabels';
@@ -116,8 +116,8 @@ const SECTION_FIELDS: Record<SectionId, (keyof Monumento)[]> = {
   provenance: ['luogo_rit', 'vicende', 'conserv'],
   profile: ['epiteti', 'divinita', 'onomastica', 'imperatori', 'persone'],
   revisions: ['revisions', 'editorialStatus'],
-  facsimile: ['facsimile_url', 'facsimile_desc'],
-  edition: ['testo', 'anepigr', 'iscrizione'],
+  facsimile: ['facsimile_url', 'facsimile_desc', 'facsimili'],
+  edition: ['testo', 'anepigr', 'iscrizione', 'facce'],
   apparatus: ['apparatus'],
   translations: ['traduzioni'],
   commentary: ['note_interne', 'note_interne_rawXml'],
@@ -517,6 +517,23 @@ export const SectionEditorView: React.FC<Props> = ({ monumenti, effectiveAdmin, 
   const setEditionText = (xml: string) =>
     setModel(m => m ? applyDerivedIndices({ ...m, testo: xml }) : m);
 
+  /**
+   * Scrive le facce E rigenera `testo` da loro: il testo dell'edizione resta
+   * scritto da una sola parte, e la vista per faccia non può divergere
+   * dall'XML (vedi types.ts EditionFace).
+   */
+  const setFaces = (facce: EditionFace[] | undefined) =>
+    setModel(m => {
+      if (!m) return m;
+      if (!facce || facce.length === 0) return applyDerivedIndices({ ...m, facce: undefined });
+      return applyDerivedIndices({
+        ...m,
+        facce,
+        testo: renderEditionFaces(facce),
+        anepigr: facce.every(f => f.anepigr),
+      });
+    });
+
   /* ── salvataggio: diff dei campi cambiati, patch sul file del corpus ─── */
   const handleSave = async () => {
     if (!model || !baseModel || !source) return;
@@ -787,7 +804,7 @@ export const SectionEditorView: React.FC<Props> = ({ monumenti, effectiveAdmin, 
                 <h3 className="font-serif font-bold text-ink text-lg">{active.label}</h3>
               </div>
 
-              {renderSectionForm(activeSection, m, set, setEditionText, suggestions)}
+              {renderSectionForm(activeSection, m, set, setEditionText, setFaces, suggestions)}
             </motion.div>
           </AnimatePresence>
         </div>
@@ -897,6 +914,7 @@ function renderSectionForm(
   m: Monumento,
   set: <K extends keyof Monumento>(k: K, v: Monumento[K]) => void,
   setEditionText: (xml: string) => void,
+  setFaces: (facce: EditionFace[] | undefined) => void,
   suggestions: { luogo_cons: string[]; citta: string[]; luogo_moderno: string[]; luogo_rit: string[]; responsabileRuolo: string[]; extRefType: string[] },
 ) {
   switch (id) {
@@ -1194,19 +1212,73 @@ function renderSectionForm(
       );
     }
 
-    case 'facsimile':
+    case 'facsimile': {
+      // I due campi singoli storici diventano la prima voce della lista appena
+      // si tocca questa sezione: da qui in poi è la lista a essere scritta.
+      const immagini: Facsimile[] = m.facsimili?.length
+        ? m.facsimili
+        : m.facsimile_url
+          ? [{ url: m.facsimile_url, desc: m.facsimile_desc }]
+          : [];
+      const scrivi = (next: Facsimile[]) => {
+        set('facsimili', next.length ? next : undefined);
+        set('facsimile_url', next[0]?.url || '');
+        set('facsimile_desc', next[0]?.desc || '');
+      };
+      const aggiorna = (i: number, patch: Partial<Facsimile>) =>
+        scrivi(immagini.map((f, j) => j === i ? { ...f, ...patch } : f));
+      const aDueFacce = !!m.facce || !!m.numismatica;
       return (
-        <div className="space-y-5 max-w-2xl">
-          <div>
-            <FieldLabel>URL immagine</FieldLabel>
-            <TextInput value={m.facsimile_url || ''} onChange={e => set('facsimile_url', e.target.value)} placeholder="https://…" />
-          </div>
-          <div>
-            <FieldLabel>Didascalia</FieldLabel>
-            <TextInput value={m.facsimile_desc || ''} onChange={e => set('facsimile_desc', e.target.value)} />
-          </div>
+        <div className="space-y-4 max-w-3xl">
+          {immagini.length === 0 && (
+            <p className="text-sm text-muted italic font-serif">
+              Nessuna immagine. Un oggetto a due facce ne vuole una per faccia.
+            </p>
+          )}
+          {immagini.map((f, i) => (
+            <div key={i} className="glass-card p-4">
+              <div className="flex items-start gap-3">
+                <span className="w-6 h-6 rounded-full bg-num/10 text-num border border-num/25 flex items-center justify-center text-[11px] font-sans font-bold shrink-0 mt-6">
+                  {i + 1}
+                </span>
+                <div className={cn('grid grid-cols-1 gap-3 flex-1', aDueFacce ? 'md:grid-cols-[1fr_1fr_10rem]' : 'md:grid-cols-2')}>
+                  <div>
+                    <FieldLabel>URL immagine</FieldLabel>
+                    <TextInput value={f.url} onChange={e => aggiorna(i, { url: e.target.value })} placeholder="https://…" />
+                  </div>
+                  <div>
+                    <FieldLabel>Didascalia</FieldLabel>
+                    <TextInput value={f.desc || ''} onChange={e => aggiorna(i, { desc: e.target.value || undefined })} placeholder="es. Tav. I" />
+                  </div>
+                  {aDueFacce && (
+                    <div>
+                      <FieldLabel hint="lega l'immagine a una faccia: &lt;surface type=…&gt;">Faccia</FieldLabel>
+                      <VocabSelect
+                        value={f.surface || ''}
+                        onChange={v => aggiorna(i, { surface: (v || undefined) as CoinFace | undefined })}
+                        options={['obv', 'rev']}
+                        placeholder="Tutto l'oggetto"
+                        allowEmpty
+                      />
+                    </div>
+                  )}
+                </div>
+                <button onClick={() => scrivi(immagini.filter((_, j) => j !== i))}
+                  className="p-1.5 mt-6 text-muted/50 hover:text-danger transition-colors" title="Rimuovi immagine">
+                  <Trash2 className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+          ))}
+          <button
+            onClick={() => scrivi([...immagini, { url: '' }])}
+            className="inline-flex items-center gap-1.5 text-xs font-sans font-semibold uppercase tracking-[0.12em] text-num hover:opacity-70 transition-opacity"
+          >
+            <Plus className="w-3.5 h-3.5" /> Aggiungi immagine
+          </button>
         </div>
       );
+    }
 
     case 'revisions': {
       const revs: Revision[] = m.revisions || [];
@@ -1245,14 +1317,72 @@ function renderSectionForm(
       );
     }
 
-    case 'edition':
+    case 'edition': {
+      const facce = m.facce;
+      const aggiornaFaccia = (n: CoinFace, patch: Partial<EditionFace>) =>
+        setFaces((facce || []).map(f => f.n === n ? { ...f, ...patch } : f));
       return (
-        <EditionMarkupEditor
-          value={m.testo || ''}
-          onChange={setEditionText}
-          anepigrafo={m.anepigr}
-        />
+        <div className="space-y-6">
+          {/* Un oggetto a due facce si edita una faccia per volta: l'edizione
+              diventa due <div type="textpart" subtype="face">. */}
+          <div className="flex items-center justify-between gap-4 pb-3 border-b border-border/30">
+            <span className="text-[11px] font-sans uppercase tracking-[0.12em] text-muted">
+              {facce ? 'Edizione per faccia' : 'Edizione'}
+            </span>
+            <button
+              onClick={() => setFaces(facce ? undefined : [
+                { n: 'obv', testo: m.testo || '', lang: 'grc', anepigr: !(m.testo || '').trim() },
+                { n: 'rev', testo: '', lang: 'grc', anepigr: true },
+              ])}
+              className="text-[11px] font-sans font-semibold uppercase tracking-[0.12em] text-num hover:opacity-70 transition-opacity"
+            >
+              {facce ? 'Torna a una faccia sola' : 'Dividi in dritto e rovescio'}
+            </button>
+          </div>
+
+          {facce ? (
+            (['obv', 'rev'] as CoinFace[]).map(n => {
+              const f = facce.find(x => x.n === n);
+              if (!f) return null;
+              return (
+                <div key={n} className="space-y-2">
+                  <div className="flex items-center justify-between gap-4">
+                    <span className="text-[10px] font-sans font-bold uppercase tracking-[0.2em] text-num">
+                      {COIN_FACE_LABELS[n]}
+                    </span>
+                    <label className="flex items-center gap-2 text-xs font-sans text-ink">
+                      <input
+                        type="checkbox"
+                        checked={f.anepigr}
+                        onChange={e => aggiornaFaccia(n, { anepigr: e.target.checked, testo: e.target.checked ? '' : f.testo })}
+                      />
+                      faccia anepigrafe
+                    </label>
+                  </div>
+                  {f.anepigr ? (
+                    <p className="text-sm text-muted italic font-serif border border-border/40 rounded-lg px-4 py-6 text-center">
+                      Faccia senza legenda: si scrive <code>&lt;space unit="side"/&gt;</code>, non un testo vuoto.
+                    </p>
+                  ) : (
+                    <EditionMarkupEditor
+                      value={f.testo}
+                      onChange={xml => aggiornaFaccia(n, { testo: xml })}
+                      anepigrafo={false}
+                    />
+                  )}
+                </div>
+              );
+            })
+          ) : (
+            <EditionMarkupEditor
+              value={m.testo || ''}
+              onChange={setEditionText}
+              anepigrafo={m.anepigr}
+            />
+          )}
+        </div>
       );
+    }
 
     case 'apparatus': {
       const entries = Array.isArray(m.apparatus) ? m.apparatus : [];
@@ -1305,9 +1435,25 @@ function renderSectionForm(
           {trads.map((t, i) => (
             <div key={i} className="glass-card p-4 space-y-3">
               <div className="flex items-center justify-between gap-3">
-                <div className="w-24">
-                  <FieldLabel>Lingua</FieldLabel>
-                  <TextInput value={t.lang} onChange={e => update(i, { lang: e.target.value })} placeholder="it" />
+                <div className="flex items-end gap-3">
+                  <div className="w-24">
+                    <FieldLabel>Lingua</FieldLabel>
+                    <TextInput value={t.lang} onChange={e => update(i, { lang: e.target.value })} placeholder="it" />
+                  </div>
+                  {/* Su un oggetto a due facce si traduce una faccia per volta:
+                      le due legende sono testi distinti, non un testo solo. */}
+                  {m.facce && m.facce.length > 0 && (
+                    <div className="w-36">
+                      <FieldLabel>Faccia</FieldLabel>
+                      <VocabSelect
+                        value={t.face || ''}
+                        onChange={v => update(i, { face: (v || undefined) as CoinFace | undefined })}
+                        options={['obv', 'rev']}
+                        placeholder="Tutto il testo"
+                        allowEmpty
+                      />
+                    </div>
+                  )}
                 </div>
                 <button onClick={() => set('traduzioni', trads.filter((_, j) => j !== i))} className="p-1.5 text-muted/50 hover:text-danger transition-colors mt-4"><Trash2 className="w-4 h-4" /></button>
               </div>

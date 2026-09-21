@@ -3,6 +3,40 @@ export interface Traduzione {
   lang: string;
   testo: string;
   note: string;
+  /**
+   * Faccia tradotta, sugli oggetti che ne hanno due. Assente sui monumenti
+   * epigrafici, dove la traduzione riguarda l'intero testo.
+   */
+  face?: CoinFace;
+}
+
+/**
+ * Una faccia dell'edizione: <div type="textpart" subtype="face" n="obv|rev">.
+ *
+ * `Monumento.testo` resta l'XML completo del `<div type="edition">` e la sola
+ * cosa che il serializzatore scrive; `facce` è la sua LETTURA per faccia —
+ * stessa scelta fatta per `IconographicFigure.side`. Chi modifica una faccia
+ * deve rigenerare `testo` da qui con `renderEditionFaces`, così il testo resta
+ * scritto da una sola parte e le due viste non possono divergere.
+ */
+export interface EditionFace {
+  n: CoinFace;
+  /** Contenuto dell'`<ab>`: markup EpiDoc, come in `Monumento.testo`. */
+  testo: string;
+  lang?: string;
+  /** Faccia senza legenda: <space unit="side"/>. */
+  anepigr: boolean;
+}
+
+/**
+ * Un'immagine della scheda. `surface` la lega a una faccia
+ * (<surface type="obverse|reverse">), come fa RPC: su un monumento epigrafico
+ * resta assente e il facsimile riguarda l'oggetto intero.
+ */
+export interface Facsimile {
+  url: string;
+  desc?: string;
+  surface?: CoinFace;
 }
 
 export interface Bibliografia {
@@ -258,7 +292,10 @@ export interface Monumento {
   // nei risultati di ricerca.
   supplied_ranges?: [number, number][];
   iscrizione: boolean;
+  /** Anepigrafe nel suo insieme: su un oggetto a due facce, tutte e due mute. */
   anepigr: boolean;
+  /** Lettura per faccia dell'edizione; assente sui monumenti a una faccia. */
+  facce?: EditionFace[];
   data: string;
   data_inizio?: number;
   data_fine?: number;
@@ -312,8 +349,14 @@ export interface Monumento {
   place_ref_ancient?: string;
   place_ref_modern?: string;
   origDates?: OrigDate[];
+  /**
+   * Prima immagine della scheda, mantenuti per i punti che leggono un solo
+   * facsimile. La lista completa è `facsimili`: quando c'è, è lei a essere
+   * scritta, e questi due ne sono il riflesso.
+   */
   facsimile_url?: string;
   facsimile_desc?: string;
+  facsimili?: Facsimile[];
   tipo_ref?: string;
   luogo_moderno?: string;
   origPlace_nota?: string;
