@@ -6,7 +6,10 @@ import {
   nomeFileScheda,
   numeroInSezione,
   sezioneDaContenuto,
+  sezioneDaNomeFile,
   sezioneDiId,
+  sezionePubblica,
+  sezioniVisibili,
 } from '../sezioni';
 import { monumentiToXml, xmlToMonumenti } from '../xmlUtils';
 import { Monumento } from '../../types';
@@ -91,5 +94,25 @@ describe('la sezione nel round-trip TEI', () => {
     const xml = monumentiToXml([scheda({ id: 42, tipo: 'stele', numismatica: undefined })]);
     expect(xml).toContain('<idno type="ILA">ILA-042</idno>');
     expect(xmlToMonumenti(xml)[0].sezione).toBe('epigrafia');
+  });
+});
+
+describe('sezioni in redazione', () => {
+  it('la numismatica non è ancora pubblica', () => {
+    expect(sezionePubblica('epigrafia')).toBe(true);
+    expect(sezionePubblica('numismatica')).toBe(false);
+  });
+
+  it('chi non è in redazione vede solo le sezioni pubbliche', () => {
+    expect(sezioniVisibili(false).map(d => d.id)).toEqual(['epigrafia']);
+    expect(sezioniVisibili(true).map(d => d.id)).toEqual(['epigrafia', 'numismatica']);
+  });
+
+  it('riconosce la sezione dal solo nome del file', () => {
+    expect(sezioneDaNomeFile('ILA-042.xml')).toBe('epigrafia');
+    expect(sezioneDaNomeFile('ILA-N-007.xml')).toBe('numismatica');
+    // Un file con un nome fuori convenzione non finisce per sbaglio in una
+    // sezione riservata: ricade sulla predefinita, che è quella pubblica.
+    expect(sezioneDaNomeFile('_teiCorpus.xml')).toBe('epigrafia');
   });
 });

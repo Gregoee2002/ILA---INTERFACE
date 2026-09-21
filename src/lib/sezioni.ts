@@ -47,6 +47,17 @@ export interface DefinizioneSezione {
   offset: number;
   /** Token di colore della sezione (src/index.css). */
   colore: string;
+  /**
+   * Se la sezione è pubblicata.
+   *
+   * `false` significa «esiste solo in modalità di redazione»: le sue schede
+   * non entrano nello scatto statico che il sito serve a chi ha la sola
+   * password (`scripts/build-corpus-snapshot.ts`), e la sezione non compare
+   * né nella barra di navigazione né in home finché l'editing non è sbloccato.
+   * Non è un nascondiglio: è lo stato di un materiale non ancora rivisto.
+   * Pubblicarla, il giorno che lo sarà, è cambiare questo booleano.
+   */
+  pubblica: boolean;
 }
 
 export const SEZIONI: DefinizioneSezione[] = [
@@ -57,6 +68,7 @@ export const SEZIONI: DefinizioneSezione[] = [
     sigla: '',
     offset: 0,
     colore: '--accent',
+    pubblica: true,
   },
   {
     id: 'numismatica',
@@ -65,6 +77,9 @@ export const SEZIONI: DefinizioneSezione[] = [
     sigla: 'N',
     offset: AMPIEZZA_BLOCCO,
     colore: '--num',
+    // 2026-09-21: le 475 schede del CMRDM II sono appena estratte e non
+    // ancora riviste. Restano in redazione finché non lo saranno.
+    pubblica: false,
   },
 ];
 
@@ -123,6 +138,26 @@ export function idDaEtichetta(s: string): number | undefined {
   }
   const semplice = testo.match(/^(?:ILA[-\s]?)?0*(\d{1,5})$/i);
   return semplice ? Number(semplice[1]) : undefined;
+}
+
+/** Se le schede della sezione sono servite a chi non ha sbloccato l'editing. */
+export function sezionePubblica(s: Sezione): boolean {
+  return definizioneSezione(s).pubblica;
+}
+
+/** Le sezioni visibili a chi sta guardando: tutte in redazione, le sole pubbliche fuori. */
+export function sezioniVisibili(inRedazione: boolean): DefinizioneSezione[] {
+  return inRedazione ? SEZIONI : SEZIONI.filter(d => d.pubblica);
+}
+
+/**
+ * La sezione di un file del corpus, dal solo nome (`ILA-N-007.xml`).
+ * Serve dove l'XML non è ancora stato letto — lo scatto statico lo decide
+ * prima di aprire i file.
+ */
+export function sezioneDaNomeFile(nome: string): Sezione {
+  const id = idDaEtichetta(nome.replace(/\.xml$/i, ''));
+  return id === undefined ? SEZIONE_PREDEFINITA : sezioneDiId(id);
 }
 
 /** Il file del corpus che contiene la scheda: `ILA-042.xml`, `ILA-N-007.xml`. */

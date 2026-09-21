@@ -62,7 +62,7 @@ import { IconographyPanel } from './components/IconographyPanel';
 import { NumismaticsPanel } from './components/NumismaticsPanel';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { leggiPermalink, scriviPermalink, etichettaScheda } from './lib/permalink';
-import { SEZIONI, Sezione, definizioneSezione, etichettaSezione, idDaNumero, nomeFileScheda, sezioneDaContenuto, sezioneDiId } from './lib/sezioni';
+import { Sezione, definizioneSezione, etichettaSezione, idDaNumero, nomeFileScheda, sezioneDaContenuto, sezioneDiId, sezionePubblica, sezioniVisibili } from './lib/sezioni';
 const CooccurrenceHeatmap = lazy(() => import('./components/CooccurrenceHeatmap').then(m => ({ default: m.CooccurrenceHeatmap })));
 const CultLexiconPanel = lazy(() => import('./components/CultLexiconPanel').then(m => ({ default: m.CultLexiconPanel })));
 const LessicoLaresEditor = lazy(() => import('./components/LessicoLaresEditor').then(m => ({ default: m.LessicoLaresEditor })));
@@ -1752,8 +1752,10 @@ const RAIL_ITEMS: { view: AppView; label: string; icon: React.ReactNode; adminOn
   { view: 'catalog', label: 'Catalogo', icon: <Book className="h-4 w-4" /> },
   // Le due sezioni del corpus hanno ciascuna la propria porta: il catalogo
   // è l'epigrafia, «Monete» la numismatica (lib/sezioni.ts). Stesso elenco,
-  // stessi filtri, insiemi separati.
-  { view: 'monete', label: 'Monete', icon: <Coins className="h-4 w-4" /> },
+  // stessi filtri, insiemi separati. Finché la sezione non è pubblica la
+  // porta si apre solo in redazione: la condizione la detta il registro
+  // delle sezioni, così si pubblica in un posto solo.
+  { view: 'monete', label: 'Monete', icon: <Coins className="h-4 w-4" />, adminOnly: !sezionePubblica('numismatica') },
   { view: 'sources', label: 'Fonti letterarie', icon: <ScrollText className="h-4 w-4" /> },
   { view: 'map', label: 'Mappa', icon: <MapPin className="h-4 w-4" /> },
   { view: 'timeline', label: 'Cronologia', icon: <Clock className="h-4 w-4" /> },
@@ -2152,6 +2154,9 @@ function HomeView({ monumenti, onNavigate, onSearch, effectiveAdmin }: { monumen
     { view: 'editor', label: 'Editor XML', desc: 'Modifica le schede EpiDoc sezione per sezione, con riscrittura chirurgica.', icon: <Feather className="h-5 w-5" /> },
   ];
   const sections = allSections.filter(s => !s.adminOnly || effectiveAdmin);
+  // Una sezione ancora in redazione non si annuncia in home a chi non può
+  // aprirla: la carta comparirà il giorno che la sezione sarà pubblica.
+  const heroVisibili = heroSections.filter(h => h.view !== 'monete' || effectiveAdmin || sezionePubblica('numismatica'));
 
   const launchCard = (view: AppView) => {
     setLaunching(view);
@@ -2211,8 +2216,8 @@ function HomeView({ monumenti, onNavigate, onSearch, effectiveAdmin }: { monumen
       {/* Le sezioni portanti, affiancate e di pari rango: lo stesso archivio
           guardato da tre lati, non tre archivi. Il Catalogo e le Fonti tengono
           il verde del database, le Monete l'oro della loro sezione. */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
-        {heroSections.map((hero, hi) => (
+      <div className={cn('grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8', heroVisibili.length > 2 && 'lg:grid-cols-3')}>
+        {heroVisibili.map((hero, hi) => (
         <motion.button
           key={hero.view}
           initial={{ opacity: 0, y: 24, scale: 0.97 }}
@@ -4106,7 +4111,32 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
   const isDarkModeActive = theme === 'dark' || (theme === 'system' && typeof window !== 'undefined' && window.matchMedia('(prefers-color-scheme: dark)').matches);
 
 
-  const [monumenti, setMonumenti] = useState<Monumento[]>([]);
+  // Il corpus come arriva dall'API. Quello che l'applicazione mostra è
+  // `monumenti`, definito più sotto: le sezioni ancora in redazione
+  // (lib/sezioni.ts) restano fuori finché l'editing non è sbloccato, e
+  // restano fuori una volta sola — così nessuna vista deve ricordarsene.
+  const [corpusCompleto, setMonumenti] = useState<Monumento[]>([]);
+
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
+  // Sulla build statica: di default si consulta lo snapshot statico del
+  // corpus (nessun token richiesto, solo il gate password in main.tsx).
+  // editingUnlocked diventa true solo dopo un PAT GitHub valido inserito
+  // da UnlockEditingModal — è quello il vero "sei autorizzato a scrivere"
+  // per questa build (vedi effectiveAdmin sotto e apiShim.ts).
+  const [editingUnlocked, setEditingUnlocked] = useState(false);
+  const effectiveAdmin = isStaticBuild ? editingUnlocked : (!!currentUser && currentUser.email === ADMIN_EMAIL);
+
+  // Le schede delle sezioni non ancora pubbliche si vedono solo in redazione.
+  // Sulla build statica non arrivano nemmeno — lo scatto del corpus non le
+  // contiene (scripts/build-corpus-snapshot.ts) — ma il filtro vale anche
+  // in locale, dove il server legge la cartella intera: una sola regola,
+  // non due che possono discordare.
+  const monumenti = useMemo(
+    () => (effectiveAdmin
+      ? corpusCompleto
+      : corpusCompleto.filter(m => sezionePubblica(m.sezione ?? sezioneDiId(m.id)))),
+    [corpusCompleto, effectiveAdmin],
+  );
   // Indici divinità/onomastica calcolati una volta sul corpus intero, riusati
   // sia dalla pagina Statistiche Epiteti sia dal popover contestuale aperto
   // cliccando un termine nel testo dell'iscrizione (vedi lib/epithetIndex.ts).
@@ -4158,6 +4188,15 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
   const selectedMonumenti = monumenti.filter(m => selectedIds.has(m.entryId || m.id));
   
   const [filters, setFilters] = useState<FilterState>(DEFAULT_FILTERS);
+
+  // Una sezione in redazione non si apre per indirizzo: chi arriva su
+  // ?vista=monete senza aver sbloccato l'editing torna al catalogo, e ci
+  // torna anche chi aveva la sezione aperta quando l'editing si richiude.
+  useEffect(() => {
+    if (activeView === 'monete' && !effectiveAdmin && !sezionePubblica('numismatica')) {
+      setActiveView('catalog');
+    }
+  }, [activeView, effectiveAdmin]);
 
   // Catalogo e Monete sono la stessa vista su due insiemi separati: quale dei
   // due si stia guardando lo dice la vista attiva, non un filtro. Così non
@@ -4253,7 +4292,6 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
   }, [miniSearchResults]);
   
   const [selectedMonumento, setSelectedMonumento] = useState<Monumento | null>(null);
-  const [currentUser, setCurrentUser] = useState<User | null>(null);
 
   // Markup cliccabile sull'iscrizione: popover di statistiche aperto (solo
   // per divinità/onomastica) e preset da applicare al mount della prossima
@@ -4442,12 +4480,6 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
     window.history.replaceState(null, '', `${window.location.pathname}${q}`);
   }, [activeView, selectedMonumento]);
 
-  // Sulla build statica: di default si consulta lo snapshot statico del
-  // corpus (nessun token richiesto, solo il gate password in main.tsx).
-  // editingUnlocked diventa true solo dopo un PAT GitHub valido inserito
-  // da UnlockEditingModal — è quello il vero "sei autorizzato a scrivere"
-  // per questa build (vedi effectiveAdmin sotto e apiShim.ts).
-  const [editingUnlocked, setEditingUnlocked] = useState(false);
   // Testimonianza letteraria da aprire entrando nella sezione Fonti: la manda
   // il blocco «Nelle fonti letterarie» delle pagine Divinità/Epiteti.
   const [fonteTarget, setFonteTarget] = useState<string | null>(null);
@@ -4611,7 +4643,6 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
   // (enforcement reale è comunque lato apiShim.ts + permessi del token su
   // GitHub, non questo booleano). Prima di sbloccare, chi ha solo la
   // password vede il catalogo in sola lettura dallo snapshot statico.
-  const effectiveAdmin = isStaticBuild ? editingUnlocked : (!!currentUser && currentUser.email === ADMIN_EMAIL);
 
   // Registro di lavorazione dei collaboratori sulle schede del catalogo
   // (vedi flags.json su GitHub) e bug segnalati sul funzionamento dell'app
@@ -4730,14 +4761,15 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
   // intestazione dell'elenco, che è anche il punto in cui si passa dall'una
   // all'altra. Una sezione ancora vuota resta visibile, con il suo zero: è
   // l'indice di un'opera in più volumi, non un cruscotto che nasconde i vuoti.
+  const sezioniInVista = useMemo(() => sezioniVisibili(effectiveAdmin), [effectiveAdmin]);
   const conteggioSezioni = useMemo(() => {
-    const conte = new Map<Sezione, number>(SEZIONI.map(d => [d.id, 0]));
+    const conte = new Map<Sezione, number>(sezioniInVista.map(d => [d.id, 0]));
     for (const m of monumenti) {
       const sez = m.sezione ?? sezioneDiId(m.id);
       conte.set(sez, (conte.get(sez) ?? 0) + 1);
     }
     return conte;
-  }, [monumenti]);
+  }, [monumenti, sezioniInVista]);
 
   const regions = useMemo(() => Array.from(new Set(monumenti.map(m => m.regione).filter(Boolean).map(s => s.trim()))).sort(), [monumenti]);
   const cities = useMemo(() => Array.from(new Set(monumenti.map(m => m.citta).filter(Boolean).map(s => s.trim()))).sort(), [monumenti]);
@@ -6238,9 +6270,11 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                   <div className="px-6 pt-6 mb-2 flex items-center justify-between border-b border-border/20 pb-3 font-sans text-[10px] font-bold uppercase tracking-[0.2em] text-muted">
                     <div className="flex items-center gap-4 min-w-0">
                       {/* Le sezioni del corpus: la divisione principale del
-                          catalogo, non un filtro in fondo alla tendina. */}
+                          catalogo, non un filtro in fondo alla tendina. Con una
+                          sola sezione visibile il bivio non si mostra. */}
+                      {sezioniInVista.length > 1 && (
                       <div className="flex items-center gap-3 shrink-0" role="group" aria-label="Sezione del corpus">
-                        {SEZIONI.map(def => (
+                        {sezioniInVista.map(def => (
                           <button
                             key={def.id}
                             onClick={() => { setActiveView(vistaDiSezione(def.id)); setHasNavigated(true); }}
@@ -6253,7 +6287,8 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                           </button>
                         ))}
                       </div>
-                      <span className="opacity-30" aria-hidden="true">·</span>
+                      )}
+                      {sezioniInVista.length > 1 && <span className="opacity-30" aria-hidden="true">·</span>}
                       <span role="status" aria-live="polite" className="truncate">Visualizzazione di {filteredMonumenti.length} schede</span>
                     </div>
                     <div className="flex items-center gap-4">

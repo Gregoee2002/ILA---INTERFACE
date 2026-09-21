@@ -347,6 +347,21 @@ Nessuna di queste fasi popola dati: il corpus numismatico resta vuoto.
     conteggi, accanto all'ordinamento; nella scheda la sezione compare come
     etichetta solo quando non è quella epigrafica.
 
+- **N9 — la sezione resta in redazione.** ✅ `pubblica: false` su
+  `numismatica` nel registro delle sezioni. Le 475 schede del CMRDM II sono
+  appena estratte e non ancora riviste: finché non lo saranno,
+
+  - non entrano nello **scatto statico** che il sito serve a chi ha la sola
+    password (`scripts/build-corpus-snapshot.ts` le lascia fuori): non sono
+    nascoste dall'interfaccia, non vengono proprio pubblicate;
+  - la voce «Monete» e la carta in home compaiono **solo a editing sbloccato**,
+    e `?vista=monete` riporta al catalogo chi non lo è;
+  - non compaiono in nessuna vista trasversale (mappa, cronologia, statistiche,
+    ricerca, bibliografia): il filtro sta in un punto solo, sul corpus che
+    l'applicazione mostra, non ripetuto vista per vista.
+
+  Pubblicarle, il giorno che lo saranno, è cambiare quel booleano.
+
 Colore della sezione: **oro** (`--num`), token accanto a `--cult` e `--lit`.
 
 ## 8. Decisioni aperte

@@ -16,6 +16,7 @@ import fs from "fs";
 import path from "path";
 import { isGitHubConfigured, pullCorpusFromGitHub, pullLitSourcesFileFromGitHub, pullLessicoLaresFileFromGitHub } from "../src/lib/githubStorage";
 import { validateOverlay } from "../src/lib/lessicoLaresOverlay";
+import { etichettaSezione, sezioneDaNomeFile, sezionePubblica } from "../src/lib/sezioni";
 
 const CORPUS_DIR = path.join(process.cwd(), "src", "data", "corpus");
 
@@ -50,9 +51,22 @@ async function main() {
   const entries = listCorpusFiles();
   console.log(`Trovati ${entries.length} file XML nel corpus.`);
 
+  // Le sezioni non ancora pubblicate (lib/sezioni.ts) restano fuori dallo
+  // scatto: il sito statico non le serve affatto a chi ha la sola password,
+  // non si limita a non mostrarle. Chi sblocca l'editing con il proprio PAT
+  // legge il corpus live dalla repo dati e le vede tutte.
   const files: Record<string, string> = {};
+  const esclusi = new Map<string, number>();
   for (const name of entries) {
+    const sezione = sezioneDaNomeFile(name);
+    if (!sezionePubblica(sezione)) {
+      esclusi.set(sezione, (esclusi.get(sezione) ?? 0) + 1);
+      continue;
+    }
     files[name] = fs.readFileSync(path.join(CORPUS_DIR, name), "utf-8");
+  }
+  for (const [sezione, quante] of esclusi) {
+    console.log(`Fuori dallo scatto: ${quante} schede della sezione ${etichettaSezione(sezione as any)} (in redazione, non ancora pubblica).`);
   }
 
   const outDir = path.join(process.cwd(), "public");
