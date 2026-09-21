@@ -62,7 +62,14 @@ describe('parse e serializzazione dell\'edizione', () => {
     let confrontate = 0;
     const fuoriModello: string[] = [];
     for (const f of file) {
-      const ed = edizioneDi(fs.readFileSync(path.join(CORPUS, f), 'utf-8'));
+      const edizione = edizioneDi(fs.readFileSync(path.join(CORPUS, f), 'utf-8'));
+      // Le schede numismatiche hanno l'edizione divisa per faccia
+      // (<div subtype="face">): ogni faccia è un flusso a sé, ed è così che
+      // l'editor la apre. Si collauda faccia per faccia, non tutte insieme.
+      const pezzi = edizione.includes('subtype="face"')
+        ? (edizione.match(/<ab\b[^>]*>[\s\S]*?<\/ab>/g) || [])
+        : [edizione];
+      for (const ed of pezzi) {
       if (!ed.includes('<')) continue;
       // Un'edizione in più <ab> (div type="textpart": fronte/retro, blocchi
       // distinti) il modello a flusso unico non la sa rappresentare, e
@@ -80,6 +87,7 @@ describe('parse e serializzazione dell\'edizione', () => {
         expect(conta(uno, tag), `${f} — <${tag}>`).toBe(conta(ed, tag));
       }
       confrontate++;
+      }
     }
     expect(confrontate).toBeGreaterThan(200);
     expect(fuoriModello.length, `edizioni in più <ab>: ${fuoriModello.join(', ')}`).toBeLessThanOrEqual(4);

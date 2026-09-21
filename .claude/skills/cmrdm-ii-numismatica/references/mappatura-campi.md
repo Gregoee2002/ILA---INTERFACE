@@ -85,7 +85,9 @@ Equivalenze già presenti, che non vanno duplicate:
 |---|---|
 | `Phrygian cap` | `headgear/phrygian_cap` |
 | `crescent on shoulders`, `crescent behind shoulders` | `lunar/crescent_shoulders` |
-| `crescent on cap`, `stars on cap` | `lunar/crescent_cap` |
+| `crescent on cap` | `lunar/crescent_cap` |
+| `stars on cap`, `starry cap` | `headgear/star` |
+| `laurel wreath on cap` | `headgear/wreath` |
 | `radiate crown` | `headgear/radiate_crown` |
 | `pine-cone`, `pine cone` | `held_object/pine_cone` |
 | `bucranium`, `bull's head` | `held_object/bucranium` |
