@@ -4,11 +4,16 @@ import { canonicalDivinityName } from "./divinityAliases";
 import { canonicalEpithet } from "./epithetAliases";
 import { CULT_FAMILY_IDS, lookupCultLemma, toolboxForLemma } from "./cultLexicon";
 import { extractSourceRefs } from "./printSources";
+import { etichettaScheda, idDaEtichetta, numeroInSezione, sezioneDiId, sezioneDaContenuto, definizioneSezione } from "./sezioni";
 
 // Unica fonte per l'etichetta identificativa del record — sostituisce le
 // vecchie stringhe "corpus numero" (CMRDM I 29) costruite ad hoc in più punti.
 export function formatIlaLabel(id: number | undefined): string {
-  return `ILA ${id ?? '?'}`;
+  if (id === undefined) return 'ILA ?';
+  // La sigla della sezione fa parte dell'identificatore: «ILA 29» resta
+  // «ILA 29» per l'epigrafia, un tipo monetale è «ILA N 7».
+  const sigla = definizioneSezione(sezioneDiId(id)).sigla;
+  return `ILA ${sigla ? sigla + ' ' : ''}${numeroInSezione(id)}`;
 }
 
 function escapeXml(unsafe: any): string {
@@ -673,6 +678,12 @@ function parseTeiElement(teiString: string): Monumento {
   const appIdMatch = teiString.match(/<idno\s+type="id">(\d+)<\/idno>/);
   if (appIdMatch) {
     id = parseInt(appIdMatch[1], 10);
+  } else {
+    // Ripiego sull'etichetta citabile (<idno type="ILA">ILA-N-007</idno>):
+    // è la stessa informazione in forma leggibile, e tiene in piedi i file
+    // aperti fuori dall'app o passati per le mani di un editor XML.
+    const etichetta = teiString.match(/<idno\s+type="ILA">([\s\S]*?)<\/idno>/);
+    if (etichetta) id = idDaEtichetta(unescapeXml(etichetta[1].trim())) ?? 0;
   }
 
   // 2. Parse entryId (legacy files may still carry <idno type="entryId">)
@@ -710,7 +721,9 @@ function parseTeiElement(teiString: string): Monumento {
   // Vocabolario aperto: si legge QUALUNQUE <idno type="…"> del publicationStmt
   // che non sia già gestito da un campo proprio, così una sigla inventata in
   // redazione sopravvive al round-trip senza modifiche al codice.
-  const RESERVED_IDNO_TYPES = new Set(["id", "entryid", "firebaseid", "tm", "phi"]);
+  // "ila" è l'etichetta citabile della scheda, non un repertorio esterno:
+  // rientra fra i tipi riservati, altrimenti tornerebbe indietro come extRef.
+  const RESERVED_IDNO_TYPES = new Set(["id", "ila", "entryid", "firebaseid", "tm", "phi"]);
   const extRefs: { type: string; value: string; url?: string }[] = [];
   const pubBlock = teiString.match(/<publicationStmt>([\s\S]*?)<\/publicationStmt>/);
   if (pubBlock) {
@@ -1575,7 +1588,7 @@ function parseTeiElement(teiString: string): Monumento {
   }
 
   // 25. Lessico cultuale (tassonomia cult-functions) — dal markup dell'edizione.
-  const cultScheda = `ILA-${String(id).padStart(3, '0')}`;
+  const cultScheda = etichettaScheda(id);
   // I riferimenti alle fonti a stampa li riconosce il registro (printSources.ts):
   // CMRDM I è la più frequente, non l'unica, e il codice non deve saperlo.
   const fontiStampa = extractSourceRefs(teiString);
@@ -1601,6 +1614,8 @@ function parseTeiElement(teiString: string): Monumento {
     divinita: de.divinita,
     epiteti: dedupeInOrder(de.epiteti.map(canonicalEpithet)),
   }));
+
+  const numismatica = extractNumismatics(teiString);
 
   return {
     id,
@@ -1669,7 +1684,10 @@ function parseTeiElement(teiString: string): Monumento {
     anepigr: facce.length > 0 ? facce.every(f => f.anepigr) : anepigr,
     facce: facce.length > 0 ? facce : undefined,
     iconografia: extractIconography(teiString),
-    numismatica: extractNumismatics(teiString),
+    numismatica,
+    // Dall'id quando l'app gliene ha già assegnato uno; dal contenuto quando
+    // la scheda arriva dall'estrazione e l'id non c'è ancora (sezioni.ts).
+    sezione: id > 0 ? sezioneDiId(id) : sezioneDaContenuto({ tipo, numismatica, facce }),
   } as Monumento;
 }
 
@@ -1889,6 +1907,10 @@ export function monumentiToXml(monumenti: Monumento[]): string {
     block += `            <publicationStmt>\n`;
     block += `                <authority>${escapeXml(auth)}</authority>\n`;
     if (m.id) block += `                <idno type="id">${m.id}</idno>\n`;
+    // L'etichetta citabile accanto all'id applicativo: è la forma con cui la
+    // scheda si cita («ILA-N-007») e la sola che dica la sezione a chi apre il
+    // file fuori dall'app. Derivata, mai digitata (lib/sezioni.ts).
+    if (m.id) block += `                <idno type="ILA">${etichettaScheda(m.id)}</idno>\n`;
     if (m.entryId) block += `                <idno type="entryId">${escapeXml(m.entryId)}</idno>\n`;
     if (m.tm) {
       // idno non ammette @ref nello schema EpiDoc (Jing: attributo non consentito);

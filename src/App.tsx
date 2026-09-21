@@ -60,7 +60,8 @@ const MapView = lazy(() => import('./components/MapView').then(m => ({ default: 
 import { IconographyPanel } from './components/IconographyPanel';
 import { NumismaticsPanel } from './components/NumismaticsPanel';
 import { ErrorBoundary } from './components/ErrorBoundary';
-import { leggiPermalink, scriviPermalink } from './lib/permalink';
+import { leggiPermalink, scriviPermalink, etichettaScheda } from './lib/permalink';
+import { SEZIONI, Sezione, definizioneSezione, etichettaSezione, idDaNumero, nomeFileScheda, sezioneDaContenuto, sezioneDiId } from './lib/sezioni';
 const CooccurrenceHeatmap = lazy(() => import('./components/CooccurrenceHeatmap').then(m => ({ default: m.CooccurrenceHeatmap })));
 const CultLexiconPanel = lazy(() => import('./components/CultLexiconPanel').then(m => ({ default: m.CultLexiconPanel })));
 const LessicoLaresEditor = lazy(() => import('./components/LessicoLaresEditor').then(m => ({ default: m.LessicoLaresEditor })));
@@ -716,7 +717,7 @@ const AttestationList = ({
               className="group grid grid-cols-[4.5rem_2fr_6rem_6rem_1.25rem] items-center gap-3 px-3 py-3.5 cursor-pointer hover:bg-accent/5 transition-colors"
             >
               <span className="shrink-0 text-[11px] font-mono font-bold text-accent/80 group-hover:text-accent transition-colors truncate">
-                ILA-{m.id.toString().padStart(3, '0')}
+                {etichettaScheda(m.id)}
               </span>
               <div className="min-w-0 flex flex-col gap-0.5">
                 <span className="text-sm font-bold font-serif text-ink group-hover:text-accent transition-colors truncate">{getDisplayTitle(m)}</span>
@@ -4011,6 +4012,7 @@ function sanitizeEntryId(raw: string): string {
 // il "Reset Filtri" in fondo alla tendina), così restano sempre allineati.
 const DEFAULT_FILTERS: FilterState = {
   searchText: '',
+  sezione: '',
   regione: '',
   citta: '',
   tipo: '',
@@ -4149,6 +4151,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
   // conta.
   const hasActiveFilters =
     filters.searchText !== '' ||
+    filters.sezione !== '' ||
     filters.regione !== '' ||
     filters.citta !== '' ||
     filters.tipo !== '' ||
@@ -4275,10 +4278,18 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
   // epigrafiche non devono guadagnare una linguetta vuota.
   const RECORD_SECTIONS: { id: string; label: string }[] = useMemo(() => {
     const num = selectedMonumento?.numismatica;
-    const haNumismatica = !!num && Object.values(num).some(v => v !== undefined);
+    const sezione = selectedMonumento
+      ? (selectedMonumento.sezione ?? sezioneDiId(selectedMonumento.id))
+      : 'epigrafia';
+    // Su un tipo monetale la scheda numismatica c'è sempre, anche prima che sia
+    // compilata: è la sezione propria di quella scheda, non un di più che
+    // compare quando qualcuno ha riempito un campo.
+    const haNumismatica = sezione === 'numismatica'
+      || (!!num && Object.values(num).some(v => v !== undefined));
+    const eMoneta = sezione === 'numismatica';
     return [
-      { id: 'supporto', label: 'Supporto Epigrafico' },
-      { id: 'iscrizione', label: 'Iscrizione' },
+      { id: 'supporto', label: eMoneta ? 'Supporto' : 'Supporto Epigrafico' },
+      { id: 'iscrizione', label: eMoneta ? 'Legenda' : 'Iscrizione' },
       ...(haNumismatica ? [{ id: 'numismatica', label: 'Numismatica' }] : []),
       { id: 'iconografia', label: 'Iconografia' },
       { id: 'bibliografia', label: 'Bibliografia' },
@@ -4689,6 +4700,19 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
     }
   };
 
+  // Quante schede ha ciascuna sezione del corpus: serve alla riga di
+  // intestazione dell'elenco, che è anche il punto in cui si passa dall'una
+  // all'altra. Una sezione ancora vuota resta visibile, con il suo zero: è
+  // l'indice di un'opera in più volumi, non un cruscotto che nasconde i vuoti.
+  const conteggioSezioni = useMemo(() => {
+    const conte = new Map<Sezione, number>(SEZIONI.map(d => [d.id, 0]));
+    for (const m of monumenti) {
+      const sez = m.sezione ?? sezioneDiId(m.id);
+      conte.set(sez, (conte.get(sez) ?? 0) + 1);
+    }
+    return conte;
+  }, [monumenti]);
+
   const regions = useMemo(() => Array.from(new Set(monumenti.map(m => m.regione).filter(Boolean).map(s => s.trim()))).sort(), [monumenti]);
   const cities = useMemo(() => Array.from(new Set(monumenti.map(m => m.citta).filter(Boolean).map(s => s.trim()))).sort(), [monumenti]);
   const types = useMemo(() => Array.from(new Set(monumenti.map(m => m.tipo).filter(Boolean).map(s => s.trim()))).sort(), [monumenti]);
@@ -4721,6 +4745,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
         // risultato" prima che la risposta arrivi.
         const matchesSearch = searchResultIds === null || searchPending || searchResultIds.has(m.id);
         
+        const matchesSezione = !filters.sezione || (m.sezione ?? sezioneDiId(m.id)) === filters.sezione;
         const matchesRegione = !filters.regione || m.regione === filters.regione;
         const matchesCitta = !filters.citta || m.citta === filters.citta;
         const matchesTipo = !filters.tipo || m.tipo === filters.tipo;
@@ -4743,7 +4768,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
 
         const matchesDate = (!m.data_inizio || !m.data_fine) || (m.data_inizio >= filters.dateRange[0] && m.data_fine <= filters.dateRange[1]);
 
-        return matchesSearch && matchesRegione && matchesCitta && matchesTipo && matchesMateriale && matchesIconAttributo && matchesIconFunzione && matchesIconPosizione && matchesInscr && matchesAnep && matchesHasTrad && matchesNoTrad && matchesDate;
+        return matchesSearch && matchesSezione && matchesRegione && matchesCitta && matchesTipo && matchesMateriale && matchesIconAttributo && matchesIconFunzione && matchesIconPosizione && matchesInscr && matchesAnep && matchesHasTrad && matchesNoTrad && matchesDate;
       })
       .sort((a, b) => {
         if (sortField === 'citta') {
@@ -4797,13 +4822,19 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
       return;
     }
     
-    // Sort by current ID to preserve relative order before re-assigning
+    // Sort by current ID to preserve relative order before re-assigning.
+    // Il riordino è PER SEZIONE: le due serie hanno una numerazione propria
+    // (ILA-042, ILA-N-007) e un blocco di id riservato, così rinumerare le
+    // epigrafi non tocca i tipi monetali e viceversa (lib/sezioni.ts).
+    const contatori = new Map<Sezione, number>();
     const reindexed = [...data]
       .sort((a, b) => a.id - b.id)
-      .map((m, index) => ({
-        ...m,
-        id: index + 1
-      }));
+      .map((m) => {
+        const sezione = m.sezione ?? sezioneDiId(m.id);
+        const numero = (contatori.get(sezione) ?? 0) + 1;
+        contatori.set(sezione, numero);
+        return { ...m, sezione, id: idDaNumero(sezione, numero) };
+      });
     
     // Sulla build statica (GitHub Pages) il salvataggio scrive le schede una
     // ad una su GitHub in un pool a concorrenza limitata (apiShim.ts): con
@@ -4961,17 +4992,26 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
           }
         }
         
-        // Assign sequential ids: preserve existing ones, fill gaps for new entries
+        // Assign sequential ids: preserve existing ones, fill gaps for new entries.
+        // Ogni sezione ha il suo blocco di id (lib/sezioni.ts): una scheda
+        // numismatica importata prende il primo numero libero della serie N,
+        // non il primo numero libero in assoluto.
         const existingIds = new Set(monumenti.map(m => m.id).filter(Boolean));
-        let nextId = monumenti.length > 0 ? Math.max(...monumenti.map(m => m.id)) + 1 : 1;
-        const getNextId = () => { while (existingIds.has(nextId)) nextId++; return nextId++; };
+        const prossimo = new Map<Sezione, number>();
+        const getNextId = (sezione: Sezione) => {
+          let n = prossimo.get(sezione) ?? 1;
+          while (existingIds.has(idDaNumero(sezione, n))) n++;
+          prossimo.set(sezione, n + 1);
+          return idDaNumero(sezione, n);
+        };
 
         const sanitized = loadedMonuments.map((m, index) => ({
           // Preserve the physical corpus file path (set above for XML imports) so the
           // server patches the existing file rather than creating a duplicate.
           _corpusFile: (m as any)._corpusFile,
           // Identity — preserve existing app id, assign new sequential one if missing
-          id: m.id || getNextId(),
+          sezione: m.sezione ?? (m.id ? sezioneDiId(m.id) : sezioneDaContenuto(m)),
+          id: m.id || getNextId(m.sezione ?? sezioneDaContenuto(m)),
           entryId: m.entryId || `gen-${Date.now()}-${Math.random().toString(36).slice(2)}`,
           // Core descriptive
           titolo: m.titolo || `Scheda #${m.id || index + 1}`,
@@ -5323,7 +5363,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = `ILA-${String(m.id).padStart(3, '0')}.xml`;
+    link.download = nomeFileScheda(m.id);
     link.click();
     URL.revokeObjectURL(url);
   };
@@ -6166,7 +6206,33 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                 {/* Record List */}
                 <div className="flex-1 flex flex-col overflow-hidden min-h-0 glass-panel glass-panel-elevated rounded-2xl">
                   <div className="px-6 pt-6 mb-2 flex items-center justify-between border-b border-border/20 pb-3 font-sans text-[10px] font-bold uppercase tracking-[0.2em] text-muted">
-                    <span role="status" aria-live="polite">Visualizzazione di {filteredMonumenti.length} schede</span>
+                    <div className="flex items-center gap-4 min-w-0">
+                      {/* Le sezioni del corpus: la divisione principale del
+                          catalogo, non un filtro in fondo alla tendina. */}
+                      <div className="flex items-center gap-3 shrink-0" role="group" aria-label="Sezione del corpus">
+                        <button
+                          onClick={() => setFilters(f => ({ ...f, sezione: '' }))}
+                          className={cn("hover:text-accent transition-colors", filters.sezione === '' && "text-accent")}
+                          aria-pressed={filters.sezione === ''}
+                        >
+                          Tutto <span className="opacity-40">{monumenti.length}</span>
+                        </button>
+                        {SEZIONI.map(def => (
+                          <button
+                            key={def.id}
+                            onClick={() => setFilters(f => ({ ...f, sezione: f.sezione === def.id ? '' : def.id }))}
+                            className={cn("hover:text-accent transition-colors", filters.sezione === def.id && "text-accent")}
+                            aria-pressed={filters.sezione === def.id}
+                            style={filters.sezione === def.id ? { color: `var(${def.colore})` } : undefined}
+                            title={`Solo ${def.label.toLowerCase()}`}
+                          >
+                            {def.label} <span className="opacity-40">{conteggioSezioni.get(def.id) ?? 0}</span>
+                          </button>
+                        ))}
+                      </div>
+                      <span className="opacity-30" aria-hidden="true">·</span>
+                      <span role="status" aria-live="polite" className="truncate">Visualizzazione di {filteredMonumenti.length} schede</span>
+                    </div>
                     <div className="flex items-center gap-4">
                       <span className="opacity-30 lowercase">Ordina per:</span>
                       <button onClick={() => toggleSort('id')} className={cn("hover:text-accent transition-colors", sortField === 'id' && "text-accent")}>ID</button>
@@ -6410,7 +6476,12 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
 
                       {filteredMonumenti.length === 0 && (
                         <div role="status" aria-live="polite" className="text-center py-16 text-muted/60 font-serif italic text-sm">
-                          Nessuna scheda corrisponde ai filtri attivi.
+                          {/* Una sezione ancora da popolare non è un filtro troppo
+                              stretto: dirlo per quello che è evita di mandare il
+                              lettore a cercare l'errore fra i filtri. */}
+                          {filters.sezione && (conteggioSezioni.get(filters.sezione) ?? 0) === 0
+                            ? `La sezione ${etichettaSezione(filters.sezione).toLowerCase()} non ha ancora schede.`
+                            : 'Nessuna scheda corrisponde ai filtri attivi.'}
                           {hasActiveFilters && (
                             <div className="mt-3">
                               <button
@@ -7324,6 +7395,20 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                               <span className="bg-accent/10 text-accent text-[10px] font-bold px-2 py-0.5 rounded-sm uppercase tracking-tighter">
                                 {formatIlaLabel(selectedMonumento.id)}
                               </span>
+                              {/* La sezione del corpus a cui la scheda appartiene: si dice
+                                  solo quando non è quella predefinita, perché il lettore di
+                                  un'epigrafe non ha bisogno che gliela si annunci. */}
+                              {(selectedMonumento.sezione ?? sezioneDiId(selectedMonumento.id)) !== 'epigrafia' && (
+                                <span
+                                  className="text-[10px] font-bold px-2 py-0.5 rounded-sm uppercase tracking-tighter"
+                                  style={{
+                                    color: `var(${definizioneSezione(selectedMonumento.sezione ?? sezioneDiId(selectedMonumento.id)).colore})`,
+                                    backgroundColor: `color-mix(in srgb, var(${definizioneSezione(selectedMonumento.sezione ?? sezioneDiId(selectedMonumento.id)).colore}) 12%, transparent)`,
+                                  }}
+                                >
+                                  {etichettaSezione(selectedMonumento.sezione ?? sezioneDiId(selectedMonumento.id))}
+                                </span>
+                              )}
                               {selectedMonumento.tm && (
                                 selectedMonumento.tmLink ? (
                                   <a

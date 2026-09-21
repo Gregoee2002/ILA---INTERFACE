@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { BookMarked, Loader2, Search, Wand2, Check, ChevronRight, AlertTriangle } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { Monumento } from '../types';
+import { etichettaScheda } from '../lib/sezioni';
 import { PRINT_SOURCES } from '../lib/printSources';
 
 /**
@@ -319,7 +320,7 @@ export function BibliographyIndex({ monumenti, onApply, onSelectMonumento, progr
                       onClick={() => onSelectMonumento(m)}
                       className="text-[9px] font-sans uppercase tracking-wide text-muted/70 hover:text-accent transition-colors"
                     >
-                      ILA-{String(m.id).padStart(3, '0')}
+                      {etichettaScheda(m.id)}
                     </button>
                   ))}
                   {row.schede.length > 12 && (

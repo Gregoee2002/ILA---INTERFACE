@@ -8,6 +8,7 @@ import 'leaflet/dist/leaflet.css';
 import 'leaflet.markercluster/dist/MarkerCluster.css';
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
 import { Monumento } from '../types';
+import { etichettaScheda } from '../lib/sezioni';
 import { cn } from '../lib/utils';
 import { formatIlaLabel } from '../lib/xmlUtils';
 import { formatSecoliAttestazione } from '../lib/chronology';
@@ -327,7 +328,7 @@ const InscriptionDrilldown: React.FC<{
               )}
             >
               <span className="shrink-0 text-[9px] font-mono font-bold text-muted/60 w-12">
-                ILA-{m.id.toString().padStart(3, '0')}
+                {etichettaScheda(m.id)}
               </span>
               <span className="flex-1 min-w-0 text-xs font-serif text-ink group-hover:text-accent truncate">
                 {m.titolo || m.citta || 'Senza titolo'}

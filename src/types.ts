@@ -1,4 +1,6 @@
 import { SourceRef } from './lib/printSources';
+import { Sezione } from './lib/sezioni';
+export type { Sezione };
 export interface Traduzione {
   lang: string;
   testo: string;
@@ -269,6 +271,14 @@ export interface CultAttestation {
 export interface Monumento {
   entryId?: string;
   id: number;
+  /**
+   * La sezione del corpus a cui la scheda appartiene (`lib/sezioni.ts`).
+   * È ridondante rispetto a `id` — il blocco di numerazione la determina — ma
+   * sta nel modello perché filtri, validazione e interfaccia la leggono a ogni
+   * riga e non devono rifare il conto. Il parser la ricava dall'id quando c'è,
+   * dal contenuto della scheda quando l'id non è ancora assegnato.
+   */
+  sezione?: Sezione;
   titolo?: string;
   conserv?: string;
   regione: string;
@@ -378,6 +388,12 @@ export type SortField = keyof Monumento | 'epiteti';
 
 export interface FilterState {
   searchText: string;
+  /**
+   * La sezione del corpus da mostrare; stringa vuota = tutto il corpus.
+   * Non è un filtro come gli altri — è la divisione principale del catalogo
+   * (lib/sezioni.ts) — ma vive qui perché l'elenco ne legge una sola.
+   */
+  sezione: Sezione | '';
   regione: string;
   citta: string;
   tipo: string;

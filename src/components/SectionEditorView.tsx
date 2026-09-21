@@ -8,6 +8,7 @@ import {
 import { cn, stripAccents } from '../lib/utils';
 import { Monumento, OrigDate, Traduzione, Bibliografia, Revision, Responsabile, ExternalRef, IconographicFigure, IconographicTrait, NumismaticData, NumMeasure, NumSpecimen, CoinFace, COIN_FACE_LABELS, EditionFace, Facsimile, EDITORIAL_STATUS_LABELS } from '../types';
 import { DENOMINATIONS, MANUFACTURES, METALS, MINTS, nomismaRef, numLabel } from '../lib/numismaticVocab';
+import { Sezione, etichettaSezione, sezioneDiId } from '../lib/sezioni';
 import { xmlToMonumenti, formatIlaLabel, renderEditionFaces } from '../lib/xmlUtils';
 import { EditionMarkupEditor } from './EditionMarkupEditor';
 import { DivinityEpithetIndex } from './DivinityEpithetIndex';
@@ -64,6 +65,25 @@ const SECTION_META: SectionMeta[] = [
 ];
 
 const GROUPS: SectionMeta['group'][] = ['Intestazione', 'Storia', 'Testo', 'Apparato scientifico'];
+
+/**
+ * Le sezioni dell'editor che NON si applicano a una sezione del corpus.
+ *
+ * Su una scheda numismatica l'unità schedata è il tipo, non l'oggetto
+ * (docs/piano-numismatica-2026-09-21.md §4): un tipo non è conservato in nessun
+ * museo, non ha vicende, non ha un'impaginazione né una mano. Quei campi non
+ * sono «da compilare»: non esistono, e l'editor deve dirlo invece di mostrarli
+ * come lacune. All'inverso, il blocco numismatico non riguarda un'epigrafe.
+ */
+const SEZIONI_NON_APPLICABILI: Record<Sezione, SectionId[]> = {
+  epigrafia: ['numismatics'],
+  numismatica: ['msIdentifier', 'provenance', 'layout', 'hand'],
+};
+
+const MOTIVO_NON_APPLICABILE: Record<Sezione, string> = {
+  epigrafia: 'Sezione della scheda: epigrafia. I campi numismatici riguardano i tipi monetali.',
+  numismatica: 'Sezione della scheda: numismatica. L\u2019unità schedata è il tipo, non l\u2019esemplare: non ha luogo di conservazione, vicende, impaginazione né mano. Lasciarli vuoti è la compilazione corretta.',
+};
 
 /** Ripartizioni regionali attestate nel corpus, offerte come suggerimento —
  *  il campo resta testo libero per qualunque altro valore. Non sono le sezioni
@@ -587,9 +607,24 @@ export const SectionEditorView: React.FC<Props> = ({ monumenti, effectiveAdmin, 
   }), [monumenti]);
 
   /* ── stato di ogni sezione per il rail ─────────────────────────── */
-  const sectionState = (id: SectionId): 'dirty' | 'present' | 'absent' => {
+  /** La sezione del corpus della scheda aperta (lib/sezioni.ts). */
+  const sezioneScheda: Sezione = model
+    ? (model.sezione ?? sezioneDiId(model.id))
+    : 'epigrafia';
+  const nonApplicabile = (id: SectionId): boolean =>
+    SEZIONI_NON_APPLICABILI[sezioneScheda].includes(id);
+
+  const sectionState = (id: SectionId): 'dirty' | 'present' | 'absent' | 'inapplicabile' => {
     if (dirtySections.includes(id)) return 'dirty';
     if (!model) return 'absent';
+    // Una sezione che non si applica ma è compilata resta segnalata come
+    // presente: è un dato da guardare, non da nascondere.
+    const fieldsPresenti = SECTION_FIELDS[id];
+    const compilata = fieldsPresenti.some(f => {
+      const v = (model as any)[f];
+      return v !== undefined && v !== null && v !== '' && !(Array.isArray(v) && v.length === 0);
+    });
+    if (!compilata && nonApplicabile(id)) return 'inapplicabile';
     const fields = SECTION_FIELDS[id];
     const has = fields.some(f => {
       const v = (model as any)[f];
@@ -774,10 +809,15 @@ export const SectionEditorView: React.FC<Props> = ({ monumenti, effectiveAdmin, 
                   >
                     <span className={cn(
                       'w-1.5 h-1.5 rounded-full shrink-0 transition-colors',
-                      st === 'dirty' ? 'bg-warning' : st === 'present' ? 'bg-accent/60' : 'bg-transparent border border-muted/30',
+                      st === 'dirty' ? 'bg-warning' : st === 'present' ? 'bg-accent/60' : st === 'inapplicabile' ? 'bg-transparent' : 'bg-transparent border border-muted/30',
                     )} />
-                    <span className={cn('text-[13px] font-serif flex-1 truncate', isActive && 'font-semibold')}>{s.label}</span>
+                    <span className={cn(
+                      'text-[13px] font-serif flex-1 truncate',
+                      isActive && 'font-semibold',
+                      st === 'inapplicabile' && !isActive && 'text-muted/40 italic',
+                    )}>{s.label}</span>
                     {st === 'dirty' && <span className="text-[9px] font-sans font-bold uppercase tracking-wider text-warning">mod.</span>}
+                    {st === 'inapplicabile' && <span className="text-[9px] font-sans uppercase tracking-wider text-muted/40" title={MOTIVO_NON_APPLICABILE[sezioneScheda]}>n/a</span>}
                   </button>
                 );
               })}
@@ -973,6 +1013,7 @@ function renderSectionForm(
             />
           </div>
           <div className="md:col-span-2 flex gap-6 text-xs text-muted font-serif italic pt-1">
+            <span>Sezione: <span className="not-italic font-semibold text-ink">{etichettaSezione(m.sezione ?? sezioneDiId(m.id))}</span></span>
             <span>ID applicativo: <span className="not-italic font-semibold text-ink">{formatIlaLabel(m.id)}</span></span>
             <span>entryId: <span className="not-italic font-semibold text-ink">{m.entryId || '—'}</span></span>
             <span className="text-muted/60">(assegnati automaticamente, non modificabili)</span>

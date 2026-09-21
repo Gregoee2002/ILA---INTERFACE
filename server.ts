@@ -12,6 +12,7 @@ import { normalizeRegistro } from "./src/lib/registroMigration";
 import { mergeIconographyOverrides } from "./src/lib/iconographyLabels";
 import { validateOverlay } from "./src/lib/lessicoLaresOverlay";
 import { buildSearchIndex, searchMonumenti } from "./src/lib/searchIndex";
+import { nomeFileScheda } from "./src/lib/sezioni";
 import MiniSearch from 'minisearch';
 
 async function startServer() {
@@ -153,10 +154,11 @@ async function startServer() {
 
   // ── Helpers ──────────────────────────────────────────────────────────────
 
-  // Build a safe filename from a Monumento: ILA-001.xml
+  // Il file del corpus che contiene una scheda: ILA-001.xml per l'epigrafia,
+  // ILA-N-001.xml per la numismatica. Il nome lo compone sezioni.ts a partire
+  // dall'id, come l'etichetta citabile: un solo posto, due scritture.
   function buildFilename(m: any): string {
-    const id = String(m.id || 0).padStart(3, '0');
-    return `ILA-${id}.xml`;
+    return nomeFileScheda(Number(m.id) || 0);
   }
 
   // Impronta del contenuto di un file del corpus, usata come controllo di

@@ -18,22 +18,17 @@
  */
 
 import { Monumento } from '../types';
+import { etichettaScheda, idDaEtichetta } from './sezioni';
+
+// L'etichetta e la sua lettura stanno in sezioni.ts, perché dipendono dalla
+// sezione della scheda (`ILA-042` / `ILA-N-007`); si ri-esportano da qui per
+// non spostare i punti di chiamata storici.
+export { etichettaScheda, idDaEtichetta };
 
 export interface StatoPermalink {
   vista?: string;
   /** id numerico della scheda, già estratto dall'etichetta ILA-NNN. */
   scheda?: number;
-}
-
-/** «ILA-042» dall'id numerico. Unico posto in cui si compone l'etichetta. */
-export function etichettaScheda(id: number): string {
-  return `ILA-${String(id).padStart(3, '0')}`;
-}
-
-/** Accetta «ILA-042», «ila-42», «042», «42». */
-export function idDaEtichetta(s: string): number | undefined {
-  const m = (s || '').trim().match(/^(?:ILA[-\s]?)?0*(\d{1,4})$/i);
-  return m ? Number(m[1]) : undefined;
 }
 
 export function leggiPermalink(search: string = typeof window !== 'undefined' ? window.location.search : ''): StatoPermalink {

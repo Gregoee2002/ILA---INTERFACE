@@ -317,6 +317,36 @@ Nessuna di queste fasi popola dati: il corpus numismatico resta vuoto.
   `.claude/skills/cmrdm-ii-numismatica/`, con segmentatore testato sul PDF
   reale. La revisione umana resta obbligatoria.
 
+- **N8 — la sezione nel database.** ✅ `src/lib/sezioni.ts`: il registro delle
+  sezioni del corpus (etichette, numerazione, nomi di file, colore). La
+  sezione diventa un campo della scheda (`Monumento.sezione`), derivato
+  dall'id quando c'è e dal contenuto quando la scheda arriva dall'estrazione.
+
+  Decisioni prese il 2026-09-21, in aggiunta a §4:
+
+  - **Serie di identificatori separata.** Un tipo monetale si cita `ILA-N-007`,
+    un'epigrafe resta `ILA-042`. Le due serie hanno una numerazione propria che
+    parte da 1, e il riordino degli id lavora dentro una sezione senza toccare
+    l'altra.
+  - **Un blocco di id per sezione** (`AMPIEZZA_BLOCCO = 10000`) invece di due
+    contatori: `Monumento.id` resta unico e numerico — è la chiave di tutta
+    l'applicazione — e il numero di sezione è `id - offset`. Niente stato da
+    tenere allineato, e la sezione si legge dall'id anche fuori dall'app.
+  - **Una sola cartella `corpus/`.** La sezione è un campo, non una directory:
+    un solo store, un solo boot-sync, un solo indice di ricerca, e nessun punto
+    in cui i due sottocorpora possano divergere.
+  - **`<idno type="ILA">`** accanto all'id applicativo: l'etichetta citabile,
+    derivata e mai digitata, che dice la sezione a chi apre il file fuori
+    dall'app. Rientra fra i tipi riservati, così non torna indietro come
+    repertorio esterno.
+  - **Le sezioni dell'editor che non si applicano si dicono tali.** Su un tipo
+    monetale Conservazione, Provenienza, Impaginazione e Mano sono marcate
+    `n/a` invece che «assenti»: un tipo non è conservato da nessuna parte
+    (§4), e lasciarle vuote è la compilazione corretta, non una lacuna.
+  - Nel catalogo la scelta della sezione sta in testa all'elenco, con i
+    conteggi, accanto all'ordinamento; nella scheda la sezione compare come
+    etichetta solo quando non è quella epigrafica.
+
 Colore della sezione: **oro** (`--num`), token accanto a `--cult` e `--lit`.
 
 ## 8. Decisioni aperte

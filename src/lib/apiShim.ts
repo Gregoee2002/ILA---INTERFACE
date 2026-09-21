@@ -38,6 +38,7 @@ import { validateOverlay } from "./lessicoLaresOverlay";
 import { EntryRegistro, BugReport } from "../types";
 import { normalizeRegistro } from "./registroMigration";
 import { mergeIconographyOverrides } from "./iconographyLabels";
+import { nomeFileScheda } from "./sezioni";
 
 let corpusStore = new Map<string, string>(); // filename -> xml content
 let searchIndex: MiniSearch<any> | null = null;
@@ -98,8 +99,7 @@ async function sha256(content: string): Promise<string> {
 // ── Stesse funzioni pure di server.ts (nessuna dipendenza Node) ─────────
 
 function buildFilename(m: any): string {
-  const id = String(m.id || 0).padStart(3, "0");
-  return `ILA-${id}.xml`;
+  return nomeFileScheda(Number(m.id) || 0);
 }
 
 function validateMonumentoShape(m: any): string | null {
