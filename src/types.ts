@@ -1,5 +1,5 @@
 import { SourceRef } from './lib/printSources';
-import { Sezione } from './lib/sezioni';
+import type { Sezione } from './lib/sezioni';
 export type { Sezione };
 export interface Traduzione {
   lang: string;
@@ -388,12 +388,6 @@ export type SortField = keyof Monumento | 'epiteti';
 
 export interface FilterState {
   searchText: string;
-  /**
-   * La sezione del corpus da mostrare; stringa vuota = tutto il corpus.
-   * Non è un filtro come gli altri — è la divisione principale del catalogo
-   * (lib/sezioni.ts) — ma vive qui perché l'elenco ne legge una sola.
-   */
-  sezione: Sezione | '';
   regione: string;
   citta: string;
   tipo: string;

@@ -42,7 +42,8 @@ import {
   BookMarked,
   Type,
   Tags,
-  ScrollText
+  ScrollText,
+  Coins
 } from 'lucide-react';
 import { cn, EASE_OUT, EASE_IN, SPRING_SNAPPY, SPRING_SOFT, gapGlyph } from './lib/utils';
 import { ICONOGRAPHY_LABELS } from './lib/iconographyLabels';
@@ -93,7 +94,7 @@ interface SearchResult {
   matchInSupplied: boolean;
 }
 
-type AppView = 'home' | 'catalog' | 'sources' | 'stats' | 'timeline' | 'health' | 'map' | 'heatmap' | 'cult' | 'editor' | 'review' | 'flags' | 'bugs' | 'biblio' | 'lessico-lares';
+type AppView = 'home' | 'catalog' | 'monete' | 'sources' | 'stats' | 'timeline' | 'health' | 'map' | 'heatmap' | 'cult' | 'editor' | 'review' | 'flags' | 'bugs' | 'biblio' | 'lessico-lares';
 
 // true sulla build GitHub Pages (vedi vite.config.ts / apiShim.ts): niente
 // server.ts, quindi le funzionalità che dipendevano da Gemini AI o dalla
@@ -1749,6 +1750,10 @@ const RAIL_HOME_MOON = getMoonPhase();
 const RAIL_ITEMS: { view: AppView; label: string; icon: React.ReactNode; adminOnly?: boolean }[] = [
   { view: 'home', label: 'Home', icon: <MoonDisc illum={RAIL_HOME_MOON.illum} waxing={RAIL_HOME_MOON.waxing} size={16} opacity={0.7} /> },
   { view: 'catalog', label: 'Catalogo', icon: <Book className="h-4 w-4" /> },
+  // Le due sezioni del corpus hanno ciascuna la propria porta: il catalogo
+  // è l'epigrafia, «Monete» la numismatica (lib/sezioni.ts). Stesso elenco,
+  // stessi filtri, insiemi separati.
+  { view: 'monete', label: 'Monete', icon: <Coins className="h-4 w-4" /> },
   { view: 'sources', label: 'Fonti letterarie', icon: <ScrollText className="h-4 w-4" /> },
   { view: 'map', label: 'Mappa', icon: <MapPin className="h-4 w-4" /> },
   { view: 'timeline', label: 'Cronologia', icon: <Clock className="h-4 w-4" /> },
@@ -2098,10 +2103,11 @@ function HomeView({ monumenti, onNavigate, onSearch, effectiveAdmin }: { monumen
     };
   }, [monumenti]);
 
-  // Le due porte d'ingresso al progetto, affiancate: la pietra e il libro.
-  // Il Catalogo raccoglie ciò che è inciso, le Fonti letterarie ciò che è
-  // scritto sulla stessa divinità — sono due sezioni pari, non una principale
-  // e una accessoria, e la home lo dice mettendole sulla stessa riga.
+  // Le porte d'ingresso al progetto, affiancate: la pietra, il metallo, il
+  // libro. Il Catalogo raccoglie ciò che è inciso, le Monete ciò che è coniato,
+  // le Fonti letterarie ciò che è scritto sulla stessa divinità — sono sezioni
+  // pari, non una principale e due accessorie, e la home lo dice mettendole
+  // sulla stessa riga.
   const heroSections: { view: AppView; eyebrow: string; label: string; desc: string; icon: React.ReactNode; tint: string; luce: number }[] = [
     {
       view: 'catalog',
@@ -2111,6 +2117,15 @@ function HomeView({ monumenti, onNavigate, onSearch, effectiveAdmin }: { monumen
       icon: <Book className="h-6 w-6 md:h-7 md:w-7" />,
       tint: 'var(--accent)',
       luce: 62,
+    },
+    {
+      view: 'monete',
+      eyebrow: 'Sul metallo',
+      label: 'Monete',
+      desc: 'I tipi monetali con Men: zecca, nominale, dritto e rovescio.',
+      icon: <Coins className="h-6 w-6 md:h-7 md:w-7" />,
+      tint: 'var(--num)',
+      luce: 75,
     },
     {
       view: 'sources',
@@ -2193,10 +2208,10 @@ function HomeView({ monumenti, onNavigate, onSearch, effectiveAdmin }: { monumen
         </div>
       </div>
 
-      {/* Le due sezioni portanti, affiancate e di pari rango. Stessa tinta —
-          il verde del database — ma i testi in una gradazione più chiara:
-          sono lo stesso archivio guardato da due lati, non due archivi. */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+      {/* Le sezioni portanti, affiancate e di pari rango: lo stesso archivio
+          guardato da tre lati, non tre archivi. Il Catalogo e le Fonti tengono
+          il verde del database, le Monete l'oro della loro sezione. */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
         {heroSections.map((hero, hi) => (
         <motion.button
           key={hero.view}
@@ -4012,7 +4027,6 @@ function sanitizeEntryId(raw: string): string {
 // il "Reset Filtri" in fondo alla tendina), così restano sempre allineati.
 const DEFAULT_FILTERS: FilterState = {
   searchText: '',
-  sezione: '',
   regione: '',
   citta: '',
   tipo: '',
@@ -4145,13 +4159,25 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
   
   const [filters, setFilters] = useState<FilterState>(DEFAULT_FILTERS);
 
+  // Catalogo e Monete sono la stessa vista su due insiemi separati: quale dei
+  // due si stia guardando lo dice la vista attiva, non un filtro. Così non
+  // esiste uno stato in cui la voce di navigazione dice una cosa e l'elenco
+  // ne mostra un'altra.
+  const inCatalogo = activeView === 'catalog' || activeView === 'monete';
+  const sezioneAttiva: Sezione = activeView === 'monete' ? 'numismatica' : 'epigrafia';
+  const vistaDiSezione = (s: Sezione): AppView => (s === 'numismatica' ? 'monete' : 'catalog');
+  /** Apre una scheda nella vista della sua sezione: una moneta non si apre nel catalogo epigrafico. */
+  const apriScheda = (m: Monumento) => {
+    setSelectedMonumento(m);
+    setActiveView(vistaDiSezione(m.sezione ?? sezioneDiId(m.id)));
+  };
+
   // Vero quando almeno un filtro (o la ricerca testuale) è diverso dallo stato
   // di partenza: pilota la comparsa del pulsante rapido "Azzera filtri" accanto
   // alla barra di ricerca. searchMode è una modalità, non un filtro, quindi non
   // conta.
   const hasActiveFilters =
     filters.searchText !== '' ||
-    filters.sezione !== '' ||
     filters.regione !== '' ||
     filters.citta !== '' ||
     filters.tipo !== '' ||
@@ -4400,7 +4426,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
     if (vista || scheda !== undefined) setShowLanding(false);
     if (scheda !== undefined) {
       const m = monumenti.find(x => x.id === scheda);
-      if (m) { setSelectedMonumento(m); setActiveView('catalog'); setHasNavigated(true); return; }
+      if (m) { apriScheda(m); setHasNavigated(true); return; }
     }
     if (vista) { setActiveView(vista as AppView); setHasNavigated(true); }
   }, [monumenti]);
@@ -4745,7 +4771,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
         // risultato" prima che la risposta arrivi.
         const matchesSearch = searchResultIds === null || searchPending || searchResultIds.has(m.id);
         
-        const matchesSezione = !filters.sezione || (m.sezione ?? sezioneDiId(m.id)) === filters.sezione;
+        const matchesSezione = (m.sezione ?? sezioneDiId(m.id)) === sezioneAttiva;
         const matchesRegione = !filters.regione || m.regione === filters.regione;
         const matchesCitta = !filters.citta || m.citta === filters.citta;
         const matchesTipo = !filters.tipo || m.tipo === filters.tipo;
@@ -4788,12 +4814,12 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
         }
         return 0;
       });
-  }, [monumenti, filters, sortField, sortOrder, searchResultIds, searchPending]);
+  }, [monumenti, filters, sezioneAttiva, sortField, sortOrder, searchResultIds, searchPending]);
 
   useEffect(() => {
     setCurrentPage(1);
     setSelectedIds(new Set());
-  }, [filters]);
+  }, [filters, sezioneAttiva]);
 
 
   const totalPages = Math.ceil(filteredMonumenti.length / ITEMS_PER_PAGE);
@@ -5692,7 +5718,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
       {/* Editorial Header — solo nel catalogo, ridotto a barra di ricerca: negli
           altri contesti le funzioni (tema/impostazioni/account/navigazione)
           sono già tutte in barra laterale, quindi qui sarebbe solo vuoto. */}
-      {activeView === 'catalog' && (
+      {inCatalogo && (
       <header className={cn(
         "mx-2.5 md:mx-5 lg:mx-6 mt-4 mb-2 rounded-2xl bg-[var(--card)]/85 dark:bg-[var(--card)]/70 backdrop-blur-xl border border-[var(--border)]/60 dark:border-[var(--border)]/50 shrink-0 gap-4 min-h-fit shadow-[0_12px_40px_-12px_rgba(var(--shadow-color),0.18),_inset_0_1px_2px_rgba(255,255,255,0.5)] dark:shadow-[0_12px_40px_-12px_rgba(0,0,0,0.5),_inset_0_1px_1px_rgba(255,255,255,0.08)] flex flex-col lg:flex-row items-stretch lg:items-center justify-between transition-all duration-500 relative sticky top-2 z-30",
         hasNavigated ? "px-5 py-2.5" : "px-8 md:px-10 py-6"
@@ -5707,7 +5733,11 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
           </div>
           <div className="mt-2 lg:mt-4 flex flex-col items-start">
             <p className="text-lg md:text-xl italic text-muted font-serif text-ink/70 leading-tight">Index lunae antiquae</p>
-            <p className="text-[11px] md:text-[12px] font-sans font-bold uppercase tracking-[0.15em] text-muted/60 leading-none mt-2 whitespace-nowrap">Database Epigrafico</p>
+            {/* L'occhiello dice quale delle due sezioni si sta sfogliando: la
+                stessa barra serve il catalogo epigrafico e quello monetale. */}
+            <p className="text-[11px] md:text-[12px] font-sans font-bold uppercase tracking-[0.15em] text-muted/60 leading-none mt-2 whitespace-nowrap">
+              {sezioneAttiva === 'numismatica' ? 'Sezione Numismatica' : 'Database Epigrafico'}
+            </p>
           </div>
         </div>
         )}
@@ -5721,7 +5751,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
             <span className="text-lg font-bold tracking-[0.1em] leading-none" style={{ fontFamily: '"Cinzel", serif' }}>ILA</span>
           </button>
         )}
-        {activeView === 'catalog' && (
+        {inCatalogo && (
           <div className="flex items-center gap-2 shrink-0">
           <div
             className={cn(
@@ -5921,7 +5951,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
 
         {/* Catalog View - Tendina filtri, ancorata sotto la pillola di ricerca in header */}
         <AnimatePresence>
-          {activeView === 'catalog' && showFilterPanel && (
+          {inCatalogo && showFilterPanel && (
             <>
               <motion.div
                 className="fixed inset-0 z-20 bg-ink/5"
@@ -6201,7 +6231,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
               effectiveAdmin={effectiveAdmin}
             />
           )}
-          {activeView === 'catalog' && (
+          {inCatalogo && (
             <>
                 {/* Record List */}
                 <div className="flex-1 flex flex-col overflow-hidden min-h-0 glass-panel glass-panel-elevated rounded-2xl">
@@ -6210,21 +6240,14 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                       {/* Le sezioni del corpus: la divisione principale del
                           catalogo, non un filtro in fondo alla tendina. */}
                       <div className="flex items-center gap-3 shrink-0" role="group" aria-label="Sezione del corpus">
-                        <button
-                          onClick={() => setFilters(f => ({ ...f, sezione: '' }))}
-                          className={cn("hover:text-accent transition-colors", filters.sezione === '' && "text-accent")}
-                          aria-pressed={filters.sezione === ''}
-                        >
-                          Tutto <span className="opacity-40">{monumenti.length}</span>
-                        </button>
                         {SEZIONI.map(def => (
                           <button
                             key={def.id}
-                            onClick={() => setFilters(f => ({ ...f, sezione: f.sezione === def.id ? '' : def.id }))}
-                            className={cn("hover:text-accent transition-colors", filters.sezione === def.id && "text-accent")}
-                            aria-pressed={filters.sezione === def.id}
-                            style={filters.sezione === def.id ? { color: `var(${def.colore})` } : undefined}
-                            title={`Solo ${def.label.toLowerCase()}`}
+                            onClick={() => { setActiveView(vistaDiSezione(def.id)); setHasNavigated(true); }}
+                            className={cn("hover:text-accent transition-colors", sezioneAttiva === def.id && "text-accent")}
+                            aria-current={sezioneAttiva === def.id ? 'true' : undefined}
+                            style={sezioneAttiva === def.id ? { color: `var(${def.colore})` } : undefined}
+                            title={`Vai alla sezione ${def.label.toLowerCase()}`}
                           >
                             {def.label} <span className="opacity-40">{conteggioSezioni.get(def.id) ?? 0}</span>
                           </button>
@@ -6349,7 +6372,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                               <div className="flex-1 min-w-0 flex flex-col gap-1.5">
                                 <div className="flex justify-between items-center gap-2">
                                   <div className="flex items-center gap-1 flex-wrap">
-                                    <span className="font-mono text-[10px] font-bold text-accent bg-accent/5 px-1.5 py-0.5 rounded-sm border border-accent/10 tabular-nums">#{m.id.toString().padStart(3, '0')}</span>
+                                    <span className="font-mono text-[10px] font-bold text-accent bg-accent/5 px-1.5 py-0.5 rounded-sm border border-accent/10 tabular-nums">{etichettaScheda(m.id)}</span>
                                     {searchResultIds?.has(m.id) && matchInSuppliedById.get(m.id) && (
                                       <span className="font-mono text-[8px] font-bold text-warning bg-warning/10 px-1 py-0.5 rounded-sm border border-warning/25">RICOSTR.</span>
                                     )}
@@ -6414,7 +6437,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                               </motion.div>
                             </div>
                               <div className="flex items-center gap-1">
-                                <span className="font-mono text-[10px] font-bold text-accent bg-accent/5 px-1.5 py-0.5 rounded-sm border border-accent/10 tabular-nums">#{m.id.toString().padStart(3, '0')}</span>
+                                <span className="font-mono text-[10px] font-bold text-accent bg-accent/5 px-1.5 py-0.5 rounded-sm border border-accent/10 tabular-nums">{etichettaScheda(m.id)}</span>
                                 {searchResultIds?.has(m.id) && matchInSuppliedById.get(m.id) && (
                                   <span
                                     className="font-mono text-[8px] font-bold text-warning bg-warning/10 px-1 py-0.5 rounded-sm border border-warning/25 whitespace-nowrap"
@@ -6479,8 +6502,8 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                           {/* Una sezione ancora da popolare non è un filtro troppo
                               stretto: dirlo per quello che è evita di mandare il
                               lettore a cercare l'errore fra i filtri. */}
-                          {filters.sezione && (conteggioSezioni.get(filters.sezione) ?? 0) === 0
-                            ? `La sezione ${etichettaSezione(filters.sezione).toLowerCase()} non ha ancora schede.`
+                          {(conteggioSezioni.get(sezioneAttiva) ?? 0) === 0
+                            ? `La sezione ${etichettaSezione(sezioneAttiva).toLowerCase()} non ha ancora schede.`
                             : 'Nessuna scheda corrisponde ai filtri attivi.'}
                           {hasActiveFilters && (
                             <div className="mt-3">
@@ -6638,7 +6661,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
           {activeView === 'stats' && (
             <EpithetStats
               monumenti={monumenti}
-              onSelectMonumento={(m) => { setSelectedMonumento(m); setActiveView('catalog'); }}
+              onSelectMonumento={apriScheda}
               onVaiAllaFonte={(id) => { setFonteTarget(id); setActiveView('sources'); setHasNavigated(true); }}
               initialTab={statsPreset?.tab}
               initialDivinity={statsPreset?.exact && statsPreset.tab === 'divinita' ? statsPreset.term : undefined}
@@ -6665,7 +6688,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
           {activeView === 'cult' && (
             <CultLexiconPanel
               monumenti={monumenti}
-              onSelectMonumento={(m) => { setSelectedMonumento(m); setActiveView('catalog'); }}
+              onSelectMonumento={apriScheda}
               onVaiAllaFonte={(id) => { setFonteTarget(id); setActiveView('sources'); setHasNavigated(true); }}
               canWrite={effectiveAdmin}
               onApriVocabolario={() => setActiveView('lessico-lares')}
@@ -6674,7 +6697,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
           {activeView === 'lessico-lares' && effectiveAdmin && (
             <LessicoLaresEditor
               monumenti={monumenti}
-              onSelectMonumento={(m) => { setSelectedMonumento(m); setActiveView('catalog'); }}
+              onSelectMonumento={apriScheda}
               onChiudi={() => setActiveView('cult')}
             />
           )}
@@ -6688,7 +6711,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
               onTestimonianzaAperta={() => setFonteTarget(null)}
             />
           )}
-          {activeView === 'health' && effectiveAdmin && <CorpusHealth monumenti={monumenti} onSelectMonumento={(m) => { setSelectedMonumento(m); setActiveView('catalog'); }} />}
+          {activeView === 'health' && effectiveAdmin && <CorpusHealth monumenti={monumenti} onSelectMonumento={apriScheda} />}
           {activeView === 'flags' && effectiveAdmin && (
             <RegistroPanel
               registri={registri}
@@ -6697,7 +6720,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
               onReopen={entryId => updateRegistroStatus(entryId, 'open')}
               onSelectEntry={entryId => {
                 const m = monumenti.find(x => x.entryId === entryId || x.id.toString() === entryId);
-                if (m) { setSelectedMonumento(m); setActiveView('catalog'); }
+                if (m) apriScheda(m);
               }}
             />
           )}
@@ -6716,7 +6739,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
               monumenti={monumenti}
               onApply={handleBiblioApply}
               progress={biblioProgress}
-              onSelectMonumento={(m) => { setSelectedMonumento(m); setActiveView('catalog'); }}
+              onSelectMonumento={apriScheda}
             />
           )}
           {activeView === 'review' && <DraftReviewPanel />}
@@ -6735,10 +6758,10 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
               />
             </Suspense>
           )}
-          {activeView === 'timeline' && <Timeline monumenti={monumenti} onSelect={(m) => { setSelectedMonumento(m); setActiveView('catalog'); }} paused={!!selectedMonumento} />}
+          {activeView === 'timeline' && <Timeline monumenti={monumenti} onSelect={apriScheda} paused={!!selectedMonumento} />}
           {activeView === 'map' && (
             <Suspense fallback={<div className="flex-1 flex items-center justify-center text-sm text-muted italic">Caricamento mappa…</div>}>
-              <MapView monumenti={monumenti} onSelectMonumento={(id) => { const m = monumenti.find(x => x.id.toString() === id || x.entryId === id); if (m) { setSelectedMonumento(m); setActiveView('catalog'); } }} />
+              <MapView monumenti={monumenti} onSelectMonumento={(id) => { const m = monumenti.find(x => x.id.toString() === id || x.entryId === id); if (m) apriScheda(m); }} />
             </Suspense>
           )}
           </Suspense>
@@ -7269,7 +7292,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                         onClick={() => setSelectedMonumento(null)}
                         className="text-[10px] font-sans font-bold uppercase tracking-[0.2em] text-muted flex items-center gap-2 hover:text-accent transition-colors"
                       >
-                        <X className="h-4 w-4" /> Torna al Catalogo
+                        <X className="h-4 w-4" /> Torna {sezioneAttiva === 'numismatica' ? 'alle Monete' : 'al Catalogo'}
                       </button>
                       <span
                         className={cn(
@@ -7287,9 +7310,11 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
 
                     <div className="space-y-8">
                       <div className="border-l-2 border-accent pl-4">
-                         <span className="text-3xl font-light italic leading-none">#{ selectedMonumento.id?.toString().padStart(3, '0') }</span>
+                         {/* L'identificatore della scheda è quello con cui si cita —
+                             ILA-042, ILA-N-007 — non il numero interno. */}
+                         <span className="text-3xl font-light italic leading-none">{selectedMonumento.id ? etichettaScheda(selectedMonumento.id) : '—'}</span>
                          <span className="block mt-2 font-sans field-label">
-                           {selectedMonumento.id ? `Record #${selectedMonumento.id}` : 'Nuovo Record'}
+                           {selectedMonumento.id ? `Record ${etichettaScheda(selectedMonumento.id)}` : 'Nuovo Record'}
                          </span>
                       </div>
 
@@ -8100,7 +8125,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                             text={m.note_interne} 
                             query={filters.searchText}
                             monumenti={monumenti}
-                            onSelectMonumento={(m) => { setSelectedMonumento(m); setActiveView('catalog'); }}
+                            onSelectMonumento={apriScheda}
                             onTagClick={(tag) => {
                               setFilters(f => ({ ...f, searchText: tag }));
                               setCompareList(compareList.filter((_, i) => i !== idx));
