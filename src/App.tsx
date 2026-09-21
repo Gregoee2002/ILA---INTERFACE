@@ -58,6 +58,7 @@ import { PleiadesMap } from './components/PleiadesMap';
 // viste): il fallback è la riga di caricamento, non una pagina bianca.
 const MapView = lazy(() => import('./components/MapView').then(m => ({ default: m.MapView })));
 import { IconographyPanel } from './components/IconographyPanel';
+import { NumismaticsPanel } from './components/NumismaticsPanel';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { leggiPermalink, scriviPermalink } from './lib/permalink';
 const CooccurrenceHeatmap = lazy(() => import('./components/CooccurrenceHeatmap').then(m => ({ default: m.CooccurrenceHeatmap })));
@@ -4270,13 +4271,24 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
   // non più scroll continuo. "Supporto Epigrafico" fonde scheda+oggetto;
   // "Iscrizione" fonde trascrizione+commento; "Iconografia" raccoglie anche
   // gli indici (divinità/epiteti/onomastica/imperatori); "Bibliografia" a parte. ---
-  const RECORD_SECTIONS: { id: string; label: string }[] = [
-    { id: 'supporto', label: 'Supporto Epigrafico' },
-    { id: 'iscrizione', label: 'Iscrizione' },
-    { id: 'iconografia', label: 'Iconografia' },
-    { id: 'bibliografia', label: 'Bibliografia' },
-  ];
+  // "Numismatica" compare solo dove c'è qualcosa da mostrare: le 295 schede
+  // epigrafiche non devono guadagnare una linguetta vuota.
+  const RECORD_SECTIONS: { id: string; label: string }[] = useMemo(() => {
+    const num = selectedMonumento?.numismatica;
+    const haNumismatica = !!num && Object.values(num).some(v => v !== undefined);
+    return [
+      { id: 'supporto', label: 'Supporto Epigrafico' },
+      { id: 'iscrizione', label: 'Iscrizione' },
+      ...(haNumismatica ? [{ id: 'numismatica', label: 'Numismatica' }] : []),
+      { id: 'iconografia', label: 'Iconografia' },
+      { id: 'bibliografia', label: 'Bibliografia' },
+    ];
+  }, [selectedMonumento]);
   const [activeRecordSection, setActiveRecordSection] = useState<string>('supporto');
+  // Passando da una moneta a una stele la sezione attiva può non esistere più.
+  useEffect(() => {
+    if (!RECORD_SECTIONS.some(s => s.id === activeRecordSection)) setActiveRecordSection('supporto');
+  }, [RECORD_SECTIONS, activeRecordSection]);
   const recordContentRef = useRef<HTMLDivElement>(null);
   const recordDialogRef = useRef<HTMLDivElement>(null);
 
@@ -7722,6 +7734,22 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                             </p>
                         </section>
                       )}
+                    </div>
+                  )}
+
+                  {activeRecordSection === 'numismatica' && (
+                    <div className="space-y-14 animate-in fade-in duration-200">
+                      <section>
+                        <h3 className="text-2xl font-bold mb-6 italic flex items-center gap-4">
+                          <div className="flex items-center gap-4 shrink-0">
+                            <div className="h-[1px] w-8 bg-border/40" />
+                            <div className="w-1.5 h-1.5 rotate-45 border border-num/50" />
+                          </div>
+                          Tipo monetale
+                          <div className="flex-1 h-[1px] bg-border/20" />
+                        </h3>
+                        <NumismaticsPanel monumento={selectedMonumento} />
+                      </section>
                     </div>
                   )}
 

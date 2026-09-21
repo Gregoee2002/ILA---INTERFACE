@@ -88,7 +88,65 @@ export const ICONOGRAPHY_LABELS: Record<string, string> = {
   festoon_bull_heads: "festone con bucefali",
   garland: "ghirlanda",
   rosette: "rosetta",
+  // --- numismatica (2026-09) ---------------------------------------------
+  // Il vocabolario resta UNO: le monete di Men mostrano gli stessi attributi
+  // delle stele (berretto frigio, falce sulle spalle, pigna), e duplicarne le
+  // chiavi spezzerebbe ogni ricerca a cavallo dei due sottocorpora. Qui sotto
+  // entrano solo le nozioni che l'epigrafia non aveva bisogno di esprimere.
+
+  // portrait — troncatura del ritratto, nozione propria della catalografia
+  // numismatica. NON confondere con `headgear`: «laureate» detto del berretto
+  // frigio resta un copricapo, detto della testa è una troncatura.
+  bare_head: "testa nuda",
+  laureate_head: "testa laureata",
+  radiate_head: "testa radiata",
+  diademed_head: "testa diademata",
+  draped_bust: "busto drappeggiato",
+  cuirassed_bust: "busto corazzato",
+  // pose — la posa della figura intera
+  standing: "stante",
+  seated: "seduto",
+  riding: "a cavallo",
+  reclining: "recumbente",
+  galloping: "al galoppo",
+  // feature — tratti fisionomici notati dalle fonti
+  bearded: "barbato",
+  beardless: "imberbe",
+  youthful: "giovanile",
+  // dir — orientamento della figura (attributo @dir, non un trait)
+  right: "a destra",
+  left: "a sinistra",
+  facing: "di fronte",
+  // rel — posizione relativa a un'altra figura (attributo @rel)
+  in_front_of: "davanti a",
+  behind: "dietro a",
+  at_feet: "ai piedi di",
+  above: "sopra",
+  below: "sotto",
+  in_field: "nel campo",
+  around: "attorno",
+  flanking: "ai lati di",
+  // figure key — soggetti e simboli ricorrenti sulle monete
+  // (`altar` è già fra i support legacy e vale anche qui: una chiave sola)
+  star: "stella",
+  shield: "scudo",
+  palm: "palma",
+  caduceus: "caduceo",
+  cornucopia: "cornucopia",
+  spear: "lancia",
+  thunderbolt: "fulmine",
+  tripod: "tripode",
+  temple: "tempio",
+  ram: "ariete",
+  lion: "leone",
+  // faccia della moneta, per le rese compatte
+  obv: "dritto",
+  rev: "rovescio",
+
   // trait/field type headers
+  portrait: "ritratto",
+  pose: "posa",
+  feature: "fisionomia",
   headgear: "copricapo",
   lunar: "attributo lunare",
   held_object: "oggetto tenuto",

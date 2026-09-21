@@ -78,6 +78,18 @@ export interface IconographicTrait {
   hand?: string;
 }
 
+/**
+ * Faccia di un oggetto a due lati (una moneta). Ricalca `@n` dei
+ * <div type="textpart" subtype="face"> dell'EpiDoc, così edizione, traduzione e
+ * iconografia si allineano sulla stessa chiave.
+ */
+export type CoinFace = "obv" | "rev";
+
+export const COIN_FACE_LABELS: Record<CoinFace, string> = {
+  obv: "Dritto",
+  rev: "Rovescio",
+};
+
 export interface IconographicFigure {
   n: number;
   type: string;
@@ -87,6 +99,28 @@ export interface IconographicFigure {
   // — per questo vive qui e non in `traits`, che raccoglie solo attributi
   // fisici/iconografici propri della figura (copricapo, oggetto tenuto...).
   place?: string;
+  /**
+   * Orientamento della figura: "right" | "left" | "facing". La prosa
+   * numismatica lo nota quasi sempre («Bust of Men, r.»), quella epigrafica
+   * quasi mai — per questo è opzionale e non entra in `place`, che descrive
+   * DOVE sta la figura, non da che parte guarda.
+   */
+  dir?: string;
+  /**
+   * Posizione RELATIVA a un'altra figura («in front», «behind», «at feet»),
+   * con `relTo` = l'`n` della figura di riferimento. È l'asse che la
+   * catalografia numismatica usa al posto dei quadranti assoluti di `place`:
+   * i due convivono, non si sostituiscono.
+   */
+  rel?: string;
+  relTo?: number;
+  /**
+   * Faccia su cui la figura compare, quando l'oggetto ne ha due. Le figure
+   * restano in un array piatto anche per le monete — così filtri, ricerca e
+   * pannello continuano a leggerle senza sapere nulla di dritti e rovesci —
+   * e il raggruppamento in <ica:side> avviene solo in serializzazione.
+   */
+  side?: CoinFace;
   traits: IconographicTrait[];
 }
 
@@ -94,6 +128,75 @@ export interface IconographyData {
   support?: string;
   function?: string;
   figures: IconographicFigure[];
+  note?: string;
+  /**
+   * La descrizione in prosa della faccia come la dà la fonte a stampa, tenuta
+   * accanto alla strutturazione e non al posto suo: strutturare è un'aggiunta,
+   * e quel che non entra nel vocabolario controllato deve restare leggibile.
+   */
+  sideNotes?: Partial<Record<CoinFace, string>>;
+}
+
+/* --- Numismatica -----------------------------------------------------------
+ *  <xenoData><num:numismatics>. L'unità di schedatura è il TIPO monetale
+ *  (nmo:TypeSeriesItem), non l'esemplare: peso e modulo sulla scheda sono
+ *  intervalli, le misure vere stanno sui singoli `specimens`.
+ *  Vedi docs/piano-numismatica-2026-09-21.md §4.
+ * ------------------------------------------------------------------------- */
+
+/** Misura: un valore singolo (sull'esemplare) o un intervallo (sul tipo). */
+export interface NumMeasure {
+  unit: string;
+  value?: string;
+  atLeast?: string;
+  atMost?: string;
+}
+
+/** Termine da vocabolario: chiave locale + URI esterno quando esiste. */
+export interface NumTerm {
+  key: string;
+  /** Resa nella lingua della scheda; se assente la risolve numismaticVocab. */
+  label?: string;
+  /** URI Nomisma. Assente quando il concetto non ha un id (es. assarion). */
+  ref?: string;
+  /** Il nominale è quasi sempre un'inferenza: va marcato come tale. */
+  cert?: "low";
+  /** Chi propone l'inferenza, quando non è l'editore della scheda. */
+  resp?: string;
+}
+
+/** Un esemplare noto del tipo. Qui stanno le misure vere. */
+export interface NumSpecimen {
+  weight?: NumMeasure;
+  diameter?: NumMeasure;
+  /** Asse di conio, in ore. */
+  axis?: string;
+  collection?: string;
+  ref?: string;
+  /** L'esemplare riprodotto nella tavola della fonte. */
+  illustrated?: boolean;
+}
+
+export interface NumismaticData {
+  mint?: NumTerm;
+  /** L'autorità reale dell'emissione (nmo:hasAuthority). */
+  authority?: NumTerm;
+  /** L'autorità come dichiarata dalla moneta (nmo:hasStatedAuthority). */
+  statedAuthority?: string;
+  /** Il magistrato responsabile, spesso nominato nella legenda. */
+  issuer?: string;
+  metal?: NumTerm;
+  denomination?: NumTerm;
+  /** Il sistema ponderale locale: è lui a definire il nominale. */
+  weightStandard?: string;
+  /** `struck` | `cast`. */
+  manufacture?: string;
+  /** Intervalli sul tipo, calcolati sugli esemplari noti. */
+  weight?: NumMeasure;
+  diameter?: NumMeasure;
+  specimens?: NumSpecimen[];
+  /** Riferimento al repertorio dei tipi: «CMRDM II», «Juliopolis 9». */
+  reference?: { corpus: string; n: string };
   note?: string;
 }
 
@@ -170,6 +273,7 @@ export interface Monumento {
   onomastica?: string[];
   persone?: Persona[];
   iconografia?: IconographyData;
+  numismatica?: NumismaticData;
   traduzioni?: Traduzione[];
   bibliografia?: Bibliografia[];
   /**

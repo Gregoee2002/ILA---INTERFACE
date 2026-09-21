@@ -122,8 +122,30 @@ function validateMonumentoShape(m: any): string | null {
       for (const f of ico.figures) {
         if (Array.isArray(f?.traits) && f.traits.length > 50) return "iconografia.figures[].traits supera 50 elementi";
         if (f?.place !== undefined && String(f.place).length > 50) return "iconografia.figures[].place supera 50 caratteri";
+        for (const attr of ["dir", "rel", "side"]) {
+          if (f?.[attr] !== undefined && String(f[attr]).length > 50) return `iconografia.figures[].${attr} supera 50 caratteri`;
+        }
       }
     }
+    for (const [faccia, nota] of Object.entries(ico.sideNotes || {})) {
+      if (nota !== undefined && String(nota).length > 10000) return `iconografia.sideNotes.${faccia} supera 10000 caratteri`;
+    }
+    return null;
+  };
+  const numCap = (): string | null => {
+    const num = m.numismatica;
+    if (!num) return null;
+    for (const campo of ["statedAuthority", "issuer", "weightStandard", "manufacture"]) {
+      if (num[campo] !== undefined && String(num[campo]).length > 200) return `numismatica.${campo} supera 200 caratteri`;
+    }
+    if (num.note !== undefined && String(num.note).length > 10000) return "numismatica.note supera 10000 caratteri";
+    for (const campo of ["mint", "authority", "metal", "denomination"]) {
+      const t = num[campo];
+      if (t && (String(t.key || "").length > 200 || String(t.label || "").length > 200 || String(t.ref || "").length > 500)) {
+        return `numismatica.${campo} supera i limiti di lunghezza`;
+      }
+    }
+    if (Array.isArray(num.specimens) && num.specimens.length > 200) return "numismatica.specimens supera 200 elementi";
     return null;
   };
   const checks = [
@@ -131,7 +153,7 @@ function validateMonumentoShape(m: any): string | null {
     strCap("testo", 50000), strCap("note_interne", 10000), strCap("note_interne_rawXml", 10000),
     arrCap("epiteti", 50), arrCap("divinita", 50), arrCap("onomastica", 50), arrCap("textTypes", 50),
     arrCap("imperatori", 50), arrCap("persone", 100), arrCap("traduzioni", 50), arrCap("bibliografia", 50),
-    arrCap("revisions", 100), arrCap("cultAttestations", 500), iconCap(),
+    arrCap("revisions", 100), arrCap("cultAttestations", 500), iconCap(), numCap(),
   ];
   return checks.find(c => c !== null) ?? null;
 }

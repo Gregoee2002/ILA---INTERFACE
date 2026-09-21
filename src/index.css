@@ -30,6 +30,7 @@
   --accent: #1F8377;
   --cult: #6F5285; /* malva/lilla — lessico di funzione cultuale (<w>/<rs> cult*); scurito per contrasto AA su fondo chiaro */
   --lit: #4A9A8E;  /* verde-acqua chiaro — «Fonti letterarie»: l'accento del Catalogo, schiarito */
+  --num: #8A6A16;  /* oro — sezione numismatica; scurito per contrasto AA su fondo chiaro */
   --muted: #6E6E66;
   --border: #E1E0D8;
   /* Componenti RGB di --parchment, per le superfici "glass" che hanno bisogno
@@ -69,6 +70,7 @@
   --accent: #35BDB3;
   --cult: #C3B0CE; /* malva/lilla smorzato — lessico di funzione cultuale (<w>/<rs> cult*) */
   --lit: #86D8CF;  /* verde-acqua chiaro — «Fonti letterarie» */
+  --num: #D9B85C;  /* oro schiarito — sezione numismatica */
   --muted: #8F8B82;
   --border: #38352E;
   --parchment-rgb: 23 22 20;
@@ -97,6 +99,7 @@
   --color-accent: var(--accent);
   --color-cult: var(--cult);
   --color-lit: var(--lit);
+  --color-num: var(--num);
   --color-muted: var(--muted);
   --color-border: var(--border);
   --color-danger: var(--danger);

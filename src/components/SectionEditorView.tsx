@@ -6,7 +6,8 @@ import {
   ChevronRight, ChevronUp, ChevronDown, FileText, Search, Download, Sparkles, LogIn, ShieldCheck, Users, ExternalLink
 } from 'lucide-react';
 import { cn, stripAccents } from '../lib/utils';
-import { Monumento, OrigDate, Traduzione, Bibliografia, Revision, Responsabile, ExternalRef, IconographicFigure, IconographicTrait, EDITORIAL_STATUS_LABELS } from '../types';
+import { Monumento, OrigDate, Traduzione, Bibliografia, Revision, Responsabile, ExternalRef, IconographicFigure, IconographicTrait, NumismaticData, NumMeasure, NumSpecimen, CoinFace, COIN_FACE_LABELS, EDITORIAL_STATUS_LABELS } from '../types';
+import { DENOMINATIONS, MANUFACTURES, METALS, MINTS, nomismaRef, numLabel } from '../lib/numismaticVocab';
 import { xmlToMonumenti, formatIlaLabel } from '../lib/xmlUtils';
 import { EditionMarkupEditor } from './EditionMarkupEditor';
 import { DivinityEpithetIndex } from './DivinityEpithetIndex';
@@ -20,7 +21,7 @@ export type SectionId =
   | 'title' | 'publication' | 'msIdentifier' | 'support' | 'layout' | 'hand'
   | 'origPlace' | 'origDate' | 'provenance' | 'profile' | 'revisions'
   | 'facsimile' | 'edition' | 'apparatus' | 'translations' | 'commentary'
-  | 'bibliography' | 'iconography';
+  | 'bibliography' | 'iconography' | 'numismatics';
 
 /* ================================================================
  * SectionEditorView — "Officina" di modifica a sezioni EpiDoc
@@ -59,6 +60,7 @@ const SECTION_META: SectionMeta[] = [
   { id: 'commentary',   label: 'Commento',          group: 'Testo' },
   { id: 'bibliography', label: 'Bibliografia',      group: 'Apparato scientifico' },
   { id: 'iconography',  label: 'Iconografia e funzione cultuale', group: 'Apparato scientifico' },
+  { id: 'numismatics',  label: 'Numismatica',        group: 'Apparato scientifico' },
 ];
 
 const GROUPS: SectionMeta['group'][] = ['Intestazione', 'Storia', 'Testo', 'Apparato scientifico'];
@@ -121,6 +123,7 @@ const SECTION_FIELDS: Record<SectionId, (keyof Monumento)[]> = {
   commentary: ['note_interne', 'note_interne_rawXml'],
   bibliography: ['bibliografia', 'responsabili'],
   iconography: ['iconografia'],
+  numismatics: ['numismatica'],
 };
 const SECTION_FIELDS_FLAT: (keyof Monumento)[] = Array.from(new Set(Object.values(SECTION_FIELDS).flat()));
 
@@ -1448,6 +1451,8 @@ function renderSectionForm(
 
     case 'iconography':
       return <IconographyEditor m={m} set={set} />;
+    case 'numismatics':
+      return <NumismaticsEditor m={m} set={set} />;
 
     default:
       return null;
@@ -1504,14 +1509,24 @@ function suggestFunctionFromTextTypes(textTypes: string[] | undefined): string |
   }
   return null;
 }
-const FIGURE_TYPE_KEYS = ['deity', 'secondary', 'worshipper', 'animal', 'symbol', 'secondary_decoration'];
+const FIGURE_TYPE_KEYS = ['deity', 'emperor', 'secondary', 'worshipper', 'animal', 'symbol', 'secondary_decoration'];
 const FIGURE_KEY_OPTIONS = ['Men', 'crescent', 'Nike', 'eagle', 'Attis', 'Helios'];
+// Simboli e soggetti che ricorrono sui rovesci monetali. Restano nello STESSO
+// vocabolario delle figure epigrafiche: duplicarlo spezzerebbe ogni ricerca a
+// cavallo dei due sottocorpora (piano §6.3).
+const COIN_SYMBOL_KEY_OPTIONS = ['altar', 'star', 'shield', 'palm', 'caduceus', 'cornucopia', 'spear', 'thunderbolt', 'tripod', 'temple', 'crescent'];
+// Orientamento della figura (@dir) e posizione relativa a un'altra (@rel):
+// assi che la catalografia numismatica nota sempre e quella epigrafica quasi mai.
+const DIR_KEYS = ['right', 'left', 'facing'];
+const REL_KEYS = ['in_front_of', 'behind', 'at_feet', 'above', 'below', 'in_field', 'around', 'flanking'];
 // Identificativi specifici per tipo 'secondary_decoration' — motivi ornamentali
 // del rilievo (festoni, ghirlande...) distinti dalle figure vere e proprie:
 // vedi FIGURE_KEY_OPTIONS_BY_TYPE sotto per la cascata sul tipo scelto.
 const SECONDARY_DECORATION_KEY_OPTIONS = ['festoon_ram_heads', 'festoon_bull_heads', 'garland', 'rosette'];
 const FIGURE_KEY_OPTIONS_BY_TYPE: Record<string, string[]> = {
   secondary_decoration: SECONDARY_DECORATION_KEY_OPTIONS,
+  symbol: COIN_SYMBOL_KEY_OPTIONS,
+  animal: ['bull', 'horse', 'cock', 'ram', 'lion', 'eagle'],
 };
 // Posizione COMPOSITIVA della figura nel rilievo — proprietà della figura
 // (figure.place), non più un "trait" fisico: vedi nota in types.ts.
@@ -1520,8 +1535,14 @@ const PLACE_KEYS = ['upper_left', 'upper_right', 'lower_left', 'lower_right', 't
 // livello di intero supporto in layoutDesc/layout/rs[@ref=.../voc/writing/]
 // (vedi i file CMRDM reali) — tenerla anche qui per singola figura duplicava
 // il dato con rischio di divergenza, senza reale valore informativo.
-const TRAIT_TYPE_KEYS = ['headgear', 'lunar', 'held_object', 'mount', 'dress', 'gesture'];
+const TRAIT_TYPE_KEYS = ['portrait', 'pose', 'feature', 'headgear', 'lunar', 'held_object', 'mount', 'dress', 'gesture'];
 const TRAIT_KEY_OPTIONS: Record<string, string[]> = {
+  // `portrait` è la TRONCATURA del ritratto, nozione propria della numismatica.
+  // Non confonderla con `headgear`: «laureate» detto del berretto frigio è un
+  // copricapo, detto della testa è una troncatura.
+  portrait: ['bare_head', 'laureate_head', 'radiate_head', 'diademed_head', 'draped_bust', 'cuirassed_bust'],
+  pose: ['standing', 'seated', 'riding', 'reclining', 'galloping'],
+  feature: ['bearded', 'beardless', 'youthful'],
   headgear: ['phrygian_cap', 'radiate_crown', 'crescent_crown'],
   lunar: ['crescent_shoulders', 'crescent_cap', 'full_moon', 'crescent'],
   held_object: ['pine_cone', 'torch', 'patera', 'sceptre', 'wreath', 'staff', 'bucranium'],
@@ -1663,6 +1684,10 @@ const IconographyEditor: React.FC<{ m: Monumento; set: <K extends keyof Monument
   const updateTrait = (fi: number, ti: number, patch: Partial<IconographicTrait>) =>
     updateFigure(fi, { traits: ico.figures[fi].traits.map((t, i) => i === ti ? { ...t, ...patch } : t) });
 
+  // Gli assi numismatici (faccia, orientamento, posizione relativa) compaiono
+  // solo dove servono: su una stele sarebbero tre campi vuoti in più.
+  const oggettoADueFacce = !!m.numismatica || ico.figures.some(f => f.side);
+
   const suggestedFunction = suggestFunctionFromTextTypes(m.textTypes);
   const functionConflict = ico.function && suggestedFunction && ico.function !== suggestedFunction;
 
@@ -1737,6 +1762,46 @@ const IconographyEditor: React.FC<{ m: Monumento; set: <K extends keyof Monument
                 </button>
               </div>
 
+              {oggettoADueFacce && (
+                <div className="pl-9 grid grid-cols-1 md:grid-cols-3 gap-3">
+                  <div>
+                    <FieldLabel hint="il lato su cui la figura compare; la stessa chiave dei textpart dell'edizione">Faccia</FieldLabel>
+                    <VocabSelect
+                      value={fig.side || ''}
+                      onChange={v => updateFigure(fi, { side: (v || undefined) as CoinFace | undefined })}
+                      options={['obv', 'rev']}
+                      placeholder="Non specificata"
+                      allowEmpty
+                    />
+                  </div>
+                  <div>
+                    <FieldLabel hint="da che parte guarda la figura — non dove si trova">Orientamento</FieldLabel>
+                    <VocabSelect value={fig.dir || ''} onChange={v => updateFigure(fi, { dir: v || undefined })}
+                      options={DIR_KEYS} placeholder="Non specificato" allowEmpty />
+                  </div>
+                  <div>
+                    <FieldLabel hint="posizione rispetto a un'altra figura: «davanti a», «ai piedi di»…">Posizione relativa</FieldLabel>
+                    <div className="flex gap-2">
+                      <div className="flex-1">
+                        <VocabSelect value={fig.rel || ''} onChange={v => updateFigure(fi, { rel: v || undefined, relTo: v ? (fig.relTo ?? 1) : undefined })}
+                          options={REL_KEYS} placeholder="Nessuna" allowEmpty />
+                      </div>
+                      {fig.rel && (
+                        <select
+                          value={fig.relTo ?? 1}
+                          onChange={e => updateFigure(fi, { relTo: parseInt(e.target.value, 10) })}
+                          title="Figura di riferimento"
+                          style={{ colorScheme: 'light dark' }}
+                          className="w-20 shrink-0 bg-white/60 dark:bg-white/5 border border-border/50 rounded-lg px-2 py-2 text-xs text-ink font-sans focus:outline-none focus:ring-1 focus:ring-accent/40"
+                        >
+                          {ico.figures.map((_, i) => <option key={i} value={i + 1}>fig. {i + 1}</option>)}
+                        </select>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              )}
+
               {/* ── 3. Tratti di questa figura ── */}
               <div className="pl-9 pt-1 border-t border-border/20">
                 <div className="text-[9px] font-sans font-bold uppercase tracking-[0.2em] text-muted/50 mb-2 pt-2">Tratti</div>
@@ -1804,8 +1869,252 @@ const IconographyEditor: React.FC<{ m: Monumento; set: <K extends keyof Monument
       {/* ── 4. Nota libera ── */}
       <section>
         <Eyebrow className="mb-2">4 · Nota</Eyebrow>
+        {oggettoADueFacce && (
+          <div className="grid gap-3 sm:grid-cols-2 mb-4">
+            {(['obv', 'rev'] as CoinFace[]).map(faccia => (
+              <div key={faccia}>
+                <FieldLabel hint="la descrizione del tipo come la dà la fonte, tenuta accanto alla codifica e non al posto suo">
+                  Descrizione · {COIN_FACE_LABELS[faccia]}
+                </FieldLabel>
+                <TextArea rows={2}
+                  value={ico.sideNotes?.[faccia] || ''}
+                  onChange={e => update({
+                    sideNotes: { ...(ico.sideNotes || {}), [faccia]: e.target.value || undefined },
+                  })} />
+              </div>
+            ))}
+          </div>
+        )}
         <FieldLabel hint="per elementi non copribili dal vocabolario controllato — mai un ripiego per evitare di scegliere un tratto">Nota iconografica</FieldLabel>
         <TextArea rows={3} value={ico.note || ''} onChange={e => update({ note: e.target.value || undefined })} />
+      </section>
+    </div>
+  );
+};
+
+/* --- Numismatica -----------------------------------------------------------
+ *  L'unità di schedatura è il TIPO monetale, non l'esemplare
+ *  (docs/piano-numismatica-2026-09-21.md §4): l'editor lo fa vedere separando
+ *  fisicamente le misure del tipo — intervalli — da quelle degli esemplari.
+ * ------------------------------------------------------------------------- */
+
+/** Select su un registro di numismaticVocab, con la resa italiana a schermo. */
+const NumVocabSelect: React.FC<{
+  value: string; onChange: (v: string) => void;
+  registro: Record<string, { label: string }>; kind: string; placeholder: string;
+}> = ({ value, onChange, registro, kind, placeholder }) => (
+  <select
+    value={value}
+    onChange={e => onChange(e.target.value)}
+    style={{ colorScheme: 'light dark' }}
+    className="w-full bg-white/60 dark:bg-white/5 border border-border/50 rounded-lg px-3 py-2 text-sm text-ink font-serif focus:outline-none focus:ring-1 focus:ring-num/40"
+  >
+    <option value="">{placeholder}</option>
+    {Object.keys(registro).map(k => <option key={k} value={k}>{numLabel(kind, k)}</option>)}
+  </select>
+);
+
+/** Una misura: valore singolo, oppure intervallo se `range`. */
+const MisuraFields: React.FC<{
+  m?: NumMeasure; unit: string; range?: boolean; onChange: (v: NumMeasure | undefined) => void;
+}> = ({ m, unit, range, onChange }) => {
+  const patch = (p: Partial<NumMeasure>) => {
+    const next: NumMeasure = { unit, ...m, ...p };
+    const vuoto = !next.value && !next.atLeast && !next.atMost;
+    onChange(vuoto ? undefined : next);
+  };
+  return (
+    <div className="flex items-center gap-2">
+      {range ? (
+        <>
+          <TextInput value={m?.atLeast || ''} onChange={e => patch({ atLeast: e.target.value || undefined })} placeholder="min" />
+          <span className="text-muted text-xs shrink-0">–</span>
+          <TextInput value={m?.atMost || ''} onChange={e => patch({ atMost: e.target.value || undefined })} placeholder="max" />
+        </>
+      ) : (
+        <TextInput value={m?.value || ''} onChange={e => patch({ value: e.target.value || undefined })} placeholder="valore" />
+      )}
+      <span className="text-xs text-muted font-sans shrink-0 w-6">{unit}</span>
+    </div>
+  );
+};
+
+const NumismaticsEditor: React.FC<{ m: Monumento; set: <K extends keyof Monumento>(k: K, v: Monumento[K]) => void }> = ({ m, set }) => {
+  const num: NumismaticData = m.numismatica || {};
+  const update = (patch: Partial<NumismaticData>) => set('numismatica', { ...num, ...patch });
+  const specimens = num.specimens || [];
+  const updateSpecimen = (i: number, patch: Partial<NumSpecimen>) =>
+    update({ specimens: specimens.map((sp, j) => j === i ? { ...sp, ...patch } : sp) });
+
+  /** Termine da registro: la chiave decide etichetta e `ref`, che non si digita mai a mano. */
+  const setTermine = (campo: 'metal' | 'denomination' | 'mint', key: string) => {
+    if (!key) return update({ [campo]: undefined } as Partial<NumismaticData>);
+    update({ [campo]: { ...(num[campo] || {}), key, label: numLabel(campo, key), ref: nomismaRef(campo, key) } } as Partial<NumismaticData>);
+  };
+
+  return (
+    <div className="space-y-8 max-w-3xl">
+      {/* ── 1. Il tipo ── */}
+      <section>
+        <Eyebrow className="mb-2">1 · Il tipo</Eyebrow>
+        <p className="text-xs text-muted font-serif italic mb-4">
+          La scheda descrive un tipo monetale, non un pezzo: qui vanno i dati dell'emissione.
+          Le misure dei singoli esemplari stanno più sotto.
+        </p>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <FieldLabel hint="il luogo di emissione, non di rinvenimento">Zecca</FieldLabel>
+            <NumVocabSelect value={num.mint?.key || ''} onChange={v => setTermine('mint', v)}
+              registro={MINTS} kind="mint" placeholder="Non registrata" />
+            <div className="mt-2">
+              <TextInput value={num.mint?.label || ''}
+                onChange={e => update({ mint: { ...(num.mint || { key: '' }), label: e.target.value || undefined } })}
+                placeholder="Nome come lo dà la fonte" />
+            </div>
+          </div>
+          <div>
+            <FieldLabel hint="l'autorità reale dell'emissione">Autorità</FieldLabel>
+            <TextInput value={num.authority?.key || ''}
+              onChange={e => update({ authority: e.target.value ? { key: e.target.value } : undefined })}
+              placeholder="es. Caracalla" />
+            <div className="mt-2" />
+            <FieldLabel hint="l'autorità come la dichiara la moneta, se diversa">Dichiarata</FieldLabel>
+            <TextInput value={num.statedAuthority || ''} onChange={e => update({ statedAuthority: e.target.value || undefined })} />
+          </div>
+          <div>
+            <FieldLabel hint="dato osservato: si scrive solo se la fonte lo dà">Metallo</FieldLabel>
+            <NumVocabSelect value={num.metal?.key || ''} onChange={v => setTermine('metal', v)}
+              registro={METALS} kind="metal" placeholder="Non indicato dalla fonte" />
+          </div>
+          <div>
+            <FieldLabel hint="quasi sempre un'inferenza da metallo, modulo e peso: marcarla come tale">Nominale</FieldLabel>
+            <NumVocabSelect value={num.denomination?.key || ''} onChange={v => setTermine('denomination', v)}
+              registro={DENOMINATIONS} kind="denomination" placeholder="Non indicato dalla fonte" />
+            {num.denomination && (
+              <div className="mt-2 flex items-center gap-3 flex-wrap">
+                <label className="flex items-center gap-2 text-xs font-sans text-ink">
+                  <input type="checkbox" checked={num.denomination.cert === 'low'}
+                    onChange={e => update({ denomination: { ...num.denomination!, cert: e.target.checked ? 'low' : undefined } })} />
+                  inferito
+                </label>
+                <div className="flex-1 min-w-40">
+                <TextInput value={num.denomination.resp || ''}
+                  onChange={e => update({ denomination: { ...num.denomination!, resp: e.target.value || undefined } })}
+                  placeholder="chi lo propone, es. #RPC" />
+                </div>
+              </div>
+            )}
+            {num.denomination && !nomismaRef('denomination', num.denomination.key) && (
+              <p className="text-[11px] text-muted font-serif italic mt-1.5">
+                Nessun identificatore Nomisma per questo nominale: resta la sola chiave del progetto.
+              </p>
+            )}
+          </div>
+          <div>
+            <FieldLabel hint="è il sistema ponderale locale a definire il nominale">Sistema ponderale</FieldLabel>
+            <TextInput value={num.weightStandard || ''} onChange={e => update({ weightStandard: e.target.value || undefined })} />
+          </div>
+          <div>
+            <FieldLabel>Tecnica</FieldLabel>
+            <NumVocabSelect value={num.manufacture || ''} onChange={v => update({ manufacture: v || undefined })}
+              registro={MANUFACTURES} kind="manufacture" placeholder="Non indicata" />
+          </div>
+          <div>
+            <FieldLabel hint="intervallo sugli esemplari noti, non la misura di un pezzo">Peso del tipo</FieldLabel>
+            <MisuraFields m={num.weight} unit="g" range onChange={v => update({ weight: v })} />
+          </div>
+          <div>
+            <FieldLabel hint="il modulo, in millimetri">Diametro del tipo</FieldLabel>
+            <MisuraFields m={num.diameter} unit="mm" range onChange={v => update({ diameter: v })} />
+          </div>
+        </div>
+      </section>
+
+      {/* ── 2. Repertorio ── */}
+      <section>
+        <Eyebrow className="mb-2">2 · Repertorio</Eyebrow>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <FieldLabel>Corpus dei tipi</FieldLabel>
+            <TextInput value={num.reference?.corpus || ''}
+              onChange={e => update({ reference: { corpus: e.target.value, n: num.reference?.n || '' } })}
+              placeholder="es. CMRDM II" />
+          </div>
+          <div>
+            <FieldLabel hint="nel CMRDM II l'identificatore è zecca + numero">Numero</FieldLabel>
+            <TextInput value={num.reference?.n || ''}
+              onChange={e => update({ reference: { corpus: num.reference?.corpus || '', n: e.target.value } })}
+              placeholder="es. Juliopolis 9" />
+          </div>
+        </div>
+      </section>
+
+      {/* ── 3. Esemplari ── */}
+      <section>
+        <Eyebrow className="mb-2">3 · Esemplari</Eyebrow>
+        {specimens.length === 0 && (
+          <p className="text-sm text-muted italic font-serif mb-3">
+            Nessun esemplare registrato. Qui vanno i pezzi noti del tipo, con le loro misure reali.
+          </p>
+        )}
+        <div className="space-y-3">
+          {specimens.map((sp, i) => (
+            <div key={i} className="glass-card p-4">
+              <div className="flex items-start gap-3">
+                <span className="w-6 h-6 rounded-full bg-num/10 text-num border border-num/25 flex items-center justify-center text-[11px] font-sans font-bold shrink-0 mt-1.5">
+                  {i + 1}
+                </span>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 flex-1">
+                  <div>
+                    <FieldLabel>Collezione</FieldLabel>
+                    <TextInput value={sp.collection || ''} onChange={e => updateSpecimen(i, { collection: e.target.value || undefined })}
+                      placeholder="es. Paris, Vienna…" />
+                  </div>
+                  <div>
+                    <FieldLabel>Riferimento</FieldLabel>
+                    <TextInput value={sp.ref || ''} onChange={e => updateSpecimen(i, { ref: e.target.value || undefined })}
+                      placeholder="URL della scheda del pezzo" />
+                  </div>
+                  <div>
+                    <FieldLabel>Peso</FieldLabel>
+                    <MisuraFields m={sp.weight} unit="g" onChange={v => updateSpecimen(i, { weight: v })} />
+                  </div>
+                  <div>
+                    <FieldLabel>Diametro</FieldLabel>
+                    <MisuraFields m={sp.diameter} unit="mm" onChange={v => updateSpecimen(i, { diameter: v })} />
+                  </div>
+                  <div>
+                    <FieldLabel hint="orientamento reciproco dei due conî, in ore">Asse di conio</FieldLabel>
+                    <TextInput value={sp.axis || ''} onChange={e => updateSpecimen(i, { axis: e.target.value || undefined })}
+                      placeholder="es. 6" />
+                  </div>
+                  <label className="flex items-center gap-2 text-xs font-sans text-ink self-end pb-2">
+                    <input type="checkbox" checked={!!sp.illustrated}
+                      onChange={e => updateSpecimen(i, { illustrated: e.target.checked || undefined })} />
+                    è l'esemplare riprodotto nella tavola
+                  </label>
+                </div>
+                <button onClick={() => update({ specimens: specimens.filter((_, j) => j !== i) })}
+                  className="p-1.5 mt-5 text-muted/50 hover:text-danger transition-colors" title="Rimuovi esemplare">
+                  <Trash2 className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+          ))}
+          <button
+            onClick={() => update({ specimens: [...specimens, {}] })}
+            className="inline-flex items-center gap-1.5 text-xs font-sans font-semibold uppercase tracking-[0.12em] text-num hover:opacity-70 transition-opacity"
+          >
+            <Plus className="w-3.5 h-3.5" /> Aggiungi esemplare
+          </button>
+        </div>
+      </section>
+
+      {/* ── 4. Nota ── */}
+      <section>
+        <Eyebrow className="mb-2">4 · Nota</Eyebrow>
+        <FieldLabel hint="quello che non entra nei campi sopra; la descrizione dei tipi va nelle note per faccia, in Iconografia">Nota numismatica</FieldLabel>
+        <TextArea rows={3} value={num.note || ''} onChange={e => update({ note: e.target.value || undefined })} />
       </section>
     </div>
   );

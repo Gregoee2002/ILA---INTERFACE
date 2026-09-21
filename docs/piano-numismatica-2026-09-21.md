@@ -275,34 +275,42 @@ una funzione cultuale.
 
 ---
 
-## 7. Sequenza di lavoro
+## 7. Sequenza di lavoro — stato al 2026-09-21
 
-Nessuna di queste fasi popola dati.
+Nessuna di queste fasi popola dati: il corpus numismatico resta vuoto.
 
-- **N0 — decisioni.** ~~Tipo vs esemplare~~: **deciso, la scheda è il tipo**
-  (§4). Nomisma: verificato e adottabile come vocabolario `@ref`, non come
-  modello (§9.5). Restano aperti i punti 2-6 di §8, nessuno dei quali blocca N1.
-- **N0b — tabella di risoluzione Nomisma** (§9.3): gli id non sono deducibili
-  dalle stringhe e la copertura è parziale. Va costruita prima di N3, sullo
-  stesso principio di `printSources.ts` — nessun id cablato nel codice.
+- **N0 — decisioni.** ✅ ~~Tipo vs esemplare~~: **la scheda è il tipo** (§4).
+  Nomisma verificato e adottato come vocabolario `@ref`, non come modello (§9.5).
+- **N0b — tabella di risoluzione Nomisma.** ✅ `src/lib/numismaticVocab.ts`:
+  metalli, nominali, tecniche e zecche, con gli id verificati e le assenze
+  registrate come tali. Nessun id cablato nei componenti.
 - **N1 — `ica:side` e i tre nuovi assi** (`@dir`, `@rel`/`@relTo`,
-  `trait type="portrait"`): estensione dello schema iconografico, opzionale,
-  retrocompatibile. Serializzatore in `renderIconography`, parser in
-  `extractIconography`.
-- **N2 — armonizzazione del vocabolario** (§6.3): censire le sovrapposizioni fra
-  termini numismatici e chiavi ICA esistenti *prima* di aggiungerne di nuovi.
-- **N3 — blocco `num:`** (§3.3) nel modello, nel serializzatore e nell'editor a
-  sezioni.
-- **N4 — faccia come dimensione del modello** (§5): edizione, traduzione e
-  `anepigr` per faccia.
-- **N5 — `facsimile`** (§2.3): immagini D/R, con ricaduta positiva anche sulle
-  schede epigrafiche.
-- **N6 — RPC nel registro delle fonti** (`printSources.ts`) e nella licenza
-  della scheda.
-- **N7 — mappatura assistita della prosa dei tipi** verso ICA (§6.1), con
-  revisione umana obbligatoria: la griglia è regolare ma non deterministica.
+  `trait type="portrait"`). ✅ `types.ts`, `renderIconography`,
+  `extractIconography`. Le figure restano in un array piatto con `side` sulla
+  singola figura: filtri, ricerca e pannello iconografico non sono stati
+  toccati, e le 295 schede epigrafiche continuano a serializzarsi identiche.
+- **N2 — armonizzazione del vocabolario.** ✅ `iconographyLabels.ts` esteso con
+  troncature, pose, fisionomia, orientamento, posizione relativa e i simboli
+  monetali ricorrenti — nello stesso registro dell'epigrafia, con le
+  equivalenze già esistenti riusate e non duplicate.
+- **N3 — blocco `num:`.** ✅ Modello (`NumismaticData`), serializzatore
+  (`renderNumismatics`), parser (`extractNumismatics`), un solo `<xenoData>`
+  per i due blocchi (`renderXenoData`), limiti di validazione anche nella via
+  statica (`apiShim.ts`). Pannello di lettura `NumismaticsPanel.tsx` e sezione
+  «Numismatica» nell'editor a sezioni.
+- **N4 — faccia come dimensione del modello.** Parziale: l'iconografia è per
+  faccia, l'edizione no. I `<div type="textpart" subtype="face">` si leggono
+  già ma `Monumento.testo` resta una stringa sola, e `anepigr` resta di scheda.
+  **Da fare.**
+- **N5 — `facsimile`.** Da fare: immagini D/R, con ricaduta anche
+  sull'epigrafia.
+- **N6 — fonti nel registro.** ✅ `printSources.ts`: **CMRDM II** (con
+  l'identificatore «zecca + numero» e le note di collazione sul PDF) e **RPC**.
+- **N7 — mappatura assistita della prosa dei tipi.** ✅ come skill:
+  `.claude/skills/cmrdm-ii-numismatica/`, con segmentatore testato sul PDF
+  reale. La revisione umana resta obbligatoria.
 
----
+Colore della sezione: **oro** (`--num`), token accanto a `--cult` e `--lit`.
 
 ## 8. Decisioni aperte
 

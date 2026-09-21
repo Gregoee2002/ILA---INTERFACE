@@ -78,6 +78,36 @@ export const PRINT_SOURCES: PrintSource[] = [
     },
   },
   {
+    id: 'cmrdm-ii',
+    sigla: 'CMRDM II',
+    autore: 'E. N. Lane',
+    titolo: 'Corpus Monumentorum Religionis Dei Menis. II: The Coins and Gems',
+    anno: '1975',
+    match: [
+      // Nel volume numismatico l'identificatore non è un numero progressivo ma
+      // «zecca + numero»: «CMRDM II Juliopolis 9». Il gruppo 1 è tutto questo.
+      /CMRDM(?:\)?\.?)?\s*II\b[^<]{0,60}?([A-Z][A-Za-z-]+\s+\d{1,3})\b/,
+      /Leiden\s+1975,?\s*([A-Z][A-Za-z-]+\s+\d{1,3})\b/,
+      // Le gemme: «CMRDM II G12».
+      /CMRDM\s*II\s+(G\d{1,2})\b/i,
+    ],
+    cita: n => `CMRDM II ${n}`,
+    collazione: {
+      pdf: 'CMDM V2.pdf',
+      // Testata dell'entry: etichetta a colonna 0 e rimando alla tavola a
+      // destra. Il segmentatore vero sta nella skill cmrdm-ii-numismatica.
+      entryStart: /^(\S.*?)\s{2,}(?:Plates?|P[IlL][.,]?)\s*[IVXLC]{1,6}\s*$/,
+      note: 'Come il volume I, il greco esce mojibake da pdftotext: le legende vanno ri-OCR con Tesseract grc. In più l\'OCR scambia le cifre arabe con lettere (1→I, 5→S, 0→O) proprio nella numerazione delle entry, che qui è l\'identificatore: ogni numero va verificato sul PDF.',
+    },
+  },
+  {
+    id: 'rpc',
+    sigla: 'RPC',
+    titolo: 'Roman Provincial Coinage Online',
+    match: [/\bRPC\s*(?:I{1,3}V?|IX|X)?\s*,?\s*(\d{3,5})\b/],
+    cita: n => `RPC ${n}`,
+  },
+  {
     id: 'lane-berytus-1964',
     sigla: 'Lane, Berytus 15',
     autore: 'E. N. Lane',

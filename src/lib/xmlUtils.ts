@@ -1,5 +1,5 @@
 import { apparatusEntryToText } from './apparatus';
-import { Monumento, Traduzione, Bibliografia, OrigDate, IconographyData, CultAttestation } from "../types";
+import { Monumento, Traduzione, Bibliografia, OrigDate, IconographyData, NumismaticData, NumMeasure, NumSpecimen, CultAttestation, CoinFace } from "../types";
 import { canonicalDivinityName } from "./divinityAliases";
 import { canonicalEpithet } from "./epithetAliases";
 import { CULT_FAMILY_IDS, lookupCultLemma, toolboxForLemma } from "./cultLexicon";
@@ -347,6 +347,23 @@ function extractIconography(teiString: string): any {
   const noteMatch = iconContent.match(/<(?:\w+:)?note[^>]*>([\s\S]*?)<\/(?:\w+:)?note>/);
   if (noteMatch) note = noteMatch[1].trim();
 
+  // Le facce: <ica:side n="obv|rev"> raggruppa le figure di un lato. Le figure
+  // restano comunque in un array piatto (ognuna con `side`), così tutto il
+  // codice che le legge — filtri, ricerca, pannello — non deve sapere nulla di
+  // dritti e rovesci.
+  const sideNotes: Record<string, string> = {};
+  const sideRanges: { side: CoinFace; content: string }[] = [];
+  const sideRegex = /<(?:\w+:)?side([^>]*)>([\s\S]*?)<\/(?:\w+:)?side>/g;
+  let sideMatch;
+  while ((sideMatch = sideRegex.exec(iconContent)) !== null) {
+    const nAttr = sideMatch[1].match(/n="([^"]*)"/);
+    if (!nAttr) continue;
+    const side = nAttr[1] as CoinFace;
+    sideRanges.push({ side, content: sideMatch[2] });
+    const sn = sideMatch[2].match(/<(?:\w+:)?note[^>]*>([\s\S]*?)<\/(?:\w+:)?note>/);
+    if (sn) sideNotes[side] = unescapeXml(sn[1].trim());
+  }
+
   const figures: any[] = [];
   // Deve matchare sia <figure .../> (auto-chiudente, scritto da renderIconography
   // quando la figura non ha traits) sia <figure ...>...</figure> (con traits
@@ -354,13 +371,23 @@ function extractIconography(teiString: string): any {
   // figura senza tratti al giro successivo di lettura (bug scoperto codificando
   // dati reali: un simbolo isolato come una falce incisa senza altri attributi).
   const figureRegex = /<(?:\w+:)?figure([^>]*?)(?:\/>|>([\s\S]*?)<\/(?:\w+:)?figure>)/g;
+  // Se ci sono <side>, si legge dentro ciascuno e si marca la faccia; altrimenti
+  // (monumento epigrafico) si legge l'intero blocco come prima.
+  const sorgenti: { side?: CoinFace; content: string }[] = sideRanges.length
+    ? sideRanges
+    : [{ content: iconContent }];
+  for (const sorgente of sorgenti) {
   let figMatch;
-  while ((figMatch = figureRegex.exec(iconContent)) !== null) {
+  figureRegex.lastIndex = 0;
+  while ((figMatch = figureRegex.exec(sorgente.content)) !== null) {
     const figAttrs = figMatch[1];
     const nMatch = figAttrs.match(/n="([^"]*)"/);
     const typeMatch = figAttrs.match(/type="([^"]*)"/);
     const keyMatch = figAttrs.match(/key="([^"]*)"/);
     const placeMatch = figAttrs.match(/place="([^"]*)"/);
+    const dirMatch = figAttrs.match(/dir="([^"]*)"/);
+    const relMatch = figAttrs.match(/rel="([^"]*)"/);
+    const relToMatch = figAttrs.match(/relTo="([^"]*)"/);
 
     if (!typeMatch || !keyMatch) continue;
 
@@ -387,11 +414,107 @@ function extractIconography(teiString: string): any {
       type: typeMatch[1],
       key: keyMatch[1],
       place: placeMatch ? placeMatch[1] : undefined,
+      dir: dirMatch ? dirMatch[1] : undefined,
+      rel: relMatch ? relMatch[1] : undefined,
+      relTo: relToMatch ? parseInt(relToMatch[1], 10) : undefined,
+      side: sorgente.side,
       traits
     });
   }
+  }
 
-  return { function: iconFunction, figures, note };
+  return {
+    function: iconFunction,
+    figures,
+    note,
+    sideNotes: Object.keys(sideNotes).length ? sideNotes : undefined,
+  };
+}
+
+/**
+ * Legge <xenoData><num:numismatics>. Assente su tutte le schede epigrafiche:
+ * ritorna undefined senza rumore.
+ */
+function extractNumismatics(teiString: string): NumismaticData | undefined {
+  const xenoMatch = teiString.match(/<xenoData>([\s\S]*?)<\/xenoData>/);
+  if (!xenoMatch) return undefined;
+  const numMatch = xenoMatch[1].match(/<(?:\w+:)?numismatics[^>]*>([\s\S]*?)<\/(?:\w+:)?numismatics>/);
+  if (!numMatch) return undefined;
+  const c = numMatch[1];
+
+  const attr = (frammento: string, nome: string): string | undefined => {
+    const m = frammento.match(new RegExp(`${nome}="([^"]*)"`));
+    return m ? unescapeXml(m[1]) : undefined;
+  };
+  /** Un elemento semplice: ritorna attributi e testo, o undefined se assente. */
+  const elemento = (nome: string, dove = c) => {
+    const m = dove.match(new RegExp(`<(?:\\w+:)?${nome}([^>]*?)(?:\\/>|>([\\s\\S]*?)<\\/(?:\\w+:)?${nome}>)`));
+    return m ? { attrs: m[1], testo: (m[2] || '').trim() } : undefined;
+  };
+  const termine = (nome: string, dove = c) => {
+    const e = elemento(nome, dove);
+    if (!e) return undefined;
+    const key = attr(e.attrs, 'key');
+    const testo = unescapeXml(e.testo);
+    if (!key && !testo) return undefined;
+    return {
+      key: key || testo,
+      label: testo || undefined,
+      ref: attr(e.attrs, 'ref'),
+      cert: attr(e.attrs, 'cert') === 'low' ? ('low' as const) : undefined,
+      resp: attr(e.attrs, 'resp'),
+    };
+  };
+  const misura = (nome: string, dove: string): NumMeasure | undefined => {
+    const e = elemento(nome, dove);
+    if (!e) return undefined;
+    const unit = attr(e.attrs, 'unit') || '';
+    const atLeast = attr(e.attrs, 'atLeast');
+    const atMost = attr(e.attrs, 'atMost');
+    const value = unescapeXml(e.testo) || undefined;
+    if (!value && !atLeast && !atMost) return undefined;
+    return { unit, value, atLeast, atMost };
+  };
+
+  const specimens: NumSpecimen[] = [];
+  const specRegex = /<(?:\w+:)?specimen([^>]*?)(?:\/>|>([\s\S]*?)<\/(?:\w+:)?specimen>)/g;
+  let sm;
+  while ((sm = specRegex.exec(c)) !== null) {
+    const dentro = sm[2] || '';
+    const coll = elemento('collection', dentro);
+    specimens.push({
+      weight: misura('weight', dentro),
+      diameter: misura('diameter', dentro),
+      axis: elemento('axis', dentro)?.testo || undefined,
+      collection: coll ? unescapeXml(coll.testo) : undefined,
+      ref: attr(sm[1], 'ref'),
+      illustrated: attr(sm[1], 'rend') === 'illustrated' || undefined,
+    });
+  }
+
+  const rif = elemento('reference');
+  // Le misure sul tipo sono quelle scritte FUORI da ogni <specimen>: dentro
+  // appartengono al singolo pezzo.
+  const fuoriSpecimen = c.replace(specRegex, '');
+
+  const dati: NumismaticData = {
+    mint: termine('mint'),
+    authority: termine('authority'),
+    statedAuthority: elemento('statedAuthority')?.testo || undefined,
+    issuer: elemento('issuer')?.testo || undefined,
+    metal: termine('metal'),
+    denomination: termine('denomination'),
+    weightStandard: elemento('weightStandard')?.testo || undefined,
+    manufacture: attr(elemento('manufacture')?.attrs || '', 'key') || elemento('manufacture')?.testo || undefined,
+    weight: misura('weight', fuoriSpecimen),
+    diameter: misura('diameter', fuoriSpecimen),
+    specimens: specimens.length ? specimens : undefined,
+    reference: rif && attr(rif.attrs, 'corpus')
+      ? { corpus: attr(rif.attrs, 'corpus')!, n: attr(rif.attrs, 'n') || '' }
+      : undefined,
+    note: elemento('note', fuoriSpecimen)?.testo ? unescapeXml(elemento('note', fuoriSpecimen)!.testo) : undefined,
+  };
+  return Object.values(dati).some(v => v !== undefined) ? dati : undefined;
 }
 
 function romanToInt(roman: string): number | null {
@@ -1428,6 +1551,7 @@ function parseTeiElement(teiString: string): Monumento {
     iscrizione,
     anepigr,
     iconografia: extractIconography(teiString),
+    numismatica: extractNumismatics(teiString),
   } as Monumento;
 }
 
@@ -1439,41 +1563,172 @@ function parseTeiElement(teiString: string): Monumento {
  * tutte assenti) — il chiamante decide se questo significa "non toccare" o
  * "rimuovi il blocco esistente".
  */
-export function renderIconography(ico: IconographyData | undefined, indent: string): string | null {
+export function renderIconography(
+  ico: IconographyData | undefined,
+  indent: string,
+  wrap = true,
+): string | null {
   if (!ico) return null;
   const hasContent = !!ico.function || (ico.figures && ico.figures.length > 0) || !!ico.note;
   if (!hasContent) return null;
 
-  const i1 = indent + "    ", i2 = i1 + "    ", i3 = i2 + "    ";
-  // <xenoData> nello schema EpiDoc ammette solo elementi FUORI dal namespace TEI
-  // (Jing: "element iconography not allowed anywhere") — perciò questo blocco,
-  // che non è EpiDoc standard, va in un namespace dedicato "ica:".
-  const lines = [`${indent}<xenoData>`, `${i1}<ica:iconography xmlns:ica="https://ila-project.org/ns/iconography">`];
+  // Quando il blocco è annidato in un <xenoData> già aperto dal chiamante
+  // (renderXenoData), un livello di rientro in meno.
+  const base = wrap ? indent + "    " : indent;
+  const i2 = base + "    ", i3 = i2 + "    ", i4 = i3 + "    ";
+  const lines: string[] = [];
+  if (wrap) lines.push(`${indent}<xenoData>`);
+  lines.push(`${base}<ica:iconography xmlns:ica="https://ila-project.org/ns/iconography">`);
   if (ico.function) lines.push(`${i2}<ica:function key="${escapeXml(ico.function)}"/>`);
-  (ico.figures || []).forEach((f, idx) => {
-    // n rispecchia sempre la posizione corrente nell'array (mai un valore
-    // storico stantio) — così una figura rimossa non lascia numerazioni
-    // disallineate nelle figure successive.
-    const fAttrs = [`n="${idx + 1}"`];
+
+  /** Una figura, con il suo `n` ricalcolato sulla posizione corrente. */
+  const renderFigure = (f: IconographyData["figures"][number], n: number, ind: string): string[] => {
+    const out: string[] = [];
+    const fAttrs = [`n="${n}"`];
     if (f.type) fAttrs.push(`type="${escapeXml(f.type)}"`);
     if (f.key) fAttrs.push(`key="${escapeXml(f.key)}"`);
     if (f.place) fAttrs.push(`place="${escapeXml(f.place)}"`);
+    if (f.dir) fAttrs.push(`dir="${escapeXml(f.dir)}"`);
+    if (f.rel) fAttrs.push(`rel="${escapeXml(f.rel)}"`);
+    if (f.relTo !== undefined) fAttrs.push(`relTo="${escapeXml(f.relTo)}"`);
     const traits = (f.traits || []).filter(t => t.type && t.key);
     if (traits.length === 0) {
-      lines.push(`${i2}<ica:figure ${fAttrs.join(" ")}/>`);
+      out.push(`${ind}<ica:figure ${fAttrs.join(" ")}/>`);
     } else {
-      lines.push(`${i2}<ica:figure ${fAttrs.join(" ")}>`);
+      out.push(`${ind}<ica:figure ${fAttrs.join(" ")}>`);
       traits.forEach(t => {
         const tAttrs = [`type="${escapeXml(t.type)}"`, `key="${escapeXml(t.key)}"`];
         if (t.hand) tAttrs.push(`hand="${escapeXml(t.hand)}"`);
-        lines.push(`${i3}<ica:trait ${tAttrs.join(" ")}/>`);
+        out.push(`${ind}    <ica:trait ${tAttrs.join(" ")}/>`);
       });
-      lines.push(`${i2}</ica:figure>`);
+      out.push(`${ind}</ica:figure>`);
     }
-  });
+    return out;
+  };
+
+  const figure = ico.figures || [];
+  const conFaccia = figure.filter(f => f.side);
+  if (conFaccia.length > 0) {
+    // Oggetto a due facce: le figure si raggruppano in <ica:side>. L'ordine è
+    // sempre dritto poi rovescio, indipendentemente da come stanno nell'array.
+    const facce: CoinFace[] = ["obv", "rev"];
+    facce.forEach(faccia => {
+      const diQuestaFaccia = figure.filter(f => f.side === faccia);
+      const nota = ico.sideNotes?.[faccia];
+      if (diQuestaFaccia.length === 0 && !nota) return;
+      lines.push(`${i2}<ica:side n="${faccia}">`);
+      diQuestaFaccia.forEach((f, idx) => lines.push(...renderFigure(f, idx + 1, i3)));
+      if (nota) lines.push(`${i3}<ica:note>${escapeXml(nota)}</ica:note>`);
+      lines.push(`${i2}</ica:side>`);
+    });
+    // Figure senza faccia dichiarata su un oggetto che ne ha: non si buttano
+    // via e non si assegnano d'ufficio a un lato — restano fuori dai <side>.
+    figure.filter(f => !f.side).forEach((f, idx) => lines.push(...renderFigure(f, idx + 1, i2)));
+  } else {
+    figure.forEach((f, idx) => lines.push(...renderFigure(f, idx + 1, i2)));
+  }
+
   if (ico.note) lines.push(`${i2}<ica:note>${escapeXml(ico.note)}</ica:note>`);
-  lines.push(`${i1}</ica:iconography>`, `${indent}</xenoData>`);
+  lines.push(`${base}</ica:iconography>`);
+  if (wrap) lines.push(`${indent}</xenoData>`);
+  void i4;
   return lines.join("\n");
+}
+
+/**
+ * Serializza <xenoData><num:numismatics>. Regola dell'unità di schedatura
+ * (docs/piano-numismatica-2026-09-21.md §4): quello che sta qui fuori dai
+ * <num:specimen> descrive il TIPO — misure come intervalli — mentre le misure
+ * puntuali appartengono ai singoli esemplari.
+ */
+export function renderNumismatics(
+  num: NumismaticData | undefined,
+  indent: string,
+  wrap = true,
+): string | null {
+  if (!num) return null;
+  const haQualcosa = !!(num.mint || num.authority || num.statedAuthority || num.issuer ||
+    num.metal || num.denomination || num.weightStandard || num.manufacture ||
+    num.weight || num.diameter || (num.specimens && num.specimens.length) ||
+    num.reference || num.note);
+  if (!haQualcosa) return null;
+
+  const base = wrap ? indent + "    " : indent;
+  const i2 = base + "    ", i3 = i2 + "    ";
+  const lines: string[] = [];
+  if (wrap) lines.push(`${indent}<xenoData>`);
+  lines.push(`${base}<num:numismatics xmlns:num="https://ila-project.org/ns/numismatics">`);
+
+  const termine = (nome: string, t: NumismaticData["metal"], ind: string) => {
+    if (!t || (!t.key && !t.label)) return;
+    const a: string[] = [];
+    if (t.key) a.push(`key="${escapeXml(t.key)}"`);
+    if (t.ref) a.push(`ref="${escapeXml(t.ref)}"`);
+    if (t.cert) a.push(`cert="${escapeXml(t.cert)}"`);
+    if (t.resp) a.push(`resp="${escapeXml(t.resp)}"`);
+    const attrs = a.length ? " " + a.join(" ") : "";
+    if (t.label) lines.push(`${ind}<num:${nome}${attrs}>${escapeXml(t.label)}</num:${nome}>`);
+    else lines.push(`${ind}<num:${nome}${attrs}/>`);
+  };
+  const semplice = (nome: string, v: string | undefined, ind: string) => {
+    if (v) lines.push(`${ind}<num:${nome}>${escapeXml(v)}</num:${nome}>`);
+  };
+  const misura = (nome: string, m: NumMeasure | undefined, ind: string) => {
+    if (!m || (!m.value && !m.atLeast && !m.atMost)) return;
+    const a = [`unit="${escapeXml(m.unit || "")}"`];
+    if (m.atLeast) a.push(`atLeast="${escapeXml(m.atLeast)}"`);
+    if (m.atMost) a.push(`atMost="${escapeXml(m.atMost)}"`);
+    if (m.value) lines.push(`${ind}<num:${nome} ${a.join(" ")}>${escapeXml(m.value)}</num:${nome}>`);
+    else lines.push(`${ind}<num:${nome} ${a.join(" ")}/>`);
+  };
+
+  termine("mint", num.mint, i2);
+  termine("authority", num.authority, i2);
+  semplice("statedAuthority", num.statedAuthority, i2);
+  semplice("issuer", num.issuer, i2);
+  termine("metal", num.metal, i2);
+  termine("denomination", num.denomination, i2);
+  semplice("weightStandard", num.weightStandard, i2);
+  if (num.manufacture) lines.push(`${i2}<num:manufacture key="${escapeXml(num.manufacture)}"/>`);
+  misura("weight", num.weight, i2);
+  misura("diameter", num.diameter, i2);
+
+  (num.specimens || []).forEach(sp => {
+    const vuoto = !sp.weight && !sp.diameter && !sp.axis && !sp.collection && !sp.ref;
+    if (vuoto) return;
+    const a: string[] = [];
+    if (sp.illustrated) a.push(`rend="illustrated"`);
+    if (sp.ref) a.push(`ref="${escapeXml(sp.ref)}"`);
+    lines.push(`${i2}<num:specimen${a.length ? " " + a.join(" ") : ""}>`);
+    misura("weight", sp.weight, i3);
+    misura("diameter", sp.diameter, i3);
+    semplice("axis", sp.axis, i3);
+    semplice("collection", sp.collection, i3);
+    lines.push(`${i2}</num:specimen>`);
+  });
+
+  if (num.reference?.corpus) {
+    lines.push(`${i2}<num:reference corpus="${escapeXml(num.reference.corpus)}"${num.reference.n ? ` n="${escapeXml(num.reference.n)}"` : ""}/>`);
+  }
+  semplice("note", num.note, i2);
+
+  lines.push(`${base}</num:numismatics>`);
+  if (wrap) lines.push(`${indent}</xenoData>`);
+  return lines.join("\n");
+}
+
+/**
+ * I due blocchi non-TEI della scheda dentro un solo <xenoData>: numismatica
+ * prima (che cos'è l'oggetto), iconografia poi (che cosa ci si vede sopra).
+ */
+export function renderXenoData(m: Pick<Monumento, "iconografia" | "numismatica">, indent: string): string | null {
+  const dentro = indent + "    ";
+  const blocchi = [
+    renderNumismatics(m.numismatica, dentro, false),
+    renderIconography(m.iconografia, dentro, false),
+  ].filter(Boolean) as string[];
+  if (blocchi.length === 0) return null;
+  return [`${indent}<xenoData>`, ...blocchi, `${indent}</xenoData>`].join("\n");
 }
 
 export function monumentiToXml(monumenti: Monumento[]): string {
@@ -1686,8 +1941,8 @@ export function monumentiToXml(monumenti: Monumento[]): string {
       
       block += `        </profileDesc>\n`;
     }
-    const iconographyBlock = renderIconography(m.iconografia, '    ');
-    if (iconographyBlock) block += iconographyBlock + '\n';
+    const xenoBlock = renderXenoData(m, '    ');
+    if (xenoBlock) block += xenoBlock + '\n';
     if ((m.revisions && m.revisions.length > 0) || m.editorialStatus) {
       const statusAttr = m.editorialStatus ? ` status="${escapeXml(m.editorialStatus)}"` : '';
       block += `    <revisionDesc${statusAttr}>\n`;
