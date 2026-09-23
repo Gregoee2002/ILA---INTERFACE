@@ -502,3 +502,7 @@ diventa un piccolo contributo che il progetto può restituire a monte.
 > valore porta l'URI Nomisma quando esiste, la sola chiave locale quando non
 > esiste. Nessun id cablato nel codice: una tabella di risoluzione accanto a
 > `printSources.ts`, sullo stesso principio.
+
+## 2026-09-23 — fuori dal corpus caricato
+
+Le 475 schede sono state spostate nella repo dati da `corpus/` a `numismatica/`: l'editing non le carica più (pesavano sulla sessione e alteravano i dati del lavoro epigrafico). Il codice della sezione resta. Per reintegrarle: `git mv numismatica/ILA-N-*.xml corpus/` nella repo Gregoee2002/ILA.
