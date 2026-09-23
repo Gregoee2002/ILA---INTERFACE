@@ -1,5 +1,5 @@
 import { apparatusEntryToText } from './apparatus';
-import { Monumento, Traduzione, Bibliografia, OrigDate, IconographyData, NumismaticData, NumMeasure, NumSpecimen, CultAttestation, CoinFace, EditionFace, Facsimile } from "../types";
+import { Monumento, Traduzione, Bibliografia, OrigDate, IconographyData, NumismaticData, NumMeasure, NumSpecimen, CultAttestation, CoinFace, EditionFace, Facsimile, EdizioneRiferimento, RUOLO_DIGITALE_LEGACY } from "../types";
 import { canonicalDivinityName } from "./divinityAliases";
 import { canonicalEpithet } from "./epithetAliases";
 import { CULT_FAMILY_IDS, lookupCultLemma, toolboxForLemma } from "./cultLexicon";
@@ -802,7 +802,8 @@ function parseTeiElement(teiString: string): Monumento {
       const respBody = respMatch[1];
       const respoMatch = respBody.match(/<resp[^>]*>([\s\S]*?)<\/resp>/);
       const nameMatch = respBody.match(/<(?:persName|name)[^>]*>([\s\S]*?)<\/(?:persName|name)>/);
-      const ruolo = respoMatch ? unescapeXml(respoMatch[1].replace(/<[^>]+>/g, '').trim()) : '';
+      const ruoloRaw = respoMatch ? unescapeXml(respoMatch[1].replace(/<[^>]+>/g, '').trim()) : '';
+      const ruolo = RUOLO_DIGITALE_LEGACY[ruoloRaw.toLowerCase()] ?? ruoloRaw;
       const nome = nameMatch ? unescapeXml(nameMatch[1].replace(/<[^>]+>/g, '').trim()) : '';
       if (ruolo || nome) responsabili.push({ ruolo, nome });
     }
@@ -1541,8 +1542,20 @@ function parseTeiElement(teiString: string): Monumento {
   // 24. Bibliography
   const bibliografia: Bibliografia[] = [];
   const biblBlockMatch = teiString.match(/<div type="bibliography"[^>\/]*>([\s\S]*?)<\/div>/);
+  let edizioneRiferimento: EdizioneRiferimento | undefined;
   if (biblBlockMatch) {
-    const biblBlock = biblBlockMatch[1];
+    // L'edizione di riferimento si legge a parte e si toglie dal blocco:
+    // il resto della lista resta com'era, voce per voce.
+    const refRe = /<bibl\s+type="edition"\s+subtype="reference"\s*>([\s\S]*?)<\/bibl>/;
+    const refMatch = biblBlockMatch[1].match(refRe);
+    if (refMatch) {
+      const edMatch = refMatch[1].match(/<editor>([\s\S]*?)<\/editor>/);
+      const editore = edMatch ? unescapeXml(edMatch[1].replace(/<[^>]+>/g, '').trim()) : '';
+      const citazione = unescapeXml(refMatch[1].replace(/<editor>[\s\S]*?<\/editor>/, '').replace(/<[^>]+>/g, ''))
+        .replace(/\s+/g, ' ').replace(/^[\s,;:]+/, '').trim();
+      if (citazione || editore) edizioneRiferimento = { citazione, ...(editore ? { editore } : {}) };
+    }
+    const biblBlock = biblBlockMatch[1].replace(refRe, '');
 
     // Detect style: if there is text content outside <bibl> elements (IGCyr style),
     // treat the whole block as a single prose entry resolved together.
@@ -1670,6 +1683,7 @@ function parseTeiElement(teiString: string): Monumento {
     cultAttestations,
     fontiStampa,
     revisions,
+    edizioneRiferimento,
     editorialStatus,
     apparatus,
     testo_tradotto: Array.isArray(apparatus) ? apparatus.map(apparatusEntryToText).join('\n') : apparatus,
@@ -2215,10 +2229,16 @@ export function monumentiToXml(monumenti: Monumento[]): string {
       block += `            </div>\n`;
     }
     
-    if (m.bibliografia && m.bibliografia.length > 0) {
+    const edRif = m.edizioneRiferimento && (m.edizioneRiferimento.citazione?.trim() || m.edizioneRiferimento.editore?.trim())
+      ? m.edizioneRiferimento : undefined;
+    if ((m.bibliografia && m.bibliografia.length > 0) || edRif) {
       block += `            <div type="bibliography">\n`;
       block += `                <listBibl>\n`;
-      for (const b of m.bibliografia) {
+      if (edRif) {
+        const ed = edRif.editore?.trim() ? `<editor>${escapeXml(edRif.editore.trim())}</editor>, ` : '';
+        block += `                    <bibl type="edition" subtype="reference">${ed}${escapeXml((edRif.citazione || '').trim())}</bibl>\n`;
+      }
+      for (const b of m.bibliografia || []) {
         if (b.rawXml) {
           block += `                    <bibl>${b.rawXml}</bibl>\n`;
         } else if (b.titolo && b.titolo.includes("<")) {

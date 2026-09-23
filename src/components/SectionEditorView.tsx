@@ -6,7 +6,7 @@ import {
   ChevronRight, ChevronUp, ChevronDown, FileText, Search, Download, Sparkles, LogIn, ShieldCheck, Users, ExternalLink
 } from 'lucide-react';
 import { cn, stripAccents } from '../lib/utils';
-import { Monumento, OrigDate, Traduzione, Bibliografia, Revision, Responsabile, ExternalRef, IconographicFigure, IconographicTrait, NumismaticData, NumMeasure, NumSpecimen, CoinFace, COIN_FACE_LABELS, EditionFace, Facsimile, EDITORIAL_STATUS_LABELS } from '../types';
+import { Monumento, OrigDate, Traduzione, Bibliografia, Revision, Responsabile, ExternalRef, IconographicFigure, IconographicTrait, NumismaticData, NumMeasure, NumSpecimen, CoinFace, COIN_FACE_LABELS, EditionFace, Facsimile, EDITORIAL_STATUS_LABELS, RUOLO_DIGITALE_LABELS, RuoloDigitale } from '../types';
 import { DENOMINATIONS, MANUFACTURES, METALS, MINTS, nomismaRef, numLabel } from '../lib/numismaticVocab';
 import { Sezione, etichettaSezione, sezioneDiId } from '../lib/sezioni';
 import { xmlToMonumenti, formatIlaLabel, renderEditionFaces } from '../lib/xmlUtils';
@@ -93,7 +93,7 @@ const CORPUS_REGIONS = ['Graecia', 'Dacia', 'Italia', 'Asia Minor'];
 /** Ruoli editoriali di base per il campo "carica" dei curatori/collaboratori
  *  (sezione Bibliografia): si aggiungono ai ruoli già usati altrove nel corpus,
  *  mai in sostituzione — il campo resta testo libero. */
-const DEFAULT_RESPONSABILE_ROLES = ['editor', 'reviewer', 'encoder', 'contributor', 'transcriber', 'translator'];
+const DEFAULT_RESPONSABILE_ROLES = Object.keys(RUOLO_DIGITALE_LABELS);
 
 /** Ruoli già usati nel corpus per i curatori/collaboratori (sezione Bibliografia),
  *  uniti al vocabolario di base: stesso principio di collectDistinct ma su un
@@ -135,13 +135,13 @@ const SECTION_FIELDS: Record<SectionId, (keyof Monumento)[]> = {
   origDate: ['origDates', 'data', 'data_inizio', 'data_fine'],
   provenance: ['luogo_rit', 'vicende', 'conserv'],
   profile: ['epiteti', 'divinita', 'onomastica', 'imperatori', 'persone'],
-  revisions: ['revisions', 'editorialStatus'],
+  revisions: ['revisions'],
   facsimile: ['facsimile_url', 'facsimile_desc', 'facsimili'],
   edition: ['testo', 'anepigr', 'iscrizione', 'facce'],
   apparatus: ['apparatus'],
   translations: ['traduzioni'],
   commentary: ['note_interne', 'note_interne_rawXml'],
-  bibliography: ['bibliografia', 'responsabili'],
+  bibliography: ['edizioneRiferimento', 'bibliografia', 'responsabili', 'editorialStatus'],
   iconography: ['iconografia'],
   numismatics: ['numismatica'],
 };
@@ -403,8 +403,8 @@ const RevisionStub: React.FC<{ revisions: Revision[]; onChange: (r: Revision[]) 
           <TextInput type="date" value={date} onChange={e => setDate(e.target.value)} />
         </div>
         <div className="flex-1 min-w-[220px]">
-          <FieldLabel hint="opzionale — es. Encoding: …">Nota</FieldLabel>
-          <TextInput value={note} onChange={e => setNote(e.target.value)} placeholder="Encoding / Editing / Revisione: …" />
+          <FieldLabel hint="opzionale — es. Codifica: …">Nota</FieldLabel>
+          <TextInput value={note} onChange={e => setNote(e.target.value)} placeholder="Codifica / Revisione / Controllo scientifico: …" />
         </div>
         <button
           onClick={commit}
@@ -1326,20 +1326,6 @@ function renderSectionForm(
       const update = (i: number, patch: Partial<Revision>) => set('revisions', revs.map((r, j) => j === i ? { ...r, ...patch } : r));
       return (
         <div className="space-y-5 max-w-3xl">
-          <div className="max-w-xs">
-            <label className="field-label block mb-1.5">Stato editoriale (TEI revisionDesc/@status)</label>
-            <select
-              value={m.editorialStatus || ''}
-              onChange={e => set('editorialStatus', (e.target.value || undefined) as Monumento['editorialStatus'])}
-              style={{ colorScheme: 'light dark' }}
-              className="w-full bg-white/60 dark:bg-white/5 border border-border/50 rounded-lg px-3 py-2 text-sm text-ink font-serif focus:outline-none focus:ring-1 focus:ring-accent/40"
-            >
-              <option value="">— Non specificato —</option>
-              {(Object.entries(EDITORIAL_STATUS_LABELS) as [Monumento['editorialStatus'], string][]).map(([k, label]) => (
-                <option key={k} value={k}>{label}</option>
-              ))}
-            </select>
-          </div>
           {revs.map((r, i) => (
             <div key={i} className="flex items-start gap-3">
               <TextInput className="w-36" type="date" value={r.date || ''} onChange={e => update(i, { date: e.target.value })} />
@@ -1585,9 +1571,40 @@ function renderSectionForm(
         set('responsabili', resp.map((r, j) => j === i ? { ...r, ...patch } : r));
       const removeResp = (i: number) => set('responsabili', resp.filter((_, j) => j !== i));
 
+      const edRif = m.edizioneRiferimento || { citazione: '' };
+      const setEdRif = (patch: Partial<NonNullable<Monumento['edizioneRiferimento']>>) =>
+        set('edizioneRiferimento', { ...edRif, ...patch });
+      const laneBibl = bibl.find(b => /CMRDM|Corpus Monumentorum Religionis Dei Menis/i.test(b.titolo || ''));
+      const soloPhi = /\bPHI\b|Packard/i.test(edRif.citazione || '')
+        && !/CMRDM|Corpus Monumentorum|TAM|SEG|MAMA|IG\b|I\.\s?\w/.test(edRif.citazione || '');
+
       return (
         <div className="space-y-6 max-w-3xl">
           <div className="space-y-3">
+            <FieldLabel>Edizione di riferimento</FieldLabel>
+            <p className="text-[11px] text-muted/60">L'edizione da cui è assunto il testo della scheda. PHI non basta da solo: si cita l'edizione che PHI riproduce.</p>
+            <div className="flex items-start gap-2">
+              <div className="w-48">
+                <TextInput value={edRif.editore || ''} onChange={e => setEdRif({ editore: e.target.value })} placeholder="Editore (es. E. Lane)" />
+              </div>
+              <TextInput className="flex-1" value={edRif.citazione || ''} onChange={e => setEdRif({ citazione: e.target.value })} placeholder="Citazione dell'edizione" />
+            </div>
+            {!edRif.citazione?.trim() && laneBibl && (
+              <button
+                onClick={() => setEdRif({ citazione: laneBibl.titolo, editore: edRif.editore?.trim() || 'E. Lane' })}
+                className="inline-flex items-center gap-1.5 text-xs font-sans font-semibold uppercase tracking-[0.12em] text-accent hover:text-accent/70 transition-colors"
+              >
+                <Plus className="w-3.5 h-3.5" /> Usa Lane (CMRDM)
+              </button>
+            )}
+            {!edRif.citazione?.trim() && (
+              <p className="text-[11px] text-warning flex items-center gap-1.5"><AlertTriangle className="w-3.5 h-3.5" /> Manca l'edizione di riferimento.</p>
+            )}
+            {soloPhi && (
+              <p className="text-[11px] text-warning flex items-center gap-1.5"><AlertTriangle className="w-3.5 h-3.5" /> PHI non può essere l'edizione di riferimento: indica l'edizione che riproduce.</p>
+            )}
+          </div>
+          <div className="space-y-3 border-t border-line/40 pt-4">
             <FieldLabel>Edizioni</FieldLabel>
             {editions.length === 0 && <p className="text-xs text-muted/60 italic">Nessuna edizione precedente registrata.</p>}
             {editions.map(({ b, i }) => renderRow(b, i))}
@@ -1611,16 +1628,27 @@ function renderSectionForm(
             </button>
           </div>
           <div className="space-y-3 border-t border-line/40 pt-4">
-            <FieldLabel>Curatori e collaboratori</FieldLabel>
-            <p className="text-[11px] text-muted/60">Chi ha curato questa scheda e con quale ruolo (editor, revisor, encoder, contributor…).</p>
-            {resp.length === 0 && <p className="text-xs text-muted/60 italic">Nessun curatore registrato.</p>}
+            <FieldLabel>Responsabilità dell'edizione digitale</FieldLabel>
+            <p className="text-[11px] text-muted/60">Chi ha lavorato sulla scheda ILA. «Editore» resta riservato a chi ha pubblicato il testo: qui i ruoli si chiamano con l'azione.</p>
+            {resp.length === 0 && <p className="text-xs text-muted/60 italic">Nessuna responsabilità registrata.</p>}
             {resp.map((r, i) => (
               <div key={i} className="flex items-start gap-2">
+                <div className="w-48">
+                  <select
+                    value={r.ruolo}
+                    onChange={e => updateResp(i, { ruolo: e.target.value })}
+                    style={{ colorScheme: 'light dark' }}
+                    className="w-full bg-white/60 dark:bg-white/5 border border-border/50 rounded-lg px-3 py-2 text-sm text-ink font-serif focus:outline-none focus:ring-1 focus:ring-accent/40"
+                  >
+                    <option value="">— Ruolo —</option>
+                    {(Object.entries(RUOLO_DIGITALE_LABELS) as [RuoloDigitale, string][]).map(([k, label]) => (
+                      <option key={k} value={k}>{label}</option>
+                    ))}
+                    {r.ruolo && !(r.ruolo in RUOLO_DIGITALE_LABELS) && <option value={r.ruolo}>{r.ruolo}</option>}
+                  </select>
+                </div>
                 <div className="flex-1">
                   <TextInput value={r.nome} onChange={e => updateResp(i, { nome: e.target.value })} placeholder="Nome e cognome" />
-                </div>
-                <div className="w-48">
-                  <SuggestInput value={r.ruolo} onChange={v => updateResp(i, { ruolo: v })} options={suggestions.responsabileRuolo} placeholder="editor" />
                 </div>
                 <button onClick={() => removeResp(i)} className="p-2 text-muted/50 hover:text-danger transition-colors"><Trash2 className="w-4 h-4" /></button>
               </div>
@@ -1629,8 +1657,22 @@ function renderSectionForm(
               onClick={() => set('responsabili', [...resp, { nome: '', ruolo: '' }])}
               className="inline-flex items-center gap-1.5 text-xs font-sans font-semibold uppercase tracking-[0.12em] text-accent hover:text-accent/70 transition-colors"
             >
-              <Plus className="w-3.5 h-3.5" /> Aggiungi curatore
+              <Plus className="w-3.5 h-3.5" /> Aggiungi responsabilità
             </button>
+          </div>
+          <div className="space-y-1.5 border-t border-line/40 pt-4">
+            <FieldLabel>Stato di pubblicazione</FieldLabel>
+            <select
+              value={m.editorialStatus || ''}
+              onChange={e => set('editorialStatus', (e.target.value || undefined) as Monumento['editorialStatus'])}
+              style={{ colorScheme: 'light dark' }}
+              className="w-full max-w-xs block bg-white/60 dark:bg-white/5 border border-border/50 rounded-lg px-3 py-2 text-sm text-ink font-serif focus:outline-none focus:ring-1 focus:ring-accent/40"
+            >
+              <option value="">— Non specificato —</option>
+              {(Object.entries(EDITORIAL_STATUS_LABELS) as [Monumento['editorialStatus'], string][]).map(([k, label]) => (
+                <option key={k} value={k}>{label}</option>
+              ))}
+            </select>
           </div>
         </div>
       );

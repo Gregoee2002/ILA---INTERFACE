@@ -64,12 +64,40 @@ export interface Revision {
   note?: string;
 }
 
-// Curatori e collaboratori della scheda: chi ha ricoperto quale ruolo
-// editoriale (editor, revisor, encoder, contributor...), TEI-conforme
-// come <respStmt><resp>/<name> dentro <titleStmt>.
+// Responsabilità dell'edizione digitale: chi ha fatto cosa sulla scheda ILA,
+// TEI-conforme come <respStmt><resp>/<name> dentro <titleStmt>.
+// «editor/editore» è riservato a chi ha pubblicato il testo (vedi
+// EdizioneRiferimento): i nostri ruoli si chiamano con l'azione.
 export interface Responsabile {
   ruolo: string;
   nome: string;
+}
+
+export type RuoloDigitale = "encoding" | "revision" | "review";
+
+export const RUOLO_DIGITALE_LABELS: Record<RuoloDigitale, string> = {
+  encoding: "Codifica",
+  revision: "Revisione",
+  review: "Controllo scientifico",
+};
+
+/** Valori di <resp> usati prima della distinzione (settembre 2026): si leggono
+ *  come i ruoli nuovi, e al primo salvataggio la scheda li riscrive. */
+export const RUOLO_DIGITALE_LEGACY: Record<string, RuoloDigitale> = {
+  encoder: "encoding",
+  editor: "revision",
+  editing: "revision",
+  revisor: "revision",
+  reviewer: "review",
+};
+
+/** L'edizione da cui è tecnicamente assunto il testo della scheda.
+ *  In TEI: <bibl type="edition" subtype="reference"> in testa alla listBibl,
+ *  con l'editore del testo in <editor>. PHI non può esserlo da solo: è un
+ *  repertorio che riproduce un'edizione, e va citata quella. */
+export interface EdizioneRiferimento {
+  citazione: string;
+  editore?: string;
 }
 
 /** Riferimento a un repertorio epigrafico esterno (EDCS, EDH, EDR, …).
@@ -323,6 +351,7 @@ export interface Monumento {
   numismatica?: NumismaticData;
   traduzioni?: Traduzione[];
   bibliografia?: Bibliografia[];
+  edizioneRiferimento?: EdizioneRiferimento;
   /**
    * Le fonti a stampa riconosciute nella bibliografia della scheda, nell'ordine
    * del registro (`lib/printSources.ts`). Serve a interrogare il corpus per

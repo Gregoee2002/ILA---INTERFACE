@@ -48,7 +48,7 @@ import {
 import { cn, EASE_OUT, EASE_IN, SPRING_SNAPPY, SPRING_SOFT, gapGlyph } from './lib/utils';
 import { ICONOGRAPHY_LABELS } from './lib/iconographyLabels';
 import { labelEvidence, labelUnit, labelType, labelMaterial, labelInscriptionType } from './lib/vocabLabels';
-import { Monumento, FilterState, SortField, Bibliografia, EntryRegistro, BugReport, COIN_FACE_LABELS, EDITORIAL_STATUS_LABELS } from './types';
+import { Monumento, FilterState, SortField, Bibliografia, EntryRegistro, BugReport, COIN_FACE_LABELS, EDITORIAL_STATUS_LABELS, RUOLO_DIGITALE_LABELS, RuoloDigitale } from './types';
 import { monumentiToXml, xmlToMonumenti, formatIlaLabel, splitDivineKey } from './lib/xmlUtils';
 import { buildPhiUrl } from './lib/extRefs';
 import { buildDivinityIndex, buildOnomasticaIndex, buildClassificationAudit, DivinityStats, OnomasticaStats } from './lib/epithetIndex';
@@ -8047,7 +8047,18 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                   )}
 
                   {activeRecordSection === 'bibliografia' && (
-                    <div className="animate-in fade-in duration-200 max-w-[70ch]">
+                    <div className="animate-in fade-in duration-200 max-w-[70ch] space-y-10">
+                      {selectedMonumento.edizioneRiferimento?.citazione && (
+                        <section>
+                          <h3 className="text-xl font-bold mb-4 italic flex items-center gap-3">
+                            <div className="h-px w-8 bg-border" /> Edizione di riferimento
+                          </h3>
+                          <p className="text-xs font-serif text-ink/80 leading-relaxed">
+                            {selectedMonumento.edizioneRiferimento.editore && <span className="font-semibold text-ink">{selectedMonumento.edizioneRiferimento.editore}, </span>}
+                            {selectedMonumento.edizioneRiferimento.citazione}
+                          </p>
+                        </section>
+                      )}
                       {selectedMonumento.bibliografia && selectedMonumento.bibliografia.length > 0 ? (
                       <section>
                          <h3 className="text-xl font-bold mb-6 italic flex items-center gap-3">
@@ -8073,6 +8084,30 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                       </section>
                       ) : (
                         <p className="text-xs font-serif text-muted italic">Nessun riferimento bibliografico registrato.</p>
+                      )}
+                      {((selectedMonumento.responsabili && selectedMonumento.responsabili.some(r => r.nome)) || selectedMonumento.editorialStatus) && (
+                        <section>
+                          <h3 className="text-xl font-bold mb-4 italic flex items-center gap-3">
+                            <div className="h-px w-8 bg-border" /> Edizione digitale
+                          </h3>
+                          <dl className="text-xs font-serif grid grid-cols-[auto_1fr] gap-x-6 gap-y-2">
+                            {(Object.keys(RUOLO_DIGITALE_LABELS) as RuoloDigitale[]).map(ruolo => {
+                              const nomi = (selectedMonumento.responsabili || []).filter(r => r.ruolo === ruolo && r.nome).map(r => r.nome);
+                              return nomi.length > 0 ? (
+                                <React.Fragment key={ruolo}>
+                                  <dt className="text-muted">{RUOLO_DIGITALE_LABELS[ruolo]}</dt>
+                                  <dd className="text-ink">{nomi.join(', ')}</dd>
+                                </React.Fragment>
+                              ) : null;
+                            })}
+                            {selectedMonumento.editorialStatus && (
+                              <>
+                                <dt className="text-muted">Stato</dt>
+                                <dd className="text-ink">{EDITORIAL_STATUS_LABELS[selectedMonumento.editorialStatus]}</dd>
+                              </>
+                            )}
+                          </dl>
+                        </section>
                       )}
                     </div>
                   )}

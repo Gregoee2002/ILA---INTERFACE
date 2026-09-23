@@ -92,20 +92,8 @@ materialRef = "https://www.eagle-network.eu/voc/material/lod/48"  ← autocompil
 </section>
 
 <section class="section-break">
-<h2><span class="num">16</span>Revisioni e stato editoriale<span class="grp">Apparato scientifico</span></h2>
-<div class="field">
-  <div class="field-head"><span class="name">Stato editoriale (TEI revisionDesc/@status)</span></div>
-  <div class="field-body">
-    <table class="field-table">
-      <tr><th style="width:34%">Valore</th><th>Significato</th></tr>
-      <tr><td class="mono">draft</td><td>Bozza</td></tr>
-      <tr><td class="mono">diplomatic-edition</td><td>Edizione diplomatica pubblicata</td></tr>
-      <tr><td class="mono">published</td><td>Pubblicata</td></tr>
-      <tr><td class="mono">under-revision</td><td>In revisione</td></tr>
-    </table>
-    <p style="font-size:8.8pt;color:#7a6f5e">Campo singolo (non una lista): rappresenta lo stato attuale della scheda, non lo storico — lo storico è la lista di revisioni sotto.</p>
-  </div>
-</div>
+<h2><span class="num">16</span>Revisioni<span class="grp">Apparato scientifico</span></h2>
+<p class="lead">Lo stato di pubblicazione non sta più qui: dal settembre 2026 è nella sezione Bibliografia, insieme agli altri metadati della scheda (sezione 17).</p>
 <div class="field">
   <div class="field-head"><span class="name">Voci di revisione</span></div>
   <div class="field-body">
@@ -115,7 +103,29 @@ materialRef = "https://www.eagle-network.eu/voc/material/lod/48"  ← autocompil
 </section>
 
 <section class="section-break">
-<h2><span class="num">17</span>Bibliografia — edizioni vs. confronti<span class="grp">Apparato scientifico</span></h2>
+<h2><span class="num">17</span>Bibliografia — da dove viene il testo, chi ha fatto la scheda<span class="grp">Apparato scientifico</span></h2>
+<p class="lead">La sezione Bibliografia risponde a due domande. Da dove viene il testo: l'edizione di riferimento, poi le altre edizioni e i confronti. Come si cita la scheda: chi ne ha curato l'edizione digitale, e con quale stato è pubblicata.</p>
+
+<div class="callout warn"><b>«Editore» ha un solo significato.</b> Nella guida e nell'interfaccia «editore» (<i>editor</i>) è chi ha pubblicato il testo dell'iscrizione: Lane, Petzl, Kern. Chi lavora sulla scheda ILA non è «editor»: il suo ruolo si chiama con l'azione (Codifica, Revisione, Controllo scientifico; vedi sezione 22).</div>
+
+<div class="field">
+  <div class="field-head"><span class="name">Edizione di riferimento</span><span class="where">in testa alla sezione</span></div>
+  <div class="field-body">
+    <p class="when"><b>Quando:</b> sempre. È l'edizione da cui è tecnicamente assunto il testo della scheda, e ce n'è una sola.</p>
+    <table class="field-table">
+      <tr><th style="width:26%">Campo</th><th>Note</th></tr>
+      <tr><td>Editore</td><td>chi ha curato quell'edizione (es. <i>E. Lane</i>, <i>G. Petzl</i>)</td></tr>
+      <tr><td>Citazione <span class="req">*</span></td><td>la citazione completa dell'edizione, secondo le norme bibliografiche del progetto</td></tr>
+    </table>
+    <p class="when">Se la scheda cita il CMRDM e il campo è vuoto, il pulsante <b>«Usa Lane (CMRDM)»</b> copia la voce del CMRDM dalla lista e mette <i>E. Lane</i> come editore. Se il testo viene da un'edizione diversa, si scrive quella.</p>
+    <pre>&lt;listBibl&gt;
+  &lt;bibl type="edition" subtype="reference"&gt;&lt;editor&gt;E. Lane&lt;/editor&gt;, E. Lane, Corpus Monumentorum Religionis Dei Menis (CMRDM). I …, n. 29&lt;/bibl&gt;
+  &lt;bibl&gt;…le altre voci…&lt;/bibl&gt;
+&lt;/listBibl&gt;</pre>
+    <div class="callout warn"><b>PHI non è un'edizione.</b> Il Packard Humanities Institute riproduce il testo di un'edizione a stampa: va citata quella, non PHI. L'editor avvisa se il campo manca («Manca l'edizione di riferimento.») o se cita solo PHI («PHI non può essere l'edizione di riferimento: indica l'edizione che riproduce.»).</div>
+  </div>
+</div>
+
 <div class="field">
   <div class="field-head"><span class="name">Convenzione "Cf." di Lane</span></div>
   <div class="field-body">
@@ -127,6 +137,31 @@ materialRef = "https://www.eagle-network.eu/voc/material/lod/48"  ← autocompil
     <div class="callout warn">
       <b>Attenzione al markup TEI incorporato.</b> Alcune voci bibliografiche portano un'icona di avviso: contengono markup TEI (es. <code>&lt;ptr&gt;</code>, riferimenti strutturati) oltre al testo semplice. Modificando quella riga a mano, il markup viene <b>convertito in testo semplice</b> e perso — da fare solo se la modifica lo richiede davvero.
     </div>
+  </div>
+</div>
+<div class="field">
+  <div class="field-head"><span class="name">Responsabilità dell'edizione digitale</span></div>
+  <div class="field-body">
+    <p class="when"><b>Quando:</b> per ogni persona che ha lavorato sulla scheda, una riga con ruolo e nome. I ruoli sono i tre della sezione 22, scelti da un menu: Codifica, Revisione, Controllo scientifico. Nella scheda pubblica compaiono sotto il titolo «Edizione digitale».</p>
+    <pre>&lt;titleStmt&gt;
+  &lt;respStmt&gt;&lt;resp&gt;encoding&lt;/resp&gt;&lt;name&gt;Gabriele Gregorio&lt;/name&gt;&lt;/respStmt&gt;
+  &lt;respStmt&gt;&lt;resp&gt;revision&lt;/resp&gt;&lt;name&gt;Luca Ceruti&lt;/name&gt;&lt;/respStmt&gt;
+&lt;/titleStmt&gt;</pre>
+    <p style="font-size:8.8pt;color:#7a6f5e">Le schede più vecchie usano <code>encoder</code>, <code>editor</code> e <code>reviewer</code>: l'editor le legge come Codifica, Revisione e Controllo scientifico, e le riscrive nella forma nuova al primo salvataggio.</p>
+  </div>
+</div>
+
+<div class="field">
+  <div class="field-head"><span class="name">Stato di pubblicazione</span><span class="where">TEI revisionDesc/@status</span></div>
+  <div class="field-body">
+    <table class="field-table">
+      <tr><th style="width:34%">Valore</th><th>Significato</th></tr>
+      <tr><td class="mono">draft</td><td>Bozza</td></tr>
+      <tr><td class="mono">diplomatic-edition</td><td>Edizione diplomatica pubblicata</td></tr>
+      <tr><td class="mono">published</td><td>Pubblicata</td></tr>
+      <tr><td class="mono">under-revision</td><td>In revisione</td></tr>
+    </table>
+    <p style="font-size:8.8pt;color:#7a6f5e">Campo singolo: è lo stato attuale della scheda, non lo storico (quello è nella sezione Revisioni).</p>
   </div>
 </div>
 </section>
