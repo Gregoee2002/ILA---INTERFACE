@@ -41,7 +41,7 @@ export const ANCIENT_LABELS: AncientLabel[] = [
   { name: 'Mysia', lat: 39.75, lng: 28.2, kind: 'regio', minZoom: 6 },
   { name: 'Lydia', lat: 38.95, lng: 28.6, kind: 'regio', minZoom: 6 },
   { name: 'Ionia', lat: 38.1, lng: 27.0, kind: 'regio', minZoom: 7 },
-  { name: 'Caria', lat: 37.3, lng: 28.1, kind: 'regio', minZoom: 6 },
+  { name: 'Caria', lat: 37.05, lng: 28.35, kind: 'regio', minZoom: 6 },
   { name: 'Phrygia', lat: 39.0, lng: 30.6, kind: 'regio', minZoom: 6 },
   { name: 'Bithynia', lat: 40.6, lng: 30.4, kind: 'regio', minZoom: 6 },
   { name: 'Paphlagonia', lat: 41.4, lng: 33.6, kind: 'regio', minZoom: 6 },
@@ -92,4 +92,49 @@ export const ANCIENT_LABELS: AncientLabel[] = [
   ...([
     ['Ostia', 41.75, 12.29], ['Hierapolis', 37.93, 29.13], ['Attaleia', 36.88, 30.70],
   ] as const).map(([name, lat, lng]): AncientLabel => ({ name, lat, lng, kind: 'urbs', minZoom: 8 })),
+
+  // Centri minori, da vicino (zoom 8; da 9 quelli a ridosso di un'altra città).
+  // Coordinate da Pleiades (reprPoint) dove il luogo ha un titolo univoco; per
+  // gli altri la posizione del sito moderno corrispondente.
+  ...([
+    ['Thyatira', 38.92, 27.836], ['Magnesia ad Sipylum', 38.613, 27.433], ['Tralles', 37.86, 27.84],
+    ['Nysa', 37.904, 28.145], ['Saittae', 38.703, 28.624], ['Blaundus', 38.358, 29.209],
+    ['Temenothyrae', 38.68, 29.41], ['Eumenia', 38.32, 29.849],
+    ['Cibyra', 37.16, 29.489], ['Hypaepa', 38.248, 27.963], ['Teos', 38.177, 26.785],
+    ['Colophon', 38.11, 27.14], ['Erythrae', 38.383, 26.481], ['Phocaea', 38.67, 26.76],
+    ['Cnidus', 36.69, 27.37], ['Stratonicea', 37.314, 28.062], ['Mylasa', 37.303, 27.79],
+    ['Alabanda', 37.592, 27.985], ['Tabae', 37.443, 28.857], ['Nacolea', 39.458, 30.707],
+    ['Amorium', 39.02, 31.296], ['Philomelium', 38.357, 31.43],
+    ['Docimium', 38.862, 30.752], ['Apollonia', 38.08, 30.46], ['Termessus', 36.984, 30.463],
+    ['Selge', 37.225, 31.126], ['Cremna', 37.495, 30.686], ['Xanthus', 36.357, 29.32],
+    ['Myra', 36.259, 29.985], ['Telmessus', 36.621, 29.106], ['Aspendus', 36.94, 31.17],
+    ['Seleucia', 36.38, 33.93], ['Anazarbus', 37.258, 35.897], ['Iuliopolis', 40.107, 31.645],
+    ['Tavium', 39.858, 34.507], ['Prusa', 40.183, 29.064], ['Cius', 40.432, 29.156],
+    ['Claudiopolis', 40.74, 31.61], ['Adramyttium', 39.53, 26.97], ['Lampsacus', 40.35, 26.69],
+    ['Ilium', 39.96, 26.24], ['Alexandria Troas', 39.75, 26.16], ['Assus', 39.491, 26.337],
+    ['Amisus', 41.3, 36.33], ['Trapezus', 41.0, 39.73], ['Neocaesarea', 40.58, 36.95],
+    ['Tyana', 37.827, 34.58], ['Lystra', 37.588, 32.344], ['Delphi', 38.482, 22.501],
+    ['Olympia', 37.639, 21.631], ['Argos', 37.63, 22.722], ['Chalcis', 38.46, 23.6],
+    ['Thebae', 38.32, 23.318], ['Megara', 37.985, 23.34], ['Patrae', 38.25, 21.73],
+    ['Nicopolis', 39.01, 20.73], ['Philippi', 41.025, 24.335], ['Amphipolis', 40.826, 23.842],
+    ['Beroea', 40.52, 22.2], ['Pella', 40.765, 22.518], ['Samos', 37.688, 26.944],
+    ['Chios', 38.372, 26.133], ['Mytilene', 39.112, 26.556], ['Naxos', 37.104, 25.378],
+    ['Gortyna', 35.063, 24.947], ['Cnossus', 35.299, 25.16], ['Capua', 41.086, 14.25],
+    ['Tarentum', 40.474, 17.233], ['Brundisium', 40.639, 17.943], ['Aquileia', 45.77, 13.371],
+    ['Ravenna', 44.416, 12.197], ['Sarmizegetusa', 45.515, 22.785], ['Porolissum', 47.179, 23.157],
+    ['Napoca', 46.773, 23.594], ['Potaissa', 46.568, 23.782], ['Nicopolis ad Istrum', 43.218, 25.612],
+    ['Odessus', 43.2, 27.91], ['Callatis', 43.81, 28.59], ['Histria', 44.549, 28.775],
+    ['Memphis', 29.849, 31.255], ['Seleucia Pieria', 36.12, 35.93], ['Apamea Syriae', 35.42, 36.4],
+  ] as const).map(([name, lat, lng]): AncientLabel => ({ name, lat, lng, kind: 'urbs', minZoom: 8 })),
+  ...([
+    ['Tripolis', 38.05, 28.961], ['Maeonia', 38.61, 28.7],
+    ['Silandus', 38.752, 28.826], ['Sebaste', 38.496, 29.656], ['Colossae', 37.79, 29.26],
+    ['Clazomenae', 38.361, 26.771], ['Cyme', 38.76, 26.94], ['Priene', 37.66, 27.298],
+    ['Prymnessus', 38.698, 30.569], ['Patara', 36.26, 29.314], ['Chalcedon', 40.99, 29.03],
+    ['Cos', 36.894, 27.29], ['Puteoli', 40.826, 14.122],
+  ] as const).map(([name, lat, lng]): AncientLabel => ({ name, lat, lng, kind: 'urbs', minZoom: 9 })),
+  // Nomi lunghi che a zoom 8 coprirebbero la città vicina.
+  { name: 'Midaeum', lat: 39.8, lng: 30.845, kind: 'urbs', minZoom: 9 },
+  { name: 'Acmonia', lat: 38.66, lng: 29.774, kind: 'urbs', minZoom: 9 },
+  { name: 'Magnesia ad Maeandrum', lat: 37.85, lng: 27.523, kind: 'urbs', minZoom: 10 },
 ];
