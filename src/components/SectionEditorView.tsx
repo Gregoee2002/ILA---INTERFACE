@@ -2342,7 +2342,7 @@ const NumismaticsEditor: React.FC<{ m: Monumento; set: <K extends keyof Monument
       {/* ── 4. Nota ── */}
       <section>
         <Eyebrow className="mb-2">4 · Nota</Eyebrow>
-        <FieldLabel hint="quello che non entra nei campi sopra; la descrizione dei tipi va nelle note per faccia, in Iconografia">Nota numismatica</FieldLabel>
+        <FieldLabel hint="quello che non entra nei campi sopra; la descrizione dei tipi va nelle note per faccia, in Morfologia cultuale">Nota numismatica</FieldLabel>
         <TextArea rows={3} value={num.note || ''} onChange={e => update({ note: e.target.value || undefined })} />
       </section>
     </div>

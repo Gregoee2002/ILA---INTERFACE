@@ -83,6 +83,7 @@ materialRef = "https://www.eagle-network.eu/voc/material/lod/48"  ← autocompil
   <div class="field-head"><span class="name">Indici derivati (profileDesc)</span></div>
   <div class="field-body">
     <p class="when"><b>Come funzionano:</b> tutti e quattro gli indici (Epiteti, Divinità, Onomastica, Imperatori) sono <b>a sola lettura</b> nella sezione Indici: sono lo specchio esatto dei <code>&lt;persName&gt;</code> già codificati nella sezione Edizione, ricalcolati automaticamente a ogni modifica del testo.</p>
+    <p class="when"><b>Dove si leggono nella scheda pubblicata:</b> gli indici non hanno più una sezione propria nella scheda. Divinità ed epiteti stanno in «Morfologia cultuale», ogni divinità seguita dai propri epiteti (sezione 22). Onomastica e Imperatori stanno in fondo alla sezione «Iscrizione», sotto il testo, perché sono dati del testo.</p>
     <div class="callout warn">
       <b>Non si digita nulla qui.</b> Per aggiungere una voce a un indice si codifica il <code>persName</code> corrispondente nell'Edizione (vedi Parte I della guida, sezione 5 "Nomi e luoghi") — mai il contrario. Se una voce manca dall'indice, il problema è nell'Edizione, non in questa sezione.
     </div>
@@ -93,11 +94,11 @@ materialRef = "https://www.eagle-network.eu/voc/material/lod/48"  ← autocompil
 
 <section class="section-break">
 <h2><span class="num">16</span>Revisioni<span class="grp">Apparato scientifico</span></h2>
-<p class="lead">Lo stato di pubblicazione non sta più qui: dal settembre 2026 è nella sezione Bibliografia, insieme agli altri metadati della scheda (sezione 17).</p>
+<p class="lead">Lo stato di pubblicazione non sta più qui: dal settembre 2026 è nella sezione Bibliografia, insieme agli altri metadati della scheda (sezione 18).</p>
 <div class="field">
   <div class="field-head"><span class="name">Voci di revisione</span></div>
   <div class="field-body">
-    <p class="when"><b>Formato:</b> ogni riga registra una modifica sostanziale alla scheda: data, autore e una nota descrittiva della modifica. Si aggiungono, non si sovrascrivono: è un log cronologico, non un campo "ultima modifica". Vedi la sezione 22 per la convenzione completa su come compilarle (ruoli, tagliandino).</p>
+    <p class="when"><b>Formato:</b> ogni riga registra una modifica sostanziale alla scheda: data, autore e una nota descrittiva della modifica. Si aggiungono, non si sovrascrivono: è un log cronologico, non un campo "ultima modifica". Vedi la sezione 23 per la convenzione completa su come compilarle (ruoli, tagliandino).</p>
   </div>
 </div>
 </section>
@@ -106,7 +107,7 @@ materialRef = "https://www.eagle-network.eu/voc/material/lod/48"  ← autocompil
 <h2><span class="num">17</span>Bibliografia — da dove viene il testo, chi ha fatto la scheda<span class="grp">Apparato scientifico</span></h2>
 <p class="lead">La sezione Bibliografia risponde a due domande. Da dove viene il testo: l'edizione di riferimento, poi le altre edizioni e i confronti. Come si cita la scheda: chi ne ha curato l'edizione digitale, e con quale stato è pubblicata.</p>
 
-<div class="callout warn"><b>«Editore» ha un solo significato.</b> Nella guida e nell'interfaccia «editore» (<i>editor</i>) è chi ha pubblicato il testo dell'iscrizione: Lane, Petzl, Kern. Chi lavora sulla scheda ILA non è «editor»: il suo ruolo si chiama con l'azione (Codifica, Revisione, Controllo scientifico; vedi sezione 22).</div>
+<div class="callout warn"><b>«Editore» ha un solo significato.</b> Nella guida e nell'interfaccia «editore» (<i>editor</i>) è chi ha pubblicato il testo dell'iscrizione: Lane, Petzl, Kern. Chi lavora sulla scheda ILA non è «editor»: il suo ruolo si chiama con l'azione (Codifica, Revisione, Controllo scientifico; vedi sezione 23).</div>
 
 <div class="field">
   <div class="field-head"><span class="name">Edizione di riferimento</span><span class="where">in testa alla sezione</span></div>
@@ -142,7 +143,7 @@ materialRef = "https://www.eagle-network.eu/voc/material/lod/48"  ← autocompil
 <div class="field">
   <div class="field-head"><span class="name">Responsabilità dell'edizione digitale</span></div>
   <div class="field-body">
-    <p class="when"><b>Quando:</b> per ogni persona che ha lavorato sulla scheda, una riga con ruolo e nome. I ruoli sono i tre della sezione 22, scelti da un menu: Codifica, Revisione, Controllo scientifico. Nella scheda pubblica compaiono sotto il titolo «Edizione digitale».</p>
+    <p class="when"><b>Quando:</b> per ogni persona che ha lavorato sulla scheda, una riga con ruolo e nome. I ruoli sono i tre della sezione 23, scelti da un menu: Codifica, Revisione, Controllo scientifico. Nella scheda pubblica compaiono sotto il titolo «Edizione digitale».</p>
     <pre>&lt;titleStmt&gt;
   &lt;respStmt&gt;&lt;resp&gt;encoding&lt;/resp&gt;&lt;name&gt;Gabriele Gregorio&lt;/name&gt;&lt;/respStmt&gt;
   &lt;respStmt&gt;&lt;resp&gt;revision&lt;/resp&gt;&lt;name&gt;Luca Ceruti&lt;/name&gt;&lt;/respStmt&gt;
@@ -200,12 +201,26 @@ materialRef = "https://www.eagle-network.eu/voc/material/lod/48"  ← autocompil
 </section>
 
 <section class="section-break">
-<h2><span class="num">21</span>Iconografia e funzione cultuale<span class="grp">Apparato scientifico</span></h2>
-<p class="lead">La sezione più strutturata dopo l'Edizione: quattro livelli via via più specifici
-— funzione del monumento, figure rappresentate, tratti di ogni figura, nota libera per
-il residuo non catalogabile. Vocabolario sempre <b>chiuso</b> tranne dove indicato.</p>
+<h2><span class="num">21</span>Morfologia cultuale<span class="grp">Apparato scientifico</span></h2>
+<p class="lead">La sezione raccoglie tutto ciò che dice <i>come</i> il monumento partecipa al culto.
+Nella scheda pubblicata si legge in quattro rubriche, in quest'ordine: <b>Funzione</b>,
+<b>Lessico cultuale</b>, <b>Divinità ed epiteti</b>, <b>Apparato iconografico</b>. Nell'editor
+però se ne compilano qui solo due, la funzione e l'apparato iconografico; le altre due
+si ricavano dall'Edizione e non si digitano in questa sezione.</p>
 
-<h3>21.1 — Funzione cultuale</h3>
+<table class="field-table">
+  <tr><th style="width:26%">Rubrica della scheda</th><th>Da dove viene</th></tr>
+  <tr><td>Funzione</td><td>il campo «Funzione cultuale» di questa sezione (22.1)</td></tr>
+  <tr><td>Lessico cultuale</td><td>le parole marcate nell'Edizione con «Funzione cultuale (parola)» o «(formula)», raggruppate per famiglia (Parte I, sezione 8). Per aggiungere o togliere un termine si corregge il markup dell'Edizione.</td></tr>
+  <tr><td>Divinità ed epiteti</td><td>i <code>&lt;persName&gt;</code> divini dell'Edizione, come negli Indici (sezione 16). Ogni divinità compare con i propri epiteti; quelli che non si riescono ad attribuire a una divinità restano in coda come «epiteti non attribuiti», segnale che il <code>persName</code> va ricontrollato.</td></tr>
+  <tr><td>Apparato iconografico</td><td>la nota iconografica e le figure di questa sezione (22.2–22.4)</td></tr>
+</table>
+
+<p>La parte compilabile qui ha quattro livelli via via più specifici: funzione del
+monumento, figure rappresentate, tratti di ogni figura, nota libera per il residuo non
+catalogabile. Vocabolario sempre <b>chiuso</b> tranne dove indicato.</p>
+
+<h3>22.1 — Funzione cultuale</h3>
 <div class="field">
   <div class="field-head"><span class="name">Funzione cultuale</span><span class="where">vocabolario chiuso, 6 valori</span></div>
   <div class="field-body">
@@ -224,7 +239,7 @@ il residuo non catalogabile. Vocabolario sempre <b>chiuso</b> tranne dove indica
   </div>
 </div>
 
-<h3>21.2 — Figure</h3>
+<h3>22.2 — Figure</h3>
 <div class="field">
   <div class="field-head"><span class="name">Tipo di figura</span><span class="where">vocabolario chiuso</span></div>
   <div class="field-body">
@@ -257,7 +272,7 @@ il residuo non catalogabile. Vocabolario sempre <b>chiuso</b> tranne dove indica
   </div>
 </div>
 
-<h3>21.3 — Tratti (a cascata sul tipo)</h3>
+<h3>22.3 — Tratti (a cascata sul tipo)</h3>
 <div class="field">
   <div class="field-head"><span class="name">Categoria → Elemento</span><span class="where">select a cascata</span></div>
   <div class="field-body">
@@ -278,7 +293,7 @@ il residuo non catalogabile. Vocabolario sempre <b>chiuso</b> tranne dove indica
   </div>
 </div>
 
-<h3>21.4 — Nota libera</h3>
+<h3>22.4 — Nota libera</h3>
 <div class="field">
   <div class="field-head"><span class="name">Nota iconografica</span></div>
   <div class="field-body">
