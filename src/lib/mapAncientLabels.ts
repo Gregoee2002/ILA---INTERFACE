@@ -127,7 +127,7 @@ export const ANCIENT_LABELS: AncientLabel[] = [
     ['Memphis', 29.849, 31.255], ['Seleucia Pieria', 36.12, 35.93], ['Apamea Syriae', 35.42, 36.4],
   ] as const).map(([name, lat, lng]): AncientLabel => ({ name, lat, lng, kind: 'urbs', minZoom: 8 })),
   ...([
-    ['Tripolis', 38.05, 28.961], ['Maeonia', 38.61, 28.7],
+    ['Tripolis', 38.05, 28.961], ['Maeonia', 38.535, 28.491],
     ['Silandus', 38.752, 28.826], ['Sebaste', 38.496, 29.656], ['Colossae', 37.79, 29.26],
     ['Clazomenae', 38.361, 26.771], ['Cyme', 38.76, 26.94], ['Priene', 37.66, 27.298],
     ['Prymnessus', 38.698, 30.569], ['Patara', 36.26, 29.314], ['Chalcedon', 40.99, 29.03],
@@ -137,4 +137,23 @@ export const ANCIENT_LABELS: AncientLabel[] = [
   { name: 'Midaeum', lat: 39.8, lng: 30.845, kind: 'urbs', minZoom: 9 },
   { name: 'Acmonia', lat: 38.66, lng: 29.774, kind: 'urbs', minZoom: 9 },
   { name: 'Magnesia ad Maeandrum', lat: 37.85, lng: 27.523, kind: 'urbs', minZoom: 10 },
+
+  // Siti del corpus che non erano già fra le città: stessi punti della
+  // mappa (reprPoint Pleiades del <placeName type="ancient"> delle schede),
+  // nome in forma latina dove esiste, altrimenti quello di Pleiades.
+  ...([
+    ['Coloe', 38.226, 28.208], ['Ipsus', 38.856, 30.549], ['Appola', 38.955, 31.146],
+    ['Laodicea Combusta', 38.189, 32.376], ['Andeda', 37.272, 30.26], ['Androna', 39.63, 32.658],
+    ['Lindus', 36.091, 28.088], ['Ormeleis', 37.307, 29.848], ['Thoricus', 37.738, 24.054],
+    ['Sunium', 37.652, 24.026], ['Thasus', 40.782, 24.718], ['Olbasa', 37.308, 30.009],
+    ['Savatra', 37.975, 33.111], ['Sidamaria', 37.48, 33.631], ['Mostene', 38.535, 27.547],
+    ['Piraeus', 37.937, 23.645],
+  ] as const).map(([name, lat, lng]): AncientLabel => ({ name, lat, lng, kind: 'urbs', minZoom: 8 })),
+  // Katoikiai del Kula, fitte fra Saittae e Maeonia: si aprono più tardi.
+  ...([
+    ['Collyda', 38.75, 28.75], ['Koresa', 38.624, 28.586], ['Kaualena', 38.596, 29.385],
+  ] as const).map(([name, lat, lng]): AncientLabel => ({ name, lat, lng, kind: 'urbs', minZoom: 9 })),
+  ...([
+    ['Iaza', 38.587, 28.607],
+  ] as const).map(([name, lat, lng]): AncientLabel => ({ name, lat, lng, kind: 'urbs', minZoom: 10 })),
 ];

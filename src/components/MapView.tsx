@@ -647,6 +647,8 @@ export const MapView: React.FC<MapViewProps> = ({ monumenti, onSelectMonumento }
           zoom={5}
           scrollWheelZoom={true}
           minZoom={2}
+          // Oltre l'11 il rilievo (nativo fino a 9) si sgrana: vedi TileLayer.
+          maxZoom={11}
           maxBounds={WORLD_BOUNDS}
           maxBoundsViscosity={0.8}
           className="ila-map"
@@ -656,13 +658,15 @@ export const MapView: React.FC<MapViewProps> = ({ monumenti, onSelectMonumento }
           <FitToSites sites={sites} ready={pendingFetches === 0} />
           <MapRefSetter mapRef={mapRef} />
           {/* Base Esri World Terrain senza scritte e senza chiave: rilievo e
-              mari, nient'altro. I nomi li mette AncientLabels, in latino e col
+              mari, nient'altro. Esri la serve fino a zoom 9: oltre, al posto
+              delle tessere esce «Map data not yet available», quindi da 10 in
+              su Leaflet ingrandisce quelle di 9. I nomi li mette AncientLabels, in latino e col
               font del sito. (Le tessere CARTO dal 2026 escono con la filigrana
               «API KEY REQUIRED»; la Light Gray di Esri porta i nomi moderni.) */}
           <TileLayer
             attribution='Tiles &copy; <a href="https://www.esri.com">Esri</a> &mdash; Source: USGS, Esri, TANA, DeLorme, NPS'
             url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Terrain_Base/MapServer/tile/{z}/{y}/{x}"
-            maxNativeZoom={13}
+            maxNativeZoom={9}
             noWrap
           />
           <PaperTint />
