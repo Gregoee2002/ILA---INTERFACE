@@ -417,6 +417,23 @@
     background: var(--sidebar) !important;
     color: var(--accent) !important;
   }
+  /* Base cartografica: i mari Esri sono un turchese acceso, qui smorzato
+     verso i toni pergamena; in scuro si inverte la base e si riporta il
+     mare sulla sua tinta. */
+  .ila-map .leaflet-tile-pane { filter: saturate(0.55) sepia(0.22) brightness(0.98); }
+  .dark .ila-map .leaflet-tile-pane { filter: invert(1) hue-rotate(180deg) saturate(0.5) brightness(0.8) contrast(0.9); }
+  /* Nomi antichi (MapView → AncientLabels): Garamond, alone del colore di
+     fondo perché restino leggibili sul rilievo. */
+  .ancient-label { background: none; border: none; }
+  .ancient-label span {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    white-space: nowrap;
+    font-family: var(--font-serif);
+    text-shadow: 0 0 3px var(--parchment), 0 0 3px var(--parchment), 0 0 6px var(--parchment);
+  }
+  .ancient-label-regio { font-size: 15px; letter-spacing: 0.12em; color: color-mix(in srgb, var(--ink) 75%, transparent); }
+  .ancient-label-mare { font-size: 14px; font-style: italic; letter-spacing: 0.06em; color: color-mix(in srgb, var(--accent) 70%, var(--ink)); }
   .leaflet-control-attribution {
     background: rgba(var(--shadow-color), 0.06) !important;
     color: var(--muted) !important;

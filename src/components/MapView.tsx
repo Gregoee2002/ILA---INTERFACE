@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
-import { MapContainer, TileLayer, CircleMarker, Popup, Tooltip, useMap } from 'react-leaflet';
+import { MapContainer, TileLayer, CircleMarker, Popup, Tooltip, Marker, Pane, useMap, useMapEvents } from 'react-leaflet';
 import MarkerClusterGroup from 'react-leaflet-cluster';
 import 'leaflet/dist/leaflet.css';
 // Senza questi due, i "bollini" cluster mostrano solo il numero senza
@@ -14,6 +14,7 @@ import { formatIlaLabel } from '../lib/xmlUtils';
 import { formatSecoliAttestazione } from '../lib/chronology';
 import L from 'leaflet';
 import { Search, X, ChevronDown, MapPinned, Locate } from 'lucide-react';
+import { ANCIENT_LABELS } from '../lib/mapAncientLabels';
 import { REGION_COLORS, DENSITY_SCALE, FILTER_MATCH_COLOR, GRAYED_OUT_FILL_COLOR } from '../lib/mapPalette';
 
 // Fix for default marker icon in react-leaflet just in case
@@ -156,6 +157,31 @@ const FitToSites: React.FC<{ sites: Site[]; ready: boolean }> = ({ sites, ready 
   }, [ready, sites, map]);
 
   return null;
+};
+
+/** Nomi antichi sopra la base senza scritte (vedi lib/mapAncientLabels.ts).
+ *  Stanno in un pane sotto i punti e non catturano il mouse. */
+const AncientLabels: React.FC = () => {
+  const map = useMap();
+  const [zoom, setZoom] = useState(map.getZoom());
+  useMapEvents({ zoomend: () => setZoom(map.getZoom()) });
+  // Il prefisso di Leaflet (con la bandierina) non è un obbligo di licenza:
+  // resta solo l'attribuzione della base, che invece lo è.
+  useEffect(() => { map.attributionControl?.setPrefix(false); }, [map]);
+  const icons = useMemo(() => new Map(ANCIENT_LABELS.map(l => [l.name, L.divIcon({
+    className: 'ancient-label',
+    html: `<span class="ancient-label-${l.kind}">${l.name}</span>`,
+    iconSize: [0, 0],
+  })])), []);
+  return (
+    <Pane name="ancient-labels" style={{ zIndex: 350, pointerEvents: 'none' }}>
+      {ANCIENT_LABELS
+        .filter(l => zoom >= (l.minZoom ?? 0) && zoom <= (l.maxZoom ?? 99))
+        .map(l => (
+          <Marker key={l.name} position={[l.lat, l.lng]} icon={icons.get(l.name)!} interactive={false} keyboard={false} pane="ancient-labels" />
+        ))}
+    </Pane>
+  );
 };
 
 const MapRefSetter: React.FC<{ mapRef: React.MutableRefObject<L.Map | null> }> = ({ mapRef }) => {
@@ -615,20 +641,23 @@ export const MapView: React.FC<MapViewProps> = ({ monumenti, onSelectMonumento }
           minZoom={2}
           maxBounds={WORLD_BOUNDS}
           maxBoundsViscosity={0.8}
+          className="ila-map"
           style={{ width: '100%', height: '100%' }}
           aria-label={`Mappa delle attestazioni del corpus — ${sites.length} località`}
         >
           <FitToSites sites={sites} ready={pendingFetches === 0} />
           <MapRefSetter mapRef={mapRef} />
-          {/* Base grigio chiaro di Esri, senza chiave. Le tessere CARTO
-              (light_all) dal 2026 escono con la filigrana «API KEY REQUIRED»
-              su ogni tessera, qualunque sia il percorso. */}
+          {/* Base Esri World Terrain senza scritte e senza chiave: rilievo e
+              mari, nient'altro. I nomi li mette AncientLabels, in latino e col
+              font del sito. (Le tessere CARTO dal 2026 escono con la filigrana
+              «API KEY REQUIRED»; la Light Gray di Esri porta i nomi moderni.) */}
           <TileLayer
-            attribution='Tiles &copy; <a href="https://www.esri.com">Esri</a> &mdash; Esri, DeLorme, NAVTEQ'
-            url="https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}"
-            maxNativeZoom={16}
+            attribution='Tiles &copy; <a href="https://www.esri.com">Esri</a> &mdash; Source: USGS, Esri, TANA, DeLorme, NPS'
+            url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Terrain_Base/MapServer/tile/{z}/{y}/{x}"
+            maxNativeZoom={13}
             noWrap
           />
+          <AncientLabels />
           <MarkerClusterGroup
             ref={clusterGroupRef}
             chunkedLoading
