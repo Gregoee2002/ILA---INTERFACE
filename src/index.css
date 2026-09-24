@@ -420,7 +420,13 @@
   /* Base cartografica: i mari Esri sono un turchese acceso, qui smorzato
      verso i toni pergamena; in scuro si inverte la base e si riporta il
      mare sulla sua tinta. */
-  .ila-map .leaflet-tile-pane { filter: saturate(0.55) sepia(0.22) brightness(0.98); }
+  /* La base Esri ha le terre quasi bianche, che sul fondo chiaro del sito
+     sparivano. Sopra le tessere sta un velo pergamena in moltiplicazione
+     (pane «tint», MapView → PaperTint): il bianco diventa carta, rilievo e
+     mari restano. In scuro il velo si toglie e la base si inverte. */
+  .ila-map .leaflet-tile-pane { filter: saturate(0.7) contrast(1.1); }
+  .ila-map .leaflet-tint-pane { mix-blend-mode: multiply; pointer-events: none; }
+  .dark .ila-map .leaflet-tint-pane { display: none; }
   .dark .ila-map .leaflet-tile-pane { filter: invert(1) hue-rotate(180deg) saturate(0.5) brightness(0.8) contrast(0.9); }
   /* Nomi antichi (MapView → AncientLabels): Garamond, alone del colore di
      fondo perché restino leggibili sul rilievo. */
@@ -430,10 +436,21 @@
     transform: translate(-50%, -50%);
     white-space: nowrap;
     font-family: var(--font-serif);
-    text-shadow: 0 0 3px var(--parchment), 0 0 3px var(--parchment), 0 0 6px var(--parchment);
+    text-shadow: 0 0 2px var(--parchment), 0 0 3px var(--parchment), 0 0 6px var(--parchment), 0 0 10px var(--parchment);
   }
-  .ancient-label-regio { font-size: 15px; letter-spacing: 0.12em; color: color-mix(in srgb, var(--ink) 75%, transparent); }
-  .ancient-label-mare { font-size: 14px; font-style: italic; letter-spacing: 0.06em; color: color-mix(in srgb, var(--accent) 70%, var(--ink)); }
+  .ancient-label-regio { font-size: 15px; letter-spacing: 0.14em; font-weight: 500; color: color-mix(in srgb, var(--ink) 82%, transparent); }
+  .ancient-label-mare { font-size: 14px; font-style: italic; letter-spacing: 0.06em; color: color-mix(in srgb, var(--accent) 55%, var(--ink)); }
+  .dark .ancient-label-mare { color: color-mix(in srgb, var(--accent) 80%, var(--ink)); }
+  /* Città: il punto sta sulla coordinata, il nome a destra. */
+  .ancient-label span.ancient-label-urbs {
+    transform: translate(-3.5px, -50%);
+    display: flex; align-items: center; gap: 5px;
+    font-size: 13px; color: var(--ink);
+  }
+  .ancient-label-urbs i {
+    width: 6px; height: 6px; border-radius: 50%; flex: none;
+    background: var(--parchment); border: 1.5px solid var(--ink);
+  }
   .leaflet-control-attribution {
     background: rgba(var(--shadow-color), 0.06) !important;
     color: var(--muted) !important;

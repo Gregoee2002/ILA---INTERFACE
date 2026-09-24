@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
-import { MapContainer, TileLayer, CircleMarker, Popup, Tooltip, Marker, Pane, useMap, useMapEvents } from 'react-leaflet';
+import { MapContainer, TileLayer, CircleMarker, Popup, Tooltip, Marker, Pane, Rectangle, useMap, useMapEvents } from 'react-leaflet';
 import MarkerClusterGroup from 'react-leaflet-cluster';
 import 'leaflet/dist/leaflet.css';
 // Senza questi due, i "bollini" cluster mostrano solo il numero senza
@@ -159,6 +159,14 @@ const FitToSites: React.FC<{ sites: Site[]; ready: boolean }> = ({ sites, ready 
   return null;
 };
 
+/** Velo pergamena sopra le tessere (vedi .leaflet-tint-pane in index.css):
+ *  un rettangolo grande quanto il mondo, moltiplicato sulla base. */
+const PaperTint: React.FC = () => (
+  <Pane name="tint" style={{ zIndex: 250 }}>
+    <Rectangle bounds={WORLD_BOUNDS} pathOptions={{ stroke: false, fillColor: '#e3d6b8', fillOpacity: 1 }} interactive={false} pane="tint" />
+  </Pane>
+);
+
 /** Nomi antichi sopra la base senza scritte (vedi lib/mapAncientLabels.ts).
  *  Stanno in un pane sotto i punti e non catturano il mouse. */
 const AncientLabels: React.FC = () => {
@@ -168,9 +176,9 @@ const AncientLabels: React.FC = () => {
   // Il prefisso di Leaflet (con la bandierina) non è un obbligo di licenza:
   // resta solo l'attribuzione della base, che invece lo è.
   useEffect(() => { map.attributionControl?.setPrefix(false); }, [map]);
-  const icons = useMemo(() => new Map(ANCIENT_LABELS.map(l => [l.name, L.divIcon({
+  const icons = useMemo(() => new Map(ANCIENT_LABELS.map(l => [`${l.name}@${l.lat}`, L.divIcon({
     className: 'ancient-label',
-    html: `<span class="ancient-label-${l.kind}">${l.name}</span>`,
+    html: `<span class="ancient-label-${l.kind}">${l.kind === 'urbs' ? '<i></i>' : ''}${l.name}</span>`,
     iconSize: [0, 0],
   })])), []);
   return (
@@ -178,7 +186,7 @@ const AncientLabels: React.FC = () => {
       {ANCIENT_LABELS
         .filter(l => zoom >= (l.minZoom ?? 0) && zoom <= (l.maxZoom ?? 99))
         .map(l => (
-          <Marker key={l.name} position={[l.lat, l.lng]} icon={icons.get(l.name)!} interactive={false} keyboard={false} pane="ancient-labels" />
+          <Marker key={`${l.name}@${l.lat}`} position={[l.lat, l.lng]} icon={icons.get(`${l.name}@${l.lat}`)!} interactive={false} keyboard={false} pane="ancient-labels" />
         ))}
     </Pane>
   );
@@ -657,6 +665,7 @@ export const MapView: React.FC<MapViewProps> = ({ monumenti, onSelectMonumento }
             maxNativeZoom={13}
             noWrap
           />
+          <PaperTint />
           <AncientLabels />
           <MarkerClusterGroup
             ref={clusterGroupRef}
