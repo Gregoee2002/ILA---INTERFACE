@@ -424,7 +424,7 @@
      sparivano. Sopra le tessere sta un velo pergamena in moltiplicazione
      (pane «tint», MapView → PaperTint): il bianco diventa carta, rilievo e
      mari restano. In scuro il velo si toglie e la base si inverte. */
-  .ila-map .leaflet-tile-pane { filter: saturate(0.55) sepia(0.12) contrast(1.05); }
+  .ila-map .leaflet-tile-pane { filter: saturate(0.6) sepia(0.04) contrast(1.05); }
   .ila-map .leaflet-tint-pane { mix-blend-mode: multiply; pointer-events: none; }
   .dark .ila-map .leaflet-tint-pane { display: none; }
   .dark .ila-map .leaflet-tile-pane { filter: invert(1) hue-rotate(180deg) saturate(0.5) brightness(0.8) contrast(0.9); }
