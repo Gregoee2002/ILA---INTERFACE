@@ -424,7 +424,7 @@
      sparivano. Sopra le tessere sta un velo pergamena in moltiplicazione
      (pane «tint», MapView → PaperTint): il bianco diventa carta, rilievo e
      mari restano. In scuro il velo si toglie e la base si inverte. */
-  .ila-map .leaflet-tile-pane { filter: saturate(0.7) contrast(1.1); }
+  .ila-map .leaflet-tile-pane { filter: saturate(0.55) sepia(0.12) contrast(1.05); }
   .ila-map .leaflet-tint-pane { mix-blend-mode: multiply; pointer-events: none; }
   .dark .ila-map .leaflet-tint-pane { display: none; }
   .dark .ila-map .leaflet-tile-pane { filter: invert(1) hue-rotate(180deg) saturate(0.5) brightness(0.8) contrast(0.9); }
@@ -438,7 +438,7 @@
     font-family: var(--font-serif);
     text-shadow: 0 0 2px var(--parchment), 0 0 3px var(--parchment), 0 0 6px var(--parchment), 0 0 10px var(--parchment);
   }
-  .ancient-label-regio { font-size: 15px; letter-spacing: 0.14em; font-weight: 500; color: color-mix(in srgb, var(--ink) 82%, transparent); }
+  .ancient-label-regio { font-size: 16px; font-variant-caps: small-caps; font-feature-settings: 'smcp'; letter-spacing: 0.1em; font-weight: 700; color: color-mix(in srgb, var(--ink) 85%, transparent); }
   .ancient-label-mare { font-size: 14px; font-style: italic; letter-spacing: 0.06em; color: color-mix(in srgb, var(--accent) 55%, var(--ink)); }
   .dark .ancient-label-mare { color: color-mix(in srgb, var(--accent) 80%, var(--ink)); }
   /* Città: il punto sta sulla coordinata, il nome a destra. */

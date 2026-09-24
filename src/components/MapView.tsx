@@ -163,7 +163,7 @@ const FitToSites: React.FC<{ sites: Site[]; ready: boolean }> = ({ sites, ready 
  *  un rettangolo grande quanto il mondo, moltiplicato sulla base. */
 const PaperTint: React.FC = () => (
   <Pane name="tint" style={{ zIndex: 250 }}>
-    <Rectangle bounds={WORLD_BOUNDS} pathOptions={{ stroke: false, fillColor: '#e3d6b8', fillOpacity: 1 }} interactive={false} pane="tint" />
+    <Rectangle bounds={WORLD_BOUNDS} pathOptions={{ stroke: false, fillColor: '#f3eee2', fillOpacity: 1 }} interactive={false} pane="tint" />
   </Pane>
 );
 
