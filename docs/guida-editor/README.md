@@ -21,7 +21,8 @@ docs/guida-editor/
 │   ├── part1-edizione.html      ← Parte I  — sezioni 1-12 (markup Leiden/EpiDoc)
 │   ├── part2-altre-sezioni.html ← Parte II — sezioni 11-21 (le altre 17 sezioni dell'editor)
 │   ├── part3-ruoli-editoriali.html ← Parte III — sezione 22 (chi cura la scheda)
-│   └── part4-fonti-letterarie.html ← Parte IV — sezioni 23-29 (la redazione delle Fonti letterarie)
+│   ├── part4-fonti-letterarie.html ← Parte IV — la redazione delle Fonti letterarie
+│   └── part5-strumenti.html     ← Parte V  — la sezione Strumenti e la tabella Mancanze
 ├── guida-editor-ila.html        ← output generato (non editare a mano, si riscrive col build)
 └── guida-editor-ila.pdf         ← output generato (il PDF da consegnare)
 ```

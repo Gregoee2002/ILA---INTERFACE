@@ -1,0 +1,129 @@
+<section class="section-break">
+<h2><span class="num">31</span>La sezione Strumenti<span class="grp">Strumenti</span></h2>
+<p class="lead">Gli strumenti della redazione stanno sotto una sola voce della barra
+laterale, <b>Strumenti</b> (icona della chiave inglese). La voce compare solo a chi ha
+sbloccato la modifica con il proprio token: chi consulta il sito con la sola password
+non la vede. In testa alla sezione ci sono sei linguette, <b>Avanzamento · Mancanze ·
+Coerenza · Registro · Bug · Bibliografia</b>. Accanto a Registro e Bug un numero indica
+le voci ancora aperte. Rientrando in Strumenti si ritrova l'ultima linguetta aperta.</p>
+
+<div class="field">
+  <div class="field-head"><span class="name">Quale strumento per quale domanda</span></div>
+  <div class="field-body">
+    <table class="field-table">
+      <tr><th style="width:22%">Linguetta</th><th style="width:38%">Risponde a</th><th>Scrive sui dati?</th></tr>
+      <tr><td><b>Avanzamento</b></td><td>A che punto è il corpus, campo per campo?</td><td>No: solo conteggi.</td></tr>
+      <tr><td><b>Mancanze</b></td><td>Che cosa manca a questa scheda? Quali schede sono più indietro?</td><td>No: elenca ed esporta.</td></tr>
+      <tr><td><b>Coerenza</b></td><td>Ci sono varianti grafiche dello stesso valore, campi essenziali vuoti, divinità ed epiteti classificati in modo sospetto?</td><td>No: le segnalazioni si correggono a mano nell'editor.</td></tr>
+      <tr><td><b>Registro</b></td><td>Chi sta lavorando su quale scheda, e che cosa resta da fare?</td><td>Sì, ma solo <span class="mono">flags.json</span> nella repo dati, non le schede.</td></tr>
+      <tr><td><b>Bug</b></td><td>Che cosa non funziona nell'applicazione?</td><td>Sì, ma solo <span class="mono">bugs.json</span> nella repo dati.</td></tr>
+      <tr><td><b>Bibliografia</b></td><td>Come è scritta ogni dicitura bibliografica, e dove la stessa opera è citata in forme diverse?</td><td><b>Sì: modifica le schede</b>, un commit per scheda toccata.</td></tr>
+    </table>
+    <p class="when"><b>Regola generale:</b> Avanzamento, Mancanze e Coerenza <b>segnalano</b> e non correggono niente. La correzione si fa sempre nell'editor a sezioni: un clic su un numero di scheda la apre. Contano se un campo è compilato, non se è compilato bene. Una scheda senza mancanze non è per questo una scheda controllata: quello resta il lavoro del Controllo scientifico (sezione 23).</p>
+  </div>
+</div>
+
+<div class="field">
+  <div class="field-head"><span class="name">Avanzamento</span><span class="where">Strumenti → Avanzamento</span></div>
+  <div class="field-body">
+    <p class="when"><b>Quando:</b> per fare il punto sul corpus nel suo insieme, per esempio prima di una riunione o per dare i numeri di un capitolo. Non serve a decidere su quale scheda lavorare: per quello c'è Mancanze.</p>
+    <table class="field-table">
+      <tr><th style="width:26%">Blocco</th><th>Che cosa mostra</th></tr>
+      <tr><td>Requisiti</td><td>Per ciascun requisito (vedi sezione 32) quante schede lo soddisfano, sul totale delle schede a cui si applica, e la percentuale. I requisiti del testo escludono gli anepigrafi. Un clic su una riga elenca le schede in cui il campo manca; <i>apri nella tabella</i> porta a Mancanze già filtrata su quel requisito.</td></tr>
+      <tr><td>Stato editoriale</td><td>Quante schede per ciascuno stato di pubblicazione, compreso «non dichiarato».</td></tr>
+      <tr><td>Responsabilità</td><td>Schede per persona, divise per ruolo (Codifica, Revisione, Controllo scientifico), lette da <b>Bibliografia → Responsabilità dell'edizione digitale</b>.</td></tr>
+      <tr><td>Per regione</td><td>Per ogni regione: numero di schede e percentuale di schede tradotte, datate e con il luogo antico collegato. Mostra dove il lavoro è più indietro.</td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="field">
+  <div class="field-head"><span class="name">Coerenza</span><span class="where">Strumenti → Coerenza</span></div>
+  <div class="field-body">
+    <p class="when"><b>Quando:</b> dopo un lotto di schede nuove o una revisione estesa degli indici. Cerca gli errori che una scheda da sola non mostra, perché emergono solo confrontando il corpus intero.</p>
+    <table class="field-table">
+      <tr><th style="width:30%">Controllo</th><th>Che cosa segnala</th></tr>
+      <tr><td>Varianti grafiche</td><td>Valori di Divinità, Epiteti, Onomastica, Città, Regione, Tipo oggetto e Materiale che coincidono se si ignorano maiuscole, accenti e sigma finale, ma sono scritti in modo diverso. Quasi sempre vanno uniformati sulla forma più frequente.</td></tr>
+      <tr><td>Campi essenziali mancanti</td><td>Schede senza divinità, senza datazione, senza bibliografia, senza città.</td></tr>
+      <tr><td>Markup EpiDoc non interpretato</td><td>Edizioni in cui il markup è finito nel testo come caratteri (per esempio <span class="mono">&amp;lt;persName</span>) invece che come marcatura.</td></tr>
+      <tr><td>Classificazione divinità / epiteti</td><td>Casi sospetti, per esempio una stessa forma usata sia come divinità sia come epiteto. Vanno verificati sulle edizioni a stampa prima di correggere l'XML.</td></tr>
+      <tr><td>Epiteti condivisi</td><td>Epiteti attribuiti a più divinità. Solo informativo: possono essere genuinamente condivisi.</td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="field">
+  <div class="field-head"><span class="name">Registro</span><span class="where">Strumenti → Registro; e nel dettaglio di ogni scheda</span></div>
+  <div class="field-body">
+    <p class="when"><b>Quando:</b> quando si prende in carico una scheda o si trova un problema che non si risolve subito. Ogni scheda ha al più una voce di registro, a cui si aggiungono note firmate (autore e testo) anche in momenti diversi, finché qualcuno non la segna come <b>Risolta</b>. La voce si apre dal dettaglio della scheda, nel riquadro «Registro». La linguetta raccoglie tutte le voci, filtrabili fra aperte, risolte e tutte.</p>
+    <div class="callout">Il Registro non è il log delle Revisioni (sezione 23). Le Revisioni documentano nell'XML un intervento fatto. Il Registro è un promemoria di lavorazione, fuori dall'XML: «ci sto lavorando io», «manca la foto», «da ricontrollare su Petzl».</div>
+  </div>
+</div>
+
+<div class="field">
+  <div class="field-head"><span class="name">Bug</span><span class="where">Strumenti → Bug</span></div>
+  <div class="field-body">
+    <p class="when"><b>Quando:</b> quando l'applicazione non si comporta come dovrebbe, per esempio un salvataggio che fallisce, una sezione che non si apre o un testo reso male. <b>Segnala un bug</b> chiede un autore e una descrizione. Si risolve e si riapre come il Registro. Un problema di contenuto di una scheda (un dato sbagliato) va invece nel Registro di quella scheda, non qui.</p>
+  </div>
+</div>
+
+<div class="field">
+  <div class="field-head"><span class="name">Bibliografia</span><span class="where">Strumenti → Bibliografia</span></div>
+  <div class="field-body">
+    <p class="when"><b>Quando:</b> per uniformare la forma di una citazione ricorrente in tutto il corpus, secondo le norme bibliografiche del progetto. Il pannello raccoglie tutte le diciture distinte, le raggruppa per autore e fa emergere le forme diverse della stessa opera. Scrivendo la nuova forma e premendo <b>Applica</b>, la sostituzione esatta viene applicata a tutte le schede che contengono quella dicitura.</p>
+    <div class="callout warn"><b>È l'unico strumento che modifica le schede.</b> Ogni scheda toccata diventa un commit, come una modifica fatta a mano nell'editor. La sostituzione è letterale: prima di applicarla, controlla nell'elenco che la dicitura di partenza sia proprio quella da cambiare in tutte le schede, e non anche in una dove è corretta così.</div>
+  </div>
+</div>
+</section>
+
+<section class="section-break">
+<h2><span class="num">32</span>Tenere traccia delle mancanze<span class="grp">Strumenti → Mancanze</span></h2>
+<p class="lead">La linguetta <b>Mancanze</b> è lo strumento di lavoro quotidiano della
+redazione: una riga per scheda, una colonna per requisito, e per ogni incrocio un segno.
+<b>●</b> vuol dire compilato, <b>○</b> vuol dire che manca, <b>–</b> che il requisito non
+riguarda quella scheda. Un clic sulla riga apre la scheda.</p>
+
+<div class="field">
+  <div class="field-head"><span class="name">I requisiti</span><span class="where">gli stessi di Avanzamento e del controllo notturno</span></div>
+  <div class="field-body">
+    <p class="when"><b>Che cosa conta come compilato:</b> un campo con del testo vero. I segnaposto <span class="mono">DA_COMPILARE</span> e i commenti come <span class="mono">&lt;!-- inserire TM number --&gt;</span> contano come vuoti.</p>
+    <table class="field-table">
+      <tr><th style="width:22%">Gruppo</th><th>Requisiti</th></tr>
+      <tr><td><b>Scheda bibliografica</b></td><td>Edizione di riferimento · Editore dell'edizione di riferimento · Riferimento diverso dal solo PHI · Codifica · Revisione · Controllo scientifico · Stato di pubblicazione</td></tr>
+      <tr><td>Testo</td><td>Edizione · Traduzione italiana · Traduzione inglese · Lessico cultuale marcato. Non riguardano gli anepigrafi.</td></tr>
+      <tr><td>Oggetto</td><td>Tipo di oggetto · Materiale · Misure (altezza o larghezza) · Immagini</td></tr>
+      <tr><td>Luogo e data</td><td>Località · Luogo antico collegato · Datazione</td></tr>
+      <tr><td>Apparato</td><td>Bibliografia · Numero Trismegistos</td></tr>
+    </table>
+    <p class="when"><b>Il gruppo «Scheda bibliografica» viene prima di tutti</b> ed è quello mostrato all'apertura. Traduce le richieste della professoressa di settembre 2026. Ogni scheda deve dichiarare da quale edizione è assunto il testo e chi l'ha pubblicata (sezione 18). Deve dire chi ha curato l'edizione digitale e con quale ruolo (sezione 23). Deve riportare lo stato di pubblicazione. Il riquadro «Riferimento diverso dal solo PHI» è <b>–</b> finché l'edizione di riferimento manca del tutto: prima va dichiarata l'edizione, poi si controlla che non sia il solo PHI.</p>
+    <div class="callout warn"><b>PHI non è mai l'edizione di riferimento.</b> Se la citazione nomina PHI (o il Packard Humanities Institute) senza l'edizione che PHI riproduce (CMRDM, TAM, SEG, MAMA, IG…), la scheda compare come mancante anche se il campo è compilato. Si corregge citando l'edizione.</div>
+  </div>
+</div>
+
+<div class="field">
+  <div class="field-head"><span class="name">Filtri, ordinamento, esportazione</span></div>
+  <div class="field-body">
+    <table class="field-table">
+      <tr><th style="width:26%">Comando</th><th>Uso</th></tr>
+      <tr><td>mostra · …</td><td>Quale gruppo di colonne vedere: un gruppo alla volta, o <i>tutti i requisiti</i> (la tabella allora scorre in orizzontale). Il numero nella colonna <b>Mancano</b> conta solo le colonne visibili.</td></tr>
+      <tr><td>Manca: …</td><td>Solo le schede in cui manca quel requisito.</td></tr>
+      <tr><td>Regione</td><td>Solo le schede di una regione.</td></tr>
+      <tr><td>Persona</td><td>Solo le schede in cui quella persona compare nelle Responsabilità, con qualsiasi ruolo; oppure <i>Nessuna responsabilità dichiarata</i>.</td></tr>
+      <tr><td>Stato</td><td>Solo le schede in uno stato di pubblicazione, oppure <i>Stato non dichiarato</i>.</td></tr>
+      <tr><td>solo schede incomplete</td><td>Attivo di partenza: nasconde le schede che non hanno mancanze fra le colonne visibili.</td></tr>
+      <tr><td>ordina per · mancanze</td><td>Le schede più indietro in cima. <i>numero di scheda</i> torna all'ordine del catalogo.</td></tr>
+      <tr><td>Esporta CSV</td><td>Scarica l'elenco filtrato, una riga per scheda: numero ILA, fonte a stampa, titolo, regione, <i>sì</i> / <i>no</i> / <i>—</i> per ogni requisito e il numero di mancanze. Si apre in Excel o LibreOffice.</td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="field">
+  <div class="field-head"><span class="name">Come lavorarci</span></div>
+  <div class="field-body">
+    <p class="when"><b>Dividersi il lavoro:</b> filtrate per una mancanza e magari per regione (per esempio «Manca: edizione di riferimento», Lydia), esportate il CSV e distribuite le righe. Chi prende una scheda lo annota nel suo <b>Registro</b>, così nessun altro la apre in parallelo.</p>
+    <p class="when"><b>Seguire il proprio lavoro:</b> filtrate per il vostro nome e ordinate per mancanze: sono le schede che avete codificato e che hanno ancora buchi.</p>
+    <p class="when"><b>Chiudere una scheda:</b> quando in «Scheda bibliografica» la riga è tutta a <b>●</b>, dal punto di vista della professoressa la scheda è completa. Resta il Controllo scientifico sul contenuto, che nessun conteggio può sostituire.</p>
+    <div class="callout">Ogni notte un controllo automatico conta gli stessi requisiti sulla repo dati e ne tiene lo storico giorno per giorno. Le percentuali di Avanzamento e quelle del rapporto notturno parlano quindi degli stessi campi, con gli stessi nomi.</div>
+  </div>
+</div>
+</section>
