@@ -153,8 +153,13 @@ eslint, test e build statica su una copia pulita di `main`, tabella di
 avanzamento per campo. Rapporto in `logs/controlli/ultimo.md`, notifica macOS
 con il sommario, storico dei conteggi in `logs/controlli/.stato/stato-*.json`.
 
-**Permesso macOS necessario (vale anche per il runner):** launchd avvia
-`/bin/bash`, che senza Accesso completo al disco non può leggere `~/Documents`
-e fallisce con «Operation not permitted» (è per questo che il runner delle
-02:00 non è mai partito da solo). Impostazioni di sistema → Privacy e
-sicurezza → Accesso completo al disco → `+` → `/bin/bash`.
+**Permesso macOS necessario (vale anche per il runner):** `/bin/bash` lanciato
+direttamente da launchd non può leggere `~/Documents` («Operation not
+permitted», exit 126), nemmeno con l'Accesso completo al disco. Per questo i
+due agent (`com.ila.controlli`, `com.ila.autonomous`) avviano
+`~/Applications/ILA Notturno.app`, un'applet AppleScript che sceglie il lavoro
+dalla variabile `ILA_JOB` del plist (`controlli` | `runner`) e lancia lo
+script con bash. L'Accesso completo al disco va dato **a quell'app**:
+Impostazioni di sistema → Privacy e sicurezza → Accesso completo al disco →
+`+` → `~/Applications/ILA Notturno.app`. Se si ricompila l'applet con
+`osacompile`, il permesso va ridato.
