@@ -142,3 +142,19 @@ Aggiungi voci a `tasks.yaml` con lo schema esistente. Accortezze:
 Ogni log in `logs/autonomous/*.md` riporta il costo stimato della singola
 esecuzione (`total_cost_usd`), ripreso anche nel riepilogo — utile per tenere
 sotto controllo la spesa se lasci girare più task a notte.
+
+## Controlli notturni (sola lettura)
+
+Accanto al runner c'è `scripts/controlli-notturni.sh`, lanciato da
+`~/Library/LaunchAgents/com.ila.controlli.plist` ogni notte all'01:30. Non usa
+l'IA e non scrive sul corpus: lint della repo dati (con i problemi nuovi
+rispetto alla notte prima), allineamento cache locale / repo dati, typecheck,
+eslint, test e build statica su una copia pulita di `main`, tabella di
+avanzamento per campo. Rapporto in `logs/controlli/ultimo.md`, notifica macOS
+con il sommario, storico dei conteggi in `logs/controlli/.stato/stato-*.json`.
+
+**Permesso macOS necessario (vale anche per il runner):** launchd avvia
+`/bin/bash`, che senza Accesso completo al disco non può leggere `~/Documents`
+e fallisce con «Operation not permitted» (è per questo che il runner delle
+02:00 non è mai partito da solo). Impostazioni di sistema → Privacy e
+sicurezza → Accesso completo al disco → `+` → `/bin/bash`.

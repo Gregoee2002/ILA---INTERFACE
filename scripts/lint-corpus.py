@@ -14,7 +14,9 @@ Vedi docs/piano-markup-esecuzione.md.
 import re, sys, glob, os, collections
 import xml.etree.ElementTree as ET
 
-CORPUS = os.path.join(os.path.dirname(__file__), '..', 'src', 'data', 'corpus')
+# ILA_CORPUS permette di puntare alla repo dati (fonte di verità) invece che
+# alla cache locale: è così che lo usano i controlli notturni.
+CORPUS = os.environ.get('ILA_CORPUS') or os.path.join(os.path.dirname(__file__), '..', 'src', 'data', 'corpus')
 EDITION = re.compile(r'<div type="edition".*?\n\s*</div>', re.S)
 TAGS = re.compile(r'<[^>]+>')
 
