@@ -60,7 +60,7 @@ const SECTION_META: SectionMeta[] = [
   { id: 'translations', label: 'Traduzioni',        group: 'Testo' },
   { id: 'commentary',   label: 'Commento',          group: 'Testo' },
   { id: 'bibliography', label: 'Bibliografia',      group: 'Apparato scientifico' },
-  { id: 'iconography',  label: 'Iconografia e funzione cultuale', group: 'Apparato scientifico' },
+  { id: 'iconography',  label: 'Morfologia cultuale', group: 'Apparato scientifico' },
   { id: 'numismatics',  label: 'Numismatica',        group: 'Apparato scientifico' },
 ];
 

@@ -11,7 +11,9 @@ const capitalize = (s: string) => s ? s.charAt(0).toUpperCase() + s.slice(1) : '
 
 export const IconographyPanel: React.FC<IconographyPanelProps> = ({ monumento }) => {
   const ico = monumento.iconografia;
-  const isEmpty = !ico || (!ico.function && (!ico.figures || ico.figures.length === 0));
+  // La funzione cultuale ha la sua rubrica in testa a «Morfologia cultuale»:
+  // qui restano solo le figure.
+  const isEmpty = !ico?.figures || ico.figures.length === 0;
 
   // Il raggruppamento dei tratti per tipo è puro rispetto a `monumento`:
   // lo si calcola una sola volta invece che ad ogni render.
@@ -33,20 +35,12 @@ export const IconographyPanel: React.FC<IconographyPanelProps> = ({ monumento })
 
   return (
     <div className="mb-10">
-      <h4 className={SOTTORUBRICA}>Figure e funzione cultuale</h4>
+      <h4 className={SOTTORUBRICA}>Figure</h4>
 
       {isEmpty ? (
-        <p className="text-xs font-serif text-muted italic">Nessun dato iconografico registrato.</p>
+        <p className="text-xs font-serif text-muted italic">Nessuna figura registrata.</p>
       ) : (
       <div className="space-y-4">
-        {ico.function && (
-          <div className="flex">
-            <span className="border border-accent bg-accent/10 text-accent text-xs px-3 py-1 rounded-full uppercase tracking-wider font-sans font-semibold">
-              {ICONOGRAPHY_LABELS[ico.function] || ico.function}
-            </span>
-          </div>
-        )}
-
         {figures.map(({ fig, groupedTraits, displayTitle, translatedType }, idx) => {
           return (
             <div key={idx} className="bg-card border border-border rounded-xl p-5 shadow-sm">

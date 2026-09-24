@@ -60,6 +60,7 @@ import { PleiadesMap } from './components/PleiadesMap';
 // viste): il fallback è la riga di caricamento, non una pagina bianca.
 const MapView = lazy(() => import('./components/MapView').then(m => ({ default: m.MapView })));
 import { IconographyPanel } from './components/IconographyPanel';
+import { CULT_FAMILIES, cultFamilyColor, cultFamilyShort } from './lib/cultLexicon';
 import { NumismaticsPanel } from './components/NumismaticsPanel';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { leggiPermalink, scriviPermalink, etichettaScheda } from './lib/permalink';
@@ -4346,8 +4347,9 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
 
   // --- Navigazione a sezioni della modale editoriale: pannelli discreti,
   // non più scroll continuo. "Supporto Epigrafico" fonde scheda+oggetto;
-  // "Iscrizione" fonde trascrizione+commento; "Iconografia" raccoglie anche
-  // gli indici (divinità/epiteti/onomastica/imperatori); "Bibliografia" a parte. ---
+  // "Iscrizione" fonde trascrizione+commento e porta in coda onomastica e
+  // imperatori; "Morfologia cultuale" raccoglie funzione, lessico cultuale,
+  // divinità con i loro epiteti e apparato iconografico; "Bibliografia" a parte. ---
   // "Numismatica" compare solo dove c'è qualcosa da mostrare: le 295 schede
   // epigrafiche non devono guadagnare una linguetta vuota.
   const RECORD_SECTIONS: { id: string; label: string }[] = useMemo(() => {
@@ -4365,7 +4367,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
       { id: 'supporto', label: eMoneta ? 'Supporto' : 'Supporto Epigrafico' },
       { id: 'iscrizione', label: eMoneta ? 'Legenda' : 'Iscrizione' },
       ...(haNumismatica ? [{ id: 'numismatica', label: 'Numismatica' }] : []),
-      { id: 'iconografia', label: 'Indici e iconografia' },
+      { id: 'morfologia', label: 'Morfologia cultuale' },
       { id: 'bibliografia', label: 'Bibliografia' },
     ];
   }, [selectedMonumento]);
@@ -7907,6 +7909,36 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                                 </div>
                              </div>
                            </div>
+                           {((selectedMonumento.onomastica?.length ?? 0) > 0 || (selectedMonumento.imperatori?.length ?? 0) > 0) && (
+                             <div className="mt-10 grid sm:grid-cols-2 gap-x-10 gap-y-6">
+                        {selectedMonumento.onomastica && selectedMonumento.onomastica.length > 0 && (
+                          <div>
+                            <h4 className={SOTTORUBRICA}>Onomastica</h4>
+                            <div className="flex flex-wrap gap-2">
+                              {selectedMonumento.onomastica.map(o => (
+                                <button key={o}
+                                  onClick={() => { setFilters(f => ({ ...f, searchText: o })); setSelectedMonumento(null); }}
+                                  className="border border-border text-ink/70 px-3 py-1 text-xs font-serif hover:border-accent hover:text-accent transition-all cursor-pointer rounded-full"
+                                >{o}</button>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                        {selectedMonumento.imperatori && selectedMonumento.imperatori.length > 0 && (
+                          <div>
+                            <h4 className={SOTTORUBRICA}>Imperatori</h4>
+                            <div className="flex flex-wrap gap-2">
+                              {selectedMonumento.imperatori.map((imp: string) => (
+                                <button key={imp}
+                                  onClick={() => { setFilters(f => ({ ...f, searchText: imp })); setSelectedMonumento(null); }}
+                                  className="border border-accent/40 text-accent/70 px-3 py-1 text-xs font-serif hover:border-accent hover:text-accent transition-all cursor-pointer rounded-full"
+                                >{imp}</button>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                             </div>
+                           )}
                       </section>
                       {aFronte && (
                       <div className={cn(COLONNA_SEZIONE, "space-y-12 mt-12 xl:mt-0 xl:max-w-none")}>
@@ -7988,78 +8020,98 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                     </div>
                   )}
 
-                  {activeRecordSection === 'iconografia' && (
+                  {activeRecordSection === 'morfologia' && (() => {
+                    const funzione = selectedMonumento.iconografia?.function;
+                    const lessico = selectedMonumento.cultAttestations || [];
+                    const famiglie = [...CULT_FAMILIES.map(f => f.id as string), ...lessico.map(a => a.family)]
+                      .filter((f, i, all) => all.indexOf(f) === i)
+                      .map(id => ({ id, voci: lessico.filter(a => a.family === id) }))
+                      .filter(f => f.voci.length > 0);
+                    // Ogni divinità con i propri epiteti; gli epiteti che il
+                    // parser non ha potuto attribuire restano in coda, da soli.
+                    const coppie = selectedMonumento.divinitaEpiteti?.length
+                      ? selectedMonumento.divinitaEpiteti
+                      : (selectedMonumento.divinita || []).map(d => ({ divinita: d, epiteti: [] as string[] }));
+                    const attribuiti = new Set(coppie.flatMap(c => c.epiteti));
+                    const epitetiSciolti = (selectedMonumento.epiteti || []).filter(e => !attribuiti.has(e));
+                    const cerca = (t: string) => { setFilters(f => ({ ...f, searchText: t })); setSelectedMonumento(null); };
+                    return (
                     <div className={cn(CORPO_SEZIONE, "space-y-14 animate-in fade-in duration-200")}>
                       <section>
-                         <RubricaSezione>Indici</RubricaSezione>
-                         {(selectedMonumento.divinita?.length || selectedMonumento.epiteti?.length || selectedMonumento.onomastica?.length || selectedMonumento.imperatori?.length) ? (
-                           <div className="grid sm:grid-cols-2 gap-x-10 gap-y-6">
-                            {selectedMonumento.divinita && selectedMonumento.divinita.length > 0 && (
-                              <div>
-                                <h4 className={SOTTORUBRICA}>Divinità</h4>
-                                <div className="flex flex-wrap gap-2">
-                                  {selectedMonumento.divinita.map(d => (
-                                    <button
-                                      key={d}
-                                      onClick={() => { setFilters(f => ({ ...f, searchText: d })); setSelectedMonumento(null); }}
-                                      className="border border-accent bg-accent/10 text-accent px-3 py-1 text-xs font-bold rounded-full font-serif hover:bg-accent hover:text-white transition-all cursor-pointer"
-                                    >
-                                      {d}
-                                    </button>
-                                  ))}
-                                </div>
-                              </div>
-                            )}
-                            {selectedMonumento.epiteti && selectedMonumento.epiteti.length > 0 && (
-                              <div>
-                                <h4 className={SOTTORUBRICA}>Epiteti</h4>
-                                <div className="flex flex-wrap gap-2 mb-2">
-                                  {selectedMonumento.epiteti.map(e => (
-                                    <button
-                                      key={e}
-                                      onClick={() => { setFilters(f => ({ ...f, searchText: e })); setSelectedMonumento(null); }}
-                                      className="border border-accent/20 bg-accent/5 text-accent px-3 py-1 text-xs italic rounded-full font-serif hover:bg-accent hover:text-white transition-all cursor-pointer"
-                                    >
-                                      {e}
-                                    </button>
-                                  ))}
-                                </div>
-                              </div>
-                            )}
-                            {selectedMonumento.onomastica && selectedMonumento.onomastica.length > 0 && (
-                              <div>
-                                <h4 className={SOTTORUBRICA}>Onomastica</h4>
-                                <div className="flex flex-wrap gap-2">
-                                  {selectedMonumento.onomastica.map(o => (
-                                    <button key={o}
-                                      onClick={() => { setFilters(f => ({ ...f, searchText: o })); setSelectedMonumento(null); }}
-                                      className="border border-border text-ink/70 px-3 py-1 text-xs font-serif hover:border-accent hover:text-accent transition-all cursor-pointer rounded-full"
-                                    >{o}</button>
-                                  ))}
-                                </div>
-                              </div>
-                            )}
-                            {selectedMonumento.imperatori && selectedMonumento.imperatori.length > 0 && (
-                              <div>
-                                <h4 className={SOTTORUBRICA}>Imperatori</h4>
-                                <div className="flex flex-wrap gap-2">
-                                  {selectedMonumento.imperatori.map((imp: string) => (
-                                    <button key={imp}
-                                      onClick={() => { setFilters(f => ({ ...f, searchText: imp })); setSelectedMonumento(null); }}
-                                      className="border border-accent/40 text-accent/70 px-3 py-1 text-xs font-serif hover:border-accent hover:text-accent transition-all cursor-pointer rounded-full"
-                                    >{imp}</button>
-                                  ))}
-                                </div>
-                              </div>
-                            )}
-                           </div>
-                         ) : (
-                           <p className="text-xs font-serif text-muted italic">Nessun indice registrato.</p>
-                         )}
+                        <RubricaSezione>Funzione</RubricaSezione>
+                        {funzione ? (
+                          <p className="text-sm font-serif text-ink">{(l => l.charAt(0).toUpperCase() + l.slice(1))(ICONOGRAPHY_LABELS[funzione] || funzione)}</p>
+                        ) : (
+                          <p className="text-xs font-serif text-muted italic">Funzione non registrata.</p>
+                        )}
                       </section>
 
                       <section>
-                        <RubricaSezione>Iconografia</RubricaSezione>
+                        <RubricaSezione azioni={lessico.length > 0 && (
+                          <button
+                            onClick={() => { setSelectedMonumento(null); setActiveView('cult'); }}
+                            className="text-[11px] font-serif text-muted hover:text-accent transition-colors"
+                          >Vista Lessico cultuale</button>
+                        )}>Lessico cultuale</RubricaSezione>
+                        {famiglie.length > 0 ? (
+                          <div className="space-y-5">
+                            {famiglie.map(f => {
+                              const info = CULT_FAMILIES.find(c => c.id === f.id);
+                              return (
+                                <div key={f.id}>
+                                  <h4 className={cn(SOTTORUBRICA, "flex items-center gap-2")} title={info?.rule}>
+                                    <span className="inline-block w-2 h-2 shrink-0" style={{ backgroundColor: cultFamilyColor(f.id) }} aria-hidden />
+                                    {info ? cultFamilyShort(info.label) : f.id}
+                                  </h4>
+                                  <ul className="space-y-1 text-sm font-serif">
+                                    {f.voci.map((a, i) => (
+                                      <li key={i} className="flex flex-wrap items-baseline gap-x-2">
+                                        <span className="text-ink">{a.lemma}</span>
+                                        {a.form && a.form !== a.lemma && <span className="text-muted italic">{a.form}</span>}
+                                        {a.line && <span className="text-[11px] text-muted/60">r. {a.line}</span>}
+                                        {a.subFunction && <span className="text-[11px] text-muted italic">— {a.subFunction}</span>}
+                                        {a.formula && <span className="text-[11px] text-muted/60">in formula</span>}
+                                        {a.cert === 'low' && <span className="text-[11px] text-muted/60">integrato</span>}
+                                      </li>
+                                    ))}
+                                  </ul>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        ) : (
+                          <p className="text-xs font-serif text-muted italic">Nessun termine cultuale marcato nell’edizione.</p>
+                        )}
+                      </section>
+
+                      <section>
+                        <RubricaSezione>Divinità ed epiteti</RubricaSezione>
+                        {coppie.length > 0 || epitetiSciolti.length > 0 ? (
+                          <ul className="space-y-2 text-sm font-serif">
+                            {coppie.map(c => (
+                              <li key={c.divinita} className="flex flex-wrap items-baseline gap-x-2">
+                                <button onClick={() => cerca(c.divinita)} className="text-ink font-semibold hover:text-accent transition-colors cursor-pointer">{c.divinita}</button>
+                                {c.epiteti.map(e => (
+                                  <button key={e} onClick={() => cerca(e)} className="text-ink/80 italic hover:text-accent transition-colors cursor-pointer">{e}</button>
+                                ))}
+                              </li>
+                            ))}
+                            {epitetiSciolti.length > 0 && (
+                              <li className="flex flex-wrap items-baseline gap-x-2">
+                                <span className="text-[11px] text-muted">epiteti non attribuiti</span>
+                                {epitetiSciolti.map(e => (
+                                  <button key={e} onClick={() => cerca(e)} className="text-ink/80 italic hover:text-accent transition-colors cursor-pointer">{e}</button>
+                                ))}
+                              </li>
+                            )}
+                          </ul>
+                        ) : (
+                          <p className="text-xs font-serif text-muted italic">Nessuna divinità registrata.</p>
+                        )}
+                      </section>
+
+                      <section>
+                        <RubricaSezione>Apparato iconografico</RubricaSezione>
                         <h4 className={SOTTORUBRICA}>Commento iconografico</h4>
                         {selectedMonumento.iconografia?.note ? (
                           <p className="text-xs leading-relaxed text-ink/80 italic font-serif whitespace-pre-wrap border-l-2 border-accent/40 pl-4">
@@ -8073,7 +8125,8 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                         </div>
                       </section>
                     </div>
-                  )}
+                    );
+                  })()}
 
                   {activeRecordSection === 'bibliografia' && (
                     <div className={cn(CORPO_SEZIONE, "animate-in fade-in duration-200")}>
