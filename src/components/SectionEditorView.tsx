@@ -1,5 +1,6 @@
 import { toApparatusRow } from '../lib/apparatus';
 import React, { useState, useEffect, useMemo, useRef, useId, ChangeEvent } from 'react';
+import { citaSoloPhi } from '../lib/mancanze';
 import { motion, AnimatePresence } from 'motion/react';
 import {
   Upload, Database, Save, Loader2, AlertTriangle, Check, X, Plus, Trash2,
@@ -1575,8 +1576,7 @@ function renderSectionForm(
       const setEdRif = (patch: Partial<NonNullable<Monumento['edizioneRiferimento']>>) =>
         set('edizioneRiferimento', { ...edRif, ...patch });
       const laneBibl = bibl.find(b => /CMRDM|Corpus Monumentorum Religionis Dei Menis/i.test(b.titolo || ''));
-      const soloPhi = /\bPHI\b|Packard/i.test(edRif.citazione || '')
-        && !/CMRDM|Corpus Monumentorum|TAM|SEG|MAMA|IG\b|I\.\s?\w/.test(edRif.citazione || '');
+      const soloPhi = citaSoloPhi(edRif.citazione);
 
       return (
         <div className="space-y-6 max-w-3xl">

@@ -36,8 +36,43 @@ def div(src, tipo, lang=None):
     return m.group(1) if m else None
 
 
-# (chiave, etichetta, test). L'ordine è quello della tabella.
+def edrif(s):
+    """Il contenuto di <bibl type="edition" subtype="reference">, o None."""
+    m = re.search(r'<bibl\s+type="edition"\s+subtype="reference"\s*>(.*?)</bibl>', s, re.S)
+    return m.group(1) if m else None
+
+
+def cita_solo_phi(c):
+    # Stessa regola di citaSoloPhi in src/lib/mancanze.ts.
+    return bool(re.search(r'\bPHI\b|Packard', c, re.I)) and not re.search(
+        r'CMRDM|Corpus Monumentorum|TAM|SEG|MAMA|IG\b|I\.\s?\w', c)
+
+
+RUOLI = {'encoding': ('encoding', 'encoder'), 'revision': ('revision', 'editor'), 'review': ('review', 'reviewer')}
+
+
+def ha_ruolo(s, ruolo):
+    for resp in re.findall(r'<respStmt>(.*?)</respStmt>', s, re.S):
+        r = re.search(r'<resp[^>]*>(.*?)</resp>', resp, re.S)
+        n = re.search(r'<(?:persName|name)[^>]*>(.*?)</(?:persName|name)>', resp, re.S)
+        if r and n and testo(r.group(1)).lower() in RUOLI[ruolo] and testo(n.group(1)):
+            return True
+    return False
+
+
+# (chiave, etichetta, test). Le chiavi sono quelle di REQUISITI in
+# src/lib/mancanze.ts, così il registro notturno e il pannello in app
+# parlano degli stessi campi. L'ordine è quello della tabella.
 CAMPI = [
+    # scheda bibliografica: le richieste della professoressa del 2026-09-23
+    ('edrif', 'edizione di riferimento', lambda s: bool(testo(re.sub(r'<editor>.*?</editor>', '', edrif(s) or '', flags=re.S)))),
+    ('edrif_editore', 'editore dell\'ed. di rif.', lambda s: bool(re.search(r'<editor>\s*[^<\s]', edrif(s) or ''))),
+    ('edrif_non_phi', 'ed. di rif. non solo PHI', lambda s: edrif(s) is not None and not cita_solo_phi(testo(edrif(s)))),
+    ('codifica', 'codifica', lambda s: ha_ruolo(s, 'encoding')),
+    ('revisione', 'revisione', lambda s: ha_ruolo(s, 'revision')),
+    ('controllo', 'controllo scientifico', lambda s: ha_ruolo(s, 'review')),
+    ('stato', 'stato di pubblicazione', lambda s: bool(re.search(r'<revisionDesc[^>]*\sstatus="[^"]+"', s))),
+
     ('edizione', 'edizione', lambda s: bool(testo(div(s, 'edition')))),
     ('trad_it', 'traduzione italiana', lambda s: bool(testo(div(s, 'translation', 'it')))),
     ('trad_en', 'traduzione inglese', lambda s: bool(testo(div(s, 'translation', 'en')))),
@@ -66,7 +101,7 @@ def main():
     print('Schede: %d\n' % tot)
     for k, etichetta, _ in CAMPI:
         n = conteggi[k]
-        print('  %-26s %4d  %5.1f%%' % (etichetta, n, 100.0 * n / tot if tot else 0))
+        print('  %-28s %4d  %5.1f%%' % (etichetta, n, 100.0 * n / tot if tot else 0))
 
     if '--json' in sys.argv:
         out = sys.argv[sys.argv.index('--json') + 1]

@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect, useLayoutEffect, useRef, lazy, Suspense } from 'react';
+import React, { useState, useMemo, useEffect, useLayoutEffect, useRef, useCallback, lazy, Suspense } from 'react';
 import { motion, AnimatePresence, MotionConfig } from 'motion/react';
 import { 
   Search,
@@ -36,14 +36,12 @@ import {
   GitCompare,
   KeyRound,
   Unlock,
-  NotebookPen,
-  Bug,
   ExternalLink,
-  BookMarked,
   Type,
   Tags,
   ScrollText,
-  Coins
+  Coins,
+  Wrench
 } from 'lucide-react';
 import { RubricaSezione, SOTTORUBRICA } from './components/RubricaSezione';
 import { cn, EASE_OUT, EASE_IN, SPRING_SNAPPY, SPRING_SOFT, gapGlyph } from './lib/utils';
@@ -81,6 +79,8 @@ import { ApparatusNotes } from './components/ApparatusNotes';
 import { apparatusEntryToText } from './lib/apparatus';
 import type { BiblioReplacement, BiblioApplyResult } from './components/BibliographyIndex';
 const BibliographyIndex = lazy(() => import('./components/BibliographyIndex').then(m => ({ default: m.BibliographyIndex })));
+const MancanzePanel = lazy(() => import('./components/MancanzePanel').then(m => ({ default: m.MancanzePanel })));
+const AvanzamentoPanel = lazy(() => import('./components/AvanzamentoPanel').then(m => ({ default: m.AvanzamentoPanel })));
 import { watchAuth, loginWithGoogle, logout, type User } from './lib/authLazy';
 import ilaLogo from './assets/images/ila-logo.webp';
 
@@ -96,7 +96,22 @@ interface SearchResult {
   matchInSupplied: boolean;
 }
 
-type AppView = 'home' | 'catalog' | 'monete' | 'sources' | 'stats' | 'timeline' | 'health' | 'map' | 'heatmap' | 'cult' | 'editor' | 'review' | 'flags' | 'bugs' | 'biblio' | 'lessico-lares';
+type AppView = 'home' | 'catalog' | 'monete' | 'sources' | 'stats' | 'timeline' | 'health' | 'map' | 'heatmap' | 'cult' | 'editor' | 'review' | 'flags' | 'bugs' | 'biblio' | 'lessico-lares' | 'progress' | 'gaps';
+
+// Strumenti: le viste riservate alla redazione, riunite sotto una sola voce
+// della barra laterale e sfogliate con le linguette in testa. Ognuna tiene la
+// propria AppView, così permalink e rimandi interni continuano a funzionare.
+const TOOL_VIEWS: { view: AppView; label: string }[] = [
+  { view: 'progress', label: 'Avanzamento' },
+  { view: 'gaps', label: 'Mancanze' },
+  { view: 'health', label: 'Coerenza' },
+  { view: 'flags', label: 'Registro' },
+  { view: 'bugs', label: 'Bug' },
+  { view: 'biblio', label: 'Bibliografia' },
+];
+const isToolView = (v: AppView) => TOOL_VIEWS.some(t => t.view === v);
+// Chi entra da «Strumenti» ritrova l'ultima linguetta aperta nella sessione.
+let ultimoStrumento: AppView = 'progress';
 
 // true sulla build GitHub Pages (vedi vite.config.ts / apiShim.ts): niente
 // server.ts, quindi le funzionalità che dipendevano da Gemini AI o dalla
@@ -1371,6 +1386,34 @@ function EpithetStats({ monumenti, onSelectMonumento, onVaiAllaFonte, initialTab
 //  varianti dello stesso termine (stessa forma normalizzata ma grafia
 //  diversa), che spezzano l'indicizzazione e le statistiche.
 // ─────────────────────────────────────────────────────────────────────────
+// Linguette della sezione Strumenti: testo in serif con la voce attiva in
+// corsivo, come «ordina per» del Lessico cultuale — non una barra di bottoni.
+function StrumentiNav({ attiva, onNavigate, conteggi }: {
+  attiva: AppView;
+  onNavigate: (v: AppView) => void;
+  conteggi: Partial<Record<AppView, number>>;
+}) {
+  return (
+    <nav className="shrink-0 max-w-6xl w-full mx-auto mt-6 md:mt-8 mb-6 pb-2 border-b border-border/40 flex flex-wrap items-baseline gap-x-5 gap-y-1">
+      <span className="font-serif text-[13px] text-muted/60">Strumenti</span>
+      {TOOL_VIEWS.map(t => {
+        const n = conteggi[t.view];
+        return (
+          <button
+            key={t.view}
+            onClick={() => onNavigate(t.view)}
+            aria-current={attiva === t.view ? 'page' : undefined}
+            className={cn('font-serif text-[15px] transition-colors', attiva === t.view ? 'text-accent italic' : 'text-muted hover:text-ink')}
+          >
+            {t.label}
+            {n ? <span className="ml-1 font-sans not-italic text-[11px] tabular-nums text-muted/60">{n}</span> : null}
+          </button>
+        );
+      })}
+    </nav>
+  );
+}
+
 function CorpusHealth({ monumenti, onSelectMonumento }: { monumenti: Monumento[], onSelectMonumento: (m: Monumento) => void }) {
   // Normalizza una stringa per il raggruppamento: minuscole, niente accenti,
   // sigma finale unificato, spazi collassati. Due valori che collassano sulla
@@ -1773,10 +1816,7 @@ const RAIL_ITEMS: { view: AppView; label: string; icon: React.ReactNode; adminOn
   { view: 'stats', label: 'Statistiche Epiteti', icon: <BarChart2 className="h-4 w-4" /> },
   { view: 'heatmap', label: 'Heatmap', icon: <Columns className="h-4 w-4" /> },
   { view: 'cult', label: 'Lessico cultuale', icon: <Tags className="h-4 w-4" /> },
-  { view: 'health', label: 'Coerenza', icon: <Check className="h-4 w-4" />, adminOnly: true },
-  { view: 'flags', label: 'Registro', icon: <NotebookPen className="h-4 w-4" />, adminOnly: true },
-  { view: 'bugs', label: 'Bug', icon: <Bug className="h-4 w-4" />, adminOnly: true },
-  { view: 'biblio', label: 'Bibliografia', icon: <BookMarked className="h-4 w-4" />, adminOnly: true },
+  { view: 'progress', label: 'Strumenti', icon: <Wrench className="h-4 w-4" />, adminOnly: true },
   { view: 'editor', label: 'Editor XML', icon: <Feather className="h-4 w-4" /> },
   // Pannello di revisione draft: dipende dalla cartella drafts/ (solo
   // lettura, popolata dalla pipeline locale) — non disponibile sulla build
@@ -1824,11 +1864,11 @@ function IconRail({
     return (
       <nav className="fixed inset-x-0 bottom-0 z-50 h-14 flex items-stretch bg-[var(--card)]/95 dark:bg-[var(--card)]/90 backdrop-blur-xl border-t border-border/40 shadow-[0_-4px_24px_-8px_rgba(var(--shadow-color),0.15)] overflow-x-auto overflow-y-hidden custom-scrollbar">
         {railItems.map(item => {
-          const active = activeView === item.view;
+          const active = activeView === item.view || (item.view === 'progress' && isToolView(activeView));
           return (
             <button
               key={item.view}
-              onClick={() => onNavigate(item.view)}
+              onClick={() => onNavigate(item.view === 'progress' ? ultimoStrumento : item.view)}
               title={item.label}
               className={cn(
                 "flex flex-col items-center justify-center gap-1 shrink-0 w-16 h-full relative transition-colors",
@@ -1946,11 +1986,11 @@ function IconRail({
 
         <div className="flex-1 flex flex-col gap-1 px-2 py-2 overflow-y-auto">
           {railItems.map(item => {
-            const active = activeView === item.view;
+            const active = activeView === item.view || (item.view === 'progress' && isToolView(activeView));
             return (
               <button
                 key={item.view}
-                onClick={() => { onNavigate(item.view); setExpanded(false); }}
+                onClick={() => { onNavigate(item.view === 'progress' ? ultimoStrumento : item.view); setExpanded(false); }}
                 title={item.label}
                 className={cn(
                   "flex items-center gap-3 h-10 px-3 rounded-lg shrink-0 transition-colors relative",
@@ -2158,10 +2198,7 @@ function HomeView({ monumenti, onNavigate, onSearch, effectiveAdmin }: { monumen
     { view: 'stats', label: 'Statistiche Epiteti', desc: 'Frequenza e distribuzione degli epiteti di Men.', icon: <BarChart2 className="h-5 w-5" /> },
     { view: 'heatmap', label: 'Heatmap Co-occorrenze', desc: 'Quali epiteti e attributi ricorrono insieme.', icon: <Columns className="h-5 w-5" /> },
     { view: 'cult', label: 'Lessico cultuale', desc: 'Il vocabolario delle funzioni cultuali marcato nelle edizioni, per lemma e famiglia.', icon: <Tags className="h-5 w-5" /> },
-    { view: 'health', label: 'Coerenza', desc: "Controlli di qualità e coerenza sui dati del corpus.", icon: <Check className="h-5 w-5" />, adminOnly: true },
-    { view: 'flags', label: 'Registro', desc: 'Lavorazioni in corso dei collaboratori sulle schede del catalogo.', icon: <NotebookPen className="h-5 w-5" />, adminOnly: true },
-    { view: 'bugs', label: 'Bug', desc: 'Problemi di funzionamento segnalati dai collaboratori.', icon: <Bug className="h-5 w-5" />, adminOnly: true },
-    { view: 'biblio', label: 'Bibliografia', desc: 'Censimento delle diciture bibliografiche e modifica in blocco.', icon: <BookMarked className="h-5 w-5" />, adminOnly: true },
+    { view: 'progress', label: 'Strumenti', desc: 'Avanzamento, coerenza, registro di lavorazione, bug e bibliografia: gli attrezzi della redazione.', icon: <Wrench className="h-5 w-5" />, adminOnly: true },
     { view: 'editor', label: 'Editor XML', desc: 'Modifica le schede EpiDoc sezione per sezione, con riscrittura chirurgica.', icon: <Feather className="h-5 w-5" /> },
   ];
   const sections = allSections.filter(s => !s.adminOnly || effectiveAdmin);
@@ -4669,6 +4706,9 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
   const [registri, setRegistri] = useState<EntryRegistro[]>([]);
   const [registriLoading, setRegistriLoading] = useState(false);
   const [bugs, setBugs] = useState<BugReport[]>([]);
+  // Requisito da preselezionare nella tabella Mancanze (da «apri nella tabella» in Avanzamento).
+  const [mancanzaTarget, setMancanzaTarget] = useState<string | null>(null);
+  const azzeraMancanzaTarget = useCallback(() => setMancanzaTarget(null), []);
   const [bugsLoading, setBugsLoading] = useState(false);
 
   const fetchRegistri = async () => {
@@ -6249,7 +6289,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
 
         <section className="flex-1 relative p-6 md:p-12 overflow-hidden transition-all duration-500">
         <motion.div
-          key={activeView}
+          key={isToolView(activeView) ? 'strumenti' : activeView}
           initial={activeView === 'map' ? { opacity: 0 } : { opacity: 0, y: 14 }}
           animate={activeView === 'map' ? { opacity: 1 } : { opacity: 1, y: 0 }}
           transition={{ duration: 0.4, ease: EASE_OUT }}
@@ -6760,6 +6800,31 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
               editingUnlocked={editingUnlocked}
               apriTestimonianza={fonteTarget}
               onTestimonianzaAperta={() => setFonteTarget(null)}
+            />
+          )}
+          {isToolView(activeView) && effectiveAdmin && (
+            <StrumentiNav
+              attiva={activeView}
+              onNavigate={(v) => { ultimoStrumento = v; setActiveView(v); setHasNavigated(true); }}
+              conteggi={{
+                flags: registri.filter(r => r.status === 'open').length,
+                bugs: bugs.filter(b => b.status === 'open').length,
+              }}
+            />
+          )}
+          {activeView === 'progress' && effectiveAdmin && (
+            <AvanzamentoPanel
+              monumenti={monumenti}
+              onSelectMonumento={apriScheda}
+              onApriMancanze={(id) => { setMancanzaTarget(id); ultimoStrumento = 'gaps'; setActiveView('gaps'); }}
+            />
+          )}
+          {activeView === 'gaps' && effectiveAdmin && (
+            <MancanzePanel
+              monumenti={monumenti}
+              onSelectMonumento={apriScheda}
+              requisitoIniziale={mancanzaTarget}
+              onRequisitoInizialeUsato={azzeraMancanzaTarget}
             />
           )}
           {activeView === 'health' && effectiveAdmin && <CorpusHealth monumenti={monumenti} onSelectMonumento={apriScheda} />}
