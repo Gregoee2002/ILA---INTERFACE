@@ -115,3 +115,19 @@ frontespizio»). Dopo l'ingresso la scheda si apre correttamente.
 4. B1–B3 (griglia e testata comuni alle viste), da concordare prima: l'audit di veste
    esteso del 17/9 è stato annullato (f2cd628).
 5. A6, B4, B5.
+
+## Esecuzione (stesso giorno)
+
+| Punto | Stato | Come |
+|---|---|---|
+| A1 | fatto | La scheda resta ferma: scorre solo il corpo della sezione, sotto la testatina. In Iscrizione, da xl in su, testo e traduzione/apparato/commento stanno a fronte e ogni colonna scorre per conto suo; sotto xl le colonne si impilano e scorre il corpo. Verificato su ILA-005 e ILA-107 (1440×900, 1100×800): nessun testo irraggiungibile. |
+| A2 | fatto | Testatina su una riga (sigla · località · titolo) nelle sezioni diverse da Supporto, dove resta l'intestazione piena. |
+| A3 | fatto | Colonna di lettura unica (`COLONNA_SEZIONE`, 70ch, sempre a sinistra). |
+| A4 | fatto | Due soli livelli: `RubricaSezione` e `SOTTORUBRICA` (`src/components/RubricaSezione.tsx`). Supporto: «Supporto e impaginazione», «Luogo e datazione». |
+| A5 | fatto | La voce diventa «Indici e iconografia»; il secondo blocco ha la sua rubrica «Iconografia». |
+| A6 | in parte | Etichette inglesi dell'interfaccia tradotte; datazioni con il trattino lungo e senza il maiuscolo forzato su «d.C.»; titolo con `text-balance`; su telefono la sezione scelta sale in vista. Resta «A.D. (Sullan era)», che viene dai dati XML. |
+| B1, B3 | non fatti | Da concordare. La Cronologia è senza testata per scelta (commento in `Timeline`). |
+| B2 | fatto | Margini attorno all'Editor. Le due carte restano entro `max-w-4xl`, che è voluto. |
+| B3 (Statistiche) | fatto | Spazio sopra le linguette. |
+| B4 | fatto | Rubrica delle divinità più larga (`DIAGONAL_BASE_X` 200) e «1 occorrenza» al singolare. |
+| B5 | fatto | Base Esri Light Gray: CARTO restituisce la filigrana su ogni percorso. |

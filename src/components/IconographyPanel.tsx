@@ -1,7 +1,7 @@
 import React from 'react';
 import { Monumento } from '../types';
 import { ICONOGRAPHY_LABELS } from '../lib/iconographyLabels';
-import { ImageIcon } from 'lucide-react';
+import { SOTTORUBRICA } from './RubricaSezione';
 
 interface IconographyPanelProps {
   monumento: Monumento;
@@ -33,10 +33,7 @@ export const IconographyPanel: React.FC<IconographyPanelProps> = ({ monumento })
 
   return (
     <div className="mb-10">
-      <h3 className="text-[10px] font-sans font-bold uppercase tracking-[0.2em] text-muted mb-4 flex items-center gap-2">
-        <ImageIcon className="w-3.5 h-3.5" />
-        Iconografia e funzione cultuale
-      </h3>
+      <h4 className={SOTTORUBRICA}>Figure e funzione cultuale</h4>
 
       {isEmpty ? (
         <p className="text-xs font-serif text-muted italic">Nessun dato iconografico registrato.</p>

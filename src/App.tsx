@@ -45,6 +45,7 @@ import {
   ScrollText,
   Coins
 } from 'lucide-react';
+import { RubricaSezione, SOTTORUBRICA } from './components/RubricaSezione';
 import { cn, EASE_OUT, EASE_IN, SPRING_SNAPPY, SPRING_SOFT, gapGlyph } from './lib/utils';
 import { ICONOGRAPHY_LABELS } from './lib/iconographyLabels';
 import { labelEvidence, labelUnit, labelType, labelMaterial, labelInscriptionType } from './lib/vocabLabels';
@@ -145,10 +146,10 @@ const formatDateRange = (start?: number, end?: number) => {
   if ((start === undefined || start === 0) && (end === undefined || end === 0)) return '-';
   if (start !== undefined && end !== undefined && start === end && start !== 0) return formatDate(start);
   if (start !== undefined && end !== undefined) {
-    if (start < 0 && end > 0) return `${Math.abs(start)} a.C. - ${end} d.C.`;
+    if (start < 0 && end > 0) return `${Math.abs(start)} a.C. – ${end} d.C.`;
     const s = start !== 0 ? formatDate(start) : '';
     const e = end !== 0 ? formatDate(end) : '';
-    if (s && e) return `${s} - ${e}`;
+    if (s && e) return `${s} – ${e}`;
     return s || e || '-';
   }
   if (start !== undefined && start !== 0) return formatDate(start);
@@ -190,6 +191,12 @@ const hasApparatusContent = (val?: { loc: string; note: string }[] | string) => 
 // comparire da solo (es. ref="DA_COMPILARE") o dentro una frase (es. "Height
 // of letters: DA_COMPILARE.") — in entrambi i casi il campo va nascosto
 // nella scheda invece di mostrare il segnaposto alla lettera.
+// Corpo scorrevole di una sezione della scheda (vedi il riquadro dei
+// contenuti): scorre solo lui, e solo se il contenuto non ci sta.
+const CORPO_SEZIONE = 'md:flex-1 md:min-h-0 md:overflow-y-auto custom-scrollbar md:pr-4 pb-12';
+// Colonna di lettura: la stessa misura in ogni sezione, sempre a sinistra.
+const COLONNA_SEZIONE = 'max-w-[70ch] xl:min-h-0 xl:overflow-y-auto custom-scrollbar xl:pr-4 pb-12';
+
 const isFilled = (v?: string | null): v is string => !!v && !v.toUpperCase().includes('DA_COMPILARE');
 
 // Format a bibliographic key like "herrmann1965b" → "Herrmann 1965b"
@@ -214,7 +221,9 @@ const formatBiblKey = (raw: string): string => {
 // vedi RUBRICA_MARKER_OFFSET). La voce attiva pilota anche l'anteprima ad
 // albero degli epiteti mostrata accanto (vedi onActiveChange).
 const DIAGONAL_ROW_H = 42;
-const DIAGONAL_BASE_X = 150;
+// 200 e non 150: la voce attiva (2xl, corsivo, grassetto) di un nome come
+// «Agathos Daimon» non ci stava e veniva troncata.
+const DIAGONAL_BASE_X = 200;
 
 const DivinityDiagonalList = ({ items, onSelect, onActiveChange, onScrollProgress, searchTerm, pinnedName }: {
   items: { name: string; count: number; epiteti: { name: string; count: number }[] }[];
@@ -447,6 +456,7 @@ const DivinityDiagonalList = ({ items, onSelect, onActiveChange, onScrollProgres
                     >
                       <motion.span
                         layoutId={`divname-${d.name}`}
+                        title={d.name}
                         className={cn(
                           "font-serif transition-all duration-200 truncate group-active:text-accent",
                           isActive ? "text-2xl italic text-accent font-bold"
@@ -1082,7 +1092,7 @@ function EpithetStats({ monumenti, onSelectMonumento, onVaiAllaFonte, initialTab
   };
 
   return (
-    <div className="flex-1 flex flex-col overflow-hidden">
+    <div className="flex-1 flex flex-col overflow-hidden pt-6 md:pt-8">
       {anySelection && (
         <motion.div
           initial={{ opacity: 0, y: -8 }}
@@ -1248,7 +1258,7 @@ function EpithetStats({ monumenti, onSelectMonumento, onVaiAllaFonte, initialTab
                       <div className="flex items-center gap-3 text-[10px] font-sans font-bold uppercase tracking-widest text-muted min-w-0 text-right justify-end">
                         {activeDivinityStats ? (
                           <>
-                            <span className="whitespace-nowrap">{activeDivinityStats.count} occorrenze</span>
+                            <span className="whitespace-nowrap">{activeDivinityStats.count} {activeDivinityStats.count === 1 ? 'occorrenza' : 'occorrenze'}</span>
                             <span className="text-border">·</span>
                             <span className="whitespace-nowrap">{activeDivinityStats.regions} {activeDivinityStats.regions === 1 ? 'regione' : 'regioni'}</span>
                             <span className="text-border">·</span>
@@ -4355,7 +4365,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
       { id: 'supporto', label: eMoneta ? 'Supporto' : 'Supporto Epigrafico' },
       { id: 'iscrizione', label: eMoneta ? 'Legenda' : 'Iscrizione' },
       ...(haNumismatica ? [{ id: 'numismatica', label: 'Numismatica' }] : []),
-      { id: 'iconografia', label: 'Iconografia' },
+      { id: 'iconografia', label: 'Indici e iconografia' },
       { id: 'bibliografia', label: 'Bibliografia' },
     ];
   }, [selectedMonumento]);
@@ -4435,7 +4445,11 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
 
   const goToRecordSection = (id: string) => {
     setActiveRecordSection(id);
-    recordContentRef.current?.scrollTo({ top: 0 });
+    // Su telefono navigazione e Dettagli occupano tutta la prima schermata:
+    // la sezione scelta va portata in vista, altrimenti resta sotto la piega.
+    if (!window.matchMedia('(min-width: 768px)').matches) {
+      recordContentRef.current?.scrollIntoView({ block: 'start', behavior: 'smooth' });
+    }
   };
 
   // Sulla build statica non esiste nessuna sessione Firebase da osservare, e
@@ -6780,6 +6794,9 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
           {activeView === 'review' && <DraftReviewPanel />}
           {activeView === 'editor' && (
             <Suspense fallback={<div className="flex-1 flex items-center justify-center text-sm text-muted italic">Caricamento editor…</div>}>
+              {/* L'editor non ha margini propri: senza questo involucro
+                  l'occhiello toccava il bordo superiore della finestra. */}
+              <div className="flex-1 min-h-0 flex flex-col px-6 md:px-10 pt-8 md:pt-10 pb-6">
               <SectionEditorView
                 monumenti={monumenti}
                 effectiveAdmin={effectiveAdmin}
@@ -6791,6 +6808,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                 initialEntryId={editorTargetEntryId}
                 onInitialEntryIdConsumed={() => setEditorTargetEntryId(null)}
               />
+              </div>
             </Suspense>
           )}
           {activeView === 'timeline' && <Timeline monumenti={monumenti} onSelect={apriScheda} paused={!!selectedMonumento} />}
@@ -7394,7 +7412,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                                   {item.display}
                                 </button>
                               ) : (
-                                <dd className="text-xs font-semibold text-ink mt-0.5 font-serif capitalize">{item.display}</dd>
+                                <dd className={cn("text-xs font-semibold text-ink mt-0.5 font-serif", item.label !== 'Datazione' && "capitalize")}>{item.display}</dd>
                               )}
                             </div>
                           ))}
@@ -7431,9 +7449,27 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                    </div>
 
                   {/* Main Content Area */}
-                  <div ref={recordContentRef} className="flex-1 min-h-0 bg-parchment p-6 md:p-16 md:overflow-hidden">
+                  {/* Su desktop la scheda resta ferma (cc90a97): scorrono solo i
+                      corpi delle sezioni, sotto la testatina, e solo quando il
+                      contenuto non ci sta. Prima il riquadro tagliava tutto ciò
+                      che superava l'altezza della finestra — in Iscrizione la
+                      traduzione, l'apparato e il commento di quasi ogni scheda. */}
+                  <div ref={recordContentRef} className="flex-1 min-h-0 bg-parchment p-6 md:px-14 md:pt-10 md:pb-0 md:overflow-hidden md:flex md:flex-col">
+                  {activeRecordSection !== 'supporto' && (
+                    <div className="shrink-0 mb-8 flex items-baseline gap-3 min-w-0 border-b border-border/30 pb-3">
+                      <span className="font-sans text-[10px] font-bold uppercase tracking-[0.2em] text-accent shrink-0">
+                        {selectedMonumento.id ? etichettaScheda(selectedMonumento.id) : '—'}
+                      </span>
+                      {selectedMonumento.citta && (
+                        <span className="font-serif italic text-sm text-ink/60 shrink-0">{selectedMonumento.citta}</span>
+                      )}
+                      <span className="font-serif text-sm text-ink truncate" title={getDisplayTitle(selectedMonumento)}>
+                        {getDisplayTitle(selectedMonumento)}
+                      </span>
+                    </div>
+                  )}
                   {activeRecordSection === 'supporto' && (
-                  <div className="animate-in fade-in duration-200 md:-mt-8">
+                  <div className={cn(CORPO_SEZIONE, "animate-in fade-in duration-200")}>
                     <div className="flex justify-between items-start mb-3">
                       <div className="flex-1 mr-4">
                         {(selectedMonumento.regione || selectedMonumento.citta) && (
@@ -7550,7 +7586,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                                 + Confronta
                               </button>
                             </div>
-                            <h2 id="record-dialog-title" className="text-3xl sm:text-4xl md:text-5xl font-bold text-ink leading-tight font-serif">
+                            <h2 id="record-dialog-title" className="text-3xl sm:text-4xl md:text-5xl font-bold text-ink leading-tight font-serif text-balance">
                               {getDisplayTitle(selectedMonumento)}
                             </h2>
                             <div className="ornament-rule !my-0 mt-2 max-w-[6rem] mx-0" />
@@ -7612,7 +7648,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                           if (immagini.length === 0) return null;
                           return (
                             <div className="bg-sidebar/40 p-6 border border-border/60 rounded-sm">
-                              <span className="text-[10px] font-sans font-bold uppercase tracking-[0.2em] text-accent block mb-3">Facsimile / Squeeze Image</span>
+                              <span className="text-[10px] font-sans font-bold uppercase tracking-[0.2em] text-accent block mb-3">Facsimile / calco</span>
                               <div className={cn('grid gap-4', immagini.length > 1 && 'md:grid-cols-2')}>
                                 {immagini.map((img, i) => (
                                   <div key={i}>
@@ -7633,7 +7669,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
 
                         <div className="grid md:grid-cols-2 gap-6 border border-border/40 bg-sidebar/20 p-5 md:p-6 rounded-sm font-serif text-xs leading-relaxed text-ink/80">
                           <div>
-                            <h3 className="text-[10px] font-sans font-bold uppercase tracking-widest text-accent mb-3 pb-1 border-b border-border/30">Layout & Supporto Materiale</h3>
+                            <h4 className={cn(SOTTORUBRICA, "pb-1 border-b border-border/30 !mb-3")}>Supporto e impaginazione</h4>
                             {selectedMonumento.layout_desc && (
                               <p className="mb-3 text-ink-70 select-text font-serif leading-relaxed">{selectedMonumento.layout_desc}</p>
                             )}
@@ -7644,7 +7680,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                                   <span className="text-ink font-serif italic text-xs">{selectedMonumento.scrittura}</span>
                                   {isFilled(selectedMonumento.scrittura_ref) && (
                                     <a href={selectedMonumento.scrittura_ref} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-[9px] text-accent hover:underline ml-2 align-middle font-mono">
-                                      EAGLE Writing Link ↗
+                                      EAGLE ↗
                                     </a>
                                   )}
                                 </div>
@@ -7658,7 +7694,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                                   <span className="text-ink font-serif italic text-xs capitalize">{labelType(selectedMonumento.tipo)}</span>
                                   {isFilled(selectedMonumento.tipo_ref) && (
                                     <a href={selectedMonumento.tipo_ref} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-[9px] text-accent hover:underline ml-2 align-middle font-mono">
-                                      EAGLE Object Link ↗
+                                      EAGLE ↗
                                     </a>
                                   )}
                                 </div>
@@ -7670,7 +7706,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                                   <span className="text-ink font-serif italic text-xs capitalize">{labelMaterial(selectedMonumento.materiale)}</span>
                                   {isFilled(selectedMonumento.materialRef) && (
                                     <a href={selectedMonumento.materialRef} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-[9px] text-accent hover:underline ml-2 align-middle font-mono">
-                                      EAGLE Material Link ↗
+                                      EAGLE ↗
                                     </a>
                                   )}
                                 </div>
@@ -7691,7 +7727,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                             </div>
                           </div>
                           <div>
-                            <h3 className="text-[10px] font-sans font-bold uppercase tracking-widest text-accent mb-3 pb-1 border-b border-border/30">Georeferenziazione & Date Storiche</h3>
+                            <h4 className={cn(SOTTORUBRICA, "pb-1 border-b border-border/30 !mb-3")}>Luogo e datazione</h4>
                             <div className="space-y-3">
                               {(selectedMonumento.citta || selectedMonumento.luogo_rit) && (
                                 <div className="grid grid-cols-2 gap-2">
@@ -7701,7 +7737,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                                       <span className="font-serif font-semibold text-ink text-xs block truncate" title={selectedMonumento.citta}>{selectedMonumento.citta}</span>
                                       {isFilled(selectedMonumento.place_ref_ancient) && (
                                         <a href={selectedMonumento.place_ref_ancient} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-[9px] text-accent hover:underline font-mono truncate max-w-full mt-1">
-                                          Pleiades Link
+                                          Pleiades ↗
                                         </a>
                                       )}
                                     </div>
@@ -7712,7 +7748,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                                       <span className="font-serif font-semibold text-ink text-xs block truncate" title={selectedMonumento.luogo_rit}>{selectedMonumento.luogo_rit}</span>
                                       {isFilled(selectedMonumento.place_ref_modern) && (
                                         <a href={selectedMonumento.place_ref_modern} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-[9px] text-accent hover:underline font-mono truncate max-w-full mt-1">
-                                          GeoNames Link
+                                          GeoNames ↗
                                         </a>
                                       )}
                                     </div>
@@ -7738,7 +7774,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                                         <span className="font-medium text-xs select-all text-ink">{od.testo}</span>
                                         {od.notBeforeCustom && (
                                           <span className="text-muted text-[10px] font-sans ml-1 not-italic" style={{ fontStyle: 'normal' }}>
-                                            ({formatEraYear(od.notBeforeCustom)}{od.notAfterCustom ? ` / ${formatEraYear(od.notAfterCustom)}` : ''})
+                                            ({formatEraYear(od.notBeforeCustom)}{od.notAfterCustom ? ` – ${formatEraYear(od.notAfterCustom)}` : ''})
                                           </span>
                                         )}
                                         {od.evidence && (
@@ -7771,27 +7807,34 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                       </div>
                   </div>
                   )}
-                  {activeRecordSection === 'iscrizione' && (
-                    <div className="space-y-14 animate-in fade-in duration-200 max-w-[70ch] mx-auto">
-                      <section>
-                         <h3 className="text-2xl font-bold mb-6 italic flex items-center gap-4">
-                           <div className="flex items-center gap-4 shrink-0">
-                             <div className="h-[1px] w-8 bg-border/40" />
-                             <div className="w-1.5 h-1.5 rotate-45 border border-accent/40" />
-                           </div>
-                           Trascrizione Testuale
-                           <div className="flex-1 h-[1px] bg-border/20" />
-                           {!isStaticBuild && effectiveAdmin && selectedMonumento.testo && (
+                  {activeRecordSection === 'iscrizione' && (() => {
+                    // Da xl in su testo e apparato stanno a fronte, come in
+                    // un'edizione a stampa, e ogni colonna scorre per conto suo:
+                    // il testo resta sotto gli occhi mentre si legge la
+                    // traduzione. Sotto xl le colonne si impilano e scorre il
+                    // corpo della sezione intero.
+                    const haTraduzione = !!selectedMonumento.traduzioni?.some(t => t.testo);
+                    const haApparato = hasApparatusContent(selectedMonumento.apparatus);
+                    const haCommento = isFilled(selectedMonumento.note_interne);
+                    const aFronte = haTraduzione || haApparato || haCommento;
+                    return (
+                    <div className={cn(
+                      "animate-in fade-in duration-200 md:flex-1 md:min-h-0 md:overflow-y-auto custom-scrollbar",
+                      aFronte && "xl:grid xl:grid-cols-2 xl:grid-rows-1 xl:gap-12 xl:overflow-hidden",
+                    )}>
+                      <section className={cn(COLONNA_SEZIONE, aFronte && "xl:max-w-none")}>
+                         <RubricaSezione azioni={!isStaticBuild && effectiveAdmin && selectedMonumento.testo && (
                              <button
                                onClick={handleTranslate}
                                disabled={translating}
-                               className="flex items-center gap-2 font-sans text-[10px] font-bold uppercase tracking-widest text-accent hover:underline disabled:opacity-50"
+                               className="flex items-center gap-2 font-sans text-[10px] font-bold uppercase tracking-widest text-accent hover:underline disabled:opacity-50 not-italic"
                              >
                                {translating ? <Loader2 className="h-3 w-3 animate-spin" /> : <Sparkles className="h-3 w-3" />}
                                Traduzione AI (Italiano)
                              </button>
-                           )}
-                         </h3>
+                           )}>
+                           {(selectedMonumento.sezione ?? sezioneDiId(selectedMonumento.id)) === 'numismatica' ? 'Legenda' : 'Trascrizione'}
+                         </RubricaSezione>
                            <div className="space-y-8">
                              <LegendaDropdown />
                              <div className="bg-sidebar/50 border border-border p-8 md:p-12 text-lg md:text-2xl text-ink/90 shadow-inner relative"
@@ -7811,7 +7854,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                                       : <><Type className="h-3 w-3" /> Trascrizione pura</>}
                                   </button>
                                 )}
-                                <div className="relative z-10 max-w-[62ch] mx-auto pl-10 border-l-2 border-border/40 max-h-[52vh] overflow-y-auto custom-scrollbar pr-4 pt-10">
+                                <div className="relative z-10 max-w-[62ch] mx-auto pl-10 border-l-2 border-border/40 max-h-[52vh] overflow-y-auto xl:max-h-none xl:overflow-visible custom-scrollbar pr-4 pt-10">
                                   {/* Su un oggetto a due facce la legenda si legge una
                                       faccia per volta: incollarle di seguito le farebbe
                                       passare per un testo solo. */}
@@ -7863,6 +7906,10 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                                   ) : <span className="opacity-40 italic">[Anepigrafe]</span>}
                                 </div>
                              </div>
+                           </div>
+                      </section>
+                      {aFronte && (
+                      <div className={cn(COLONNA_SEZIONE, "space-y-12 mt-12 xl:mt-0 xl:max-w-none")}>
                              {selectedMonumento.traduzioni && selectedMonumento.traduzioni.filter(t => t.testo).length > 0 && (() => {
                                const isIt = (l: string) => l === 'it' || l.startsWith('it (');
                                const sorted = [...selectedMonumento.traduzioni!.filter(t => t.testo)].sort((a, b) => {
@@ -7872,11 +7919,9 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                                });
                                const active = sorted.find(t => translationKey(t) === activeTranslationLang) ?? sorted[0];
                                return (
-                                 <div className="bg-sidebar/30 border-l-4 border-accent p-8 font-serif text-lg italic leading-relaxed text-ink/80 mb-6">
-                                   <div className="flex items-center justify-between gap-4 mb-2 not-italic">
-                                     <span className="text-[9px] font-sans font-bold uppercase tracking-widest text-muted">Traduzione</span>
-                                     {sorted.length > 1 && (
-                                       <div className="flex items-center gap-1">
+                                 <section>
+                                   <RubricaSezione azioni={sorted.length > 1 && (
+                                       <span className="flex items-center gap-1 not-italic">
                                          {sorted.map((t, i) => (
                                            <button
                                              key={`${t.lang}-${i}`}
@@ -7891,36 +7936,29 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                                              {t.face && <span className="ml-1 opacity-70">{t.face}</span>}
                                            </button>
                                          ))}
-                                       </div>
-                                     )}
-                                   </div>
+                                       </span>
+                                     )}>Traduzione</RubricaSezione>
+                                   <div className="bg-sidebar/30 border-l-4 border-accent p-6 md:p-8 font-serif text-lg italic leading-relaxed text-ink/80">
                                    <Highlight text={stripXml(active?.testo)} query={filters.searchText} />
                                    {active?.note && <p className="text-[10px] font-sans not-italic text-muted mt-3">Note: {active.note}</p>}
-                                 </div>
+                                   </div>
+                                 </section>
                                );
                              })()}
-                             {hasApparatusContent(selectedMonumento.apparatus) && (
-                               <div className="bg-sidebar/20 border border-border/40 p-6 rounded-sm font-sans text-xs leading-relaxed text-muted block">
-                                 <div className="text-[9px] font-sans font-bold uppercase tracking-widest text-muted mb-3 font-semibold">Apparatus Critico</div>
-                                 <ApparatusNotes
-                                   value={selectedMonumento.apparatus}
-                                   render={t => <Highlight text={t} query={filters.searchText} />}
-                                 />
-                               </div>
+                             {haApparato && (
+                               <section>
+                                 <RubricaSezione>Apparato critico</RubricaSezione>
+                                 <div className="font-sans text-xs leading-relaxed text-muted">
+                                   <ApparatusNotes
+                                     value={selectedMonumento.apparatus}
+                                     render={t => <Highlight text={t} query={filters.searchText} />}
+                                   />
+                                 </div>
+                               </section>
                              )}
-                           </div>
-                      </section>
-
-                      {isFilled(selectedMonumento.note_interne) && (
+                      {haCommento && (
                         <section>
-                           <h3 className="text-2xl font-bold mb-6 italic flex items-center gap-4">
-                             <div className="flex items-center gap-4 shrink-0">
-                               <div className="h-[1px] w-8 bg-border/40" />
-                               <div className="w-1.5 h-1.5 rotate-45 border border-accent/40" />
-                             </div>
-                             Commento
-                             <div className="flex-1 h-[1px] bg-border/20" />
-                           </h3>
+                           <RubricaSezione>Commento</RubricaSezione>
                            <p className="text-sm leading-relaxed text-ink/80 font-serif whitespace-pre-wrap">
                               <NoteWithTags
                                 text={selectedMonumento.note_interne}
@@ -7935,41 +7973,30 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                             </p>
                         </section>
                       )}
+                      </div>
+                      )}
                     </div>
-                  )}
+                    );
+                  })()}
 
                   {activeRecordSection === 'numismatica' && (
-                    <div className="space-y-14 animate-in fade-in duration-200">
+                    <div className={cn(CORPO_SEZIONE, "space-y-14 animate-in fade-in duration-200")}>
                       <section>
-                        <h3 className="text-2xl font-bold mb-6 italic flex items-center gap-4">
-                          <div className="flex items-center gap-4 shrink-0">
-                            <div className="h-[1px] w-8 bg-border/40" />
-                            <div className="w-1.5 h-1.5 rotate-45 border border-num/50" />
-                          </div>
-                          Tipo monetale
-                          <div className="flex-1 h-[1px] bg-border/20" />
-                        </h3>
+                        <RubricaSezione colore="num">Tipo monetale</RubricaSezione>
                         <NumismaticsPanel monumento={selectedMonumento} />
                       </section>
                     </div>
                   )}
 
                   {activeRecordSection === 'iconografia' && (
-                    <div className="space-y-14 animate-in fade-in duration-200">
+                    <div className={cn(CORPO_SEZIONE, "space-y-14 animate-in fade-in duration-200")}>
                       <section>
-                         <h3 className="text-2xl font-bold mb-6 italic flex items-center gap-4">
-                           <div className="flex items-center gap-4 shrink-0">
-                             <div className="h-[1px] w-8 bg-border/40" />
-                             <div className="w-1.5 h-1.5 rotate-45 border border-accent/40" />
-                           </div>
-                           Indici
-                           <div className="flex-1 h-[1px] bg-border/20" />
-                         </h3>
+                         <RubricaSezione>Indici</RubricaSezione>
                          {(selectedMonumento.divinita?.length || selectedMonumento.epiteti?.length || selectedMonumento.onomastica?.length || selectedMonumento.imperatori?.length) ? (
                            <div className="grid sm:grid-cols-2 gap-x-10 gap-y-6">
                             {selectedMonumento.divinita && selectedMonumento.divinita.length > 0 && (
                               <div>
-                                <h4 className="text-xs font-bold uppercase text-muted tracking-widest mb-2">Divinità</h4>
+                                <h4 className={SOTTORUBRICA}>Divinità</h4>
                                 <div className="flex flex-wrap gap-2">
                                   {selectedMonumento.divinita.map(d => (
                                     <button
@@ -7985,7 +8012,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                             )}
                             {selectedMonumento.epiteti && selectedMonumento.epiteti.length > 0 && (
                               <div>
-                                <h4 className="text-xs font-bold uppercase text-muted tracking-widest mb-2">Epiteti</h4>
+                                <h4 className={SOTTORUBRICA}>Epiteti</h4>
                                 <div className="flex flex-wrap gap-2 mb-2">
                                   {selectedMonumento.epiteti.map(e => (
                                     <button
@@ -8001,7 +8028,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                             )}
                             {selectedMonumento.onomastica && selectedMonumento.onomastica.length > 0 && (
                               <div>
-                                <h4 className="text-xs font-bold uppercase text-muted tracking-widest mb-2 font-sans">Onomastica</h4>
+                                <h4 className={SOTTORUBRICA}>Onomastica</h4>
                                 <div className="flex flex-wrap gap-2">
                                   {selectedMonumento.onomastica.map(o => (
                                     <button key={o}
@@ -8014,7 +8041,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                             )}
                             {selectedMonumento.imperatori && selectedMonumento.imperatori.length > 0 && (
                               <div>
-                                <h4 className="text-xs font-bold uppercase text-muted tracking-widest mb-2">Imperatori</h4>
+                                <h4 className={SOTTORUBRICA}>Imperatori</h4>
                                 <div className="flex flex-wrap gap-2">
                                   {selectedMonumento.imperatori.map((imp: string) => (
                                     <button key={imp}
@@ -8032,7 +8059,8 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                       </section>
 
                       <section>
-                        <h3 className="text-xs font-bold uppercase text-muted tracking-widest mb-3">Commento Iconografico</h3>
+                        <RubricaSezione>Iconografia</RubricaSezione>
+                        <h4 className={SOTTORUBRICA}>Commento iconografico</h4>
                         {selectedMonumento.iconografia?.note ? (
                           <p className="text-xs leading-relaxed text-ink/80 italic font-serif whitespace-pre-wrap border-l-2 border-accent/40 pl-4">
                             {selectedMonumento.iconografia.note}
@@ -8040,19 +8068,19 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                         ) : (
                           <p className="text-xs font-serif text-muted italic">Nessun commento registrato.</p>
                         )}
+                        <div className="mt-8">
+                          <IconographyPanel monumento={selectedMonumento} />
+                        </div>
                       </section>
-
-                      <IconographyPanel monumento={selectedMonumento} />
                     </div>
                   )}
 
                   {activeRecordSection === 'bibliografia' && (
-                    <div className="animate-in fade-in duration-200 max-w-[70ch] space-y-10">
+                    <div className={cn(CORPO_SEZIONE, "animate-in fade-in duration-200")}>
+                    <div className="max-w-[70ch] space-y-10">
                       {selectedMonumento.edizioneRiferimento?.citazione && (
                         <section>
-                          <h3 className="text-xl font-bold mb-4 italic flex items-center gap-3">
-                            <div className="h-px w-8 bg-border" /> Edizione di riferimento
-                          </h3>
+                          <RubricaSezione>Edizione di riferimento</RubricaSezione>
                           <p className="text-xs font-serif text-ink/80 leading-relaxed">
                             {selectedMonumento.edizioneRiferimento.editore && <span className="font-semibold text-ink">{selectedMonumento.edizioneRiferimento.editore}, </span>}
                             {selectedMonumento.edizioneRiferimento.citazione}
@@ -8061,9 +8089,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                       )}
                       {selectedMonumento.bibliografia && selectedMonumento.bibliografia.length > 0 ? (
                       <section>
-                         <h3 className="text-xl font-bold mb-6 italic flex items-center gap-3">
-                           <div className="h-px w-8 bg-border" /> Bibliografia
-                         </h3>
+                         <RubricaSezione>Bibliografia</RubricaSezione>
                             <>
                               {selectedMonumento.bibliografia.length === 1 && selectedMonumento.bibliografia[0].titolo.length > 60 ? (
                                 <p className="text-xs font-serif text-ink/80 leading-relaxed">
@@ -8087,9 +8113,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                       )}
                       {((selectedMonumento.responsabili && selectedMonumento.responsabili.some(r => r.nome)) || selectedMonumento.editorialStatus) && (
                         <section>
-                          <h3 className="text-xl font-bold mb-4 italic flex items-center gap-3">
-                            <div className="h-px w-8 bg-border" /> Edizione digitale
-                          </h3>
+                          <RubricaSezione>Edizione digitale</RubricaSezione>
                           <dl className="text-xs font-serif grid grid-cols-[auto_1fr] gap-x-6 gap-y-2">
                             {(Object.keys(RUOLO_DIGITALE_LABELS) as RuoloDigitale[]).map(ruolo => {
                               const nomi = (selectedMonumento.responsabili || []).filter(r => r.ruolo === ruolo && r.nome).map(r => r.nome);
@@ -8109,6 +8133,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                           </dl>
                         </section>
                       )}
+                    </div>
                     </div>
                   )}
                   </div>
@@ -8179,7 +8204,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                     </section>
                     {hasApparatusContent(m.apparatus) && (
                       <section>
-                        <h5 className="text-[9px] font-bold uppercase text-muted underline underline-offset-4 mb-3 font-sans">Apparatus Critico</h5>
+                        <h5 className="text-[9px] font-bold uppercase text-muted underline underline-offset-4 mb-3 font-sans">Apparato critico</h5>
                         <ApparatusNotes
                           className="text-xs leading-relaxed text-muted"
                           value={m.apparatus}

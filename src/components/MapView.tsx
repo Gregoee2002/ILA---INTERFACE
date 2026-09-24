@@ -620,10 +620,13 @@ export const MapView: React.FC<MapViewProps> = ({ monumenti, onSelectMonumento }
         >
           <FitToSites sites={sites} ready={pendingFetches === 0} />
           <MapRefSetter mapRef={mapRef} />
+          {/* Base grigio chiaro di Esri, senza chiave. Le tessere CARTO
+              (light_all) dal 2026 escono con la filigrana «API KEY REQUIRED»
+              su ogni tessera, qualunque sia il percorso. */}
           <TileLayer
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
-            url="https://{s}.basemaps.cartocdn.com/rastertiles/light_all/{z}/{x}/{y}{r}.png"
-            subdomains="abcd"
+            attribution='Tiles &copy; <a href="https://www.esri.com">Esri</a> &mdash; Esri, DeLorme, NAVTEQ'
+            url="https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}"
+            maxNativeZoom={16}
             noWrap
           />
           <MarkerClusterGroup
