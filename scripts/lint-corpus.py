@@ -11,7 +11,7 @@ Esce con codice 1 se c'è almeno un ERRORE. Gli avvisi di avanzamento
 servono a misurare le fasi F1-F3 del piano, non a bloccarle.
 Vedi docs/piano-markup-esecuzione.md.
 """
-import re, sys, glob, os, collections
+import re, sys, glob, os, collections, unicodedata
 import xml.etree.ElementTree as ET
 
 # ILA_CORPUS permette di puntare alla repo dati (fonte di verità) invece che
@@ -150,14 +150,18 @@ def controlla_era(name, src, txt, warnings, counters):
 W_LEMMA = re.compile(r'<w\b[^>]*\blemma="([^"]+)"[^>]*>(.*?)</w>', re.S)
 
 def compatta(s):
-    return re.sub(r'[-\[\]\s·.,:;΄\'’]+', '', plain(s))
+    # senza spazi né punteggiatura, accento grave reso acuto e in minuscolo:
+    # εὐχὴν a metà frase e Εὐχήν a inizio riga sono la stessa forma
+    t = re.sub(r'[-\[\]\s·.,:;΄\'’]+', '', plain(s))
+    t = unicodedata.normalize('NFD', t).replace('\u0300', '\u0301')
+    return unicodedata.normalize('NFC', t).lower()
 
 def controlla_copertura(sorgenti, warnings, counters):
     forme = collections.defaultdict(set)   # lemma -> forme compatte attestate
     for name, src in sorgenti:
         for lemma, forma in W_LEMMA.findall(edition_of(src)):
             f = compatta(forma)
-            if len(f) >= 6:   # sotto le 6 lettere gli omografi fanno solo rumore
+            if len(f) >= 5:   # sotto le 5 lettere gli omografi fanno solo rumore
                 forme[lemma].add(f)
     for name, src in sorgenti:
         ed = edition_of(src)
