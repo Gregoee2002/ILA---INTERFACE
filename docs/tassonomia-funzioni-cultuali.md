@@ -6,7 +6,9 @@ grep-testuale su tutti i 293 file dell'edizione + verifica a mano dei riscontri 
 rischio + `integrazionetassonomia.md`.
 Dati: [`spoglio-lessico-cultuale.csv`](spoglio-lessico-cultuale.csv) **v2** — 318
 righe, 56 lemmi, 197 schede (decisioni a–g applicate 2026-08-30; ὁρκίζω ed ἐνορκίζω
-aggiunti il 2026-09-05, +2 righe). Colonne: `scheda,
+aggiunti il 2026-09-05, +2 righe; il 2026-09-25 tolto il falso positivo λύτρον in
+ILA-273, che è il nome *Lytronios*, e aggiunte 12 occorrenze di τεκμωρεύω ad Antiochia
+che erano rimaste non marcate, `verifica=manuale`: ora 331 righe, 200 schede). Colonne: `scheda,
 lane_ref, famiglia, lemma, sotto_funzione, forma_attestata, cert, verifica`.
 `cert=low` = forma fra `[ ]`; `verifica=manuale` = i 2 casi residui (`τρέφω`/ILA-151
 metafora poetica, `ἱερεύς`/ILA-097 datazione eponimica) — esclusi dall'applicazione

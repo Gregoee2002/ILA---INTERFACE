@@ -174,7 +174,6 @@ ILA-037,"Lane, CMRDM I 66",atto-cultuale,λυτρόω,riscatto,ἐλυτρώσα
 ILA-028,"Lane, CMRDM I 57",atto-cultuale,λύτρον,riscatto,ἐγλυτρω,,auto
 ILA-032,"Lane, CMRDM I 61",atto-cultuale,λύτρον,riscatto,λύτρον,,auto
 ILA-058,"Lane, CMRDM I 90",atto-cultuale,λύτρον,riscatto,λύτρον,,auto
-ILA-273,"Lane, CMRDM I 286",atto-cultuale,λύτρον,riscatto,Λυτρόνιος,,auto
 ILA-015,"Lane, CMRDM I 43",atto-cultuale,μαρτυρέω,registrazione-su-stele,μαρτυροῦμεν,,auto
 ILA-034,"Lane, CMRDM I 63",atto-cultuale,μαρτυρέω,registrazione-su-stele,μαρτυροῦντες,low,auto
 ILA-079,"Lane, CMRDM I 111",atto-cultuale,ναός,costruzione,ναὸν,,auto
@@ -218,6 +217,18 @@ ILA-276,"Lane, CMRDM I 289",atto-cultuale,τεκμωρεύω,tekmor,τεκμορ
 ILA-277,"Lane, CMRDM I 290",atto-cultuale,τεκμωρεύω,tekmor,τεκμορεύσας,,auto
 ILA-278,"Lane, CMRDM I 291",atto-cultuale,τεκμωρεύω,tekmor,τεκμορεύσαντες,,auto
 ILA-280,"Lane, CMRDM I 293",atto-cultuale,τεκμωρεύω,tekmor,τεκμορεύσα,,auto
+ILA-228,"Lane, CMRDM I 240",atto-cultuale,τεκμωρεύω,tekmor,τεκμορεύσας,,manuale
+ILA-230,"Lane, CMRDM I 242",atto-cultuale,τεκμωρεύω,tekmor,τεκμορεύσας,,manuale
+ILA-235,"Lane, CMRDM I 247",atto-cultuale,τεκμωρεύω,tekmor,τεκμορεύσας,,manuale
+ILA-240,"Lane, CMRDM I 252",atto-cultuale,τεκμωρεύω,tekmor,τεκμορεύσας,,manuale
+ILA-242,"Lane, CMRDM I 254",atto-cultuale,τεκμωρεύω,tekmor,τεκμορεύσας,low,manuale
+ILA-250,"Lane, CMRDM I 263",atto-cultuale,τεκμωρεύω,tekmor,τεκμορεύσαντες,,manuale
+ILA-258,"Lane, CMRDM I 271",atto-cultuale,τεκμωρεύω,tekmor,τεκμορεύσας,low,manuale
+ILA-259,"Lane, CMRDM I 272",atto-cultuale,τεκμωρεύω,tekmor,τεκμορεύσα,low,manuale
+ILA-268,"Lane, CMRDM I 281",atto-cultuale,τεκμωρεύω,tekmor,τεκμορεύσας,low,manuale
+ILA-270,"Lane, CMRDM I 283",atto-cultuale,τεκμωρεύω,tekmor,τεκμορεύσας,,manuale
+ILA-279,"Lane, CMRDM I 292",atto-cultuale,τεκμωρεύω,tekmor,τεκμορεύσας,,manuale
+ILA-281,"Lane, CMRDM I 294",atto-cultuale,τεκμωρεύω,tekmor,τεκμορεύσας,,manuale
 ILA-107,"Lane, CMRDM I 12",atto-cultuale,ἀκάθαρτος,norma-santuariale,ἀκάθαρτον,,auto
 ILA-108,"Lane, CMRDM I 13",atto-cultuale,ἀκάθαρτος,norma-santuariale,ἀκάθαρτον,,auto
 ILA-011,"Lane, CMRDM I 39",atto-cultuale,ἀνίστημι,dedica,ἀνέστησεν,,auto
