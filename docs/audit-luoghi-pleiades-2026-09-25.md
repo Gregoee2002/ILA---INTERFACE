@@ -7,7 +7,11 @@ Oggetto: il blocco `<origPlace>` delle 294 schede in `src/data/corpus/`
 - il dump completo di Pleiades (`pleiades-places/names-latest.csv.gz`) per cercare gli ID mancanti;
 - le intestazioni di luogo di Lane, CMRDM I (`pdftotext -layout` sul PDF).
 
-Nessuna scheda è stata modificata: qui ci sono solo le constatazioni e le correzioni proposte.
+**Applicato il 2026-09-25** (repo dati `Gregoee2002/ILA`, commit a6acea98): i 5 URI
+errati del § 1 e i 16 ID «sicuri» del § 2 (Koresa, Tarsis?, Saittai, Synaos, Sereana,
+Plouristreia, Vetissus, Ouezaitai, Lydia). Ogni scheda toccata ha un commento
+«Audit luoghi 2026-09-25» prima di `<origPlace>`. Restano aperti i candidati «da
+vagliare» del § 2 e i §§ 3-5.
 
 ## Quadro
 
