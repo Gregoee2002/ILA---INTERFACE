@@ -8089,25 +8089,62 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                     const attribuiti = new Set(coppie.flatMap(c => c.epiteti));
                     const epitetiSciolti = (selectedMonumento.epiteti || []).filter(e => !attribuiti.has(e));
                     const cerca = (t: string) => { setFilters(f => ({ ...f, searchText: t })); setSelectedMonumento(null); };
+                    // Funzione, commento e figure sono compilati in 1-2 schede su
+                    // 294: i blocchi vuoti non si stampano, si elencano in coda in
+                    // una riga sola. Un solo titolo grande per blocco pieno.
+                    const nota = selectedMonumento.iconografia?.note;
+                    const haFigure = (selectedMonumento.iconografia?.figures?.length ?? 0) > 0;
+                    const haDivinita = coppie.length > 0 || epitetiSciolti.length > 0;
+                    const mancanti = [
+                      !haDivinita && 'divinità',
+                      !funzione && 'funzione',
+                      famiglie.length === 0 && 'lessico cultuale',
+                      !nota && !haFigure && 'iconografia',
+                    ].filter(Boolean) as string[];
                     return (
-                    <div className={cn(CORPO_SEZIONE, "space-y-14 animate-in fade-in duration-200")}>
-                      <section>
-                        <RubricaSezione>Funzione</RubricaSezione>
-                        {funzione ? (
-                          <p className="text-sm font-serif text-ink">{(l => l.charAt(0).toUpperCase() + l.slice(1))(ICONOGRAPHY_LABELS[funzione] || funzione)}</p>
-                        ) : (
-                          <p className="text-xs font-serif text-muted italic">Funzione non registrata.</p>
-                        )}
-                      </section>
+                    <div className={cn(CORPO_SEZIONE, "space-y-12 animate-in fade-in duration-200")}>
+                      {(haDivinita || funzione) && (
+                        <dl className="grid grid-cols-[auto_1fr] gap-x-8 gap-y-4 items-baseline">
+                          {haDivinita && (
+                            <>
+                              <dt className={cn(SOTTORUBRICA, "mb-0")}>Divinità</dt>
+                              <dd className="space-y-1 text-base font-serif">
+                                {coppie.map(c => (
+                                  <div key={c.divinita} className="flex flex-wrap items-baseline gap-x-2">
+                                    <button onClick={() => cerca(c.divinita)} className="text-ink font-semibold hover:text-accent transition-colors cursor-pointer">{c.divinita}</button>
+                                    {c.epiteti.map(e => (
+                                      <button key={e} onClick={() => cerca(e)} className="text-ink/80 italic hover:text-accent transition-colors cursor-pointer">{e}</button>
+                                    ))}
+                                  </div>
+                                ))}
+                                {epitetiSciolti.length > 0 && (
+                                  <div className="flex flex-wrap items-baseline gap-x-2">
+                                    <span className="text-[11px] text-muted">epiteti non attribuiti</span>
+                                    {epitetiSciolti.map(e => (
+                                      <button key={e} onClick={() => cerca(e)} className="text-ink/80 italic hover:text-accent transition-colors cursor-pointer">{e}</button>
+                                    ))}
+                                  </div>
+                                )}
+                              </dd>
+                            </>
+                          )}
+                          {funzione && (
+                            <>
+                              <dt className={cn(SOTTORUBRICA, "mb-0")}>Funzione</dt>
+                              <dd className="text-sm font-serif text-ink">{(l => l.charAt(0).toUpperCase() + l.slice(1))(ICONOGRAPHY_LABELS[funzione] || funzione)}</dd>
+                            </>
+                          )}
+                        </dl>
+                      )}
 
-                      <section>
-                        <RubricaSezione azioni={lessico.length > 0 && (
-                          <button
-                            onClick={() => { setSelectedMonumento(null); setActiveView('cult'); }}
-                            className="text-[11px] font-serif text-muted hover:text-accent transition-colors"
-                          >Vista Lessico cultuale</button>
-                        )}>Lessico cultuale</RubricaSezione>
-                        {famiglie.length > 0 ? (
+                      {famiglie.length > 0 && (
+                        <section>
+                          <RubricaSezione azioni={
+                            <button
+                              onClick={() => { setSelectedMonumento(null); setActiveView('cult'); }}
+                              className="text-[11px] font-serif text-muted hover:text-accent transition-colors"
+                            >Vista Lessico cultuale</button>
+                          }>Lessico cultuale</RubricaSezione>
                           <div className="space-y-5">
                             {famiglie.map(f => {
                               const info = CULT_FAMILIES.find(c => c.id === f.id);
@@ -8133,51 +8170,33 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                               );
                             })}
                           </div>
-                        ) : (
-                          <p className="text-xs font-serif text-muted italic">Nessun termine cultuale marcato nell’edizione.</p>
-                        )}
-                      </section>
+                        </section>
+                      )}
 
-                      <section>
-                        <RubricaSezione>Divinità ed epiteti</RubricaSezione>
-                        {coppie.length > 0 || epitetiSciolti.length > 0 ? (
-                          <ul className="space-y-2 text-sm font-serif">
-                            {coppie.map(c => (
-                              <li key={c.divinita} className="flex flex-wrap items-baseline gap-x-2">
-                                <button onClick={() => cerca(c.divinita)} className="text-ink font-semibold hover:text-accent transition-colors cursor-pointer">{c.divinita}</button>
-                                {c.epiteti.map(e => (
-                                  <button key={e} onClick={() => cerca(e)} className="text-ink/80 italic hover:text-accent transition-colors cursor-pointer">{e}</button>
-                                ))}
-                              </li>
-                            ))}
-                            {epitetiSciolti.length > 0 && (
-                              <li className="flex flex-wrap items-baseline gap-x-2">
-                                <span className="text-[11px] text-muted">epiteti non attribuiti</span>
-                                {epitetiSciolti.map(e => (
-                                  <button key={e} onClick={() => cerca(e)} className="text-ink/80 italic hover:text-accent transition-colors cursor-pointer">{e}</button>
-                                ))}
-                              </li>
-                            )}
-                          </ul>
-                        ) : (
-                          <p className="text-xs font-serif text-muted italic">Nessuna divinità registrata.</p>
-                        )}
-                      </section>
+                      {(nota || haFigure) && (
+                        <section>
+                          <RubricaSezione>Iconografia</RubricaSezione>
+                          {nota && (
+                            <>
+                              <h4 className={SOTTORUBRICA}>Commento iconografico</h4>
+                              <p className="text-xs leading-relaxed text-ink/80 italic font-serif whitespace-pre-wrap border-l-2 border-accent/40 pl-4">
+                                {nota}
+                              </p>
+                            </>
+                          )}
+                          {haFigure && (
+                            <div className={nota ? "mt-8" : undefined}>
+                              <IconographyPanel monumento={selectedMonumento} />
+                            </div>
+                          )}
+                        </section>
+                      )}
 
-                      <section>
-                        <RubricaSezione>Apparato iconografico</RubricaSezione>
-                        <h4 className={SOTTORUBRICA}>Commento iconografico</h4>
-                        {selectedMonumento.iconografia?.note ? (
-                          <p className="text-xs leading-relaxed text-ink/80 italic font-serif whitespace-pre-wrap border-l-2 border-accent/40 pl-4">
-                            {selectedMonumento.iconografia.note}
-                          </p>
-                        ) : (
-                          <p className="text-xs font-serif text-muted italic">Nessun commento registrato.</p>
-                        )}
-                        <div className="mt-8">
-                          <IconographyPanel monumento={selectedMonumento} />
-                        </div>
-                      </section>
+                      {mancanti.length > 0 && (
+                        <p className="text-xs font-serif text-muted/70 italic">
+                          Non registrati: {mancanti.join(', ')}.
+                        </p>
+                      )}
                     </div>
                     );
                   })()}

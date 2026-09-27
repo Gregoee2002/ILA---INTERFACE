@@ -2,6 +2,7 @@ import React from 'react';
 import { Monumento } from '../types';
 import { ICONOGRAPHY_LABELS } from '../lib/iconographyLabels';
 import { SOTTORUBRICA } from './RubricaSezione';
+import { cn } from '../lib/utils';
 
 interface IconographyPanelProps {
   monumento: Monumento;
@@ -34,7 +35,7 @@ export const IconographyPanel: React.FC<IconographyPanelProps> = ({ monumento })
   }, [monumento]);
 
   return (
-    <div className="mb-10">
+    <div>
       <h4 className={SOTTORUBRICA}>Figure</h4>
 
       {isEmpty ? (
@@ -44,7 +45,7 @@ export const IconographyPanel: React.FC<IconographyPanelProps> = ({ monumento })
         {figures.map(({ fig, groupedTraits, displayTitle, translatedType }, idx) => {
           return (
             <div key={idx} className="bg-card border border-border rounded-xl p-5 shadow-sm">
-              <div className="mb-3 border-b border-border/40 pb-3 flex justify-between items-baseline flex-wrap gap-2">
+              <div className={cn("flex justify-between items-baseline flex-wrap gap-2", Object.keys(groupedTraits).length > 0 && "mb-3 border-b border-border/40 pb-3")}>
                 <span className="font-serif text-[15px] font-medium text-ink">
                   {displayTitle}
                 </span>
@@ -58,6 +59,7 @@ export const IconographyPanel: React.FC<IconographyPanelProps> = ({ monumento })
                 </span>
               </div>
 
+              {Object.keys(groupedTraits).length > 0 && (
               <div className="space-y-3">
                 {Object.entries(groupedTraits).map(([type, traits], tIdx) => {
                   const label = ICONOGRAPHY_LABELS[type] || type;
@@ -82,6 +84,7 @@ export const IconographyPanel: React.FC<IconographyPanelProps> = ({ monumento })
                   );
                 })}
               </div>
+              )}
             </div>
           );
         })}
