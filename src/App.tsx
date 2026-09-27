@@ -8111,9 +8111,9 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                               <dd className="space-y-1 text-base font-serif">
                                 {coppie.map(c => (
                                   <div key={c.divinita} className="flex flex-wrap items-baseline gap-x-2">
-                                    <button onClick={() => cerca(c.divinita)} className="text-ink font-semibold hover:text-accent transition-colors cursor-pointer">{c.divinita}</button>
+                                    <button onClick={() => cerca(c.divinita)} className="font-serif text-ink font-semibold hover:text-accent transition-colors cursor-pointer">{c.divinita}</button>
                                     {c.epiteti.map(e => (
-                                      <button key={e} onClick={() => cerca(e)} className="text-ink/80 italic hover:text-accent transition-colors cursor-pointer">{e}</button>
+                                      <button key={e} onClick={() => cerca(e)} className="font-serif text-ink/80 italic hover:text-accent transition-colors cursor-pointer">{e}</button>
                                     ))}
                                   </div>
                                 ))}
@@ -8121,7 +8121,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                                   <div className="flex flex-wrap items-baseline gap-x-2">
                                     <span className="text-[11px] text-muted">epiteti non attribuiti</span>
                                     {epitetiSciolti.map(e => (
-                                      <button key={e} onClick={() => cerca(e)} className="text-ink/80 italic hover:text-accent transition-colors cursor-pointer">{e}</button>
+                                      <button key={e} onClick={() => cerca(e)} className="font-serif text-ink/80 italic hover:text-accent transition-colors cursor-pointer">{e}</button>
                                     ))}
                                   </div>
                                 )}

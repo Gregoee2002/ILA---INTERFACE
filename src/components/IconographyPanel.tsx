@@ -41,49 +41,37 @@ export const IconographyPanel: React.FC<IconographyPanelProps> = ({ monumento })
       {isEmpty ? (
         <p className="text-xs font-serif text-muted italic">Nessuna figura registrata.</p>
       ) : (
-      <div className="space-y-4">
+      // Niente riquadro né pillole: la figura si legge come il resto della
+      // scheda, titolo in Garamond e qualifiche in corsivo, i tratti come
+      // elenco di voci accanto alla loro etichetta.
+      <div className="space-y-6">
         {figures.map(({ fig, groupedTraits, displayTitle, translatedType }, idx) => {
+          const qualifiche = [translatedType, fig.place && (ICONOGRAPHY_LABELS[fig.place] || fig.place)].filter(Boolean).join(' · ');
+          const gruppi = Object.entries(groupedTraits);
           return (
-            <div key={idx} className="bg-card border border-border rounded-xl p-5 shadow-sm">
-              <div className={cn("flex justify-between items-baseline flex-wrap gap-2", Object.keys(groupedTraits).length > 0 && "mb-3 border-b border-border/40 pb-3")}>
-                <span className="font-serif text-[15px] font-medium text-ink">
-                  {displayTitle}
-                </span>
-                <span className="text-xs text-muted font-sans shrink-0 flex items-center gap-2">
-                  {translatedType}
-                  {fig.place && (
-                    <span className="text-[10px] uppercase tracking-wide text-muted/60 border border-border/40 rounded-full px-1.5 py-0.5">
-                      {ICONOGRAPHY_LABELS[fig.place] || fig.place}
-                    </span>
-                  )}
-                </span>
+            <div key={idx} className="font-serif">
+              <div className="flex items-baseline gap-x-3 flex-wrap">
+                <span className="text-base text-ink">{displayTitle}</span>
+                {qualifiche && <span className="text-xs italic text-muted">{qualifiche}</span>}
               </div>
-
-              {Object.keys(groupedTraits).length > 0 && (
-              <div className="space-y-3">
-                {Object.entries(groupedTraits).map(([type, traits], tIdx) => {
-                  const label = ICONOGRAPHY_LABELS[type] || type;
-                  return (
-                    <div key={tIdx} className="flex flex-col sm:flex-row sm:items-start gap-1 sm:gap-3">
-                      <span className="text-[11px] uppercase tracking-wide text-muted font-medium w-28 shrink-0 sm:pt-1">
-                        {label}
-                      </span>
-                      <div className="flex flex-wrap gap-2">
-                        {traits.map((t, trIdx) => {
-                          const traitLabel = ICONOGRAPHY_LABELS[t.key] || t.key;
-                          return (
-                            <span key={trIdx} className="border border-border bg-sidebar/50 text-ink/80 text-xs px-2 py-0.5 rounded-full font-sans">
-                              {traitLabel}
-                              {t.hand === 'right' && <span className="opacity-70 font-light ml-1">(d.)</span>}
-                              {t.hand === 'left' && <span className="opacity-70 font-light ml-1">(s.)</span>}
-                            </span>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
+              {gruppi.length > 0 && (
+                <dl className="mt-2 grid grid-cols-[auto_1fr] gap-x-6 gap-y-1 items-baseline">
+                  {gruppi.map(([type, traits]) => (
+                    <React.Fragment key={type}>
+                      <dt className={cn(SOTTORUBRICA, 'mb-0')}>{ICONOGRAPHY_LABELS[type] || type}</dt>
+                      <dd className="text-sm text-ink/85">
+                        {traits.map((t, i) => (
+                          <React.Fragment key={i}>
+                            {i > 0 && ', '}
+                            {ICONOGRAPHY_LABELS[t.key] || t.key}
+                            {t.hand === 'right' && <span className="text-muted"> (d.)</span>}
+                            {t.hand === 'left' && <span className="text-muted"> (s.)</span>}
+                          </React.Fragment>
+                        ))}
+                      </dd>
+                    </React.Fragment>
+                  ))}
+                </dl>
               )}
             </div>
           );
