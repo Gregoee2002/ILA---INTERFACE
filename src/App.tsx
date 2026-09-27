@@ -61,6 +61,7 @@ import { IconographyPanel } from './components/IconographyPanel';
 import { CULT_FAMILIES, cultFamilyColor, cultFamilyShort } from './lib/cultLexicon';
 import { NumismaticsPanel } from './components/NumismaticsPanel';
 import { ErrorBoundary } from './components/ErrorBoundary';
+import { Button } from './components/ui/Button';
 import { leggiPermalink, scriviPermalink, etichettaScheda } from './lib/permalink';
 import { Sezione, definizioneSezione, etichettaSezione, idDaNumero, nomeFileScheda, sezioneDaContenuto, sezioneDiId, sezionePubblica, sezioniVisibili } from './lib/sezioni';
 const CooccurrenceHeatmap = lazy(() => import('./components/CooccurrenceHeatmap').then(m => ({ default: m.CooccurrenceHeatmap })));
@@ -5685,12 +5686,9 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
           <AlertTriangle className="h-6 w-6 text-danger" />
           <p className="text-sm font-sans font-bold text-ink">Corpus non caricato</p>
           <p className="text-xs text-muted leading-relaxed">{loadError}</p>
-          <button
-            onClick={() => window.location.reload()}
-            className="mt-2 px-4 py-1.5 text-xs font-sans font-bold uppercase tracking-widest bg-accent text-white rounded-sm"
-          >
+          <Button size="md" onClick={() => window.location.reload()} className="mt-2">
             Riprova
-          </button>
+          </Button>
         </div>
       </div>
     );
@@ -6699,9 +6697,8 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                             </button>
                           </div>
                           <div className="flex items-center gap-2">
-                            <button
+                            <Button
                               onClick={() => { exportFilteredData(); flashExport('xml'); }}
-                              className="flex items-center gap-1.5 px-4 py-1.5 bg-accent text-white text-[9px] font-sans font-bold uppercase tracking-widest hover:bg-accent/90 transition-colors rounded-sm"
                             >
                               <AnimatePresence mode="wait" initial={false}>
                                 {exportFlash === 'xml' ? (
@@ -6715,7 +6712,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                                 )}
                               </AnimatePresence>
                               {exportFlash === 'xml' ? 'Esportato' : 'Esporta XML'}
-                            </button>
+                            </Button>
                             <button
                               onClick={() => { exportToPDF(); flashExport('pdf'); }}
                               className="flex items-center gap-1.5 px-4 py-1.5 border border-accent text-accent text-[9px] font-sans font-bold uppercase tracking-widest hover:bg-accent/5 transition-colors rounded-sm"
@@ -7337,12 +7334,9 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                       <p className="text-xs text-muted max-w-sm mx-auto bg-danger/10 p-3 border border-danger/25 font-mono text-left overflow-x-auto text-[10px]">
                         {importErrorMsg}
                       </p>
-                      <button 
-                        onClick={() => setImportStep('upload')}
-                        className="px-4 py-1.5 bg-accent text-white text-[9px] font-sans font-bold uppercase tracking-widest hover:bg-accent/90"
-                      >
+                      <Button onClick={() => setImportStep('upload')}>
                         Scegli un altro file
-                      </button>
+                      </Button>
                     </div>
                   )}
                     </>
@@ -7368,12 +7362,9 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                       {importStep === 'success' ? 'Chiudi' : 'Annulla'}
                     </button>
                     {importStep === 'config' && (
-                      <button 
-                        onClick={executeImport}
-                        className="px-4 py-1.5 bg-accent text-white text-[9px] font-sans font-bold uppercase tracking-widest hover:bg-accent/90 transition-transform"
-                      >
+                      <Button onClick={executeImport}>
                         Carica nel Database
-                      </button>
+                      </Button>
                     )}
                   </div>
                 </div>
@@ -7665,13 +7656,13 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                           <div className="flex gap-2 items-center">
                            {!showDeleteConfirm ? (
                              <>
-                               <button 
+                               <Button
                                  onClick={() => exportSingleRecord(selectedMonumento)}
-                                 className="flex items-center gap-1.5 px-3 py-1.5 bg-accent text-white font-sans text-[10px] font-bold uppercase tracking-widest hover:bg-accent/90 transition-all rounded-sm shadow-sm"
+                                 className="px-3 text-[10px] shadow-sm"
                                  title="Esporta XML"
                                >
                                  <Download className="h-3.5 w-3.5" /> Esporta XML
-                               </button>
+                               </Button>
                                <button 
                                  onClick={() => setShowDeleteConfirm(true)}
                                  className="p-2 hover:bg-sidebar text-muted hover:text-danger transition-all rounded-full"
@@ -7683,18 +7674,12 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                            ) : (
                              <div className="flex items-center gap-3 animate-in fade-in zoom-in-95 duration-200">
                                <span className="text-[10px] font-bold uppercase text-danger tracking-widest whitespace-nowrap">Sicuro di voler eliminare?</span>
-                               <button
-                                 onClick={() => handleDelete()}
-                                 className="px-4 py-1.5 bg-danger text-white font-sans text-[9px] font-bold uppercase tracking-widest hover:bg-danger/90 transition-colors"
-                               >
+                               <Button variant="danger" onClick={() => handleDelete()}>
                                  Conferma
-                               </button>
-                               <button 
-                                 onClick={() => setShowDeleteConfirm(false)}
-                                 className="px-4 py-1.5 border border-border text-muted font-sans text-[9px] font-bold uppercase tracking-widest hover:bg-sidebar transition-colors"
-                               >
+                               </Button>
+                               <Button variant="secondary" onClick={() => setShowDeleteConfirm(false)}>
                                  Annulla
-                               </button>
+                               </Button>
                              </div>
                            )}
                           </div>
