@@ -37,3 +37,9 @@ logs/
 # Copia del corpus arricchita col percorso LARES (scripts/export-lares.ts):
 # si rigenera, non è una fonte.
 exports/lares/
+
+# Consegne generate a mano (presentazione, tabelle, anteprime): restano locali,
+# e non devono sporcare l'albero, sennò il runner notturno non parte.
+exports/ILA-edizioni-e-responsabilita.xlsx
+exports/ILA-mappa-*.png
+exports/ILA-presentazione.*
