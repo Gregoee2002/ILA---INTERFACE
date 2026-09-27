@@ -8145,31 +8145,46 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                               className="text-[11px] font-serif text-muted hover:text-accent transition-colors"
                             >Vista Lessico cultuale</button>
                           }>Lessico cultuale</RubricaSezione>
-                          <div className="space-y-5">
-                            {famiglie.map(f => {
+                          {/* Una tabella sola per tutte le famiglie, così lemma, forma,
+                              riga e funzione restano incolonnati anche da un gruppo
+                              all'altro. Niente filetti: bastano l'allineamento e l'aria. */}
+                          <table className="w-full text-sm font-serif border-collapse">
+                            <colgroup>
+                              <col className="w-[1%]" />
+                              <col className="w-[1%]" />
+                              <col className="w-[1%]" />
+                              <col />
+                            </colgroup>
+                            {famiglie.map((f, fi) => {
                               const info = CULT_FAMILIES.find(c => c.id === f.id);
                               return (
-                                <div key={f.id}>
-                                  <h4 className={cn(SOTTORUBRICA, "flex items-center gap-2")} title={info?.rule}>
-                                    <span className="inline-block w-2 h-2 shrink-0" style={{ backgroundColor: cultFamilyColor(f.id) }} aria-hidden />
-                                    {info ? cultFamilyShort(info.label) : f.id}
-                                  </h4>
-                                  <ul className="space-y-1 text-sm font-serif">
-                                    {f.voci.map((a, i) => (
-                                      <li key={i} className="flex flex-wrap items-baseline gap-x-2">
-                                        <span className="text-ink">{a.lemma}</span>
-                                        {a.form && a.form !== a.lemma && <span className="text-muted italic">{a.form}</span>}
-                                        {a.line && <span className="text-[11px] text-muted/60">r. {a.line}</span>}
-                                        {a.subFunction && <span className="text-[11px] text-muted italic">— {a.subFunction}</span>}
-                                        {a.formula && <span className="text-[11px] text-muted/60">in formula</span>}
-                                        {a.cert === 'low' && <span className="text-[11px] text-muted/60">integrato</span>}
-                                      </li>
-                                    ))}
-                                  </ul>
-                                </div>
+                                <tbody key={f.id}>
+                                  <tr>
+                                    <th colSpan={4} scope="colgroup" className={cn("text-left font-normal pb-1.5", fi > 0 && "pt-5")}>
+                                      <span className={cn(SOTTORUBRICA, "mb-0 flex items-center gap-2")} title={info?.rule}>
+                                        <span className="inline-block w-2 h-2 shrink-0" style={{ backgroundColor: cultFamilyColor(f.id) }} aria-hidden />
+                                        {info ? cultFamilyShort(info.label) : f.id}
+                                      </span>
+                                    </th>
+                                  </tr>
+                                  {f.voci.map((a, i) => {
+                                    const note = [a.formula && 'in formula', a.cert === 'low' && 'integrato'].filter(Boolean).join(' · ');
+                                    return (
+                                      <tr key={i} className="align-baseline">
+                                        <td className="py-0.5 pr-5 text-ink whitespace-nowrap">{a.lemma}</td>
+                                        <td className="py-0.5 pr-5 text-muted italic whitespace-nowrap">{a.form && a.form !== a.lemma ? a.form : ''}</td>
+                                        <td className="py-0.5 pr-5 text-[11px] text-muted/60 text-right tabular-nums whitespace-nowrap">{a.line ? `r. ${a.line}` : ''}</td>
+                                        <td className="py-0.5 text-[11px] text-muted italic">
+                                          {a.subFunction}
+                                          {note && <span className="not-italic text-muted/60">{a.subFunction ? ' · ' : ''}{note}</span>}
+                                        </td>
+                                      </tr>
+                                    );
+                                  })}
+                                </tbody>
                               );
                             })}
-                          </div>
+                          </table>
                         </section>
                       )}
 
