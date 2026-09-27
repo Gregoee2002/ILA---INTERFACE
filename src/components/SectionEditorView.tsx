@@ -12,6 +12,7 @@ import { DENOMINATIONS, MANUFACTURES, METALS, MINTS, nomismaRef, numLabel } from
 import { Sezione, etichettaSezione, sezioneDiId } from '../lib/sezioni';
 import { xmlToMonumenti, formatIlaLabel, renderEditionFaces } from '../lib/xmlUtils';
 import { EditionMarkupEditor } from './EditionMarkupEditor';
+import { Chip } from './ui/Chip';
 import { DivinityEpithetIndex } from './DivinityEpithetIndex';
 import { ICONOGRAPHY_LABELS } from '../lib/iconographyLabels';
 import { INSCRIPTION_TYPES, OBJECT_TYPES, MATERIALS, EXECUTION_TECHNIQUES, VocabTerm } from '../lib/eagleVocab';
@@ -337,12 +338,12 @@ const ChipListEditor: React.FC<{ values: string[]; onChange: (v: string[]) => vo
     <div className="relative" ref={wrapRef}>
       <div className="flex flex-wrap items-center gap-2 bg-white/40 dark:bg-white/5 border border-border/50 rounded-lg px-2.5 py-2 focus-within:ring-1 focus-within:ring-accent/40 transition-all">
         {values.map((v, i) => (
-          <span key={i} className="inline-flex items-center gap-1.5 bg-accent/10 text-accent border border-accent/20 rounded-full px-2.5 py-0.5 text-xs font-serif">
+          <Chip key={i}>
             {v}
             <button onClick={() => onChange(values.filter((_, j) => j !== i))} className="hover:text-danger transition-colors" title="Rimuovi">
               <X className="w-3 h-3" />
             </button>
-          </span>
+          </Chip>
         ))}
         <input
           value={draft}
@@ -1216,9 +1217,9 @@ function renderSectionForm(
           {values.length > 0 ? (
             <div className="flex flex-wrap gap-1.5">
               {values.map(v => (
-                <span key={v} className="inline-flex items-center bg-accent/10 text-accent border border-accent/20 rounded-full px-2.5 py-0.5 text-xs font-serif">
+                <Chip key={v}>
                   {v}
-                </span>
+                </Chip>
               ))}
             </div>
           ) : (

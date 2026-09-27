@@ -61,7 +61,9 @@ import { IconographyPanel } from './components/IconographyPanel';
 import { CULT_FAMILIES, cultFamilyColor, cultFamilyShort } from './lib/cultLexicon';
 import { NumismaticsPanel } from './components/NumismaticsPanel';
 import { ErrorBoundary } from './components/ErrorBoundary';
+import { Badge } from './components/ui/Badge';
 import { Button } from './components/ui/Button';
+import { Chip } from './components/ui/Chip';
 import { leggiPermalink, scriviPermalink, etichettaScheda } from './lib/permalink';
 import { Sezione, definizioneSezione, etichettaSezione, idDaNumero, nomeFileScheda, sezioneDaContenuto, sezioneDiId, sezionePubblica, sezioniVisibili } from './lib/sezioni';
 const CooccurrenceHeatmap = lazy(() => import('./components/CooccurrenceHeatmap').then(m => ({ default: m.CooccurrenceHeatmap })));
@@ -1139,9 +1141,9 @@ function EpithetStats({ monumenti, onSelectMonumento, onVaiAllaFonte, initialTab
             )}
           >
             Divinità
-            <span className="ml-2 text-[9px] bg-accent/10 text-accent px-1.5 py-0.5 rounded-sm font-bold">
+            <Badge className="ml-2">
               {totalDivinita}
-            </span>
+            </Badge>
             <span className="ml-1.5 text-[9px] text-muted/50 font-sans font-normal normal-case tracking-normal">
               {totalEpiteti} epiteti
             </span>
@@ -1156,9 +1158,9 @@ function EpithetStats({ monumenti, onSelectMonumento, onVaiAllaFonte, initialTab
             )}
           >
             Onomastica
-            <span className="ml-2 text-[9px] bg-accent/10 text-accent px-1.5 py-0.5 rounded-sm font-bold">
+            <Badge className="ml-2">
               {totalOnomastica}
-            </span>
+            </Badge>
           </button>
         </div>
       )}
@@ -3930,9 +3932,9 @@ const TermStatsPopover = ({ action, onExpand, onClose }: {
           {action.stats.epiteti.length > 0 && (
             <div className="flex flex-wrap gap-1.5 mt-3">
               {action.stats.epiteti.slice(0, 5).map(e => (
-                <span key={e.name} className="border border-accent/20 bg-accent/5 text-accent px-2 py-0.5 text-[11px] italic rounded-full font-serif">
+                <Chip key={e.name} className="gap-1 px-2 text-[11px] italic">
                   {e.name} <span className="opacity-60">{e.count}×</span>
-                </span>
+                </Chip>
               ))}
             </div>
           )}
@@ -6461,9 +6463,9 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                               <div className="flex-1 min-w-0 flex flex-col gap-1.5">
                                 <div className="flex justify-between items-center gap-2">
                                   <div className="flex items-center gap-1 flex-wrap">
-                                    <span className="font-mono text-[10px] font-bold text-accent bg-accent/5 px-1.5 py-0.5 rounded-sm border border-accent/10 tabular-nums">{etichettaScheda(m.id)}</span>
+                                    <Badge bordered className="font-mono text-[10px] tabular-nums">{etichettaScheda(m.id)}</Badge>
                                     {searchResultIds?.has(m.id) && matchInSuppliedById.get(m.id) && (
-                                      <span className="font-mono text-[8px] font-bold text-warning bg-warning/10 px-1 py-0.5 rounded-sm border border-warning/25">RICOSTR.</span>
+                                      <Badge tone="warning" bordered className="font-mono text-[8px] px-1">RICOSTR.</Badge>
                                     )}
                                   </div>
                                   <span className="text-[10px] font-bold text-ink/75 tabular-nums shrink-0">{formatDateRange(m.data_inizio, m.data_fine)}</span>
@@ -6526,14 +6528,16 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                               </motion.div>
                             </div>
                               <div className="flex items-center gap-1">
-                                <span className="font-mono text-[10px] font-bold text-accent bg-accent/5 px-1.5 py-0.5 rounded-sm border border-accent/10 tabular-nums">{etichettaScheda(m.id)}</span>
+                                <Badge bordered className="font-mono text-[10px] tabular-nums">{etichettaScheda(m.id)}</Badge>
                                 {searchResultIds?.has(m.id) && matchInSuppliedById.get(m.id) && (
-                                  <span
-                                    className="font-mono text-[8px] font-bold text-warning bg-warning/10 px-1 py-0.5 rounded-sm border border-warning/25 whitespace-nowrap"
+                                  <Badge
+                                    tone="warning"
+                                    bordered
+                                    className="font-mono text-[8px] px-1 whitespace-nowrap"
                                     title="Il termine cercato compare in una parte ricostruita editorialmente (supplied), non attestata sulla pietra"
                                   >
                                     RICOSTR.
-                                  </span>
+                                  </Badge>
                                 )}
                               </div>
                               <div>
@@ -7633,9 +7637,9 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                                 </span>
                               )}
                               {selectedMonumento.textTypes?.map((tt, idx) => (
-                                <span key={idx} className="bg-success/10 text-success text-[10px] font-bold px-2 py-0.5 rounded-sm uppercase tracking-tighter shadow-sm">
+                                <Badge key={idx} tone="success" className="text-[10px] px-2 uppercase tracking-tighter shadow-sm">
                                   {labelInscriptionType(tt)}
-                                </span>
+                                </Badge>
                               ))}
                               <button
                                 onClick={() => setCompareList(prev => prev.some(m => m.entryId === selectedMonumento.entryId) ? prev : [...prev, selectedMonumento])}
