@@ -17,6 +17,7 @@ import { ICONOGRAPHY_LABELS } from '../lib/iconographyLabels';
 import { INSCRIPTION_TYPES, OBJECT_TYPES, MATERIALS, EXECUTION_TECHNIQUES, VocabTerm } from '../lib/eagleVocab';
 import { extractIndexSuggestions, extractPersonsFromEdition } from '../lib/leidenMarkup';
 import { buildExtRefUrl, collectExtRefTypes, findExtRefRepo, normalizeExtRefType, rememberExtRefType } from '../lib/extRefs';
+import { Button } from './ui/Button';
 
 /** Le 18 sezioni canoniche, ora mappate su campi Monumento (già separati nel corpus). */
 export type SectionId =
@@ -407,13 +408,14 @@ const RevisionStub: React.FC<{ revisions: Revision[]; onChange: (r: Revision[]) 
           <FieldLabel hint="opzionale — es. Codifica: …">Nota</FieldLabel>
           <TextInput value={note} onChange={e => setNote(e.target.value)} placeholder="Codifica / Revisione / Controllo scientifico: …" />
         </div>
-        <button
+        <Button
+          size="md"
           onClick={commit}
           disabled={people.length === 0}
-          className="inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-xs font-sans font-bold uppercase tracking-[0.12em] bg-accent text-white disabled:opacity-40 transition-all hover:shadow-md"
+          className="py-2 rounded-full tracking-[0.12em] transition-all hover:bg-accent hover:shadow-md"
         >
           <Plus className="w-3.5 h-3.5" /> Registra
-        </button>
+        </Button>
       </div>
       {last && (
         <p className="text-[11px] text-muted/60 font-serif italic mt-2.5">
@@ -650,9 +652,9 @@ export const SectionEditorView: React.FC<Props> = ({ monumenti, effectiveAdmin, 
         {!effectiveAdmin && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mb-6 flex items-center justify-between gap-3 text-sm text-warning bg-warning/10 border border-warning/25 rounded-xl px-4 py-3">
             <span className="flex items-center gap-2.5"><ShieldCheck className="w-4 h-4 shrink-0" /> Puoi sfogliare le schede, ma per salvare serve l’accesso come amministratore.</span>
-            <button onClick={onLogin} className="inline-flex items-center gap-1.5 shrink-0 rounded-full px-3.5 py-1.5 text-xs font-sans font-bold uppercase tracking-[0.12em] bg-accent text-white hover:shadow-md transition-all">
+            <Button size="md" onClick={onLogin} className="shrink-0 px-3.5 rounded-full tracking-[0.12em] transition-all hover:bg-accent hover:shadow-md">
               <LogIn className="w-3.5 h-3.5" /> Accedi
-            </button>
+            </Button>
           </motion.div>
         )}
 
