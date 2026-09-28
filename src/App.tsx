@@ -2998,6 +2998,37 @@ type TermClickAction =
   | { kind: 'redirect-stats'; tab: 'divinita' | 'onomastica'; search: string }
   | { kind: 'redirect-catalog'; term: string };
 
+/**
+ * Parola spezzata a fine riga (<lb break="no"/>). Nel corpus il trattino è
+ * quasi sempre scritto anche nel testo («Ἀμ-⏎<lb break="no"/>μιανὸς»), ma il
+ * trattino lo mette già il renderer: qui si tolgono dal testo che precede il
+ * <lb> il trattino e gli spazi/a capo dell'indentazione, che altrimenti davano
+ * un doppio trattino e un «–» orfano su una riga a sé.
+ */
+function normalizeWordBreaks(root: Node | null) {
+  if (!root) return;
+  const doc = root.ownerDocument || (root as Document);
+  const nodes: Node[] = [];
+  const walker = doc.createTreeWalker(root, NodeFilter.SHOW_ELEMENT | NodeFilter.SHOW_TEXT);
+  for (let n = walker.nextNode(); n; n = walker.nextNode()) nodes.push(n);
+  const nameOf = (n: Node) => ((n as Element).localName || '').toLowerCase();
+  nodes.forEach((n, i) => {
+    if (n.nodeType !== Node.ELEMENT_NODE || nameOf(n) !== 'lb') return;
+    if ((n as Element).getAttribute('break') !== 'no') return;
+    for (let j = i - 1; j >= 0; j--) {
+      const p = nodes[j];
+      if (p.nodeType === Node.ELEMENT_NODE) {
+        if (['lb', 'gap', 'space'].includes(nameOf(p))) break;
+        continue;
+      }
+      const t = p.textContent || '';
+      if (!t.trim()) { p.textContent = ''; continue; }
+      p.textContent = t.replace(/\s+$/, '').replace(/[-‐]$/, '');
+      break;
+    }
+  });
+}
+
 const EpiDocRenderer = ({ xml, query, onTermClick, divinityIndex, onomasticaIndex, plain = false }: {
   xml: string;
   query: string;
@@ -3023,6 +3054,7 @@ const EpiDocRenderer = ({ xml, query, onTermClick, divinityIndex, onomasticaInde
                        doc.getElementsByTagName('parsererror').length > 0 || 
                        doc.getElementsByTagNameNS('*', 'parsererror').length > 0;
       if (!hasError) {
+        normalizeWordBreaks(doc.documentElement);
         return { type: 'xml', doc };
       }
     } catch (e) {}
@@ -3030,9 +3062,11 @@ const EpiDocRenderer = ({ xml, query, onTermClick, divinityIndex, onomasticaInde
     // 2. Fallback to permissive HTML parsing
     try {
       const parser = new DOMParser();
-      return { 
-        type: 'html', 
-        doc: parser.parseFromString(xml, 'text/html') 
+      const doc = parser.parseFromString(xml, 'text/html');
+      normalizeWordBreaks(doc.body);
+      return {
+        type: 'html',
+        doc
       };
     } catch (e) {
       return null;
@@ -3146,7 +3180,7 @@ const EpiDocRenderer = ({ xml, query, onTermClick, divinityIndex, onomasticaInde
             const ind = (el.getAttribute('rend') || '') === 'indent'
               ? <span key={key + '-i'} className="inline-block w-8 select-none" />
               : null;
-            if (brk === 'no') return <span key={key}><br />{lineNumSpan}{ind}</span>;
+            if (brk === 'no') return <span key={key}>-<br />{lineNumSpan}{ind}</span>;
             if (ln === '1') return <span key={key}>{lineNumSpan}{ind}</span>;
             return <span key={key}><br />{lineNumSpan}{ind}</span>;
           }
