@@ -14,8 +14,8 @@
 #                            di lavoro: il tuo lavoro in corso non c'entra)
 #    4. avanzamento        — stato-corpus.py, con la differenza da ieri
 #
-#  Unica azione sulla rete: `git pull --ff-only` sulla repo dati, solo se è
-#  pulita. Non tocca l'albero di lavoro di questa repo, quindi non blocca il
+#  Azioni sulla rete: `git pull --ff-only` sulla repo dati, solo se è
+#  pulita, e in fondo raccogli-revisione.py, che fa push solo di revisione/. Non tocca l'albero di lavoro di questa repo, quindi non blocca il
 #  runner autonomo delle 02:00 (che rifiuta di partire con l'albero sporco).
 #
 #  Uso manuale:  ./scripts/controlli-notturni.sh
@@ -193,6 +193,12 @@ ULTIMA_RUN=$(grep '^## 20' "$ROOT/logs/autonomous/RIEPILOGO.md" 2>/dev/null | ta
   cat "$TMP/corpo.md"
 } > "$REPORT"
 ln -sf "$OGGI.md" "$OUT_DIR/ultimo.md"
+
+# Porta questo rapporto e quelli delle routine serali nell'hub Strumenti ›
+# Revisione (revisione/ della repo dati). Unica scrittura in rete della notte,
+# e solo in revisione/: vedi scripts/raccogli-revisione.py.
+python3 "$ROOT/scripts/raccogli-revisione.py" >> "$OUT_DIR/raccolta.log" 2>&1 \
+  || echo "$(date '+%F %T') raccolta per la revisione non riuscita" >> "$OUT_DIR/raccolta.log"
 
 # Notifica macOS con il sommario: la prima riga che non è un ✓, o «tutto a posto».
 PROBLEMA=$(printf '%s\n' "${ESITI[@]}" | grep -v '^✓' | grep -v '^–' | head -1)

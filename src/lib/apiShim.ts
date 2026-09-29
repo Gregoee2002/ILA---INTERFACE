@@ -33,9 +33,9 @@
 import { xmlToMonumenti, monumentiToXml } from "./xmlUtils";
 import { buildSearchIndex, searchMonumenti } from "./searchIndex";
 import MiniSearch from "minisearch";
-import { pullAllCorpusFiles, pushCorpusFile, deleteCorpusFile, testGitHubAccess, setStoredToken, clearStoredToken, pullFlagsFile, pushFlagsFile, pullBugsFile, pushBugsFile, pullIconographyVocabFile, pushIconographyVocabFile, pullLitSourcesFile, pushLitSourcesFile, pullLessicoLaresFile, pushLessicoLaresFile, scheduleRedeploy } from "./githubStorageBrowser";
+import { pullAllCorpusFiles, pushCorpusFile, deleteCorpusFile, testGitHubAccess, setStoredToken, clearStoredToken, pullFlagsFile, pushFlagsFile, pullBugsFile, pushBugsFile, pullIconographyVocabFile, pushIconographyVocabFile, pullLitSourcesFile, pushLitSourcesFile, pullLessicoLaresFile, pushLessicoLaresFile, pullRevisioneIndice, pullRevisioneRapporto, pullDecisioniFile, pushDecisioniFile, scheduleRedeploy } from "./githubStorageBrowser";
 import { validateOverlay } from "./lessicoLaresOverlay";
-import { EntryRegistro, BugReport } from "../types";
+import { EntryRegistro, BugReport, DecisioneRevisione, IndiceRevisione } from "../types";
 import { normalizeRegistro } from "./registroMigration";
 import { mergeIconographyOverrides } from "./iconographyLabels";
 import { nomeFileScheda } from "./sezioni";
@@ -68,6 +68,24 @@ let litStore: string | null = null;
 // statico (public/lessico-lares-overlay.json), perché la vista «Lessico
 // cultuale» dev'essere leggibile da chiunque. `null` = nessun overlay → seed.
 let lessicoLaresStore: string | null = null;
+// Hub di revisione: in modalità mock solo in memoria (vedi MOCK_REVISIONE);
+// con un PAT vero si rilegge sempre da GitHub, perché indice.json cambia
+// quando le routine girano e decisioni.json anche dalla routine che applica.
+let mockDecisioni: Record<string, DecisioneRevisione> = {};
+
+const MOCK_REVISIONE: IndiceRevisione = {
+  generato: "2026-09-29T08:00:00+02:00",
+  rapporti: [
+    { routine: "collazione", etichetta: "Collazione con Lane", data: "2026-09-28", titolo: "Collazione con Lane (CMRDM I) — 2026-09-28", sommario: ["Schede viste: 8 (ILA-002 → ILA-023), su 83 con divergenze.", "Classe (a): 5 divergenze in 4 schede.", "Punto del giro: ultimo id fatto ILA-023 (8/83)."], file: "revisione/rapporti/collazione/2026-09-28.md", proposte: 3 },
+    { routine: "controlli", etichetta: "Controlli notturni", data: "2026-09-29", titolo: "Controlli notturni — 29/09/2026 01:30", sommario: ["✓ corpus: nessun errore, nessun problema nuovo", "✓ build: typecheck, eslint, test e build statica passano"], file: "revisione/rapporti/controlli/2026-09-29.md", proposte: 0 },
+  ],
+  proposte: [
+    { id: "collazione-mock000001", routine: "collazione", data: "2026-09-28", rapporto: "revisione/rapporti/collazione/2026-09-28.md", scheda: "ILA-018", tipo: "edizione", riga: "4", classe: "a", titolo: "εἰς → ἰς, come stampa Lane", attuale: "εἰς ὑπηρεσίας", proposta: "ἰς ὑπηρεσίας", destinazione: "dati", patch: [{ file: "corpus/ILA-018.xml", cerca: "θεοῦ εἰς ὑπηρεσίας", sostituisci: "θεοῦ ἰς ὑπηρεσίας" }] },
+    { id: "collazione-mock000002", routine: "collazione", data: "2026-09-28", rapporto: "revisione/rapporti/collazione/2026-09-28.md", scheda: "ILA-015", tipo: "edizione", riga: "14–15", classe: "a", titolo: "Due righe fuse in una", attuale: "ἀχαριατί-\\ναν. Ἐπεστάθη", proposta: "ἀχαριατί- | αν. Ἐπεστάθη", dettaglio: "Il corpus ha 24 righe, Lane 25: da r. 15 in poi la numerazione va spostata di uno.", destinazione: "dati" },
+    { id: "collazione-mock000003", routine: "collazione", data: "2026-09-28", rapporto: "revisione/rapporti/collazione/2026-09-28.md", scheda: "ILA-002", tipo: "edizione", riga: "1", classe: "c", dubbio: true, titolo: "Da decidere: iota ascritto o sottoscritto?", attuale: "Τυράννωι", proposta: "Τυράννῳ", destinazione: "dati" },
+  ],
+};
+const MOCK_RAPPORTO = "# Collazione con Lane (CMRDM I) — 2026-09-28\n\n**Schede viste:** 8.\n\n## ILA-018\n\n| riga | corpus | Lane | classe |\n|---|---|---|---|\n| 4 | εἰς ὑπηρεσίας | ἰς ὑπηρεσίας | **(a)** |\n\n```xml\n<lb n=\"4\"/>θεοῦ ἰς ὑπηρεσίας χάριν μὴ\n```\n";
 
 export function isEditingUnlocked(): boolean {
   return canWrite;
@@ -544,6 +562,51 @@ async function handleRequest(url: URL, init: RequestInit | undefined): Promise<R
       return json(registro);
     }
 
+    // ── Hub di revisione ─────────────────────────────────────────────────
+    if (path === "/api/revisione" && method === "GET") {
+      if (!canWrite) return json({ error: "Sblocca l'editing con un token GitHub per vedere la revisione." }, 403);
+      if (mockMode) return json({ indice: MOCK_REVISIONE, decisioni: mockDecisioni });
+      const [indice, decisioni] = await Promise.all([pullRevisioneIndice(), pullDecisioniFile()]);
+      return json({
+        indice: indice ? JSON.parse(indice) : { rapporti: [], proposte: [] },
+        decisioni: decisioni ? JSON.parse(decisioni) : {},
+      });
+    }
+
+    if (path === "/api/revisione/rapporto" && method === "GET") {
+      if (!canWrite) return json({ error: "Modifica non abilitata." }, 403);
+      const file = url.searchParams.get("file") || "";
+      if (!/^revisione\/rapporti\/[\w-]+\/\d{4}-\d{2}-\d{2}\.md$/.test(file)) return json({ error: "Percorso del rapporto non valido" }, 400);
+      const testo = mockMode ? MOCK_RAPPORTO : await pullRevisioneRapporto(file);
+      if (testo === null) return json({ error: "Rapporto non trovato nella repo dati" }, 404);
+      return new Response(testo, { status: 200, headers: { "Content-Type": "text/markdown; charset=utf-8" } });
+    }
+
+    // Aggiorna solo le voci passate in `modifiche` (null = torna «da vedere»),
+    // sopra la versione appena riletta: così non si cancellano gli esiti che
+    // la routine ila-applica-correzioni ha scritto nel frattempo.
+    if (path === "/api/revisione/decisioni" && method === "POST") {
+      if (!canWrite) return json({ error: "Modifica non abilitata. Sblocca l'editing con un token GitHub." }, 403);
+      const { modifiche, messaggio } = body || {};
+      if (!modifiche || typeof modifiche !== "object") return json({ error: "modifiche mancanti" }, 400);
+      let attuali: Record<string, DecisioneRevisione>;
+      if (mockMode) attuali = { ...mockDecisioni };
+      else {
+        const remoto = await pullDecisioniFile();
+        attuali = remoto ? JSON.parse(remoto) : {};
+      }
+      const saltate: string[] = [];
+      for (const [id, d] of Object.entries(modifiche as Record<string, DecisioneRevisione | null>)) {
+        // Già applicata dalla routine: il sito non la riapre per sbaglio.
+        if (attuali[id]?.stato === "applicata") { saltate.push(id); continue; }
+        if (d === null) delete attuali[id];
+        else attuali[id] = d;
+      }
+      if (mockMode) mockDecisioni = attuali;
+      else await pushDecisioniFile(JSON.stringify(attuali, null, 2) + "\n", typeof messaggio === "string" && messaggio ? messaggio.slice(0, 120) : "revisione: decisioni");
+      return json({ decisioni: attuali, saltate });
+    }
+
     if (path === "/api/bugs" && method === "GET") {
       return json(bugsStore);
     }
@@ -844,6 +907,7 @@ export async function unlockEditing(token: string): Promise<{ ok: boolean; detai
     bugsStore = [];
     iconographyVocabStore = {};
     lessicoLaresStore = null;
+    mockDecisioni = {};
     canWrite = true;
     return { ok: true, detail: "Modalità mock: 25 schede fittizie, nessuna chiamata a GitHub." };
   }

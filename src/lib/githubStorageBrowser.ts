@@ -340,6 +340,34 @@ export async function pushBugsFile(content: string, message: string): Promise<vo
   await pushJsonFileWithRetry(BUGS_PATH, content, message, bugsShaRef, "bugs.json");
 }
 
+// ── Hub di revisione (revisione/) ──────────────────────────────────────
+// indice.json e i rapporti li scrive scripts/raccogli-revisione.py (dal Mac,
+// con git); qui si leggono soltanto. decisioni.json invece lo scrive il sito
+// e, per gli esiti, la routine ila-applica-correzioni.
+const DECISIONI_PATH = "revisione/decisioni.json";
+const decisioniShaRef: ShaRef = { sha: null };
+
+async function pullTextFile(path: string, ref?: ShaRef): Promise<string | null> {
+  const url = `${GITHUB_API}/repos/${REPO}/contents/${path.split("/").map(encodeURIComponent).join("/")}?ref=${encodeURIComponent(BRANCH)}`;
+  const res = await fetch(url, { headers: headers(), cache: "no-store" });
+  if (res.status === 404) { if (ref) ref.sha = null; return null; }
+  if (!res.ok) throw new Error(`GitHub get ${path} fallita (${res.status}): ${await res.text()}`);
+  const data = await res.json();
+  if (ref) ref.sha = data.sha || null;
+  if (data.encoding !== "base64" || typeof data.content !== "string") {
+    throw new Error(`Formato risposta inatteso per ${path}`);
+  }
+  return base64ToUtf8(data.content);
+}
+
+export const pullRevisioneIndice = () => pullTextFile("revisione/indice.json");
+export const pullRevisioneRapporto = (path: string) => pullTextFile(path);
+export const pullDecisioniFile = () => pullTextFile(DECISIONI_PATH, decisioniShaRef);
+
+export async function pushDecisioniFile(content: string, message: string): Promise<void> {
+  await pushJsonFileWithRetry(DECISIONI_PATH, content, message, decisioniShaRef, "decisioni.json");
+}
+
 // ── Overlay del vocabolario iconografico (iconography-vocab.json) ────
 // Variante browser di githubStorage.ts, stesso schema minimale — vedi
 // commento gemello lì per il perché di un file unico.

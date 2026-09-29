@@ -65,7 +65,7 @@ import { Badge } from './components/ui/Badge';
 import { Button } from './components/ui/Button';
 import { Chip } from './components/ui/Chip';
 import { leggiPermalink, scriviPermalink, etichettaScheda } from './lib/permalink';
-import { Sezione, definizioneSezione, etichettaSezione, idDaNumero, nomeFileScheda, sezioneDaContenuto, sezioneDiId, sezionePubblica, sezioniVisibili } from './lib/sezioni';
+import { Sezione, definizioneSezione, etichettaSezione, idDaEtichetta, idDaNumero, nomeFileScheda, sezioneDaContenuto, sezioneDiId, sezionePubblica, sezioniVisibili } from './lib/sezioni';
 const CooccurrenceHeatmap = lazy(() => import('./components/CooccurrenceHeatmap').then(m => ({ default: m.CooccurrenceHeatmap })));
 const CultLexiconPanel = lazy(() => import('./components/CultLexiconPanel').then(m => ({ default: m.CultLexiconPanel })));
 const LessicoLaresEditor = lazy(() => import('./components/LessicoLaresEditor').then(m => ({ default: m.LessicoLaresEditor })));
@@ -78,6 +78,7 @@ import { UnlockEditingModal } from './components/UnlockEditingModal';
 const RegistroPanel = lazy(() => import('./components/RegistroPanel').then(m => ({ default: m.RegistroPanel })));
 import { RegistroForm } from './components/RegistroForm';
 const BugReportsPanel = lazy(() => import('./components/BugReportsPanel').then(m => ({ default: m.BugReportsPanel })));
+const RevisionePanel = lazy(() => import('./components/RevisionePanel').then(m => ({ default: m.RevisionePanel })));
 import { ApparatusNotes } from './components/ApparatusNotes';
 import { apparatusEntryToText } from './lib/apparatus';
 import type { BiblioReplacement, BiblioApplyResult } from './components/BibliographyIndex';
@@ -99,12 +100,13 @@ interface SearchResult {
   matchInSupplied: boolean;
 }
 
-type AppView = 'home' | 'catalog' | 'monete' | 'sources' | 'stats' | 'timeline' | 'health' | 'map' | 'heatmap' | 'cult' | 'editor' | 'review' | 'flags' | 'bugs' | 'biblio' | 'lessico-lares' | 'progress' | 'gaps';
+type AppView = 'home' | 'catalog' | 'monete' | 'sources' | 'stats' | 'timeline' | 'health' | 'map' | 'heatmap' | 'cult' | 'editor' | 'review' | 'flags' | 'bugs' | 'biblio' | 'lessico-lares' | 'progress' | 'gaps' | 'revisione';
 
 // Strumenti: le viste riservate alla redazione, riunite sotto una sola voce
 // della barra laterale e sfogliate con le linguette in testa. Ognuna tiene la
 // propria AppView, così permalink e rimandi interni continuano a funzionare.
 const TOOL_VIEWS: { view: AppView; label: string }[] = [
+  { view: 'revisione', label: 'Revisione' },
   { view: 'progress', label: 'Avanzamento' },
   { view: 'gaps', label: 'Mancanze' },
   { view: 'health', label: 'Coerenza' },
@@ -114,7 +116,7 @@ const TOOL_VIEWS: { view: AppView; label: string }[] = [
 ];
 const isToolView = (v: AppView) => TOOL_VIEWS.some(t => t.view === v);
 // Chi entra da «Strumenti» ritrova l'ultima linguetta aperta nella sessione.
-let ultimoStrumento: AppView = 'progress';
+let ultimoStrumento: AppView = 'revisione';
 
 // true sulla build GitHub Pages (vedi vite.config.ts / apiShim.ts): niente
 // server.ts, quindi le funzionalità che dipendevano da Gemini AI o dalla
@@ -2201,7 +2203,7 @@ function HomeView({ monumenti, onNavigate, onSearch, effectiveAdmin }: { monumen
     { view: 'stats', label: 'Statistiche Epiteti', desc: 'Frequenza e distribuzione degli epiteti di Men.', icon: <BarChart2 className="h-5 w-5" /> },
     { view: 'heatmap', label: 'Heatmap Co-occorrenze', desc: 'Quali epiteti e attributi ricorrono insieme.', icon: <Columns className="h-5 w-5" /> },
     { view: 'cult', label: 'Lessico cultuale', desc: 'Il vocabolario delle funzioni cultuali marcato nelle edizioni, per lemma e famiglia.', icon: <Tags className="h-5 w-5" /> },
-    { view: 'progress', label: 'Strumenti', desc: 'Avanzamento, coerenza, registro di lavorazione, bug e bibliografia: gli attrezzi della redazione.', icon: <Wrench className="h-5 w-5" />, adminOnly: true },
+    { view: 'progress', label: 'Strumenti', desc: 'Revisione delle proposte delle routine, avanzamento, coerenza, registro di lavorazione, bug e bibliografia: gli attrezzi della redazione.', icon: <Wrench className="h-5 w-5" />, adminOnly: true },
     { view: 'editor', label: 'Editor XML', desc: 'Modifica le schede EpiDoc sezione per sezione, con riscrittura chirurgica.', icon: <Feather className="h-5 w-5" /> },
   ];
   const sections = allSections.filter(s => !s.adminOnly || effectiveAdmin);
@@ -6844,6 +6846,16 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
               conteggi={{
                 flags: registri.filter(r => r.status === 'open').length,
                 bugs: bugs.filter(b => b.status === 'open').length,
+              }}
+            />
+          )}
+          {activeView === 'revisione' && effectiveAdmin && (
+            <RevisionePanel
+              onApriScheda={(scheda) => {
+                const id = idDaEtichetta(scheda);
+                const m = id === undefined ? undefined : monumenti.find(x => x.id === id);
+                if (m) apriScheda(m);
+                return !!m;
               }}
             />
           )}

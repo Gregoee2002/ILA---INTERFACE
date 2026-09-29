@@ -10,7 +10,9 @@ prevista, partono al primo avvio.
 Regole comuni a tutte:
 
 - **sola lettura** su corpus e codice: niente modifiche all'XML (né qui né
-  nella repo dati `~/Documents/GitHub/ILA`), niente commit, niente push;
+  nella repo dati `~/Documents/GitHub/ILA`), niente commit, niente push —
+  tranne `scripts/raccogli-revisione.py`, che scrive solo `revisione/` (vedi
+  «Hub di revisione» più sotto);
 - il corpus si legge dalla **repo dati** `~/Documents/GitHub/ILA/corpus`, non
   dalla cache `src/data/corpus`;
 - il rapporto va in `logs/serali/<routine>/AAAA-MM-GG.md` (la cartella `logs/`
@@ -45,6 +47,60 @@ mezza di giri.
 ```bash
 python3 scripts/controlla-link.py --out logs/serali/link/oggi.md
 ```
+
+## Hub di revisione
+
+Dal 2026-09-29 i rapporti e le proposte di tutte le routine confluiscono in
+**Strumenti › Revisione** sul sito (riservata, serve il token dell'editor).
+
+Il percorso:
+
+1. ogni routine scrive il rapporto `logs/serali/<cartella>/AAAA-MM-GG.md` e,
+   accanto, `AAAA-MM-GG.json` con le proposte (formato sotto). Le routine
+   senza proposte (diario, memoria) scrivono solo il rapporto;
+2. come ultimo passo lancia `python3 scripts/raccogli-revisione.py`, che copia
+   i rapporti in `revisione/rapporti/` della **repo dati** e rigenera
+   `revisione/indice.json`: commit e push solo di `revisione/`. Lo lancia
+   anche `controlli-notturni.sh` alle 01:30, che così porta nell'hub anche il
+   proprio rapporto (log in `logs/controlli/raccolta.log`);
+3. sul sito ogni proposta si accetta, si scarta o si rimanda (anche da
+   tastiera: `a` `s` `r`, `u` annulla, `j` `k` per spostarsi), con una nota o
+   riscrivendo la correzione. Le decisioni si salvano da sole in
+   `revisione/decisioni.json`, qualche secondo dopo l'ultimo clic;
+4. **Invia** mette in coda le accettate (stato `inviata`);
+5. la routine `ila-applica-correzioni` le applica nella repo dati, un commit
+   per scheda dopo xmllint e lint, e scrive l'esito (`applicata` con il commit,
+   oppure `bloccata` con la domanda da fare). Lo script di appoggio è
+   `scripts/applica-revisione.py` (`elenco`, `patch ID`, `esito ID …`).
+   **Da creare:** l'attività pianificata non è ancora stata creata (serve
+   l'approvazione dell'autore, perché scrive sul corpus senza supervisione).
+   Finché manca, si applica a mano in una sessione: «applica le correzioni
+   inviate dall'hub di revisione».
+
+L'id di una proposta dipende solo dal contenuto (routine, scheda, riga, testo
+attuale e proposto), quindi se una routine ripropone la stessa correzione in
+un giro successivo la decisione già presa resta valida.
+
+Formato delle proposte (`logs/serali/<cartella>/AAAA-MM-GG.json`):
+
+```json
+{"routine": "collazione", "data": "2026-09-28", "proposte": [
+  {"scheda": "ILA-018", "tipo": "edizione", "riga": "4",
+   "titolo": "εἰς → ἰς, come stampa Lane",
+   "attuale": "εἰς ὑπηρεσίας", "proposta": "ἰς ὑπηρεσίας",
+   "dettaglio": "markdown semplice", "classe": "a", "dubbio": false,
+   "destinazione": "dati",
+   "patch": {"file": "corpus/ILA-018.xml",
+             "cerca": "<lb n=\"4\"/>θεοῦ εἰς ὑπηρεσίας",
+             "sostituisci": "<lb n=\"4\"/>θεοῦ ἰς ὑπηρεσίας"}}
+]}
+```
+
+Obbligatorio solo `titolo`. `patch` (oggetto o lista) solo quando la
+correzione è una sostituzione esatta: `cerca` deve comparire una sola volta
+nel file, altrimenti lo script si ferma senza toccare niente. `destinazione`
+è `dati` (percorsi relativi alla repo dati) o `tesi` (relativi a
+`~/Documents/Tesi-ILA`). Le questioni da decidere vanno con `"dubbio": true`.
 
 ## Modificare o sospendere
 

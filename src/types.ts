@@ -464,6 +464,71 @@ export interface EntryRegistro {
 }
 
 /** Bug segnalato da un collaboratore sul funzionamento dell'app (non legato a una scheda). */
+// Hub di revisione (Strumenti › Revisione): le proposte delle routine
+// raccolte da scripts/raccogli-revisione.py in revisione/indice.json della
+// repo dati, e le decisioni prese sul sito in revisione/decisioni.json.
+export interface PatchRevisione {
+  /** Percorso relativo alla radice della destinazione (p. es. corpus/ILA-018.xml). */
+  file: string;
+  cerca: string;
+  sostituisci: string;
+}
+
+export interface PropostaRevisione {
+  id: string;
+  routine: string;
+  data: string;
+  rapporto: string;
+  titolo: string;
+  scheda?: string;
+  tipo?: string;
+  riga?: string;
+  attuale?: string;
+  proposta?: string;
+  dettaglio?: string;
+  classe?: string;
+  /** dati (repo del corpus), tesi, codice. */
+  destinazione?: string;
+  dubbio?: boolean;
+  patch?: PatchRevisione[];
+}
+
+export interface RapportoRevisione {
+  routine: string;
+  etichetta: string;
+  data: string;
+  titolo: string;
+  sommario: string[];
+  file?: string;
+  proposte: number;
+}
+
+export interface IndiceRevisione {
+  generato?: string;
+  rapporti: RapportoRevisione[];
+  proposte: PropostaRevisione[];
+}
+
+/**
+ * accettata/scartata/rimandata: decise sul sito, non ancora spedite;
+ * inviata: in coda per la routine ila-applica-correzioni;
+ * applicata/bloccata: esito scritto dalla routine.
+ */
+export type StatoDecisione = 'accettata' | 'scartata' | 'rimandata' | 'inviata' | 'applicata' | 'bloccata';
+
+export interface DecisioneRevisione {
+  stato: StatoDecisione;
+  nota?: string;
+  /** Testo della correzione riscritto a mano, al posto di `proposta`. */
+  propostaModificata?: string;
+  decisaIl: string;
+  inviataIl?: string;
+  applicataIl?: string;
+  commit?: string;
+  /** Messaggio della routine: che cosa ha fatto, o perché si è fermata. */
+  esito?: string;
+}
+
 export interface BugReport {
   id: string;
   author: string;
