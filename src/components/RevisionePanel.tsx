@@ -241,7 +241,7 @@ export function RevisionePanel({ onApriScheda, registri = [] }: Props) {
     });
     const n = accettate.length;
     const ok = await salva(`revisione: ${n} ${n === 1 ? 'correzione inviata' : 'correzioni inviate'}`);
-    setInvio(ok ? `${n === 1 ? 'Una correzione inviata' : `${n} correzioni inviate`}: le applica la routine ila-applica-correzioni.` : null);
+    setInvio(ok ? `${n === 1 ? 'Una correzione inviata' : `${n} correzioni inviate`}: per applicarle, «Esegui ora» su ila-applica-correzioni nelle attività pianificate dell'app.` : null);
   }
 
   // Tastiera, sulla proposta aperta: a accetta, s scarta, r rimanda, u annulla,
@@ -365,7 +365,7 @@ export function RevisionePanel({ onApriScheda, registri = [] }: Props) {
                   </button>
                 )}
                 <span className={cn('font-serif italic text-[12px]', SEC)}>
-                  {invio ?? 'le applica la routine ila-applica-correzioni, che ne scrive qui l\'esito'}
+                  {invio ?? 'le applica la routine ila-applica-correzioni, da lanciare con «Esegui ora» nelle attività pianificate dell\'app; l\'esito compare qui'}
                 </span>
               </div>
             )}
