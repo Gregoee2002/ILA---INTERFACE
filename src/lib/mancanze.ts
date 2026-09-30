@@ -2,9 +2,9 @@
  * mancanze.ts — che cosa manca a una scheda, requisito per requisito.
  *
  * Un solo elenco di requisiti per tutti gli strumenti della redazione: la
- * tabella «Mancanze» (scheda per scheda), il pannello «Avanzamento» (in
- * aggregato) e, per la parte che si legge dall'XML, scripts/stato-corpus.py
- * dei controlli notturni. Se si aggiunge un requisito qui, va aggiunto anche
+ * linguetta Strumenti › Completezza (per campo e per scheda) e, per la parte
+ * che si legge dall'XML, scripts/stato-corpus.py dei controlli notturni, i cui
+ * conteggi tornano in Completezza come variazione settimanale. Se si aggiunge un requisito qui, va aggiunto anche
  * là, con la stessa chiave.
  *
  * Il gruppo «Scheda bibliografica» traduce le richieste della professoressa

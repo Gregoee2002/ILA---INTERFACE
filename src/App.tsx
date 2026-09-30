@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect, useLayoutEffect, useRef, useCallback, lazy, Suspense } from 'react';
+import React, { useState, useMemo, useEffect, useLayoutEffect, useRef, lazy, Suspense } from 'react';
 import { motion, AnimatePresence, MotionConfig } from 'motion/react';
 import { 
   Search,
@@ -33,7 +33,6 @@ import {
   ZoomIn,
   ZoomOut,
   RotateCcw,
-  GitCompare,
   KeyRound,
   Unlock,
   ExternalLink,
@@ -50,7 +49,7 @@ import { labelEvidence, labelUnit, labelType, labelMaterial, labelInscriptionTyp
 import { Monumento, FilterState, SortField, Bibliografia, EntryRegistro, BugReport, COIN_FACE_LABELS, EDITORIAL_STATUS_LABELS, RUOLO_DIGITALE_LABELS, RuoloDigitale } from './types';
 import { monumentiToXml, xmlToMonumenti, formatIlaLabel, splitDivineKey } from './lib/xmlUtils';
 import { buildPhiUrl } from './lib/extRefs';
-import { buildDivinityIndex, buildOnomasticaIndex, buildClassificationAudit, DivinityStats, OnomasticaStats } from './lib/epithetIndex';
+import { buildDivinityIndex, buildOnomasticaIndex, DivinityStats, OnomasticaStats } from './lib/epithetIndex';
 import { PleiadesMap } from './components/PleiadesMap';
 // Le sezioni che il visitatore medio non apre mai — mappa, heatmap, editor,
 // pannelli riservati — non stanno nel bundle iniziale: si caricano quando
@@ -73,18 +72,15 @@ const LiterarySourcesPanel = lazy(() => import('./components/LiterarySourcesPane
 import { LiteraryEchoes } from './components/LiteraryEchoes';
 // Editor a sezioni: pesante e usato solo da chi ha sbloccato la modifica.
 const SectionEditorView = lazy(() => import('./components/SectionEditorView').then(m => ({ default: m.SectionEditorView })));
-const DraftReviewPanel = lazy(() => import('./components/DraftReviewPanel').then(m => ({ default: m.DraftReviewPanel })));
 import { UnlockEditingModal } from './components/UnlockEditingModal';
-const RegistroPanel = lazy(() => import('./components/RegistroPanel').then(m => ({ default: m.RegistroPanel })));
+const SegnalazioniPanel = lazy(() => import('./components/SegnalazioniPanel').then(m => ({ default: m.SegnalazioniPanel })));
 import { RegistroForm } from './components/RegistroForm';
-const BugReportsPanel = lazy(() => import('./components/BugReportsPanel').then(m => ({ default: m.BugReportsPanel })));
 const RevisionePanel = lazy(() => import('./components/RevisionePanel').then(m => ({ default: m.RevisionePanel })));
 import { ApparatusNotes } from './components/ApparatusNotes';
 import { apparatusEntryToText } from './lib/apparatus';
 import type { BiblioReplacement, BiblioApplyResult } from './components/BibliographyIndex';
-const BibliographyIndex = lazy(() => import('./components/BibliographyIndex').then(m => ({ default: m.BibliographyIndex })));
-const MancanzePanel = lazy(() => import('./components/MancanzePanel').then(m => ({ default: m.MancanzePanel })));
-const AvanzamentoPanel = lazy(() => import('./components/AvanzamentoPanel').then(m => ({ default: m.AvanzamentoPanel })));
+const CoerenzaPanel = lazy(() => import('./components/CoerenzaPanel').then(m => ({ default: m.CoerenzaPanel })));
+const CompletezzaPanel = lazy(() => import('./components/CompletezzaPanel').then(m => ({ default: m.CompletezzaPanel })));
 import { watchAuth, loginWithGoogle, logout, type User } from './lib/authLazy';
 import ilaLogo from './assets/images/ila-logo.webp';
 
@@ -100,21 +96,29 @@ interface SearchResult {
   matchInSupplied: boolean;
 }
 
-type AppView = 'home' | 'catalog' | 'monete' | 'sources' | 'stats' | 'timeline' | 'health' | 'map' | 'heatmap' | 'cult' | 'editor' | 'review' | 'flags' | 'bugs' | 'biblio' | 'lessico-lares' | 'progress' | 'gaps' | 'revisione';
+type AppView = 'home' | 'catalog' | 'monete' | 'sources' | 'stats' | 'timeline' | 'map' | 'heatmap' | 'cult' | 'editor' | 'lessico-lares' | 'revisione' | 'completezza' | 'coerenza' | 'segnalazioni';
 
 // Strumenti: le viste riservate alla redazione, riunite sotto una sola voce
-// della barra laterale e sfogliate con le linguette in testa. Ognuna tiene la
-// propria AppView, così permalink e rimandi interni continuano a funzionare.
+// della barra laterale e sfogliate con le linguette in testa. Quattro, una
+// per domanda: che cosa propongono le routine (Revisione), che cosa manca
+// (Completezza), che cosa non torna (Coerenza, con il lint della notte e la
+// bibliografia), che cosa hanno annotato i collaboratori (Segnalazioni).
 const TOOL_VIEWS: { view: AppView; label: string }[] = [
   { view: 'revisione', label: 'Revisione' },
-  { view: 'progress', label: 'Avanzamento' },
-  { view: 'gaps', label: 'Mancanze' },
-  { view: 'health', label: 'Coerenza' },
-  { view: 'flags', label: 'Registro' },
-  { view: 'bugs', label: 'Bug' },
-  { view: 'biblio', label: 'Bibliografia' },
+  { view: 'completezza', label: 'Completezza' },
+  { view: 'coerenza', label: 'Coerenza' },
+  { view: 'segnalazioni', label: 'Segnalazioni' },
 ];
 const isToolView = (v: AppView) => TOOL_VIEWS.some(t => t.view === v);
+// Linguette di Strumenti fuse il 2026-09-30: un indirizzo salvato prima porta
+// alla linguetta che ne ha preso il posto. «review» era la revisione dei draft
+// del CMRDM, visibile solo sul server locale e tolta.
+const VISTE_RINOMINATE: Record<string, AppView> = {
+  progress: 'completezza', gaps: 'completezza',
+  health: 'coerenza', biblio: 'coerenza',
+  flags: 'segnalazioni', bugs: 'segnalazioni',
+  review: 'home',
+};
 // Chi entra da «Strumenti» ritrova l'ultima linguetta aperta nella sessione.
 let ultimoStrumento: AppView = 'revisione';
 
@@ -130,14 +134,6 @@ const isStaticBuild = import.meta.env.VITE_STATIC_BUILD === 'true';
 // NOTA: questo è solo un controllo di visibilità UI; l'enforcement reale
 // deve avvenire lato server (vedi audit di sicurezza).
 const ADMIN_EMAIL = 'gabrielegregorio123@gmail.com';
-
-// Helper: fade+slide standard per l'ingresso di sezioni al momento in cui entrano nel viewport
-const scrollReveal = {
-  initial: { opacity: 0, y: 16 },
-  whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true, margin: '-60px' },
-  transition: { duration: 0.5, ease: EASE_OUT },
-};
 
 // Helper: dissolvenza pura (nessuno spostamento) per il cambio di "livello"
 // nella navigazione divinità → epiteti → attestazioni
@@ -1385,12 +1381,6 @@ function EpithetStats({ monumenti, onSelectMonumento, onVaiAllaFonte, initialTab
   );
 }
 
-// ─────────────────────────────────────────────────────────────────────────
-//  CORPUS HEALTH — cruscotto di coerenza
-//  Aggrega i valori distinti dei campi controllati e segnala potenziali
-//  varianti dello stesso termine (stessa forma normalizzata ma grafia
-//  diversa), che spezzano l'indicizzazione e le statistiche.
-// ─────────────────────────────────────────────────────────────────────────
 // Linguette della sezione Strumenti: testo in serif con la voce attiva in
 // corsivo, come «ordina per» del Lessico cultuale — non una barra di bottoni.
 function StrumentiNav({ attiva, onNavigate, conteggi }: {
@@ -1416,307 +1406,6 @@ function StrumentiNav({ attiva, onNavigate, conteggi }: {
         );
       })}
     </nav>
-  );
-}
-
-function CorpusHealth({ monumenti, onSelectMonumento }: { monumenti: Monumento[], onSelectMonumento: (m: Monumento) => void }) {
-  // Normalizza una stringa per il raggruppamento: minuscole, niente accenti,
-  // sigma finale unificato, spazi collassati. Due valori che collassano sulla
-  // stessa chiave normalizzata ma differiscono nella forma grezza sono sospetti.
-  const norm = (s: string) => s
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .replace(/ς/g, 'σ')
-    .replace(/\s+/g, ' ')
-    .trim()
-    .toLowerCase();
-
-  const analyzeField = (
-    label: string,
-    extractor: (m: Monumento) => string[]
-  ) => {
-    // Mappa: chiave normalizzata → { variante grezza → [id monumenti] }
-    const groups: Record<string, Record<string, number[]>> = {};
-    monumenti.forEach(m => {
-      extractor(m).forEach(raw => {
-        const v = (raw || '').trim();
-        if (!v) return;
-        const k = norm(v);
-        if (!groups[k]) groups[k] = {};
-        if (!groups[k][v]) groups[k][v] = [];
-        groups[k][v].push(m.id);
-      });
-    });
-    // Conflitti = chiavi normalizzate con più di una variante grezza
-    const conflicts = Object.entries(groups)
-      .filter(([, variants]) => Object.keys(variants).length > 1)
-      .map(([k, variants]) => ({
-        key: k,
-        variants: Object.entries(variants)
-          .map(([form, ids]) => ({ form, ids: Array.from(new Set(ids)) }))
-          .sort((a, b) => b.ids.length - a.ids.length)
-      }))
-      .sort((a, b) => b.variants.length - a.variants.length);
-    const distinctCount = Object.keys(groups).length;
-    return { label, conflicts, distinctCount };
-  };
-
-  const reports = useMemo(() => [
-    analyzeField('Divinità', m => m.divinita || []),
-    analyzeField('Epiteti', m => m.epiteti || []),
-    analyzeField('Onomastica', m => m.onomastica || []),
-    analyzeField('Città', m => m.citta ? [m.citta] : []),
-    analyzeField('Regione', m => m.regione ? [m.regione] : []),
-    analyzeField('Tipo oggetto', m => m.tipo ? [m.tipo] : []),
-    analyzeField('Materiale', m => m.materiale ? [m.materiale] : []),
-  ], [monumenti]);
-
-  // Entry con campi essenziali mancanti — segnalazione, non auto-riempimento
-  const missing = useMemo(() => {
-    const noDivinita = monumenti.filter(m => !m.divinita || m.divinita.length === 0);
-    const noDate = monumenti.filter(m => m.data_inizio === undefined && m.data_fine === undefined);
-    const noBiblio = monumenti.filter(m => !m.bibliografia || m.bibliografia.length === 0);
-    const noCitta = monumenti.filter(m => !m.citta || !m.citta.trim());
-    const escapedMarkup = monumenti.filter(m => (m.testo || '').includes('&lt;persName') || (m.testo || '').includes('&lt;rs'));
-    return { noDivinita, noDate, noBiblio, noCitta, escapedMarkup };
-  }, [monumenti]);
-
-  const totalConflicts = reports.reduce((s, r) => s + r.conflicts.length, 0);
-
-  // Audit di classificazione divinità / epiteti (vedi buildClassificationAudit).
-  const audit = useMemo(() => buildClassificationAudit(monumenti), [monumenti]);
-  const naRelated = audit.neverAlone.filter(d => d.relatedNames.length > 0);
-  const naPlain = audit.neverAlone.filter(d => d.relatedNames.length === 0);
-  // Solo i segnali "stretti" contano nel totale in evidenza: sovrapposizione di
-  // token fra teonimi co-presenti + stessa forma divinità/epiteto. Il "mai da
-  // sola" senza altri indizi resta come nota informativa (in un corpus tutto
-  // incentrato su Men molte divinità reali non compaiono mai da sole).
-  const auditTotal = naRelated.length + audit.divVsEpi.length;
-
-  const jumpToFirst = (ids: number[]) => {
-    const m = monumenti.find(x => ids.includes(x.id));
-    if (m) onSelectMonumento(m);
-  };
-
-  const IdChips = ({ ids }: { ids: number[] }) => (
-    <div className="flex flex-wrap gap-1.5">
-      {ids.slice(0, 20).map(id => {
-        const m = monumenti.find(x => x.id === id);
-        return (
-          <button key={id} onClick={() => m && onSelectMonumento(m)}
-            className="text-[10px] font-sans rounded border border-border/60 bg-white/40 dark:bg-black/10 px-1.5 py-0.5 hover:border-accent hover:text-accent transition-colors">
-            {formatIlaLabel(id)}
-          </button>
-        );
-      })}
-      {ids.length > 20 && <span className="text-[10px] text-muted self-center">+{ids.length - 20}</span>}
-    </div>
-  );
-
-  return (
-    <div className="flex-1 flex flex-col overflow-hidden">
-      <motion.div {...scrollReveal} className="mb-8">
-        <div className="text-[10px] font-sans font-bold uppercase tracking-[0.22em] text-accent/70 mb-2">Controllo qualità</div>
-        <h2 className="text-3xl md:text-4xl font-bold italic mb-2">Coerenza del Corpus</h2>
-        <div className="ornament-rule !my-0 mb-3 max-w-[6rem] mx-0" />
-        <p className="text-sm text-muted font-serif">
-          Controllo automatico delle varianti grafiche e dei campi mancanti. Nessun dato viene modificato: le segnalazioni vanno verificate e corrette a mano.
-        </p>
-      </motion.div>
-
-      <div className="flex-1 overflow-y-auto space-y-8 pr-2">
-        {/* Riepilogo */}
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-          <div className="glass-card p-4">
-            <div className="text-3xl font-bold">{totalConflicts}</div>
-            <div className="text-[10px] font-sans uppercase tracking-widest text-muted mt-1">Conflitti di grafia</div>
-          </div>
-          <div className="glass-card p-4">
-            <div className="text-3xl font-bold">{auditTotal}</div>
-            <div className="text-[10px] font-sans uppercase tracking-widest text-muted mt-1">Classificazioni sospette</div>
-          </div>
-          <div className="glass-card p-4">
-            <div className="text-3xl font-bold">{missing.escapedMarkup.length}</div>
-            <div className="text-[10px] font-sans uppercase tracking-widest text-muted mt-1">Markup non valido</div>
-          </div>
-          <div className="glass-card p-4">
-            <div className="text-3xl font-bold">{missing.noDivinita.length}</div>
-            <div className="text-[10px] font-sans uppercase tracking-widest text-muted mt-1">Senza divinità</div>
-          </div>
-          <div className="glass-card p-4">
-            <div className="text-3xl font-bold">{missing.noDate.length}</div>
-            <div className="text-[10px] font-sans uppercase tracking-widest text-muted mt-1">Senza datazione</div>
-          </div>
-        </div>
-
-        {/* Markup escaped — errore bloccante per il parser */}
-        {missing.escapedMarkup.length > 0 && (
-          <div className="border-l-2 border-danger/25 pl-4">
-            <h3 className="font-bold text-sm mb-2 text-danger">⚠ Markup EpiDoc non interpretato</h3>
-            <p className="text-xs text-muted font-serif mb-3">
-              Questi file contengono <code>&amp;lt;persName&amp;gt;</code> come testo letterale invece di veri tag XML. Le divinità e gli epiteti al loro interno NON vengono indicizzati. Vanno ricodificati.
-            </p>
-            <div className="flex flex-wrap gap-2">
-              {missing.escapedMarkup.map(m => (
-                <button key={m.id} onClick={() => onSelectMonumento(m)}
-                  className="text-xs font-sans border border-danger/25 text-danger px-2 py-1 hover:bg-danger/10 transition-colors">
-                  {formatIlaLabel(m.id)}
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Conflitti di grafia per campo */}
-        {reports.filter(r => r.conflicts.length > 0).map(report => (
-          <div key={report.label}>
-            <h3 className="font-bold text-sm mb-1">
-              {report.label}
-              <span className="ml-2 text-[10px] font-sans font-normal text-muted uppercase tracking-widest">
-                {report.distinctCount} valori distinti · {report.conflicts.length} conflitti
-              </span>
-            </h3>
-            <div className="space-y-3 mt-3">
-              {report.conflicts.map(conflict => (
-                <div key={conflict.key} className="rounded-xl border border-warning/25 bg-warning/10 backdrop-blur-md p-4 shadow-sm">
-                  <div className="text-[10px] font-sans uppercase tracking-widest text-warning mb-2">
-                    Stessa forma, grafie diverse:
-                  </div>
-                  <div className="flex flex-wrap gap-2">
-                    {conflict.variants.map(v => (
-                      <button key={v.form} onClick={() => jumpToFirst(v.ids)}
-                        className="text-xs font-sans rounded-md border border-border/60 bg-white/40 dark:bg-black/10 px-2 py-1.5 hover:border-accent hover:text-accent transition-colors">
-                        <span className="font-serif text-sm font-semibold">{v.form}</span>
-                        <span className="ml-2 text-[10px] text-muted">×{v.ids.length}</span>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        ))}
-
-        {totalConflicts === 0 && missing.escapedMarkup.length === 0 && (
-          <div className="border border-border/60 p-6 text-center">
-            <div className="text-sm font-serif text-muted">Nessun conflitto di grafia rilevato nel corpus.</div>
-          </div>
-        )}
-
-        {/* Audit di classificazione divinità / epiteti */}
-        {(auditTotal > 0 || naPlain.length > 0) && (
-          <div>
-            <h3 className="font-bold text-sm mb-1">
-              Classificazione divinità / epiteti
-              <span className="ml-2 text-[10px] font-sans font-normal text-muted uppercase tracking-widest">
-                da verificare sulle edizioni a stampa, poi correggere sullo XML
-              </span>
-            </h3>
-
-            {naRelated.length > 0 && (
-              <div className="space-y-3 mt-3">
-                <div className="text-[10px] font-sans uppercase tracking-widest text-muted/70">
-                  Probabile stessa divinità in forma variante ({naRelated.length}) — mai attestata da sola e con token in comune con un teonimo co-presente
-                </div>
-                {naRelated.map(d => (
-                  <div key={d.name} className="rounded-xl border border-warning/25 bg-warning/10 backdrop-blur-md p-4 shadow-sm">
-                    <div className="flex items-baseline gap-2 mb-2">
-                      <span className="font-serif text-sm font-semibold">{d.name}</span>
-                      <span className="text-[10px] text-muted">×{d.count} · confronta con: <span className="text-warning font-semibold">{d.relatedNames.join(', ')}</span></span>
-                    </div>
-                    <IdChips ids={d.monumentIds} />
-                  </div>
-                ))}
-              </div>
-            )}
-
-            {naPlain.length > 0 && (
-              <div className="mt-4">
-                <div className="text-[10px] font-sans uppercase tracking-widest text-muted/70 mb-2">
-                  Mai attestate da sole ({naPlain.length}) — informativo: in un corpus incentrato su Men è atteso anche per divinità reali
-                </div>
-                <div className="flex flex-wrap gap-2">
-                  {naPlain.map(d => (
-                    <span key={d.name} className="text-xs font-sans rounded border border-border/50 px-2 py-1 text-muted">
-                      {d.name} <span className="text-[10px]">×{d.count}</span>
-                    </span>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {audit.divVsEpi.length > 0 && (
-              <div className="space-y-3 mt-4">
-                <div className="text-[10px] font-sans uppercase tracking-widest text-muted/70">
-                  Stessa forma usata sia come divinità sia come epiteto ({audit.divVsEpi.length})
-                </div>
-                {audit.divVsEpi.map(t => (
-                  <div key={t.key} className="rounded-xl border border-warning/25 bg-warning/10 backdrop-blur-md p-4 shadow-sm space-y-2">
-                    <div>
-                      <span className="text-[10px] font-sans uppercase tracking-widest text-warning">come divinità: </span>
-                      <span className="font-serif text-sm font-semibold">{t.asDivinita.form}</span>
-                      <div className="mt-1"><IdChips ids={t.asDivinita.monumentIds} /></div>
-                    </div>
-                    <div>
-                      <span className="text-[10px] font-sans uppercase tracking-widest text-warning">come epiteto: </span>
-                      <span className="font-serif text-sm font-semibold">{t.asEpiteto.form}</span>
-                      <div className="mt-1"><IdChips ids={t.asEpiteto.monumentIds} /></div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        )}
-
-        {audit.sharedEpithets.length > 0 && (
-          <div>
-            <h3 className="font-bold text-sm mb-1">
-              Epiteti condivisi da più divinità
-              <span className="ml-2 text-[10px] font-sans font-normal text-muted uppercase tracking-widest">
-                {audit.sharedEpithets.length} · informativo — genuinamente condivisi o contaminazione da co-occorrenza
-              </span>
-            </h3>
-            <div className="space-y-3 mt-3">
-              {audit.sharedEpithets.map(s => (
-                <div key={s.epiteto} className="rounded-xl border border-border/60 bg-white/30 dark:bg-black/10 p-4">
-                  <div className="font-serif text-sm font-semibold mb-2">{s.epiteto}</div>
-                  <div className="space-y-1.5">
-                    {s.divinita.map(d => (
-                      <div key={d.name} className="flex flex-wrap items-baseline gap-2">
-                        <span className="text-xs font-sans text-muted min-w-[8rem]">{d.name} <span className="text-[10px]">×{d.monumentIds.length}</span></span>
-                        <IdChips ids={d.monumentIds} />
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Liste campi mancanti */}
-        <div className="grid md:grid-cols-2 gap-6">
-          {[
-            { title: 'Senza bibliografia', list: missing.noBiblio },
-            { title: 'Senza città', list: missing.noCitta },
-          ].map(({ title, list }) => list.length > 0 && (
-            <div key={title}>
-              <h3 className="font-bold text-sm mb-2">{title} <span className="text-[10px] font-sans font-normal text-muted">({list.length})</span></h3>
-              <div className="flex flex-wrap gap-2">
-                {list.slice(0, 40).map(m => (
-                  <button key={m.id} onClick={() => onSelectMonumento(m)}
-                    className="text-xs font-sans border border-border/60 px-2 py-1 hover:border-accent hover:text-accent transition-colors">
-                    #{m.id}
-                  </button>
-                ))}
-                {list.length > 40 && <span className="text-xs text-muted self-center">+{list.length - 40} altre</span>}
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
   );
 }
 
@@ -1821,12 +1510,8 @@ const RAIL_ITEMS: { view: AppView; label: string; icon: React.ReactNode; adminOn
   { view: 'stats', label: 'Statistiche Epiteti', icon: <BarChart2 className="h-4 w-4" /> },
   { view: 'heatmap', label: 'Heatmap', icon: <Columns className="h-4 w-4" /> },
   { view: 'cult', label: 'Lessico cultuale', icon: <Tags className="h-4 w-4" /> },
-  { view: 'progress', label: 'Strumenti', icon: <Wrench className="h-4 w-4" />, adminOnly: true },
+  { view: 'revisione', label: 'Strumenti', icon: <Wrench className="h-4 w-4" />, adminOnly: true },
   { view: 'editor', label: 'Editor XML', icon: <Feather className="h-4 w-4" /> },
-  // Pannello di revisione draft: dipende dalla cartella drafts/ (solo
-  // lettura, popolata dalla pipeline locale) — non disponibile sulla build
-  // GitHub Pages, che non ha accesso a quel filesystem.
-  ...(isStaticBuild ? [] : [{ view: 'review' as const, label: 'Revisione Draft', icon: <GitCompare className="h-4 w-4" /> }]),
 ];
 
 // Sotto la soglia `md` (768px) di Tailwind, la rail verticale lascia il posto a una barra inferiore.
@@ -1858,8 +1543,8 @@ function IconRail({
 }) {
   const [expanded, setExpanded] = useState(false);
   const isDesktop = useIsDesktop();
-  // Registro e Bug sono voci riservate: nascoste finché l'editing non è
-  // sbloccato, non solo di sola lettura (vedi RegistroForm/BugReportsPanel).
+  // Strumenti è una voce riservata: nascosta finché l'editing non è
+  // sbloccato, non solo di sola lettura (vedi RegistroForm/SegnalazioniPanel).
   const railItems = useMemo(() => RAIL_ITEMS.filter(item => !item.adminOnly || effectiveAdmin), [effectiveAdmin]);
 
   // Fase lunare reale: ciclo sinodico medio 29.53059 giorni, ancorato al novilunio del 6 gen 2000 18:14 UTC
@@ -1869,11 +1554,11 @@ function IconRail({
     return (
       <nav className="fixed inset-x-0 bottom-0 z-50 h-14 flex items-stretch bg-[var(--card)]/95 dark:bg-[var(--card)]/90 backdrop-blur-xl border-t border-border/40 shadow-[0_-4px_24px_-8px_rgba(var(--shadow-color),0.15)] overflow-x-auto overflow-y-hidden custom-scrollbar">
         {railItems.map(item => {
-          const active = activeView === item.view || (item.view === 'progress' && isToolView(activeView));
+          const active = activeView === item.view || (item.view === 'revisione' && isToolView(activeView));
           return (
             <button
               key={item.view}
-              onClick={() => onNavigate(item.view === 'progress' ? ultimoStrumento : item.view)}
+              onClick={() => onNavigate(item.view === 'revisione' ? ultimoStrumento : item.view)}
               title={item.label}
               className={cn(
                 "flex flex-col items-center justify-center gap-1 shrink-0 w-16 h-full relative transition-colors",
@@ -1991,11 +1676,11 @@ function IconRail({
 
         <div className="flex-1 flex flex-col gap-1 px-2 py-2 overflow-y-auto">
           {railItems.map(item => {
-            const active = activeView === item.view || (item.view === 'progress' && isToolView(activeView));
+            const active = activeView === item.view || (item.view === 'revisione' && isToolView(activeView));
             return (
               <button
                 key={item.view}
-                onClick={() => { onNavigate(item.view === 'progress' ? ultimoStrumento : item.view); setExpanded(false); }}
+                onClick={() => { onNavigate(item.view === 'revisione' ? ultimoStrumento : item.view); setExpanded(false); }}
                 title={item.label}
                 className={cn(
                   "flex items-center gap-3 h-10 px-3 rounded-lg shrink-0 transition-colors relative",
@@ -2203,7 +1888,7 @@ function HomeView({ monumenti, onNavigate, onSearch, effectiveAdmin }: { monumen
     { view: 'stats', label: 'Statistiche Epiteti', desc: 'Frequenza e distribuzione degli epiteti di Men.', icon: <BarChart2 className="h-5 w-5" /> },
     { view: 'heatmap', label: 'Heatmap Co-occorrenze', desc: 'Quali epiteti e attributi ricorrono insieme.', icon: <Columns className="h-5 w-5" /> },
     { view: 'cult', label: 'Lessico cultuale', desc: 'Il vocabolario delle funzioni cultuali marcato nelle edizioni, per lemma e famiglia.', icon: <Tags className="h-5 w-5" /> },
-    { view: 'progress', label: 'Strumenti', desc: 'Revisione delle proposte delle routine, avanzamento, coerenza, registro di lavorazione, bug e bibliografia: gli attrezzi della redazione.', icon: <Wrench className="h-5 w-5" />, adminOnly: true },
+    { view: 'revisione', label: 'Strumenti', desc: 'Le proposte delle routine da decidere, che cosa manca alle schede, che cosa non torna nel corpus e le note dei collaboratori.', icon: <Wrench className="h-5 w-5" />, adminOnly: true },
     { view: 'editor', label: 'Editor XML', desc: 'Modifica le schede EpiDoc sezione per sezione, con riscrittura chirurgica.', icon: <Feather className="h-5 w-5" /> },
   ];
   const sections = allSections.filter(s => !s.adminOnly || effectiveAdmin);
@@ -4297,6 +3982,14 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
     setSelectedMonumento(m);
     setActiveView(vistaDiSezione(m.sezione ?? sezioneDiId(m.id)));
   };
+  /** Da un'etichetta «ILA-018» (proposte delle routine, lint): false se la scheda non c'è. */
+  const apriSchedaDaEtichetta = (etichetta: string) => {
+    const id = idDaEtichetta(etichetta);
+    const m = id === undefined ? undefined : monumenti.find(x => x.id === id);
+    if (m) apriScheda(m);
+    return !!m;
+  };
+  const vaiAStrumento = (v: AppView) => { ultimoStrumento = v; setActiveView(v); setHasNavigated(true); };
 
   // Vero quando almeno un filtro (o la ricerca testuale) è diverso dallo stato
   // di partenza: pilota la comparsa del pulsante rapido "Azzera filtri" accanto
@@ -4558,7 +4251,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
       const m = monumenti.find(x => x.id === scheda);
       if (m) { apriScheda(m); setHasNavigated(true); return; }
     }
-    if (vista) { setActiveView(vista as AppView); setHasNavigated(true); }
+    if (vista) { setActiveView((VISTE_RINOMINATE[vista] ?? vista) as AppView); setHasNavigated(true); }
   }, [monumenti]);
 
   // …e si riscrive a ogni cambio, con replaceState: navigare dentro
@@ -4745,9 +4438,6 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
   const [registri, setRegistri] = useState<EntryRegistro[]>([]);
   const [registriLoading, setRegistriLoading] = useState(false);
   const [bugs, setBugs] = useState<BugReport[]>([]);
-  // Requisito da preselezionare nella tabella Mancanze (da «apri nella tabella» in Avanzamento).
-  const [mancanzaTarget, setMancanzaTarget] = useState<string | null>(null);
-  const azzeraMancanzaTarget = useCallback(() => setMancanzaTarget(null), []);
   const [bugsLoading, setBugsLoading] = useState(false);
 
   const fetchRegistri = async () => {
@@ -4775,7 +4465,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
   };
 
   // Solo se sbloccati: da viewer non c'è nulla da mostrare in queste
-  // sezioni (vedi RegistroPanel/BugReportsPanel, comunque nascoste dalla nav).
+  // sezioni (vedi SegnalazioniPanel, comunque nascosta dalla nav).
   useEffect(() => {
     if (effectiveAdmin) { fetchRegistri(); fetchBugs(); }
     else { setRegistri([]); setBugs([]); }
@@ -6842,70 +6532,46 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
           {isToolView(activeView) && effectiveAdmin && (
             <StrumentiNav
               attiva={activeView}
-              onNavigate={(v) => { ultimoStrumento = v; setActiveView(v); setHasNavigated(true); }}
+              onNavigate={vaiAStrumento}
               conteggi={{
-                flags: registri.filter(r => r.status === 'open').length,
-                bugs: bugs.filter(b => b.status === 'open').length,
+                segnalazioni: registri.filter(r => r.status === 'open').length + bugs.filter(b => b.status === 'open').length,
               }}
             />
           )}
           {activeView === 'revisione' && effectiveAdmin && (
             <RevisionePanel
-              onApriScheda={(scheda) => {
-                const id = idDaEtichetta(scheda);
-                const m = id === undefined ? undefined : monumenti.find(x => x.id === id);
-                if (m) apriScheda(m);
-                return !!m;
-              }}
-            />
-          )}
-          {activeView === 'progress' && effectiveAdmin && (
-            <AvanzamentoPanel
-              monumenti={monumenti}
-              onSelectMonumento={apriScheda}
-              onApriMancanze={(id) => { setMancanzaTarget(id); ultimoStrumento = 'gaps'; setActiveView('gaps'); }}
-            />
-          )}
-          {activeView === 'gaps' && effectiveAdmin && (
-            <MancanzePanel
-              monumenti={monumenti}
-              onSelectMonumento={apriScheda}
-              requisitoIniziale={mancanzaTarget}
-              onRequisitoInizialeUsato={azzeraMancanzaTarget}
-            />
-          )}
-          {activeView === 'health' && effectiveAdmin && <CorpusHealth monumenti={monumenti} onSelectMonumento={apriScheda} />}
-          {activeView === 'flags' && effectiveAdmin && (
-            <RegistroPanel
+              onApriScheda={apriSchedaDaEtichetta}
               registri={registri}
-              loading={registriLoading}
-              onResolve={entryId => updateRegistroStatus(entryId, 'resolved')}
-              onReopen={entryId => updateRegistroStatus(entryId, 'open')}
+            />
+          )}
+          {activeView === 'completezza' && effectiveAdmin && (
+            <CompletezzaPanel monumenti={monumenti} onSelectMonumento={apriScheda} />
+          )}
+          {activeView === 'coerenza' && effectiveAdmin && (
+            <CoerenzaPanel
+              monumenti={monumenti}
+              onSelectMonumento={apriScheda}
+              onApriScheda={apriSchedaDaEtichetta}
+              onVaiARevisione={() => vaiAStrumento('revisione')}
+              onBiblioApply={handleBiblioApply}
+              biblioProgress={biblioProgress}
+            />
+          )}
+          {activeView === 'segnalazioni' && effectiveAdmin && (
+            <SegnalazioniPanel
+              registri={registri}
+              bugs={bugs}
+              loading={registriLoading || bugsLoading}
+              knownAuthors={knownAuthors}
               onSelectEntry={entryId => {
                 const m = monumenti.find(x => x.entryId === entryId || x.id.toString() === entryId);
                 if (m) apriScheda(m);
               }}
+              onRegistroStatus={updateRegistroStatus}
+              onBugCreate={createBugReport}
+              onBugStatus={updateBugStatus}
             />
           )}
-          {activeView === 'bugs' && effectiveAdmin && (
-            <BugReportsPanel
-              bugs={bugs}
-              loading={bugsLoading}
-              knownAuthors={knownAuthors}
-              onCreate={createBugReport}
-              onResolve={id => updateBugStatus(id, 'resolved')}
-              onReopen={id => updateBugStatus(id, 'open')}
-            />
-          )}
-          {activeView === 'biblio' && effectiveAdmin && (
-            <BibliographyIndex
-              monumenti={monumenti}
-              onApply={handleBiblioApply}
-              progress={biblioProgress}
-              onSelectMonumento={apriScheda}
-            />
-          )}
-          {activeView === 'review' && <DraftReviewPanel />}
           {activeView === 'editor' && (
             <Suspense fallback={<div className="flex-1 flex items-center justify-center text-sm text-muted italic">Caricamento editor…</div>}>
               {/* L'editor non ha margini propri: senza questo involucro

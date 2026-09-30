@@ -9,6 +9,9 @@ li legge con il token dell'editor:
   revisione/rapporti/<routine>/AAAA-MM-GG.md   copia del rapporto
   revisione/indice.json                        elenco dei rapporti e delle
                                                proposte, rigenerato ogni volta
+  revisione/controlli.json                     lint e avanzamento dei controlli
+                                               notturni, per le linguette
+                                               Coerenza e Completezza
   revisione/decisioni.json                     NON lo tocca: lo scrive il sito
                                                (accetta, scarta, invia) e la
                                                routine ila-applica-correzioni
@@ -193,6 +196,55 @@ def raccogli():
     return rapporti, proposte, avvisi, copie
 
 
+STATO_CONTROLLI = LOGS / "controlli" / ".stato"
+GIORNI_AVANZAMENTO = 30
+LINT_RE = re.compile(r"^(ILA-\d+|\S+)\s+(.*)$")
+
+
+def genere_lint(testo: str) -> str:
+    """Raggruppa i problemi del lint come li mostra la linguetta Coerenza."""
+    if "manca un <w lemma>" in testo:
+        return "lemma"      # le proposte le fa ila-lessico-candidati
+    if "nelle keywords" in testo:
+        return "keywords"
+    return "altro"
+
+
+def controlli() -> dict | None:
+    """Lint e avanzamento dell'ultima notte, da logs/controlli/.stato/.
+
+    Il lint viene da problemi.tsv (righe «ERRORI|AVVISI<tab>ILA-NNN  testo»),
+    i nuovi da nuovi.tsv; l'avanzamento dagli stato-AAAA-MM-GG.json degli
+    ultimi GIORNI_AVANZAMENTO giorni. Le chiavi dei campi sono quelle di
+    scripts/stato-corpus.py, che coincidono con src/lib/mancanze.ts.
+    """
+    problemi = STATO_CONTROLLI / "problemi.tsv"
+    if not problemi.exists():
+        return None
+    nuovi_f = STATO_CONTROLLI / "nuovi.tsv"
+    nuovi = set(nuovi_f.read_text(encoding="utf-8").splitlines()) if nuovi_f.exists() else set()
+    lint = {"errori": [], "avvisi": []}
+    for riga in problemi.read_text(encoding="utf-8").splitlines():
+        if "\t" not in riga:
+            continue
+        sez, resto = riga.split("\t", 1)
+        m = LINT_RE.match(resto.strip())
+        scheda, testo = (m.group(1), m.group(2).strip()) if m else ("", resto.strip())
+        voce = {"scheda": scheda, "testo": testo, "genere": genere_lint(testo)}
+        if riga in nuovi:
+            voce["nuovo"] = True
+        lint["errori" if sez == "ERRORI" else "avvisi"].append(voce)
+    storico = []
+    for f in sorted(STATO_CONTROLLI.glob("stato-*.json"))[-GIORNI_AVANZAMENTO:]:
+        try:
+            d = json.loads(f.read_text(encoding="utf-8"))
+        except json.JSONDecodeError:
+            continue
+        storico.append({"data": f.stem[len("stato-"):], "schede": d.get("schede"), "campi": d.get("campi", {})})
+    data = dt.datetime.fromtimestamp(problemi.stat().st_mtime).astimezone().isoformat(timespec="minutes")
+    return {"data": data, "lint": lint, "avanzamento": storico}
+
+
 def git(*args, check=True) -> subprocess.CompletedProcess:
     return subprocess.run(["git", "-C", str(DATA_REPO), *args], capture_output=True, text=True, check=check)
 
@@ -248,6 +300,15 @@ def main() -> int:
         indice_path.write_text(json.dumps(nuovo, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
         cambiati.append(f"{DEST}/indice.json")
 
+    ctrl = controlli()
+    if ctrl is not None:
+        ctrl_path = DATA_REPO / DEST / "controlli.json"
+        testo = json.dumps(ctrl, ensure_ascii=False, indent=2) + "\n"
+        if not ctrl_path.exists() or ctrl_path.read_text(encoding="utf-8") != testo:
+            ctrl_path.parent.mkdir(parents=True, exist_ok=True)
+            ctrl_path.write_text(testo, encoding="utf-8")
+            cambiati.append(f"{DEST}/controlli.json")
+
     if not cambiati:
         print("Niente di nuovo da portare nell'hub.")
         return 0
@@ -256,6 +317,8 @@ def main() -> int:
         return 0 if a.no_push else 2
 
     percorsi = [f"{DEST}/rapporti", f"{DEST}/indice.json"]
+    if (DATA_REPO / DEST / "controlli.json").exists():
+        percorsi.append(f"{DEST}/controlli.json")
     git("add", "--", *percorsi)
     nuovi = sorted({c.split("/")[2] for c in cambiati if c.startswith(f"{DEST}/rapporti/")})
     msg = "revisione: " + (", ".join(nuovi) if nuovi else "indice") + f" ({len(proposte)} proposte)"

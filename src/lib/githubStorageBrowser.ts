@@ -362,6 +362,7 @@ async function pullTextFile(path: string, ref?: ShaRef): Promise<string | null> 
 
 export const pullRevisioneIndice = () => pullTextFile("revisione/indice.json");
 export const pullRevisioneRapporto = (path: string) => pullTextFile(path);
+export const pullControlliNotturni = () => pullTextFile("revisione/controlli.json");
 export const pullDecisioniFile = () => pullTextFile(DECISIONI_PATH, decisioniShaRef);
 
 export async function pushDecisioniFile(content: string, message: string): Promise<void> {

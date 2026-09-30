@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { cn } from '../lib/utils';
-import { DecisioneRevisione, IndiceRevisione, PropostaRevisione, RapportoRevisione, StatoDecisione } from '../types';
+import { DecisioneRevisione, EntryRegistro, IndiceRevisione, PropostaRevisione, RapportoRevisione, StatoDecisione } from '../types';
+import { idDaEtichetta } from '../lib/sezioni';
 
 /**
  * RevisionePanel — l'hub in cui confluiscono le routine sul corpus.
@@ -13,7 +14,10 @@ import { DecisioneRevisione, IndiceRevisione, PropostaRevisione, RapportoRevisio
  * alla routine ila-applica-correzioni, che le applica e scrive l'esito.
  *
  * Le decisioni si salvano da sole in revisione/decisioni.json, qualche
- * secondo dopo l'ultimo clic. Veste da indice a stampa come AvanzamentoPanel.
+ * secondo dopo l'ultimo clic. Accanto a una proposta compare la nota aperta
+ * del registro di lavorazione sulla stessa scheda, se c'è (Segnalazioni):
+ * chi decide la vede senza cambiare linguetta. Veste da indice a stampa come
+ * CompletezzaPanel.
  */
 
 const SEC = 'text-muted';
@@ -72,9 +76,11 @@ const dataEstesa = (iso: string) => {
 interface Props {
   /** Apre la scheda citata dalla proposta (p. es. «ILA-018»); false se non c'è. */
   onApriScheda: (scheda: string) => boolean;
+  /** Registro di lavorazione: le note aperte si mostrano accanto alle proposte. */
+  registri?: EntryRegistro[];
 }
 
-export function RevisionePanel({ onApriScheda }: Props) {
+export function RevisionePanel({ onApriScheda, registri = [] }: Props) {
   const [indice, setIndice] = useState<IndiceRevisione | null>(null);
   const [decisioni, setDecisioni] = useState<Record<string, DecisioneRevisione>>({});
   const [errore, setErrore] = useState<string | null>(null);
@@ -203,6 +209,22 @@ export function RevisionePanel({ onApriScheda }: Props) {
     }
     return [...m.entries()].sort((a, b) => b[0].localeCompare(a[0]));
   }, [visibili]);
+
+  // Nota aperta più recente del registro, per numero di scheda.
+  const noteAperte = useMemo(() => {
+    const m = new Map<number, { testo: string; author: string }>();
+    for (const r of registri) {
+      if (r.status !== 'open') continue;
+      const id = idDaEtichetta(r.entryLabel || '');
+      const ultima = [...r.notes].sort((a, b) => b.createdAt.localeCompare(a.createdAt))[0];
+      if (id !== undefined && ultima) m.set(id, { testo: ultima.testo, author: ultima.author });
+    }
+    return m;
+  }, [registri]);
+  const notaDi = (scheda?: string) => {
+    const id = scheda ? idDaEtichetta(scheda) : undefined;
+    return id === undefined ? undefined : noteAperte.get(id);
+  };
 
   const accettate = useMemo(() => proposte.filter(p => decisioni[p.id]?.stato === 'accettata'), [proposte, decisioni]);
 
@@ -380,6 +402,7 @@ export function RevisionePanel({ onApriScheda }: Props) {
                       onApri={() => setAperta(aperta === p.id ? null : p.id)}
                       onDecidi={d => decidi(p.id, d)}
                       onApriScheda={onApriScheda}
+                      notaRegistro={notaDi(p.scheda)}
                     />
                   ))}
                 </section>
@@ -396,7 +419,8 @@ export function RevisionePanel({ onApriScheda }: Props) {
   );
 }
 
-function VoceProposta({ p, d, aperta, onApri, onDecidi, onApriScheda }: {
+function VoceProposta({ p, d, aperta, onApri, onDecidi, onApriScheda, notaRegistro }: {
+  notaRegistro?: { testo: string; author: string };
   p: PropostaRevisione;
   d?: DecisioneRevisione;
   aperta: boolean;
@@ -439,6 +463,7 @@ function VoceProposta({ p, d, aperta, onApri, onDecidi, onApriScheda }: {
         {p.riga && <span className={cn('shrink-0 w-12 font-sans text-[11px] tabular-nums', TER)}>r. {p.riga}</span>}
         <span className={cn('font-serif text-[14px]', d?.stato === 'scartata' ? cn(TER, 'line-through decoration-muted/40') : 'text-ink')}>{p.titolo}</span>
         {p.dubbio && <span className={cn('shrink-0 font-serif italic text-[12px]', SEC)}>da decidere</span>}
+        {notaRegistro && <span className={cn('shrink-0 font-serif italic text-[12px]', TER)} title={notaRegistro.testo}>nota nel registro</span>}
         <span className="flex-1" />
         {d && <span className={cn('shrink-0 font-serif italic text-[12px]', d.stato === 'bloccata' ? 'text-danger' : SEC)}>{DICITURA[d.stato]}</span>}
       </button>
@@ -450,6 +475,11 @@ function VoceProposta({ p, d, aperta, onApri, onDecidi, onApriScheda }: {
               {p.attuale && <><span className={cn('font-serif italic text-[12px]', SEC)}>ora</span><span className="font-serif text-[15px] text-ink whitespace-pre-wrap">{p.attuale}</span></>}
               {p.proposta && <><span className={cn('font-serif italic text-[12px]', SEC)}>proposta</span><span className="font-serif text-[15px] text-ink whitespace-pre-wrap">{p.proposta}</span></>}
             </div>
+          )}
+          {notaRegistro && (
+            <p className={cn('font-serif text-[13px] leading-relaxed pl-2 border-l-2 border-warning/40', SEC)}>
+              <span className="italic">Nel registro, {notaRegistro.author}:</span> {notaRegistro.testo}
+            </p>
           )}
           {p.dettaglio && <div className={cn('font-serif text-[13px] leading-relaxed', SEC)}><Inline testo={p.dettaglio} /></div>}
           <div className={cn('font-serif italic text-[12px]', TER)}>

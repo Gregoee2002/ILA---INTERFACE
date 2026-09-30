@@ -102,6 +102,34 @@ nel file, altrimenti lo script si ferma senza toccare niente. `destinazione`
 è `dati` (percorsi relativi alla repo dati) o `tesi` (relativi a
 `~/Documents/Tesi-ILA`). Le questioni da decidere vanno con `"dubbio": true`.
 
+## Integrazione con gli strumenti
+
+Dal 2026-09-30 la sezione **Strumenti** del sito ha quattro linguette, e ognuna
+è collegata alle routine:
+
+| Linguetta | Che cosa mostra | Da dove arriva | Chi la usa fra le routine |
+|---|---|---|---|
+| Revisione | proposte da decidere e rapporti | `revisione/indice.json`, `decisioni.json` (repo dati) | tutte scrivono qui con `raccogli-revisione.py`; `ila-applica-correzioni` legge le inviate |
+| Completezza | campi compilati, per campo e per scheda; variazione in 7 giorni | calcolata sulle schede + `revisione/controlli.json` (`avanzamento`) | `controlli-notturni.sh` (stato-corpus.py) |
+| Coerenza | lint della notte, grafie e classificazione, bibliografia | `revisione/controlli.json` (`lint`) + calcoli sulle schede | `controlli-notturni.sh` (lint-corpus.py); `ila-lessico-candidati` trasforma le «forme non marcate» in proposte |
+| Segnalazioni | note dei collaboratori sulle schede (registro) e sul sito (bug) | `flags.json`, `bugs.json` (repo dati) | le routine con proposte le leggono e le citano; il diario le elenca |
+
+`revisione/controlli.json` lo scrive `raccogli-revisione.py` da
+`logs/controlli/.stato/` (`problemi.tsv`, `nuovi.tsv`, `stato-AAAA-MM-GG.json`
+degli ultimi 30 giorni). Le chiavi dei campi sono quelle di
+`scripts/stato-corpus.py`, le stesse di `src/lib/mancanze.ts`.
+
+Ogni routine che fa proposte, prima di scriverle, legge (blocco «STRUMENTI DEL
+SITO» nei SKILL.md):
+
+- le note **aperte** del registro sulle schede che esamina (`flags.json`): le
+  cita nel `dettaglio`, e il sito le mostra accanto alla proposta;
+- le **decisioni già prese** (`revisione/decisioni.json`): non ripropone una
+  correzione scartata sulla stessa scheda e riga senza un argomento nuovo.
+
+Il diario della domenica chiude con «Da decidere»: proposte non viste,
+correzioni bloccate, segnalazioni aperte e problemi nuovi del lint.
+
 ## Modificare o sospendere
 
 I prompt completi stanno in `~/.claude/scheduled-tasks/<id>/SKILL.md`. Per

@@ -94,6 +94,8 @@ fi
 riga ""
 blocco "Uscita completa di lint-corpus.py" "$TMP/lint.txt"
 cp "$TMP/problemi.tsv" "$STATO/problemi.tsv"
+# I nuovi di stanotte: raccogli-revisione.py li segna nella linguetta Coerenza.
+cp "$TMP/nuovi.tsv" "$STATO/nuovi.tsv"
 
 if [ "$N_ERR" -gt 0 ]; then esito "✗ corpus: errori: $N_ERR (problemi nuovi: $N_NUOVI)"
 elif [ "$N_NUOVI" -gt 0 ]; then esito "△ corpus: nessun errore, avvisi nuovi: $N_NUOVI"

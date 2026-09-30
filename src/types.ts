@@ -510,6 +510,26 @@ export interface IndiceRevisione {
 }
 
 /**
+ * revisione/controlli.json, scritto da scripts/raccogli-revisione.py con
+ * l'esito dei controlli notturni: il lint della repo dati (linguetta
+ * Coerenza) e i conteggi di stato-corpus.py degli ultimi giorni (linguetta
+ * Completezza; le chiavi dei campi sono gli id di lib/mancanze.ts).
+ */
+export interface VoceLint {
+  scheda: string;
+  testo: string;
+  /** lemma = forma cultuale non marcata (la tratta ila-lessico-candidati). */
+  genere: 'lemma' | 'keywords' | 'altro';
+  nuovo?: boolean;
+}
+
+export interface ControlliNotturni {
+  data: string;
+  lint: { errori: VoceLint[]; avvisi: VoceLint[] };
+  avanzamento: { data: string; schede: number; campi: Record<string, number> }[];
+}
+
+/**
  * accettata/scartata/rimandata: decise sul sito, non ancora spedite;
  * inviata: in coda per la routine ila-applica-correzioni;
  * applicata/bloccata: esito scritto dalla routine.

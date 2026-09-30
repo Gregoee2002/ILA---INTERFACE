@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { BookMarked, Loader2, Search, Wand2, Check, ChevronRight, AlertTriangle } from 'lucide-react';
+import { Loader2, Search, Wand2, Check, ChevronRight, AlertTriangle } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { Monumento } from '../types';
 import { etichettaScheda } from '../lib/sezioni';
@@ -211,17 +211,13 @@ export function BibliographyIndex({ monumenti, onApply, onSelectMonumento, progr
   const busy = applying || ruleBusy !== null;
 
   return (
-    <div className="flex-1 overflow-y-auto">
-      <div className="p-6 md:p-10 max-w-4xl mx-auto w-full">
+    <div className="flex-1 overflow-y-auto pr-3">
+      <div className="max-w-4xl w-full pb-10">
       <div className="mb-6">
-        <div className="text-[10px] font-sans font-bold uppercase tracking-[0.22em] text-accent/70 mb-2 flex items-center gap-1.5">
-          <BookMarked className="h-3 w-3" /> Bibliografia — censimento e modifica in blocco
-        </div>
-        <p className="text-xs font-serif italic text-muted leading-relaxed">
-          {inventory.size.toLocaleString('it')} diciture distinte su {totalBibl.toLocaleString('it')} riferimenti
-          <span className="text-muted/60"> · {conflictGroups.length} gruppi con discrepanze di forma</span>
-          <span className="text-muted/60"> · norme: </span>
-          <a href="/docs/norme-bibliografia.md" target="_blank" rel="noreferrer" className="text-accent hover:opacity-70">docs/norme-bibliografia.md</a>
+        <p className="font-serif italic text-[13px] text-muted leading-relaxed">
+          Censimento e modifica in blocco delle diciture: {inventory.size.toLocaleString('it')} distinte su {totalBibl.toLocaleString('it')} riferimenti,
+          {' '}{conflictGroups.length} gruppi con discrepanze di forma. Norme:{' '}
+          <a href="https://github.com/Gregoee2002/ILA---INTERFACE/blob/main/docs/norme-bibliografia.md" target="_blank" rel="noreferrer" className="underline decoration-dotted underline-offset-2 hover:text-accent">norme-bibliografia.md</a>.
         </p>
       </div>
 

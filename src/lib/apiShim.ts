@@ -33,9 +33,9 @@
 import { xmlToMonumenti, monumentiToXml } from "./xmlUtils";
 import { buildSearchIndex, searchMonumenti } from "./searchIndex";
 import MiniSearch from "minisearch";
-import { pullAllCorpusFiles, pushCorpusFile, deleteCorpusFile, testGitHubAccess, setStoredToken, clearStoredToken, pullFlagsFile, pushFlagsFile, pullBugsFile, pushBugsFile, pullIconographyVocabFile, pushIconographyVocabFile, pullLitSourcesFile, pushLitSourcesFile, pullLessicoLaresFile, pushLessicoLaresFile, pullRevisioneIndice, pullRevisioneRapporto, pullDecisioniFile, pushDecisioniFile, scheduleRedeploy } from "./githubStorageBrowser";
+import { pullAllCorpusFiles, pushCorpusFile, deleteCorpusFile, testGitHubAccess, setStoredToken, clearStoredToken, pullFlagsFile, pushFlagsFile, pullBugsFile, pushBugsFile, pullIconographyVocabFile, pushIconographyVocabFile, pullLitSourcesFile, pushLitSourcesFile, pullLessicoLaresFile, pushLessicoLaresFile, pullRevisioneIndice, pullRevisioneRapporto, pullControlliNotturni, pullDecisioniFile, pushDecisioniFile, scheduleRedeploy } from "./githubStorageBrowser";
 import { validateOverlay } from "./lessicoLaresOverlay";
-import { EntryRegistro, BugReport, DecisioneRevisione, IndiceRevisione } from "../types";
+import { EntryRegistro, BugReport, DecisioneRevisione, IndiceRevisione, ControlliNotturni } from "../types";
 import { normalizeRegistro } from "./registroMigration";
 import { mergeIconographyOverrides } from "./iconographyLabels";
 import { nomeFileScheda } from "./sezioni";
@@ -83,6 +83,21 @@ const MOCK_REVISIONE: IndiceRevisione = {
     { id: "collazione-mock000001", routine: "collazione", data: "2026-09-28", rapporto: "revisione/rapporti/collazione/2026-09-28.md", scheda: "ILA-018", tipo: "edizione", riga: "4", classe: "a", titolo: "εἰς → ἰς, come stampa Lane", attuale: "εἰς ὑπηρεσίας", proposta: "ἰς ὑπηρεσίας", destinazione: "dati", patch: [{ file: "corpus/ILA-018.xml", cerca: "θεοῦ εἰς ὑπηρεσίας", sostituisci: "θεοῦ ἰς ὑπηρεσίας" }] },
     { id: "collazione-mock000002", routine: "collazione", data: "2026-09-28", rapporto: "revisione/rapporti/collazione/2026-09-28.md", scheda: "ILA-015", tipo: "edizione", riga: "14–15", classe: "a", titolo: "Due righe fuse in una", attuale: "ἀχαριατί-\\ναν. Ἐπεστάθη", proposta: "ἀχαριατί- | αν. Ἐπεστάθη", dettaglio: "Il corpus ha 24 righe, Lane 25: da r. 15 in poi la numerazione va spostata di uno.", destinazione: "dati" },
     { id: "collazione-mock000003", routine: "collazione", data: "2026-09-28", rapporto: "revisione/rapporti/collazione/2026-09-28.md", scheda: "ILA-002", tipo: "edizione", riga: "1", classe: "c", dubbio: true, titolo: "Da decidere: iota ascritto o sottoscritto?", attuale: "Τυράννωι", proposta: "Τυράννῳ", destinazione: "dati" },
+  ],
+};
+const MOCK_CONTROLLI: ControlliNotturni = {
+  data: "2026-09-30T01:30+02:00",
+  lint: {
+    errori: [],
+    avvisi: [
+      { scheda: "ILA-008", testo: "epiteto «Tyrannos» nell'edizione ma non nelle keywords «epiteti»", genere: "keywords", nuovo: true },
+      { scheda: "ILA-015", testo: "la forma di «δύναμις» compare 2 volte ma è marcata 1: manca un <w lemma>?", genere: "lemma" },
+      { scheda: "ILA-021", testo: "il testo porta ἔτους ma <origDate> è vuota", genere: "altro" },
+    ],
+  },
+  avanzamento: [
+    { data: "2026-09-23", schede: 25, campi: { trad_it: 15, datazione: 3, bibliografia: 24 } },
+    { data: "2026-09-30", schede: 25, campi: { trad_it: 18, datazione: 4, bibliografia: 25 } },
   ],
 };
 const MOCK_RAPPORTO = "# Collazione con Lane (CMRDM I) — 2026-09-28\n\n**Schede viste:** 8.\n\n## ILA-018\n\n| riga | corpus | Lane | classe |\n|---|---|---|---|\n| 4 | εἰς ὑπηρεσίας | ἰς ὑπηρεσίας | **(a)** |\n\n```xml\n<lb n=\"4\"/>θεοῦ ἰς ὑπηρεσίας χάριν μὴ\n```\n";
@@ -571,6 +586,15 @@ async function handleRequest(url: URL, init: RequestInit | undefined): Promise<R
         indice: indice ? JSON.parse(indice) : { rapporti: [], proposte: [] },
         decisioni: decisioni ? JSON.parse(decisioni) : {},
       });
+    }
+
+    // Esito dei controlli notturni (lint e avanzamento), per Coerenza e
+    // Completezza. null se raccogli-revisione.py non l'ha ancora scritto.
+    if (path === "/api/revisione/controlli" && method === "GET") {
+      if (!canWrite) return json({ error: "Sblocca l'editing con un token GitHub per vedere i controlli notturni." }, 403);
+      if (mockMode) return json(MOCK_CONTROLLI);
+      const testo = await pullControlliNotturni();
+      return json(testo ? JSON.parse(testo) : null);
     }
 
     if (path === "/api/revisione/rapporto" && method === "GET") {
