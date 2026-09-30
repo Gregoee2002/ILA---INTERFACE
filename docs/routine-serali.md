@@ -72,10 +72,13 @@ Il percorso:
    per scheda dopo xmllint e lint, e scrive l'esito (`applicata` con il commit,
    oppure `bloccata` con la domanda da fare). Lo script di appoggio è
    `scripts/applica-revisione.py` (`elenco`, `patch ID`, `esito ID …`).
-   **Da creare:** l'attività pianificata non è ancora stata creata (serve
-   l'approvazione dell'autore, perché scrive sul corpus senza supervisione).
-   Finché manca, si applica a mano in una sessione: «applica le correzioni
-   inviate dall'hub di revisione».
+   **Sospesa:** l'attività esiste dal 2026-09-30 (prompt in
+   `~/.claude/scheduled-tasks/ila-applica-correzioni/SKILL.md`, ogni sera alle
+   22:30) ma è disattivata, perché scrive e fa push sul corpus senza
+   supervisione e la scelta spetta all'autore: A) si applica a mano in una
+   sessione («applica le correzioni inviate dall'hub di revisione»), B) si
+   lancia con «Esegui ora» dall'elenco delle attività, C) la si riattiva e gira
+   da sola. Rapporto in `logs/serali/applica/`.
 
 L'id di una proposta dipende solo dal contenuto (routine, scheda, riga, testo
 attuale e proposto), quindi se una routine ripropone la stessa correzione in

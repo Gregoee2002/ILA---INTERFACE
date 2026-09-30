@@ -1,5 +1,4 @@
 import { useMemo, useState } from 'react';
-import { Loader2, Search, Wand2, Check, ChevronRight, AlertTriangle } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { Monumento } from '../types';
 import { etichettaScheda } from '../lib/sezioni';
@@ -222,136 +221,114 @@ export function BibliographyIndex({ monumenti, onApply, onSelectMonumento, progr
       </div>
 
       {progress && (
-        <div className="mb-4 text-[11px] font-sans text-accent flex items-center gap-2">
-          <Loader2 className="h-3.5 w-3.5 animate-spin" />
-          Salvataggio {progress.done}/{progress.total} schede…
-        </div>
+        <p className="mb-4 font-serif italic text-[13px] text-accent">
+          Salvataggio {progress.done} di {progress.total} schede…
+        </p>
       )}
 
       {lastResult && (
-        <div className={cn(
-          'mb-4 rounded-sm border px-3 py-2 text-[11px] font-sans',
-          lastResult.failures.length
-            ? 'border-warning/25 bg-warning/10 text-warning'
-            : 'border-accent/30 bg-accent/5 text-accent'
-        )}>
+        <p className={cn('mb-4 font-serif text-[13px]', lastResult.failures.length ? 'text-danger' : 'text-muted')}>
           {lastResult.updatedEntries} diciture aggiornate in {lastResult.updatedSchede} schede.
           {lastResult.failures.length > 0 && (
-            <span> {lastResult.failures.length} falliti: {lastResult.failures.map(f => f.entryId).join(', ')}</span>
+            <span> Non riuscite: {lastResult.failures.map(f => f.entryId).join(', ')}.</span>
           )}
-        </div>
+        </p>
       )}
 
       {/* Normalizzazioni rapide */}
-      <div className="mb-6 rounded-lg border border-border/40 p-3">
-        <div className="text-[10px] font-sans font-bold uppercase tracking-wide text-muted/70 mb-2 flex items-center gap-1.5">
-          <Wand2 className="h-3 w-3" /> Normalizzazioni rapide
-        </div>
-        <div className="space-y-2">
-          {QUICK_RULES.map(rule => {
-            const edits = ruleMatches[rule.id] || [];
-            return (
-              <div key={rule.id} className="flex items-center gap-3">
-                <div className="flex-1 min-w-0">
-                  <div className="text-xs font-sans text-ink">{rule.label}</div>
-                  <div className="text-[10px] font-serif italic text-muted/70 truncate">{rule.desc}</div>
-                </div>
-                <div className="text-[10px] font-sans text-muted tabular-nums shrink-0">{edits.length} diciture</div>
-                <button
-                  disabled={busy || edits.length === 0}
-                  onClick={() => runApply(edits, rule.id)}
-                  className="px-2.5 py-1 bg-accent hover:bg-accent/90 text-white font-sans text-[9px] font-bold uppercase tracking-widest transition-colors rounded-sm disabled:opacity-30 flex items-center gap-1.5 shrink-0"
-                >
-                  {ruleBusy === rule.id ? <Loader2 className="h-3 w-3 animate-spin" /> : <Check className="h-3 w-3" />}
-                  Applica
-                </button>
-              </div>
-            );
-          })}
-        </div>
-      </div>
+      <section className="mb-8">
+        <h3 className="font-serif text-[15px] text-ink mb-1.5 pb-1 border-b border-border/30">Normalizzazioni rapide</h3>
+        {QUICK_RULES.map(rule => {
+          const edits = ruleMatches[rule.id] || [];
+          return (
+            <div key={rule.id} className="flex items-baseline gap-2 px-1.5 py-[3px]">
+              <span className="font-serif text-[14px] text-ink shrink-0">{rule.label}</span>
+              <span className="font-serif italic text-[12px] text-muted/60 truncate">{rule.desc}</span>
+              <span className="flex-1 self-center border-b border-dotted border-border/70 mx-1 min-w-4" />
+              <span className="shrink-0 font-sans text-xs tabular-nums text-muted">{edits.length} diciture</span>
+              <button
+                disabled={busy || edits.length === 0}
+                onClick={() => runApply(edits, rule.id)}
+                className="shrink-0 w-14 text-right font-serif text-[13px] text-accent hover:opacity-70 transition-opacity disabled:text-muted/40 disabled:hover:opacity-100"
+              >
+                {ruleBusy === rule.id ? '…' : 'Applica'}
+              </button>
+            </div>
+          );
+        })}
+      </section>
 
       {/* Ricerca / filtri */}
-      <div className="flex gap-2 mb-3 items-center">
-        <div className="relative flex-1">
-          <Search className="h-3.5 w-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-muted/50" aria-hidden="true" />
-          <input
-            type="search"
-            aria-label="Filtra le diciture bibliografiche"
-            value={query}
-            onChange={e => setQuery(e.target.value)}
-            placeholder="Filtra le diciture…"
-            className="w-full text-xs font-sans rounded-sm border border-border bg-sidebar pl-8 pr-2.5 py-1.5 outline-none focus:border-accent transition-colors"
-          />
-        </div>
-        <button
-          onClick={() => setOnlyConflicts(v => !v)}
-          aria-pressed={onlyConflicts}
-          className={cn(
-            'px-3 py-1.5 font-sans text-[9px] font-bold uppercase tracking-widest transition-colors rounded-sm border flex items-center gap-1.5',
-            onlyConflicts
-              ? 'border-warning/25 bg-warning/10 text-warning'
-              : 'border-border text-muted hover:text-ink hover:border-accent/40'
-          )}
-        >
-          <AlertTriangle className="h-3 w-3" /> Solo discrepanze
-        </button>
+      <div className="mb-2 pb-1 border-b border-border/30 flex flex-wrap items-baseline gap-x-5 gap-y-1">
+        <h3 className="font-serif text-[15px] text-ink">Diciture</h3>
+        <input
+          type="search"
+          aria-label="Filtra le diciture bibliografiche"
+          value={query}
+          onChange={e => setQuery(e.target.value)}
+          placeholder="Filtra le diciture"
+          className="w-56 bg-transparent border-0 border-b border-border/50 rounded-none font-sans text-xs text-ink outline-none focus:border-accent/60 py-0.5 placeholder:text-muted/60"
+        />
+        <label className="font-serif text-[13px] text-muted flex items-baseline gap-1.5 cursor-pointer">
+          <input type="checkbox" checked={onlyConflicts} onChange={e => setOnlyConflicts(e.target.checked)} className="accent-[var(--accent)] translate-y-[1px]" />
+          solo le discrepanze
+        </label>
+        <span className="ml-auto font-sans text-[11px] tabular-nums text-muted/60">{rows.length}</span>
       </div>
 
-      <div className="text-[10px] font-sans text-muted/60 mb-2">{rows.length} diciture</div>
-
-      <div className="space-y-1">
+      <div>
         {rows.map(row => (
-          <div key={row.val} className="rounded-sm border border-border/40 hover:border-border transition-colors">
-            <div className="flex items-start gap-2 px-3 py-2">
+          <div key={row.val} className={cn('border-b border-border/15', editing === row.val && 'bg-sidebar/30')}>
+            <div className="flex items-baseline gap-2.5 px-1.5 py-1.5">
+              <span
+                className={cn('shrink-0 self-center h-1.5 w-1.5 rounded-full', row.conflict ? 'bg-warning' : 'bg-transparent')}
+                title={row.conflict ? 'Esiste una forma quasi uguale scritta diversamente' : undefined}
+                aria-hidden
+              />
               <div className="flex-1 min-w-0">
-                <div className="text-xs font-serif text-ink leading-snug flex items-start gap-1.5">
-                  {row.conflict && <AlertTriangle className="h-3 w-3 text-warning mt-0.5 shrink-0" />}
-                  <span>{row.val}</span>
-                </div>
-                <div className="mt-1 flex flex-wrap gap-1">
+                <div className="font-serif text-[14px] text-ink leading-snug">{row.val}</div>
+                <div className="mt-0.5 flex flex-wrap gap-x-2.5 gap-y-0.5">
                   {row.schede.slice(0, 12).map(m => (
                     <button
                       key={m.entryId || m.id}
                       onClick={() => onSelectMonumento(m)}
-                      className="text-[9px] font-sans uppercase tracking-wide text-muted/70 hover:text-accent transition-colors"
+                      className="font-sans text-[11px] tabular-nums text-muted hover:text-accent transition-colors"
                     >
                       {etichettaScheda(m.id)}
                     </button>
                   ))}
                   {row.schede.length > 12 && (
-                    <span className="text-[9px] font-sans text-muted/50">+{row.schede.length - 12}</span>
+                    <span className="font-sans text-[11px] text-muted/60">+{row.schede.length - 12}</span>
                   )}
                 </div>
               </div>
-              <div className="text-[10px] font-sans text-muted tabular-nums shrink-0 pt-0.5">×{row.schede.length}</div>
+              <span className="shrink-0 font-sans text-xs tabular-nums text-muted">×{row.schede.length}</span>
               <button
                 onClick={() => (editing === row.val ? setEditing(null) : startEdit(row.val))}
                 aria-expanded={editing === row.val}
-                className="text-[10px] font-sans font-bold uppercase tracking-wide text-accent hover:opacity-70 transition-opacity flex items-center gap-1 shrink-0 pt-0.5"
+                className={cn('shrink-0 font-serif text-[13px] transition-colors', editing === row.val ? 'text-accent italic' : 'text-muted hover:text-ink')}
               >
-                Modifica <ChevronRight className={cn('h-3 w-3 transition-transform', editing === row.val && 'rotate-90')} aria-hidden="true" />
+                Modifica
               </button>
             </div>
 
             {editing === row.val && (
-              <div className="border-t border-border/40 px-3 py-2.5 space-y-2 bg-sidebar/40">
+              <div className="ml-6 pl-3 mb-3 border-l border-border/40 space-y-2">
                 <textarea
                   value={draft}
                   onChange={e => setDraft(e.target.value)}
                   rows={2}
-                  className="w-full text-xs font-serif rounded-sm border border-border bg-sidebar px-2.5 py-2 outline-none focus:border-accent transition-colors resize-none"
+                  className="w-full resize-y bg-transparent border-0 border-b border-border/50 rounded-none font-serif text-[14px] text-ink outline-none focus:border-accent/60"
                 />
-                <div className="flex items-center gap-2">
+                <div className="flex items-baseline gap-4">
                   <button
                     disabled={busy || draft.trim() === '' || draft === row.val}
                     onClick={() => runApply([{ from: row.val, to: draft.trim() }])}
-                    className="px-3 py-1.5 bg-accent hover:bg-accent/90 text-white font-sans text-[9px] font-bold uppercase tracking-widest transition-colors rounded-sm disabled:opacity-30 flex items-center gap-1.5"
+                    className="font-serif text-[14px] text-accent hover:opacity-70 transition-opacity disabled:opacity-40"
                   >
-                    {applying ? <Loader2 className="h-3 w-3 animate-spin" /> : <Check className="h-3 w-3" />}
-                    Sostituisci in {row.schede.length} {row.schede.length === 1 ? 'scheda' : 'schede'}
+                    {applying ? 'Sostituzione…' : `Sostituisci in ${row.schede.length} ${row.schede.length === 1 ? 'scheda' : 'schede'}`}
                   </button>
-                  <button onClick={() => setEditing(null)} className="px-3 py-1.5 text-muted hover:text-ink font-sans text-[9px] font-bold uppercase tracking-widest transition-colors rounded-sm">
+                  <button onClick={() => setEditing(null)} className="font-serif italic text-[13px] text-muted hover:text-ink transition-colors">
                     Annulla
                   </button>
                 </div>
@@ -360,7 +337,7 @@ export function BibliographyIndex({ monumenti, onApply, onSelectMonumento, progr
           </div>
         ))}
         {rows.length === 0 && (
-          <div className="text-sm italic text-muted/60 py-12 text-center">Nessuna dicitura corrisponde al filtro.</div>
+          <p className="py-12 text-center font-serif italic text-sm text-muted/60">Nessuna dicitura corrisponde al filtro.</p>
         )}
       </div>
       </div>

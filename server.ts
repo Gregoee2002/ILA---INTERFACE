@@ -22,9 +22,9 @@ async function startServer() {
   const CORPUS_DIR = path.join(DATA_DIR, "corpus");
   // Staging area per le estrazioni draft (agente Vision su Lane 1971), separata
   // dal corpus vero e proprio. Sincronizzata da Gregoee2002/ILA, cartella
-  // drafts/ (mai la stessa cartella "corpus" del corpus revisionato). Le
-  // route HTTP restano sola lettura: le scritture avvengono offline (script
-  // di revisione + pushDraftFileToGitHub), mai tramite l'app in esecuzione.
+  // drafts/ (mai la stessa cartella "corpus" del corpus revisionato). Nessuna
+  // route HTTP: la vista «Revisione Draft» è stata tolta il 2026-09-30, a
+  // pipeline chiusa; le scritture avvengono offline (pushDraftFileToGitHub).
   const DRAFTS_DIR = path.join(DATA_DIR, "corpus-drafts");
   const BACKUP_FILE = path.join(CORPUS_DIR, "_teiCorpus.xml");
   // Legacy file — kept for backwards compatibility on first run
@@ -580,46 +580,6 @@ async function startServer() {
   });
 
 
-
-  // ── Draft (estrazioni Vision non ancora revisionate) — SOLO LETTURA ────────
-  // Nessuna route di scrittura/cancellazione qui per costruzione: la revisione
-  // del draft avviene comunque a mano in Oxygen prima di finire in CORPUS_DIR.
-
-  // GET list draft files, con eventuale match verso un file già presente nel
-  // corpus vero (stesso filename) per segnalare che è già stato revisionato.
-  app.get("/api/drafts/files", (_req, res) => {
-    try {
-      if (!fs.existsSync(DRAFTS_DIR)) return res.json([]);
-      const corpusFiles = new Set(
-        fs.existsSync(CORPUS_DIR)
-          ? fs.readdirSync(CORPUS_DIR).filter(f => f.endsWith('.xml') && !f.startsWith('_'))
-          : []
-      );
-      const files = fs.readdirSync(DRAFTS_DIR)
-        .filter(f => f.endsWith('.xml'))
-        .sort()
-        .map(f => ({
-          filename: f,
-          size: fs.statSync(path.join(DRAFTS_DIR, f)).size,
-          hasCorpusMatch: corpusFiles.has(f)
-        }));
-      res.json(files);
-    } catch (error) {
-      res.status(500).json({ error: "Failed to list drafts" });
-    }
-  });
-
-  // GET contenuto di un singolo file draft
-  app.get("/api/drafts/file/:filename", (req, res) => {
-    try {
-      const filepath = path.join(DRAFTS_DIR, req.params.filename.replace(/[^a-zA-Z0-9._-]/g, '_'));
-      if (!fs.existsSync(filepath) || !filepath.startsWith(DRAFTS_DIR)) return res.status(404).json({ error: "File not found" });
-      res.setHeader('Content-Type', 'application/xml');
-      res.send(fs.readFileSync(filepath, 'utf-8'));
-    } catch (error) {
-      res.status(500).json({ error: "Failed to read draft file" });
-    }
-  });
 
   // GET stato della persistenza GitHub — utile per verificare la config
   // (token/repo/permessi) senza dover rilanciare uno script a parte.
