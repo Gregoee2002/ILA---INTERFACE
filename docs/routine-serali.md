@@ -17,6 +17,7 @@ Regole comuni a tutte:
   dalla cache `src/data/corpus`;
 - il rapporto va in `logs/serali/<routine>/AAAA-MM-GG.md` (la cartella `logs/`
   è ignorata da git); lo stato per la rotazione in `logs/serali/.stato/`;
+- le proposte con patch vengono provate prima su una copia del corpus (xmllint + `ILA_CORPUS=… scripts/lint-corpus.py`) — dalle routine 13-16 in poi;
 - ogni rapporto si apre con un sommario di tre righe e dà proposte da
   accettare o scartare, mai correzioni già fatte.
 
@@ -28,6 +29,16 @@ Regole comuni a tutte:
 | 7 | `ila-lessico-candidati` | mar 21:00 | dagli avvisi del lint «forma non marcata» propone i `<w lemma>` da aggiungere, con il frammento XML pronto | — |
 | 8 | `ila-traduzioni-coerenza` | gio 21:00 | 15 schede a sera: la traduzione italiana copre tutto il greco? nomi e teonimi resi come vuole la norma? restano quadre (norma R1-R5 del 17/09)? | `.stato/traduzioni-cursore.txt` |
 | 9 | `ila-tesi-corpus` | mar, gio, sab 21:30 | nei sorgenti della tesi modificati dall'ultima volta, controlla che ogni greco e ogni traduzione attribuiti a una scheda ILA coincidano con la scheda, e che le concordanze ILA ↔ Lane siano giuste | `.stato/tesi-ultima.txt` |
+
+Dal 2026-10-06, sulla stessa falsariga (proposte con patch per l'hub):
+
+| # | Attività | Quando | Che cosa fa | Stato |
+|---|---|---|---|---|
+| 13 | `ila-supplementi-lane` | mar, ven 22:00 | 6 pagine a sera dei volumi successivi di Lane: addenda e corrigenda al vol. I in CMRDM II (solo quelli, non le monete), addenda e corrigenda e «Addenda ultima» in CMRDM III, tutto CMRDM IV, poi i capitoli interpretativi di CMRDM III. Propone correzioni, voci di apparato, bibliografia, dati di datazione e luogo, e segnala i monumenti che in ILA mancano (`nuova-scheda`, senza XML) | `.stato/supplementi-pagine.tsv` (199 pagine), `.stato/supplementi-cursore.txt` |
+| 14 | `ila-numerali-date` | mer 22:00 | fase F3 del piano di markup: 7 schede a sera, `<num value>` e `<date>` sui numerali greci, con il controllo delle somme (astragali) e dell'era contro `<origDate>`; i numerali irregolari vanno in apparato | `.stato/numerali-schede.txt`, `.stato/numerali-cursore.txt` |
+| 15 | `ila-lacune-scansione` | sab 21:00 | 8 schede a sera da `docs/f1-lacune-quantita.csv`: guarda la pagina di Lane e propone `quantity` o `atLeast`/`atMost` al posto di `extent="unknown"` | `.stato/lacune-cursore.txt` |
+
+Il testo di CMRDM II, III e IV (pdftotext -layout delle scansioni in OneDrive, `Tesi Magistrale/cmrdm scan/`) sta in `~/Documents/OCR/CMRDM-{II,III,IV}.layout.txt`.
 
 La collazione (6) riusa `scripts/collate-source.ts` con le due letture OCR
 (`grc` ed `ell`), come in `docs/collazione-cmrdm-i-2026-09-05.md`: a fine
@@ -41,6 +52,7 @@ mezza di giri.
 | 10 | `ila-link-bibliografia` | dom 20:00 | `scripts/controlla-link.py` (Pleiades, EAGLE; Trismegistos blocca i client automatici) e verifica con Scholar Sidekick delle voci di bibliografia moderna della tesi, per scovare citazioni inesistenti |
 | 11 | `ila-diario-settimana` | dom 20:30 | riassunto in italiano dei commit della settimana su codice e repo dati, pronto da inoltrare |
 | 12 | `ila-memoria-pulizia` | dom 21:00 | passaggio `consolidate-memory` sulla memoria di Claude per questo progetto: duplicati, fatti superati, indice |
+| 16 | `ila-luoghi-pleiades` | dom 21:30 | prosegue `docs/audit-luoghi-pleiades-2026-09-25.md`: prima le questioni rimaste aperte (candidati da vagliare, `DA_COMPILARE`, Koresa/Iaza solo con i dati), poi 25 schede a settimana: URI Pleiades contro Lane, GeoNames per il luogo moderno, Turkey/Turchia, regione al posto di «Asia Minor». Le norme nuove arrivano come prima proposta con `dubbio` |
 
 `scripts/controlla-link.py` si lancia anche a mano:
 
