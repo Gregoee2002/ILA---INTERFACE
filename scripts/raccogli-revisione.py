@@ -51,6 +51,7 @@ ROUTINE = {
     "collazione": "Collazione con Lane",
     "lessico": "Lessico cultuale",
     "traduzioni": "Traduzioni",
+    "cura-traduzioni": "Cura delle traduzioni",
     "supplementi": "Supplementi di Lane",
     "numerali": "Numerali e date",
     "lacune": "Lacune sulla scansione",
