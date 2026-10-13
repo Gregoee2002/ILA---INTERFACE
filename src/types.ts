@@ -510,6 +510,33 @@ export interface IndiceRevisione {
 }
 
 /**
+ * revisione/smistamento.json: le proposte divise in lotti dalla routine di
+ * regia (ila-regia), così si decide per gruppi invece che una per una.
+ * norma: una domanda da decidere una volta, che vale per tutto il lotto;
+ * pronta: correzioni meccaniche o già coperte da una norma, da accettare in
+ * blocco dopo una scorsa; giudizio: decisioni filologiche, per priorità
+ * (1 cambia il senso o l'identità, 3 arricchisce); cantiere: lavoro lungo,
+ * fuori dal giro settimanale; attesa: da riproporre dopo un'altra correzione.
+ */
+export type GenereLotto = 'norma' | 'pronta' | 'giudizio' | 'cantiere' | 'attesa';
+
+export interface LottoRevisione {
+  id: string;
+  genere: GenereLotto;
+  titolo: string;
+  descrizione?: string;
+  domanda?: string;
+  consiglio?: string;
+  priorita?: number;
+  proposte: string[];
+}
+
+export interface SmistamentoRevisione {
+  generato?: string;
+  lotti: LottoRevisione[];
+}
+
+/**
  * revisione/controlli.json, scritto da scripts/raccogli-revisione.py con
  * l'esito dei controlli notturni: il lint della repo dati (linguetta
  * Coerenza) e i conteggi di stato-corpus.py degli ultimi giorni (linguetta

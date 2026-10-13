@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { cn } from '../lib/utils';
-import { DecisioneRevisione, EntryRegistro, IndiceRevisione, PropostaRevisione, RapportoRevisione, StatoDecisione } from '../types';
+import { DecisioneRevisione, EntryRegistro, GenereLotto, IndiceRevisione, LottoRevisione, PropostaRevisione, RapportoRevisione, SmistamentoRevisione, StatoDecisione } from '../types';
 import { idDaEtichetta } from '../lib/sezioni';
 
 /**
@@ -18,6 +18,11 @@ import { idDaEtichetta } from '../lib/sezioni';
  * del registro di lavorazione sulla stessa scheda, se c'è (Segnalazioni):
  * chi decide la vede senza cambiare linguetta. Veste da indice a stampa come
  * CompletezzaPanel.
+ *
+ * La vista «Lotti» legge revisione/smistamento.json (routine ila-regia): le
+ * stesse proposte divise per genere (questioni di norma, lotti pronti,
+ * decisioni filologiche, cantiere), con il comando per decidere un lotto
+ * intero. Tocca solo le voci ancora da vedere.
  */
 
 const SEC = 'text-muted';
@@ -85,7 +90,9 @@ export function RevisionePanel({ onApriScheda, registri = [] }: Props) {
   const [decisioni, setDecisioni] = useState<Record<string, DecisioneRevisione>>({});
   const [errore, setErrore] = useState<string | null>(null);
   const [caricamento, setCaricamento] = useState(true);
-  const [vista, setVista] = useState<'proposte' | 'rapporti'>('proposte');
+  const [smistamento, setSmistamento] = useState<SmistamentoRevisione | null>(null);
+  const [vista, setVista] = useState<'lotti' | 'proposte' | 'rapporti'>('lotti');
+  const [lottoAperto, setLottoAperto] = useState<string | null>(null);
   const [filtro, setFiltro] = useState<Filtro>('da-vedere');
   const [routine, setRoutine] = useState('');
   const [cerca, setCerca] = useState('');
@@ -109,6 +116,8 @@ export function RevisionePanel({ onApriScheda, registri = [] }: Props) {
       if (!res.ok) throw new Error(data.error || `HTTP ${res.status}`);
       setIndice(data.indice);
       setDecisioni(data.decisioni || {});
+      setSmistamento(data.smistamento ?? null);
+      if (!data.smistamento) setVista(v => (v === 'lotti' ? 'proposte' : v));
     } catch (e: any) {
       setErrore(e.message || String(e));
     } finally {
@@ -175,7 +184,36 @@ export function RevisionePanel({ onApriScheda, registri = [] }: Props) {
     timer.current = setTimeout(() => { void salva(); }, SALVA_DOPO_MS);
   }, [salva]);
 
+  // Più decisioni insieme (un lotto): un commit solo. Le voci già decise non
+  // si toccano, così «accetta il lotto» non rovescia una scelta fatta a mano.
+  const decidiMolte = useCallback((ids: string[], stato: StatoDecisione) => {
+    const ora = new Date().toISOString();
+    const libere = ids.filter(id => !decisioni[id]);
+    if (!libere.length) return;
+    setDecisioni(prev => {
+      const out = { ...prev };
+      for (const id of libere) out[id] = { stato, decisaIl: ora };
+      return out;
+    });
+    for (const id of libere) pendenti.current[id] = { stato, decisaIl: ora };
+    setSalvataggio('attesa');
+    if (timer.current) clearTimeout(timer.current);
+    timer.current = setTimeout(() => { void salva(); }, SALVA_DOPO_MS);
+  }, [decisioni, salva]);
+
   const proposte = useMemo(() => indice?.proposte ?? [], [indice]);
+  const perId = useMemo(() => new Map(proposte.map(p => [p.id, p])), [proposte]);
+  const lottoDi = useMemo(() => smistamento?.lotti.find(l => l.id === lottoAperto) ?? null, [smistamento, lottoAperto]);
+  const proposteLotto = useMemo(
+    () => (lottoDi?.proposte ?? []).map(id => perId.get(id)).filter((p): p is PropostaRevisione => !!p),
+    [lottoDi, perId],
+  );
+  // Le proposte arrivate dopo l'ultimo smistamento: non stanno in nessun lotto.
+  const nonSmistate = useMemo(() => {
+    if (!smistamento) return [];
+    const dentro = new Set(smistamento.lotti.flatMap(l => l.proposte));
+    return proposte.filter(p => !dentro.has(p.id));
+  }, [smistamento, proposte]);
   const rapporti = useMemo(() => indice?.rapporti ?? [], [indice]);
 
   const etichette = useMemo(() => {
@@ -190,7 +228,7 @@ export function RevisionePanel({ onApriScheda, registri = [] }: Props) {
     return c;
   }, [proposte, decisioni]);
 
-  const visibili = useMemo(() => {
+  const visibiliElenco = useMemo(() => {
     const q = cerca.trim().toLowerCase();
     return proposte.filter(p =>
       inFiltro(filtro, decisioni[p.id]) &&
@@ -202,13 +240,13 @@ export function RevisionePanel({ onApriScheda, registri = [] }: Props) {
   // Raggruppate per rapporto, il più recente in alto.
   const gruppi = useMemo(() => {
     const m = new Map<string, PropostaRevisione[]>();
-    for (const p of visibili) {
+    for (const p of visibiliElenco) {
       const k = `${p.data}|${p.routine}`;
       if (!m.has(k)) m.set(k, []);
       m.get(k)!.push(p);
     }
     return [...m.entries()].sort((a, b) => b[0].localeCompare(a[0]));
-  }, [visibili]);
+  }, [visibiliElenco]);
 
   // Nota aperta più recente del registro, per numero di scheda.
   const noteAperte = useMemo(() => {
@@ -248,9 +286,10 @@ export function RevisionePanel({ onApriScheda, registri = [] }: Props) {
   // j/k passano alla successiva/precedente.
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (vista !== 'proposte' || !aperta) return;
+      if (vista === 'rapporti' || !aperta) return;
       const t = e.target as HTMLElement;
       if (t.closest('input, textarea, select, [contenteditable="true"]') || e.metaKey || e.ctrlKey || e.altKey) return;
+      const visibili = vista === 'lotti' ? proposteLotto : visibiliElenco;
       const i = visibili.findIndex(p => p.id === aperta);
       const ora = new Date().toISOString();
       const vecchia = decisioni[aperta];
@@ -274,7 +313,7 @@ export function RevisionePanel({ onApriScheda, registri = [] }: Props) {
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [vista, aperta, visibili, decisioni, decidi]);
+  }, [vista, aperta, visibiliElenco, proposteLotto, decisioni, decidi]);
 
   const statoSalvataggio = {
     fermo: '',
@@ -301,13 +340,13 @@ export function RevisionePanel({ onApriScheda, registri = [] }: Props) {
             passano alla routine che le applica nella repo dati e ne scrive qui l'esito.
           </p>
           <div className="mt-3 flex items-baseline gap-x-5">
-            {(['proposte', 'rapporti'] as const).map(v => (
+            {(['lotti', 'proposte', 'rapporti'] as const).filter(v => v !== 'lotti' || smistamento).map(v => (
               <button
                 key={v}
-                onClick={() => setVista(v)}
+                onClick={() => { setVista(v); setAperta(null); }}
                 className={cn('font-serif text-[15px] transition-colors', vista === v ? 'text-accent italic' : 'text-muted hover:text-ink')}
               >
-                {v === 'proposte' ? 'Proposte' : 'Rapporti'}
+                {v === 'lotti' ? 'Lotti' : v === 'proposte' ? 'Proposte' : 'Rapporti'}
               </button>
             ))}
             <button onClick={carica} className={cn('ml-auto font-serif italic text-[12px] hover:text-accent transition-colors', TER)}>
@@ -318,6 +357,35 @@ export function RevisionePanel({ onApriScheda, registri = [] }: Props) {
 
         {errore && <p className="mb-4 font-serif italic text-[13px] text-danger">{errore}</p>}
         {caricamento && <p className={cn('font-serif italic text-[13px]', SEC)}>Caricamento…</p>}
+
+        {!caricamento && indice && smistamento && vista === 'lotti' && (
+          <ElencoLotti
+            smistamento={smistamento}
+            perId={perId}
+            decisioni={decisioni}
+            nonSmistate={nonSmistate}
+            aperto={lottoAperto}
+            onApri={id => { setLottoAperto(lottoAperto === id ? null : id); setAperta(null); }}
+            onDecidiLotto={decidiMolte}
+            onVediNonSmistate={() => { setVista('proposte'); setFiltro('da-vedere'); }}
+            invio={invio}
+            accettate={accettate.length}
+            onInvia={inviaTutte}
+            salvataggioInCorso={salvataggio === 'in-corso'}
+            renderVoce={p => (
+              <VoceProposta
+                key={p.id}
+                p={p}
+                d={decisioni[p.id]}
+                aperta={aperta === p.id}
+                onApri={() => setAperta(aperta === p.id ? null : p.id)}
+                onDecidi={d => decidi(p.id, d)}
+                onApriScheda={onApriScheda}
+                notaRegistro={notaDi(p.scheda)}
+              />
+            )}
+          />
+        )}
 
         {!caricamento && indice && vista === 'proposte' && (
           <>
@@ -555,6 +623,133 @@ function VoceProposta({ p, d, aperta, onApri, onDecidi, onApriScheda, notaRegist
           )}
         </div>
       )}
+    </div>
+  );
+}
+
+const SEZIONI: { genere: GenereLotto; titolo: string; nota: string }[] = [
+  { genere: 'norma', titolo: 'Questioni di norma', nota: 'Una decisione per lotto, che vale per tutte le proposte che contiene.' },
+  { genere: 'pronta', titolo: 'Lotti pronti', nota: 'Correzioni meccaniche o già coperte da una norma: una scorsa, poi un clic.' },
+  { genere: 'giudizio', titolo: 'Decisioni filologiche', nota: 'Qui serve la pagina di Lane. In ordine di priorità: 1 cambia il senso o l\'identità, 3 arricchisce la scheda.' },
+  { genere: 'cantiere', titolo: 'Cantiere', nota: 'Lavoro lungo, fuori dal giro delle decisioni.' },
+  { genere: 'attesa', titolo: 'In attesa', nota: 'Si riproporranno da sole quando la correzione da cui dipendono sarà applicata.' },
+];
+
+const plurale = (n: number, uno: string, molti: string) => `${n} ${n === 1 ? uno : molti}`;
+
+function ElencoLotti({ smistamento, perId, decisioni, nonSmistate, aperto, onApri, onDecidiLotto, onVediNonSmistate, invio, accettate, onInvia, salvataggioInCorso, renderVoce }: {
+  smistamento: SmistamentoRevisione;
+  perId: Map<string, PropostaRevisione>;
+  decisioni: Record<string, DecisioneRevisione>;
+  nonSmistate: PropostaRevisione[];
+  aperto: string | null;
+  onApri: (id: string) => void;
+  onDecidiLotto: (ids: string[], stato: StatoDecisione) => void;
+  onVediNonSmistate: () => void;
+  invio: string | null;
+  accettate: number;
+  onInvia: () => void;
+  salvataggioInCorso: boolean;
+  renderVoce: (p: PropostaRevisione) => React.ReactNode;
+}) {
+  // Solo le proposte ancora nell'indice: quelle sparite non contano.
+  const daVedere = (l: LottoRevisione) => l.proposte.filter(id => perId.has(id) && !decisioni[id]);
+  const presenti = (l: LottoRevisione) => l.proposte.filter(id => perId.has(id));
+
+  const somma = (g: GenereLotto) => smistamento.lotti.filter(l => l.genere === g).reduce((n, l) => n + daVedere(l).length, 0);
+  const urgenti = smistamento.lotti.filter(l => l.genere === 'giudizio' && l.priorita === 1).reduce((n, l) => n + daVedere(l).length, 0);
+
+  return (
+    <div>
+      <p className={cn('mb-5 font-serif text-[14px] leading-relaxed', SEC)}>
+        Da vedere: <span className="text-ink">{plurale(somma('pronta'), 'proposta', 'proposte')}</span> nei lotti pronti,{' '}
+        <span className="text-ink">{somma('norma')}</span> {somma('norma') === 1 ? 'legata' : 'legate'} a questioni di norma,{' '}
+        <span className="text-ink">{plurale(somma('giudizio'), 'decisione filologica', 'decisioni filologiche')}</span>
+        {urgenti > 0 && <> ({urgenti} di priorità 1)</>}
+        {somma('cantiere') > 0 && <>, {somma('cantiere')} nel cantiere</>}.
+        {smistamento.generato && (
+          <span className={cn('ml-1 italic text-[12px]', TER)}>
+            Smistate il {new Date(smistamento.generato).toLocaleString('it-IT', { day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' })}.
+          </span>
+        )}
+      </p>
+
+      {(accettate > 0 || invio) && (
+        <div className="mb-6 pb-3 border-b border-border/30 flex flex-wrap items-baseline gap-x-4 gap-y-1">
+          {accettate > 0 && (
+            <button onClick={onInvia} disabled={salvataggioInCorso} className="font-serif text-[15px] text-accent hover:opacity-70 transition-opacity disabled:opacity-40">
+              Invia {accettate === 1 ? 'la correzione accettata' : `le ${accettate} correzioni accettate`}
+            </button>
+          )}
+          <span className={cn('font-serif italic text-[12px]', SEC)}>
+            {invio ?? 'le applica la routine ila-applica-correzioni, da lanciare con «Esegui ora» nelle attività pianificate dell\'app'}
+          </span>
+        </div>
+      )}
+
+      {nonSmistate.length > 0 && (
+        <p className={cn('mb-6 font-serif italic text-[13px]', SEC)}>
+          {plurale(nonSmistate.length, 'proposta arrivata', 'proposte arrivate')} dopo lo smistamento:{' '}
+          <button onClick={onVediNonSmistate} className="underline decoration-dotted underline-offset-2 hover:text-accent transition-colors">vedile nell'elenco</button>.
+        </p>
+      )}
+
+      {SEZIONI.map(sez => {
+        const lotti = smistamento.lotti
+          .filter(l => l.genere === sez.genere && presenti(l).length > 0)
+          // Prima quelli con qualcosa da vedere, poi per priorità.
+          .sort((a, b) => (daVedere(b).length > 0 ? 1 : 0) - (daVedere(a).length > 0 ? 1 : 0) || (a.priorita ?? 9) - (b.priorita ?? 9));
+        if (!lotti.length) return null;
+        return (
+          <section key={sez.genere} className="mb-8">
+            <h3 className="font-serif text-[15px] text-ink mb-0.5 pb-1 border-b border-border/30">{sez.titolo}</h3>
+            <p className={cn('mb-1.5 font-serif italic text-[12px]', TER)}>{sez.nota}</p>
+            {lotti.map(l => {
+              const libere = daVedere(l);
+              const tutte = presenti(l);
+              const open = aperto === l.id;
+              return (
+                <div key={l.id} className={cn('border-b border-border/20', open && 'bg-sidebar/20')}>
+                  <button onClick={() => onApri(l.id)} className="w-full flex items-baseline gap-2.5 px-1.5 py-1.5 text-left hover:bg-sidebar/40 transition-colors">
+                    <span className={cn('font-serif text-[14px]', open ? 'text-accent italic' : libere.length ? 'text-ink' : TER)}>{l.titolo}</span>
+                    {l.priorita && sez.genere === 'giudizio' && <span className={cn('shrink-0 font-serif italic text-[12px]', SEC)}>priorità {l.priorita}</span>}
+                    <span className="flex-1 self-center border-b border-dotted border-border/70 mx-1 min-w-4" />
+                    <span className={cn('shrink-0 font-sans text-xs tabular-nums', libere.length ? 'text-ink' : TER)}>
+                      {libere.length ? `${libere.length}${libere.length < tutte.length ? ` su ${tutte.length}` : ''}` : 'fatto'}
+                    </span>
+                  </button>
+                  {open && (
+                    <div className="ml-3 pl-4 mb-3 mt-1 border-l border-border/40 space-y-2">
+                      {l.descrizione && <p className={cn('font-serif text-[13px] leading-relaxed', SEC)}><Inline testo={l.descrizione} /></p>}
+                      {l.domanda && <p className="font-serif text-[14px] text-ink"><span className={cn('italic text-[12px] mr-1.5', SEC)}>da decidere</span><Inline testo={l.domanda} /></p>}
+                      {l.consiglio && <p className={cn('font-serif text-[13px] leading-relaxed', SEC)}><span className="italic text-[12px] mr-1.5">consiglio</span><Inline testo={l.consiglio} /></p>}
+                      {libere.length > 0 && sez.genere !== 'cantiere' && sez.genere !== 'attesa' && (
+                        <div className="flex flex-wrap items-baseline gap-x-4 pt-0.5">
+                          {(sez.genere === 'pronta' || sez.genere === 'norma') && (
+                            <button onClick={() => onDecidiLotto(libere, 'accettata')} className="font-serif text-[14px] text-accent hover:opacity-70 transition-opacity">
+                              {libere.length === 1 ? 'Accetta la proposta' : `Accetta le ${libere.length} da vedere`}
+                            </button>
+                          )}
+                          {sez.genere === 'norma' && (
+                            <button onClick={() => onDecidiLotto(libere, 'scartata')} className="font-serif text-[13px] text-muted hover:text-ink transition-colors">
+                              {libere.length === 1 ? 'Scartala' : `Scarta le ${libere.length}`}
+                            </button>
+                          )}
+                          <button onClick={() => onDecidiLotto(libere, 'rimandata')} className="font-serif text-[13px] text-muted hover:text-ink transition-colors">
+                            {libere.length === 1 ? 'Rimandala' : `Rimanda le ${libere.length}`}
+                          </button>
+                          <span className={cn('font-serif italic text-[12px]', TER)}>tocca solo quelle ancora da vedere; si possono sempre riaprire una per una</span>
+                        </div>
+                      )}
+                      <div className="pt-1">{tutte.map(id => renderVoce(perId.get(id)!))}</div>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </section>
+        );
+      })}
     </div>
   );
 }

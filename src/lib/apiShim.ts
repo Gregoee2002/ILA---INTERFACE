@@ -33,9 +33,9 @@
 import { xmlToMonumenti, monumentiToXml } from "./xmlUtils";
 import { buildSearchIndex, searchMonumenti } from "./searchIndex";
 import MiniSearch from "minisearch";
-import { pullAllCorpusFiles, pushCorpusFile, deleteCorpusFile, testGitHubAccess, setStoredToken, clearStoredToken, pullFlagsFile, pushFlagsFile, pullBugsFile, pushBugsFile, pullIconographyVocabFile, pushIconographyVocabFile, pullLitSourcesFile, pushLitSourcesFile, pullLessicoLaresFile, pushLessicoLaresFile, pullRevisioneIndice, pullRevisioneRapporto, pullControlliNotturni, pullDecisioniFile, pushDecisioniFile, scheduleRedeploy } from "./githubStorageBrowser";
+import { pullAllCorpusFiles, pushCorpusFile, deleteCorpusFile, testGitHubAccess, setStoredToken, clearStoredToken, pullFlagsFile, pushFlagsFile, pullBugsFile, pushBugsFile, pullIconographyVocabFile, pushIconographyVocabFile, pullLitSourcesFile, pushLitSourcesFile, pullLessicoLaresFile, pushLessicoLaresFile, pullRevisioneIndice, pullRevisioneRapporto, pullControlliNotturni, pullSmistamento, pullDecisioniFile, pushDecisioniFile, scheduleRedeploy } from "./githubStorageBrowser";
 import { validateOverlay } from "./lessicoLaresOverlay";
-import { EntryRegistro, BugReport, DecisioneRevisione, IndiceRevisione, ControlliNotturni } from "../types";
+import { EntryRegistro, BugReport, DecisioneRevisione, IndiceRevisione, ControlliNotturni, SmistamentoRevisione } from "../types";
 import { normalizeRegistro } from "./registroMigration";
 import { mergeIconographyOverrides } from "./iconographyLabels";
 import { nomeFileScheda } from "./sezioni";
@@ -83,6 +83,14 @@ const MOCK_REVISIONE: IndiceRevisione = {
     { id: "collazione-mock000001", routine: "collazione", data: "2026-09-28", rapporto: "revisione/rapporti/collazione/2026-09-28.md", scheda: "ILA-018", tipo: "edizione", riga: "4", classe: "a", titolo: "εἰς → ἰς, come stampa Lane", attuale: "εἰς ὑπηρεσίας", proposta: "ἰς ὑπηρεσίας", destinazione: "dati", patch: [{ file: "corpus/ILA-018.xml", cerca: "θεοῦ εἰς ὑπηρεσίας", sostituisci: "θεοῦ ἰς ὑπηρεσίας" }] },
     { id: "collazione-mock000002", routine: "collazione", data: "2026-09-28", rapporto: "revisione/rapporti/collazione/2026-09-28.md", scheda: "ILA-015", tipo: "edizione", riga: "14–15", classe: "a", titolo: "Due righe fuse in una", attuale: "ἀχαριατί-\\ναν. Ἐπεστάθη", proposta: "ἀχαριατί- | αν. Ἐπεστάθη", dettaglio: "Il corpus ha 24 righe, Lane 25: da r. 15 in poi la numerazione va spostata di uno.", destinazione: "dati" },
     { id: "collazione-mock000003", routine: "collazione", data: "2026-09-28", rapporto: "revisione/rapporti/collazione/2026-09-28.md", scheda: "ILA-002", tipo: "edizione", riga: "1", classe: "c", dubbio: true, titolo: "Da decidere: iota ascritto o sottoscritto?", attuale: "Τυράννωι", proposta: "Τυράννῳ", destinazione: "dati" },
+  ],
+};
+const MOCK_SMISTAMENTO: SmistamentoRevisione = {
+  generato: "2026-09-29T09:00:00+02:00",
+  lotti: [
+    { id: "norma-iota", genere: "norma", titolo: "Iota ascritto o sottoscritto: come Lane", descrizione: "Lane riproduce lo iota della pietra.", domanda: "Lo iota si rende come lo stampa Lane?", consiglio: "Sì, come per le altre grafie.", proposte: ["collazione-mock000003"] },
+    { id: "pronte-grafie", genere: "pronta", titolo: "Grafie della pietra come stampa Lane", descrizione: "Una normalizzazione entrata per sbaglio.", proposte: ["collazione-mock000001"] },
+    { id: "giudizio-015", genere: "giudizio", titolo: "ILA-015: righe fuse", priorita: 1, proposte: ["collazione-mock000002"] },
   ],
 };
 const MOCK_CONTROLLI: ControlliNotturni = {
@@ -580,11 +588,12 @@ async function handleRequest(url: URL, init: RequestInit | undefined): Promise<R
     // ── Hub di revisione ─────────────────────────────────────────────────
     if (path === "/api/revisione" && method === "GET") {
       if (!canWrite) return json({ error: "Sblocca l'editing con un token GitHub per vedere la revisione." }, 403);
-      if (mockMode) return json({ indice: MOCK_REVISIONE, decisioni: mockDecisioni });
-      const [indice, decisioni] = await Promise.all([pullRevisioneIndice(), pullDecisioniFile()]);
+      if (mockMode) return json({ indice: MOCK_REVISIONE, decisioni: mockDecisioni, smistamento: MOCK_SMISTAMENTO });
+      const [indice, decisioni, smistamento] = await Promise.all([pullRevisioneIndice(), pullDecisioniFile(), pullSmistamento()]);
       return json({
         indice: indice ? JSON.parse(indice) : { rapporti: [], proposte: [] },
         decisioni: decisioni ? JSON.parse(decisioni) : {},
+        smistamento: smistamento ? JSON.parse(smistamento) : null,
       });
     }
 

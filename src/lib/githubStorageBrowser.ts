@@ -342,7 +342,7 @@ export async function pushBugsFile(content: string, message: string): Promise<vo
 
 // ── Hub di revisione (revisione/) ──────────────────────────────────────
 // indice.json e i rapporti li scrive scripts/raccogli-revisione.py (dal Mac,
-// con git); qui si leggono soltanto. decisioni.json invece lo scrive il sito
+// con git), smistamento.json la routine ila-regia; qui si leggono soltanto. decisioni.json invece lo scrive il sito
 // e, per gli esiti, la routine ila-applica-correzioni.
 const DECISIONI_PATH = "revisione/decisioni.json";
 const decisioniShaRef: ShaRef = { sha: null };
@@ -363,6 +363,7 @@ async function pullTextFile(path: string, ref?: ShaRef): Promise<string | null> 
 export const pullRevisioneIndice = () => pullTextFile("revisione/indice.json");
 export const pullRevisioneRapporto = (path: string) => pullTextFile(path);
 export const pullControlliNotturni = () => pullTextFile("revisione/controlli.json");
+export const pullSmistamento = () => pullTextFile("revisione/smistamento.json");
 export const pullDecisioniFile = () => pullTextFile(DECISIONI_PATH, decisioniShaRef);
 
 export async function pushDecisioniFile(content: string, message: string): Promise<void> {

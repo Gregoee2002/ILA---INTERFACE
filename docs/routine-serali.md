@@ -118,6 +118,39 @@ nel file, altrimenti lo script si ferma senza toccare niente. `destinazione`
 è `dati` (percorsi relativi alla repo dati) o `tesi` (relativi a
 `~/Documents/Tesi-ILA`). Le questioni da decidere vanno con `"dubbio": true`.
 
+### Smistamento in lotti
+
+Dal 2026-10-13 le proposte sono anche divise in **lotti**, perché una per una
+erano troppe (365 aperte, nessuna decisa). Il file è
+`revisione/smistamento.json` nella repo dati; `raccogli-revisione.py` non lo
+tocca. Sul sito la vista **Lotti** (la prima di Strumenti › Revisione) li
+mostra per genere, e un clic decide tutte le proposte del lotto ancora da
+vedere. Quelle già decise a mano restano come sono.
+
+| Genere | Che cosa contiene | Comando sul lotto |
+|---|---|---|
+| `norma` | una domanda da decidere una volta (`domanda`, `consiglio`) e le proposte che ne dipendono | accetta, scarta, rimanda |
+| `pronta` | correzioni meccaniche o già coperte da una norma approvata | accetta, rimanda |
+| `giudizio` | decisioni filologiche, con `priorita` 1 (cambia il senso o l'identità), 2 o 3 (arricchisce) | rimanda; le altre decisioni si prendono una per una |
+| `cantiere` | lavoro lungo, p. es. le nuove schede dagli addenda | — |
+| `attesa` | proposte che toccano lo stesso punto di un'altra: da riproporre dopo che la prima è applicata | — |
+
+```json
+{"generato": "2026-10-13T12:00:00+02:00", "lotti": [
+  {"id": "pronte-break", "genere": "pronta",
+   "titolo": "Parole spezzate a fine riga: break=\"no\"",
+   "descrizione": "markdown semplice", "proposte": ["collazione-…", "…"]},
+  {"id": "norma-iota", "genere": "norma", "titolo": "…",
+   "domanda": "…", "consiglio": "…", "proposte": ["…"]}
+]}
+```
+
+Ogni proposta sta in un lotto solo. Quelle arrivate dopo l'ultimo smistamento
+compaiono come «non ancora smistate» e si vedono nella vista Proposte. Il
+primo smistamento, del 2026-10-13, è stato fatto a mano: 161 proposte in 12
+lotti pronti, 83 legate a 11 questioni di norma, 104 decisioni filologiche
+(49 di priorità 1), 14 nuove schede nel cantiere e 3 in attesa.
+
 ## Integrazione con gli strumenti
 
 Dal 2026-09-30 la sezione **Strumenti** del sito ha quattro linguette, e ognuna
