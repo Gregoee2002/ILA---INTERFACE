@@ -161,12 +161,14 @@ rispettivi epiteti. La sezione 4 descrive la procedura di riconoscimento
 ottico e trascrizione dei testi epigrafici. La sezione 5 presenta
 l'organizzazione dell'interfaccia digitale, con particolare attenzione,
 nella sottosezione 5.1, alla sezione dedicata all'iconografia dei
-monumenti, nella sottosezione 5.2 alla navigazione tra divinità, epiteti
-e registro onomastico, nella sottosezione 5.3 alla raccolta delle fonti
-letterarie relative alla divinità e al lessico cultuale che le accomuna
-al materiale epigrafico, e nella sottosezione 5.4 agli strumenti di
-ricerca. Infine, nella sezione 6 si propongono alcune considerazioni
-finali e le prospettive di sviluppo futuro del progetto.
+monumenti, nella sottosezione 5.2 alla sezione numismatica dedicata alle
+monete e alle gemme, nella sottosezione 5.3 alla navigazione tra
+divinità, epiteti e registro onomastico, nella sottosezione 5.4 alla
+raccolta delle fonti letterarie relative alla divinità e al lessico
+cultuale che le accomuna al materiale epigrafico, e nella sottosezione
+5.5 agli strumenti di ricerca. Infine, nella sezione 6 si propongono
+alcune considerazioni finali e le prospettive di sviluppo futuro del
+progetto.
 
 \screenshotplaceholder{7cm}{Pagina iniziale dell'interfaccia digitale di ILA}
 
@@ -321,7 +323,7 @@ lavoro di revisione capillare, più vicino a un controllo di qualità
 filologico che a uno sviluppo di funzionalità in senso stretto, ma che
 condiziona direttamente l'affidabilità di qualunque strumento --- di
 consultazione, di ricerca o di analisi comparativa --- costruito a valle
-su questa informazione (si veda, in particolare, la sezione 5.2).
+su questa informazione (si veda, in particolare, la sezione 5.3).
 
 Una parte non trascurabile di questo lavoro di adattamento ha riguardato
 la conversione, su scala dell'intero corpus, delle convenzioni di Leida
@@ -449,13 +451,15 @@ una sezione di consultazione che presenta l'elenco completo delle
 epigrafi con accesso diretto alle singole schede descrittive; una
 sezione bibliografica che raccoglie i repertori e i corpora di
 riferimento; una sezione geografica che consente di visualizzare la
-distribuzione spaziale delle attestazioni su una mappa interattiva,
-affiancata da una sezione cronologica che ne restituisce invece la
+distribuzione spaziale delle attestazioni su una mappa interattiva a
+sfondo storico, sulla quale la toponomastica antica dei siti emerge
+progressivamente al crescere del livello di zoom, affiancata da una
+sezione cronologica che ne restituisce invece la
 distribuzione lungo l'asse del tempo, disposta come una linea temporale
 navigabile e progressivamente ingrandibile; una sezione dedicata alle
-fonti letterarie sulla divinità, descritta nella sottosezione 5.3; e
+fonti letterarie sulla divinità, descritta nella sottosezione 5.4; e
 una sezione di ricerca avanzata, descritta più diffusamente nella
-sottosezione 5.4. Ogni scheda descrittiva è corredata, ove disponibile,
+sottosezione 5.5. Ogni scheda descrittiva è corredata, ove disponibile,
 di materiale fotografico del monumento e riporta, oltre al testo
 dell'iscrizione e ai principali attributi epigrafici, un rimando
 puntuale alla codifica filologica sottostante, liberamente
@@ -761,6 +765,117 @@ strumento di analisi.
 
 \screenshotplaceholder{7.5cm}{Heatmap delle co-occorrenze tra attributi iconografici, onomastici e geografici}
 
+\subsection{La sezione numismatica}
+
+Lo stesso principio che ha motivato l'introduzione di una sezione
+dedicata all'iconografia (sottosezione 5.1) ha portato a estendere il
+corpus a un ulteriore ordine di testimonianze materiali relative al
+culto di Men: le monete e le gemme censite nel secondo volume del
+CMRDM (Lane, 1975), dedicato specificamente a questa classe di oggetti
+e rimasto, al pari del primo, pressoché privo di una trattazione
+sistematica. Si tratta di un patrimonio di natura diversa da quello
+epigrafico in senso stretto --- non un testo inciso su pietra, ma un
+tipo monetale o un intaglio su gemma, spesso accompagnato da legende
+brevi e da un proprio apparato figurato --- che tuttavia condivide con
+il resto del corpus la medesima esigenza di una rappresentazione
+digitale interrogabile, anziché affidata alla sola descrizione
+discorsiva del repertorio a stampa.
+
+Coerentemente con il principio di \virg{unica fonte di verità} già
+richiamato più volte in questo lavoro (si vedano le sezioni 2 e 5.1),
+questa nuova classe di materiale non è stata trattata come un
+sottoinsieme filtrato del catalogo epigrafico esistente, ma come una
+sezione del corpus a pieno titolo, con una propria serie di
+identificativi distinta da quella delle epigrafi e un proprio punto di
+accesso nella navigazione dell'interfaccia. Questa scelta evita che la
+sezione effettivamente consultata venga dedotta da un filtro applicato
+all'elenco --- con il rischio, altrimenti concreto, che la navigazione
+indichi un insieme di dati e l'elenco visualizzato ne mostri un altro
+--- e consente al tempo stesso di riusare, senza alcuna duplicazione,
+gli stessi strumenti già disponibili per il materiale epigrafico: la
+mappa, la linea del tempo, la ricerca e la sezione bibliografica
+operano indifferentemente sulle due sezioni del corpus, restituendo in
+ciascun caso solo l'insieme di dati pertinente.
+
+Una decisione preliminare, non scontata, ha riguardato l'unità di
+schedatura: catalogare singolarmente ciascun esemplare superstite di
+una moneta, come farebbe un catalogo museale, oppure --- sul modello
+già adottato altrove nella tradizione numismatica --- il tipo monetale
+nel suo complesso, trattando i singoli esemplari come testimonianze di
+un medesimo tipo. Si è scelta questa seconda opzione, rivelatasi anche
+la più coerente con l'impostazione generale del progetto: così come
+un'epigrafe è, in ILA, prima di tutto un testo attestato da un supporto
+materiale, un tipo monetale è prima di tutto una combinazione di
+zecca, autorità emittente, metallo, nominale e iconografia, di cui i
+singoli esemplari costituiscono altrettante attestazioni fisiche. Il
+confronto con un'ontologia di riferimento già adottata nella
+numismatica digitale ha confermato la bontà di questa impostazione per
+gli attributi propriamente numismatici --- metallo, nominale,
+autorità, zecca, asse di conio, sistema ponderale --- ma ha anche
+mostrato che tale ontologia non dispone di un modello comparabile per
+la descrizione iconografica: il vocabolario controllato già sviluppato
+per l'apparato figurato delle epigrafi (sottosezione 5.1) si è così
+rivelato, anche in questo ambito, più maturo dello standard di settore
+disponibile.
+
+Dal punto di vista della codifica, l'informazione specificamente
+numismatica --- zecca, autorità reale e dichiarata, metallo, nominale,
+sistema ponderale, tecnica di conio, le misure del tipo espresse come
+intervalli e quelle, puntuali, dei singoli esemplari, il rimando al
+repertorio di riferimento --- trova posto nello stesso blocco di dati
+extra già impiegato per l'iconografia (sottosezione 5.1), accanto
+all'informazione figurata e non in sua sostituzione. Il vocabolario
+controllato per la descrizione dei tratti iconografici non è stato
+duplicato per l'occasione, ma semplicemente esteso con le categorie
+proprie della materia monetale e glittica --- il grado di usura del
+conio, la posa e la fisionomia della figura, il suo orientamento e la
+sua posizione relativa, i simboli che compaiono sul campo della moneta
+--- cosicché un'unica tabella di traduzione chiave/etichetta, e un
+unico strumento di analisi delle co-occorrenze (si veda ancora la
+sottosezione 5.1), continuano a valere indifferentemente per
+l'iconografia epigrafica e per quella numismatica.
+
+Un aspetto proprio della materia monetale e glittica, l'esistenza di
+due facce distinte --- dritto e rovescio --- ciascuna con una propria
+legenda e un proprio apparato figurato, ha richiesto di introdurre nel
+modello la nozione di faccia del monumento, distinguendo per ciascuna
+faccia il testo, la lingua e l'eventuale assenza di iscrizione, oltre
+a consentire più di un'immagine per faccia anziché una sola per
+l'intera scheda. Questa nozione, pur introdotta per le esigenze della
+numismatica, si è rivelata utile anche per quelle epigrafi --- non
+numerose, ma presenti nel corpus --- che recano testo o immagini su
+più di una faccia del supporto, che ne beneficiano allo stesso modo
+senza che sia stato necessario introdurre una rappresentazione
+separata per i due casi.
+
+Coerentemente con il principio metodologico, più volte richiamato in
+questo lavoro, per cui nessuna informazione viene presentata come
+acquisita prima di essere stata verificata, l'intera sezione
+numismatica --- alcune centinaia di schede, derivate dal
+riconoscimento ottico del repertorio a stampa secondo la stessa
+procedura descritta nella sezione 4, e non ancora sottoposte a
+revisione filologica sistematica --- resta per il momento allo stato
+di bozza redazionale: esclusa dall'edizione servita pubblicamente, ma
+interamente consultabile da chi dispone delle credenziali di
+redazione, così da poter proseguire il lavoro di revisione senza dover
+attendere una pubblicazione preliminare dell'intero insieme. La
+pubblicazione della sezione, una volta completata la revisione, non
+richiederà alcun intervento sulla rappresentazione dei dati, ma
+soltanto l'aggiornamento di un singolo indicatore di stato nel
+registro delle sezioni del corpus.
+
+Alla stessa esigenza di trasparenza editoriale risponde un
+affinamento introdotto in parallelo nella sezione bibliografica di
+ciascuna epigrafe: l'edizione di riferimento --- la voce bibliografica
+da cui il testo trascritto deriva --- è ora distinta esplicitamente
+dall'edizione digitale qui presentata, e a ciascun curatore di
+quest'ultima può essere associato un ruolo editoriale specifico (chi
+ha effettuato la codifica, chi ha condotto la revisione, chi ha
+curato il controllo scientifico), così che la responsabilità di un
+intervento sulla scheda resti sempre attribuibile a una persona e a un
+ruolo precisi, anziché a un generico \virg{editore} del tutto
+indistinto.
+
 \subsection{Onomastica ed epiteti divini}
 
 Se la scheda descrittiva resta lo strumento naturale per consultare una
@@ -888,7 +1003,7 @@ base condivisa a rendere possibile il collegamento con il resto del
 progetto: una divinità o un epiteto individuati all'interno di una
 testimonianza letteraria confluiscono automaticamente negli indici di
 questa sezione e compaiono, con rimando diretto, nelle pagine di
-navigazione onomastica e divina già descritte nella sottosezione 5.2,
+navigazione onomastica e divina già descritte nella sottosezione 5.3,
 così che chi consulta la pagina di un epiteto possa raggiungere in un
 clic le fonti letterarie che lo menzionano --- mentre il conteggio delle
 attestazioni epigrafiche resta rigorosamente distinto, poiché risponde a
@@ -996,10 +1111,12 @@ monumenti --- aspetto che, come si è detto, risultava finora trattato
 solo in forma discorsiva nella letteratura di riferimento --- e due viste
 di navigazione pensate specificamente per orientarsi nell'insieme delle
 divinità, degli epiteti e delle figure onomastiche attestate nel corpus,
-affiancate da una visualizzazione cronologica delle attestazioni e da una
-sezione, di pari rango rispetto al catalogo epigrafico, dedicata alla
-raccolta delle fonti letterarie relative alla divinità e al lessico
-cultuale che le accomuna al materiale inciso sulla pietra.
+affiancate da una visualizzazione cronologica delle attestazioni, da una
+sezione numismatica dedicata alle monete e alle gemme censite nel
+secondo volume del CMRDM, e da una sezione, di pari rango rispetto al
+catalogo epigrafico, dedicata alla raccolta delle fonti letterarie
+relative alla divinità e al lessico cultuale che le accomuna al
+materiale inciso sulla pietra.
 
 L'approccio complessivamente seguito privilegia la trasparenza e la
 verificabilità del dato rispetto alla comodità di gestione a breve
@@ -1011,8 +1128,16 @@ sviluppo e di revisione, ma garantisce che ogni informazione presentata
 all'utente sia sempre riconducibile, in maniera diretta e verificabile,
 alla fonte da cui deriva.
 
-Per quanto riguarda gli sviluppi futuri, il lavoro prosegue
-principalmente su due fronti. Da un lato si sta portando avanti la
+Per quanto riguarda gli sviluppi futuri, un fronte di lavoro più
+immediato riguarda il completamento della revisione filologica delle
+schede della sezione numismatica, derivate dal riconoscimento ottico
+del secondo volume del CMRDM e per il momento mantenute allo stato di
+bozza redazionale (sottosezione 5.2): solo al termine di questa
+revisione, condotta con lo stesso criterio di verifica sulle fonti
+primarie già applicato al catalogo epigrafico, la sezione potrà essere
+inclusa nell'edizione digitale accessibile al pubblico. Il lavoro
+prosegue inoltre principalmente su due fronti. Da un lato si sta
+portando avanti la
 revisione sistematica, voce per voce, delle trascrizioni derivate
 dall'edizione a stampa originaria, sulla base di un confronto diretto
 con le fonti primarie disponibili, così da ridurre progressivamente la
