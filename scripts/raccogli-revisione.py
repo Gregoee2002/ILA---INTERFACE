@@ -12,6 +12,8 @@ li legge con il token dell'editor:
   revisione/controlli.json                     lint e avanzamento dei controlli
                                                notturni, per le linguette
                                                Coerenza e Completezza
+  revisione/smistamento.json                   copia di logs/serali/regia/
+                                               smistamento.json (routine ila-regia)
   revisione/decisioni.json                     NON lo tocca: lo scrive il sito
                                                (accetta, scarta, invia) e la
                                                routine ila-applica-correzioni
@@ -60,6 +62,7 @@ ROUTINE = {
     "link": "Link e bibliografia",
     "diario": "Diario della settimana",
     "memoria": "Memoria di Claude",
+    "regia": "Regia",
 }
 
 DATA_RE = re.compile(r"^(\d{4}-\d{2}-\d{2})\.(md|json)$")
@@ -314,6 +317,17 @@ def main() -> int:
             ctrl_path.write_text(testo, encoding="utf-8")
             cambiati.append(f"{DEST}/controlli.json")
 
+    # Lo smistamento in lotti lo scrive la routine ila-regia in logs/: qui si
+    # copia soltanto, come i rapporti.
+    smist_src = LOGS / "serali" / "regia" / "smistamento.json"
+    smist_path = DATA_REPO / DEST / "smistamento.json"
+    if smist_src.exists():
+        testo = smist_src.read_text(encoding="utf-8")
+        json.loads(testo)  # se non è JSON valido, meglio fermarsi qui che rompere il sito
+        if not smist_path.exists() or smist_path.read_text(encoding="utf-8") != testo:
+            smist_path.write_text(testo, encoding="utf-8")
+            cambiati.append(f"{DEST}/smistamento.json")
+
     if not cambiati:
         print("Niente di nuovo da portare nell'hub.")
         return 0
@@ -322,8 +336,9 @@ def main() -> int:
         return 0 if a.no_push else 2
 
     percorsi = [f"{DEST}/rapporti", f"{DEST}/indice.json"]
-    if (DATA_REPO / DEST / "controlli.json").exists():
-        percorsi.append(f"{DEST}/controlli.json")
+    for extra in ("controlli.json", "smistamento.json"):
+        if (DATA_REPO / DEST / extra).exists():
+            percorsi.append(f"{DEST}/{extra}")
     git("add", "--", *percorsi)
     nuovi = sorted({c.split("/")[2] for c in cambiati if c.startswith(f"{DEST}/rapporti/")})
     msg = "revisione: " + (", ".join(nuovi) if nuovi else "indice") + f" ({len(proposte)} proposte)"

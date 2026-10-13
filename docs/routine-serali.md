@@ -146,7 +146,18 @@ vedere. Quelle già decise a mano restano come sono.
 ```
 
 Ogni proposta sta in un lotto solo. Quelle arrivate dopo l'ultimo smistamento
-compaiono come «non ancora smistate» e si vedono nella vista Proposte. Il
+compaiono come «non ancora smistate» e si vedono nella vista Proposte.
+
+Lo smistamento lo tiene aggiornato la routine n. 18 **`ila-regia`** (ogni sera
+alle 23:15, dopo le altre). Mette nei lotti le proposte nuove, toglie
+quelle decise e controlla che le patch si applichino ancora. Sposta in
+`attesa` quelle superate o sovrapposte e scrive
+`logs/serali/regia/AAAA-MM-GG.md`: tre righe di sommario, i lotti da fare per
+primi, le dieci decisioni della settimana e l'arretrato per routine. Non
+decide e non applica nulla. Il file sorgente è `logs/serali/regia/smistamento.json`,
+che `raccogli-revisione.py` copia in `revisione/smistamento.json`. Le routine
+con più di 30 proposte da vedere sono solo segnalate nel rapporto: per ora
+nessuna si ferma da sola. Il
 primo smistamento, del 2026-10-13, è stato fatto a mano: 161 proposte in 12
 lotti pronti, 83 legate a 11 questioni di norma, 104 decisioni filologiche
 (49 di priorità 1), 14 nuove schede nel cantiere e 3 in attesa.
