@@ -15,11 +15,12 @@ Ricognizione di partenza: [`piano-markup-integrazioni-toponimi-date.md`](piano-m
 | F0 + F1 — `<supplied>`/`<gap>`/`<unclear>` | **fatto** | `scripts/leiden2epidoc.py`; 607 `[ ]` e 224 puntini → 0; 635 `<supplied>`, 172 `<gap>`, 1 `<unclear>`. D1 e D3 applicate (fuori parentesi = `illegible`; quantità mai dedotta dai puntini, conteggi salvati in `f1-lacune-quantita.csv`). F0 non è servita come fase a sé: le sei forme di lacuna sono state riconosciute e normalizzate dalla conversione stessa. |
 | F2 — `<expan>` / `<supplied reason="omitted">` | **fatto** | `scripts/parentesi2epidoc.py`; 180 `( )` → 0; 155 scioglimenti, 15 integrazioni di lettere omesse, 8 casi decisi sullo stampato (ILA-049, 059, 101, 039, 180, 201, 291) |
 | Editor assistito — annidamento epiteto + markup editoriale | **fatto** | l'annidamento funzionava; mancava il consumo dei delimitatori, che lasciava un doppione muto. Corretto in `src/lib/leidenMarkup.ts`, più l'azione «Elimina caratteri» |
-| F3, F4 | da fare | |
+| F3 | da fare | avanza come proposte (`ila-numerali-date`) |
+| F4 — etnici | **fatto** (parziale) | `scripts/etnici2epidoc.py`; D2 = `placeName type="ethnic"` (EpiDoc Guidelines 9.8), 11 etnici in 11 schede. Restano fuori ILA-286 (Ἀντιοχεῖ, lettura dubbia), ILA-272 e ILA-263 (Μακεδών: nome, non etnico certo) e i toponimi (§3 della ricognizione) |
 
 Il linter passa senza errori. Contatori correnti: `[ ]` 0, `( )` 0, puntini 0,
 `<supplied>` 635, `<gap>` 172, `<unclear>` 1, `<expan>` 172, `<num>` 0, `<date>` 1,
-`<placeName>` 2. Dettaglio di F1 e F2 nel [log del 2026-09-01](log/markup-f1-f2-2026-09-01.md).
+`<placeName>` 13. Dettaglio di F1 e F2 nel [log del 2026-09-01](log/markup-f1-f2-2026-09-01.md).
 
 > **Il linter ora fa fallire la regressione, non solo la misura.** `[ ]`, `( )` e i
 > puntini che ricompaiano nell'edizione sono un errore, non un contatore: durante la
@@ -71,7 +72,7 @@ markup ma la divergenza fra le due repo.
 | # | decisione | opzioni | perché blocca |
 |---|---|---|---|
 | D1 | lacune: `reason` | `lost` (caduta) vs `illegible` (illeggibile) | i puntini nudi fuori parentesi in Leiden valgono *illeggibile*, quelli dentro *caduto*: sono 51 e 73 occorrenze, non si possono trattare uguali |
-| D2 | etnici | `placeName type="ethnic"` vs `rs type="ethnic"` | oggi 2 sole schede fanno testo; la scelta va presa una volta per tutte e 13 |
+| D2 | etnici — **deciso il 2026-10-18: `placeName type="ethnic"`** | `placeName type="ethnic"` vs `rs type="ethnic"` | oggi 2 sole schede fanno testo; la scelta va presa una volta per tutte e 13 |
 | D3 | estensione delle lacune | `<gap extent="unknown">` sempre, oppure `@quantity` dove Lane la dà | determina se F1 è del tutto automatica o richiede il riscontro sullo stampato |
 | D4 | numerali greci | `<num value="207">Ἔτους σζ΄</num>` sul solo numerale, oppure `<date>` che avvolge tutta la formula | cambia la forma di F3 e cosa il sito può indicizzare |
 
