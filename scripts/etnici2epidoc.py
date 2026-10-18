@@ -14,7 +14,6 @@ UNA e una sola corrispondenza dentro l'edizione, altrimenti lo script si
 ferma. L'<lb/> in mezzo alla parola resta dentro il placeName (TEI lo ammette).
 
 Casi NON trattati, da decidere sul testo di Lane:
-  - ILA-286 «Ἀντiοχεῖ»: lettura dubbia (Lane forse Ἀντιοχῆ), nel commento.
   - ILA-272 «Μακεδών»: già `<name>` dentro persName (cognomen), non etnico.
   - ILA-263 «[Μακ]εδών»: nome isolato in fondo al testo, funzione incerta.
 
@@ -42,17 +41,34 @@ REGOLE = {
     # nel testo «νοπο λείτη» ha uno spazio: da riscontrare su Lane, non toccato
     'ILA-141': [r'(Ἀδρια-\s*<lb n="3"/>νοπο λείτη-\s*<lb n="4"/>ς)'],
     'ILA-064': [r'(Κολιανοκωμή\s*<lb n="5" rend="indent"/>τη)'],
+    # CMRDM I 17 (Lane p. 12): «Ἀντιοχῇ», e Lane glossa che Hephaistion era
+    # nativo di Antiochia di Pisidia. Le lettere restano com'erano (Ἀντιοχεῖ):
+    # la grafia da riscontrare, la funzione di etnico è certa.
+    'ILA-286': [r'(Ἀντιοχεῖ) θαλίνῳ'],
+}
+
+# Letture corrette prima della marcatura, da Lane (pagina renderizzata).
+# CMRDM I 69 (Lane p. 46, PDF 58): «Μέγας Μεὶς Ἀξιοττηνὸς Τάρσι βασιλεύων».
+# Il corpus aveva Ταρεῖ. Le altre divergenze di ILA-102 non si toccano qui
+# (spetta alla collazione).
+SOSTITUZIONI = {
+    'ILA-102': [('Ταρεῖ', 'Τάρσι')],
 }
 
 # Toponimi nel testo (`<placeName>` senza type, come l'altro uso del corpus).
 # Solo dove il nome sta nel testo: «κώμην βασιλεύων» o «κατοικίας» senza nome
 # accanto non hanno nulla da marcare; Ἀξιοττα (ILA-054) è già dentro
-# <rs type="epithet">; Ταρεῖ (ILA-102) attende Lane («Tarsi (?)» in header).
+# <rs type="epithet">; Ταρεῖ (ILA-102) è Τάρσι in Lane, corretto con SOSTITUZIONI.
 # Niente @ref: nessun URI Pleiades verificato per Askaia.
 TOPONIMI = {
     'ILA-150': [r'(Ἀσκαίης) ναέτην'],
     'ILA-151': [r'(Ἀσκαίης) τῷ μεδέοντι'],
+    'ILA-102': [r'(Τάρσι) <w '],
 }
+
+# Schede già lavorate (segno di riconoscimento), per rendere lo script rilanciabile.
+GIA_FATTE = {'ILA-150': '<placeName>Ἀσκαίης', 'ILA-151': '<placeName>Ἀσκαίης',
+             'ILA-102': '<placeName>Τάρσι'}
 
 
 def edition_span(src):
@@ -78,6 +94,10 @@ def lavora(name, src):
         raise SystemExit(f'{name}: edizione non trovata')
     a, b = span
     inner = src[a:b]
+    for vecchio, nuovo in SOSTITUZIONI.get(name, []):
+        if inner.count(vecchio) != 1:
+            raise SystemExit(f'{name}: «{vecchio}» trovata {inner.count(vecchio)} volte (deve essere 1)')
+        inner = inner.replace(vecchio, nuovo)
     for rx, apre in [(r, OPEN) for r in REGOLE.get(name, [])] + [(r, '<placeName>') for r in TOPONIMI.get(name, [])]:
         trovate = list(re.finditer(rx, inner))
         if len(trovate) != 1:
@@ -101,7 +121,7 @@ def main():
             continue
         path = os.path.join(CORPUS, name + '.xml')
         src = open(path, encoding='utf-8').read()
-        if 'type="ethnic"' in src and name not in ('ILA-107', 'ILA-108'):
+        if GIA_FATTE.get(name, '\0') in src or ('type="ethnic"' in src and name in REGOLE):
             print(f'{name}: già marcata, salto')
             continue
         new = lavora(name, src)

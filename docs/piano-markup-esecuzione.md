@@ -16,11 +16,11 @@ Ricognizione di partenza: [`piano-markup-integrazioni-toponimi-date.md`](piano-m
 | F2 — `<expan>` / `<supplied reason="omitted">` | **fatto** | `scripts/parentesi2epidoc.py`; 180 `( )` → 0; 155 scioglimenti, 15 integrazioni di lettere omesse, 8 casi decisi sullo stampato (ILA-049, 059, 101, 039, 180, 201, 291) |
 | Editor assistito — annidamento epiteto + markup editoriale | **fatto** | l'annidamento funzionava; mancava il consumo dei delimitatori, che lasciava un doppione muto. Corretto in `src/lib/leidenMarkup.ts`, più l'azione «Elimina caratteri» |
 | F3 | da fare | avanza come proposte (`ila-numerali-date`) |
-| F4 — etnici e Askaia | **fatto** (parziale) | `scripts/etnici2epidoc.py`; D2 = `placeName type="ethnic"` (EpiDoc Guidelines 9.8), 11 etnici in 11 schede, più Ἀσκαίης (ILA-150, 151). Restano fuori ILA-286 (Ἀντιοχεῖ, lettura dubbia), ILA-272 e ILA-263 (Μακεδών: nome, non etnico certo) e i toponimi (§3 della ricognizione) |
+| F4 — etnici e Askaia | **fatto** (parziale) | `scripts/etnici2epidoc.py`; D2 = `placeName type="ethnic"` (EpiDoc Guidelines 9.8), 11 etnici in 11 schede, più Ἀσκαίης (ILA-150, 151), Τάρσι (ILA-102, corretto da Ταρεῖ su Lane nr. 69) e Ἀντιοχεῖ (ILA-286; Lane stampa Ἀντιοχῇ, lettere non toccate). Restano fuori ILA-272 e ILA-263 (Μακεδών: nome, non etnico certo) e i toponimi (§3 della ricognizione) |
 
 Il linter passa senza errori. Contatori correnti: `[ ]` 0, `( )` 0, puntini 0,
 `<supplied>` 635, `<gap>` 172, `<unclear>` 1, `<expan>` 172, `<num>` 0, `<date>` 1,
-`<placeName>` 15. Dettaglio di F1 e F2 nel [log del 2026-09-01](log/markup-f1-f2-2026-09-01.md).
+`<placeName>` 17. Dettaglio di F1 e F2 nel [log del 2026-09-01](log/markup-f1-f2-2026-09-01.md).
 
 > **Il linter ora fa fallire la regressione, non solo la misura.** `[ ]`, `( )` e i
 > puntini che ricompaiano nell'edizione sono un errore, non un contatore: durante la
