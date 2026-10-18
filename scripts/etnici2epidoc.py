@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-etnici2epidoc — fase F4: gli etnici dentro <div type="edition".
+etnici2epidoc — fase F4: etnici e toponimi dentro <div type="edition".
 
 Decisione D2 (2026-10-18): l'etnico di comunità è `<placeName type="ethnic">`,
 come nell'esempio delle EpiDoc Guidelines 9.8 (cap. «Place names») e come già
@@ -44,6 +44,16 @@ REGOLE = {
     'ILA-064': [r'(Κολιανοκωμή\s*<lb n="5" rend="indent"/>τη)'],
 }
 
+# Toponimi nel testo (`<placeName>` senza type, come l'altro uso del corpus).
+# Solo dove il nome sta nel testo: «κώμην βασιλεύων» o «κατοικίας» senza nome
+# accanto non hanno nulla da marcare; Ἀξιοττα (ILA-054) è già dentro
+# <rs type="epithet">; Ταρεῖ (ILA-102) attende Lane («Tarsi (?)» in header).
+# Niente @ref: nessun URI Pleiades verificato per Askaia.
+TOPONIMI = {
+    'ILA-150': [r'(Ἀσκαίης) ναέτην'],
+    'ILA-151': [r'(Ἀσκαίης) τῷ μεδέοντι'],
+}
+
 
 def edition_span(src):
     m = ED_OPEN.search(src)
@@ -68,13 +78,13 @@ def lavora(name, src):
         raise SystemExit(f'{name}: edizione non trovata')
     a, b = span
     inner = src[a:b]
-    for rx in REGOLE[name]:
+    for rx, apre in [(r, OPEN) for r in REGOLE.get(name, [])] + [(r, '<placeName>') for r in TOPONIMI.get(name, [])]:
         trovate = list(re.finditer(rx, inner))
         if len(trovate) != 1:
             raise SystemExit(f'{name}: «{rx}» trovata {len(trovate)} volte (deve essere 1)')
         m = trovate[0]
         s, e = m.span(1)
-        inner = inner[:s] + OPEN + inner[s:e] + CLOSE + inner[e:]
+        inner = inner[:s] + apre + inner[s:e] + CLOSE + inner[e:]
     return src[:a] + inner + src[b:]
 
 
@@ -86,7 +96,7 @@ def main():
     args = ap.parse_args()
     if args.dry_run == args.apply:
         raise SystemExit('indica --dry-run oppure --apply')
-    for name in sorted(REGOLE):
+    for name in sorted(set(REGOLE) | set(TOPONIMI)):
         if args.only and name != args.only:
             continue
         path = os.path.join(CORPUS, name + '.xml')
@@ -95,7 +105,7 @@ def main():
             print(f'{name}: già marcata, salto')
             continue
         new = lavora(name, src)
-        for m in re.finditer(re.escape(OPEN) + r'(.*?)' + re.escape(CLOSE), new, re.S):
+        for m in re.finditer(r'<placeName(?: type="ethnic")?>' + r'(.*?)' + re.escape(CLOSE), new, re.S):
             print(f'{name}: {re.sub(r"\s+", " ", m.group(1))}')
         if args.apply:
             open(path, 'w', encoding='utf-8').write(new)
