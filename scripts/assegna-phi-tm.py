@@ -7,7 +7,9 @@ Il corpus ha schede senza <idno type="PHI"> o <idno type="TM">. Tre passi:
      Trismegistos, che collega i due numeri;
   2. testo: scheda senza PHI → confronto dell'edizione, ridotta alle sole
      lettere greche, con i testi di I.PHI (88.202 testi PHI puliti);
-  3. conferma: dal PHI trovato si ricava il TM con la stessa API.
+  3. conferma: dal PHI trovato si ricava il TM con la stessa API. Un TM può
+     raccogliere più PHI (edizioni diverse della stessa pietra, come ILA-060):
+     la scheda li prende tutti.
 
 Livelli di fiducia nel CSV di uscita:
   sicuro    rimando dell'API, oppure testo quasi identico senza concorrenti
@@ -29,6 +31,8 @@ Uso:
     python3 scripts/assegna-phi-tm.py --taratura     # misura sulle già numerate
     python3 scripts/assegna-phi-tm.py [--out f.csv]  # sola lettura
     python3 scripts/assegna-phi-tm.py --applica      # scrive i «sicuro» in XML
+    python3 scripts/assegna-phi-tm.py --applica --conferma ILA-004,ILA-023
+                                  # e i «probabile» controllati a mano su PHI
 Variabili: ILA_DATA_REPO (default ~/Documents/GitHub/ILA)
            ILA_IPHI (default ~/Library/Caches/ila/iphi.jsonl)
 """
@@ -225,6 +229,13 @@ def taratura(schede, righe, testi):
         print('  errore:', e)
 
 
+def segna_se_altrove(r, gia_phi):
+    """Un PHI collegato dall'API che sta già su un'altra scheda va guardato."""
+    altrove = {gia_phi[p] for p in r['phi'].split() if gia_phi.get(p, r['scheda']) != r['scheda']}
+    if altrove:
+        r['livello'], r['nota'] = 'dubbio', 'PHI collegato già su ' + ', '.join(sorted(altrove))
+
+
 def trova(schede, righe, testi):
     """Righe del rapporto, una per ogni scheda a cui manca qualcosa."""
     gia_phi = {p: k for k, s in schede.items() for p in s['phi']}
@@ -232,11 +243,15 @@ def trova(schede, righe, testi):
     senza_phi = {k: s for k, s in schede.items() if not s['phi']}
     # 1. rimando TM → PHI, poi PHI → TM per chi ha solo il PHI
     for k, s in schede.items():
-        if s['tm'] and not s['phi']:
+        if s['tm']:
             _, phi = tm_api(s['tm'][0])
+            nuovi = [p for p in phi if p not in s['phi']]
+            if nuovi:
+                r = dict(scheda=k, livello='sicuro', metodo='API TM→PHI', phi=' '.join(nuovi),
+                         tm=s['tm'][0], nuovo_phi=1, nuovo_tm=0)
+                segna_se_altrove(r, gia_phi)
+                uscita.append(r)
             if phi:
-                uscita.append(dict(scheda=k, livello='sicuro', metodo='API TM→PHI', phi=' '.join(phi),
-                                   tm=s['tm'][0], nuovo_phi=1, nuovo_tm=0))
                 senza_phi.pop(k, None)
         elif s['phi'] and not s['tm']:
             tm, _ = tm_api(s['phi'][0], 'phi')
@@ -280,9 +295,11 @@ def trova(schede, righe, testi):
     # 3. TM dal PHI, solo dove può servire
     for r in uscita:
         if r['metodo'] == 'testo' and r.get('phi') and r['livello'] in ('sicuro', 'probabile') and not r['tm']:
-            tm, _ = tm_api(r['phi'], 'phi')
+            tm, fratelli = tm_api(r['phi'], 'phi')
             if len(tm) == 1:
                 r['tm'], r['nuovo_tm'] = tm[0], 1
+                r['phi'] = ' '.join([r['phi']] + [p for p in fratelli if p != r['phi']])
+                segna_se_altrove(r, gia_phi)
             elif tm:
                 r['nota'] = 'più TM per questo PHI: ' + ' '.join(tm)
     return sorted(uscita, key=lambda r: r['scheda'])
@@ -312,7 +329,13 @@ def applica(righe_rapporto):
             xml = imposta_idno(xml, 'TM', r['tm'], f' corresp="https://www.trismegistos.org/text/{r["tm"]}"')
         if r.get('nuovo_phi'):
             for p in r['phi'].split():
-                xml = imposta_idno(xml, 'PHI', f'PH{p}')
+                if f'>PH{p}<' in xml:
+                    continue
+                if re.search(r'<idno type="PHI"[^>]*>\s*PH?\d', xml):
+                    xml = re.sub(r'(?s)(.*<idno type="PHI"[^>]*>[^<]*</idno>)',
+                                 lambda m: f'{m.group(1)}\n                <idno type="PHI">PH{p}</idno>', xml, count=1)
+                else:
+                    xml = imposta_idno(xml, 'PHI', f'PH{p}')
         f.write_text(xml, encoding='utf8')
         fatte += 1
     aggiorna_concordanza(righe_rapporto)
@@ -329,7 +352,7 @@ def aggiorna_concordanza(righe_rapporto):
         nome = f"{r['scheda']}.xml"
         v = voci.setdefault(nome, {c: '' for c in campi} | {'file': nome})
         v['tm'] = r.get('tm') or v['tm']
-        v['phi'] = ' '.join(f'PH{p}' for p in r['phi'].split())
+        v['phi'] = ' '.join(dict.fromkeys(v['phi'].split() + [f'PH{p}' for p in r['phi'].split()]))
         v['status'] = 'auto-api' if r['metodo'].startswith('API') else 'auto-testo'
     with CONCORDANZA.open('w', newline='', encoding='utf8') as h:
         w = csv.DictWriter(h, campi, lineterminator='\n')
@@ -342,6 +365,7 @@ def main():
     ap.add_argument('--prepara', action='store_true', help='scarica I.PHI in cache')
     ap.add_argument('--taratura', action='store_true', help='misura il metodo sulle schede già numerate')
     ap.add_argument('--applica', action='store_true', help='scrive i «sicuro» nelle schede')
+    ap.add_argument('--conferma', default='', help='schede «probabile» controllate a mano, separate da virgole')
     ap.add_argument('--out', type=Path, default=OUT)
     a = ap.parse_args()
     if a.prepara:
@@ -351,12 +375,25 @@ def main():
     if a.taratura:
         return taratura(schede, righe, testi)
     rapporto = trova(schede, righe, testi)
+    confermate = {x.strip() for x in a.conferma.split(',') if x.strip()}
+    for r in rapporto:
+        if r['scheda'] in confermate and r['livello'] == 'probabile':
+            r['livello'], r['metodo'] = 'sicuro', 'testo + controllo su PHI'
+            confermate.discard(r['scheda'])
+    if confermate:
+        sys.exit(f'Non sono «probabile»: {sorted(confermate)}')
+    if a.out.exists():  # le schede già assegnate restano nel rapporto come traccia
+        with a.out.open(newline='', encoding='utf8') as h:
+            nuove = {r['scheda'] for r in rapporto}
+            traccia = [r for r in csv.DictReader(h) if r['livello'] == 'sicuro' and r['scheda'] not in nuove]
+    else:
+        traccia = []
     campi = ['scheda', 'livello', 'metodo', 'phi', 'tm', 'nuovo_phi', 'nuovo_tm', 'lettere', 'ratio', 'margine',
              'fonte_phi', 'nota']
     with a.out.open('w', newline='', encoding='utf8') as h:
         w = csv.DictWriter(h, campi, extrasaction='ignore', lineterminator='\n')
         w.writeheader()
-        w.writerows(rapporto)
+        w.writerows(sorted(rapporto + traccia, key=lambda r: r['scheda']))
     print(Counter(r['livello'] for r in rapporto), '→', a.out)
     if a.applica:
         applica(rapporto)

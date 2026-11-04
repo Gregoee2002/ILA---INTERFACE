@@ -1,7 +1,7 @@
 scheda,livello,metodo,phi,tm,nuovo_phi,nuovo_tm,lettere,ratio,margine,fonte_phi,nota
 ILA-002,sicuro,API TM→PHI,317060,932585,1,0,,,,,
 ILA-003,sicuro,testo,263750,838059,1,1,48,1.0,0.926,"Lyd., N.E. — Kollyda (İncesu-Gölde)",
-ILA-004,probabile,testo,263755,838064,1,1,34,0.944,0.491,"Lyd., N.E. — Kollyda (İncesu-Gölde)","stesso PHI anche per ILA-004, ILA-010: questa è la più simile"
+ILA-004,sicuro,testo + controllo su PHI,263755,838064,1,1,34,0.944,0.491,"Lyd., N.E. — Kollyda (İncesu-Gölde)","stesso PHI anche per ILA-004, ILA-010: questa è la più simile"
 ILA-005,sicuro,testo,263748,838057,1,1,120,0.938,0.861,"Lyd., N.E. — Kollyda (İncesu-Gölde) — 122/3 AD",
 ILA-006,sicuro,testo,263757,838066,1,1,420,0.99,0.909,"Lyd., N.E. — Kollyda (İncesu-Gölde) — 161/2 AD",
 ILA-007,sicuro,testo,263728,838037,1,1,204,0.985,0.954,"Lyd., N.E. — Kula: Anaeitis & Men Tiamu — 236/7 AD",
@@ -19,8 +19,8 @@ ILA-018,sicuro,testo,263869,838178,1,1,313,0.981,0.934,"Lyd., N.E. — Gölde, A
 ILA-019,sicuro,testo,263863,838172,1,1,54,0.981,0.517,"Lyd., N.E. — Gölde, Area N. of: Ayazviran — 177/8 AD",
 ILA-020,sicuro,testo,263867,838176,1,1,96,0.995,0.761,"Lyd., N.E. — Gölde, Area N. of: Ayazviran",
 ILA-021,sicuro,testo,263862,838171,1,1,157,0.981,0.485,"Lyd., N.E. — Gölde, Area N. of: Ayazviran — 235/6 AD",
-ILA-022,sicuro,testo,263846,838155,1,1,496,0.914,0.861,"Lyd., N.E. — Gölde, Area N. of: Ayvatlar — 118/9 AD",
-ILA-023,probabile,testo,263942,838251,1,1,56,0.811,0.415,"Lyd., N.E. — Maionia (Gökçeören-Menye)",
+ILA-022,sicuro,API TM→PHI,263847 263848,838155,1,0,,,,,
+ILA-023,sicuro,testo + controllo su PHI,263942,838251,1,1,56,0.811,0.415,"Lyd., N.E. — Maionia (Gökçeören-Menye)",
 ILA-024,sicuro,testo,263960,838269,1,1,230,0.987,0.95,"Lyd., N.E. — Maionia (Gökçeören-Menye) — 171/2 AD",
 ILA-025,sicuro,testo,263961,838270,1,1,437,0.959,0.787,"Lyd., N.E. — Maionia (Gökçeören-Menye) — 171/2 AD",
 ILA-026,sicuro,testo,263951,838260,1,1,175,0.874,0.849,"Lyd., N.E. — Maionia (Gökçeören-Menye) — 172/3 AD",
@@ -44,8 +44,8 @@ ILA-044,sicuro,testo,263730,838039,1,1,64,0.984,0.216,"Lyd., N.E. — Kula: Anae
 ILA-045,nessuno,testo,,,,,499,0.05,,,
 ILA-046,nessuno,testo,,,,,631,0.074,,,
 ILA-047,sicuro,testo,263211,916865,1,1,101,0.99,0.951,Lyd. — Sardis (Sart),
-ILA-049,sicuro,testo,263128,916806,1,1,576,0.939,0.903,Lyd. — Sardis (Sart) — ca. 200 AD,
-ILA-050,sicuro,testo,263270,916916,1,1,181,0.923,0.89,Lyd. — Sardis (Sart),
+ILA-049,sicuro,API TM→PHI,348219,916806,1,0,,,,,
+ILA-050,sicuro,API TM→PHI,348498,916916,1,0,,,,,
 ILA-051,nessuno,testo,,,,,31,0.396,,,
 ILA-052,dubbio,testo,281219,,1,0,40,0.651,0.087,"Pisid. — Burdur Göl, E.: Burdur — BCH 3.1879.339,13",
 ILA-053,sicuro,testo,263948,838257,1,1,87,0.946,0.703,"Lyd., N.E. — Maionia (Gökçeören-Menye) — 184/5 AD",
@@ -63,13 +63,13 @@ ILA-066,dubbio,testo,273027,,1,0,32,0.506,0.02,"Phryg. — Dorylaion (Eskişehir
 ILA-069,sicuro,testo,270970,938454,1,1,297,1.0,0.967,"Phryg. — Eumeneia (Işıklı) — Balçıkhisar — 2nd c. AD — CIG 3886; BCH 8.1884.237,7 — CB 246,88 = 375,197; IGR 4.739",
 ILA-070,dubbio,testo,200428,,1,0,26,0.581,0.113,"Crete, E. — Loc. Incert.",
 ILA-071,dubbio,testo,281158,,1,0,202,0.546,0.523,"Pisid. — Ormeleis (Tefenni) — 261/2 AD — BCH 2.1878.171,3 — Sterrett, EJ 60/61",
-ILA-072,probabile,testo,282329,878108,1,1,39,1.0,0.06,"Pisid. — Olbasa (Belenli) — 3rd c. AD? — SEG 6.607 — Belleten 22 (1958) 69, 85",
+ILA-072,sicuro,testo + controllo su PHI,282329 282294,878108,1,1,39,1.0,0.06,"Pisid. — Olbasa (Belenli) — 3rd c. AD? — SEG 6.607 — Belleten 22 (1958) 69, 85",
 ILA-073,sicuro,testo,271345,938300,1,1,61,0.891,0.416,Phrygia — Appola: Kemerkaya-Çoğu — MAMA 1.436; SEG 28.1109,
 ILA-074,sicuro,testo,275055,845195,1,1,43,1.0,0.369,Gal. Phryg. — Laodicea Comb.: Hacilar,
 ILA-075,sicuro,testo,266655,845421,1,1,73,1.0,0.491,"Gal., S. — Selmea (Gözören)","stesso PHI anche per ILA-075, ILA-059: questa è la più simile"
 ILA-076,dubbio,testo,281396,,1,0,23,0.567,0.002,"Pisid. — Antiocheia (Yalvaç) — Sanct. of Mēn Askaēnos (Karakuyu) — Rom. Imp. period — CMRDM IV 10,34",PHI già su ILA-269
-ILA-077,probabile,testo,266657,845423,1,1,26,1.0,0.347,"Gal., S. — Selmea (Gözören)",
-ILA-078,sicuro,testo,267994,867068,1,1,45,1.0,0.362,"Gal., N. — Yaǧcioǧlu — Early 2nd cent. ac — MAMA 7.311",
+ILA-077,sicuro,testo + controllo su PHI,266657,845423,1,1,26,1.0,0.347,"Gal., S. — Selmea (Gözören)",
+ILA-078,sicuro,API TM→PHI,266671,867068,1,0,,,,,
 ILA-079,sicuro,testo,266847,845613,1,1,73,0.906,0.31,"Gal., S. — Beşkavak — 89 AD",
 ILA-081,dubbio,testo,281488,,1,0,21,0.545,0.045,Pisid. — Antiocheia (Yalvaç) — Sanct. of Mēn Askaēnos (Karakuyu) — Rom. Imp. period — SEG 31.1196,
 ILA-082,dubbio,testo,271603,,1,0,24,0.506,0.267,Phrygia N — Advan,
@@ -87,10 +87,10 @@ ILA-102,sicuro,testo,263555,837864,1,1,264,0.962,0.907,"Lyd., N.E. — Saittai (
 ILA-103,nessuno,testo,,,,,186,0.027,,,
 ILA-104,sicuro,testo,263469,837778,1,1,59,0.933,0.669,"Lyd., N.E. — Saittai (Sidasharabeleri) — İcikler",
 ILA-107,sicuro,testo,3581,789330,1,1,675,0.965,0.459,Att. — s. I p.,
-ILA-108,sicuro,testo,3582,789331,1,1,1057,0.875,0.309,Att. — s. I p.,
+ILA-108,sicuro,API TM→PHI,294539,789331,1,0,,,,,
 ILA-113,dubbio,testo,281490,,1,0,15,0.698,0.12,Pisid. — Antiocheia (Yalvaç) — Sanct. of Mēn Askaēnos (Karakuyu) — Rom. Imp. period — SEG 31.1198,"stesso PHI anche per ILA-113, ILA-114, ILA-259: questa è la più simile"
 ILA-114,dubbio,testo,281490,,1,0,36,0.594,0.034,Pisid. — Antiocheia (Yalvaç) — Sanct. of Mēn Askaēnos (Karakuyu) — Rom. Imp. period — SEG 31.1198,"stesso PHI per ILA-113, ILA-114, ILA-259"
-ILA-115,probabile,testo,281180,942441,1,1,515,0.824,0.15,"Pisid. — Eren Çay Valley: Akören — 175/6 AD? — AJA 4.1888.19,4 — Ramsay, Soc.Basis(1941) 17,6",
+ILA-115,sicuro,testo + controllo su PHI,281180 281181 281182,942441,1,1,515,0.824,0.15,"Pisid. — Eren Çay Valley: Akören — 175/6 AD? — AJA 4.1888.19,4 — Ramsay, Soc.Basis(1941) 17,6",
 ILA-116,sicuro,testo,269663,846313,1,1,54,1.0,0.614,Phryg. — Tymandos (Mandos Kiri): Pise — 3rd c. AD,
 ILA-117,sicuro,testo,282419,878736,1,1,40,1.0,0.508,"Pisid. — Aziziye, S. of Hadrianoi (Gāvur Ören) — AS 9 (1959) 111, 81","stesso PHI anche per ILA-117, ILA-076: questa è la più simile"
 ILA-118,sicuro,testo,282452,878769,1,1,66,1.0,0.987,"Pisid. — Andeda (Yavuz-Andya): Belen — AS 10 (1960) 65, 115",
@@ -114,7 +114,7 @@ ILA-263,dubbio,testo,281377,,1,0,20,0.513,0.075,"Pisid. — Antiocheia (Yalvaç)
 ILA-272,dubbio,testo,281377,,1,0,33,0.725,0.299,"Pisid. — Antiocheia (Yalvaç) — Sanct. of Mēn Askaēnos (Karakuyu) — Rom. Imp. period — CMRDM IV 8,26","stesso PHI anche per ILA-272, ILA-263: questa è la più simile"
 ILA-284,nessuno,testo,,,,,46,0.039,,,
 ILA-285,sicuro,testo,138700,771351,1,1,341,0.975,0.452,Rhodos Isl. — Rhodos — undated,
-ILA-286,probabile,testo,139469,772039,1,1,101,0.842,0.442,Rhodos Isl. — Lindos: Lartos — undated,
+ILA-286,sicuro,testo + controllo su PHI,139469,772039,1,1,101,0.842,0.442,Rhodos Isl. — Lindos: Lartos — undated,
 ILA-287,nessuno,testo,,,,,9,0.432,,,
 ILA-288,nessuno,testo,,,,,15,0.467,,,
 ILA-289,sicuro,testo,141153,636067,1,1,52,0.99,0.624,Italia (Roma et vicinia) — Ostia — undated,
