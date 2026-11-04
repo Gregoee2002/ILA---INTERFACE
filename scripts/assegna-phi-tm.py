@@ -69,6 +69,7 @@ MARGINE_LUNGO = 0.30
 RATIO_PROBABILE = 0.75
 MIN_LETTERE_PROB = 20
 FREQ_MAX = 8000        # grammi più comuni di così non discriminano
+MAX_CANDIDATI = 200
 
 
 def normalizza(t):
@@ -161,10 +162,14 @@ class Indice:
             if p is not None and len(p) < FREQ_MAX:
                 conta.update(p)
         out = []
-        for i, _ in conta.most_common(quanti):
+        # A parità di grammi l'ordine sarebbe casuale: entrano tutti i pari merito
+        # dell'ultimo posto, fino a un tetto, così l'esito non cambia fra due giri.
+        ordinati = sorted(conta.items(), key=lambda x: (-x[1], x[0]))
+        soglia = ordinati[min(quanti, len(ordinati)) - 1][1] if ordinati else 0
+        for i, _ in [x for x in ordinati if x[1] >= soglia][:MAX_CANDIDATI]:
             ratio = difflib.SequenceMatcher(None, testo, self.testi[i], autojunk=False).ratio()
             out.append((round(ratio, 3), i))
-        return sorted(out, reverse=True)
+        return sorted(out, key=lambda x: (-x[0], x[1]))
 
 
 def livello(lettere, primo, secondo):
