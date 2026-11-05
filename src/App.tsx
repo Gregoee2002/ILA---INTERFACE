@@ -49,6 +49,7 @@ import { labelEvidence, labelUnit, labelType, labelMaterial, labelInscriptionTyp
 import { Monumento, FilterState, SortField, Bibliografia, EntryRegistro, BugReport, COIN_FACE_LABELS, EDITORIAL_STATUS_LABELS, RUOLO_DIGITALE_LABELS, RuoloDigitale } from './types';
 import { monumentiToXml, xmlToMonumenti, formatIlaLabel, splitDivineKey } from './lib/xmlUtils';
 import { buildPhiUrl } from './lib/extRefs';
+import { dateRangeMatches } from './lib/chronology';
 import { buildDivinityIndex, buildOnomasticaIndex, DivinityStats, OnomasticaStats } from './lib/epithetIndex';
 import { PleiadesMap } from './components/PleiadesMap';
 // Le sezioni che il visitatore medio non apre mai — mappa, heatmap, editor,
@@ -4609,7 +4610,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
         const matchesHasTrad = bothTrad || !filters.onlyHasTrad || hasTrad;
         const matchesNoTrad = bothTrad || !filters.onlyNoTrad || !hasTrad;
 
-        const matchesDate = (!m.data_inizio || !m.data_fine) || (m.data_inizio >= filters.dateRange[0] && m.data_fine <= filters.dateRange[1]);
+        const matchesDate = dateRangeMatches(m.data_inizio, m.data_fine, filters.dateRange);
 
         return matchesSearch && matchesSezione && matchesRegione && matchesCitta && matchesTipo && matchesMateriale && matchesIconAttributo && matchesIconFunzione && matchesIconPosizione && matchesInscr && matchesAnep && matchesHasTrad && matchesNoTrad && matchesDate;
       })

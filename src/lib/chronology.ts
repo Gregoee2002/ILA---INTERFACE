@@ -75,3 +75,20 @@ export function formatSecoliAttestazione(dataInizio?: number, dataFine?: number)
   const secoli = getSecoliAttestazione(dataInizio, dataFine);
   return secoli.length > 0 ? secoli.join(' - ') : '-';
 }
+
+/**
+ * Filtro cronologico di catalogo e mappa: una scheda resta se la sua datazione
+ * tocca il periodo cercato. «II sec. d.C.» (101-200) risponde quindi a chi cerca
+ * 150-250: pretendere che l'intervallo stia tutto dentro escluderebbe proprio le
+ * datazioni larghe. Le schede senza data restano visibili; 0 vale "non impostato".
+ */
+export function dateRangeMatches(
+  dataInizio: number | undefined,
+  dataFine: number | undefined,
+  [da, a]: readonly [number, number] | readonly number[],
+): boolean {
+  const start = dataInizio || undefined;
+  const end = dataFine || undefined;
+  if (start === undefined && end === undefined) return true;
+  return (end ?? start)! >= da && (start ?? end)! <= a;
+}
