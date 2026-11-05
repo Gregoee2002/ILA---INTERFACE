@@ -11,7 +11,7 @@ import { Monumento } from '../types';
 import { etichettaScheda } from '../lib/sezioni';
 import { cn } from '../lib/utils';
 import { formatIlaLabel } from '../lib/xmlUtils';
-import { formatSecoliAttestazione } from '../lib/chronology';
+import { dateRangeMatches, formatSecoliAttestazione } from '../lib/chronology';
 import L from 'leaflet';
 import { Search, X, ChevronDown, MapPinned, Locate } from 'lucide-react';
 import { ANCIENT_LABELS } from '../lib/mapAncientLabels';
@@ -487,18 +487,7 @@ export const MapView: React.FC<MapViewProps> = ({ monumenti, onSelectMonumento }
       if (!m.divinita || !m.divinita.some(d => selectedDivinita.includes(d))) return false;
     }
 
-    const start = m.data_inizio !== undefined ? m.data_inizio : undefined;
-    const end = m.data_fine !== undefined ? m.data_fine : undefined;
-    
-    if (start !== undefined && end !== undefined) {
-      if (end < dateRange[0] || start > dateRange[1]) return false;
-    } else if (start !== undefined) {
-      if (start < dateRange[0] || start > dateRange[1]) return false;
-    } else if (end !== undefined) {
-      if (end < dateRange[0] || end > dateRange[1]) return false;
-    }
-    
-    return true;
+    return dateRangeMatches(m.data_inizio, m.data_fine, dateRange);
   };
 
   const sites = useMemo(() => {

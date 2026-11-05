@@ -10,7 +10,8 @@ import { cn, stripAccents } from '../lib/utils';
 import { Monumento, OrigDate, Traduzione, Bibliografia, Revision, Responsabile, ExternalRef, IconographicFigure, IconographicTrait, NumismaticData, NumMeasure, NumSpecimen, CoinFace, COIN_FACE_LABELS, EditionFace, Facsimile, EDITORIAL_STATUS_LABELS, RUOLO_DIGITALE_LABELS, RuoloDigitale } from '../types';
 import { DENOMINATIONS, MANUFACTURES, METALS, MINTS, nomismaRef, numLabel } from '../lib/numismaticVocab';
 import { Sezione, etichettaSezione, sezioneDiId } from '../lib/sezioni';
-import { xmlToMonumenti, formatIlaLabel, renderEditionFaces } from '../lib/xmlUtils';
+import { xmlToMonumenti, formatIlaLabel, renderEditionFaces, patchTestoDatazione } from '../lib/xmlUtils';
+import { EVIDENCE_LABELS } from '../lib/vocabLabels';
 import { EditionMarkupEditor } from './EditionMarkupEditor';
 import { Chip } from './ui/Chip';
 import { DivinityEpithetIndex } from './DivinityEpithetIndex';
@@ -1170,7 +1171,7 @@ function renderSectionForm(
               <div className="flex items-start justify-between gap-3">
                 <div className="flex-1">
                   <FieldLabel>Testo della datazione</FieldLabel>
-                  <TextInput value={d.testo || ''} onChange={e => update(i, { testo: e.target.value })} />
+                  <TextInput value={d.testo || ''} onChange={e => update(i, patchTestoDatazione(d, e.target.value))} />
                 </div>
                 <button onClick={() => set('origDates', dates.filter((_, j) => j !== i))} className="mt-6 p-1.5 text-muted/50 hover:text-danger transition-colors" title="Rimuovi datazione">
                   <Trash2 className="w-4 h-4" />
@@ -1179,6 +1180,17 @@ function renderSectionForm(
               <div className="grid grid-cols-2 gap-3">
                 <div><FieldLabel>Da (notBefore)</FieldLabel><TextInput value={d.notBeforeCustom || ''} onChange={e => update(i, { notBeforeCustom: e.target.value })} /></div>
                 <div><FieldLabel>A (notAfter)</FieldLabel><TextInput value={d.notAfterCustom || ''} onChange={e => update(i, { notAfterCustom: e.target.value })} /></div>
+              </div>
+              <p className="text-[11px] text-muted/60">Anni avanti Cristo con il segno meno (-27). Un secolo scritto nel testo («II sec. d.C.») compila Da e A da solo.</p>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <FieldLabel>Precisione</FieldLabel>
+                  <DatingSelect value={d.precision || ''} onChange={v => update(i, { precision: v || undefined })} labels={PRECISION_LABELS} />
+                </div>
+                <div>
+                  <FieldLabel>Tipo di prova (evidence)</FieldLabel>
+                  <DatingSelect value={d.evidence || ''} onChange={v => update(i, { evidence: v || undefined })} labels={EVIDENCE_LABELS} />
+                </div>
               </div>
             </div>
           ))}
@@ -2131,6 +2143,23 @@ const IconographyEditor: React.FC<{ m: Monumento; set: <K extends keyof Monument
  * ------------------------------------------------------------------------- */
 
 /** Select su un registro di numismaticVocab, con la resa italiana a schermo. */
+const PRECISION_LABELS: Record<string, string> = { high: 'alta', medium: 'media', low: 'bassa' };
+
+/** Select di precisione e prova della datazione. Un valore già nell'XML ma fuori
+ *  elenco resta fra le opzioni: aprire la scheda non deve farlo sembrare vuoto. */
+const DatingSelect: React.FC<{ value: string; onChange: (v: string) => void; labels: Record<string, string> }> = ({ value, onChange, labels }) => (
+  <select
+    value={value}
+    onChange={e => onChange(e.target.value)}
+    style={{ colorScheme: 'light dark' }}
+    className="w-full bg-white/60 dark:bg-white/5 border border-border/50 rounded-lg px-3 py-2 text-sm text-ink font-serif focus:outline-none focus:ring-1 focus:ring-accent/40"
+  >
+    <option value="">Non indicata</option>
+    {Object.entries(labels).map(([k, label]) => <option key={k} value={k}>{label}</option>)}
+    {value && !(value in labels) && <option value={value}>{value}</option>}
+  </select>
+);
+
 const NumVocabSelect: React.FC<{
   value: string; onChange: (v: string) => void;
   registro: Record<string, { label: string }>; kind: string; placeholder: string;

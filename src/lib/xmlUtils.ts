@@ -659,6 +659,29 @@ export function parseCenturyRange(text: string): { start: number; end: number; m
   return { start: Math.min(start1, start2), end: Math.max(end1, end2), match: m[0] };
 }
 
+/**
+ * Modifica del testo di una datazione nell'editor: se nomina un secolo («II sec.
+ * d.C.»), Da e A si ricavano da soli, altrimenti la scheda resterebbe non datata.
+ * Valori scritti a mano non vengono mai toccati: si aggiornano solo Da/A vuoti o
+ * ricavati dal testo precedente.
+ */
+export function patchTestoDatazione(
+  prev: Pick<OrigDate, 'testo' | 'notBeforeCustom' | 'notAfterCustom'>,
+  testo: string,
+): Pick<OrigDate, 'testo'> & Partial<Pick<OrigDate, 'notBeforeCustom' | 'notAfterCustom'>> {
+  const nuovo = parseCenturyRange(testo);
+  const vecchio = parseCenturyRange(prev.testo);
+  const vuoti = !prev.notBeforeCustom && !prev.notAfterCustom;
+  const ricavati = !!vecchio
+    && prev.notBeforeCustom === String(vecchio.start)
+    && prev.notAfterCustom === String(vecchio.end);
+  if (nuovo && (vuoti || ricavati)) {
+    return { testo, notBeforeCustom: String(nuovo.start), notAfterCustom: String(nuovo.end) };
+  }
+  if (!nuovo && ricavati) return { testo, notBeforeCustom: undefined, notAfterCustom: undefined };
+  return { testo };
+}
+
 function parseTeiElement(teiString: string): Monumento {
   const extractAllMatches = (regex: RegExp, text: string): string[] => {
     const results: string[] = [];
