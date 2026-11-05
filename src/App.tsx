@@ -7114,17 +7114,19 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
              >
                 <div className="flex h-full flex-col md:flex-row overflow-y-auto md:overflow-hidden">
                   {/* Left Metadata Rail */}
-                  <div className="w-full md:w-56 bg-sidebar border-b md:border-b-0 md:border-r border-border p-5 md:p-6 flex flex-col shrink-0 md:overflow-y-auto custom-scrollbar">
-                    <div className="mb-10 flex items-center justify-between gap-3">
+                  <div className="w-full md:w-56 bg-sidebar border-b md:border-b-0 md:border-r border-border p-5 md:p-6 flex flex-col shrink-0 md:overflow-y-auto md:overflow-x-hidden custom-scrollbar">
+                    {/* In colonna: nei 224 px della colonna il ritorno e il badge,
+                        affiancati, non ci stanno e il badge finiva tagliato. */}
+                    <div className="mb-8 flex flex-col items-start gap-2">
                       <button
                         onClick={() => setSelectedMonumento(null)}
-                        className="text-[10px] font-sans font-bold uppercase tracking-[0.2em] text-muted flex items-center gap-2 hover:text-accent transition-colors"
+                        className="text-[10px] font-sans font-bold uppercase tracking-[0.2em] text-muted flex items-center gap-2 hover:text-accent transition-colors whitespace-nowrap"
                       >
-                        <X className="h-4 w-4" /> Torna {sezioneAttiva === 'numismatica' ? 'alle Monete' : 'al Catalogo'}
+                        <X className="h-4 w-4 shrink-0" /> Torna {sezioneAttiva === 'numismatica' ? 'alle Monete' : 'al Catalogo'}
                       </button>
                       <span
                         className={cn(
-                          "text-[8px] font-sans font-bold uppercase tracking-[0.15em] px-2 py-0.5 rounded-full border shrink-0",
+                          "text-[8px] font-sans font-bold uppercase tracking-[0.15em] px-2 py-0.5 rounded-full border whitespace-nowrap",
                           effectiveAdmin
                             ? "border-accent/50 text-accent bg-accent/10"
                             : "border-border text-muted"
@@ -7202,9 +7204,9 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
                               setSelectedMonumento(null);
                               setActiveView('editor');
                             }}
-                            className="w-full py-2 bg-accent hover:bg-accent/90 text-white font-sans text-[9px] font-bold uppercase tracking-widest transition-colors flex items-center justify-center gap-1.5 shadow-sm rounded-sm"
+                            className="w-full px-3 py-2 bg-accent hover:bg-accent/90 text-white font-sans text-[9px] font-bold uppercase tracking-widest transition-colors flex items-center justify-center gap-1.5 shadow-sm rounded-sm"
                           >
-                            <Edit2 className="h-3 w-3" /> Modifica nell'Editor a Sezioni
+                            <Edit2 className="h-3 w-3 shrink-0" /> Modifica nell'Editor a Sezioni
                           </button>
                         </section>
                       )}
