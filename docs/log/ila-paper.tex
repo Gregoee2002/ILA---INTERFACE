@@ -164,9 +164,12 @@ nella sottosezione 5.1, alla sezione dedicata all'iconografia dei
 monumenti, nella sottosezione 5.2 alla navigazione tra divinità, epiteti
 e registro onomastico, nella sottosezione 5.3 alla raccolta delle fonti
 letterarie relative alla divinità e al lessico cultuale che le accomuna
-al materiale epigrafico, e nella sottosezione 5.4 agli strumenti di
-ricerca. Infine, nella sezione 6 si propongono alcune considerazioni
-finali e le prospettive di sviluppo futuro del progetto.
+al materiale epigrafico, nella sottosezione 5.4 agli strumenti di
+ricerca, e nella sottosezione 5.5 alla sezione numismatica, che
+affianca al catalogo epigrafico i tipi monetali e le gemme incise
+pertinenti al culto di Men. Infine, nella sezione 6 si propongono
+alcune considerazioni finali e le prospettive di sviluppo futuro del
+progetto.
 
 \screenshotplaceholder{7cm}{Pagina iniziale dell'interfaccia digitale di ILA}
 
@@ -981,6 +984,95 @@ richiesto.
 
 \screenshotplaceholder{7cm}{Interfaccia del modulo di ricerca con filtri combinati}
 
+\subsection{La sezione numismatica}
+
+Oltre al materiale epigrafico propriamente detto, il culto di Men è
+documentato anche attraverso la monetazione e un insieme di gemme
+incise che ne recano tipi iconografici riferibili --- una classe di
+testimonianze distinta, per natura materiale e per modalità di
+produzione, dalle iscrizioni su pietra, ma riconducibile, quanto a
+pertinenza tematica, allo stesso ambito di interesse del progetto. Si
+è scelto di accogliere anche questo materiale all'interno di ILA non
+come un sottoinsieme filtrato del catalogo epigrafico, ma come una
+collezione distinta e di pari rango, secondo lo stesso principio già
+adottato per la sezione dedicata alle fonti letterarie (sottosezione
+5.3): ogni tipo monetale e ogni gemma riceve un identificativo
+citabile proprio, numerato all'interno di una sequenza indipendente da
+quella delle epigrafi, in modo che l'ingresso di nuovo materiale
+numismatico non comporti mai lo spostamento o la rinumerazione di un
+identificativo epigrafico già pubblicato e citato altrove.
+
+La sezione è stata popolata a partire dal secondo volume dell'edizione
+di Lane, dedicato appunto alla monetazione e alla glittica, da cui sono
+state estratte alcune centinaia di tipi monetali distribuiti su diverse
+decine di zecche, insieme a un più ridotto numero di gemme. Per questa
+componente, l'estrazione automatica del materiale dall'edizione a
+stampa, descritta più in generale nella sezione 4, ha presentato
+difficoltà aggiuntive rispetto al materiale epigrafico propriamente
+detto: le intestazioni di alcune voci si sono rivelate danneggiate dal
+riconoscimento ottico in misura tale da richiedere un recupero manuale
+puntuale, e una parte non trascurabile delle legende monetali in
+alfabeto greco, per la loro brevità, è risultata sistematicamente al
+di sotto della soglia di confidenza richiesta dal processo di
+riconoscimento automatico; piuttosto che lasciarle con una trascrizione
+inattendibile e non dichiarata come tale, sono state segnalate
+esplicitamente come da ritrascrivere a vista, coerentemente con il
+principio di trasparenza già più volte richiamato in questo lavoro.
+
+Dal punto di vista della codifica, una moneta differisce da
+un'epigrafe su pietra per un aspetto strutturale rilevante: possiede
+tipicamente due facce --- dritto e rovescio --- ciascuna delle quali
+può portare una propria legenda, una propria immagine e, se tradotta,
+una propria resa in lingua moderna. Il modello di rappresentazione
+descritto nella sezione 2 è stato pertanto esteso per trattare la
+faccia come un'articolazione interna del testo dell'edizione, e non
+come un'unità separata: l'edizione di una moneta resta un unico
+documento filologico, dal quale le due facce vengono lette
+distintamente per la presentazione nella scheda e per la curatela
+nell'editor, evitando così che le due letture possano in alcun modo
+divergere l'una dall'altra. Per le stesse ragioni, un attributo
+descrittivo che non ha senso per un tipo monetale --- lo stato di
+conservazione del supporto, la provenienza di scavo, l'impaginazione
+del testo sulla superficie, l'identificazione della mano del lapicida
+--- non viene lasciato semplicemente vuoto, ma dichiarato
+esplicitamente non applicabile a quella classe di oggetto: una
+distinzione concettualmente identica a quella già discussa a proposito
+della visualizzazione cronologica in apertura di questa sezione, per
+cui l'assenza di un'informazione deve sempre poter essere distinta, con
+chiarezza, da un'omissione o da un errore.
+
+Poiché il materiale numismatico è stato immesso nel corpus subito dopo
+l'estrazione, e non ha ancora attraversato lo stesso processo di
+revisione sistematica applicato alle epigrafi e discusso nella sezione
+6, la sezione numismatica resta per il momento in uno stato editoriale
+non pubblico, governato da un unico stato di pubblicazione valido per
+l'intera collezione: la versione dell'interfaccia servita a chi
+consulta il sito senza credenziali di redazione non la contiene affatto,
+mentre chi vi accede in veste di redattore la visualizza come corpus
+pienamente vivo e consultabile. Questa scelta generalizza all'intera
+collezione lo stesso principio di trasparenza già adottato puntualmente
+per le singole fonti letterarie non ancora collazionate (sottosezione
+5.3): nessuna informazione viene presentata come acquisita prima di
+essere stata effettivamente verificata, e la futura pubblicazione della
+sezione numismatica si configurerà come il semplice ribaltamento di
+questo stato, senza richiedere alcuna migrazione dei dati già
+codificati.
+
+Nell'interfaccia, catalogo epigrafico e sezione numismatica sono
+accessibili attraverso due punti di accesso distinti, che condividono
+lo stesso elenco filtrabile e lo stesso modulo di ricerca descritto
+nella sottosezione precedente, ma operano su due insiemi di voci
+reciprocamente disgiunti: quale delle due collezioni si stia
+consultando è sempre determinato dal punto di accesso scelto, e non da
+un filtro applicato a un insieme unico, cosicché una scheda raggiunta
+dalla mappa, dalla linea del tempo, dalla ricerca o da un collegamento
+diretto si apre sempre nella visualizzazione propria della collezione a
+cui appartiene.
+
+\screenshotplaceholder{7cm}{Scheda di un tipo monetale, con le due facce distinte}
+
+\screenshotplaceholder{7cm}{Elenco della sezione numismatica, con zecche e tipi monetali}
+
 \section{Considerazioni finali e sviluppi futuri}
 
 Il lavoro descritto in questo articolo rappresenta un primo bilancio
@@ -999,7 +1091,9 @@ divinità, degli epiteti e delle figure onomastiche attestate nel corpus,
 affiancate da una visualizzazione cronologica delle attestazioni e da una
 sezione, di pari rango rispetto al catalogo epigrafico, dedicata alla
 raccolta delle fonti letterarie relative alla divinità e al lessico
-cultuale che le accomuna al materiale inciso sulla pietra.
+cultuale che le accomuna al materiale inciso sulla pietra, e da una
+sezione numismatica, anch'essa di pari rango, dedicata ai tipi
+monetali e alle gemme incise pertinenti al culto di Men.
 
 L'approccio complessivamente seguito privilegia la trasparenza e la
 verificabilità del dato rispetto alla comodità di gestione a breve
@@ -1018,6 +1112,40 @@ dall'edizione a stampa originaria, sulla base di un confronto diretto
 con le fonti primarie disponibili, così da ridurre progressivamente la
 dipendenza dal testo di Lane e trasformarlo, per ciascuna voce
 revisionata, da testo sottostante a semplice riferimento bibliografico.
+
+Questo lavoro di revisione, per sua stessa natura ripetitiva e
+distribuita su centinaia di voci, ha iniziato a ricevere un supporto
+strutturato sotto forma di una serie di controlli automatici che
+analizzano periodicamente l'intero corpus alla ricerca di categorie
+specifiche di problemi filologici ancora aperti --- supplementi
+testuali desumibili dall'apparato critico di Lane, numerali da
+codificare secondo lo schema descritto nella sezione 3, lacune non
+ancora segnalate, toponimi non ancora identificati, traduzioni da
+rivedere --- e che, per ciascuna di queste categorie, non correggono
+direttamente la scheda ma producono una proposta di intervento
+puntuale, motivata e corredata del riferimento alla voce interessata.
+Le proposte confluiscono in un'area dell'interfaccia riservata alla
+redazione, dove ciascuna può essere accettata, scartata o rinviata
+singolarmente, eventualmente accompagnata da una nota o da una
+correzione riformulata a mano; una volta che il numero di proposte
+accumulate ha reso la revisione voce per voce poco sostenibile in
+pratica, a questa modalità puntuale si è affiancata una
+visualizzazione per \virg{lotti}, che raggruppa le proposte per
+priorità e consente di risolvere in un solo passaggio tutte quelle
+ancora in attesa all'interno di uno stesso lotto. Resta tuttavia
+esclusa da qualunque automazione, e sottoposta a un comando di
+esecuzione sempre esplicito e individuale, la sola categoria di
+intervento che riscrive direttamente il testo dell'edizione:
+un'eccezione deliberata, giacché è precisamente questo il nucleo
+filologicamente vincolante della scheda di cui si è detto nella
+sezione 3, e nessuna correzione che lo riguardi può essere delegata,
+nemmeno in parte, a un processo privo di una decisione umana esplicita
+e tracciata per ciascuna voce. L'intero meccanismo resta, in questo
+senso, coerente con il principio enunciato poco sopra: la routine
+propone sulla base di un'analisi sistematica del corpus, ma la
+decisione --- accettare, scartare, rinviare --- rimane sempre un atto
+editoriale individuale.
+
 Dall'altro lato si prevede di ampliare ulteriormente il vocabolario
 controllato utilizzato per la descrizione iconografica, e di
 sviluppare strumenti di confronto comparativo tra le diverse
