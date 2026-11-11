@@ -58,6 +58,13 @@ export interface DefinizioneSezione {
    * Pubblicarla, il giorno che lo sarà, è cambiare questo booleano.
    */
   pubblica: boolean;
+  /**
+   * Se la sezione, non ancora pubblica, si vede almeno in redazione.
+   * `false` la toglie anche a chi ha sbloccato l'editing: niente porta nella
+   * barra, niente carta in home, nessuna scheda negli elenchi. I dati restano
+   * dove sono; riaccenderla è cambiare questo booleano.
+   */
+  inRedazione: boolean;
 }
 
 export const SEZIONI: DefinizioneSezione[] = [
@@ -69,6 +76,7 @@ export const SEZIONI: DefinizioneSezione[] = [
     offset: 0,
     colore: '--accent',
     pubblica: true,
+    inRedazione: true,
   },
   {
     id: 'numismatica',
@@ -80,6 +88,8 @@ export const SEZIONI: DefinizioneSezione[] = [
     // 2026-09-21: le 475 schede del CMRDM II sono appena estratte e non
     // ancora riviste. Restano in redazione finché non lo saranno.
     pubblica: false,
+    // 2026-11-11: tolta anche dalla modalità di redazione, su richiesta.
+    inRedazione: false,
   },
 ];
 
@@ -145,9 +155,15 @@ export function sezionePubblica(s: Sezione): boolean {
   return definizioneSezione(s).pubblica;
 }
 
-/** Le sezioni visibili a chi sta guardando: tutte in redazione, le sole pubbliche fuori. */
+/** Se la sezione si vede da chi sta guardando: le pubbliche sempre, le altre solo in redazione e se lì sono accese. */
+export function sezioneVisibile(s: Sezione, inRedazione: boolean): boolean {
+  const d = definizioneSezione(s);
+  return d.pubblica || (inRedazione && d.inRedazione);
+}
+
+/** Le sezioni visibili a chi sta guardando. */
 export function sezioniVisibili(inRedazione: boolean): DefinizioneSezione[] {
-  return inRedazione ? SEZIONI : SEZIONI.filter(d => d.pubblica);
+  return SEZIONI.filter(d => sezioneVisibile(d.id, inRedazione));
 }
 
 /**

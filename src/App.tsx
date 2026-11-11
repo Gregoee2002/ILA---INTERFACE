@@ -65,7 +65,7 @@ import { Badge } from './components/ui/Badge';
 import { Button } from './components/ui/Button';
 import { Chip } from './components/ui/Chip';
 import { leggiPermalink, scriviPermalink, etichettaScheda } from './lib/permalink';
-import { Sezione, definizioneSezione, etichettaSezione, idDaEtichetta, idDaNumero, nomeFileScheda, sezioneDaContenuto, sezioneDiId, sezionePubblica, sezioniVisibili } from './lib/sezioni';
+import { Sezione, definizioneSezione, etichettaSezione, idDaEtichetta, idDaNumero, nomeFileScheda, sezioneDaContenuto, sezioneDiId, sezioneVisibile, sezioniVisibili } from './lib/sezioni';
 const CooccurrenceHeatmap = lazy(() => import('./components/CooccurrenceHeatmap').then(m => ({ default: m.CooccurrenceHeatmap })));
 const CultLexiconPanel = lazy(() => import('./components/CultLexiconPanel').then(m => ({ default: m.CultLexiconPanel })));
 const LessicoLaresEditor = lazy(() => import('./components/LessicoLaresEditor').then(m => ({ default: m.LessicoLaresEditor })));
@@ -1504,7 +1504,7 @@ const RAIL_ITEMS: { view: AppView; label: string; icon: React.ReactNode; adminOn
   // stessi filtri, insiemi separati. Finché la sezione non è pubblica la
   // porta si apre solo in redazione: la condizione la detta il registro
   // delle sezioni, così si pubblica in un posto solo.
-  { view: 'monete', label: 'Monete', icon: <Coins className="h-4 w-4" />, adminOnly: !sezionePubblica('numismatica') },
+  { view: 'monete', label: 'Monete', icon: <Coins className="h-4 w-4" /> },
   { view: 'sources', label: 'Fonti letterarie', icon: <ScrollText className="h-4 w-4" /> },
   { view: 'map', label: 'Mappa', icon: <MapPin className="h-4 w-4" /> },
   { view: 'timeline', label: 'Cronologia', icon: <Clock className="h-4 w-4" /> },
@@ -1546,7 +1546,7 @@ function IconRail({
   const isDesktop = useIsDesktop();
   // Strumenti è una voce riservata: nascosta finché l'editing non è
   // sbloccato, non solo di sola lettura (vedi RegistroForm/SegnalazioniPanel).
-  const railItems = useMemo(() => RAIL_ITEMS.filter(item => !item.adminOnly || effectiveAdmin), [effectiveAdmin]);
+  const railItems = useMemo(() => RAIL_ITEMS.filter(item => (!item.adminOnly || effectiveAdmin) && (item.view !== 'monete' || sezioneVisibile('numismatica', effectiveAdmin))), [effectiveAdmin]);
 
   // Fase lunare reale: ciclo sinodico medio 29.53059 giorni, ancorato al novilunio del 6 gen 2000 18:14 UTC
   const moon = useMemo(() => getMoonPhase(), []);
@@ -1895,7 +1895,7 @@ function HomeView({ monumenti, onNavigate, onSearch, effectiveAdmin }: { monumen
   const sections = allSections.filter(s => !s.adminOnly || effectiveAdmin);
   // Una sezione ancora in redazione non si annuncia in home a chi non può
   // aprirla: la carta comparirà il giorno che la sezione sarà pubblica.
-  const heroVisibili = heroSections.filter(h => h.view !== 'monete' || effectiveAdmin || sezionePubblica('numismatica'));
+  const heroVisibili = heroSections.filter(h => h.view !== 'monete' || sezioneVisibile('numismatica', effectiveAdmin));
 
   const launchCard = (view: AppView) => {
     setLaunching(view);
@@ -3905,9 +3905,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
   // in locale, dove il server legge la cartella intera: una sola regola,
   // non due che possono discordare.
   const monumenti = useMemo(
-    () => (effectiveAdmin
-      ? corpusCompleto
-      : corpusCompleto.filter(m => sezionePubblica(m.sezione ?? sezioneDiId(m.id)))),
+    () => corpusCompleto.filter(m => sezioneVisibile(m.sezione ?? sezioneDiId(m.id), effectiveAdmin)),
     [corpusCompleto, effectiveAdmin],
   );
   // Indici divinità/onomastica calcolati una volta sul corpus intero, riusati
@@ -3966,7 +3964,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
   // ?vista=monete senza aver sbloccato l'editing torna al catalogo, e ci
   // torna anche chi aveva la sezione aperta quando l'editing si richiude.
   useEffect(() => {
-    if (activeView === 'monete' && !effectiveAdmin && !sezionePubblica('numismatica')) {
+    if (activeView === 'monete' && !sezioneVisibile('numismatica', effectiveAdmin)) {
       setActiveView('catalog');
     }
   }, [activeView, effectiveAdmin]);
