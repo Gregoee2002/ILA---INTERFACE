@@ -68,7 +68,10 @@ export const CultLexiconPanel: React.FC<Props> = ({ monumenti, onSelectMonumento
   const [letterario, setLetterario] = useState<Map<string, LemmaLetterario>>(new Map());
   // Stesso accostamento sull'asse LARES.
   const [percorsiLett, setPercorsiLett] = useState<Map<string, PercorsoLetterario>>(new Map());
+  // Senza un modo di aprire le testimonianze (Fonti letterarie nascoste,
+  // vedi FONTI_LETTERARIE_VISIBILI in App.tsx) il conto letterario non si carica.
   useEffect(() => {
+    if (!onVaiAllaFonte) return;
     let vivo = true;
     caricaLitDatasetCondiviso().then(({ dataset }) => {
       if (!vivo) return;
@@ -77,7 +80,7 @@ export const CultLexiconPanel: React.FC<Props> = ({ monumenti, onSelectMonumento
       setPercorsiLett(toolboxLetterario(risolte));
     });
     return () => { vivo = false; };
-  }, []);
+  }, [!onVaiAllaFonte]);
 
   const occorrenzeLetterarie = [...letterario.values()].reduce((n, l) => n + l.occorrenze.length, 0);
 

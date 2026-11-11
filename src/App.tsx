@@ -1301,11 +1301,13 @@ function EpithetStats({ monumenti, onSelectMonumento, onVaiAllaFonte, initialTab
                           {/* Le menzioni della stessa divinità nei testi
                               antichi. Non entrano nei conteggi qui sopra:
                               «occorrenze» continua a voler dire monumenti. */}
-                          <LiteraryEchoes
-                            divinita={activeDivinityStats.name}
-                            onApri={onVaiAllaFonte}
-                            className="shrink-0 mt-3"
-                          />
+                          {onVaiAllaFonte && (
+                            <LiteraryEchoes
+                              divinita={activeDivinityStats.name}
+                              onApri={onVaiAllaFonte}
+                              className="shrink-0 mt-3"
+                            />
+                          )}
                         </>
                       ) : (
                         <div className="flex-1 flex items-center justify-center text-center text-muted/40 text-sm italic px-8">
@@ -1333,12 +1335,14 @@ function EpithetStats({ monumenti, onSelectMonumento, onVaiAllaFonte, initialTab
             {/* Sotto le attestazioni epigrafiche, e separate da quelle: le
                 menzioni della stessa divinità (o dello stesso epiteto) nei
                 testi antichi, ricavate dal markup delle testimonianze. */}
-            <LiteraryEchoes
-              divinita={selectedDivinity}
-              epiteto={selectedEpithet === ALL_EPITHETS ? undefined : selectedEpithet}
-              onApri={onVaiAllaFonte}
-              className="shrink-0"
-            />
+            {onVaiAllaFonte && (
+              <LiteraryEchoes
+                divinita={selectedDivinity}
+                epiteto={selectedEpithet === ALL_EPITHETS ? undefined : selectedEpithet}
+                onApri={onVaiAllaFonte}
+                className="shrink-0"
+              />
+            )}
           </div>
         )}
 
@@ -1495,6 +1499,11 @@ function MoonDisc({ illum, waxing, size = 24, opacity = 0.55 }: { illum: number;
   );
 }
 
+// 2026-11-11: le Fonti letterarie restano fuori dall'interfaccia, anche in
+// redazione — nella barra, in home, e nei rimandi da Statistiche e Lessico
+// cultuale. I dati non si toccano; riaccenderle è cambiare questo booleano.
+const FONTI_LETTERARIE_VISIBILI = false;
+
 const RAIL_HOME_MOON = getMoonPhase();
 const RAIL_ITEMS: { view: AppView; label: string; icon: React.ReactNode; adminOnly?: boolean }[] = [
   { view: 'home', label: 'Home', icon: <MoonDisc illum={RAIL_HOME_MOON.illum} waxing={RAIL_HOME_MOON.waxing} size={16} opacity={0.7} /> },
@@ -1505,7 +1514,7 @@ const RAIL_ITEMS: { view: AppView; label: string; icon: React.ReactNode; adminOn
   // porta si apre solo in redazione: la condizione la detta il registro
   // delle sezioni, così si pubblica in un posto solo.
   { view: 'monete', label: 'Monete', icon: <Coins className="h-4 w-4" /> },
-  { view: 'sources', label: 'Fonti letterarie', icon: <ScrollText className="h-4 w-4" /> },
+  ...(FONTI_LETTERARIE_VISIBILI ? [{ view: 'sources' as AppView, label: 'Fonti letterarie', icon: <ScrollText className="h-4 w-4" /> }] : []),
   { view: 'map', label: 'Mappa', icon: <MapPin className="h-4 w-4" /> },
   { view: 'timeline', label: 'Cronologia', icon: <Clock className="h-4 w-4" /> },
   { view: 'stats', label: 'Statistiche Epiteti', icon: <BarChart2 className="h-4 w-4" /> },
@@ -1895,7 +1904,7 @@ function HomeView({ monumenti, onNavigate, onSearch, effectiveAdmin }: { monumen
   const sections = allSections.filter(s => !s.adminOnly || effectiveAdmin);
   // Una sezione ancora in redazione non si annuncia in home a chi non può
   // aprirla: la carta comparirà il giorno che la sezione sarà pubblica.
-  const heroVisibili = heroSections.filter(h => h.view !== 'monete' || sezioneVisibile('numismatica', effectiveAdmin));
+  const heroVisibili = heroSections.filter(h => (h.view !== 'monete' || sezioneVisibile('numismatica', effectiveAdmin)) && (h.view !== 'sources' || FONTI_LETTERARIE_VISIBILI));
 
   const launchCard = (view: AppView) => {
     setLaunching(view);
@@ -3967,6 +3976,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
     if (activeView === 'monete' && !sezioneVisibile('numismatica', effectiveAdmin)) {
       setActiveView('catalog');
     }
+    if (activeView === 'sources' && !FONTI_LETTERARIE_VISIBILI) setActiveView('catalog');
   }, [activeView, effectiveAdmin]);
 
   // Catalogo e Monete sono la stessa vista su due insiemi separati: quale dei
@@ -6479,7 +6489,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
             <EpithetStats
               monumenti={monumenti}
               onSelectMonumento={apriScheda}
-              onVaiAllaFonte={(id) => { setFonteTarget(id); setActiveView('sources'); setHasNavigated(true); }}
+              onVaiAllaFonte={FONTI_LETTERARIE_VISIBILI ? (id) => { setFonteTarget(id); setActiveView('sources'); setHasNavigated(true); } : undefined}
               initialTab={statsPreset?.tab}
               initialDivinity={statsPreset?.exact && statsPreset.tab === 'divinita' ? statsPreset.term : undefined}
               // La tab onomastica non ha un campo di ricerca libera (solo
@@ -6506,7 +6516,7 @@ export default function App({ skipLanding = false }: { skipLanding?: boolean } =
             <CultLexiconPanel
               monumenti={monumenti}
               onSelectMonumento={apriScheda}
-              onVaiAllaFonte={(id) => { setFonteTarget(id); setActiveView('sources'); setHasNavigated(true); }}
+              onVaiAllaFonte={FONTI_LETTERARIE_VISIBILI ? (id) => { setFonteTarget(id); setActiveView('sources'); setHasNavigated(true); } : undefined}
               canWrite={effectiveAdmin}
               onApriVocabolario={() => setActiveView('lessico-lares')}
             />
