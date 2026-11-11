@@ -13,7 +13,7 @@ import { cn } from '../lib/utils';
 import { formatIlaLabel } from '../lib/xmlUtils';
 import { dateRangeMatches, formatSecoliAttestazione } from '../lib/chronology';
 import L from 'leaflet';
-import { Search, X, ChevronDown, MapPinned, Locate } from 'lucide-react';
+import { Search, X, ChevronDown, ChevronLeft, ChevronRight, MapPinned, Locate, Maximize2 } from 'lucide-react';
 import { ANCIENT_LABELS } from '../lib/mapAncientLabels';
 import { REGION_COLORS, DENSITY_SCALE, FILTER_MATCH_COLOR, GRAYED_OUT_FILL_COLOR } from '../lib/mapPalette';
 
@@ -376,6 +376,194 @@ const InscriptionDrilldown: React.FC<{
   );
 };
 
+// Pannello ingrandito di un sito: si apre dal pulsantino in alto a destra
+// del popup del cerchio, quando la lista è troppo lunga per il fumetto.
+// A sinistra l'elenco (con ricerca), a destra la scheda scelta; frecce
+// ←/→ (o ↑/↓) per scorrere, Esc per chiudere, Invio per aprire la scheda.
+const ExpandedSitePanel: React.FC<{
+  site: Site;
+  isActive: (m: Monumento) => boolean;
+  onClose: () => void;
+  onOpen?: (id: string) => void;
+}> = ({ site, isActive, onClose, onOpen }) => {
+  const [query, setQuery] = useState('');
+  const [soloVisibili, setSoloVisibili] = useState(false);
+  const [index, setIndex] = useState(0);
+  const listRef = useRef<HTMLDivElement>(null);
+
+  const items = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    return site.monumenti.filter(m => {
+      if (soloVisibili && !isActive(m)) return false;
+      if (!q) return true;
+      return [formatIlaLabel(m.id), m.titolo, m.citta, m.luogo_moderno, m.tipo, ...(m.epiteti || [])]
+        .filter(Boolean).some(v => String(v).toLowerCase().includes(q));
+    });
+  }, [site, query, soloVisibili, isActive]);
+
+  useEffect(() => { setIndex(0); }, [query, soloVisibili, site.id]);
+  const current = items[Math.min(index, items.length - 1)];
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      const tag = (e.target as HTMLElement)?.tagName;
+      if (e.key === 'Escape') { onClose(); return; }
+      if (tag === 'INPUT' && e.key !== 'ArrowDown' && e.key !== 'ArrowUp' && e.key !== 'Enter') return;
+      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { e.preventDefault(); setIndex(i => Math.min(items.length - 1, i + 1)); }
+      else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); setIndex(i => Math.max(0, i - 1)); }
+      else if (e.key === 'Enter' && current) { e.preventDefault(); onOpen?.(current.id.toString()); }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [items.length, current, onClose, onOpen]);
+
+  useEffect(() => {
+    listRef.current?.querySelector<HTMLElement>(`[data-idx="${index}"]`)?.scrollIntoView({ block: 'nearest' });
+  }, [index]);
+
+  const nomeSito = site.monumenti[0]?.citta || 'Località';
+  const anteprima = current?.testo_searchable?.trim();
+
+  return (
+    <div className="absolute inset-0 z-[1100] flex items-center justify-center bg-black/25 p-6" onClick={onClose}>
+      <div
+        role="dialog"
+        aria-label={`Iscrizioni di ${nomeSito}`}
+        className="bg-[var(--card)] border border-border/60 rounded-sm shadow-xl w-full max-w-4xl h-full max-h-[34rem] flex flex-col overflow-hidden"
+        onClick={e => e.stopPropagation()}
+      >
+        <div className="flex items-center gap-3 px-4 py-3 border-b border-border/40">
+          <div className="min-w-0 flex-1">
+            <h3 className="font-serif font-bold text-base text-ink truncate">{nomeSito}</h3>
+            <span className="font-serif italic text-[12px] text-muted">
+              {site.activeCount} / {site.totalCount} iscrizioni visibili
+            </span>
+          </div>
+          <a href={site.id} target="_blank" rel="noopener noreferrer" className="font-serif text-[12px] text-accent hover:underline shrink-0">
+            Pleiades
+          </a>
+          <button type="button" onClick={onClose} aria-label="Chiudi" className="p-1 rounded-sm text-muted hover:text-ink hover:bg-[var(--sidebar)]">
+            <X className="h-4 w-4" />
+          </button>
+        </div>
+
+        <div className="flex-1 min-h-0 flex">
+          <div className="w-72 shrink-0 border-r border-border/40 flex flex-col min-h-0">
+            <div className="p-2 border-b border-border/30 flex flex-col gap-2">
+              <div className="relative">
+                <Search className="absolute left-2 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted" />
+                <input
+                  autoFocus
+                  value={query}
+                  onChange={e => setQuery(e.target.value)}
+                  placeholder="Cerca nel sito…"
+                  className="w-full pl-7 pr-2 py-1.5 text-xs font-serif bg-transparent border border-border/60 rounded-sm focus:outline-none focus:ring-1 focus:ring-accent/40"
+                />
+              </div>
+              {site.activeCount < site.totalCount && (
+                <label className="flex items-center gap-2 text-[12px] font-serif text-muted cursor-pointer">
+                  <input type="checkbox" className="accent-accent" checked={soloVisibili} onChange={e => setSoloVisibili(e.target.checked)} />
+                  Solo quelle del filtro
+                </label>
+              )}
+            </div>
+            <div ref={listRef} className="flex-1 overflow-y-auto custom-scrollbar">
+              {items.length === 0 && (
+                <p className="p-3 text-xs font-serif italic text-muted">Nessuna iscrizione.</p>
+              )}
+              {items.map((m, i) => (
+                <button
+                  key={m.id}
+                  type="button"
+                  data-idx={i}
+                  onClick={() => setIndex(i)}
+                  onDoubleClick={() => onOpen?.(m.id.toString())}
+                  className={cn(
+                    "w-full flex items-baseline gap-2 px-3 py-1.5 text-left border-l-2 transition-colors",
+                    i === index ? "border-accent bg-accent/10" : "border-transparent hover:bg-[var(--sidebar)]",
+                    !isActive(m) && "opacity-45"
+                  )}
+                >
+                  <span className="shrink-0 text-[10px] font-mono font-bold text-muted w-14">{formatIlaLabel(m.id)}</span>
+                  <span className={cn("flex-1 min-w-0 text-xs font-serif truncate", i === index ? "text-accent" : "text-ink")}>
+                    {m.titolo || 'Senza titolo'}
+                  </span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="flex-1 min-w-0 flex flex-col min-h-0">
+            {current ? (
+              <>
+                <div className="flex-1 overflow-y-auto custom-scrollbar p-5 flex flex-col gap-3">
+                  <h4 className="font-serif font-bold text-lg leading-tight text-ink">
+                    <span className="text-muted font-mono text-sm mr-2">[{formatIlaLabel(current.id)}]</span>
+                    {current.titolo || 'Senza titolo'}
+                  </h4>
+                  <div className="text-sm text-muted font-serif">
+                    {current.citta} {current.luogo_moderno ? `(${current.luogo_moderno})` : ''}
+                    {!isActive(current) && <span className="ml-2 italic text-[12px]">— esclusa dal filtro</span>}
+                  </div>
+                  {current.epiteti && current.epiteti.length > 0 && (
+                    <div className="flex flex-wrap gap-1.5">
+                      {current.epiteti.map(e => (
+                        <span key={e} className="font-serif text-[12px] text-accent border border-accent/30 rounded-full px-2 py-0.5">{e}</span>
+                      ))}
+                    </div>
+                  )}
+                  <dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 text-sm">
+                    <dt className="font-serif italic text-[12px] text-muted">Data</dt><dd className="text-ink/85">{current.data || 'Ignota'}</dd>
+                    <dt className="font-serif italic text-[12px] text-muted">Secolo</dt><dd className="text-ink/85">{formatSecoliAttestazione(current.data_inizio, current.data_fine)}</dd>
+                    <dt className="font-serif italic text-[12px] text-muted">Tipo</dt><dd className="text-ink/85 italic">{current.tipo || 'Ignoto'}</dd>
+                    {current.materiale && (<><dt className="font-serif italic text-[12px] text-muted">Materiale</dt><dd className="text-ink/85">{current.materiale}</dd></>)}
+                  </dl>
+                  {anteprima && (
+                    <p className="font-serif text-sm text-ink/80 leading-relaxed border-t border-border/30 pt-3 line-clamp-6 whitespace-pre-line">
+                      {anteprima}
+                    </p>
+                  )}
+                </div>
+                <div className="flex items-center gap-2 px-4 py-2.5 border-t border-border/40">
+                  <button
+                    type="button"
+                    disabled={index <= 0}
+                    onClick={() => setIndex(i => Math.max(0, i - 1))}
+                    aria-label="Precedente"
+                    className="p-1.5 rounded-sm border border-border/60 text-ink disabled:opacity-30 hover:bg-[var(--sidebar)]"
+                  >
+                    <ChevronLeft className="h-4 w-4" />
+                  </button>
+                  <span className="font-serif text-[12px] text-muted tabular-nums">{index + 1} di {items.length}</span>
+                  <button
+                    type="button"
+                    disabled={index >= items.length - 1}
+                    onClick={() => setIndex(i => Math.min(items.length - 1, i + 1))}
+                    aria-label="Successiva"
+                    className="p-1.5 rounded-sm border border-border/60 text-ink disabled:opacity-30 hover:bg-[var(--sidebar)]"
+                  >
+                    <ChevronRight className="h-4 w-4" />
+                  </button>
+                  <div className="flex-1" />
+                  <button
+                    type="button"
+                    onClick={() => onOpen?.(current.id.toString())}
+                    className="px-3 py-1.5 rounded-sm bg-accent text-white text-xs font-serif hover:opacity-90"
+                  >
+                    Apri scheda
+                  </button>
+                </div>
+              </>
+            ) : (
+              <div className="flex-1" />
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 export const MapView: React.FC<MapViewProps> = ({ monumenti, onSelectMonumento }) => {
   const [coordsCache, setCoordsCache] = useState<Record<string, [number, number]>>({});
   const fetchedUris = useRef(new Set<string>());
@@ -392,6 +580,7 @@ export const MapView: React.FC<MapViewProps> = ({ monumenti, onSelectMonumento }
   // Sito su cui è stato appena richiesto un fly-to dal drilldown: riceve un
   // alone pulsante temporaneo perché sia riconoscibile a colpo d'occhio.
   const [flashSiteId, setFlashSiteId] = useState<string | null>(null);
+  const [expandedSiteId, setExpandedSiteId] = useState<string | null>(null);
 
   // Tipizzato "any": leaflet.markercluster non fornisce dichiarazioni TS e
   // @types/leaflet non espone L.MarkerClusterGroup.
@@ -520,6 +709,7 @@ export const MapView: React.FC<MapViewProps> = ({ monumenti, onSelectMonumento }
     return Array.from(siteMap.values());
   }, [monumenti, coordsCache, selectedRegioni, selectedEpiteti, selectedDivinita, dateRange]);
 
+  const expandedSite = expandedSiteId ? sites.find(s => s.id === expandedSiteId) ?? null : null;
   const maxSiteCount = useMemo(() => sites.reduce((max, s) => Math.max(max, s.totalCount), 1), [sites]);
   // Soglia oltre la quale un sito è considerato "denso" e riceve il bagliore in legenda/mappa
   const hotThreshold = Math.max(3, Math.ceil(maxSiteCount * 0.6));
@@ -727,10 +917,23 @@ export const MapView: React.FC<MapViewProps> = ({ monumenti, onSelectMonumento }
                   )}
                   <Popup className="custom-popup">
                     <div className="max-h-64 overflow-y-auto pr-3 flex flex-col gap-4 w-64 custom-scrollbar">
-                      <div className="sticky top-0 bg-[var(--card)] pb-2 border-b border-border/30 z-10">
-                        <span className="font-serif italic text-[12px] text-muted">
+                      <div className="sticky top-0 bg-[var(--card)] pb-2 border-b border-border/30 z-10 flex items-center gap-2">
+                        <span className="flex-1 font-serif italic text-[12px] text-muted">
                           {site.activeCount} / {site.totalCount} iscrizioni visibili
                         </span>
+                        <button
+                          type="button"
+                          title="Espandi la selezione"
+                          aria-label="Espandi la selezione"
+                          className="p-1 -my-1 rounded-sm text-muted hover:text-accent hover:bg-accent/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            mapRef.current?.closePopup();
+                            setExpandedSiteId(site.id);
+                          }}
+                        >
+                          <Maximize2 className="h-3.5 w-3.5" />
+                        </button>
                       </div>
                       
                       {site.monumenti.map(m => {
@@ -783,6 +986,15 @@ export const MapView: React.FC<MapViewProps> = ({ monumenti, onSelectMonumento }
             })}
           </MarkerClusterGroup>
         </MapContainer>
+
+        {expandedSite && (
+          <ExpandedSitePanel
+            site={expandedSite}
+            isActive={isMonumentoActive}
+            onClose={() => setExpandedSiteId(null)}
+            onOpen={onSelectMonumento}
+          />
+        )}
         
         {/* Legend */}
         <div className="absolute bottom-6 right-6 bg-parchment border border-border/60 p-4 z-[1000] rounded-sm text-xs pointer-events-none w-48">
