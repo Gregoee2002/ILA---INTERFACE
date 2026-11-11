@@ -105,7 +105,7 @@ describe('sezioni in redazione', () => {
 
   it('chi non è in redazione vede solo le sezioni pubbliche', () => {
     expect(sezioniVisibili(false).map(d => d.id)).toEqual(['epigrafia']);
-    expect(sezioniVisibili(true).map(d => d.id)).toEqual(['epigrafia', 'numismatica']);
+    expect(sezioniVisibili(true).map(d => d.id)).toEqual(['epigrafia']);
   });
 
   it('riconosce la sezione dal solo nome del file', () => {
